@@ -22,6 +22,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MyDateRangePickerModule } from 'mydaterangepicker';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { BoardJefeDisenoComponent } from './board-jefe-diseno/board-jefe-diseno.component';
+import { BoardJefeProduccionComponent } from './board-jefe-produccion/board-jefe-produccion.component';
 
 
 @NgModule({
@@ -56,6 +58,8 @@ import { ComponentsModule } from 'src/app/components/components.module';
     ResolucionesxvencerComponent,
     CardreportesComponent,
     BoardJefeIngenieriaComponent,
+    BoardJefeDisenoComponent,
+    BoardJefeProduccionComponent,
   ],
   exports: [BoardsComponent],
   providers: [{ provide: LOCALE_ID, useValue: 'es' }, BoardContabilidadService, // Añades esta línea en los providers

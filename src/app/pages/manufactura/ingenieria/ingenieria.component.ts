@@ -9,6 +9,7 @@ import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 import { PermissionService } from 'src/app/core/services/permission.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
+import { IngenieriaService } from '../services/ingenieria.service';
 import { OrdenesProduccionService } from '../services/ordenes-produccion.service';
 
 @Component({
@@ -37,7 +38,7 @@ export class IngenieriaComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private _work_orders: OrdenesProduccionService,
+    private _work_order_engineering: IngenieriaService,
     private fb: FormBuilder,
     private _swal: SwalService,
     private route: ActivatedRoute,
@@ -133,7 +134,7 @@ export class IngenieriaComponent implements OnInit, OnDestroy {
     }
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/manufactura/ingenieria', paramsurl.toString());
-    this._work_orders.getWorkOrdersEngineering(params).subscribe((r: any) => {
+    this._work_order_engineering.getWorkOrdersEngineering(params).subscribe((r: any) => {
       this.work_orders = r.data.data;
       this.paginationMaterial = r.data
       if (this.paginationMaterial.last_page < this.pagination.page) {

@@ -12,15 +12,15 @@ import { UserService } from 'src/app/core/services/user.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
-import { IngenieriaService } from '../../manufactura/services/ingenieria.service';
+import { DisenoService } from '../../manufactura/services/diseno.service';
 import { OrdenesProduccionService } from '../../manufactura/services/ordenes-produccion.service';
 
 @Component({
-  selector: 'app-board-jefe-ingenieria',
-  templateUrl: './board-jefe-ingenieria.component.html',
-  styleUrls: ['./board-jefe-ingenieria.component.scss']
+  selector: 'app-board-jefe-diseno',
+  templateUrl: './board-jefe-diseno.component.html',
+  styleUrls: ['./board-jefe-diseno.component.scss']
 })
-export class BoardJefeIngenieriaComponent implements OnInit, OnDestroy {
+export class BoardJefeDisenoComponent implements OnInit, OnDestroy {
   @ViewChild('instance') instance: NgbTypeahead;
   @ViewChild('matPanel') matPanel: MatExpansionPanel;
   focus$ = new Subject<string>();
@@ -42,10 +42,9 @@ export class BoardJefeIngenieriaComponent implements OnInit, OnDestroy {
     page: '',
     pageSize: '',
   }
-
   constructor(
     private _work_orders: OrdenesProduccionService,
-    private _work_order_engineering: IngenieriaService,
+    private _work_order_deesign: DisenoService,
     private _modal: ModalService,
     private fb: FormBuilder,
     private _dependencies: DependenciesService,
@@ -56,7 +55,6 @@ export class BoardJefeIngenieriaComponent implements OnInit, OnDestroy {
     public router: Router,
     public _user: UserService
   ) { }
-
   ngOnDestroy(): void {
     clearInterval(this.interval)
   }
@@ -141,15 +139,15 @@ export class BoardJefeIngenieriaComponent implements OnInit, OnDestroy {
     this.form_assign = this.fb.group({
       dependency_id: [12, Validators.required],
       work_order_id: [item.id],
-      person_id: [null, Validators.required],
+      people: [null, Validators.required],
       observations: ['', [Validators.required, Validators.maxLength(500)]],
       hours: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(0)]],
       minutes: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.min(0), Validators.max(59)]],
     })
     this.getPeople(this.form_assign.get('dependency_id').value)
     this.form_assign.get('dependency_id').valueChanges.subscribe(r => {
-      this.form_assign.get('person_id').reset()
-      this.getPeople(r)
+      this.form_assign.get('people').reset()
+      this.getPeople(r);
     })
   }
 
@@ -172,7 +170,7 @@ export class BoardJefeIngenieriaComponent implements OnInit, OnDestroy {
     this.loading_stage = true;
     let params = {
       orderBy: this.orderBy,
-      status: 'inicial'
+      status: 'ingenieria'
     }
     this._work_orders.getForStage(params).subscribe((r: any) => {
       this.work_orders = r.data;
@@ -188,7 +186,7 @@ export class BoardJefeIngenieriaComponent implements OnInit, OnDestroy {
     }
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/', paramsurl.toString());
-    this._work_order_engineering.getWorkOrdersEngineering(params).subscribe((r: any) => {
+    this._work_order_deesign.getWorkOrdersDesign(params).subscribe((r: any) => {
       this.work_orders_assigned = r.data.data;
       this.paginationMaterial = r.data
       if (this.paginationMaterial.last_page < this.pagination.page) {
@@ -203,7 +201,7 @@ export class BoardJefeIngenieriaComponent implements OnInit, OnDestroy {
       }, 1000)
       this.loading_assigned = false;
     })
-  }
+  } //esta cambia
 
   getTime(item) {
     if (item.start_time && !item.end_time) {
@@ -230,8 +228,6 @@ export class BoardJefeIngenieriaComponent implements OnInit, OnDestroy {
     return days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's';
   }
 
-
-
   search_person: OperatorFunction<string, readonly { text; value }[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
@@ -245,8 +241,8 @@ export class BoardJefeIngenieriaComponent implements OnInit, OnDestroy {
   formatter_person = (x: { text: string }) => x.text;
 
   assign() {
-    console.log(this.form_assign.value);
     if (!this.form_assign.valid) {
+      this.form_assign.markAllAsTouched()
       this._swal.show({
         icon: 'error',
         title: 'Campos incompletos',
@@ -260,7 +256,7 @@ export class BoardJefeIngenieriaComponent implements OnInit, OnDestroy {
         text: 'Vamos a asignar esta orden de trabajo.'
       }).then(r => {
         if (r.isConfirmed) {
-          this._work_order_engineering.assignEngineering(this.form_assign.value).subscribe((r: any) => {
+          this._work_order_deesign.assignDesign(this.form_assign.value).subscribe((r: any) => {
             this._swal.show({
               icon: 'success',
               title: 'Correcto',

@@ -70,7 +70,34 @@
                 </tr>
                 <tr>
                   <th scope="row">Asignada a</th>
-                  <td>{{ work_order.person.person }}</td>
+                  <td>
+                    <ng-template #popContent>
+                      <div class="popover-people">
+                        <ul class="list-group list-group-flush">
+                          <li
+                            class="list-group-item p-1"
+                            *ngFor="let person of work_order.people"
+                          >
+                            <img
+                              onerror="this.src='../../../../assets/images/noprofile.png'"
+                              class="img-thumbnail rounded-circle mx-auto img-fluid header-profile-user"
+                              [src]="person.image"
+                            />
+                            {{ person.person }}
+                          </li>
+                        </ul>
+                      </div>
+                    </ng-template>
+                    <ng-template #popTitle>LISTA DE FUNCIONARIOS</ng-template>
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-sm"
+                      [ngbPopover]="popContent"
+                      [popoverTitle]="popTitle"
+                    >
+                      Presiona para ver
+                    </button>
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">Asignada por</th>
@@ -111,7 +138,7 @@
         <hr class="line" />
         <p class="card-text">Content</p>
       </div>
-      <ng-container *ngIf="person_id == work_order?.person.id">
+      <ng-container *ngIf="view_button">
         <div class="card-footer">
           <ng-container *ngIf="work_order?.status == 'pendiente'">
             <button

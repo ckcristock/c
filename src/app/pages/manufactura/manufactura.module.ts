@@ -6,7 +6,7 @@ import { OrdenesProduccionComponent } from './ordenes-produccion/ordenes-producc
 import { IngenieriaComponent } from './ingenieria/ingenieria.component';
 import { DisenoComponent } from './diseno/diseno.component';
 import { ProduccionComponent } from './produccion/produccion.component';
-import { NgbDropdownModule, NgbNavModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbModule, NgbNavModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -19,6 +19,7 @@ import { CrearOrdenProduccionComponent } from './ordenes-produccion/crear-orden-
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { VerOrdenProduccionComponent } from './ordenes-produccion/ver-orden-produccion/ver-orden-produccion.component';
 import { VerIngenieriaComponent } from './ingenieria/ver-ingenieria/ver-ingenieria.component';
+import { VerDisenoComponent } from './diseno/ver-diseno/ver-diseno.component';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -40,6 +41,7 @@ export const MY_FORMATS = {
     CrearOrdenProduccionComponent,
     VerOrdenProduccionComponent,
     VerIngenieriaComponent,
+    VerDisenoComponent,
   ],
   imports: [
     CommonModule,
@@ -68,6 +70,7 @@ export const MY_FORMATS = {
     SatNativeDateModule,
     MatTooltipModule,
     CKEditorModule,
+    NgbModule
   ],
   providers: [
     {

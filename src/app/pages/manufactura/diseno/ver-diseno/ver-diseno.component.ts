@@ -2,15 +2,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/core/services/user.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
-import { IngenieriaService } from '../../services/ingenieria.service';
-import { OrdenesProduccionService } from '../../services/ordenes-produccion.service';
+import { DisenoService } from '../../services/diseno.service';
 
 @Component({
-  selector: 'app-ver-ingenieria',
-  templateUrl: './ver-ingenieria.component.html',
-  styleUrls: ['./ver-ingenieria.component.scss']
+  selector: 'app-ver-diseno',
+  templateUrl: './ver-diseno.component.html',
+  styleUrls: ['./ver-diseno.component.scss']
 })
-export class VerIngenieriaComponent implements OnInit, OnDestroy {
+export class VerDisenoComponent implements OnInit, OnDestroy {
   work_order_id: string;
   loading: boolean;
   work_order: any;
@@ -20,15 +19,18 @@ export class VerIngenieriaComponent implements OnInit, OnDestroy {
   seconds;
   await_chrono: boolean;
   interval;
+  view_button: boolean = false;
   person_id;
+
   constructor(
     private route: ActivatedRoute,
-    private _work_order_engineering: IngenieriaService,
+    private _work_order_design: DisenoService,
     private _user: UserService,
     private _swal: SwalService
   ) {
     this.person_id = _user.user.person.id
-  }
+   }
+
   ngOnDestroy(): void {
     clearInterval(this.interval)
   }
@@ -42,9 +44,10 @@ export class VerIngenieriaComponent implements OnInit, OnDestroy {
 
   getWorkOrder() {
     this.loading = true
-    this._work_order_engineering.getWorkOrder(this.work_order_id).subscribe((res: any) => {
+    this._work_order_design.getWorkOrder(this.work_order_id).subscribe((res: any) => {
       this.work_order = res.data;
       this.loading = false;
+      this.view_button = this.work_order.people.some(x => x.pivot.person_id == this.person_id);
       if (this.work_order.status == 'proceso') {
         this.await_chrono = true;
         this.interval = setInterval(() => {
@@ -67,16 +70,16 @@ export class VerIngenieriaComponent implements OnInit, OnDestroy {
   changeStatus(status) {
     this._swal.show({
       icon: 'question',
-      title: status == 'proceso' ? 'Comenzar fase de ingeniería' : 'Finalizar fase de ingeniería',
+      title: status == 'proceso' ? 'Comenzar fase de diseño' : 'Finalizar fase de diseño',
       text: status == 'proceso' ?
         'Recuerda que empezaremos a contabilizar el tiempo transcurrido desde este momento hasta que finalices la tarea.' :
-        'Revisa todos los datos, la orden de producción pasará a fase de diseño.'
+        'Revisa todos los datos, la orden de producción pasará a fase de producción.'
     }).then(r => {
       if (r.isConfirmed) {
         let data = {
           status: status
         }
-        this._work_order_engineering.changeStatus(data, this.work_order_id).subscribe((r: any) => {
+        this._work_order_design.changeStatus(data, this.work_order_id).subscribe((r: any) => {
           this._swal.show({
             icon: 'success',
             title: r.data,

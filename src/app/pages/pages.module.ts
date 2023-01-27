@@ -37,6 +37,8 @@ import { NewTaskComponent } from './tasks/new-task/new-task.component';
 import { CardTaskComponent } from './tasks/card-task/card-task.component';
 import { MatButtonModule, MatIconModule, MatPaginatorModule } from '@angular/material';
 import { BoardJefeIngenieriaComponent } from './boards/board-jefe-ingenieria/board-jefe-ingenieria.component';
+import { BoardJefeDisenoComponent } from './boards/board-jefe-diseno/board-jefe-diseno.component';
+import { BoardJefeProduccionComponent } from './boards/board-jefe-produccion/board-jefe-produccion.component';
 registerLocaleData(localeEs, 'es');
 
 @NgModule({
@@ -50,6 +52,8 @@ registerLocaleData(localeEs, 'es');
         BoardJefeBodegaComponent,
         BoardNominaComponent,
         BoardJefeIngenieriaComponent,
+        BoardJefeDisenoComponent,
+        BoardJefeProduccionComponent,
         FiltrosgeneralesauditorComponent,
         ResolucionesxvencerComponent,
         CardreportesComponent,

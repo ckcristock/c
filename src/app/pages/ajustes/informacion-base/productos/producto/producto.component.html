@@ -1,372 +1,218 @@
-<div class="row">
-  <div class="col-md-4">
-    <div class="card">
-      <div class="card-body">
-        <div class="row card-title d-flex justify-content-between">
-          <div class="col px-0">
-            <h4 class="text-primary">Actividad</h4>
+<ng-container *ngIf="!cargando.valor(); else notProduct">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="row card-title d-flex justify-content-between">
+            <div class="col px-0">
+              <h4 class="text-primary">Actividad</h4>
+            </div>
           </div>
-        </div>
-        <hr class="line" />
-        <div class="text-center justify-content-center">
-          <ng-container *ngIf="!cargando.actividad && Actividades.length > 0; else notActividad">
-            <ng-container *ngFor="let item of Actividades">
-              <section class="gradient-custom-5">
-                <div class="main-timeline-5">
-                  <div class="timeline-5 right-5">
-                    <div class="card bg-light">
-                      <div class="card-body p-4">
-                        <div class="d-flex justify-content-between text-left">
-                          <h6>
-                            <!-- <i [class]="item.icon"></i> {{ item.title }} <br /> -->
-                            <div class="text-muted" style="font-size: x-small">
-                              <i class="fas fa-clock me-1"></i>
-                              {{ item.Fecha | date : "MMM d, y, h:mm a" }}
-                            </div>
-                            <div class="text-muted" style="font-size: small">
-                              <i class="fas fa-user me-1"></i>
-                              {{ item.funcionario.complete_name }}
-                            </div>
-                          </h6>
-                          <img
-                            [src]="item.funcionario.image"
-                            onerror="this.src='../../../../assets/images/noprofile.png'"
-                            class="float-right rounded-circle img-fluid header-profile-user"
-                          />
+          <hr class="line" />
+          <div class="text-center justify-content-center">
+            <ng-container *ngIf="Actividades.length > 0; else notActividad">
+              <ng-container *ngFor="let item of Actividades">
+                <section class="gradient-custom-5">
+                  <div class="main-timeline-5">
+                    <div class="timeline-5 right-5">
+                      <div class="card bg-light">
+                        <div class="card-body p-4">
+                          <div class="d-flex justify-content-between text-left">
+                            <h6>
+                              <!-- <i [class]="item.icon"></i> {{ item.title }} <br /> -->
+                              <div class="text-muted" style="font-size: x-small">
+                                <i class="fas fa-clock me-1"></i>
+                                {{ item.Fecha | date : "MMM d, y, h:mm a" }}
+                              </div>
+                              <div class="text-muted" style="font-size: small">
+                                <i class="fas fa-user me-1"></i>
+                                {{ item.funcionario.complete_name }}
+                              </div>
+                            </h6>
+                            <img
+                              [src]="item.funcionario.image"
+                              onerror="this.src='../../../../assets/images/noprofile.png'"
+                              class="float-right rounded-circle img-fluid header-profile-user"
+                            />
+                          </div>
+                          <small>
+                            {{ item.Detalles }}
+                          </small>
                         </div>
-                        <small>
-                          {{ item.Detalles }}
-                        </small>
                       </div>
                     </div>
                   </div>
-                </div>
-              </section>
+                </section>
+              </ng-container>
             </ng-container>
-          </ng-container>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-8">
-    <div class="card">
-      <div class="card-header">
-        <div class="row">
-          <div class="col-md-12">
-            <h5>Detalle del Medicamento</h5>
           </div>
         </div>
       </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-2" style="text-align: center">
-                    <!-- TODO Funcionar imagenes -->
-                    <!-- <img *ngIf="productoPorVer.Imagen!==''" src="{{environment.ruta}}IMAGENES/PRODUCTOS/{{productoPorVer.Imagen}}" style="-moz-border-radius: 50px;border-radius: 23px;height: 150px; max-width: 100%;">
-                                            <img *ngIf="productoPorVer.Imagen==='' " src="assets/images/producto.png" style="-moz-border-radius: 50px;border-radius: 23px;height: 150px; max-width: 100%;"> -->
-                  </div>
-                  <div class="col-md-10">
-                    <div class="rounded-top table-responsive">
-                      <table class="invoice-detail-table table">
-                        <tbody>
-                          <tr>
-                            <td>
-                              <strong>Código CUM</strong>
-                              <p>{{ productoPorVer.Codigo_Cum }}</p>
-                              <p *ngIf="productoPorVer.Codigo_Cum == ''">
-                                No Tiene Registro
-                              </p>
-                            </td>
-                            <td>
-                              <strong>Presentación</strong>
-                              <p>{{ productoPorVer.Presentacion }}</p>
-                              <p *ngIf="productoPorVer.Presentacion == ''">
-                                No Tiene Registro
-                              </p>
-                            </td>
-                            <td>
-                              <strong>Concentración</strong>
-                              <p>{{ productoPorVer.Concentracion }}</p>
-                              <p *ngIf="productoPorVer.Concentracion == ''">
-                                No Tiene Registro
-                              </p>
-                            </td>
-                            <td>
-                              <strong>Código de barras</strong>
-
-                              <p *ngIf="productoPorVer.Codigo_Barras != ''">
-                                {{ productoPorVer.Codigo_Barras }}
-                              </p>
-                              <p *ngIf="productoPorVer.Codigo_Barras == ''">
-                                No Tiene Registro
-                              </p>
-                            </td>
-                            <td>
-                              <strong>ATC</strong>
-                              <p>{{ productoPorVer.ATC }}</p>
-                              <p *ngIf="productoPorVer.ATC == ''">
-                                No Tiene Registro
-                              </p>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td colspan="5">
-                              <strong>Embalaje</strong>
-                              <p>{{ productoPorVer.Embalaje }}</p>
-                            </td>
-                            <p *ngIf="productoPorVer.Embalaje == ''">
-                              No Tiene Registro
-                            </p>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
+    </div>
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="text-center align-middle p-0">
+                <img
+                  onerror="this.src='../../../../assets/images/not-available.png'"
+                  [src]="productoPorVer.Foto"
+                  class="img-fluid img-product"
+                  alt="Vista previa del producto"
+                />
               </div>
             </div>
-
-            <div class="row">
-              <div class="col-md-12">
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="card">
+            <div class="card-body">
+              <div class="row card-title d-flex justify-content-between">
+                <div class="col px-0">
+                  <h4 class="text-primary">Información básica</h4>
+                </div>
+              </div>
+              <hr class="line" />
+              <div class="rounded-top table-responsive">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Nombre</th>
+                      <th>Categoría</th>
+                      <th>Subcategoría</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      class="text-center"
+                      [ngClass]="{ 'text-danger': productoPorVer.Estado == 'Inactivo' }"
+                    >
+                      <td class="align-middle">{{ productoPorVer.Nombre_Comercial }}</td>
+                      <td class="align-middle">{{ productoPorVer.Categoria }}</td>
+                      <td class="align-middle">{{ productoPorVer.Subcategoria }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <div class="row card-title d-flex justify-content-between">
+                <div class="col px-0">
+                  <h4 class="text-primary">Detalle del producto</h4>
+                </div>
+              </div>
+              <hr class="line" />
+              <div class="rounded-top table-responsive">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Presentacion</th>
+                      <th>Unidad de medida</th>
+                      <th>Codigo de barras</th>
+                      <th>Embalaje</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="text-center">
+                      <td class="align-middle">{{ productoPorVer.Presentacion }}</td>
+                      <td class="align-middle">{{ productoPorVer.Nom_unidad_medida }}</td>
+                      <td class="align-middle">{{ productoPorVer.Codigo_Barras }}</td>
+                      <td class="align-middle">{{ productoPorVer.Embalaje }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <div class="row card-title d-flex justify-content-between">
+                <div class="col px-0">
+                  <h4 class="text-primary">Variables de categoría</h4>
+                </div>
+              </div>
+              <hr class="line" />
+              <ng-container *ngIf="VariablesProducto.categoria.nom.length > 0; else notVariablesCat">
                 <div class="rounded-top table-responsive">
-                  <table class="invoice-detail-table table">
+                  <table class="table table-bordered table-striped table-sm">
+                    <thead class="bg-light">
+                      <tr class="text-center text-uppercase">
+                        <ng-container *ngFor="let item of VariablesProducto.categoria.nom">
+                          <th>{{ item.replace("_"," ") }}</th>
+                        </ng-container>
+                      </tr>
+                    </thead>
                     <tbody>
-                      <tr>
-                        <td>
-                          <strong>Principio Activo</strong>
-                          <p>{{ productoPorVer.Principio_Activo }}</p>
-                          <p *ngIf="productoPorVer.Principio_Activo == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Nombre Comercial</strong>
-                          <p>{{ productoPorVer.Nombre_Comercial }}</p>
-                          <p *ngIf="productoPorVer.Nombre_Comercial == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Laboratorio Generico</strong>
-                          <p>{{ productoPorVer.Laboratorio_Generico }}</p>
-                          <p
-                            *ngIf="
-                              productoPorVer.Laboratorio_Generico == ''
-                            "
-                          >
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Laboratorio Comercial</strong>
-                          <p>{{ productoPorVer.Laboratorio_Comercial }}</p>
-                          <p
-                            *ngIf="
-                              productoPorVer.Laboratorio_Comercial == ''
-                            "
-                          >
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Descripcion ATC</strong>
-                          <p>{{ productoPorVer.Descripcion_ATC }}</p>
-                          <p *ngIf="productoPorVer.Descripcion_ATC == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <strong>Invima</strong>
-                          <p>{{ productoPorVer.Invima }}</p>
-                          <p *ngIf="productoPorVer.Invima == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Cantidad</strong>
-                          <p>{{ productoPorVer.Cantidad }}</p>
-                          <p *ngIf="productoPorVer.Cantidad == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Unidad De Medida</strong>
-                          <p>{{ productoPorVer.Unidad_Medida }}</p>
-                          <p *ngIf="productoPorVer.Unidad_Medida == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Via De Administracion</strong>
-                          <p>{{ productoPorVer.Via_Administracion }}</p>
-                          <p
-                            *ngIf="productoPorVer.Via_Administracion == ''"
-                          >
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Fecha Expedición</strong>
-                          <p>
-                            {{ productoPorVer.Fecha_Expedicion_Invima }}
-                          </p>
-                          <p
-                            *ngIf="
-                              productoPorVer.Fecha_Expedicion_Invima == ''
-                            "
-                          >
-                            No Tiene Registro
-                          </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <strong>Fecha Vencimiento</strong>
-                          <p>
-                            {{ productoPorVer.Fecha_Vencimiento_Invima }}
-                          </p>
-                          <p
-                            *ngIf="
-                              productoPorVer.Fecha_Vencimiento_Invima == ''
-                            "
-                          >
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Cant. Min</strong>
-                          <p>{{ productoPorVer.Cantidad_Minima }}</p>
-                          <p *ngIf="productoPorVer.Cantidad_Minima == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Cant. Max</strong>
-                          <p>{{ productoPorVer.Cantidad_Maxima }}</p>
-                          <p *ngIf="productoPorVer.Cantidad_Maxima == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Precio Min</strong>
-                          <p>{{ productoPorVer.Precio_Minimo }}</p>
-                          <p *ngIf="productoPorVer.Precio_Minimo == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Precio Max</strong>
-                          <p>{{ productoPorVer.Precio_Maximo }}</p>
-                          <p *ngIf="productoPorVer.Precio_Maximo == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <strong>Mantis</strong>
-                          <p>{{ productoPorVer.Mantis }}</p>
-                          <p *ngIf="productoPorVer.Mantis == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Cantidad Presentación</strong>
-                          <p>{{ productoPorVer.Cantidad_Presentacion }}</p>
-                          <p
-                            *ngIf="
-                              productoPorVer.Cantidad_Presentacion == ''
-                            "
-                          >
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Peso Mínimo</strong>
-                          <p>
-                            {{ productoPorVer.Peso_Presentacion_Minima }}
-                          </p>
-                          <p
-                            *ngIf="
-                              productoPorVer.Peso_Presentacion_Minima == ''
-                            "
-                          >
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Peso Regular</strong>
-                          <p>
-                            {{ productoPorVer.Peso_Presentacion_Regular }}
-                          </p>
-                          <p
-                            *ngIf="
-                              productoPorVer.Peso_Presentacion_Regular == ''
-                            "
-                          >
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Peso Máximo</strong>
-                          <p>
-                            {{ productoPorVer.Peso_Presentacion_Maxima }}
-                          </p>
-                          <p
-                            *ngIf="
-                              productoPorVer.Peso_Presentacion_Maxima == ''
-                            "
-                          >
-                            No Tiene Registro
-                          </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <strong>Tipo Regulación</strong>
-                          <p>{{ productoPorVer.Tipo_Regulacion }}</p>
-                          <p *ngIf="productoPorVer.Tipo_Regulacion == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Tipo POS</strong>
-                          <p>{{ productoPorVer.Tipo_Pos }}</p>
-                          <p *ngIf="productoPorVer.Tipo_Pos == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td>
-                          <strong>Familia</strong>
-                          <p>{{ productoPorVer.Familia }}</p>
-                          <p *ngIf="productoPorVer.Familia == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
-                        <td colspan="2">
-                          <strong>Subcategoria</strong>
-                          <p>{{ productoPorVer.Subcategoria }}</p>
-                          <p *ngIf="productoPorVer.Subcategoria == ''">
-                            No Tiene Registro
-                          </p>
-                        </td>
+                      <tr class="text-center">
+                        <ng-container *ngFor="let item of VariablesProducto.categoria.valor">
+                          <td class="align-middle">{{ item }}</td>
+                        </ng-container>
                       </tr>
                     </tbody>
                   </table>
                 </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <div class="row card-title d-flex justify-content-between">
+                <div class="col px-0">
+                  <h4 class="text-primary">Variables de subcategoría</h4>
+                </div>
               </div>
+              <hr class="line" />
+              <ng-container *ngIf="VariablesProducto.subcategoria.nom.length > 0; else notVariablesSubcat">
+                <div class="rounded-top table-responsive">
+                  <table class="table table-bordered table-striped table-sm">
+                    <thead class="bg-light">
+                      <tr class="text-center text-uppercase">
+                        <ng-container *ngFor="let item of VariablesProducto.subcategoria.nom">
+                          <th>{{ item.replace("_"," ") }}</th>
+                        </ng-container>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="text-center">
+                        <ng-container *ngFor="let item of VariablesProducto.subcategoria.valor">
+                          <td class="align-middle">{{ item }}</td>
+                        </ng-container>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ng-container>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</ng-container>
+<ng-template #notProduct>
+  <app-not-data [loading]="cargando.valor()"></app-not-data>
+</ng-template>
 <ng-template #notActividad>
   <app-not-data [loading]="cargando.actividad" text="Este producto no registra actividad!"></app-not-data>
+</ng-template>
+<ng-template #notVariablesCat>
+  <app-not-data [loading]="cargando.actividad" text="La categoría no registra varaibles para este producto"></app-not-data>
+</ng-template>
+<ng-template #notVariablesSubcat>
+  <app-not-data [loading]="cargando.actividad" text="La subcategoría no registra varaibles para este producto"></app-not-data>
 </ng-template>

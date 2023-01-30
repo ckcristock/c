@@ -1,0 +1,174 @@
+<div class="row">
+  <div class="col-md-4">
+    <ng-container *ngIf="work_order?.status == 'proceso'">
+      <div class="card text-white bg-warning mb-3">
+        <div class="card-body">
+          <h1 class="h1 text-center text-white">
+            {{
+              await_chrono
+                ? "Espera..."
+                : (days ? days + "d " : "") +
+                  (hours ? hours + "h " : "") +
+                  (minutes ? minutes + "m " : "") +
+                  (seconds ? seconds + "s" : "")
+            }}
+          </h1>
+        </div>
+      </div>
+    </ng-container>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-primary">Información</h5>
+        <hr class="line" />
+        <ng-container *ngIf="!loading && work_order; else notData">
+          <div class="table-responsive">
+            <table class="table table-borderless">
+              <tbody>
+                <tr>
+                  <th scope="row">Estado</th>
+                  <td>
+                    <span
+                      class="badge"
+                      [class]="
+                        work_order.status == 'pendiente'
+                          ? 'badge-danger'
+                          : work_order.status == 'proceso'
+                          ? 'badge-warning'
+                          : work_order.status == 'completado'
+                          ? 'badge-success'
+                          : ''
+                      "
+                      >{{ work_order.status | titlecase }}</span
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Orden de producción</th>
+                  <td
+                    role="button"
+                    class="text-primary"
+                    [routerLink]="[
+                      '/manufactura/ordenes-produccion/ver/',
+                      work_order.work_order_id
+                    ]"
+                  >
+                    {{ work_order.work_order.code }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Cotización</th>
+                  <td
+                    role="button"
+                    class="text-primary"
+                    [routerLink]="[
+                      '/crm/cotizacion/ver/',
+                      work_order.work_order.quotation_id
+                    ]"
+                  >
+                    {{ work_order.work_order.quotation.code }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Asignada a</th>
+                  <td>
+                    <ng-template #popContent>
+                      <div class="popover-people">
+                        <ul class="list-group list-group-flush">
+                          <li
+                            class="list-group-item p-1"
+                            *ngFor="let person of work_order.people"
+                          >
+                            <img
+                              onerror="this.src='../../../../assets/images/noprofile.png'"
+                              class="img-thumbnail rounded-circle mx-auto img-fluid header-profile-user"
+                              [src]="person.image"
+                            />
+                            {{ person.person }}
+                          </li>
+                        </ul>
+                      </div>
+                    </ng-template>
+                    <ng-template #popTitle>LISTA DE FUNCIONARIOS</ng-template>
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-sm"
+                      [ngbPopover]="popContent"
+                      [popoverTitle]="popTitle"
+                    >
+                      Presiona para ver
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Asignada por</th>
+                  <td>{{ work_order.allocator_person.person }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Fecha de asignación</th>
+                  <td>{{ work_order.created_at | date }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Tiempo estimado</th>
+                  <td>
+                    {{ work_order.hours + "h " + work_order.minutes + "m" }}
+                  </td>
+                </tr>
+                <tr *ngIf="work_order.status == 'completado'">
+                  <th scope="row">Tiempo empleado</th>
+                  <td>
+                    {{
+                      (days ? days + "d " : "") +
+                        (hours ? hours + "h " : "") +
+                        (minutes ? minutes + "m " : "") +
+                        (seconds ? seconds + "s" : "")
+                    }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-primary">Detalles</h5>
+        <hr class="line" />
+        <p class="card-text">Content</p>
+      </div>
+      <ng-container *ngIf="view_button">
+        <div class="card-footer">
+          <ng-container *ngIf="work_order?.status == 'pendiente'">
+            <button
+              (click)="changeStatus('proceso')"
+              type="button"
+              class="btn btn-primary btn-block"
+            >
+              Comenzar
+            </button></ng-container
+          >
+          <ng-container *ngIf="work_order?.status == 'proceso'">
+            <button
+              (click)="changeStatus('completado')"
+              type="button"
+              class="btn btn-warning btn-block"
+            >
+              Terminar
+            </button></ng-container
+          >
+          <ng-container *ngIf="work_order?.status == 'completado'">
+            <div class="alert alert-success text-center mb-0" role="alert">
+              Esta orden de producción ha finalizado la fase de ingeniería.
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

@@ -22,15 +22,15 @@
             <td>
               {{ item.apu_type }}
             </td>
-            <td *ngIf="item.apu_type == 'conjunto'">
+            <td *ngIf="item.apu_type == 'C'">
               {{ item.apuset.name }}
             </td>
-            <td *ngIf="item.apu_type == 'pieza'">
+            <td *ngIf="item.apu_type == 'P'">
               {{ item.apupart.name }}
             </td>
-            <td *ngIf="item.apu_type != 'pieza' && item.apu_type != 'conjunto'">
+            <!-- <td *ngIf="item.apu_type != 'pieza' && item.apu_type != 'conjunto'">
               {{ item.apupart.name }}
-            </td>
+            </td> -->
             <td>
               {{ item.unit?.name }}
             </td>

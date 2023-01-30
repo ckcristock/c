@@ -209,7 +209,8 @@
                 <th>Ciudad</th>
                 <th>Código</th>
                 <th>Cliente</th>
-                <th class="col-4">Descripción</th>
+                <th>Descripción</th>
+                <th>Presupuesto</th>
                 <th>Estado</th>
                 <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
@@ -239,6 +240,21 @@
                   }}
                 </td>
                 <td (click)="openList(item.id)">{{ item.observation }}</td>
+                <td
+                  [role]="item.budget_included == 'si' ? 'button' : ''"
+                  [class]="item.budget_included == 'si' ? 'text-primary' : ''"
+                  [routerLink]="
+                    item.budget_included == 'si'
+                      ? ['/crm/presupuesto/ver/' + item.budgets.id]
+                      : null
+                  "
+                >
+                  {{
+                    item.budget_included == "si"
+                      ? item.budgets.code
+                      : "No incluye"
+                  }}
+                </td>
                 <td (click)="openList(item.id)">
                   <span
                     class="badge"

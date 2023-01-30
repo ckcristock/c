@@ -9,7 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TasksComponent } from './tasks/tasks.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { NgbModule, NgbNav } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbNav, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { LOCALE_ID } from '@angular/core';
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
@@ -35,7 +35,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { NoautorizadoComponent } from './noautorizado/noautorizado.component';
 import { NewTaskComponent } from './tasks/new-task/new-task.component';
 import { CardTaskComponent } from './tasks/card-task/card-task.component';
-import { MatButtonModule, MatIconModule } from '@angular/material';
+import { MatButtonModule, MatIconModule, MatPaginatorModule } from '@angular/material';
+import { BoardJefeIngenieriaComponent } from './boards/board-jefe-ingenieria/board-jefe-ingenieria.component';
+import { BoardJefeDisenoComponent } from './boards/board-jefe-diseno/board-jefe-diseno.component';
+import { BoardJefeProduccionComponent } from './boards/board-jefe-produccion/board-jefe-produccion.component';
 registerLocaleData(localeEs, 'es');
 
 @NgModule({
@@ -48,6 +51,9 @@ registerLocaleData(localeEs, 'es');
         BoardContabilidadComponent,
         BoardJefeBodegaComponent,
         BoardNominaComponent,
+        BoardJefeIngenieriaComponent,
+        BoardJefeDisenoComponent,
+        BoardJefeProduccionComponent,
         FiltrosgeneralesauditorComponent,
         ResolucionesxvencerComponent,
         CardreportesComponent,
@@ -75,6 +81,8 @@ registerLocaleData(localeEs, 'es');
         MatSelectModule,
         MatButtonModule,
         MatIconModule,
+        NgbTypeaheadModule,
+        MatPaginatorModule
         //AngularFileUploaderModule,
     ],
     exports: [

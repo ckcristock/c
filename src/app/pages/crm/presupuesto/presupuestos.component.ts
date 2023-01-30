@@ -108,7 +108,7 @@ export class PresupuestosComponent implements OnInit {
 
   createFormFilters() {
     this.form_filters = this.fb.group({
-      item: '',
+      code: '',
       date: '',
       customer: '',
       municipality_id: '',

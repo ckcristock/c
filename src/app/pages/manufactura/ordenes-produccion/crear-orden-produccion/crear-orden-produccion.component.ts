@@ -137,7 +137,13 @@ export class CrearOrdenProduccionComponent implements OnInit {
     const type = this.form.get('type')
     const third_party_id = this.form.get('third_party_id')
     type.valueChanges.subscribe(q => {
-      q == 'externa' ? this.form.controls.third_party_id.enable() : this.form.controls.third_party_id.disable()
+      if (q == 'externa') {
+        this.form.controls.third_party_id.enable()
+        this.form.controls.quotation_id.enable()
+      } else {
+        this.form.controls.third_party_id.disable()
+        this.form.controls.quotation_id.disable()
+      }
     })
     third_party_id.valueChanges.subscribe(q => {
       if (q && q.value) {

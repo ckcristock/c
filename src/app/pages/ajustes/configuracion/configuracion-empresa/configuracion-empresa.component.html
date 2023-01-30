@@ -14,9 +14,9 @@
       <button
         type="button"
         class="btn btn-warning btn-sm"
-        (click)="openModal(commercial_terms, 'xl')"
+        (click)="openModal(default_texts, 'xl')"
       >
-        Condiciones comerciales
+        Textos predeterminados
       </button>
     </div>
   </div>
@@ -245,9 +245,9 @@
   </div>
 </ng-template>
 
-<ng-template #commercial_terms let-modal>
+<ng-template #default_texts let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Condiciones comerciales</h4>
+    <h4 class="text-primary modal-title">Textos predeterminados</h4>
     <button
       type="button"
       class="close"
@@ -260,6 +260,21 @@
   </div>
 
   <div class="modal-body">
+    <h6>Condiciones comerciales</h6>
+    <ckeditor
+      [editor]="_texteditor.Editor"
+      (ready)="_texteditor.onReady($event)"
+      [formControl]="commercial_terms_"
+      [config]="_texteditor.configEditor"
+    ></ckeditor>
+    <h6>Requisitos técnicos, funcionales y desempeño</h6>
+    <ckeditor
+      [editor]="_texteditor.Editor"
+      (ready)="_texteditor.onReady($event)"
+      [formControl]="commercial_terms_"
+      [config]="_texteditor.configEditor"
+    ></ckeditor>
+    <h6>Requisitos legales o reglamentos aplicables</h6>
     <ckeditor
       [editor]="_texteditor.Editor"
       (ready)="_texteditor.onReady($event)"

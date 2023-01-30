@@ -4,6 +4,7 @@ import { AsignacionTurnosService } from './asignacion-turnos.service';
 import { RotatingTurnService } from '../../ajustes/informacion-base/turnos/turno-rotativo/rotating-turn.service';
 import { GroupService } from '../../ajustes/informacion-base/services/group.service';
 import { DependenciesService } from '../../ajustes/informacion-base/services/dependencies.service';
+
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DatePipe, Location } from '@angular/common';
 import { Permissions } from 'src/app/core/interfaces/permissions-interface';
@@ -51,8 +52,8 @@ export class AsignacionTurnosComponent implements OnInit {
   dependencyList: any[] = [];
   datosGenerales: any[] = [];
   turns: any[] = [];
-  diaInicialSemana = moment().startOf('week');
-  diaFinalSemana = moment().endOf('week');
+  diaInicialSemana = moment().startOf('week');//revisar estos, y posiblemente eliminar
+  diaFinalSemana = moment().endOf('week');//se está usando en el formFilter
   startWeek: any
   endWeek: any;
 
@@ -92,7 +93,7 @@ export class AsignacionTurnosComponent implements OnInit {
           }
           this.orderObj = { ...params.keys, ...params }
 
-          if (Object.keys(this.orderObj).length > 4) {
+          if (Object.keys(this.orderObj).length > 2) {
             this.active_filters = true
             const formValues = {};
             for (const param in params) {
@@ -194,10 +195,12 @@ export class AsignacionTurnosComponent implements OnInit {
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/rrhh/turnos/asignacion', paramsurl.toString());
     const fecha_ini = this.formFilters.controls.date_from.value == ''
-                        ? moment().format('YYYY-MM-DD')
+                        //? moment().format('YYYY-MM-DD')
+                        ? moment().startOf('week')
                         : this.formFilters.controls.date_from.value
     const fecha_fin = this.formFilters.controls.date_to.value == ''
-                        ? moment().format('YYYY-MM-DD')
+                        //? moment().format('YYYY-MM-DD')
+                        ? moment().endOf('week')
                         : this.formFilters.controls.date_to.value
 
     this._asignacion
@@ -207,8 +210,8 @@ export class AsignacionTurnosComponent implements OnInit {
         this.loading = false;
         setTimeout(() => {
           this.changeWeek.emit({
-            diaInicialSemana: this.diaInicialSemana,
-            diaFinalSemana: this.diaFinalSemana,
+            diaInicialSemana: fecha_ini,
+            diaFinalSemana: fecha_fin,
           });
           //this.changeWeek.emit();
         }, 200);
@@ -234,9 +237,9 @@ export class AsignacionTurnosComponent implements OnInit {
     });
   }
 
-
   /**
    * revisar, la idea es que funcione con el formulario y no con la variable
+   * El emiter lo anvía al padre
    */
   makeRequestBySemana() {
     let semana = this.formFilters.get('week').value;

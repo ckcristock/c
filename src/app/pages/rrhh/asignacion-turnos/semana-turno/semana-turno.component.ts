@@ -20,22 +20,23 @@ export class SemanaTurnoComponent implements OnInit {
   diasSemana: any[] = [];
   horariosExistentes: any[] = [];
   turnos: any[] = [];
+  loading: boolean;
 
   constructor(
     private _asignacion: AsignacionTurnosService,
     private _swal: SwalService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.changeWeek.subscribe(async (d: any) => {
       this.diasSemana = [];
-      this.diaFinal = d.diaFinalSemana;
       this.diaInicial = d.diaInicialSemana;
+      this.diaFinal = d.diaFinalSemana;
       this.diaInicialSemana = this.diaInicial;
       this.diaFinalSemana = this.diaFinal;
       this.turnos = this.turnosRotativos.data;
       await this.fillDiasSemana();
-      setTimeout(() =>{
+      setTimeout(() => {
         this.loading = false; //sí, me quedó grande
       }, 1000)
       //this.loading = false; //sí, me quedó grande
@@ -54,7 +55,7 @@ export class SemanaTurnoComponent implements OnInit {
     if (turn) {
       this.masiveTurnId = turn;
 
-    }else{
+    } else {
       this.masiveTurnId = {};
 
     }
@@ -68,20 +69,20 @@ export class SemanaTurnoComponent implements OnInit {
       this.people.forEach((r) => {
         if (r.selected) {
           r.diasSemana.forEach((dia) => {
-            if(dia.dia == 'domingo'){
-              let turnId = this.masiveTurnId?.sunday?.id  ? this.masiveTurnId?.sunday?.id : 0;
+            if (dia.dia == 'domingo') {
+              let turnId = this.masiveTurnId?.sunday?.id ? this.masiveTurnId?.sunday?.id : 0;
               dia.turno = turnId;
-              dia.color = turnId ? this.masiveTurnId.sunday.color : 'black' ;
+              dia.color = turnId ? this.masiveTurnId.sunday.color : 'black';
               return;
             }
-            if(dia.dia == 'sábado'){
-              let turnId = this.masiveTurnId?.saturday?.id  ? this.masiveTurnId?.saturday?.id : 0;
+            if (dia.dia == 'sábado') {
+              let turnId = this.masiveTurnId?.saturday?.id ? this.masiveTurnId?.saturday?.id : 0;
               dia.turno = turnId;
-              dia.color = turnId ? this.masiveTurnId.saturday.color : 'black' ;
+              dia.color = turnId ? this.masiveTurnId.saturday.color : 'black';
               return;
 
             }
-            else{
+            else {
               dia.turno = this.masiveTurnId.rotating_turn_id;
               dia.color = this.masiveTurnId.color;
             }
@@ -90,10 +91,23 @@ export class SemanaTurnoComponent implements OnInit {
       });
     }
   }
-  loading: boolean;
+
   async fillDiasSemana() {
     this.loading = true;
+    this.diaInicialSemana = (typeof (this.diaInicialSemana) == 'string')
+      ? this.diaInicialSemana = moment(this.diaInicialSemana)
+      : this.diaInicialSemana
+
+    this.diaInicial = typeof (this.diaInicial) == 'string'
+      ? moment(this.diaInicial)
+      : this.diaInicial;
+
+    this.diaFinal = typeof (this.diaFinal) == 'string'
+      ? moment(this.diaFinal)
+      : this.diaFinal;
+
     this.diaInicialSemana.locale('es');
+    this.diaInicial.locale('es');
     while (this.diaInicial <= this.diaFinal) {
       let dia = this.diaInicial.format('dddd');
 
@@ -142,7 +156,7 @@ export class SemanaTurnoComponent implements OnInit {
 
     if (!turn.rotating_turn_id) {
       turn.color = '#000';
-    } else if (findColor){
+    } else if (findColor) {
       turn.color = this.turnos.find(
         (turno) => turno.id == turn.rotating_turn_id
       ).color;

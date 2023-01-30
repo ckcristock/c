@@ -27,11 +27,10 @@ Object.defineProperty(TooltipComponent.prototype, 'message', {
 export class OrdenesProduccionComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   datePipe = new DatePipe('es-CO');
-  date: any;
-  matPanel: boolean;
-  loading: boolean;
-  paginationMaterial: any;
   workOrders: any[] = []
+  loading: boolean;
+  matPanel: boolean;
+  date: any;
   formFilters: FormGroup;
   orderObj: any
   active_filters: boolean = false
@@ -42,6 +41,7 @@ export class OrdenesProduccionComponent implements OnInit {
       add: true
     }
   };
+  paginationMaterial: any;
   pagination: any = {
     page: '',
     pageSize: '',
@@ -59,8 +59,6 @@ export class OrdenesProduccionComponent implements OnInit {
     this.permission = this._permission.validatePermissions(this.permission);
     this.dateAdapter.setLocale('es');
   }
-
-
 
   ngOnInit(): void {
 

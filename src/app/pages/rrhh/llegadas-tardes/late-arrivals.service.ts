@@ -14,9 +14,17 @@ export class LateArrivalsService {
       { params }
     );
   }
+  getLateArrivalsPaginated(date1, date2, params = {}) {
+    return this.http.get(
+      `${environment.base_url}/late_arrivals/paginate/${date1}/${date2}`,
+      { params }
+    );
+  }
   downloadLateArrivals(date1, date2, params = {}) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.get(`${environment.base_url}/late-arrivals/download/${date1}/${date2}`,{ params, headers, responseType: 'blob' as 'json' });
+    return this.http.get(`${environment.base_url}/late-arrivals/download/${date1}/${date2}`,
+    { params, headers, responseType: 'blob' as 'json' }
+    );
   }
   getStatistcs(date1, date2, params = {}) {
     return this.http.get(

@@ -8,6 +8,16 @@ import { ReporteHorarioService } from './reporte-horario.service';
 import { CompanyService } from '../../ajustes/informacion-base/services/company.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { DatePipe, Location } from '@angular/common';
+import { DateAdapter } from 'saturn-datepicker';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
+import { PermissionService } from 'src/app/core/services/permission.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from 'src/app/core/services/user.service';
+import { User } from 'src/app/core/models/users.model';
+import { PageEvent } from '@angular/material';
+import { HttpParams } from '@angular/common/http';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reporte-horario',
@@ -15,63 +25,194 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./reporte-horario.component.scss'],
 })
 export class ReporteHorarioComponent implements OnInit {
+
   @ViewChild(MatAccordion) accordion: MatAccordion;
-  matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }    
+  datePipe = new DatePipe('es-CO');
+
+  loading: boolean;
+  matPanel: boolean;
+  date: any;
+  estadoFiltros = false;
+  formFilters: FormGroup;
+  orderObj: any
+  active_filters: boolean = false
+  permission: Permissions = {
+    menu: 'Reporte de horarios',
+    permissions: {
+      show: true,
+      add: true
+    }
+  };
+  paginationMaterial: any;
+  pagination: any = {
+    page: '',
+    pageSize: '',
   }
-  loading = false;
+  user: User;
+
   reporteHorarios: any[] = [];
   groupList: any[] = [];
   dependencyList: any[] = [];
   companies: any[] = [];
-  forma: FormGroup;
   people: any[] = [];
+
   constructor(
     private _companies: CompanyService,
     private _grups: GroupService,
     private _dependencies: DependenciesService,
-    private fb: FormBuilder,
     private _reporteHorario: ReporteHorarioService,
-    private _people: PersonService
-  ) {}
+    private _people: PersonService,
+
+    private dateAdapter: DateAdapter<any>,
+    private _permission: PermissionService,
+    private location: Location,
+    private fb: FormBuilder,
+    public router: Router,
+    private route: ActivatedRoute,
+    private _user: UserService,
+  ) {
+    this.user = _user.user;
+    this.dateAdapter.setLocale('es');
+    this.permission = this._permission.validatePermissions(this.permission);
+  }
 
   ngOnInit(): void {
-    this.createForm();
-    this.getGroup();
-    this.getCompanies();
-    this.addElement();
-    this.getDiaries();
-    this.getPeople();
+    if (this.permission.permissions.show) {
+      this.createFormFilters();
+
+      this.route.queryParamMap.subscribe((params: any) => {
+        if (params.params.pageSize) {
+          this.pagination.pageSize = params.params.pageSize
+        } else {
+          this.pagination.pageSize = 10
+        }
+        if (params.params.pag) {
+          this.pagination.page = params.params.pag
+        } else {
+          this.pagination.page = 1
+        }
+        this.orderObj = { ...params.keys, ...params }
+
+        if (Object.keys(this.orderObj).length > 4) {
+          this.active_filters = true
+          const formValues = {};
+          for (const param in params) {
+            formValues[param] = params[param];
+          }
+          this.formFilters.patchValue(formValues['params']);
+        }
+      });//aqui
+      this.createFormFilters();
+      this.getCompanies();
+      this.getGroup();
+      this.getPeople();
+      this.getDiaries();
+
+    } else {
+      this.router.navigate(['/notautorized']);
+    }
   }
-  estadoFiltros = false;
-  mostrarFiltros(){
-    this.estadoFiltros = !this.estadoFiltros
+
+  openClose(){
+    this.matPanel = !this.matPanel;
+    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
   }
+
+  handlePageEvent(event: PageEvent) {
+    this.pagination.pageSize = event.pageSize
+    this.pagination.page = event.pageIndex + 1
+    this.getDiaries()
+  }
+
+  resetFiltros() {
+    for (const controlName in this.formFilters.controls) {
+      this.formFilters.get(controlName).setValue('');
+    }
+    this.active_filters = false
+  }
+
+  SetFiltros(paginacion) {
+    let params = new HttpParams;
+    params = params.set('pag', paginacion)
+    params = params.set('pageSize', this.pagination.pageSize)
+    for (const controlName in this.formFilters.controls) {
+      const control = this.formFilters.get(controlName);
+      if (control.value) {
+        params = params.set(controlName, control.value);
+      }
+    }
+    return params;
+  }
+
+  createFormFilters() {
+    this.formFilters = this.fb.group({
+      turn_type: [''],
+      group_id: [''],
+      dependency_id: [''],
+      company_id: [1],
+      person_id: [''],
+      date_from: [''],
+      date_to: [''],
+    })
+    this.formFilters.valueChanges.pipe(
+      debounceTime(500),
+    ).subscribe(r => {
+      this.getDiaries();
+    })
+    this.formFilters.get('group_id').valueChanges.subscribe((valor) => {
+      if (valor) {
+        this.formFilters.get('dependency_id').enable();
+        this.getDependencies(valor);
+      } else {
+        this.formFilters.patchValue({ dependency_id: 0 });
+        this.formFilters.get('dependency_id').disable();
+      }
+    });
+  }
+
+  selectedDate(fecha) {
+    if (fecha.value) {
+      this.formFilters.patchValue({
+        date_from: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
+        date_to: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+      })
+    } else {
+      this.formFilters.patchValue({
+        date_from: '',
+        date_to: ''
+      });
+    }
+    this.getDiaries()
+  }
+
+  getDiaries() {
+    this.loading = true;
+    let params = {
+      ...this.pagination,
+      ...this.formFilters.value
+    }
+    var paramsurl = this.SetFiltros(this.pagination.page);
+    this.location.replaceState('/rrhh/turnos/reporte', paramsurl.toString());
+    const fecha_ini = this.formFilters.controls.date_from.value == ''
+                        ? moment().format('YYYY-MM-DD')
+                        : this.formFilters.controls.date_from.value
+    const fecha_fin = this.formFilters.controls.date_to.value == ''
+                        ? moment().format('YYYY-MM-DD')
+                        : this.formFilters.controls.date_to.value
+    this._reporteHorario
+      .getFixedTurnsDiaries(fecha_ini, fecha_fin, params )
+      .subscribe((r) => {
+        this.reporteHorarios = r.data;
+        this.loading = false;
+        //falta paginación, es necearia??
+      });
+  }
+
   getPeople() {
     this._people.getAll({}).subscribe((res: any) => {
       this.people = res.data;
       this.people.unshift({ text: 'Todos', value: 0 });
     });
-  }
-  getDiaries() {
-    let d1 = this.forma.get('first_day').value;
-    let d2 = this.forma.get('last_day').value;
-
-    this.loading = true;
-    this._reporteHorario
-      .getFixedTurnsDiaries(d1, d2, this.getForm() )
-      .subscribe((r) => {
-        this.reporteHorarios = r.data;
-        //console.log(this.reporteHorarios)
-        this.loading = false;
-      });
   }
   getGroup() {
     this._grups.getGroup().subscribe((r: any) => {
@@ -82,54 +223,37 @@ export class ReporteHorarioComponent implements OnInit {
   getDependencies(group_id) {
     this._dependencies.getDependencies({ group_id }).subscribe((r: any) => {
       this.dependencyList = r.data;
-      this.addElement();
+      this.dependencyList.unshift({ value: 0, text: 'Todas' });
     });
   }
   getCompanies() {
-    this._companies.getCompanies().subscribe((r: any) => {
+    this.companies = this.user.person.companies.map(ele=>({value: ele.id, text: ele.short_name}));
+    this.formFilters.patchValue({
+      company_id: 1
+    })
+    /* this._companies.getCompanies().subscribe((r: any) => {
       this.companies = r.data;
       this.companies.unshift({ value: 0, text: 'Todas' });
-    });
-  }
-
-  createForm() {
-    this.forma = this.fb.group({
-      turn_type: [''],
-      first_day: [moment().format('YYYY-MM-DD')],
-      last_day: [moment().format('YYYY-MM-DD')],
-      group_id: [0],
-      dependency_id: [0],
-      company_id: [0],
-      person_id: [0],
-    });
-
-    this.forma.get('group_id').valueChanges.subscribe((valor) => {
-      if (valor) {
-        this.forma.get('dependency_id').enable();
-        this.getDependencies(valor);
-      } else {
-        this.addElement();
-        this.forma.patchValue({ dependency_id: 0 });
-        this.forma.get('dependency_id').disable();
-      }
-    });
-  }
-  addElement() {
-    this.dependencyList.unshift({ value: 0, text: 'Todas' });
+    }); */
   }
 
   get turn_type_value() {
-    return this.forma.get('turn_type').value;
+    return this.formFilters.get('turn_type').value;
   }
+
   donwloading = false;
   download() {
-    let d1 = this.forma.get('first_day').value;
-    let d2 = this.forma.get('last_day').value;
+    const fecha_ini = this.formFilters.controls.date_from.value == ''
+                        ? moment().format('YYYY-MM-DD')
+                        : this.formFilters.controls.date_from.value
+    const fecha_fin = this.formFilters.controls.date_to.value == ''
+                        ? moment().format('YYYY-MM-DD')
+                        : this.formFilters.controls.date_to.value
 
     this.donwloading = true;
-   
+
     this._reporteHorario
-      .download(d1, d2, this.getForm())
+      .download(fecha_ini, fecha_fin, this.getForm())
       .subscribe((response: BlobPart) => {
         let blob = new Blob([response], { type: 'application/excel' });
         let link = document.createElement('a');
@@ -140,6 +264,7 @@ export class ReporteHorarioComponent implements OnInit {
         this.donwloading = false;
       }),
       (error) => {
+        console.log('Error downloading the file', error);
         this.donwloading = false;
       },
       () => {
@@ -149,7 +274,7 @@ export class ReporteHorarioComponent implements OnInit {
   }
 
   getForm(){
-    let form = this.forma.value;
+    let form = this.formFilters.value;
     if (form.person_id == null) {
        delete form.person_id
     }

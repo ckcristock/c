@@ -2,7 +2,7 @@ import { Location } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Template } from '@angular/compiler/src/render3/r3_ast';
 import { noUndefined } from '@angular/compiler/src/util';
-import { Component, ElementRef, EventEmitter, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,7 +24,7 @@ import { CatalogoService } from './catalogo.service';
   templateUrl: './catalogo.component.html',
   styleUrls: ['./catalogo.component.scss'],
 })
-export class CatalogoComponent implements OnInit {
+export class CatalogoComponent implements OnInit, AfterViewInit {
   @ViewChild('matPanel') matPanel: MatExpansionPanel;
 
   private modalRef: NgbModalRef;
@@ -63,7 +63,10 @@ export class CatalogoComponent implements OnInit {
   event = new EventEmitter<Event>();
   formFiltros: FormGroup;
   formProductos: FormGroup;
+  productoDetalle: any = {};
   filtroDefault: any = {};
+  productoDefault: any = {};
+  camposFlag: any = {};
   active = 1;
   loadingCategorias: boolean = false;
   loadingProductos: boolean = false;
@@ -109,7 +112,7 @@ export class CatalogoComponent implements OnInit {
         this.selectedCategory.subcategoria.id = (params.params.subcategoria)?parseInt(params.params.subcategoria):null;
         this.selectedCategory.categoria.nombre = (params.params.nom_categoria)?params.params.nom_categoria:'';
         this.selectedCategory.subcategoria.nombre = (params.params.nom_subcategoria)?params.params.nom_subcategoria:'';
-        Object.keys(this.formFiltros.value).forEach(campo => this.formFiltros.get(campo).setValue(params.params[campo] || this.filtroDefault[campo]));
+        Object.keys(this.formFiltros.value).forEach(campo => this.formFiltros.get(campo).setValue(params.params[campo] || this.filtroDefault[campo],{emitEvent: false}));
         this.filtroActivado = this.verificarFiltros();
         if(this.selectedCategory.categoria.id!==null){
           this.getProductosBySubcategoria(this.selectedCategory,false);
@@ -125,6 +128,9 @@ export class CatalogoComponent implements OnInit {
     } else {
       this.router.navigate(['/notauthorized'])
     }
+  }
+
+  ngAfterViewInit(): void{
   }
 
   verificarFiltros():boolean {
@@ -146,7 +152,7 @@ export class CatalogoComponent implements OnInit {
   }
 
   resetFiltros() {
-    this.formFiltros.reset(this.filtroDefault);
+    this.formFiltros.reset(this.filtroDefault,{emitEvent: false});
     this.filtroActivado = false
     this.alerta =  {
       senyal: "",
@@ -178,7 +184,8 @@ export class CatalogoComponent implements OnInit {
   createForms() {
     this.formFiltros = this.fb.group({
       nombre: [''],
-      estado: ['']
+      estado: [''],
+      imagen: ['']
     });
     this.filtroDefault = this.formFiltros.value;
 
@@ -201,6 +208,7 @@ export class CatalogoComponent implements OnInit {
       FormCamposCategoria: this.fb.array([]),
       FormCamposSubcategoria: this.fb.array([])
     });
+
   }
 
   get arrayCamposCat() {
@@ -239,6 +247,7 @@ export class CatalogoComponent implements OnInit {
           this.newCampoCatSubcat(tipo);
         });
         if(template != undefined){
+          this.camposFlag={cat:this.campos.cat.length, subcat:this.campos.subcat.length }
           this._modalCatalogo.open(template, 'lg');
         }
     });
@@ -263,7 +272,7 @@ export class CatalogoComponent implements OnInit {
         categoria:this.selectedCategory.categoria.id ,
         subcategoria:this.selectedCategory.subcategoria.id
       };
-    }else{
+    }else if(titulo == "Editar"){
       this.formProductos.patchValue({
         Id_Producto: data.Id_Producto,
         Id_Categoria: data.Id_Categoria,
@@ -276,7 +285,10 @@ export class CatalogoComponent implements OnInit {
         Foto: data.Foto
       });
       params={ producto:data.Id_Producto };
-    }
+    }/* else if(titulo == "Detalle del"){
+      this.productoDetalle = data;
+    } */
+
     this.mostrarCampos(params,["cat","subcat"],confirm);
   }
 
@@ -358,8 +370,8 @@ export class CatalogoComponent implements OnInit {
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.foto.file = base64;
+        this.formProductos.get("Foto").setValue(this.foto.file);
       });
-      this.formProductos.get("Foto").setValue(this.foto.file);
     }
   }
 
@@ -404,8 +416,18 @@ export class CatalogoComponent implements OnInit {
       delete this.formProductos.value.FormCamposCategoria;
       delete this.formProductos.value.FormCamposSubcategoria;
 
-      let formData = {...this.formProductos.value };
+      let formData = {
+        ...this.formProductos.value,
+        user_id: this._user.user.id,
+        camposFlag:{
+          cat:(this.campos.cat.length>this.camposFlag.cat),
+          subcat:(this.campos.subcat.length>this.camposFlag.subcat)
+        }
+      };
+
       formData["Foto"] = { ...this.foto };
+      delete formData.string;
+      delete formData.name;
       this._swal.show({
         title: '¿Estás seguro(a)?',
         text: 'Si ya verificó la información y está de acuerdo, por favor proceda.',

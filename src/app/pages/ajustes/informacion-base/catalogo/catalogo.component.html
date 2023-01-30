@@ -8,7 +8,10 @@
           </div>
         </div>
         <hr class="line" />
-        <mat-accordion displayMode="flat" *ngIf="Categorias.length > 0; else loadDataCategorias">
+        <mat-accordion
+          displayMode="flat"
+          *ngIf="Categorias.length > 0; else loadDataCategorias"
+        >
           <mat-expansion-panel
             class="mat-elevation-z0 my-0"
             *ngFor="let categoria of Categorias"
@@ -105,14 +108,27 @@
                   formControlName="estado"
                   matInput
                   placeholder="Estado del producto"
-                  (selectionChange)="getProducts()"
-                >
+                ><!--
+                  (selectionChange)="getProducts()" -->
                   <mat-option value="">Todos</mat-option>
                   <mat-option
                     *ngFor="let estado of estados"
                     [value]="estado.estado"
                     >{{ estado.estado }}</mat-option
                   >
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Imagen</mat-label>
+                <mat-select
+                  formControlName="imagen"
+                  matInput
+                  placeholder="Mostrar registros con imagen?"
+                ><!--
+                  (selectionChange)="getProducts()" -->
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option value="con">Mostrar con foto</mat-option>
+                  <mat-option value="sin">Mostrar sin foto</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -138,6 +154,7 @@
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
+                <th class="col-1">Imagen</th>
                 <th>Nombre</th>
                 <th>Embalaje</th>
                 <th class="col-1"><i class="mdi mdi-chevron-down"></i></th>
@@ -149,6 +166,14 @@
                 *ngFor="let producto of Productos"
                 [ngClass]="{ 'text-danger': producto.Estado == 'Inactivo' }"
               >
+                <td class="align-middle p-0">
+                  <img
+                    onerror="this.src='../../../../assets/images/not-available.png'"
+                    [src]="producto.Foto"
+                    class="img-fluid img-product"
+                    alt="Vista previa del producto"
+                  />
+                </td>
                 <td class="align-middle">{{ producto.Nombre_Comercial }}</td>
                 <td class="align-middle">{{ producto.Embalaje }}</td>
                 <td class="align-middle">
@@ -169,6 +194,17 @@
                           (click)="openConfirm(add, 'Editar', producto)"
                         >
                           <i class="far fa-edit"></i> Editar
+                        </a>
+                        <a
+                          role="button"
+                          class="dropdown-item waves-light caja-botones"
+
+                          [routerLink]="[
+                            'ver',
+                            producto.Id_Producto
+                          ]"
+                        ><!-- (click)="openConfirm(detalleCatalogo, 'Detalle del', producto)" -->
+                          <i class="fa fa-file-invoice"></i> Ver detalle
                         </a>
                         <a
                           role="button"
@@ -328,48 +364,56 @@
               data-placement="top"
               [title]="foto.name || 'No ha seleccionado ningún archivo'"
               class="text-white d-inline-block text-truncate"
-              >Cargar <span *ngIf="foto.name || formProductos.value.Foto">nueva</span> foto del producto.</span
+              >Cargar
+              <span *ngIf="foto.name || formProductos.value.Foto">nueva</span>
+              foto del producto.</span
             >
           </button>
         </div>
       </div>
       <hr class="line" />
-  <!-- <span class="text-primary">Campos de la subcategoría</span> -->
+      <!-- <span class="text-primary">Campos de la subcategoría</span> -->
       <ng-container
-        *ngIf="(campos.cat.length + campos.subcat.length) > 0; else notCatSubcatForm"
+        *ngIf="
+          campos.cat.length + campos.subcat.length > 0;
+          else notCatSubcatForm
+        "
       >
-        <ng-container formArrayName="FormCamposCategoria" *ngIf="campos.cat.length > 0; else notCatForm">
+        <ng-container
+          formArrayName="FormCamposCategoria"
+          *ngIf="campos.cat.length > 0; else notCatForm"
+        >
           <ng-container
             *ngFor="let campoControl of arrayCamposCat.controls; let i = index"
           >
-              <div
-                class="row"
-                [formGroupName]="i"
-              >
-                <ng-container *ngFor="let campo of campos.cat">
-                  <mat-form-field class="col" appearance="outline">
-                    <mat-label>{{ campo.label }}</mat-label>
-                    <input
-                      type="{{ campo.type }}"
-                      formControlName="{{ campo.label }}"
-                      matInput
-                      placeholder=""
-                      autocomplete="off"
-                      [required]="campo.required == 'Si'"
-                    />
-                  </mat-form-field>
-                </ng-container>
-              </div>
+            <div class="row" [formGroupName]="i">
+              <ng-container *ngFor="let campo of campos.cat">
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>{{ campo.label }}</mat-label>
+                  <input
+                    type="{{ campo.type }}"
+                    formControlName="{{ campo.label }}"
+                    matInput
+                    placeholder=""
+                    autocomplete="off"
+                    [required]="campo.required == 'Si'"
+                  />
+                </mat-form-field>
+              </ng-container>
+            </div>
           </ng-container>
         </ng-container>
-        <ng-container formArrayName="FormCamposSubcategoria" *ngIf="campos.subcat.length > 0; else notSubcatForm">
+        <ng-container
+          formArrayName="FormCamposSubcategoria"
+          *ngIf="campos.subcat.length > 0; else notSubcatForm"
+        >
           <ng-container
-            *ngFor="let campoControl of arrayCamposSubcat.controls; let i = index"
+            *ngFor="
+              let campoControl of arrayCamposSubcat.controls;
+              let i = index
+            "
           >
-            <div
-              class="row"
-              [formGroupName]="i"
-            >
+            <div class="row" [formGroupName]="i">
               <ng-container *ngFor="let campo of campos.subcat">
                 <mat-form-field class="col" appearance="outline">
                   <mat-label>{{ campo.label }}</mat-label>
@@ -390,7 +434,11 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="modalCatalogo.close()">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modalCatalogo.close()"
+    >
       Cancelar
     </button>
     <button
@@ -400,6 +448,41 @@
       class="btn btn-primary"
     >
       Guardar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #detalleCatalogo let-modalDetalleCatalogo>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">{{ title }} producto</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modalDetalleCatalogo.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-3">
+        <img class="img-rounded d-block rounded img-fluid"
+          onerror="this.src='../../../../assets/images/not-available.png'"
+          [src]="productoDetalle.Foto"
+          alt="Vista previa del producto"
+        >
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="modalDetalleCatalogo.close()"
+    >
+      Salir
     </button>
   </div>
 </ng-template>
@@ -473,7 +556,12 @@
 
 <ng-template #openCat let-modalCat>
   <div class="modal-body">
-    <app-categorias [reloadCategories]="{evento:event,filtro:selectedCategory.categoria.nombre}"></app-categorias>
+    <app-categorias
+      [reloadCategories]="{
+        evento: event,
+        filtro: selectedCategory.categoria.nombre
+      }"
+    ></app-categorias>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="modalCat.close()">
@@ -484,7 +572,12 @@
 
 <ng-template #openSubcat let-modalSubcat>
   <div class="modal-body">
-    <app-subcategorias [reloadSubcategories]="{evento:event,filtro:selectedCategory.subcategoria.nombre}"></app-subcategorias>
+    <app-subcategorias
+      [reloadSubcategories]="{
+        evento: event,
+        filtro: selectedCategory.subcategoria.nombre
+      }"
+    ></app-subcategorias>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="modalSubcat.close()">
@@ -500,10 +593,19 @@
 <ng-template #notCatSubcatForm>
   <div class="alert alert-warning" role="alert">
     No tiene campos asignados. Si lo desea puede ir al
-    <a type="button" class="alert-link" (click)="openCatSubcatModal(openCat,'cat')">
+    <a
+      type="button"
+      class="alert-link"
+      (click)="openCatSubcatModal(openCat, 'cat')"
+    >
       módulo de Categorías
-    </a> o al
-    <a type="button" class="alert-link" (click)="openCatSubcatModal(openSubcat,'subcat')">
+    </a>
+    o al
+    <a
+      type="button"
+      class="alert-link"
+      (click)="openCatSubcatModal(openSubcat, 'subcat')"
+    >
       módulo de Subcategorías
     </a>
     y verificar que sean los campos correctos.
@@ -513,7 +615,11 @@
 <ng-template #notCatForm>
   <div class="alert alert-warning" role="alert">
     La categoría selecionada no tiene campos asignados. Si lo desea puede ir al
-    <a type="button" class="alert-link" (click)="openCatSubcatModal(openCat,'cat')">
+    <a
+      type="button"
+      class="alert-link"
+      (click)="openCatSubcatModal(openCat, 'cat')"
+    >
       módulo de Categorías
     </a>
     y verificar que sean los campos correctos.
@@ -522,8 +628,13 @@
 
 <ng-template #notSubcatForm>
   <div class="alert alert-warning" role="alert">
-    La subcategoría selecionada no tiene campos asignados. Si lo desea puede ir al
-    <a type="button" class="alert-link" (click)="openCatSubcatModal(openSubcat,'subcat')">
+    La subcategoría selecionada no tiene campos asignados. Si lo desea puede ir
+    al
+    <a
+      type="button"
+      class="alert-link"
+      (click)="openCatSubcatModal(openSubcat, 'subcat')"
+    >
       módulo de Subcategorías
     </a>
     y verificar que sean los campos correctos.

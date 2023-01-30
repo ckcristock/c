@@ -132,9 +132,9 @@ export class CategoriasComponent implements OnInit {
     });
 
     this.form.get("Nombre")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
-    this.form.get("compraInternacional")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
-    this.form.get("separacionCategorias")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
-    this.form.get("fijo")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("Compra_Internacional")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("Aplica_Separacion_Categorias")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("Fijo")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
   }
 
   dinamicFields() {

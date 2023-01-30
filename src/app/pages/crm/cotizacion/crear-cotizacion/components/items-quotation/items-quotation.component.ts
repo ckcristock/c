@@ -42,9 +42,11 @@ export class ItemsQuotationComponent implements OnInit {
   }
 
   addItems(item_to_add = null, type) {
+    console.log(item_to_add)
     let item = this.fb.group({
       subItems: this.fb.array([]),
       id: item_to_add ? item_to_add.id : '',
+      budget_item_id: item_to_add ? item_to_add.id : '',
       name: [item_to_add ? item_to_add.name : '', Validators.required],
       cuantity_aux: [1, Validators.required],
       cuantity: 1,
@@ -333,6 +335,7 @@ export class ItemsQuotationComponent implements OnInit {
   makeSubItemGroup(pre, edit = null, type) {
     return this.fb.group({
       id: ((edit && pre?.id) ? pre.id : ''),
+      budget_item_subitem_id: ((edit && pre?.id) ? pre.id : ''),
       description: [((edit && pre?.description) ? pre.description : ''), Validators.required],
       cuantity_aux: ((edit && pre?.cuantity) ? pre.cuantity : 1),
       cuantity: ((edit && pre?.cuantity) ? pre.cuantity : 1),

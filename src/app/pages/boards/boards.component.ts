@@ -9,6 +9,9 @@ import { BoardsService } from '../ajustes/informacion-base/services/boards.servi
 })
 export class BoardsComponent implements OnInit {
   loading: boolean
+  personId = this._user.user.person.id;
+  board: any;
+
   constructor(
     private _board: BoardsService,
     private _user: UserService
@@ -17,8 +20,7 @@ export class BoardsComponent implements OnInit {
   ngOnInit() {
     this.getBoardsWorked();
   }
-  personId = this._user.user.person.id;
-  board: any;
+
   getBoardsWorked() {
     this.loading = true
     this._board
@@ -26,8 +28,7 @@ export class BoardsComponent implements OnInit {
       .subscribe(
         (d: any) => {
           this.loading = false
-          this.board = d.data[0].board_id                   
-          //console.log(this.board)
+          this.board = d.data[0].board_id
         });
   }
 }

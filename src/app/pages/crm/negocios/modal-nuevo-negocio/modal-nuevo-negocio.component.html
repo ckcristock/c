@@ -148,12 +148,12 @@
               </ng-select>
             </div>
             <mat-form-field class="col" appearance="outline">
-              <mat-label>Item</mat-label>
+              <mat-label>Código</mat-label>
               <input
                 type="text"
                 matInput
-                placeholder="Busca por item"
-                formControlName="item"
+                placeholder="Busca por código"
+                formControlName="code"
                 autocomplete="off"
               />
             </mat-form-field>
@@ -200,7 +200,7 @@
               >
                 <thead class="bg-light">
                   <tr class="text-center text-uppercase">
-                    <th>Item</th>
+                    <th>Código</th>
                     <th>Fecha</th>
                     <th>Cliente</th>
                     <th>Destino</th>
@@ -224,7 +224,7 @@
                         color="primary"
                         (change)="guardarPresupuesto($event, item)"
                         [id]="item.id"
-                        >PRES {{ item.id }}</mat-checkbox
+                        >{{ item.code }}</mat-checkbox
                       >
                     </td>
                     <td class="align-middle">
@@ -379,7 +379,7 @@
               >
                 <thead class="bg-light">
                   <tr class="text-center text-uppercase">
-                    <th>Item</th>
+                    <th>Código</th>
                     <th>Fecha</th>
                     <th>Cliente</th>
                     <th>Destino</th>
@@ -396,7 +396,7 @@
                         color="primary"
                         (change)="guardarCotizacion($event, item)"
                         [id]="item.id"
-                        >COT {{ item.id }}</mat-checkbox
+                        >{{ item.code }}</mat-checkbox
                       >
                     </td>
                     <td class="align-middle">

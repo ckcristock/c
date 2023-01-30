@@ -1,0 +1,345 @@
+<h2 class="title-board text-center">JEFE DE DISEÑO</h2>
+<div class="row">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="row d-flex justify-content-between">
+          <h5 class="col card-title text-primary">Por asignar</h5>
+          <div class="col text-right">
+            <span class="badge badge-pill badge-warning">{{
+              work_orders.length
+            }}</span>
+          </div>
+        </div>
+        <hr class="line" />
+        <div class="d-flex justify-content-end mb-1">
+          <small
+            role="button"
+            class="text-info"
+            (click)="
+              orderBy == 'asc' ? (orderBy = 'desc') : (orderBy = 'asc');
+              getInicial()
+            "
+          >
+            <i
+              class="fas"
+              [class]="
+                orderBy == 'asc' ? 'fa-sort-amount-up' : 'fa-sort-amount-down'
+              "
+            ></i>
+            {{
+              orderBy == "asc"
+                ? "Fecha de entrega (asc)"
+                : "Fecha de entrega (desc)"
+            }}
+          </small>
+        </div>
+        <ng-container
+          *ngIf="!loading_stage && work_orders.length > 0; else notData"
+        >
+          <div class="list-group">
+            <a
+              *ngFor="let item of work_orders"
+              href="javascript:void(0)"
+              (click)="openModal(forStageModal, item)"
+              class="list-group-item list-group-item-action flex-column align-items-start list-group-item-light"
+            >
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">
+                  <i class="fas fa-tools"></i> {{ item.code }}
+                </h5>
+                <small>{{ item.delivery_date | date }}</small>
+              </div>
+              <p class="mb-1">
+                <b><i class="fas fa-building"></i> Empresa:</b>
+                {{ item.third_party.text | titlecase }} <br />
+                <b><i class="fas fa-user-alt"></i> Persona:</b>
+                {{ item.third_party_person.name | titlecase }}
+              </p>
+              <small
+                ><i class="fas fa-map-marker"></i>
+                {{ item.city.name | titlecase }}</small
+              >
+            </a>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h5 class="text-primary card-title">
+              Seguimiento
+              <span style="font-size: smaller" *ngIf="paginationMaterial"
+                ><small class="pb-2 text-secondary text-muted"
+                  >pág. {{ paginationMaterial.current_page }}</small
+                ></span
+              >
+            </h5>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button class="btn btn-info btn-sm" (click)="openClose()">
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
+            </div>
+          </div>
+        </div>
+        <hr class="line" />
+        <mat-expansion-panel
+          #matPanel="matExpansionPanel"
+          class="mat-elevation-z0"
+        >
+          <ng-container [formGroup]="formFilters">
+            <div class="row">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Código</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="code"
+                  autocomplete="off"
+                  placeholder="Busca por código"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Estado</mat-label>
+                <mat-select formControlName="status">
+                  <mat-option value="">Todas</mat-option>
+                  <mat-option value="pendiente">Pendiente</mat-option>
+                  <mat-option value="proceso">En proceso</mat-option>
+                  <mat-option value="completado">Completado</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </ng-container>
+        </mat-expansion-panel>
+        <div class="alert alert-info" *ngIf="active_filters" role="alert">
+          <strong
+            >Hay filtros de búsqueda activos, para mostrar todos los resultados
+            haz click
+          </strong>
+          <a
+            href="javascript: void(0)"
+            (click)="resetFiltros()"
+            class="alert-link"
+            >aquí</a
+          >
+        </div>
+        <ng-container
+          *ngIf="
+            !loading_assigned && work_orders_assigned.length > 0;
+            else notDataAssigned
+          "
+        >
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th scope="col">Código</th>
+                  <th scope="col">Tiempo previsto</th>
+                  <th scope="col">Asignada a</th>
+                  <th scope="col">Transcurrido</th>
+                  <th scope="col">Estado</th>
+                  <th><i class="mdi mdi-chevron-down"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class="text-center"
+                  *ngFor="let item of work_orders_assigned"
+                >
+                  <td>{{ item.work_order.code }}</td>
+                  <td>{{ item.hours }}h. {{ item.minutes }}m.</td>
+                  <td>
+                    <ng-template #popContent>
+                      <div class="popover-people">
+                        <ul class="list-group list-group-flush">
+                          <li
+                            class="list-group-item p-1"
+                            *ngFor="let person of item.people"
+                          >
+                            <img
+                              onerror="this.src='../../../../assets/images/noprofile.png'"
+                              class="img-thumbnail rounded-circle mx-auto img-fluid header-profile-user"
+                              [src]="person.image"
+                            />
+                            {{ person.person }}
+                          </li>
+                        </ul>
+                      </div>
+                    </ng-template>
+                    <ng-template #popTitle>LISTA DE FUNCIONARIOS</ng-template>
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-sm"
+                      [ngbPopover]="popContent"
+                      [popoverTitle]="popTitle"
+                    >
+                      Presiona para ver
+                    </button>
+                  </td>
+                  <td>{{ item.duration || "Espera..." }}</td>
+                  <td>
+                    <span
+                      class="badge"
+                      [class]="
+                        item.status == 'pendiente'
+                          ? 'badge-danger'
+                          : item.status == 'proceso'
+                          ? 'badge-warning'
+                          : item.status == 'completado'
+                          ? 'badge-success'
+                          : ''
+                      "
+                      >{{ item.status | titlecase }}</span
+                    >
+                  </td>
+                  <td>
+                    <div ngbDropdown container="body" class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm waves-light"
+                        type="button"
+                      >
+                        <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          class="dropdown-item waves-light text-success caja-botones"
+                          href="javascript: void(0);"
+                          [routerLink]="[
+                            '/manufactura/diseño/ver',
+                            item.id
+                          ]"
+                        >
+                          <i class="fas fa-eye"></i> Ver</a
+                        >
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <mat-paginator
+            *ngIf="paginationMaterial"
+            [length]="paginationMaterial.total"
+            [pageSize]="paginationMaterial.per_page"
+            [pageIndex]="paginationMaterial.current_page - 1"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            (page)="handlePageEvent($event)"
+            aria-label="Select page"
+          >
+          </mat-paginator>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading_stage"></app-not-data>
+</ng-template>
+<ng-template #notDataAssigned>
+  <app-not-data [loading]="loading_assigned"></app-not-data>
+</ng-template>
+
+<ng-template #forStageModal let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">
+      Asignar orden de producción (diseño)
+    </h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-container [formGroup]="form_assign">
+      <div class="row">
+        <div class="col-12 mat-form-field-wrapper">
+          <ng-select
+            [multiple]="true"
+            formControlName="people"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Funcionario *"
+            [closeOnSelect]="false"
+            [clearable]="false"
+            required
+          >
+            <ng-option *ngFor="let item of people" [value]="item.value">{{
+              item.text
+            }}</ng-option>
+          </ng-select>
+        </div>
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Dependencia</mat-label>
+          <mat-select formControlName="dependency_id" required>
+            <mat-option
+              *ngFor="let item of dependencies"
+              [value]="item.value"
+              >{{ item.text }}</mat-option
+            >
+          </mat-select>
+          <mat-error>Campo obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Horas</mat-label>
+          <input
+            matInput
+            type="number"
+            autocomplete="off"
+            formControlName="hours"
+            required
+          />
+          <mat-error>Obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3" appearance="outline">
+          <mat-label>Minutos</mat-label>
+          <input
+            matInput
+            type="number"
+            autocomplete="off"
+            formControlName="minutes"
+            required
+          />
+          <mat-error>Obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-12 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Observaciones</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingresa las observaciones"
+            rows="5"
+            required
+            formControlName="observations"
+            [cdkTextareaAutosize]="true"
+          ></textarea>
+          <mat-hint>Max. 500 caracteres</mat-hint>
+          <mat-error>Campo obligatorio</mat-error>
+        </mat-form-field>
+      </div>
+    </ng-container>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button type="button" (click)="assign()" class="btn btn-primary">
+      Asignar
+    </button>
+  </div>
+</ng-template>

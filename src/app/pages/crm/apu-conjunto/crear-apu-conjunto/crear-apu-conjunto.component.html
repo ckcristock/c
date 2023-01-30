@@ -714,12 +714,14 @@
                       />
                     </td>
                     <td class="align-middle">
-                      <input
-                        type="text"
+                      <select
                         class="form-control form-control-sm"
-                        id="descripcion_otros"
-                        formControlName="unit"
-                      />
+                        formControlName="unit_id"
+                      >
+                        <option *ngFor="let item of units" [value]="item.value">
+                          {{ item.text }}
+                        </option>
+                      </select>
                     </td>
                     <td class="align-middle">
                       <input

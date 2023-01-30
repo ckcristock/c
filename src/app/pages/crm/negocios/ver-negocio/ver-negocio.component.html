@@ -75,7 +75,7 @@
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
-                <th class="col-md-3">Descripción</th>
+                <th class="col-md-3">Código</th>
                 <th class="col-md-3">Fecha</th>
                 <th class="col-md-3">Valor</th>
                 <th class="col-md-3">Estado</th>
@@ -88,7 +88,7 @@
                 class="text-center"
               >
                 <th class="align-middle" scope="row">
-                  {{ pres?.budget.line }} - {{ pres?.budget.project }}
+                  {{ pres?.budget.code }}
                 </th>
                 <td class="align-middle">
                   {{ pres?.budget.created_at | date }}
@@ -199,18 +199,34 @@
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
-                <th>Descripción</th>
+                <th>Código</th>
                 <th>Fecha</th>
                 <th>Valor</th>
+                <th>Presupuesto</th>
                 <th>Estado</th>
                 <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let item of negocio?.quotations" class="text-center">
-                <th scope="row">{{ item.name }}</th>
+                <th scope="row">{{ item.code }}</th>
                 <td>{{ item.created_at | date }}</td>
                 <td>$ {{ item.total_cop | number }}</td>
+                <td
+                  [role]="item.budget_included == 'si' ? 'button' : ''"
+                  [class]="item.budget_included == 'si' ? 'text-primary' : ''"
+                  [routerLink]="
+                    item.budget_included == 'si'
+                      ? ['/crm/presupuesto/ver/' + item.budgets.id]
+                      : null
+                  "
+                >
+                  {{
+                    item.budget_included == "si"
+                      ? item.budgets.code
+                      : "No incluye"
+                  }}
+                </td>
                 <td>
                   <span
                     class="badge"
@@ -382,15 +398,15 @@
           >
           </ng-select>
         </div>
-        <!-- <mat-form-field class="col" appearance="outline">
-          <mat-label>Item</mat-label>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Código</mat-label>
           <input
             type="text"
             matInput
-            placeholder="Busca por item"
-            formControlName="item"
+            placeholder="Busca por código"
+            formControlName="code"
           />
-        </mat-form-field> -->
+        </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Fecha</mat-label>
           <input
@@ -436,7 +452,7 @@
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
-            <th>Item</th>
+            <th>Código</th>
             <th>Fecha</th>
             <th>Cliente</th>
             <th>Destino</th>
@@ -460,7 +476,7 @@
                 color="primary"
                 (change)="guardarPresupuesto(item.id, item.total_cop)"
                 [id]="item.id"
-                >PRES {{ item.id }}</mat-checkbox
+                >{{ item.code }}</mat-checkbox
               >
             </td>
             <td class="align-middle">
@@ -634,7 +650,7 @@
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
-            <th>Item</th>
+            <th>Código</th>
             <th>Fecha</th>
             <th>Cliente</th>
             <th>Destino</th>
@@ -651,7 +667,7 @@
                 color="primary"
                 (change)="guardarCotizacion(item.id, item.total_cop)"
                 [id]="item.id"
-                >PRES {{ item.id }}</mat-checkbox
+                >{{ item.code }}</mat-checkbox
               >
             </td>
             <td>{{ item.created_at | date : "longDate" }}</td>

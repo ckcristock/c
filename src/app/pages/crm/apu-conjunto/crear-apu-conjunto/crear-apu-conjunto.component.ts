@@ -300,7 +300,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   getApus(e: any[]) {
     let item = this.form.get('list_pieces_sets') as FormArray
     e.forEach(apu => {
-      const exist = item.value.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
+      const exist = item.value.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module)) //valida que no exista esa pieza en la lista, pero no funcioanria
       !exist ? item.push(this.piecesSetsControl(apu)) : ''
     });
 

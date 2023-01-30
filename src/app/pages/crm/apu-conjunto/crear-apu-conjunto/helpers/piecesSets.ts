@@ -18,7 +18,7 @@ export const piecesSetsHelper = {
           amount: [r.amount],
           unit_cost: [r.unit_cost],
           total: [r.total],
-          description: []
+          description: [r.apu_type == 'P' ? r.apupart_th : r.apu_type == 'C' ? r.apuset_th : '']
         });
         this.subscribePiecesSets(group, form, list_pieces_sets);
         list_pieces_sets.push(group);
@@ -35,34 +35,34 @@ export const piecesSetsHelper = {
       amount: [0],
       unit_cost: (item ? item.unit_cost : 0),
       total: [0],
-      description: (item ? item.name : '')
+      description: (item ? { id: item.apu_id, name: item.name, text: item.name, unit_direct_cost: item.unit_cost, value: item.apu_id } : '')
     });
     let list = form.get('list_pieces_sets') as FormArray;
     this.subscribePiecesSets(setpartlist, form, list);
     return setpartlist;
   },
 
-  subscribePiecesSets( group: FormGroup, form:FormGroup, list: FormArray){
+  subscribePiecesSets(group: FormGroup, form: FormGroup, list: FormArray) {
     group.get('apu_type').valueChanges.subscribe(value => {
       (value == 'C'
-      ?
-      group.patchValue({
-        description: '',
-        apu_part_id: '',
-        unit: '',
-        amount: 0,
-        unit_cost: 0,
-        total: 0
-      })
-      :
-      group.patchValue({
-        description: '',
-        apu_set_child_id: '',
-        unit: '',
-        amount: 0,
-        unit_cost: 0,
-        total: 0
-      }))
+        ?
+        group.patchValue({
+          description: '',
+          apu_part_id: 0,
+          unit: '',
+          amount: 0,
+          unit_cost: 0,
+          total: 0
+        })
+        :
+        group.patchValue({
+          description: '',
+          apu_set_child_id: 0,
+          unit: '',
+          amount: 0,
+          unit_cost: 0,
+          total: 0
+        }))
     })
     group.get('description').valueChanges.subscribe(value => {
       if (group.get('apu_type').value == 'P') {
@@ -94,14 +94,14 @@ export const piecesSetsHelper = {
     })
   },
 
-  subtotalPieceSets(list: FormArray, form: FormGroup){
+  subtotalPieceSets(list: FormArray, form: FormGroup) {
     setTimeout(() => {
       let total =
-      list.value.reduce(
-        (a, b) => {
-          return  a + b.total
-        },0
-      );
+        list.value.reduce(
+          (a, b) => {
+            return a + b.total
+          }, 0
+        );
       form.patchValue({
         list_pieces_sets_subtotal: total
       })

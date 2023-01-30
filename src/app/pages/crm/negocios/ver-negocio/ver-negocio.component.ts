@@ -78,7 +78,7 @@ export class VerNegocioComponent implements OnInit {
 
   createFormFiltersBudgets() {
     this.form_filters_budget = this.fb.group({
-      item: '',
+      code: '',
       date: '',
       customer: '',
       municipality_id: '',

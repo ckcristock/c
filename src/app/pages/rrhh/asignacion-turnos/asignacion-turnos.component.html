@@ -15,13 +15,13 @@
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <form [formGroup]="forma" (ngSubmit)="makeRequestBySemana(); getData()">
+        <form [formGroup]="formFilters" (ngSubmit)="makeRequestBySemana()">
           <div class="row">
             <mat-form-field class="col" appearance="outline">
               <mat-label>Grupo</mat-label>
               <mat-select
                 formControlName="group_id"
-                (selectionChange)="makeRequestBySemana(); getData()"
+                (selectionChange)="makeRequestBySemana()"
               >
                 <mat-option
                   *ngFor="let group of groupList"
@@ -35,7 +35,7 @@
               <mat-label>Dependencia</mat-label>
               <mat-select
                 formControlName="dependency_id"
-                (selectionChange)="makeRequestBySemana(); getData()"
+                (selectionChange)="makeRequestBySemana()"
               >
                 <mat-option
                   *ngFor="let dependency of dependencyList"
@@ -53,28 +53,35 @@
                 placeholder="Busca por funcionario"
                 formControlName="person"
                 [readonly]="false"
-                (input)="makeRequestBySemana(); getData()"
+                (input)="makeRequestBySemana()"
               />
             </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
+
+            <mat-form-field appearance="outline" class="col">
               <mat-label>Semana</mat-label>
               <input
                 matInput
-                type="week"
-                (change)="makeRequestBySemana(); getData()"
-                formControlName="week"
-                required
+                [satDatepicker]="pickerDate"
+                [value]="date"
+                (dateChange)="selectedDate($event)"
+                name="daterange"
+                autocomplete="off"
               />
+              <sat-datepicker #pickerDate [rangeMode]="true"></sat-datepicker>
+              <sat-datepicker-toggle
+                matSuffix
+                [for]="pickerDate"
+              ></sat-datepicker-toggle>
             </mat-form-field>
           </div>
         </form>
       </mat-expansion-panel>
     </mat-accordion>
     <h5><span class="badge badge-pill badge-warning">Semana del {{startWeek | date}} al {{endWeek | date}}</span></h5>
-    <div *ngIf="datosGenerales.length && !loading; else notData">
-      <div *ngFor="let company of datosGenerales">
-        <div *ngFor="let group of company.groups">
-          <div *ngFor="let dependency of group.dependencies">
+    <ng-container *ngIf="datosGenerales.length > 0 && !loading; else notData">
+      <ng-container *ngFor="let company of datosGenerales">
+        <ng-container *ngFor="let group of company.groups">
+          <ng-container *ngFor="let dependency of group.dependencies">
             <h6 class="text-center text-uppercase text-primary">
               {{ group.name }} - {{ dependency.name }}
             </h6>
@@ -85,17 +92,17 @@
               [changeWeek]="changeWeek"
               [diaFinal]="diaFinalSemana"
             ></app-semana-turno>
-          </div>
-        </div>
-      </div>
-    </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
   </div>
 </div>
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
-<!-- 
+<!--
 <div class="alert alert-secondary" >
   <p class="font-weight-bold text-center">
     Aún no existen centros de costos, puede agregarlos desde el menú

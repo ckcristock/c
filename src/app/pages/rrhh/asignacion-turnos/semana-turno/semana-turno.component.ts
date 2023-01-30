@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import * as moment from 'moment';
 import { AsignacionTurnosService } from '../asignacion-turnos.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
@@ -16,23 +16,30 @@ export class SemanaTurnoComponent implements OnInit {
   @Input('changeWeek') changeWeek: EventEmitter<any>;
   masiveTurnId: any = {};
   diaInicialSemana: any;
+  diaFinalSemana: any;
   diasSemana: any[] = [];
   horariosExistentes: any[] = [];
   turnos: any[] = [];
+  loading: boolean;
 
   constructor(
     private _asignacion: AsignacionTurnosService,
     private _swal: SwalService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {
-    this.changeWeek.subscribe((d: any) => {
+  async ngOnInit() {
+    this.changeWeek.subscribe(async (d: any) => {
       this.diasSemana = [];
-      this.diaFinal = d.diaFinalSemana;
       this.diaInicial = d.diaInicialSemana;
+      this.diaFinal = d.diaFinalSemana;
       this.diaInicialSemana = this.diaInicial;
+      this.diaFinalSemana = this.diaFinal;
       this.turnos = this.turnosRotativos.data;
-      this.fillDiasSemana();
+      await this.fillDiasSemana();
+      setTimeout(() => {
+        this.loading = false; //sí, me quedó grande
+      }, 1000)
+      //this.loading = false; //sí, me quedó grande
     });
   }
   checkAll(ev) {
@@ -48,7 +55,7 @@ export class SemanaTurnoComponent implements OnInit {
     if (turn) {
       this.masiveTurnId = turn;
 
-    }else{
+    } else {
       this.masiveTurnId = {};
 
     }
@@ -62,20 +69,20 @@ export class SemanaTurnoComponent implements OnInit {
       this.people.forEach((r) => {
         if (r.selected) {
           r.diasSemana.forEach((dia) => {
-            if(dia.dia == 'domingo'){
-              let turnId = this.masiveTurnId?.sunday?.id  ? this.masiveTurnId?.sunday?.id : 0;
+            if (dia.dia == 'domingo') {
+              let turnId = this.masiveTurnId?.sunday?.id ? this.masiveTurnId?.sunday?.id : 0;
               dia.turno = turnId;
-              dia.color = turnId ? this.masiveTurnId.sunday.color : 'black' ;
+              dia.color = turnId ? this.masiveTurnId.sunday.color : 'black';
               return;
             }
-            if(dia.dia == 'sábado'){
-              let turnId = this.masiveTurnId?.saturday?.id  ? this.masiveTurnId?.saturday?.id : 0;
+            if (dia.dia == 'sábado') {
+              let turnId = this.masiveTurnId?.saturday?.id ? this.masiveTurnId?.saturday?.id : 0;
               dia.turno = turnId;
-              dia.color = turnId ? this.masiveTurnId.saturday.color : 'black' ;
+              dia.color = turnId ? this.masiveTurnId.saturday.color : 'black';
               return;
 
             }
-            else{
+            else {
               dia.turno = this.masiveTurnId.rotating_turn_id;
               dia.color = this.masiveTurnId.color;
             }
@@ -84,23 +91,38 @@ export class SemanaTurnoComponent implements OnInit {
       });
     }
   }
-  fillDiasSemana() {
+
+  async fillDiasSemana() {
+    this.loading = true;
+    this.diaInicialSemana = (typeof (this.diaInicialSemana) == 'string')
+      ? this.diaInicialSemana = moment(this.diaInicialSemana)
+      : this.diaInicialSemana
+
+    this.diaInicial = typeof (this.diaInicial) == 'string'
+      ? moment(this.diaInicial)
+      : this.diaInicial;
+
+    this.diaFinal = typeof (this.diaFinal) == 'string'
+      ? moment(this.diaFinal)
+      : this.diaFinal;
+
     this.diaInicialSemana.locale('es');
-    while (this.diaInicialSemana < this.diaFinal) {
-      let dia = this.diaInicialSemana.format('dddd');
+    this.diaInicial.locale('es');
+    while (this.diaInicial <= this.diaFinal) {
+      let dia = this.diaInicial.format('dddd');
 
       let pur = {
         dia,
-        fecha: this.diaInicialSemana.format('YYYY-MM-DD'),
+        fecha: this.diaInicial.format('YYYY-MM-DD'),
         color: dia == 'domingo' ? 'black' : '#9da4ad',
         turno: dia == 'domingo' ? 0 : 'seleccione',
       };
 
       this.diasSemana.push(pur);
-      this.diaInicialSemana = moment(this.diaInicialSemana).add(1, 'd');
+      this.diaInicial = moment(this.diaInicial).add(1, 'd');
     }
 
-    this.people.forEach((p, i) => {
+    await this.people.forEach((p, i) => {
       let sem = [...this.diasSemana];
       p.diasSemana = [];
       p.diasSemana = sem.map((acc) => {
@@ -134,7 +156,7 @@ export class SemanaTurnoComponent implements OnInit {
 
     if (!turn.rotating_turn_id) {
       turn.color = '#000';
-    } else if (findColor){
+    } else if (findColor) {
       turn.color = this.turnos.find(
         (turno) => turno.id == turn.rotating_turn_id
       ).color;

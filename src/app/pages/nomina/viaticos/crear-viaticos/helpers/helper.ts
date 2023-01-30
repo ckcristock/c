@@ -37,7 +37,6 @@ export const functions = {
     func = data.person;
     func.position = data.person.contractultimate.position.name;
     func.type = 'Funcionario';
-    console.log(func)
     return func;
   },
 

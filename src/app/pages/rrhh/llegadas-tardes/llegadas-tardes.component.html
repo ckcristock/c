@@ -19,87 +19,96 @@
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-          <div class="col-md-2 mb-4" *ngIf="companyList.length > 1">
-            <ng-select
-              [items]="companyList"
-              bindLabel="text"
-              bindValue="value"
-              appearance="outline"
-              [appendTo]="'body'"
-              placeholder="Empresa"
-              name="company"
-              [clearable]="false"
-              [(ngModel)]="company_id"
-              (change)="filtrar()"
-              ngDefaultControl
-            >
-            </ng-select>
-          </div>
-          <div class="col-md-2 mb-4">
-            <ng-select
-              [items]="groupList"
-              (change)="getDependencies($event.value); filtrar()"
-              bindLabel="text"
-              bindValue="value"
-              appearance="outline"
-              [appendTo]="'body'"
-              placeholder="Grupo"
-              name="group"
-              [clearable]="false"
-              [(ngModel)]="group_id"
-              ngDefaultControl
-            >
-            </ng-select>
-          </div>
-          <div class="col-md-2 mb-4">
-            <ng-select
-              [items]="dependencyList"
-              [(ngModel)]="dependency_id"
-              bindLabel="text"
-              bindValue="value"
-              appearance="outline"
-              [appendTo]="'body'"
-              [clearable]="false"
-              placeholder="Dependencia"
-              ngDefaultControl
-              (change)="filtrar()"
-            >
-            </ng-select>
-          </div>
-          <div class="col-md-4 mb-4">
-            <ng-select
-              [items]="people"
-              [(ngModel)]="people_id"
-              bindLabel="text"
-              bindValue="value"
-              appearance="outline"
-              [appendTo]="'body'"
-              [clearable]="false"
-              placeholder="Funcionario"
-              ngDefaultControl
-              (change)="filtrar()"
-            >
-            </ng-select>
-          </div>
-          <mat-form-field appearance="outline" class="col">
-            <mat-label>Rango de fechas</mat-label>
-            <input
-              matInput
-              [satDatepicker]="picker"
-              [value]="date"
-              (dateChange)="selectedDate($event)"
-              name="daterange"
-              autocomplete="off"
-            />
-            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
-            <sat-datepicker-toggle
-              matSuffix
-              [for]="picker"
-            ></sat-datepicker-toggle>
-          </mat-form-field>
+          <ng-container [formGroup]="formFilters">
+            <div class="col-md-2 mb-4" *ngIf="companyList.length > 1">
+              <ng-select
+                [items]="companyList"
+                (change)="getCompanies()"
+                bindLabel="text"
+                bindValue="value"
+                appearance="outline"
+                [appendTo]="'body'"
+                placeholder="Empresa"
+                name="company"
+                [clearable]="false"
+                formControlName="company_id"
+                ngDefaultControl
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-2 mb-4">
+              <ng-select
+                [items]="groupList"
+                (change)="getDependencies($event.value);"
+                bindLabel="text"
+                bindValue="value"
+                appearance="outline"
+                [appendTo]="'body'"
+                placeholder="Grupo"
+                name="group"
+                [clearable]="false"
+                formControlName="group_id"
+                ngDefaultControl
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-2 mb-4">
+              <ng-select
+                [items]="dependencyList"
+                bindLabel="text"
+                bindValue="value"
+                appearance="outline"
+                [appendTo]="'body'"
+                [clearable]="false"
+                placeholder="Dependencia"
+                formControlName="dependency_id"
+                ngDefaultControl
+              >
+              </ng-select>
+            </div>
+            <div class="col-md-4 mb-4">
+              <ng-select
+                [items]="people"
+                bindLabel="text"
+                bindValue="value"
+                appearance="outline"
+                [appendTo]="'body'"
+                [clearable]="false"
+                placeholder="Funcionario"
+                formControlName="people_id"
+                ngDefaultControl
+              >
+              </ng-select>
+            </div>
+            <mat-form-field appearance="outline" class="col">
+              <mat-label>Rango de fechas</mat-label>
+              <input
+                matInput
+                [satDatepicker]="picker"
+                [value]="date"
+                (dateChange)="selectedDate($event)"
+                name="daterange"
+                autocomplete="off"
+              />
+              <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+              <sat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></sat-datepicker-toggle>
+            </mat-form-field>
+          </ng-container>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
+    <div class="alert alert-info" *ngIf="active_filters" role="alert">
+      <strong
+        >Hay filtros de búsqueda activos, para mostrar todos los resultados haz
+        click
+      </strong>
+      <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link"
+        >aquí</a
+      >
+    </div>
     <div *ngIf="companies.length && !loading; else notData">
       <div class="row">
         <div class="col-md-6">

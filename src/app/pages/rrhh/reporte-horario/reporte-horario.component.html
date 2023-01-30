@@ -31,7 +31,7 @@
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <form [formGroup]="forma">
+        <form [formGroup]="formFilters">
           <div class="row">
             <mat-form-field
               class="col"
@@ -51,7 +51,6 @@
               <mat-label>Grupo</mat-label>
               <mat-select
                 formControlName="group_id"
-                (selectionChange)="getDiaries()"
               >
                 <mat-option
                   *ngFor="let item of groupList"
@@ -64,7 +63,6 @@
               <mat-label>Dependencia</mat-label>
               <mat-select
                 formControlName="dependency_id"
-                (selectionChange)="getDiaries()"
               >
                 <mat-option
                   *ngFor="let item of dependencyList"
@@ -73,33 +71,26 @@
                 >
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Fecha de inicio</mat-label>
+            <mat-form-field appearance="outline" class="col">
+              <mat-label>Rango de fechas</mat-label>
               <input
                 matInput
-                type="date"
-                formControlName="first_day"
-                required
-                (change)="getDiaries()"
+                [satDatepicker]="picker"
+                [value]="date"
+                (dateChange)="selectedDate($event)"
+                name="daterange"
                 autocomplete="off"
               />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Fecha de fin</mat-label>
-              <input
-                matInput
-                type="date"
-                formControlName="last_day"
-                (change)="getDiaries()"
-                required
-                autocomplete="off"
-              />
+              <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+              <sat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></sat-datepicker-toggle>
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
               <mat-label>Funcionario</mat-label>
               <mat-select
                 formControlName="person_id"
-                (selectionChange)="getDiaries()"
               >
                 <mat-option *ngFor="let item of people" [value]="item.value">{{
                   item.text
@@ -111,7 +102,6 @@
               <mat-select
                 formControlName="turn_type"
                 name="tipo_turno"
-                (selectionChange)="getDiaries()"
               >
                 <mat-option value="">Todos</mat-option>
                 <mat-option value="Rotativo">Rotativo</mat-option>

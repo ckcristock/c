@@ -6,7 +6,7 @@
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-info btn-sm" (click)="openClose()">
+          <button class="btn btn-info btn-sm" (click)="openClose()" >
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -15,49 +15,67 @@
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
-        <div class="row">
-          <mat-form-field class="col-md-4" appearance="outline">
-            <mat-label>Tipo de turno actual</mat-label>
-            <mat-select
-              name="turn_type"
-              [(ngModel)]="turnType"
-              (selectionChange)="getPeople()"
-            >
-              <mat-option value="Rotativo">Rotativo</mat-option>
-              <mat-option value="fijo">Fijo</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <div class="col-md-4 mb-4">
-            <ng-select
-              [items]="people"
-              [(ngModel)]="people_id"
-              (change)="getPeople()"
-              appearance="outline"
-              [appendTo]="'body'"
-              placeholder="Funcionario"
-              bindLabel="text"
-              bindValue="value"
-              ngDefaultControl
-            >
-            </ng-select>
+        <form [formGroup]="formFilters">
+          <div class="row">
+            <mat-form-field class="col-md-4" appearance="outline">
+              <mat-label>Tipo de turno actual</mat-label>
+              <mat-select
+                name="turn_type"
+                formControlName="turn_type"
+              >
+                <mat-option value="Rotativo">Rotativo</mat-option>
+                <mat-option value="Fijo">Fijo</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="col-md-4 mb-4">
+              <ng-select
+                [items]="people"
+                formControlName="people_id"
+                appearance="outline"
+                [appendTo]="'body'"
+                placeholder="Funcionario"
+                bindLabel="text"
+                bindValue="value"
+                ngDefaultControl
+              >
+              </ng-select>
+            </div>
+            <mat-form-field appearance="outline" class="col">
+              <mat-label>Fecha</mat-label>
+              <input
+                matInput
+                [satDatepicker]="pickerDate"
+                [value]="date"
+                (dateChange)="selectedDate($event)"
+                name="daterange"
+                autocomplete="off"
+              />
+              <sat-datepicker #pickerDate [rangeMode]="true"></sat-datepicker>
+              <sat-datepicker-toggle
+                matSuffix
+                [for]="pickerDate"
+              ></sat-datepicker-toggle>
+            </mat-form-field>
+
+
+            <!-- <mat-form-field class="col-md-4" appearance="outline">
+              <mat-label>Rango de fechas</mat-label>
+              <input
+                matInput
+                type="week"
+                name="semana"
+                min=6
+
+                (change)="cambiarSemana()"
+                required
+              />
+              <mat-hint align="end"
+                >Del {{ primerDiaSemanaFormato }} al
+                {{ ultimoDiaSemanaFormato }}</mat-hint
+              >
+            </mat-form-field> -->
           </div>
-          <mat-form-field class="col-md-4" appearance="outline">
-            <mat-label>Rango de fechas</mat-label>
-            <input
-              matInput
-              type="week"
-              name="semana"
-              min=6
-              [(ngModel)]="semana"
-              (change)="cambiarSemana()"
-              required
-            />
-            <mat-hint align="end"
-              >Del {{ primerDiaSemanaFormato }} al
-              {{ ultimoDiaSemanaFormato }}</mat-hint
-            >
-          </mat-form-field>
-        </div>
+        </form>
       </mat-expansion-panel>
     </mat-accordion>
 

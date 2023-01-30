@@ -13,7 +13,6 @@ export const hospedajeHelper = {
   createFillHotel(form: FormGroup, fb: FormBuilder, data) {
     if (data.hotels) {
       let hospedaje = form.get('hospedaje') as FormArray;
-      console.log('data', data)
       data.hotels.forEach((r, i) => {
         let group = fb.group({
           tipo: [r.type],

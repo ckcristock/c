@@ -11,7 +11,7 @@
     Asignar
   </button> -->
 </div>
-<div class="rounded-top table-responsive">
+<div class="rounded-top table-responsive" *ngIf="!loading && diasSemana.length > 0; else notData">
   <table class="table table-bordered table-striped table-sm">
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
@@ -93,3 +93,7 @@
 <button class="btn btn-primary btn-block mb-3" (click)="makeHorario()">
   Guardar
 </button>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

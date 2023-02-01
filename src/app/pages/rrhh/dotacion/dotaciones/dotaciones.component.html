@@ -1,27 +1,6 @@
 <div class="card">
-  <div class="card-header p-0">
-    <ul
-      ngbNav
-      #nav="ngbNav"
-      [(activeId)]="active"
-      class="nav nav-pills nav-justified border border-primary rounded"
-    >
-      <li [ngbNavItem]="1">
-        <a ngbNavLink class="h-100">Inventario de dotación</a>
-        <ng-template ngbNavContent>
-          <app-category-stock></app-category-stock>
-        </ng-template>
-      </li>
-      <li [ngbNavItem]="2">
-        <a ngbNavLink class="h-100">Entrega de dotación</a>
-        <ng-template ngbNavContent>
-          <app-table-inventary></app-table-inventary>
-        </ng-template>
-      </li>
-    </ul>
-  </div>
   <div class="card-body">
-    <div [ngbNavOutlet]="nav" class="mt-0"></div>
+    <app-table-inventary></app-table-inventary>
   </div>
 </div>
 
@@ -413,20 +392,20 @@
                                                                         <li [ngbNavItem]="1">
                                                                             <a ngbNavLink>Dotación</a>
                                                                             <ng-template ngbNavContent>
-        
+
                                                                                 <app-table-stock [type]="'Dotacion'" [find]="true"></app-table-stock>
-        
+
                                                                             </ng-template>
                                                                         </li>
                                                                         <li [ngbNavItem]="2">
                                                                             <a ngbNavLink>Epp</a>
                                                                             <ng-template ngbNavContent>
                                                                                 <app-table-stock [type]="'EPP'" [find]="true"></app-table-stock>
-        
+
                                                                             </ng-template>
                                                                         </li>
                                                                     </ul>
-        
+
                                                                     <div [ngbNavOutlet]="nav" class="mt-2"></div>
                                                                 </div>
                                                             </div>

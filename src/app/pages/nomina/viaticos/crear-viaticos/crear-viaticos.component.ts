@@ -8,6 +8,7 @@ import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swa
 import { Router } from '@angular/router';
 import * as help from './helpers/import';
 import * as moment from 'moment';
+import { OrdenesProduccionService } from 'src/app/pages/manufactura/services/ordenes-produccion.service';
 @Component({
   selector: 'app-crear-viaticos',
   templateUrl: './crear-viaticos.component.html',
@@ -40,16 +41,19 @@ export class CrearViaticosComponent implements OnInit {
   value: any;
   public acomodation_for_hotel: any[] = []
   hotels_list: any[] = []
+  work_orders: any[] = []
 
   constructor(
     private roter: Router,
     private _swal: SwalService,
     private fb: FormBuilder,
     private location: Location,
-    private _viatico: CrearViaticosService
+    private _viatico: CrearViaticosService,
+    private _work_order: OrdenesProduccionService
   ) { }
 
   async ngOnInit() {
+    this.getWorkOrders()
     this.createForm();
     this.crearListener();
     this.getPeople();
@@ -57,6 +61,15 @@ export class CrearViaticosComponent implements OnInit {
     this.getCity();
     await this.getHotels();
     this.validateData();
+  }
+
+  getWorkOrders() {
+    let params = {
+
+    }
+    this._work_order.getWorkOrdersIndex(params).subscribe((res: any) => {
+      this.work_orders = res.data
+    })
   }
 
   getCity() {

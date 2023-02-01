@@ -15,6 +15,7 @@ export const functions = {
       departure_date: data.departure_date,
       arrival_date: data.arrival_date,
       n_nights: parseInt(data.n_nights),
+
       });
     form.patchValue({
       other_expenses_cop: data.other_expenses_cop,
@@ -24,6 +25,7 @@ export const functions = {
       baggage_cop: data.baggage_cop,
       total_laundry_cop: data.total_laundry_cop,
       total_laundry_usd: data.total_laundry_usd,
+      work_order_id: parseInt(data.work_order_id)
     })
 
     hospedajeHelper.createFillHotel(form, fb, data);
@@ -57,6 +59,7 @@ export const functions = {
       total_laundry_usd: [0],
       total_usd: [0],
       total_cop: [0],
+      work_order_id: [''],
       observation: [''],
       travel: fb.group({
         person_id: [''],

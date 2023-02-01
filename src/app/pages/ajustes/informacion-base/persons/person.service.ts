@@ -19,6 +19,14 @@ export class PersonService {
     return this.httpClient.get(`${environment.base_url}/people`, { params })
   }
 
+  updatePerson(data, id) {
+    return this.httpClient.put(`${environment.base_url}/people/${id}`, data)
+  }
+
+  getProfile(id) {
+    return this.httpClient.get(`${environment.base_url}/person-profile/${id}`)
+  }
+
   getAll( params ){
     return this.httpClient.get(`${environment.base_url}/people-all`, { params })
   }

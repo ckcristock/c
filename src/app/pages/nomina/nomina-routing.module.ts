@@ -19,7 +19,7 @@ const routes: Routes = [
     { path: 'crear-viatico', component: CrearViaticosComponent },
     { path: 'editar-viatico/:id', component: EditarViaticoComponent },
     { path: 'viaticos/legalizar/:id', component: LegalizarComponent },
-    { path: 'vacaciones', component: VacacionesComponent},
+    /* { path: 'vacaciones', component: VacacionesComponent}, */
     { path: 'nomina', component: NominaComponent},
     { path: 'primas', component: PrimasComponent},
     { path: 'prima/:anio/:periodo/:pagado', component: PrimaFuncionarioComponent},

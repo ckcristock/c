@@ -1,16 +1,18 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-title d-flex justify-content-between">
-      <h4 class="text-primary">{{ title }}</h4>
-      <mat-form-field class="col-md-3 pr-0 pb-0" appearance="outline">
-        <mat-label>Orden de trabajo</mat-label>
-        <mat-select>
-          <mat-option value="pendiente">Pendiente</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <hr class="line" />
     <form action="" [formGroup]="form">
+      <div class="card-title d-flex justify-content-between">
+        <h4 class="text-primary">{{ title }}</h4>
+        <mat-form-field class="col-md-3 pr-0 pb-0" appearance="outline">
+          <mat-label>Orden de trabajo</mat-label>
+          <mat-select formControlName="work_order_id">
+            <mat-option *ngFor="let item of work_orders" [value]="item.value">{{
+              item.text
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <hr class="line" />
       <div class="text-center">
         <h5>Información del viaje</h5>
       </div>
@@ -253,7 +255,11 @@
                     id="tipo_acomodacion_hospedaje"
                   >
                     <option
-                      *ngFor="let item of item['controls']['acomodationForHotel']['value']  "
+                      *ngFor="
+                        let item of item['controls']['acomodationForHotel'][
+                          'value'
+                        ]
+                      "
                       [value]="item.id"
                     >
                       {{ item.name }}
@@ -662,9 +668,6 @@
               <th class="col-md-3">Item</th>
               <th>Dolares</th>
               <th>Pesos</th>
-              <th class="col-md-3">Item</th>
-              <th>Dolares</th>
-              <th>Pesos</th>
             </tr>
           </thead>
           <tbody>
@@ -676,6 +679,34 @@
               <td class="col-2">
                 {{ form.get("total_hotels_cop").value | currency : "COP" }}
               </td>
+            </tr>
+
+            <tr class="text-center">
+              <th class="align-middle">Transporte terrestre</th>
+              <td>{{ 0 | currency }}</td>
+              <td>
+                {{ form.get("total_transports_cop").value | currency : "COP" }}
+              </td>
+            </tr>
+
+            <tr class="text-center">
+              <th class="align-middle">Taxis</th>
+              <td>{{ form.get("total_taxis_usd").value | currency }}</td>
+              <td>
+                {{ form.get("total_taxis_cop").value | currency : "COP" }}
+              </td>
+            </tr>
+
+            <tr class="text-center">
+              <th class="align-middle">Alimentación</th>
+              <td>
+                {{ form.get("total_feedings_usd").value | currency }}
+              </td>
+              <td>
+                {{ form.get("total_feedings_cop").value | currency : "COP" }}
+              </td>
+            </tr>
+            <tr class="text-center">
               <th class="align-middle col-2">Lavanderia</th>
               <td class="col-2">
                 <input
@@ -693,11 +724,6 @@
               </td>
             </tr>
             <tr class="text-center">
-              <th class="align-middle">Transporte terrestre</th>
-              <td>{{ 0 | currency }}</td>
-              <td>
-                {{ form.get("total_transports_cop").value | currency : "COP" }}
-              </td>
               <th class="align-middle">Sobre equipaje</th>
               <td>
                 <input
@@ -715,11 +741,6 @@
               </td>
             </tr>
             <tr class="text-center">
-              <th class="align-middle">Taxis</th>
-              <td>{{ form.get("total_taxis_usd").value | currency }}</td>
-              <td>
-                {{ form.get("total_taxis_cop").value | currency : "COP" }}
-              </td>
               <th class="align-middle">Otros gastos</th>
               <td>
                 <input
@@ -737,19 +758,10 @@
               </td>
             </tr>
             <tr class="text-center">
-              <th class="align-middle">Alimentación</th>
-              <td>
-                {{ form.get("total_feedings_usd").value | currency }}
-              </td>
-              <td>
-                {{ form.get("total_feedings_cop").value | currency : "COP" }}
-              </td>
-
-              <th class="align-middle">Total</th>
+              <th class="align-middle"><b>TOTAL</b></th>
               <th>{{ form.get("total_usd").value | currency }}</th>
               <th>{{ form.get("total_cop").value | currency : "COP" }}</th>
             </tr>
-            <tr></tr>
           </tbody>
         </table>
       </div>

@@ -16,4 +16,8 @@ export class PerfilesApuService {
   save(data:any){
     return this.http.post(`${environment.base_url}/apu-profile`, data);
   }
+
+  getProfilesIdex(){
+    return this.http.get(`${environment.base_url}/apu-profile`);
+  }
 }

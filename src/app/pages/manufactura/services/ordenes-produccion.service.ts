@@ -15,6 +15,10 @@ export class OrdenesProduccionService {
     return this.http.get(`${environment.base_url}/paginate-work-orders`, { params });
   }
 
+  getWorkOrdersIndex(params = {}) {
+    return this.http.get(`${environment.base_url}/work-orders`, { params });
+  }
+
   getForStage(params = {}) {
     return this.http.get(`${environment.base_url}/get-wo-for-stage`, { params });
   }

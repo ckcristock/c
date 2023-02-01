@@ -48,17 +48,21 @@ export class ColillaPagoComponent implements OnInit {
   }
 
   getPeriodo() {
-    
+
     return moment().get('date') > 15;
   }
 
   get hasNovedad(){
-    
-    return Object.keys(this.novedadesDatos.novedades).length > 0
+    //console.log(this.novedadesDatos.novedades);
+    if (this.novedadesDatos.novedades!= undefined || this.novedadesDatos.novedades?.length > 0) {
+      return Object.keys(this.novedadesDatos.novedades).length > 0
+    } else {
+      return []
+    }
   }
 
   async getNominaSeguridadFuncionario() {
-    
+
     this._payrollDetail.getSocialSecurity().subscribe( (r:any ) =>{
       this.nominaSeguridadFuncionario = r;
     })
@@ -111,12 +115,12 @@ export class ColillaPagoComponent implements OnInit {
         this.netoApagar = r.total_valor_neto;
         this.loading = false;
       });
-      
+
   }
 
   /**
    * ,
-   
+
    ,
    ,
 

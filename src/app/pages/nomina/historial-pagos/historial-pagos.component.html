@@ -25,6 +25,9 @@
           <th>Seguridad social</th>
           <th>Parafiscales</th>
           <th>Costo total empresa</th>
+          <th class="align-middle">
+            <i class="mdi mdi-chevron-down"></i>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -32,34 +35,52 @@
           <!--  {{ pago | json }} -->
           <td>
             <a
-              [routerLink]="['/nomina/nomina']"
-              [queryParams]="{
-                inicio: pago.start_period,
-                fin: pago.end_period
-              }"
-              class="btn btn-link p-0"
-              (click)="redirectToNomina(pago)"
+
             >
               {{ pago.start_period }} -
               {{ pago.end_period }}
             </a>
           </td>
           <td>
-            {{ pago.total_salaries | currency: "":"" }}
+            {{ pago.total_salaries | currency : "" : "" }}
           </td>
           <td>
-            {{ pago.total_retentions | currency: "":"" }}
+            {{ pago.total_retentions | currency : "" : "" }}
           </td>
           <td>
-            {{ pago.total_provisions | currency: "":"" }}
+            {{ pago.total_provisions | currency : "" : "" }}
           </td>
           <td>
-            {{ pago.total_social_secturity | currency: "":"" }}
+            {{ pago.total_social_secturity | currency : "" : "" }}
           </td>
           <td>
-            {{ pago.total_parafiscals | currency: "":"" }}
+            {{ pago.total_parafiscals | currency : "" : "" }}
           </td>
-          <td>{{ pago.total_cost | currency: "":"" }}</td>
+          <td>{{ pago.total_cost | currency : "" : "" }}</td>
+          <td class="align-middle">
+            <div ngbDropdown container="body" class="dropdown-primary">
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm waves-light"
+                type="button"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                  [routerLink]="['/nomina/nomina']"
+                  [queryParams]="{
+                    inicio: pago.start_period,
+                    fin: pago.end_period
+                  }"
+                  class="btn btn-link p-0"
+                  (click)="redirectToNomina(pago)"
+
+                    ><i class="far fa-edit"></i> Editar</a
+                  >
+              </div>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>

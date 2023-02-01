@@ -54,7 +54,7 @@ export class SeguridadParafiscalesComponent implements OnInit {
       fin: this.fechaFin
     }).subscribe(r => {
       this.seguridadDatos = r
-      console.log(r);
+      //console.log(r);
 
 
     })

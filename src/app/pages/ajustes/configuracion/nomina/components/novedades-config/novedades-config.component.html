@@ -9,7 +9,7 @@
             (setAccount)="actualizar($event.identifier, 'accounting_account', $event.datos.id)"
             [extra]="extra"
             [variable]="extra.cuenta_contable"
-            [titulo]="'Cuentas Contables'"
+            [titulo]="'Cuenta Contable'"
             ></app-row-typeahead>
           </td>
           <td>
@@ -26,15 +26,6 @@
                 <mat-option value="Por Hora">Por hora</mat-option>
               </mat-select>
             </mat-form-field>
-          </td>
-          <td>
-            <mat-slide-toggle
-              (change)="actualizar($event.checked, 'state',  extra.id)"
-              color="primary"
-              [(ngModel)]="extra.state"
-              [ngModelOption]="{standalone: true}"
-              >{{ extra.state == 1 ? "Activo" : "Inactivo" }}</mat-slide-toggle
-            >
           </td>
         </tr>
       </ng-template>

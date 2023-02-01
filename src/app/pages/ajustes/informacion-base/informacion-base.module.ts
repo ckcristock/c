@@ -85,6 +85,20 @@ import { CrearbodegaComponent } from './bodegas/crearbodega/crearbodega.componen
 import { GrupoestibaComponent } from './bodegas/grupoestiba/grupoestiba.component';
 import { FilePermissionsComponent } from './funcionarios/detalle-funcionario/permissions/file-permissions/file-permissions.component';
 import { CatSubcatModule } from '../parametros/cat-subcat/cat-subcat.module';
+import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from 'saturn-datepicker';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY'
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  }
+};
 
 @NgModule({
   declarations: [
@@ -174,6 +188,10 @@ import { CatSubcatModule } from '../parametros/cat-subcat/cat-subcat.module';
     MatButtonModule,
     CatSubcatModule,
     MatTooltipModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    SatDatepickerModule,
+    SatNativeDateModule,
     SweetAlert2Module.forRoot(),
   ],
   exports: [
@@ -183,6 +201,14 @@ import { CatSubcatModule } from '../parametros/cat-subcat/cat-subcat.module';
     CajaCompensacionComponent,
     EstructuraEmpresaComponent,
     SedesComponent
-  ]
+  ],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
 })
 export class InformacionBaseModule { }

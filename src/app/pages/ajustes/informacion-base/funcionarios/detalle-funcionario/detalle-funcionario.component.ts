@@ -5,10 +5,10 @@ import { DetalleService } from './detalle.service';
 import { DatosBasicosService } from './ver-funcionario/datos-basicos/datos-basicos.service';
 import { SwalService } from '../../services/swal.service';
 import { environment } from 'src/environments/environment';
-import Swal from 'sweetalert2';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { DateAdapter } from 'saturn-datepicker';
 
 @Component({
   selector: 'app-detalle-funcionario',
@@ -36,6 +36,7 @@ export class DetalleFuncionarioComponent implements OnInit {
   form: FormGroup;
   datePipe = new DatePipe('es-CO');
   date = moment().format('YYYY-MM-DD');
+  maxDate = moment().format('YYYY-MM-DD');
   public ruta = environment.url_assets
   public url: string;
 
@@ -47,8 +48,11 @@ export class DetalleFuncionarioComponent implements OnInit {
     private _swal: SwalService,
     private _modal: ModalService,
     private fb: FormBuilder,
-    private router: Router
-  ) { }
+    private router: Router,
+    private dateAdapter: DateAdapter<any>
+  ) {
+    dateAdapter.setLocale('es')
+  }
 
   ngOnInit(): void {
     this.id = this.activateRoute.snapshot.params.id;
@@ -66,18 +70,23 @@ export class DetalleFuncionarioComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
-      name: ['', Validators.required],
-      date_from: [''],
-      date_to: [''],
+      date_from: ['', Validators.required],
     })
   }
-  selectedDate(fecha) {
-    //console.log(fecha);
-    this.form.patchValue({
-      date_from: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
-      date_to: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
-    })
-    console.log(this.form);
+  selectedDate(fecha:any) {
+    if (fecha.valor >= moment()){
+      this._swal.show({
+        icon: 'error',
+        title: 'Fecha incorrecta',
+        text: 'No puede escoger una fecha luego de hoy',
+        showCancel: false,
+        timer: 2000
+      });
+    }else {
+      this.form.patchValue({
+        date_from: this.datePipe.transform(fecha.value, 'yyyy-MM-dd')
+      })
+    }
   }
 
   regresar(): void {
@@ -95,39 +104,21 @@ export class DetalleFuncionarioComponent implements OnInit {
     this._swal.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
-      text: 'Vamos a liquidar a '+ this.funcionario.first_name
+      text: 'El funcionario '+ this.funcionario.first_name+' no tendrá más acceso al sistema'
     }).then((result) => {
-      console.log(result);
-
-      Swal.fire({
-        title: '<strong>HTML <u>example</u></strong>',
-        icon: 'info',
-        html:
-          '<input type="date" id="start" name="trip-start"'+
-          'value="2018-07-22"'+
-          'min="2018-01-01" max="2018-12-31">',
-
-        showCloseButton: false,
-        showCancelButton: true,
-        focusConfirm: false,
-        confirmButtonText:
-          '<i class="fa fa-thumbs-up"></i> Great!',
-        confirmButtonAriaLabel: 'Thumbs up, great!',
-        cancelButtonText:
-          '<i class="fa fa-thumbs-down"></i>',
-        cancelButtonAriaLabel: 'Thumbs down'
-      })
-      /* if (result.isConfirmed) {
+      if (result.isConfirmed) {
         this.detalleService.liquidar(data, this.id).subscribe((r: any) => {
           this._swal.show({
             icon: 'success',
             title: 'Proceso finalizado',
-            text: 'El funcionario ha sido preliquidado con éxito.',
+            //text: 'El funcionario ha sido preliquidado con éxito.',
+            text: r.data,
             showCancel: false,
             timer: 1000
           });
         });
-      } */
+        this.getBasicData();
+      }
     });
   }
 

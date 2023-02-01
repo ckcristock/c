@@ -163,7 +163,15 @@
 
 <ng-template #add let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Pre-liquidar</h4>
+    <h4 class="text-primary modal-title text-truncate">
+      <img
+        class="img-fluid img-header"
+        [src]="funcionario.image | image : 'users'"
+        onerror="this.src='../../../../../../../assets/images/noprofile.png'"
+      />
+      Preliquidar a {{ funcionario.first_name | titlecase }}
+      {{ funcionario.first_surname | titlecase }}
+    </h4>
     <button
       type="button"
       class="close"
@@ -175,37 +183,34 @@
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="form">
+    <ng-container [formGroup]="form">
+      <div class="alert alert-danger text-center" role="alert">
+        Al pre-liquidar el funcionario, este no podrá acceder al sistema
+      </div>
       <div class="row">
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Ingresa el nombre"
-            formControlName="name"
-            required
-            autocomplete="off"
-          />
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="col">
-          <mat-label>Fecha de acta</mat-label>
+        <div class="col">
+          <p>Seleccione la fecha desde la cuál desea sea preliquidado el funcionario: </p>
+        </div>
+        <mat-form-field appearance="outline" class="col mt-2">
+          <mat-label>Fecha de preliquidación</mat-label>
           <input
             matInput
             [satDatepicker]="picker"
+            (dateInput)="selectedDate($event)"
             [value]="date"
-            (dateChange)="selectedDate($event)"
+            [max]="maxDate"
             name="daterange"
             autocomplete="off"
           />
-          <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
-          <sat-datepicker-toggle
+          <mat-datepicker-toggle
             matSuffix
             [for]="picker"
-          ></sat-datepicker-toggle>
+          ></mat-datepicker-toggle>
+          <sat-datepicker #picker></sat-datepicker>
         </mat-form-field>
+        <hr class="line" />
       </div>
-    </form>
+    </ng-container>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="_modal.close()">
@@ -214,10 +219,10 @@
     <button
       type="button"
       [disabled]="!form.valid"
-      (click)="liquidar()"
+      (click)="liquidar('PreLiquidado'); _modal.close()"
       class="btn btn-primary"
     >
-      Guardar
+      Preliquidar
     </button>
   </div>
 </ng-template>

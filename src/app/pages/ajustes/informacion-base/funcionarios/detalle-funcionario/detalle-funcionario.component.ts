@@ -98,7 +98,7 @@ export class DetalleFuncionarioComponent implements OnInit {
   }
 
   liquidar(status) {
-    let data = {
+    let dataForm = {
       status
     }
     this._swal.show({
@@ -107,7 +107,15 @@ export class DetalleFuncionarioComponent implements OnInit {
       text: 'El funcionario '+ this.funcionario.first_name+' no tendrá más acceso al sistema'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.detalleService.liquidar(data, this.id).subscribe((r: any) => {
+        let data = {
+          state: 'Inactivo'
+        }
+        console.log(data);
+
+        this.detalleService.blockUser(data, this.id).subscribe((r: any) => {
+          console.log(r);
+        })
+        this.detalleService.liquidar(dataForm, this.id).subscribe((r: any) => {
           this._swal.show({
             icon: 'success',
             title: 'Proceso finalizado',
@@ -136,7 +144,7 @@ export class DetalleFuncionarioComponent implements OnInit {
       icon: 'question',
       title: '¿Estás seguro(a)?',
       showCancel: true,
-      text: (data.state == 'Inactivo' ? 'Vamos a bloquear a' + this.funcionario.first_name + '.' : 'Vamos a activar a ' + this.funcionario.first_name + '.')
+      text: (data.state == 'Inactivo' ? 'Vamos a bloquear a ' + this.funcionario.first_name + '.' : 'Vamos a activar a ' + this.funcionario.first_name + '.')
     }).then((result) => {
       if (result.isConfirmed) {
         this.detalleService.blockUser(data, this.id).subscribe((r: any) => {

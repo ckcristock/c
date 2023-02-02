@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { UserService } from 'src/app/core/services/user.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { PrimasService } from '../primas.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-prima-funcionario',
@@ -25,7 +26,7 @@ export class PrimaFuncionarioComponent implements OnInit {
     }
   };
 
-
+  habilitarPagar: boolean = false;
   employees: any[] = [];
   page: number;
   previousPage: number;
@@ -62,6 +63,7 @@ export class PrimaFuncionarioComponent implements OnInit {
     this.page = 1;
     this.previousPage = 1;
     this.calcularPrimas();
+    this.habilitarBotonPagar();
   }
 
   calcularPrimas() {
@@ -128,6 +130,21 @@ export class PrimaFuncionarioComponent implements OnInit {
 
   changePage(e) {
     this.employees = this.paginate(this.empleados.empleados, e.pageSize)[e.pageIndex]
+  }
+
+  habilitarBotonPagar (){
+    const hoy = new Date;
+    //const hoy = new Date('2022-06-15');
+    const hoyMes = hoy.getMonth()
+    // 0: Enero, 1: Febrere, 2: Marzo, 3: Abril,
+    // 4: Mayo, 5: Junio, 6: Julio, 7: Agosto,
+    // 8: Septiembre, 9: Octubre, 10: Noviembre, 11: Diciembre
+
+    if (hoyMes == 5 || hoyMes == 6 || hoyMes == 11 || hoyMes == 0)  {
+      this.habilitarPagar = true;
+    } else {
+      this.habilitarPagar = false;
+    }
   }
 
   paginate(arr, size) {

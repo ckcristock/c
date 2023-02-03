@@ -39,4 +39,25 @@ export class VerApuServicioComponent implements OnInit {
       this.loading = false;
     })
   }
+  donwloading = false;
+  download() {
+    this.donwloading = true;
+    this._apuServicio.download(this.id).subscribe((response: BlobPart) => {
+      let blob = new Blob([response], { type: 'application/pdf' });
+      let link = document.createElement('a');
+      const filename = 'apu_servicio_' + this.id + '.pdf';
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${filename}.pdf`;
+      link.click();
+      this.donwloading = false;
+    }),
+      (error) => {
+        console.log('Error downloading the file');
+        this.donwloading = false;
+      },
+      () => {
+        this.donwloading = false;
+        console.info('File downloaded successfully');
+      };
+  }
 }

@@ -76,7 +76,12 @@
             <td>{{ item.longitud }}</td>
             <td>{{ item.format_code }}</td>
             <td>
-              <div ngbDropdown container="body" class="dropdown-primary">
+              <div
+                ngbDropdown
+                container="body"
+                class="dropdown-primary"
+                *ngIf="item.editable"
+              >
                 <button
                   ngbDropdownToggle
                   class="btn btn-primary btn-sm waves-light"
@@ -181,7 +186,8 @@
         </div>
         <div class="col-12 mt-3">
           <div class="alert alert-info" role="alert">
-            <b>Previsualización: </b> {{ form.controls.Prefijo.value }}{{form.controls.city.value ? '(BGA)' : ''}}-{{
+            <b>Previsualización: </b> {{ form.controls.Prefijo.value
+            }}{{ form.controls.city.value ? "(BGA)" : "" }}-{{
               consecutivo_numero
             }}{{
               form.controls.Anio.value ||

@@ -18,6 +18,7 @@
     <table class="table table-bordered table-striped table-sm">
       <thead class="bg-light">
         <tr class="text-center text-uppercase">
+          <th>Código</th>
           <th>Periodo</th>
           <th>Salarios</th>
           <th>Retenciones</th>
@@ -25,41 +26,62 @@
           <th>Seguridad social</th>
           <th>Parafiscales</th>
           <th>Costo total empresa</th>
+          <th><i class="mdi mdi-chevron-down"></i></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let pago of historialPagos" class="text-center">
           <!--  {{ pago | json }} -->
+          <td>{{ pago.code }}</td>
           <td>
-            <a
-              [routerLink]="['/nomina/nomina']"
-              [queryParams]="{
-                inicio: pago.start_period,
-                fin: pago.end_period
-              }"
-              class="btn btn-link p-0"
-              (click)="redirectToNomina(pago)"
+            {{ pago.start_period }} -
+            {{ pago.end_period }}
+          </td>
+          <td>
+            {{ pago.total_salaries | currency : "" : "" }}
+          </td>
+          <td>
+            {{ pago.total_retentions | currency : "" : "" }}
+          </td>
+          <td>
+            {{ pago.total_provisions | currency : "" : "" }}
+          </td>
+          <td>
+            {{ pago.total_social_secturity | currency : "" : "" }}
+          </td>
+          <td>
+            {{ pago.total_parafiscals | currency : "" : "" }}
+          </td>
+          <td>{{ pago.total_cost | currency : "" : "" }}</td>
+          <td class="align-middle">
+            <div
+              ngbDropdown
+              container="body"
+              class="d-inline-block dropdown-primary"
             >
-              {{ pago.start_period }} -
-              {{ pago.end_period }}
-            </a>
+              <button
+                ngbDropdownToggle
+                class="btn btn-primary btn-sm"
+                type="button"
+                id="dropdownBasic1"
+              >
+                <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <a
+                  [routerLink]="['/nomina/nomina']"
+                  [queryParams]="{
+                    inicio: pago.start_period,
+                    fin: pago.end_period
+                  }"
+                  class="dropdown-item waves-light text-success caja-botones"
+                  (click)="redirectToNomina(pago)"
+                >
+                  <i class="far fa-eye"></i> Ver
+                </a>
+              </div>
+            </div>
           </td>
-          <td>
-            {{ pago.total_salaries | currency: "":"" }}
-          </td>
-          <td>
-            {{ pago.total_retentions | currency: "":"" }}
-          </td>
-          <td>
-            {{ pago.total_provisions | currency: "":"" }}
-          </td>
-          <td>
-            {{ pago.total_social_secturity | currency: "":"" }}
-          </td>
-          <td>
-            {{ pago.total_parafiscals | currency: "":"" }}
-          </td>
-          <td>{{ pago.total_cost | currency: "":"" }}</td>
         </tr>
       </tbody>
     </table>

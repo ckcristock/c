@@ -2,7 +2,9 @@
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
-        <h4 class="text-primary">Pago de nómina</h4>
+        <h4 class="text-primary">{{nomina?.nomina_paga ? 'Vista del pago' : 'Pago de nómina'}}
+          <small *ngIf="nomina?.nomina_paga">({{nomina?.code}})</small>
+        </h4>
       </div>
       <div class="col-md-6 px-0 text-md-right text-center">
         <span class="font-weight-bold">Periodo de pago</span>:
@@ -188,6 +190,7 @@
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
               <th class="align-middle">Foto</th>
+              <th *ngIf="nomina?.nomina_paga">Código</th>
               <th class="align-middle">Funcionario</th>
               <th class="align-middle">Ingresos Prestacionales</th>
               <th class="align-middle">Ingresos No Prestacionales</th>
@@ -207,6 +210,7 @@
                   onerror="this.src='../../../../../../../assets/images/noprofile.png'"
                 />
               </td>
+              <td *ngIf="nomina?.nomina_paga">{{funcionario.code}}</td>
               <td class="align-middle">
                 {{ funcionario.name }}
                 {{ funcionario.surname }}

@@ -179,12 +179,17 @@ export class CertificadosComponent implements OnInit {
   createFormCesantias() {
     this.formCesantias = this.fb.group({
       reason_withdrawal: ['', Validators.required],
-      person_id: ['', Validators.required],
+      person_id: [null, Validators.required],
       reason: ['', Validators.required],
       document: ['', Validators.required],
       file_name: [''],
-      monto: [''],
-      valormonto: [''],
+      monto: ['', Validators.required],
+      valormonto: ['', Validators.required],
+    })
+    this.formCesantias.get('monto').valueChanges.subscribe(r => {
+      r == 'parcial' ?
+      this.formCesantias.get('valormonto').enable() :
+      this.formCesantias.get('valormonto').disable()
     })
   }
 

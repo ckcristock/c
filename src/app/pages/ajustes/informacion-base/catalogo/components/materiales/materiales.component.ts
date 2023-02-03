@@ -76,13 +76,13 @@ export class MaterialesComponent implements OnInit {
   getCategory() {
     this._category.getCategories().subscribe((r: any) => {
       this.Categorias = r.data;
-      this.Categorias.unshift({ text: 'Seleccione ', value: '' });
+      this.Categorias.unshift({ Nombre: 'Seleccione ', Id_Categoria_Nueva: '' });
     });
   }
 
 
-  getSubCategories(Id_Categoria_Nueva) {
-    this._category.getSubCategories(Id_Categoria_Nueva).subscribe((r: any) => {
+  getSubCategories(event) {
+    this._category.indexSubCategories(event).subscribe((r: any) => {
       this.SubCategorias = r.data;
     });
   }
@@ -137,6 +137,7 @@ export class MaterialesComponent implements OnInit {
 
 
   openConfirm(confirm, titulo) {
+    this.fieldDinamic.clear();
     this.title = titulo;
     this._modal.open(confirm, 'lg')
     if (titulo != 'Editar material') {
@@ -200,17 +201,18 @@ export class MaterialesComponent implements OnInit {
       name: this.material.name,
       unit: this.material.unit,
       type: this.material.type,
-      Codigo_Barras: this.material.product.Codigo_Barras,
-      Tipo_Catalogo: this.material.product.Tipo_Catalogo,
-      Id_Categoria: this.material.product.Id_Categoria,
-      Id_Subcategoria: Number(this.material.product.Id_Subcategoria),
+      Codigo_Barras: this.material.product?.Codigo_Barras,
+      Tipo_Catalogo: this.material.product?.Tipo_Catalogo,
+      Id_Categoria: this.material.product?.Id_Categoria,
+      Id_Subcategoria: Number(this.material.product?.Id_Subcategoria),
       unit_price: this.material.unit_price,
       kg_value: this.material.kg_value
     });
 
+    console.log(this.material);
 
-    this.getSubCategories(this.material.product.Id_Subcategoria);
-    this.getSubCategoryEditar(this.material.product_id, this.material.product.Id_Subcategoria);
+    this.getSubCategories(this.material.product?.Id_Subcategoria);
+    this.getSubCategoryEditar(this.material.product_id, this.material.product?.Id_Subcategoria);
     this.fieldList.clear();
     this.material.material_field.forEach(r => {
       let group = this.fb.group({

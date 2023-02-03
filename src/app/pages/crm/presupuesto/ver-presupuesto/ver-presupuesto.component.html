@@ -109,9 +109,14 @@
       </table>
     </div>
     <div class="btn-group btn-block" role="group" aria-label="Button group">
-      <!-- <button class="btn btn-primary">Descargar</button> -->
-      <button class="btn btn-info" (click)="downloadClient()">
-        Descargar cliente
+      <button (click)="downloadClient()" class="btn btn-primary btn-block">
+        <span
+          ><i
+            class="fas"
+            [class]="!donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'"
+          ></i>
+          {{ !donwloading ? "Descargar cliente" : "Descargando" }}</span
+        >
       </button>
     </div>
   </div>

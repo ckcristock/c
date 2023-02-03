@@ -32,7 +32,8 @@ export class DisenoComponent implements OnInit, OnDestroy {
   permission: Permissions = {
     menu: 'Diseño',
     permissions: {
-      show: true
+      show: true,
+      show_all: true
     }
   };
 
@@ -117,7 +118,7 @@ export class DisenoComponent implements OnInit, OnDestroy {
     this.formFilters = this.fb.group({
       code: '',
       status: '',
-      person_id: this._user.user.person.id
+      person_id: this.permission.permissions.show_all ? '' : this._user.user.person.id
     })
     this.formFilters.valueChanges.pipe(
       debounceTime(500),

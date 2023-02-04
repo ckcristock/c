@@ -1,10 +1,14 @@
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Route } from '@angular/router';
 import { DetalleService } from './detalle.service';
 import { DatosBasicosService } from './ver-funcionario/datos-basicos/datos-basicos.service';
 import { SwalService } from '../../services/swal.service';
 import { environment } from 'src/environments/environment';
+import { ModalService } from 'src/app/core/services/modal.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import * as moment from 'moment';
+import { DateAdapter } from 'saturn-datepicker';
 
 @Component({
   selector: 'app-detalle-funcionario',
@@ -28,17 +32,27 @@ export class DetalleFuncionarioComponent implements OnInit {
     signature: '',
     title: ''
   };
+  user: any = {};
+  form: FormGroup;
+  datePipe = new DatePipe('es-CO');
+  date = moment().format('YYYY-MM-DD');
+  maxDate = moment().format('YYYY-MM-DD');
   public ruta = environment.url_assets
   public url: string;
-  user: any = {};
+
   constructor(
     private detalleService: DetalleService,
     private activateRoute: ActivatedRoute,
     private basicDataService: DatosBasicosService,
     private location: Location,
     private _swal: SwalService,
-    private router: Router
-  ) { }
+    private _modal: ModalService,
+    private fb: FormBuilder,
+    private router: Router,
+    private dateAdapter: DateAdapter<any>
+  ) {
+    dateAdapter.setLocale('es')
+  }
 
   ngOnInit(): void {
     this.id = this.activateRoute.snapshot.params.id;
@@ -47,6 +61,32 @@ export class DetalleFuncionarioComponent implements OnInit {
       this.getBasicData();
     });
     this.getUser();
+    this.createForm();
+  }
+
+  openConfirm(content) {
+    this._modal.open(content)
+  }
+
+  createForm() {
+    this.form = this.fb.group({
+      date_from: ['', Validators.required],
+    })
+  }
+  selectedDate(fecha:any) {
+    if (fecha.valor >= moment()){
+      this._swal.show({
+        icon: 'error',
+        title: 'Fecha incorrecta',
+        text: 'No puede escoger una fecha luego de hoy',
+        showCancel: false,
+        timer: 2000
+      });
+    }else {
+      this.form.patchValue({
+        date_from: this.datePipe.transform(fecha.value, 'yyyy-MM-dd')
+      })
+    }
   }
 
   regresar(): void {
@@ -58,24 +98,34 @@ export class DetalleFuncionarioComponent implements OnInit {
   }
 
   liquidar(status) {
-    let data = {
+    let dataForm = {
       status
     }
     this._swal.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
-      text: 'Vamos a liquidar a '+ this.funcionario.first_name
+      text: 'El funcionario '+ this.funcionario.first_name+' no tendrá más acceso al sistema'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.detalleService.liquidar(data, this.id).subscribe((r: any) => {
+        let data = {
+          state: 'Inactivo'
+        }
+        console.log(data);
+
+        this.detalleService.blockUser(data, this.id).subscribe((r: any) => {
+          console.log(r);
+        })
+        this.detalleService.liquidar(dataForm, this.id).subscribe((r: any) => {
           this._swal.show({
             icon: 'success',
             title: 'Proceso finalizado',
-            text: 'El funcionario ha sido preliquidado con éxito.',
+            //text: 'El funcionario ha sido preliquidado con éxito.',
+            text: r.data,
             showCancel: false,
             timer: 1000
           });
         });
+        this.getBasicData();
       }
     });
   }
@@ -94,7 +144,7 @@ export class DetalleFuncionarioComponent implements OnInit {
       icon: 'question',
       title: '¿Estás seguro(a)?',
       showCancel: true,
-      text: (data.state == 'Inactivo' ? 'Vamos a bloquear a' + this.funcionario.first_name + '.' : 'Vamos a activar a ' + this.funcionario.first_name + '.')
+      text: (data.state == 'Inactivo' ? 'Vamos a bloquear a ' + this.funcionario.first_name + '.' : 'Vamos a activar a ' + this.funcionario.first_name + '.')
     }).then((result) => {
       if (result.isConfirmed) {
         this.detalleService.blockUser(data, this.id).subscribe((r: any) => {

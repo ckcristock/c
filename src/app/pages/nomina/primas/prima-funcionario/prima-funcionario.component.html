@@ -165,17 +165,26 @@
         aria-label="Select page"
       ></mat-paginator>
 
-      <div class="alert alert-warning text-center" role="alert">
+      <div class="alert alert-info text-center" role="alert">
         <b>TOTAL PRIMA: </b>$ {{ empleados.total_primas | currency : "" : "" }}
       </div>
+    </ng-container>.
+
+    <ng-container>
+      <div *ngIf="!habilitarPagar" >
+        <div class="alert alert-danger m-0 text-center" role="alert">
+          Solo podrá pagar primas en los meses de Junio/Julio y en Diciembre/Enero
+        </div>
+      </div>
+      <button
+        class="btn btn-primary btn-block"
+        *ngIf="empleados.status != 'pagado' && habilitarPagar"
+        (click)="pagar(empleados)"
+      >
+        Pagar
+      </button>
     </ng-container>
-    <button
-      class="btn btn-primary btn-block"
-      *ngIf="empleados.status != 'pagado'"
-      (click)="pagar(empleados)"
-    >
-      Pagar
-    </button>
+
   </div>
 </div>
 

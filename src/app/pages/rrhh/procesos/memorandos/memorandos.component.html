@@ -89,7 +89,6 @@
             <th scope="col">Estado</th>
             <th
               scope="col"
-              class="col-1"
               *ngIf="permission.permissions.approve"
             >
               <i class="mdi mdi-chevron-down"></i>
@@ -104,7 +103,7 @@
               'text-success': memorandum.state == 'Aprobado'
             }"
           >
-            <td class="align-middle" scope="row">
+            <td class="align-middle p-0" scope="row">
               <img
                 [src]="memorandum.image | image"
                 onerror="this.src='../../../../assets/images/noprofile.png'"

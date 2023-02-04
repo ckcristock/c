@@ -5,12 +5,8 @@
         <div class="d-flex justify-content-center">
           <h5>{{ task_data.titulo | uppercase }}</h5>
         </div>
-        <div class="card card-shadow">
-          <div class="card-body pb-0">
-            <div class="card-text" [innerHTML]="task_data.descripcion"></div>
-          </div>
-        </div>
-
+        <h6>Descripción</h6>
+        <div class="card-text" [innerHTML]="task_data.descripcion"></div>
         <div class="d-flex justify-content-between">
           <div>
             <span
@@ -56,38 +52,44 @@
           </div>
         </div>
         <hr />
-        <h6 class="card-title text-center">Comentarios</h6>
+        <h5 class="card-title text-center">Comentarios</h5>
+
         <ng-container
           *ngIf="!loading && task_data.comment.length > 0; else notData"
         >
-          <div class="card card-shadow bg-light" *ngFor="let item of task_data.comment">
-            <div class="card-body pb-0">
-              <div class="d-flex justify-content-between">
-                <h6 class="card-title">
+          <ul class="list-group list-group-flush">
+            <li
+              class="list-group-item flex-column align-items-start"
+              *ngFor="let item of task_data.comment"
+            >
+              <div class="d-flex w-100 justify-content-between">
+                <h6 class="mb-1">
                   {{ item.autor.full_names }}
-                  <small>{{
-                    item.created_at | date: "MMM d, y, h:mm a"
-                  }}</small>
                 </h6>
-                <div (click)="deleteComment(item.id)">
-                  <button
-                    class="btn btn-outline-danger btn-sm rounded-2"
-                    type="button"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="Eliminar comentario"
-                    *ngIf="item.deleted"
-                  >
-                    <i class="fa fa-trash"></i>
-                  </button>
-                </div>
+                <small class="text-muted">
+                  <div (click)="deleteComment(item.id)">
+                    <button
+                      class="btn btn-outline-danger btn-sm rounded-2"
+                      type="button"
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Eliminar comentario"
+                      *ngIf="item.deleted"
+                    >
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </div>
+                </small>
               </div>
               <div class="card-text" [innerHTML]="item.comment"></div>
-            </div>
-          </div>
+              <small class="text-muted">{{
+                item.created_at | date : "MMM d, y, h:mm a"
+              }}</small>
+            </li>
+          </ul>
         </ng-container>
         <form [formGroup]="form_comment">
-          <div class="d-flex flex-start w-100">
+          <div class="d-flex flex-start w-100 mt-2">
             <div class="form-outline w-100">
               <ckeditor
                 [editor]="_texteditor.Editor"
@@ -103,7 +105,7 @@
           type="button"
           (click)="saveComment()"
           [disabled]="!form_comment.controls.comment_temp.valid"
-          class="btn btn-primary btn-sm btn-block"
+          class="btn btn-primary btn-block mt-2"
         >
           Publicar
         </button>
@@ -125,7 +127,8 @@
         <h5 class="card-title">
           Fecha:
           <small>{{
-            task_data.fecha + " " + task_data.hora | date: "MMM d, y, h:mm:ss a"
+            task_data.fecha + " " + task_data.hora
+              | date : "MMM d, y, h:mm:ss a"
           }}</small>
         </h5>
       </div>
@@ -150,7 +153,11 @@
                 <a [href]="item.file" target="_blank">
                   <div class="card bg-light card-style" role="button">
                     <div class="card-body d-flex align-items-center p-2 pt-3">
-                      <img [src]="item.file" class="files-img" />
+                      <img
+                        [src]="item.file"
+                        class="files-img"
+                        onerror="this.src='../../../../assets/images/not-available.png'"
+                      />
                     </div>
                   </div>
                 </a>
@@ -195,7 +202,7 @@
                           {{ item.title }} <br />
                           <div class="text-muted" style="font-size: x-small">
                             <i class="fas fa-clock me-1"></i>
-                            {{ item.created_at | date: "MMM d, y, h:mm a" }}
+                            {{ item.created_at | date : "MMM d, y, h:mm a" }}
                           </div>
                         </h6>
                         <div>

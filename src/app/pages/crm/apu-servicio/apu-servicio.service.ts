@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -48,6 +48,11 @@ export class ApuServicioService {
 
   activateOrInactivate( data:any ){
     return this.http.put(`${environment.base_url}/activateOrInactApuService`, data);
+  }
+
+  download(id: string) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/apu-service/pdf/${id}`, { headers, responseType: 'blob' as 'json' });
   }
 
 }

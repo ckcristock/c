@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +37,10 @@ export class QuotationService {
 
   getCommercialTerms(params = {}) {
     return this.http.get(`${environment.base_url}/commercial-terms`, { params });
+  }
+
+  download(id: any) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/quotation/pdf/${id}`, { headers, responseType: 'blob' as 'json' });
   }
 }

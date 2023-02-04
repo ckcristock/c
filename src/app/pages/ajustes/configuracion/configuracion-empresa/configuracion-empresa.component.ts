@@ -44,6 +44,8 @@ export class ConfiguracionEmpresaComponent implements OnInit {
   affects_transportation_subsidy = '';
   pay_vacations = '';
   commercial_terms_ = new FormControl();
+  technical_requirements = new FormControl();
+  legal_requirements = new FormControl();
 
 
   constructor(
@@ -80,7 +82,6 @@ export class ConfiguracionEmpresaComponent implements OnInit {
     this._configuracionEmpresaService
       .getCompanyData()
       .subscribe((res: any) => {
-        console.log(res)
         res.data.page_heading ? this.page_heading = true : false
         this.company_name = res.data.name
         this.datBasic.company = res.data;
@@ -90,6 +91,8 @@ export class ConfiguracionEmpresaComponent implements OnInit {
         this.datPila.pilas = res.data;
         this.datPila.arl = res?.data?.arl?.name;
         this.commercial_terms_.setValue(res.data.commercial_terms)
+        this.technical_requirements.setValue(res.data.technical_requirements)
+        this.legal_requirements.setValue(res.data.legal_requirements)
         this.datBasic.getBasicData();
         this.datPila.getPilaData();
         this.datNomina.getNominaData();
@@ -125,7 +128,9 @@ export class ConfiguracionEmpresaComponent implements OnInit {
       .then((r) => {
         if (r.isConfirmed) {
           let data = {
-            commercial_terms: this.commercial_terms_.value
+            commercial_terms: this.commercial_terms_.value,
+            technical_requirements: this.technical_requirements.value,
+            legal_requirements: this.legal_requirements.value
           }
           this._configuracionEmpresaService.saveCommercialTerms(data, 1).subscribe((res: any) => {
             this._swal.show({

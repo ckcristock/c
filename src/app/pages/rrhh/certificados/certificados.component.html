@@ -178,6 +178,7 @@
     </button>
   </div>
 </ng-template>
+
 <ng-template #cesantia let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">Solicitud de carta de cesantías</h4>
@@ -205,6 +206,7 @@
               >{{ item.name }}</mat-option
             >
           </mat-select>
+          <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
 
         <div class="col-md-6" [ngClass]="person_is_valid2 ? 'mb-0' : 'mb-4'">
@@ -213,7 +215,8 @@
             formControlName="person_id"
             appearance="outline"
             [appendTo]="'body'"
-            placeholder="Funcionario"
+            placeholder="Funcionario *"
+            [clearable]="false"
             bindLabel="text"
             bindValue="value"
             ngDefaultControl
@@ -257,6 +260,7 @@
             matInput
             formControlName="valormonto"
             type="number"
+            required
             placeholder="Ingresa el monto a retirar"
           />
         </mat-form-field>

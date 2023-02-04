@@ -49,7 +49,7 @@ export class TercerosComponent implements OnInit {
     { value: 2, text: 'Nombre', selected: true },
     { value: 1, text: 'Documento', selected: true },
     { value: 3, text: 'Dirección', selected: true },
-    { value: 4, text: 'Municipio', selected: true },
+    { value: 4, text: 'Ciudad', selected: true },
     { value: 5, text: 'Teléfono', selected: true },
     { value: 6, text: 'Tipo', selected: true },
     { value: 8, text: 'Correo electrónico', selected: false },

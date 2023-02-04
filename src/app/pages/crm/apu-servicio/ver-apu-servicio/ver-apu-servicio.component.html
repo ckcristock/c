@@ -68,99 +68,101 @@
           </div>
         </div>
       </div>
-      <hr />
-      <h5 class="mt-2 text-center">Validación dimensional</h5>
-      <hr />
-      <h6>Cálculo de mano de obra</h6>
-      <app-validacion-dimensional
-        *ngIf="data.dimensional_validation.length"
-        [data]="data.dimensional_validation"
-      ></app-validacion-dimensional>
-      <div class="row d-flex justify-content-end">
-        <div class="col-md-6">
-          <div class="d-flex justify-content-between">
-            <div class="rounded-top table-responsive">
-              <table class="table table-hover">
-                <tbody>
-                  <tr>
-                    <td>SUBTOTAL MANO DE OBRA</td>
-                    <td class="text-right">
-                      ${{ data.subtotal_labor | currency : "" : "" }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>SUBTOTAL VIÁTICOS</td>
-                    <td class="text-right">
-                      ${{ data.subtotal_travel_expense | currency : "" : "" }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>SUBTOTAL VALID DIMENSIONAL</td>
-                    <td class="text-right">
-                      ${{
-                        data.subtotal_dimensional_validation
-                          | currency : "" : ""
-                      }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+      <ng-container *ngIf="data.dimensional_validation.length > 0">
+        <hr />
+        <h5 class="mt-2 text-center">Validación dimensional</h5>
+        <hr />
+        <h6>Cálculo de mano de obra</h6>
+        <app-validacion-dimensional
+          [data]="data.dimensional_validation"
+        ></app-validacion-dimensional>
+        <div class="row d-flex justify-content-end">
+          <div class="col-md-6">
+            <div class="d-flex justify-content-between">
+              <div class="rounded-top table-responsive">
+                <table class="table table-hover">
+                  <tbody>
+                    <tr>
+                      <td>SUBTOTAL MANO DE OBRA</td>
+                      <td class="text-right">
+                        ${{ data.subtotal_labor | currency : "" : "" }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SUBTOTAL VIÁTICOS</td>
+                      <td class="text-right">
+                        ${{ data.subtotal_travel_expense | currency : "" : "" }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SUBTOTAL VALID DIMENSIONAL</td>
+                      <td class="text-right">
+                        ${{
+                          data.subtotal_dimensional_validation
+                            | currency : "" : ""
+                        }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <hr />
-      <h5 class="text-center">Montaje y puesta en marcha</h5>
-      <hr />
-      <h6>Cálculo de mano de obra</h6>
-      <app-montaje-puesta-marcha
-        *ngIf="data.assemblies_start_up.length"
-        [data]="data.assemblies_start_up"
-      ></app-montaje-puesta-marcha>
-      <div class="row d-flex justify-content-end">
-        <div class="col-md-6">
-          <div class="d-flex justify-content-between">
-            <div class="rounded-top table-responsive">
-              <table class="table table-hover">
-                <tbody>
-                  <tr>
-                    <td>SUBTOTAL MANO DE OBRA</td>
-                    <td class="text-right">
-                      ${{ data.subtotal_labor_mpm | currency : "" : "" }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>SUBTOTAL VIÁTICOS</td>
-                    <td class="text-right">
-                      ${{
-                        data.subtotal_travel_expense_mpm | currency : "" : ""
-                      }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>SUBTOTAL MONTAJE Y PUESTA EN MARCHA</td>
-                    <td class="text-right">
-                      ${{
-                        data.subtotal_assembly_commissioning
-                          | currency : "" : ""
-                      }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA</td>
-                    <td class="text-right">
-                      ${{
-                        data.general_subtotal_travel_expense_labor
-                          | currency : "" : ""
-                      }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+      </ng-container>
+      <ng-container *ngIf="data.assemblies_start_up.length > 0">
+        <hr />
+        <h5 class="text-center">Montaje y puesta en marcha</h5>
+        <hr />
+        <h6>Cálculo de mano de obra</h6>
+        <app-montaje-puesta-marcha
+          [data]="data.assemblies_start_up"
+        ></app-montaje-puesta-marcha>
+        <div class="row d-flex justify-content-end">
+          <div class="col-md-6">
+            <div class="d-flex justify-content-between">
+              <div class="rounded-top table-responsive">
+                <table class="table table-hover">
+                  <tbody>
+                    <tr>
+                      <td>SUBTOTAL MANO DE OBRA</td>
+                      <td class="text-right">
+                        ${{ data.subtotal_labor_mpm | currency : "" : "" }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SUBTOTAL VIÁTICOS</td>
+                      <td class="text-right">
+                        ${{
+                          data.subtotal_travel_expense_mpm | currency : "" : ""
+                        }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SUBTOTAL MONTAJE Y PUESTA EN MARCHA</td>
+                      <td class="text-right">
+                        ${{
+                          data.subtotal_assembly_commissioning
+                            | currency : "" : ""
+                        }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA</td>
+                      <td class="text-right">
+                        ${{
+                          data.general_subtotal_travel_expense_labor
+                            | currency : "" : ""
+                        }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </ng-container>
       <hr />
       <h4 class="text-center">AIU</h4>
       <hr />
@@ -225,7 +227,15 @@
           </table>
         </div>
       </div>
-      <button class="btn btn-block btn-primary">Descargar</button>
+      <button (click)="download()" class="btn btn-primary btn-block">
+        <span
+          ><i
+            class="fas"
+            [class]="!donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'"
+          ></i>
+          {{ !donwloading ? "Descargar" : "Descargando" }}</span
+        >
+      </button>
     </div>
   </ng-container>
 </div>

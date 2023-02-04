@@ -4,9 +4,9 @@ import {
     FormBuilder,
     FormArray
   } from '@angular/forms';
-  
+
   export const cmoHelper = {
-  
+
     createFillIncmo(form: FormGroup, fb: FormBuilder, data, profiles, cities) {
       if (data.dimensional_validation) {
         data.dimensional_validation.forEach((r) => {
@@ -69,11 +69,11 @@ import {
         });
       }
     },
-  
-    createcmoGroup(  
-      form: FormGroup, 
-      fb: FormBuilder, 
-      profiles:Array<any>, 
+
+    createcmoGroup(
+      form: FormGroup,
+      fb: FormBuilder,
+      profiles:Array<any>,
       tEestimation:Array<any>,
       cities) {
       let group = fb.group({
@@ -134,7 +134,7 @@ import {
       return group;
     },
 
-    
+
     operationAmount(group:FormGroup){
       let formu = group.controls.formula_amount.value;
       let formula = formu;
@@ -149,9 +149,9 @@ import {
         amount: Math.round(result)
       });
     },
-    
+
     operationValue(group){
-      let formu = group.controls.formula_total_value.value;  
+      let formu = group.controls.formula_total_value.value;
       let formula = formu;
       let el = group.value;
       for (const key in el) {
@@ -164,11 +164,11 @@ import {
         total_value: Math.round(result)
       });
     },
-    
+
     viaticEstimationSubscribe(
-      forma:FormGroup, 
-      form:FormGroup, 
-      group: FormGroup, 
+      forma:FormGroup,
+      form:FormGroup,
+      group: FormGroup,
       estimation,
       cities,
       viact:FormArray,
@@ -177,22 +177,22 @@ import {
         form.get('displacement_type').valueChanges.subscribe(value => {
           let city_id = forma.get('city_id');
           let city = cities.find(c => c.id == city_id.value);
-          if (value == 1 && city?.country_id != 1) {
-            group.patchValue({ unit_value: estimation.travel_expense_estimation_values.aerial_international_value })
-          } else if (value == 2 && city?.country_id != 1) {
-            group.patchValue({ unit_value: estimation.travel_expense_estimation_values.land_international_value })
+          if (value == 1 && city?.department_?.country_id != 1) {
+            group.patchValue({ unit_value: estimation.travel_expense_estimation_values?.aerial_international_value })
+          } else if (value == 2 && city?.department_?.country_id != 1) {
+            group.patchValue({ unit_value: estimation.travel_expense_estimation_values?.land_international_value })
           } else if (value == 3) {
-            group.patchValue({ unit_value: estimation.travel_expense_estimation_values.aerial_international_value })
+            group.patchValue({ unit_value: estimation.travel_expense_estimation_values?.aerial_international_value })
           }
-          if (value == 1 && city?.country_id == 1) {
-            group.patchValue({ unit_value: estimation.travel_expense_estimation_values.aerial_national_value })
-          } else if (value == 2 && city?.country_id == 1) {
-            group.patchValue({ unit_value: estimation.travel_expense_estimation_values.land_national_value })
+          if (value == 1 && city?.department_?.country_id == 1) {
+            group.patchValue({ unit_value: estimation.travel_expense_estimation_values?.aerial_national_value })
+          } else if (value == 2 && city?.department_?.country_id == 1) {
+            group.patchValue({ unit_value: estimation.travel_expense_estimation_values?.land_national_value })
           }
         });
         forma.get('city_id').valueChanges.subscribe(value => {
           let city = cities.find(c => c.id == value);
-          if (city.country_id != 1) {
+          if (city?.department_?.country_id != 1) {
             group.patchValue({ unit_value: estimation.travel_expense_estimation_values.aerial_international_value })
           } else {
             group.patchValue({ unit_value: estimation.travel_expense_estimation_values.land_national_value })
@@ -259,7 +259,7 @@ import {
         this.subtotalTravelExpense(list, forma)
       })
     },
-    
+
     subscribecmo( group: FormGroup, form:FormGroup, list: FormArray, profiles:Array<any>){
       group.get('people_number').valueChanges.subscribe(value => {
         let hours_value_displacement = group.get('hours_value_displacement');
@@ -274,7 +274,7 @@ import {
         let resultDisplacement = (days_number_displacement.value * hours_displacement.value * hours_value_displacement.value * value);
         let resultOrdinary = (days_number_ordinary.value * hours_ordinary.value * hours_value_ordinary.value * value);
         let resultFestive = (days_number_festive.value * hours_festive.value * hours_value_festive.value * value)
-        group.patchValue({ 
+        group.patchValue({
           total_value_displacement: Math.round(resultDisplacement),
           total_value_ordinary: Math.round(resultOrdinary),
           total_value_festive:  Math.round(resultFestive)
@@ -413,16 +413,16 @@ import {
     },
 
     subtotalTravelExpense(list: FormArray, form:FormGroup){
-      setTimeout(() => {     
+      setTimeout(() => {
         let total = list.value.reduce((a, b) => { return  a + b.subtotal }, 0);
         form.patchValue({ subtotal_travel_expense: total })
       }, 100);
     },
-    
+
     subtotalLabor(list: FormArray, form: FormGroup){
       setTimeout(() => {
         let total = list.value.reduce((a, b) => { return  a + b.salary_value }, 0);
-        form.patchValue({ subtotal_labor: total }) 
+        form.patchValue({ subtotal_labor: total })
       }, 100);
     }
   };

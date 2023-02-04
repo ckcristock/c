@@ -100,14 +100,12 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of people" class="text-center text-uppercase">
-            <td class="align-middle">
-              <div>
-                <img
-                  [src]="item.image | image"
-                  onerror="this.src='../../../../assets/images/noprofile.png'"
-                  class="rounded-circle mx-auto img-fluid header-profile-user"
-                />
-              </div>
+            <td class="align-middle p-0">
+              <img
+                [src]="item.image | image"
+                onerror="this.src='../../../../assets/images/noprofile.png'"
+                class="rounded-circle mx-auto img-fluid header-profile-user"
+              />
             </td>
             <td class="align-middle">
               {{ item.first_name }} {{ item.second_name }}

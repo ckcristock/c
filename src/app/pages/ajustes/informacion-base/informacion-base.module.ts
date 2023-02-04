@@ -85,6 +85,7 @@ import { CrearbodegaComponent } from './bodegas/crearbodega/crearbodega.componen
 import { GrupoestibaComponent } from './bodegas/grupoestiba/grupoestiba.component';
 import { FilePermissionsComponent } from './funcionarios/detalle-funcionario/permissions/file-permissions/file-permissions.component';
 import { CatSubcatModule } from '../parametros/cat-subcat/cat-subcat.module';
+import { ProfilePermissionsComponent } from './funcionarios/detalle-funcionario/permissions/profile-permissions/profile-permissions.component';
 
 @NgModule({
   declarations: [
@@ -133,6 +134,7 @@ import { CatSubcatModule } from '../parametros/cat-subcat/cat-subcat.module';
     VerLiquidacionComponent,
     BodegasComponent,
     FilePermissionsComponent,
+    ProfilePermissionsComponent,
   ],
 
   imports: [

@@ -234,6 +234,7 @@ export class ItemsQuotationComponent implements OnInit {
   } */
   value_cop_temp: number
   value_usd_temp: number
+
   recalculate(subItemGroup, item_pre) {
     this.value_cop_temp = 0
     this.value_usd_temp = 0
@@ -360,6 +361,7 @@ export class ItemsQuotationComponent implements OnInit {
     id ? this.itemsTodelete.push(id) : ''
     this.form.patchValue({ itemsTodelete: this.itemsTodelete })
     this.items.removeAt(pos)
+    this.updateTotal()
   }
 
   deleteSubItem(group: FormGroup, pos: number) {
@@ -373,6 +375,7 @@ export class ItemsQuotationComponent implements OnInit {
 
     this.form.patchValue({ subItemsToDelete: this.subItemsToDelete })
     subItems.removeAt(pos)
+    this.recalculate('', group)
     /* this.updateSubTotals(subItems,
       ['total_cost', 'subtotal_indirect_cost', 'total_amd_imp_uti',
         'value_amd', 'value_unforeseen', 'value_utility',

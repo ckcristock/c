@@ -7,17 +7,17 @@ import { environment } from 'src/environments/environment';
 })
 export class PerfilesApuService {
 
-  constructor( private http: HttpClient ) { }
+  constructor(private http: HttpClient) { }
 
-  getProfiles( params = {} ){
-    return this.http.get(`${environment.base_url}/paginationApuProfiles`, {params});
+  getProfiles(params = {}) {
+    return this.http.get(`${environment.base_url}/paginationApuProfiles`, { params });
   }
 
-  save(data:any){
+  save(data: any) {
     return this.http.post(`${environment.base_url}/apu-profile`, data);
   }
 
-  getProfilesIdex(){
-    return this.http.get(`${environment.base_url}/apu-profile`);
+  getProfilesIdex(params = {}) {
+    return this.http.get(`${environment.base_url}/apu-profile`, { params });
   }
 }

@@ -40,7 +40,7 @@ export class VerPresupuestoComponent implements OnInit {
       this.loading = false;
     })
   }
-
+  donwloading = false;
   downloadClient() {
     Swal.fire({
       inputOptions: {
@@ -68,7 +68,7 @@ export class VerPresupuestoComponent implements OnInit {
     }).then(r => {
       if (r.isConfirmed, r.value) {
         const data = { id: this.id, currency: r.value }
-
+        this.donwloading = true;
         this._budget.downloadClient(data).subscribe((response: BlobPart) => {
           let blob = new Blob([response], { type: 'application/pdf' });
           let link = document.createElement('a');
@@ -76,6 +76,7 @@ export class VerPresupuestoComponent implements OnInit {
           link.href = window.URL.createObjectURL(blob);
           link.download = `${filename}.pdf`;
           link.click();
+          this.donwloading = false;
         }),
           (error) => {
           },

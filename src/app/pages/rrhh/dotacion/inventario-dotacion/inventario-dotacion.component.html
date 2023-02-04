@@ -14,6 +14,20 @@
             <i class="fa fa-plus"></i>
             Agregar
           </button>
+          <button
+            class="btn btn-sm btn-success"
+            (click)="DownloadInventoryDotation()"
+          >
+            <span *ngIf="!donwloading; else status">
+              <i class="fas fa-file-download"></i> Descargar</span
+            >
+            <ng-template #status>
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+              Generando...
+            </ng-template>
+          </button>
           <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
@@ -67,7 +81,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="Inventarios.length > 0 && !loading; else notData"
       >
         <thead class="bg-light">
@@ -108,6 +121,25 @@
       aria-label="Default pagination "
     >
     </ngb-pagination>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="card-title">
+      <h5 class="text-center text-primary">Dotación y EPP por categorías</h5>
+    </div>
+    <div #dotacion_chart>
+      <canvas
+        baseChart
+        [datasets]="barChartData"
+        [labels]="barChartLabels"
+        [options]="barChartOptions"
+        [legend]="barChartLegend"
+        [chartType]="barChartType"
+      >
+      </canvas>
+    </div>
   </div>
 </div>
 

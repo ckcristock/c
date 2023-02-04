@@ -18,6 +18,7 @@
     <table class="table table-bordered table-striped table-sm">
       <thead class="bg-light">
         <tr class="text-center text-uppercase">
+          <th>Código</th>
           <th>Periodo</th>
           <th>Salarios</th>
           <th>Retenciones</th>
@@ -33,13 +34,10 @@
       <tbody>
         <tr *ngFor="let pago of historialPagos" class="text-center">
           <!--  {{ pago | json }} -->
+          <td>{{ pago.code }}</td>
           <td>
-            <a
-
-            >
-              {{ pago.start_period }} -
-              {{ pago.end_period }}
-            </a>
+            {{ pago.start_period }} -
+            {{ pago.end_period }}
           </td>
           <td>
             {{ pago.total_salaries | currency : "" : "" }}
@@ -58,26 +56,32 @@
           </td>
           <td>{{ pago.total_cost | currency : "" : "" }}</td>
           <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
+            <div
+              ngbDropdown
+              container="body"
+              class="d-inline-block dropdown-primary"
+            >
               <button
                 ngbDropdownToggle
-                class="btn btn-primary btn-sm waves-light"
+                class="btn btn-primary btn-sm"
                 type="button"
+                id="dropdownBasic1"
               >
                 <i class="mdi mdi-chevron-down"></i>
               </button>
-              <div ngbDropdownMenu>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                 <a
                   [routerLink]="['/nomina/nomina']"
                   [queryParams]="{
                     inicio: pago.start_period,
                     fin: pago.end_period
                   }"
-                  class="btn btn-link p-0"
-                  (click)="redirectToNomina(pago)"
 
-                    ><i class="far fa-edit"></i> Editar</a
-                  >
+                  class="dropdown-item waves-light text-success caja-botones"
+                  (click)="redirectToNomina(pago)"
+                >
+                  <i class="far fa-eye"></i> Ver
+                </a>
               </div>
             </div>
           </td>

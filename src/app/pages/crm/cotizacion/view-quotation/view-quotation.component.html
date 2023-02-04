@@ -13,7 +13,7 @@
         <br />
         {{ quotation.municipality.name }}
       </p>
-      <div class="alert alert-info" role="alert">
+      <div class="alert alert-primary" role="alert">
         <i class="fas fa-cogs"></i> {{ quotation.line }} {{ quotation.project }}
       </div>
       <div class="rounded-top table-responsive">
@@ -64,17 +64,20 @@
         </ng-template>
       </div>
       <div
-        class="alert alert-warning alert-custom-quotation pb-0"
+        class="alert alert-light alert-custom-quotation pb-0"
         [innerHTML]="quotation.commercial_terms"
         role="alert"
         [ngClass]="'alert-p-0'"
       ></div>
-      <div class="btn-group btn-block" role="group" aria-label="Button group">
-        <button type="button" class="btn btn-success" (click)="print()">
-          Imprimir
-        </button>
-        <button type="button" class="btn btn-info">Enviar</button>
-      </div>
+      <button (click)="download()" class="btn btn-primary btn-block">
+        <span
+          ><i
+            class="fas"
+            [class]="!donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'"
+          ></i>
+          {{ !donwloading ? "Descargar" : "Descargando" }}</span
+        >
+      </button>
     </div>
   </ng-container>
 </div>

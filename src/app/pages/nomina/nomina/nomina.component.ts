@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
@@ -28,7 +28,8 @@ export class NominaComponent implements OnInit {
     private _payroll: PayRollService,
     private _people: PersonService,
     private _swal: SwalService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
   }
 
@@ -187,9 +188,12 @@ export class NominaComponent implements OnInit {
       this._swal
         .show({
           title: "Operación exitosa",
-          text: "Nómina Guardada correctamente",
-          icon: "success"
+          text: "Nómina guardada correctamente",
+          icon: "success",
+          timer: 1000,
+          showCancel: false
         })
+        this.router.navigateByUrl('/nomina/historial-pagos')
     }).catch((err: any) => {
       console.log(err);
     })

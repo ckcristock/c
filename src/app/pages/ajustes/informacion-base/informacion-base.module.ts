@@ -99,6 +99,7 @@ export const MY_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY'
   }
 };
+import { ProfilePermissionsComponent } from './funcionarios/detalle-funcionario/permissions/profile-permissions/profile-permissions.component';
 
 @NgModule({
   declarations: [
@@ -147,6 +148,7 @@ export const MY_FORMATS = {
     VerLiquidacionComponent,
     BodegasComponent,
     FilePermissionsComponent,
+    ProfilePermissionsComponent,
   ],
 
   imports: [

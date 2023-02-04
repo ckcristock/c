@@ -182,12 +182,12 @@
           <ng-select
             formControlName="Id_Categoria"
             [items]="Categorias"
-            bindLabel="text"
+            bindLabel="Nombre"
+            bindValue="Id_Categoria_Nueva"
             appearance="outline"
             [appendTo]="'body'"
             placeholder="Categoría"
-            (change)="getSubCategories($event.value)"
-            bindValue="value"
+            (change)="getSubCategories($event.Id_Categoria_Nueva)"
             loadingText="loading"
             ngDefaultControl
           >

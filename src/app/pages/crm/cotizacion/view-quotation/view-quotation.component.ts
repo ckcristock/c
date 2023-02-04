@@ -41,7 +41,25 @@ export class ViewQuotationComponent implements OnInit {
     })
   }
 
-  print(){
-    console.log(this.printPDF)
+  donwloading = false;
+  download() {
+    this.donwloading = true;
+    this._quotation.download(this.id).subscribe((response: BlobPart) => {
+      let blob = new Blob([response], { type: 'application/pdf' });
+      let link = document.createElement('a');
+      const filename = 'quotation' + this.id + '.pdf';
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${filename}.pdf`;
+      link.click();
+      this.donwloading = false;
+    }),
+      (error) => {
+        console.log('Error downloading the file');
+        this.donwloading = false;
+      },
+      () => {
+        this.donwloading = false;
+        console.info('File downloaded successfully');
+      };
   }
 }

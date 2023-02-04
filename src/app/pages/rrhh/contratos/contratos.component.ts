@@ -281,11 +281,11 @@ export class ContratosComponent implements OnInit {
       });
   }
 
-  download(id) {
+  download(id, contract) {
     this.contractService.download(id).subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/pdf' });
       let link = document.createElement('a');
-      const filename = 'contrato' + '.pdf';
+      const filename = 'contrato' + contract.work_contract_type + '.pdf';
       link.href = window.URL.createObjectURL(blob);
       link.download = `${filename}.pdf`;
       link.click();

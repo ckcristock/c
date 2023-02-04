@@ -5,12 +5,7 @@
         <h4 class="text-primary">Ver viático</h4>
       </div>
       <div class="col-md-6 px-0 text-right">
-        <mat-form-field class="col pb-0 px-0" appearance="outline">
-          <mat-label>Orden de trabajo</mat-label>
-          <mat-select>
-            <mat-option value="pendiente">Pendiente (?)</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <a [routerLink]="['/manufactura/ordenes-produccion/ver/', data.work_order_id]">{{data.work_order?.code}}</a>
       </div>
     </div>
     <hr class="line" />

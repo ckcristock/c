@@ -103,30 +103,48 @@
       <!-- Eventos Nomina paga  -->
       <div class="row" *ngIf="nomina?.nomina_paga">
         <div class="col">
-          <button class="btn btn-primary btn-sm btn-block">
-            <i class="fas fa-file-excel"></i> Resumen de nómina
+          <button
+           class="btn btn-primary btn-sm btn-block"
+           (click)="getColilla(nomina)">
+            <span><i
+              class="fas"
+              [class]="!donwloadingExNom ? 'fas fa-download' : 'fa-spinner fa-spin'"
+            ></i>
+            {{ !donwloadingExNom ? "Resumen de nómina" : "Descargando" }}</span>
           </button>
         </div>
+
         <div class="col">
           <button class="btn btn-primary btn-sm btn-block">
             <i class="fas fa-bell"></i> Resumen de novedades
           </button>
         </div>
+
         <div class="col">
-          <button class="btn btn-primary btn-sm btn-block">
-            <i class="fas fa-download"></i> Descargar colillas de pago
+          <button
+           class="btn btn-primary btn-sm btn-block"
+           (click)="getColillasPago(nomina)"
+           >
+           <span><i
+                class="fas"
+                [class]="!donwloadingExNom ? 'fas fa-download' : 'fa-spinner fa-spin'"
+              ></i>
+              {{ !donwloadingExNom ? "Colillas de pago" : "Descargando" }}</span>
           </button>
         </div>
+
         <div class="col">
           <button class="btn btn-primary btn-sm btn-block">
             <i class="fas fa-mail-bulk"></i> Notificar vía email y SMS
           </button>
         </div>
+
         <div class="col">
           <button class="btn btn-primary btn-sm btn-block">
             <i class="fas fa-umbrella"></i> Archivo seguridad social
           </button>
         </div>
+
         <div class="col">
           <button class="btn btn-primary btn-sm btn-block">
             <i class="fas fa-piggy-bank"></i> Archivo pago bancos
@@ -193,7 +211,7 @@
               <th *ngIf="nomina?.nomina_paga">Código</th>
               <th class="align-middle">Funcionario</th>
               <th class="align-middle">Ingresos Prestacionales</th>
-              <th class="align-middle">Ingresos No Prestacionales</th>
+              <th class="align-middle">Otros Ingresos</th>
               <th class="align-middle">Deducciones</th>
               <th class="align-middle">Pago a Empleado</th>
               <th class="align-middle">
@@ -262,7 +280,7 @@
                       class="dropdown-item waves-light caja-botones"
                       href="javascript:void(0)"
                       (click)="modalIngNoPrest.show(funcionario)"
-                      >Ingresos no prestacionales</a
+                      >Otros ingresos</a
                     >
                     <a
                       class="dropdown-item waves-light caja-botones"

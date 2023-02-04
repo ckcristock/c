@@ -54,7 +54,7 @@ export class BoardNominaComponent implements OnInit {
 
   public ColoresChart = ['#357ff4', '#4834f4', '#34d4f4', '#34f444', '#bcae31', '#d1261d'];
   //public TagsChart = ['Salarios', 'Extras y Recargos', 'Vacaciones', 'Incapacidades', 'Ingresos Constitutivos', 'Ingresos No Constitutivos'];
-  public TagsChart = ['Salarios', 'extras y Recargos', 'Vacaciones', 'Incapacidades', 'Ingresos Constitutvos', 'Ingresos No Constitutivos'];
+  public TagsChart = ['Salarios', 'extras y Recargos', 'Vacaciones', 'Incapacidades', 'Ingresos Constitutvos', 'Otros ingresos'];
   public LabelsChart:any = new Array;
   private chartDatasets:any = [];
 
@@ -97,7 +97,7 @@ export class BoardNominaComponent implements OnInit {
       this.TotalDeducciones= data.Total_Deducciones;
     });
   }
-  
+
   DescargarDatosNomina() {
     this.http.get(this.globales.ruta + 'php/nomina/tablero_nomina.php').subscribe((data: any) => {
       // console.log(data);
@@ -115,14 +115,14 @@ export class BoardNominaComponent implements OnInit {
 
       //Datos grafica lineal
       let costosNominaQuincenas = data.totales_quincenas;
-      
+
       let indexTags = 0;
       for (const key in costosNominaQuincenas) {
 
         let i = 0;
-        for(const k in costosNominaQuincenas[key]){    
-          
-          if(k == 'fechas'){ 
+        for(const k in costosNominaQuincenas[key]){
+
+          if(k == 'fechas'){
 
             this.LabelsChart.push(costosNominaQuincenas[key][k]['inicio']+" al "+costosNominaQuincenas[key][k]['fin']);
 
@@ -139,8 +139,8 @@ export class BoardNominaComponent implements OnInit {
             i++;
           }
           indexTags++;
-        }      
-      }    
+        }
+      }
 
       //Datos graficas Donas
       let costosNomina = data.costos_nomina;
@@ -174,11 +174,11 @@ export class BoardNominaComponent implements OnInit {
         labels: this.LabelsChart, //Eje X
         datasets: this.chartDatasets
       };
-      
+
     }, 7000);
   }
 
-  ConstruirGrafica(){  
+  ConstruirGrafica(){
     setTimeout(()=>{
       // console.log(this.nominaQuincenasData);
       let i = 0;
@@ -203,11 +203,11 @@ export class BoardNominaComponent implements OnInit {
 
         i++;
       });
-    }, 5000);  
-    
+    }, 5000);
+
   }
 
-  ConstruirCostosGastos(){   
+  ConstruirCostosGastos(){
     setTimeout(()=>{
       this.costosGastosOptions = {
         position: ['bottom', 'right'],
@@ -239,8 +239,8 @@ export class BoardNominaComponent implements OnInit {
         title: { display: false },
         animation: { animateScale: true, animateRotate: true }
       };
-    }, 5000);  
-    
+    }, 5000);
+
   }
 
   ConstruirCostosGastosGrupos(){
@@ -275,7 +275,7 @@ export class BoardNominaComponent implements OnInit {
         title: { display: false },
         animation: { animateScale: true, animateRotate: true }
       };
-    }, 5000); 
+    }, 5000);
   }
 
   ConstruirCostosGastosDependencia(){
@@ -310,8 +310,8 @@ export class BoardNominaComponent implements OnInit {
         legend: { display: true },
         title: { display: false },
         animation: { animateScale: true, animateRotate: true }
-      };    
-    }, 5500); 
+      };
+    }, 5500);
   }
 
   ConstruirGraficaDona(graphOptionContainer:any, graphDataContainer:any, data:Array<any>, colores:Array<string>, tags:Array<string>){
@@ -334,7 +334,7 @@ export class BoardNominaComponent implements OnInit {
         legend: { display: true },
         title: { display: false },
         animation: { animateScale: true, animateRotate: true }
-      };   
+      };
     }, 400);
   }
 

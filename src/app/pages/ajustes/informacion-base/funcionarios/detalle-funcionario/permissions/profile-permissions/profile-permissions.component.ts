@@ -12,7 +12,7 @@ import { SwalService } from '../../../../services/swal.service';
 export class ProfilePermissionsComponent implements OnInit {
   @Input('personId') personId;
   form: FormGroup;
-  apu_profiles: any [] = [];
+  apu_profiles: any[] = [];
   saving: boolean
 
   constructor(
@@ -35,7 +35,10 @@ export class ProfilePermissionsComponent implements OnInit {
   }
 
   getProfiles() {
-    this._apu_profiles.getProfilesIdex().subscribe((res: any) => {
+    let params = {
+      full: true
+    }
+    this._apu_profiles.getProfilesIdex(params).subscribe((res: any) => {
       this.apu_profiles = res.data
     })
   }

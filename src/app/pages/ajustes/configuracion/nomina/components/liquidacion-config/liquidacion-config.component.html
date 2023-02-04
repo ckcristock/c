@@ -9,21 +9,9 @@
               (setAccount)="actualizar($event.identifier, 'account_plan_id', $event.datos.id)"
               [extra]="extra"
               [variable]="extra.cuenta_contable"
-              [titulo]="'Cuentas contables'"
+              [titulo]="'Cuenta contable'"
             ></app-row-typeahead>
           </td>
-
-          <td>
-            <mat-slide-toggle
-              class="col"
-              (change)="actualizar($event.checked, 'status',  extra.id)"
-              color="primary"
-              [(ngModel)]="extra.status"
-              [ngModelOption]="{standalone: true}"
-              >{{ extra.status == 1 ? "Activo" : "Inactivo" }}</mat-slide-toggle
-            >
-          </td>
-
         </tr>
       </ng-template>
       <ng-container *ngIf="datos.length <= 0; else liquidacion"></ng-container>

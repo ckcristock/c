@@ -101,30 +101,48 @@
       <!-- Eventos Nomina paga  -->
       <div class="row" *ngIf="nomina?.nomina_paga">
         <div class="col">
-          <button class="btn btn-primary btn-sm btn-block">
-            <i class="fas fa-file-excel"></i> Resumen de nómina
+          <button
+           class="btn btn-primary btn-sm btn-block"
+           (click)="getColilla(nomina)">
+            <span><i
+              class="fas"
+              [class]="!donwloadingExNom ? 'fas fa-download' : 'fa-spinner fa-spin'"
+            ></i>
+            {{ !donwloadingExNom ? "Resumen de nómina" : "Descargando" }}</span>
           </button>
         </div>
+
         <div class="col">
           <button class="btn btn-primary btn-sm btn-block">
             <i class="fas fa-bell"></i> Resumen de novedades
           </button>
         </div>
+
         <div class="col">
-          <button class="btn btn-primary btn-sm btn-block">
-            <i class="fas fa-download"></i> Descargar colillas de pago
+          <button
+           class="btn btn-primary btn-sm btn-block"
+           (click)="getColillasPago(nomina)"
+           >
+           <span><i
+                class="fas"
+                [class]="!donwloadingExNom ? 'fas fa-download' : 'fa-spinner fa-spin'"
+              ></i>
+              {{ !donwloadingExNom ? "Colillas de pago" : "Descargando" }}</span>
           </button>
         </div>
+
         <div class="col">
           <button class="btn btn-primary btn-sm btn-block">
             <i class="fas fa-mail-bulk"></i> Notificar vía email y SMS
           </button>
         </div>
+
         <div class="col">
           <button class="btn btn-primary btn-sm btn-block">
             <i class="fas fa-umbrella"></i> Archivo seguridad social
           </button>
         </div>
+
         <div class="col">
           <button class="btn btn-primary btn-sm btn-block">
             <i class="fas fa-piggy-bank"></i> Archivo pago bancos

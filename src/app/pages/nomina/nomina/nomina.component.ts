@@ -15,6 +15,7 @@ export class NominaComponent implements OnInit {
     frecuencia_pago: 30,
   };
   loadingPeople = false;
+  donwloadingExNom: boolean = false;
   pago: any = {};
   renderizar = false;
   funcionarios = [];
@@ -46,7 +47,6 @@ export class NominaComponent implements OnInit {
   }
 
   getPagoNomina() {
-
     this.loadingPeople = true;
     const params = this.inicioParemeter && this.finParemeter ?
       {
@@ -64,6 +64,7 @@ export class NominaComponent implements OnInit {
       this.loadingPeople = false;
     });
   }
+
   getUsuario() {
     this.pago.admin_id = 1;
   }
@@ -82,7 +83,6 @@ export class NominaComponent implements OnInit {
     } else {
       this.funcionarios = this.funcionariosBase
     }
-
   }
 
   getPeople() {
@@ -120,11 +120,39 @@ export class NominaComponent implements OnInit {
   showInterfaceForGlobo(modal) { }
 
   mostrarNovedades(fun) { }
-  mostrarIngresosP(fun) { }
-  mostrarIngresosNP(fun) { }
-  mostrarDeducciones(fun) { }
-  getColilla(fun) { }
 
+  mostrarIngresosP(fun) { }
+
+  mostrarIngresosNP(fun) { }
+
+  mostrarDeducciones(fun) { }
+
+
+
+
+  getColillasPago(datos: any){
+    let mono = 'sapo'
+    console.log(`[${datos.frecuencia_pago}]`);
+    console.log([mono]);
+  }
+
+  getColilla(fun:any) {
+    this.donwloadingExNom = true;
+    //console.log(fun);
+    this._payroll.downloadExNomina(fun)
+    .subscribe((res: BlobPart) => {
+        let blob = new Blob([res], { type: 'application/excel' });
+        let link = document.createElement("a");
+        const filename = 'reporte-nomina';
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.xlsx`;
+        link.click();
+      }), (err: any) => {
+          console.log(err);
+          console.log('Error downloading the file');
+      }, () => console.info('File downloaded successfully');
+    this.donwloadingExNom = false;
+  }
 
   postPagoNomina() {
     this.pago.start_period = this.nomina.inicio_periodo;
@@ -148,6 +176,7 @@ export class NominaComponent implements OnInit {
       }, this.savePayroll)
       .then(result => {
         if (result.isConfirmed) {
+          this.getPagoNomina();
           this.renderizar = false;
         }
       });

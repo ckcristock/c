@@ -151,7 +151,6 @@ export class PrimasComponent implements OnInit {
   habilitarBotonPagar (){
     const hoy = new Date;
     const hoyMes = hoy.getMonth()
-    console.log(hoyMes);
 
     // 0: Enero, 1: Febrere, 2: Marzo, 3: Abril,
     // 4: Mayo, 5: Junio, 6: Julio, 7: Agosto,

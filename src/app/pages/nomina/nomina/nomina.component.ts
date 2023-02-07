@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
+import { PayrollFactorService } from '../../rrhh/novedades/payroll-factor.service';
 import { PayRollService } from './pay-roll.service';
 
 @Component({
@@ -16,6 +17,8 @@ export class NominaComponent implements OnInit {
   };
   loadingPeople = false;
   donwloadingExNom: boolean = false;
+  donwloadingExcNov: boolean = false;
+  donwloadingExcCol: boolean = false;
   pago: any = {};
   renderizar = false;
   funcionarios = [];
@@ -27,6 +30,7 @@ export class NominaComponent implements OnInit {
   constructor(
     private _payroll: PayRollService,
     private _people: PersonService,
+    private _payrollFactor: PayrollFactorService,
     private _swal: SwalService,
     private route: ActivatedRoute,
     private router: Router
@@ -124,9 +128,30 @@ export class NominaComponent implements OnInit {
   showInterfaceForGlobo(modal) { }
 
   mostrarNovedades() {
-    console.log(this.inicioPeriodo);
-    console.log(this.finPeriodo);
+    let params = {
+      date_start: moment("01-01-2020", ['DD-MM-YYYY']).format('YYYY-MM-DD'),
+      //date_start: moment(this.inicioPeriodo, ['DD/MM/YYYY']).format('YYYY-MM-DD'),
+      date_end: moment(this.finPeriodo, ['DD/MM/YYYY']).format('YYYY-MM-DD')
+    }
 
+    this._payroll.downloadExcNov(params).subscribe((response: BlobPart) => {
+      let blob = new Blob([response], { type: 'application/excel' });
+      let link = document.createElement('a');
+      const filename = 'reporte_novedades';
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${filename}.xlsx`;
+      link.click();
+      this.donwloadingExcNov = false;
+    }),
+      (error:any) => {
+        console.log(error);
+        console.log('Error downloading the file');
+        this.donwloadingExcNov = false;
+      },
+      () => {
+        console.info('File downloaded successfully');
+        this.donwloadingExcNov = false;
+      };
    }
 
   mostrarIngresosP(fun) { }

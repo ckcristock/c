@@ -118,7 +118,10 @@
           <button
            class="btn btn-primary btn-sm btn-block"
            (click)="mostrarNovedades()">
-            <i class="fas fa-bell"></i> Resumen de novedades
+           <span><i
+            class="fas fa-bell"
+            [class]="!donwloadingExcNov ? 'fas fa-download' : 'fa-spinner fa-spin' "
+            ></i>{{ !donwloadingExNom ? "Resumen de novedades" : "Descargando" }}</span>
           </button>
         </div>
 
@@ -129,9 +132,9 @@
            >
            <span><i
                 class="fas"
-                [class]="!donwloadingExNom ? 'fas fa-download' : 'fa-spinner fa-spin'"
+                [class]="!donwloadingExcCol ? 'fas fa-download' : 'fa-spinner fa-spin'"
               ></i>
-              {{ !donwloadingExNom ? "Colillas de pago" : "Descargando" }}</span>
+              {{ !donwloadingExcCol ? "Colillas de pago" : "Descargando" }}</span>
           </button>
         </div>
 

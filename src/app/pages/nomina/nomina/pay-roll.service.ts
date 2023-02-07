@@ -23,13 +23,17 @@ export class PayRollService {
 
   deletePayroll(){ //no debería poder eliminarse la nómina, al menos no fisicamente
     return this.http.delete(`${environment.base_url}/nomina/pago/funcionarios`);
-
   }
 
   downloadExNomina(params){
     const headers = new HttpHeaders().set('Content-Type', 'application/json')
     return this.http.post(`${environment.base_url}/download-payroll`, params, {headers, responseType: 'blob' as 'json'});
     //return this.http.get(`${environment.base_url}/download-payroll`, {headers, responseType: 'blob' as 'json'});
+  }
+
+  downloadExcNov(params:any){
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/download-disabilities/${params.date_start}/${params.date_end}`,{headers, responseType: 'blob' as 'json'});
   }
 
 }

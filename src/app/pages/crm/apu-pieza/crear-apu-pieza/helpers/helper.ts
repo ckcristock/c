@@ -14,7 +14,7 @@ export const functionsApu = {
     percentage_product: []
   },
 
-  fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials:Array<any>, cutLmaterials:Array<any>) {
+  fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials: Array<any>, cutLmaterials: Array<any>) {
 
     form.patchValue({
       name: data.name,
@@ -67,7 +67,7 @@ export const functionsApu = {
     this.subscribes(form)
   },
 
-  fillInIndirectCost(form: FormGroup, fb: FormBuilder, data){
+  fillInIndirectCost(form: FormGroup, fb: FormBuilder, data) {
     if (data.indirect) {
       let indirect_cost = form.get('indirect_cost') as FormArray;
       data.indirect.forEach(element => {
@@ -84,14 +84,14 @@ export const functionsApu = {
 
   createForm(fb: FormBuilder, calculationBase) {
     let group = fb.group({
-      name: [''],
-      city_id: [null],
+      name: ['', Validators.required],
+      city_id: [null, Validators.required],
       person_id: [null],
-      third_party_id:[null],
-      line: [''],
-      amount: [0],
+      third_party_id: [null, Validators.required],
+      line: ['', Validators.required],
+      amount: [1, Validators.required],
       files: [''],
-      observation: [''],
+      observation: ['', Validators.required],
       materia_prima: fb.array([]),
       subtotal_raw_material: [0],
       commercial_materials: fb.array([]),
@@ -139,12 +139,12 @@ export const functionsApu = {
     return group;
   },
 
-  cityRetention(group: FormGroup, cities:Array<any>){
+  cityRetention(group: FormGroup, cities: Array<any>) {
     group.get('city_id').valueChanges.subscribe(value => {
       let data = cities.find(c => c.value == value);
       if (data) {
         let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal');
-        let result = admin_unforeseen_utility_subtotal.value / ( 1 - (data.percentage_product / 100));
+        let result = admin_unforeseen_utility_subtotal.value / (1 - (data.percentage_product / 100));
         group.patchValue({
           sale_price_cop_withholding_total: Math.round(result)
         })
@@ -154,7 +154,7 @@ export const functionsApu = {
       let city = group.get('city_id');
       let data = cities.find(c => c.value == city.value);
       if (data) {
-        let result = value / ( 1 - (data.percentage_product / 100));
+        let result = value / (1 - (data.percentage_product / 100));
         group.patchValue({
           sale_price_cop_withholding_total: Math.round(result)
         });
@@ -162,11 +162,11 @@ export const functionsApu = {
     });
   },
 
-  indirectCostOp(indirect:FormGroup, form:FormGroup){
+  indirectCostOp(indirect: FormGroup, form: FormGroup) {
     let list = form.get('indirect_cost') as FormArray;
     indirect.get('percentage').valueChanges.subscribe(value => {
       let total_direct_cost = form.get('total_direct_cost');
-      let result =  ((value / 100) * total_direct_cost.value);
+      let result = ((value / 100) * total_direct_cost.value);
       indirect.patchValue({
         value: Math.round(result)
       });
@@ -183,7 +183,7 @@ export const functionsApu = {
     });
   },
 
-  subscribes(group: FormGroup){
+  subscribes(group: FormGroup) {
     group.get('indirect_cost_total').valueChanges.subscribe(value => {
       let total_direct_cost = group.get('total_direct_cost');
       group.patchValue({
@@ -277,39 +277,39 @@ export const functionsApu = {
     });
   },
 
-  subtotalIndirectCost(list: FormArray, form:FormGroup){
+  subtotalIndirectCost(list: FormArray, form: FormGroup) {
     setTimeout(() => {
       let total =
-      list.value.reduce(
-        (a, b) => {
-          return  a + b.value
-        },0
-      );
+        list.value.reduce(
+          (a, b) => {
+            return a + b.value
+          }, 0
+        );
       form.patchValue({
         indirect_cost_total: total
       })
     }, 100);
   },
 
-  sumarTotalDirectCost(form: FormGroup){
+  sumarTotalDirectCost(form: FormGroup) {
     setTimeout(() => {
       let forma = form.value;
       let result =
-      forma.subtotal_raw_material +
-      forma.commercial_materials_subtotal +
-      forma.cut_water_subtotal +
-      forma.cut_laser_subtotal +
-      forma.machine_tools_subtotal +
-      forma.internal_proccesses_subtotal +
-      forma.external_proccesses_subtotal +
-      forma.others_subtotal;
+        forma.subtotal_raw_material +
+        forma.commercial_materials_subtotal +
+        forma.cut_water_subtotal +
+        forma.cut_laser_subtotal +
+        forma.machine_tools_subtotal +
+        forma.internal_proccesses_subtotal +
+        forma.external_proccesses_subtotal +
+        forma.others_subtotal;
       form.patchValue({
         total_direct_cost: result
       });
     }, 130);
   },
 
-  directCostUnit(form: FormGroup){
+  directCostUnit(form: FormGroup) {
     setTimeout(() => {
       let forma = form.value;
       let result = (forma.total_direct_cost / forma.amount);
@@ -365,11 +365,11 @@ export const functionsApu = {
     });
   },
 
-  sumarAmindImpr(form:FormGroup){
+  sumarAmindImpr(form: FormGroup) {
     let forma = form.value;
     let resultAminImp =
-    forma.direct_costs_indirect_costs_total + forma.administrative_value +
-    forma.unforeseen_value;
+      forma.direct_costs_indirect_costs_total + forma.administrative_value +
+      forma.unforeseen_value;
     form.patchValue({
       administrative_unforeseen_subtotal: resultAminImp
     })

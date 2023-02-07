@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ApuPiezaService } from '../apu-pieza.service';
 import { UnidadesMedidasService } from '../../../ajustes/parametros/apu/unidades-medidas/unidades-medidas.service';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
@@ -20,6 +20,10 @@ import { ProcesosExternosService } from 'src/app/pages/ajustes/parametros/apu/pr
 import { ProcesosInternosService } from 'src/app/pages/ajustes/parametros/apu/procesos-internos/procesos-internos.service';
 import { MaquinasHerramientasService } from 'src/app/pages/ajustes/parametros/apu/maquinas-herramientas/maquinas-herramientas.service';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
+import { consts } from 'src/app/core/utils/consts';
+import {
+  ViewportScroller
+} from '@angular/common';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -30,6 +34,10 @@ export class CrearApuPiezaComponent implements OnInit {
   @Input('id') id;
   @Input('data') data;
   @Input('title') title = 'Crear pieza';
+  pageYoffset = 0;
+  @HostListener('window:scroll', ['$event']) onScroll(event) {
+    this.pageYoffset = window.pageYOffset;
+  }
   form: FormGroup;
   date: Date = new Date();
   datosCabecera = {
@@ -38,6 +46,8 @@ export class CrearApuPiezaComponent implements OnInit {
     Codigo: '',
     CodigoFormato: ''
   }
+
+
   people: any[] = [];
   cities: any[] = [];
   geometries: any[] = [];
@@ -59,6 +69,7 @@ export class CrearApuPiezaComponent implements OnInit {
   auiCollapsed: boolean;
   loading: boolean;
   calculationBase: any = {}
+  masksMoney = consts
   constructor(
     private _apuPieza: ApuPiezaService,
     private _units: UnidadesMedidasService,
@@ -70,7 +81,8 @@ export class CrearApuPiezaComponent implements OnInit {
     private _externos: ProcesosExternosService,
     private _internos: ProcesosInternosService,
     public _consecutivos: ConsecutivosService,
-    private _maquinas: MaquinasHerramientasService
+    private _maquinas: MaquinasHerramientasService,
+    private scroll: ViewportScroller
   ) { }
 
   async ngOnInit() {
@@ -103,9 +115,9 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   getConsecutivo() {
-    this._consecutivos.getConsecutivo('apu_parts').subscribe((r:any) => {
+    this._consecutivos.getConsecutivo('apu_parts').subscribe((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
-      this.form.patchValue({format_code: this.datosCabecera.CodigoFormato})
+      this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
       this.construiConsecutivo(r);
     })
   }
@@ -123,7 +135,7 @@ export class CrearApuPiezaComponent implements OnInit {
         code: this.data?.code
       })
     }
-    if(r.data.city) {
+    if (r.data.city) {
       this.form.get('city_id').valueChanges.subscribe(value => {
         let city = this.cities.find(x => x.value === value)
         let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
@@ -136,13 +148,13 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   getVariablesApu() {
-    this._externos.getExternos().subscribe((res:any) => {
+    this._externos.getExternos().subscribe((res: any) => {
       this.procesos_externos = res.data
     })
-    this._maquinas.getMaquinas().subscribe((res:any) => {
+    this._maquinas.getMaquinas().subscribe((res: any) => {
       this.maquinas_herramientas = res.data
     })
-    this._internos.getExternos().subscribe((res:any) => {
+    this._internos.getExternos().subscribe((res: any) => {
       this.procesos_internos = res.data
     })
   }
@@ -243,8 +255,13 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   newMateria() {
-    let materia = this.materiaList;
-    materia.push(this.basicControl())
+    if (this.form.valid) {
+      let materia = this.materiaList;
+      materia.push(this.basicControl())
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
   }
 
   deleteMateria(i) {
@@ -264,8 +281,13 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   newMaterial() {
-    let materials = this.materialsList;
-    materials.push(this.materialsControl())
+    if (this.form.valid) {
+      let materials = this.materialsList;
+      materials.push(this.materialsControl())
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
   }
 
   deleteMaterial(i) {
@@ -287,8 +309,13 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   newCutWater() {
-    let water = this.cutWaterList;
-    water.push(this.cutWaterControl())
+    if (this.form.valid) {
+      let water = this.cutWaterList;
+      water.push(this.cutWaterControl())
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
   }
 
   deleteCutWater(i) {
@@ -311,8 +338,13 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   newCutLaser() {
-    let laser = this.cutLaserList;
-    laser.push(this.cutLaserControl());
+    if (this.form.valid) {
+      let laser = this.cutLaserList;
+      laser.push(this.cutLaserControl());
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
   }
 
   deleteCutLaser(i) {
@@ -380,8 +412,13 @@ export class CrearApuPiezaComponent implements OnInit {
 
 
   newMachineTool() {
-    let machine = this.machineToolList;
-    machine.push(this.machineToolsControl())
+    if (this.form.valid) {
+      let machine = this.machineToolList;
+      machine.push(this.machineToolsControl())
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
   }
 
   deleteMachineTool(i) {
@@ -403,8 +440,13 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   newInternalProccesses() {
-    let internalProccess = this.internalProccessList;
-    internalProccess.push(this.internalProccessesControl())
+    if (this.form.valid) {
+      let internalProccess = this.internalProccessList;
+      internalProccess.push(this.internalProccessesControl())
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
   }
 
   deleteInternalProccess(i) {
@@ -426,8 +468,13 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   newExternalProccesses() {
-    let exteranlProccess = this.externalProccessList;
-    exteranlProccess.push(this.externalProccessesControl())
+    if (this.form.valid) {
+      let exteranlProccess = this.externalProccessList;
+      exteranlProccess.push(this.externalProccessesControl())
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
   }
 
   deleteExternalProccess(i) {
@@ -449,8 +496,14 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   newOthersList() {
-    let others = this.othersList;
-    others.push(this.othersControl())
+    if (this.form.valid) {
+      let others = this.othersList;
+      others.push(this.othersControl())
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
+
   }
 
   deleteOthers(i) {
@@ -483,43 +536,53 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   save() {
-    let filess = this.files;
-    filess.forEach(elem => {
-      let file = elem;
-      var reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        this.fileString = (<FileReader>event.target).result;
-      };
-      functionsUtils.fileToBase64(file).subscribe((base64) => {
-        this.file = base64;
-        this.fileArr.push(this.fileString);
-      });
-    });
-    this.form.patchValue({
-      files: this.fileArr
-    });
-    this._swal
-      .show({
-        text: `Se dispone a ${this.id ? 'editar' : 'crear'} un apu pieza`,
-        title: '¿Está seguro?',
-        icon: 'warning',
+    console.log(this.form.valid);
+    if (this.form.invalid) {
+      this._swal.show({
+        icon: 'error',
+        title: 'ERROR',
+        text: 'Revisa la información y vuelve a intentarlo',
+        showCancel: false
       })
-      .then((r) => {
-        if (r.isConfirmed) {
-          if (this.id) {
-            this._apuPieza.update(this.form.value, this.id).subscribe(
-              (res: any) => this.showSuccess(),
-              (err) => this.showError(err)
-            );
-          } else {
-            this._apuPieza.save(this.form.value).subscribe(
-              (res: any) => this.showSuccess(),
-              (err) => this.showError(err)
-            );
-          }
-        }
+    } else {
+      let filess = this.files;
+      filess.forEach(elem => {
+        let file = elem;
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          this.fileString = (<FileReader>event.target).result;
+        };
+        functionsUtils.fileToBase64(file).subscribe((base64) => {
+          this.file = base64;
+          this.fileArr.push(this.fileString);
+        });
       });
+      this.form.patchValue({
+        files: this.fileArr
+      });
+      this._swal
+        .show({
+          text: `Se dispone a ${this.id ? 'editar' : 'crear'} un apu pieza`,
+          title: '¿Está seguro?',
+          icon: 'warning',
+        })
+        .then((r) => {
+          if (r.isConfirmed) {
+            if (this.id) {
+              this._apuPieza.update(this.form.value, this.id).subscribe(
+                (res: any) => this.showSuccess(),
+                (err) => this.showError(err)
+              );
+            } else {
+              this._apuPieza.save(this.form.value).subscribe(
+                (res: any) => this.showSuccess(),
+                (err) => this.showError(err)
+              );
+            }
+          }
+        });
+    }
   }
 
   showSuccess() {

@@ -1,5 +1,5 @@
 export const consts = {
-  maxSizeFile:500000,
+  maxSizeFile: 500000,
   degree: [
     { clave: 'Primaria', valor: 'Primaria' },
     { clave: 'Secundaria', valor: 'Secundaria' },
@@ -26,11 +26,11 @@ export const consts = {
   ],
   driving_requirements: [
     { text: 'Sin Licencia', value: 'Sin Licencia' },
-    { text: 'A1', value:'A1' },
-    { text: 'A2', value:'A2' },
-    { text: 'B1', value:'B1' },
-    { text: 'B2', value:'B2' },
-    { text: 'B3', value:'B3' }
+    { text: 'A1', value: 'A1' },
+    { text: 'A2', value: 'A2' },
+    { text: 'B1', value: 'B1' },
+    { text: 'B2', value: 'B2' },
+    { text: 'B3', value: 'B3' }
   ],
   bloodType: [
     { clave: 'A+', valor: 'A+' },
@@ -161,6 +161,41 @@ export const consts = {
     { clave: 'Si', valor: 0 },
     { clave: 'No', valor: 1 }
   ],
+  maskUSD: {
+    prefix: 'USD ',
+    suffix: "",
+    thousands: '.',
+    decimal: ',',
+    allowNegative: false,
+    precision: 2
+  },
+
+  maskCOP: {
+    prefix: '$ ',
+    suffix: "",
+    thousands: '.',
+    decimal: ',',
+    allowNegative: false,
+    precision: 2
+  },
+
+  maskNumbers: {
+    prefix: ' ',
+    suffix: "",
+    thousands: '.',
+    decimal: ',',
+    allowNegative: false,
+    precision: 0
+  },
+
+  maskPorcentaje: {
+    prefix: ' ',
+    suffix: "%",
+    thousands: '.',
+    decimal: ',',
+    allowNegative: false,
+    precision: 2
+  }
 
 
 };

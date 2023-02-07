@@ -48,7 +48,7 @@ registerLocaleData(localeEs, 'es');
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: LOCALE_ID, useValue: 'es' },
+    { provide: LOCALE_ID, useValue: 'es-CO' },
     { provide: MatPaginatorIntl, useValue: getEspañolPaginatorIntl() }
   ],
   bootstrap: [AppComponent],

@@ -78,6 +78,8 @@ import { ViewThirdComponent } from './terceros/view-third/view-third.component';
 import { ModalNuevoNegocioComponent } from './negocios/modal-nuevo-negocio/modal-nuevo-negocio.component';
 import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
+import { CurrencyMaskModule } from "ng2-currency-mask";
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 export const MY_FORMATS = {
   parse: {
@@ -181,7 +183,9 @@ export const MY_FORMATS = {
     SatDatepickerModule,
     SatNativeDateModule,
     ChartModule,
-    ChartsModule
+    ChartsModule,
+    CurrencyMaskModule,
+    MatSnackBarModule
   ]
 })
 export class CrmModule { }

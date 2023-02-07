@@ -21,6 +21,7 @@ export class PrimasComponent implements OnInit {
   premiums: any[] = [];
   premiumsPeople: any[] = [];
   year = new Date().getFullYear();
+  habilitarPagar: boolean = false;
   pagination = {
     pageSize: 5,
     page: 1,
@@ -43,6 +44,7 @@ export class PrimasComponent implements OnInit {
     for (let index = year - 5; index <= year; index++) {
       this.years.push(index);
     }
+    this.habilitarBotonPagar();
   }
 
   closeResult = '';
@@ -144,6 +146,22 @@ export class PrimasComponent implements OnInit {
         this.premiums = r.data.data;
         this.pagination.collectionSize = r.data.total
       })
+  }
+
+  habilitarBotonPagar (){
+    const hoy = new Date;
+    const hoyMes = hoy.getMonth()
+    console.log(hoyMes);
+
+    // 0: Enero, 1: Febrere, 2: Marzo, 3: Abril,
+    // 4: Mayo, 5: Junio, 6: Julio, 7: Agosto,
+    // 8: Septiembre, 9: Octubre, 10: Noviembre, 11: Diciembre
+
+    if (hoyMes == 5 || hoyMes == 6 || hoyMes == 11 || hoyMes == 0)  {
+      this.habilitarPagar = true;
+    } else {
+      this.habilitarPagar = false;
+    }
   }
 
   VerPrimaFuncionarios(period) {

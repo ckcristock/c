@@ -111,6 +111,9 @@ export class NominaComponent implements OnInit {
   }
 
   deletePagoNomina() {
+
+    console.log('no se puede borrar');
+
     this._payroll.deletePayroll().subscribe(r => {
 
     }, err => {
@@ -120,7 +123,11 @@ export class NominaComponent implements OnInit {
 
   showInterfaceForGlobo(modal) { }
 
-  mostrarNovedades(fun) { }
+  mostrarNovedades() {
+    console.log(this.inicioPeriodo);
+    console.log(this.finPeriodo);
+
+   }
 
   mostrarIngresosP(fun) { }
 

@@ -25,6 +25,10 @@ export class DetalleService {
     return this.http.put(`${environment.base_url}/blockOrActivate/${id}`, data);
   }
 
+  setPreliquidadoLog(info: any) {
+    return this.http.post(`${environment.base_url}/preliquidation`, info);
+  }
+
   getLiquidation(id) {
     return this.http.get(`${environment.base_url}/liquidation/${id}`);
   }

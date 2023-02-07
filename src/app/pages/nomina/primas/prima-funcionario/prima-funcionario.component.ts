@@ -63,7 +63,6 @@ export class PrimaFuncionarioComponent implements OnInit {
     this.page = 1;
     this.previousPage = 1;
     this.calcularPrimas();
-    this.habilitarBotonPagar();
   }
 
   calcularPrimas() {

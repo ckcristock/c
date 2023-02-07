@@ -6,6 +6,8 @@ import { SwalService } from '../../ajustes/informacion-base/services/swal.servic
 import * as moment from 'moment';
 import { MatAccordion } from '@angular/material';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { UserService } from 'src/app/core/services/user.service';
+import { DetalleService } from '../../ajustes/informacion-base/funcionarios/detalle-funcionario/detalle.service';
 
 @Component({
   selector: 'app-preliquidados',
@@ -16,6 +18,7 @@ export class PreliquidadosComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   preliquidados: any = [];
+  responsable: any = {};
   filters: FormGroup;
   loading: boolean = false;
   matPanel: boolean;
@@ -30,11 +33,14 @@ export class PreliquidadosComponent implements OnInit {
     private router: Router,
     private _preliquidadosService: PreliquidadosService,
     private _swal: SwalService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _user: UserService,
+    private _detalle: DetalleService,
   ) { }
 
   ngOnInit(): void {
     this.getPreliquidados();
+    this.responsable = this._user.user;
     this.createForm();
   }
 
@@ -65,9 +71,9 @@ export class PreliquidadosComponent implements OnInit {
         this.pagination.collectionSize = res.data.total;
         this.loading = false;
         for (let index = 0; index < this.preliquidados.length; index++) {
-          let fecha = this.preliquidados[index].updated_at;
+          let fecha = this.preliquidados[index].log_created_at;
           let InfoH = this.cantidadDate(fecha);
-          this.preliquidados[index].updated_at = InfoH;
+          this.preliquidados[index].log_created_at = InfoH;
         }
       })
   }
@@ -128,23 +134,45 @@ export class PreliquidadosComponent implements OnInit {
     })
   }
 
-  activate(id) {
+  activate(preliquidado: any) {
     this._swal.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
       text: 'Vamos a activar a este empleado'
     }).then((result) => {
       if (result.isConfirmed) {
-        this._preliquidadosService.activate({ status: 'Activo' }, id).subscribe((r: any) => {
-          this.getPreliquidados();
-          this._swal.show({
-            icon: 'success',
-            title: 'Proceso finalizado',
-            text: 'El funcionario ha sido activado con éxito.',
-            showCancel: false,
-            timer: 1000
-          });
-        });
+        let info = {
+          id: preliquidado.id,
+          identifier: preliquidado.identifier,
+          full_name: preliquidado.first_name+' '+preliquidado.first_surname,
+          contract_work: preliquidado.work_contract_id ?? 0,
+          liquidated_at: moment().format('YYYY-MM-DD'),
+          reponsible: {
+              person_id: this.responsable.id,
+              usuario: this.responsable.usuario
+          },
+          status: "Reincorporado"
+        }
+
+        this._detalle.setPreliquidadoLog(info).subscribe((res:any)=>{
+          if (res.status) {
+            this._detalle.blockUser({ status: 'Activo' }, preliquidado.id).subscribe((r: any) => {
+              console.log(r.status);
+            })
+            this._preliquidadosService.activate({ status: 'Activo' }, preliquidado.id).subscribe((r: any) => {
+              console.log(r);
+              this.getPreliquidados();
+              this._swal.show({
+                icon: 'success',
+                title: 'Proceso finalizado',
+                text: 'El funcionario ha sido activado con éxito.',
+                showCancel: false,
+                timer: 1000
+              });
+            });
+
+          }
+        })
       }
     });
   }

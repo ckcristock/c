@@ -4,7 +4,7 @@
       <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
       <hr class="line" />
       <div class="row">
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Nombre</mat-label>
           <input
             matInput
@@ -14,7 +14,7 @@
             required
           />
         </mat-form-field>
-        <div class="col mb-4">
+        <div class="col-md-3 mat-form-field-wrapper">
           <ng-select
             formControlName="city_id"
             [items]="cities"
@@ -29,22 +29,7 @@
           >
           </ng-select>
         </div>
-        <!-- !Arreglar el person automatico -->
-        <!-- <div class="col-md-4 mb-4">
-          <ng-select
-            formControlName="person_id"
-            [items]="people"
-            bindLabel="text"
-            appearance="outline"
-            [appendTo]="'body'"
-            placeholder="¿Quién elbaora? *"
-            bindValue="value"
-            loadingText="loading"
-            ngDefaultControl
-          >
-          </ng-select>
-        </div> -->
-        <div class="col mb-4">
+        <div class="col-md-3 mat-form-field-wrapper">
           <ng-select
             formControlName="third_party_id"
             [items]="clients"
@@ -59,7 +44,7 @@
           >
           </ng-select>
         </div>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-2" appearance="outline">
           <mat-label>Línea</mat-label>
           <input
             matInput
@@ -69,7 +54,7 @@
             formControlName="line"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-1" appearance="outline">
           <mat-label>Cantidad</mat-label>
           <input
             matInput
@@ -101,8 +86,13 @@
     <div class="card-body">
       <h5 class="mt-2 text-center">Costos directos</h5>
       <hr class="line" />
-      <h6>Plano</h6>
-      <ngx-dropzone class="drop-zone" (change)="onSelect($event)">
+      <app-planos *ngIf="planos.length > 0" (actualizar)="ngOnInit()" [data]="planos" [info]="'editar'"></app-planos>
+      <h6>Subir planos</h6>
+      <ngx-dropzone
+        class="drop-zone"
+        (change)="onSelect($event)"
+        accept="image/jpeg, image/jpg, image/png, application/pdf"
+      >
         <ngx-dropzone-label>
           <span><i class="fas fa-cloud-download-alt"></i></span>
           Arrastre y suelte el archivo
@@ -125,7 +115,7 @@
             <ng-container
               *ngFor="let item of materiaList.controls; let i = index"
             >
-              <div [formGroupName]="i">
+              <ng-container [formGroupName]="i">
                 <thead class="bg-light">
                   <tr class="text-center text-uppercase">
                     <th class="align-middle">Item</th>
@@ -272,7 +262,7 @@
                     </td>
                   </tr>
                 </tbody>
-              </div>
+              </ng-container>
             </ng-container>
           </table>
         </div>

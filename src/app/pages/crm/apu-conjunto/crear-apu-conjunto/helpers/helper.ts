@@ -60,11 +60,11 @@ export const functionsApuConjunto = {
     }
   },
 
-  createForm(fb: FormBuilder) {
+  createForm(fb: FormBuilder, user_id) {
     let group = fb.group({
       name: [''],
       city_id: [null],
-      person_id: [null],
+      person_id: [user_id],
       third_party_id:[null],
       line: [''],
       files: [''],

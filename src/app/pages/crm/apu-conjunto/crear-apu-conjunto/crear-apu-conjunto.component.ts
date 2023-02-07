@@ -18,6 +18,7 @@ import { ProcesosInternosService } from 'src/app/pages/ajustes/parametros/apu/pr
 import { MaquinasHerramientasService } from 'src/app/pages/ajustes/parametros/apu/maquinas-herramientas/maquinas-herramientas.service';
 import { UnidadesMedidasService } from 'src/app/pages/ajustes/parametros/apu/unidades-medidas/unidades-medidas.service';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
+import { UserService } from 'src/app/core/services/user.service';
 interface ApuPart {
   name: string;
   id: number;
@@ -70,6 +71,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   searchingSet: boolean;
   searchFailedSet: boolean;
   calculationBase: any = {}
+  user_id;
   @ViewChild('apus') apus: any
 
   constructor(
@@ -83,8 +85,9 @@ export class CrearApuConjuntoComponent implements OnInit {
     private _maquinas: MaquinasHerramientasService,
     private _units: UnidadesMedidasService,
     public _consecutivos: ConsecutivosService,
+    private _user: UserService
   ) {
-
+    this.user_id = _user.user.person.id
   }
 
   ngOnInit(): void {
@@ -325,7 +328,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   createForm() {
-    this.form = help.functionsApuConjunto.createForm(this.fb);
+    this.form = help.functionsApuConjunto.createForm(this.fb, this.user_id);
     help.functionsApuConjunto.listerTotalDirectCost(this.form);
   }
 

@@ -4,12 +4,24 @@
       <div class="card-title d-flex justify-content-between">
         <h4 class="text-primary">{{ title }}</h4>
         <mat-form-field class="col-md-3 pr-0 pb-0" appearance="outline">
-          <mat-label>Orden de trabajo</mat-label>
-          <mat-select formControlName="work_order_id">
+          <mat-label>Orden de producción</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Busca por código de OP"
+            formControlName="work_order_id"
+            [ngbTypeahead]="search"
+            [inputFormatter]="formatter"
+            [resultFormatter]="formatter"
+            [editable]="false"
+            required
+            autocomplete="off"
+          />
+          <!-- <mat-select formControlName="work_order_id">
             <mat-option *ngFor="let item of work_orders" [value]="item.value">{{
               item.text
             }}</mat-option>
-          </mat-select>
+          </mat-select> -->
         </mat-form-field>
       </div>
       <hr class="line" />

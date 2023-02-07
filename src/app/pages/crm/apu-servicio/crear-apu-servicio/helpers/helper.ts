@@ -38,11 +38,11 @@ export const functionsApuService = {
     this.subscribes(form)
   },
 
-  createForm(fb: FormBuilder, clients:Array<any>) {
+  createForm(fb: FormBuilder, clients:Array<any>, user_id) {
     let group = fb.group({
       name: [''],
       city_id: [null],
-      person_id: [null],
+      person_id: [user_id],
       third_party_id:[null],
       line: [''],
       observation: [''],

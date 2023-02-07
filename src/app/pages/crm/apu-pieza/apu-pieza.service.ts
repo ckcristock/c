@@ -70,4 +70,8 @@ export class ApuPiezaService {
     return this.http.get(`${environment.base_url}/apu-pieza/pdf/${id}`, { headers, responseType: 'blob' as 'json' });
   }
 
+  deleteFile(id) {
+    return this.http.get(`${environment.base_url}/apu-part-delete-file/${id}`);
+  }
+
 }

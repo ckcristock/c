@@ -139,6 +139,7 @@ export class PersonasComponent implements OnInit {
   }
 
   public openConfirm(confirm) {
+    this.getThirdsForCreate()
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -149,12 +150,19 @@ export class PersonasComponent implements OnInit {
     this.form.reset();
 
   }
-
+  thirds_aux: any[] = [];
   getThirds() {
     this._terceros.getThirds().subscribe((r: any) => {
       this.thirds = r.data
       this.thirds.unshift({ text: 'Sin tercero', value: null });
       this.thirds.unshift({ text: 'Todos', value: '' });
+    })
+  }
+
+  getThirdsForCreate() {
+    this._terceros.getThirds({get_full: true}).subscribe((r: any) => {
+      this.thirds_aux = r.data;
+      this.thirds_aux.unshift({ text: 'Sin tercero', value: null });
     })
   }
 
@@ -173,7 +181,7 @@ export class PersonasComponent implements OnInit {
     this.form = this.fb.group({
       id: [''],
       name: ['', this._validators.required],
-      n_document: ['', this._validators.required],
+      n_document: [''],
       landline: [''],
       cell_phone: [''],
       email: ['', Validators.email],

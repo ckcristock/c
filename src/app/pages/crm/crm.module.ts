@@ -11,7 +11,8 @@ import {
   NgbCollapseModule,
   NgbNavModule,
   NgbTooltipModule,
-  NgbTypeaheadModule
+  NgbTypeaheadModule,
+  NgbPopoverModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -80,6 +81,7 @@ import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { PlanosComponent } from './apu-pieza/ver-apu-pieza/planos/planos.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -132,6 +134,7 @@ export const MY_FORMATS = {
     TableNegociosComponent,
     ViewThirdComponent,
     ModalNuevoNegocioComponent,
+    PlanosComponent,
   ],
   providers: [
     {
@@ -185,7 +188,8 @@ export const MY_FORMATS = {
     ChartModule,
     ChartsModule,
     CurrencyMaskModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgbPopoverModule
   ]
 })
 export class CrmModule { }

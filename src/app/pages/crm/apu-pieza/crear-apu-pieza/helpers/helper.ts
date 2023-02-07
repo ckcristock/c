@@ -82,11 +82,11 @@ export const functionsApu = {
     }
   },
 
-  createForm(fb: FormBuilder, calculationBase) {
+  createForm(fb: FormBuilder, calculationBase, user_id) {
     let group = fb.group({
       name: ['', Validators.required],
       city_id: [null, Validators.required],
-      person_id: [null],
+      person_id: [user_id],
       third_party_id: [null, Validators.required],
       line: ['', Validators.required],
       amount: [1, Validators.required],

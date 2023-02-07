@@ -44,12 +44,12 @@
               </td>
               <td>{{ item.cuantity }}</td>
               <ng-container *ngIf="quotation.money_type == 'cop'; else usd">
-                <td>${{ item.value_cop | currency : "COP" }}</td>
-                <td>${{ item.total_cop | currency : "COP" }}</td>
+                <td>${{ item.value_cop | number: '1.2' }} sin IVA</td>
+                <td>${{ item.total_cop | number: '1.2' }} sin IVA</td>
               </ng-container>
               <ng-template #usd>
-                <td>{{ item.value_usd | currency }}</td>
-                <td>{{ item.total_usd | currency }}</td>
+                <td>USD {{ item.value_usd | number: '1.2' }}</td>
+                <td>USD {{ item.total_usd | number: '1.2' }}</td>
               </ng-template>
             </tr>
           </tbody>

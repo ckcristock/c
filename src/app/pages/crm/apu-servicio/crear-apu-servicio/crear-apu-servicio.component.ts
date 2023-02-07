@@ -5,6 +5,7 @@ import { SwalService } from '../../../ajustes/informacion-base/services/swal.ser
 import { Router } from '@angular/router';
 import * as help from './helpers/imports';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
+import { UserService } from 'src/app/core/services/user.service';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class CrearApuServicioComponent implements OnInit {
     Codigo: '',
     CodigoFormato: ''
   }
+  user_id;
 
   constructor(
     private _apuService: ApuServicioService,
@@ -48,7 +50,10 @@ export class CrearApuServicioComponent implements OnInit {
     private _swal: SwalService,
     private router: Router,
     public _consecutivos: ConsecutivosService,
-  ) { }
+    private _user: UserService
+  ) {
+    this.user_id = _user.user.person.id
+  }
 
   async ngOnInit() {
     this.datosCabecera.Fecha = this.id ? this.data?.created_at : new Date();
@@ -99,7 +104,7 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   createForm() {
-    this.form = help.functionsApuService.createForm(this.fb, this.clients);
+    this.form = help.functionsApuService.createForm(this.fb, this.clients, this.user_id);
   }
 
   validateData() {

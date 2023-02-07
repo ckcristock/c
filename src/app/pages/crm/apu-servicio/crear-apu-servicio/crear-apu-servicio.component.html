@@ -5,7 +5,7 @@
         <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
         <hr class="line" />
         <div class="row">
-          <mat-form-field class="col-md-4" appearance="outline">
+          <mat-form-field class="col-md-3" appearance="outline">
             <mat-label>Nombre</mat-label>
             <input
               matInput
@@ -15,7 +15,7 @@
               required
             />
           </mat-form-field>
-          <div class="col-md-4 mb-4">
+          <div class="col-md-3 mat-form-field-wrapper">
             <ng-select
               formControlName="city_id"
               [items]="cities"
@@ -29,21 +29,7 @@
             >
             </ng-select>
           </div>
-          <div class="col-md-4 mb-4">
-            <ng-select
-              formControlName="person_id"
-              [items]="people"
-              bindLabel="text"
-              appearance="outline"
-              [appendTo]="'body'"
-              placeholder="¿Quién elbaora? *"
-              bindValue="value"
-              loadingText="loading"
-              ngDefaultControl
-            >
-            </ng-select>
-          </div>
-          <div class="col-md-4 mb-4">
+          <div class="col-md-3 mat-form-field-wrapper">
             <ng-select
               formControlName="third_party_id"
               [items]="clients"
@@ -57,7 +43,7 @@
             >
             </ng-select>
           </div>
-          <mat-form-field class="col" appearance="outline">
+          <mat-form-field class="col-md-3" appearance="outline">
             <mat-label>Línea</mat-label>
             <input
               matInput

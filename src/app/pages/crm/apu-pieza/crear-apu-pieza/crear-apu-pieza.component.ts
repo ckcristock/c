@@ -24,6 +24,7 @@ import { consts } from 'src/app/core/utils/consts';
 import {
   ViewportScroller
 } from '@angular/common';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -68,6 +69,7 @@ export class CrearApuPiezaComponent implements OnInit {
   indirectCollapsed: boolean;
   auiCollapsed: boolean;
   loading: boolean;
+  user_id;
   calculationBase: any = {}
   masksMoney = consts
   constructor(
@@ -82,8 +84,11 @@ export class CrearApuPiezaComponent implements OnInit {
     private _internos: ProcesosInternosService,
     public _consecutivos: ConsecutivosService,
     private _maquinas: MaquinasHerramientasService,
-    private scroll: ViewportScroller
-  ) { }
+    private scroll: ViewportScroller,
+    private _user: UserService
+  ) {
+    this.user_id = _user.user.person.id
+  }
 
   async ngOnInit() {
     this.datosCabecera.Fecha = this.id ? this.data?.created_at : new Date();
@@ -169,6 +174,19 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   onSelect(event) {
+    const types = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf']
+    event.addedFiles.forEach(file => {
+      if (!types.includes(file.type)) {
+        this._swal.show({
+          icon: 'error',
+          title: 'Error de archivo',
+          showCancel: false,
+          text: 'El tipo de archivo no es válido'
+        });
+        return null
+      }
+    })
+
     this.files.push(...event.addedFiles);
   }
 
@@ -235,13 +253,14 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   createForm() {
-    this.form = help.functionsApu.createForm(this.fb, this.calculationBase);
+    this.form = help.functionsApu.createForm(this.fb, this.calculationBase, this.user_id);
     help.functionsApu.listerTotalDirectCost(this.form);
   }
-
+  planos: any [] = [];
   validateData() {
     if (this.data) {
       help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries, this.materials, this.cutLaserMaterials);
+      this.planos = this.data.files
     }
   }
   /************** Materia Prima Inicio ****************/
@@ -536,7 +555,6 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   save() {
-    console.log(this.form.valid);
     if (this.form.invalid) {
       this._swal.show({
         icon: 'error',
@@ -551,7 +569,11 @@ export class CrearApuPiezaComponent implements OnInit {
         var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (event) => {
-          this.fileString = (<FileReader>event.target).result;
+          this.fileString = {
+            base64: (<FileReader>event.target).result,
+            name: elem.name,
+            type: elem.type
+          };
         };
         functionsUtils.fileToBase64(file).subscribe((base64) => {
           this.file = base64;
@@ -561,11 +583,12 @@ export class CrearApuPiezaComponent implements OnInit {
       this.form.patchValue({
         files: this.fileArr
       });
+      console.log(this.form.value);
       this._swal
         .show({
-          text: `Se dispone a ${this.id ? 'editar' : 'crear'} un apu pieza`,
-          title: '¿Está seguro?',
-          icon: 'warning',
+          text: `Vamos a ${this.id ? 'editar' : 'crear'} una pieza`,
+          title: '¿Estás seguro(a)?',
+          icon: 'question',
         })
         .then((r) => {
           if (r.isConfirmed) {
@@ -588,9 +611,10 @@ export class CrearApuPiezaComponent implements OnInit {
   showSuccess() {
     this._swal.show({
       icon: 'success',
-      text: `Apu Pieza ${this.id ? 'editado' : 'creado'} con éxito`,
+      text: `Pieza ${this.id ? 'editada' : 'creada'} con éxito`,
       title: 'Operación exitosa',
       showCancel: false,
+      timer: 1000
     });
     this.router.navigateByUrl('/crm/apus');
   }

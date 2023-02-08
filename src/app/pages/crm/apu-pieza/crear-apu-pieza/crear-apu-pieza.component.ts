@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { ApuPiezaService } from '../apu-pieza.service';
 import { UnidadesMedidasService } from '../../../ajustes/parametros/apu/unidades-medidas/unidades-medidas.service';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
@@ -35,6 +35,7 @@ export class CrearApuPiezaComponent implements OnInit {
   @Input('id') id;
   @Input('data') data;
   @Input('title') title = 'Crear pieza';
+  @Output() obtenerDato = new EventEmitter;
   pageYoffset = 0;
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYoffset = window.pageYOffset;
@@ -47,8 +48,6 @@ export class CrearApuPiezaComponent implements OnInit {
     Codigo: '',
     CodigoFormato: ''
   }
-
-
   people: any[] = [];
   cities: any[] = [];
   geometries: any[] = [];
@@ -91,6 +90,7 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   async ngOnInit() {
+    console.log(this.data)
     this.datosCabecera.Fecha = this.id ? this.data?.created_at : new Date();
     this.datosCabecera.Titulo = this.title;
     this.loading = false
@@ -102,12 +102,12 @@ export class CrearApuPiezaComponent implements OnInit {
     this.getMaterials();
     this.getIndirectCosts();
     this.getPeople();
-    this.getCities();
-    this.getConsecutivo();
+    await this.getCities();
     this.collapses();
     this.getThicknesses();
     await this.getCutLaserMaterial();
     this.validateData();
+    this.getConsecutivo();
     this.loading = true;
     this.getVariablesApu();
   }
@@ -116,40 +116,34 @@ export class CrearApuPiezaComponent implements OnInit {
     if (!this.data) {
       return null
     }
-    (this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
+    (this.data && this.data.other && this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
   }
-
   getConsecutivo() {
     this._consecutivos.getConsecutivo('apu_parts').subscribe((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
       this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
-      this.construiConsecutivo(r);
+      if (this.title !== 'Editar pieza') {
+        this.buildConsecutivo(this.form.get('city_id').value, r)
+        this.form.get('city_id').valueChanges.subscribe(value => {
+          this.buildConsecutivo(value, r)
+        });
+      } else {
+        this.datosCabecera.Codigo = this.data.code
+        this.form.patchValue({
+          code: this.data.code
+        })
+        this.form.get('city_id').disable()
+      }
     })
   }
 
-  construiConsecutivo(r) {
-    if (!this.id) {
-      let con = this._consecutivos.construirConsecutivo(r.data);
-      this.datosCabecera.Codigo = con
-      this.form.patchValue({
-        code: con
-      })
-    } else {
-      this.datosCabecera.Codigo = this.data?.code
-      this.form.patchValue({
-        code: this.data?.code
-      })
-    }
-    if (r.data.city) {
-      this.form.get('city_id').valueChanges.subscribe(value => {
-        let city = this.cities.find(x => x.value === value)
-        let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
-        this.datosCabecera.Codigo = con
-        this.form.patchValue({
-          code: con
-        })
-      });
-    }
+  buildConsecutivo(value, r, context = '') {
+    let city = this.cities.find(x => x.value === value)
+    let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
+    this.datosCabecera.Codigo = con
+    this.form.patchValue({
+      code: con
+    })
   }
 
   getVariablesApu() {
@@ -200,8 +194,8 @@ export class CrearApuPiezaComponent implements OnInit {
     })
   }
 
-  getCities() {
-    this._apuPieza.getCities().subscribe((r: any) => {
+  async getCities() {
+    await this._apuPieza.getCities().toPromise().then((r: any) => {
       this.cities = r.data;
       help.functionsApu.cityRetention(this.form, this.cities);
     })
@@ -256,12 +250,17 @@ export class CrearApuPiezaComponent implements OnInit {
     this.form = help.functionsApu.createForm(this.fb, this.calculationBase, this.user_id);
     help.functionsApu.listerTotalDirectCost(this.form);
   }
-  planos: any [] = [];
+  planos: any[] = [];
   validateData() {
     if (this.data) {
       help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries, this.materials, this.cutLaserMaterials);
       this.planos = this.data.files
     }
+  }
+
+  async refreshData() {
+    this.obtenerDato.emit();
+    this.ngOnInit();
   }
   /************** Materia Prima Inicio ****************/
   basicControl(): FormGroup {
@@ -586,13 +585,13 @@ export class CrearApuPiezaComponent implements OnInit {
       console.log(this.form.value);
       this._swal
         .show({
-          text: `Vamos a ${this.id ? 'editar' : 'crear'} una pieza`,
+          text: `Vamos a ${this.id && this.title == 'Editar pieza' ? 'editar' : 'crear'} una pieza`,
           title: '¿Estás seguro(a)?',
           icon: 'question',
         })
         .then((r) => {
           if (r.isConfirmed) {
-            if (this.id) {
+            if (this.id && this.title == 'Editar pieza') {
               this._apuPieza.update(this.form.value, this.id).subscribe(
                 (res: any) => this.showSuccess(),
                 (err) => this.showError(err)
@@ -611,7 +610,7 @@ export class CrearApuPiezaComponent implements OnInit {
   showSuccess() {
     this._swal.show({
       icon: 'success',
-      text: `Pieza ${this.id ? 'editada' : 'creada'} con éxito`,
+      text: `Pieza ${this.id && this.title == 'Editar pieza' ? 'editada' : 'creada'} con éxito`,
       title: 'Operación exitosa',
       showCancel: false,
       timer: 1000

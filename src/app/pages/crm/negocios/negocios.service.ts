@@ -83,6 +83,14 @@ export class NegociosService {
     return this.http.get(`${this.url}/get-history-business/${id}`)
   }
 
+  newNote(data: any) {
+    return this.http.post(`${this.url}/new-business-note`, data)
+  }
+
+  getNotes(id) {
+    return this.http.get(`${this.url}/business-notes/${id}`)
+  }
+
   changeStatusQyB(data) {
     return this.http.post(`${this.url}/change-status-in-business`, data)
   }

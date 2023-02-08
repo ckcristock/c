@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ApuConjuntoService } from '../apu-conjunto.service';
 import * as help from './helpers/imports';
@@ -33,6 +33,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   @Input('id') id;
   @Input('data') data: any;
   @Input('title') title = 'Crear conjunto';
+  @Output() obtenerDato = new EventEmitter;
   form: FormGroup;
   formGroup: FormGroup;
   filters_apu = {
@@ -90,18 +91,18 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.user_id = _user.user.person.id
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.datosCabecera.Fecha = this.id ? this.data?.created_at : new Date();
     this.datosCabecera.Titulo = this.title;
     // await this.getBases()
     this.getPeople();
-    this.getCities();
     this.getClients();
     this.getApuSets();
     this.getApuPart();
     this.getUnits();
     this.createForm();
     this.getIndirectCosts();
+    await this.getCities();
     this.validateData();
     this.collapses();
     this.loadPeople();
@@ -113,33 +114,32 @@ export class CrearApuConjuntoComponent implements OnInit {
     this._consecutivos.getConsecutivo('apu_sets').subscribe((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
       this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
-      this.construirConsecutivo(r);
+      if (this.title !== 'Editar conjunto') {
+        this.buildConsecutivo(this.form.get('city_id').value, r)
+        this.form.get('city_id').valueChanges.subscribe(value => {
+          this.buildConsecutivo(value, r)
+        });
+      } else {
+        this.datosCabecera.Codigo = this.data.code
+        this.form.patchValue({
+          code: this.data.code
+        })
+        this.form.get('city_id').disable()
+        /* this.buildConsecutivo(this.form.get('city_id').value, r, 'editar')
+        this.form.get('city_id').valueChanges.subscribe(value => {
+          this.buildConsecutivo(value, r, 'editar')
+        }); */
+      }
     })
   }
 
-  construirConsecutivo(r) {
-    if (!this.id) {
-      let con = this._consecutivos.construirConsecutivo(r.data);
-      this.datosCabecera.Codigo = con
-      this.form.patchValue({
-        code: con
-      })
-    } else {
-      this.datosCabecera.Codigo = this.data?.code
-      this.form.patchValue({
-        code: this.data?.code
-      })
-    }
-    if (r.data.city) {
-      this.form.get('city_id').valueChanges.subscribe(value => {
-        let city = this.cities.find(x => x.value === value)
-        let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
-        this.datosCabecera.Codigo = con
-        this.form.patchValue({
-          code: con
-        })
-      });
-    }
+  buildConsecutivo(value, r, context = '') {
+    let city = this.cities.find(x => x.value === value)
+    let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
+    this.datosCabecera.Codigo = con
+    this.form.patchValue({
+      code: con
+    })
   }
 
   getUnits() {
@@ -320,6 +320,18 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   onSelect(event) {
+    const types = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf']
+    event.addedFiles.forEach(file => {
+      if (!types.includes(file.type)) {
+        this._swal.show({
+          icon: 'error',
+          title: 'Error de archivo',
+          showCancel: false,
+          text: 'El tipo de archivo no es válido'
+        });
+        return null
+      }
+    })
     this.files.push(...event.addedFiles);
   }
 
@@ -340,13 +352,21 @@ export class CrearApuConjuntoComponent implements OnInit {
       }
     })
   };
-
+  planos: any[] = [];
   validateData() {
     if (this.data) {
       setTimeout(() => {
         help.functionsApuConjunto.fillInForm(this.form, this.data, this.fb, this.apuParts);
       }, 1200);
+      this.planos = this.data.files
     }
+  }
+
+  refreshData() {
+    //this.obtenerDato.emit();
+    this._apuConjunto.getApuSet(this.id).subscribe((r: any) => {
+      this.planos = r.data.files
+    })
   }
 
   getPeople() {
@@ -355,8 +375,8 @@ export class CrearApuConjuntoComponent implements OnInit {
     })
   }
 
-  getCities() {
-    this._apuConjunto.getCities().subscribe((r: any) => {
+  async getCities() {
+    await this._apuConjunto.getCities().toPromise().then((r: any) => {
       this.cities = r.data;
       help.functionsApuConjunto.cityRetention(this.form, this.cities);
     })
@@ -500,45 +520,58 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   save() {
-    let filess = this.files;
-    filess.forEach(elem => {
-      let file = elem;
-      var reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        this.fileString = (<FileReader>event.target).result;
-      };
-      functionsUtils.fileToBase64(file).subscribe((base64) => {
-        this.file = base64;
-        this.fileArr.push(this.fileString);
-      });
-    });
-    this.form.patchValue({
-      files: this.fileArr
-    });
-    console.log(this.form.value);
-
-    this._swal
-      .show({
-        text: `Se dispone a ${this.id ? 'editar' : 'crear'} un apu conjunto`,
-        title: '¿Está seguro?',
-        icon: 'warning',
+    if (this.form.invalid) {
+      this._swal.show({
+        icon: 'error',
+        title: 'ERROR',
+        text: 'Revisa la información y vuelve a intentarlo',
+        showCancel: false
       })
-      .then((r) => {
-        if (r.isConfirmed) {
-          if (this.id) {
-            this._apuConjunto.update(this.form.value, this.id).subscribe(
-              (res: any) => this.showSuccess(),
-              (err) => this.showError(err)
-            );
-          } else {
-            this._apuConjunto.save(this.form.value).subscribe(
-              (res: any) => this.showSuccess(),
-              (err) => this.showError(err)
-            );
-          }
-        }
+    } else {
+      let filess = this.files;
+      filess.forEach(elem => {
+        let file = elem;
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          this.fileString = {
+            base64: (<FileReader>event.target).result,
+            name: elem.name,
+            type: elem.type
+          };
+        };
+        functionsUtils.fileToBase64(file).subscribe((base64) => {
+          this.file = base64;
+          this.fileArr.push(this.fileString);
+        });
       });
+      this.form.patchValue({
+        files: this.fileArr
+      });
+      console.log(this.form.value);
+
+      this._swal
+        .show({
+          text: `Vamos a ${this.id && this.title == 'Editar conjunto' ? 'editar' : 'crear'} un conjunto`,
+          title: '¿Estás seguro(a)?',
+          icon: 'question',
+        })
+        .then((r) => {
+          if (r.isConfirmed) {
+            if (this.id && this.title == 'Editar conjunto') {
+              this._apuConjunto.update(this.form.value, this.id).subscribe(
+                (res: any) => this.showSuccess(),
+                (err) => this.showError(err)
+              );
+            } else {
+              this._apuConjunto.save(this.form.value).subscribe(
+                (res: any) => this.showSuccess(),
+                (err) => this.showError(err)
+              );
+            }
+          }
+        });
+    }
   }
 
   apuIdToCreateOrEdit() {
@@ -554,9 +587,10 @@ export class CrearApuConjuntoComponent implements OnInit {
   showSuccess() {
     this._swal.show({
       icon: 'success',
-      text: `Apu conjunto ${this.id ? 'editado' : 'creado'} con éxito`,
+      text: `Conjunto ${this.id && this.title == 'Editar conjunto' ? 'editado' : 'creado'} con éxito`,
       title: 'Operación exitosa',
       showCancel: false,
+      timer: 1000
     });
     this.router.navigateByUrl('/crm/apus');
   }

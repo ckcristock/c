@@ -1,22 +1,22 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { environment } from 'src/environments/environment';
-import { ApuPiezaService } from '../../apu-pieza.service';
+import { ApuConjuntoService } from '../../apu-conjunto.service';
 
 @Component({
-  selector: 'app-planos',
-  templateUrl: './planos.component.html',
-  styleUrls: ['./planos.component.scss']
+  selector: 'app-planos-conjunto',
+  templateUrl: './planos-conjunto.component.html',
+  styleUrls: ['./planos-conjunto.component.scss']
 })
-export class PlanosComponent implements OnInit {
+export class PlanosConjuntoComponent implements OnInit {
   @Input('data') data;
   @Input('info') info;
   @Output() actualizar = new EventEmitter;
   env = environment.production
   constructor(
     private _swal: SwalService,
-    private _apu_service: ApuPiezaService
-  ) { }
+    private _apu_conjunto: ApuConjuntoService
+  ) {}
 
   ngOnInit(): void {
   }
@@ -28,7 +28,7 @@ export class PlanosComponent implements OnInit {
       text: 'Vamos a eliminar este plano',
     }).then(x => {
       if (x.isConfirmed) {
-        this._apu_service.deleteFile(item.id).subscribe((res: any) => {
+        this._apu_conjunto.deleteFile(item.id).subscribe((res: any) => {
           this._swal.show({
             icon: 'success',
             title: res.data,
@@ -43,4 +43,5 @@ export class PlanosComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
   }
+
 }

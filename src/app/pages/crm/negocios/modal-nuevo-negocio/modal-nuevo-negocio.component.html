@@ -45,7 +45,7 @@
           <ng-select
             [items]="companies"
             formControlName="third_party_id"
-            placeholder="Compañía *"
+            placeholder="Tercero *"
             [appendTo]="'body'"
             appearance="outline"
             (change)="getContacts(); getBudgets(); getQuotations()"
@@ -469,6 +469,182 @@
           </ng-container>
         </ng-container>
       </div>
+      <div class="mt-3">
+        <div class="row">
+          <div class="col-md mb-3">
+            <h6>APU disponibles</h6>
+          </div>
+          <div class="col-md mb-3 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="_modal.close()"
+                [routerLink]="['/crm/apus']"
+              >
+                <i class="fa fa-plus"></i> Ver y agregar
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="row">
+          <ng-container [formGroup]="form_filters_quotations">
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Ciudad</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="city"
+                autocomplete="off"
+                placeholder="Busca por ciudad"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Código</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="code"
+                autocomplete="off"
+                placeholder="Busca por código"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Línea</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="line"
+                autocomplete="off"
+                placeholder="Busca por línea"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Cliente</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="client"
+                autocomplete="off"
+                placeholder="Busca por cliente"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Descripción</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="description"
+                autocomplete="off"
+                placeholder="Busca por descripción"
+              />
+            </mat-form-field>
+          </ng-container>
+        </div>
+        <ng-container
+          *ngIf="
+            !loadingQuotations && quotations.length > 0;
+            else notDataQuotations
+          "
+        >
+          <ng-container *ngIf="quotations.length > 0; else notDataAd">
+            <div class="rounded-top table-responsive">
+              <table
+                class="table table-bordered table-striped table-sm mt-2"
+                style="font-size: smaller"
+              >
+                <thead class="bg-light">
+                  <tr class="text-center text-uppercase">
+                    <th>Código</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Destino</th>
+                    <th>Linea</th>
+                    <th>Total COP</th>
+                    <th>Total USD</th>
+                    <th><i class="mdi mdi-chevron-down"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of quotations" class="text-center">
+                    <td class="align-middle pb-0">
+                      <mat-checkbox
+                        color="primary"
+                        (change)="guardarCotizacion($event, item)"
+                        [id]="item.id"
+                        >{{ item.code }}</mat-checkbox
+                      >
+                    </td>
+                    <td class="align-middle">
+                      {{ item.created_at | date : "longDate" }}
+                    </td>
+                    <td class="align-middle">{{ item.client.full_name }}</td>
+                    <td>{{ item.municipality.name }}</td>
+                    <td class="align-middle">{{ item.line }}</td>
+                    <td class="align-middle">
+                      ${{ item.total_cop | currency : "" : "" }}
+                    </td>
+                    <td class="align-middle">
+                      ${{ item.total_usd | currency : "" : "" }}
+                    </td>
+                    <td>
+                      <div
+                        ngbDropdown
+                        container="body"
+                        class="dropdown-primary"
+                      >
+                        <button
+                          ngbDropdownToggle
+                          class="btn btn-primary btn-sm waves-light"
+                          type="button"
+                        >
+                          <i class="mdi mdi-chevron-down"></i>
+                        </button>
+                        <div ngbDropdownMenu>
+                          <a
+                            class="dropdown-item waves-light text-success caja-botones"
+                            href="javascript: void(0);"
+                            [routerLink]="['/crm/cotizacion/ver/', item.id]"
+                            (click)="_modal.close()"
+                          >
+                            <i class="fas fa-eye"></i> Ver</a
+                          >
+                          <a
+                            class="dropdown-item waves-light text-primary caja-botones"
+                            href="javascript: void(0);"
+                            [routerLink]="['/crm/cotizacion/copiar/', item.id]"
+                            (click)="_modal.close()"
+                            ><i class="fas fa-copy"></i> Copiar</a
+                          >
+                          <a
+                            class="dropdown-item waves-light text-info caja-botones"
+                            href="javascript: void(0);"
+                            [routerLink]="['/crm/cotizacion/editar/', item.id]"
+                            (click)="_modal.close()"
+                            ><i class="fas fa-edit"></i> Editar</a
+                          >
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <ngb-pagination
+              class="d-flex justify-content-center pagination-rounded pagination-sm"
+              [collectionSize]="paginationQuotations.collectionSize"
+              [pageSize]="paginationQuotations.pageSize"
+              [(page)]="paginationQuotations.page"
+              (pageChange)="getQuotations($event)"
+              maxSize="5"
+              rotate="true"
+              ellipses="false"
+              boundaryLinks="true"
+            >
+            </ngb-pagination>
+          </ng-container>
+        </ng-container> -->
+      </div>
+
     </form>
   </div>
   <div class="modal-footer">

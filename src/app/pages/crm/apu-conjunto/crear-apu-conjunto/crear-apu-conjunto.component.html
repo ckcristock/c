@@ -66,25 +66,33 @@
       </div>
       <h5 class="mt-2 text-center">Costos directos</h5>
       <hr class="line" />
-      <h6>Plano</h6>
-      <div>
-        <ngx-dropzone class="drop-zone" (change)="onSelect($event)">
-          <ngx-dropzone-label>
-            <span><i class="fas fa-cloud-download-alt"></i></span> Arrastre y
-            suelte el archivo
-          </ngx-dropzone-label>
-          <ngx-dropzone-preview
-            *ngFor="let f of files"
-            [removable]="true"
-            (removed)="onRemove(f)"
-          >
-            <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-          </ngx-dropzone-preview>
-        </ngx-dropzone>
-      </div>
+      <app-planos-conjunto
+        *ngIf="planos.length > 0 && title == 'Editar conjunto'"
+        (actualizar)="refreshData()"
+        [data]="planos"
+        [info]="'editar'"
+      ></app-planos-conjunto>
+      <h6>Subir planos</h6>
+      <ngx-dropzone
+        class="drop-zone"
+        (change)="onSelect($event)"
+        accept="image/jpeg, image/jpg, image/png, application/pdf"
+      >
+        <ngx-dropzone-label>
+          <span><i class="fas fa-cloud-download-alt"></i></span> Arrastre y
+          suelte el archivo
+        </ngx-dropzone-label>
+        <ngx-dropzone-preview
+          *ngFor="let f of files"
+          [removable]="true"
+          (removed)="onRemove(f)"
+        >
+          <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+        </ngx-dropzone-preview>
+      </ngx-dropzone>
       <h6 class="mt-3">Listado de piezas</h6>
       <ng-container *ngIf="piecesSetsList.controls.length; else notData">
-        <div class="rounded-top">
+        <div class="rounded-top table-responsive">
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">

@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { ApuServicioService } from '../apu-servicio.service';
 
 @Component({
-  selector: 'app-editar-apu-servicio',
-  templateUrl: './editar-apu-servicio.component.html',
-  styleUrls: ['./editar-apu-servicio.component.scss']
+  selector: 'app-copiar-apu-servicio',
+  templateUrl: './copiar-apu-servicio.component.html',
+  styleUrls: ['./copiar-apu-servicio.component.scss']
 })
-export class EditarApuServicioComponent implements OnInit {
+export class CopiarApuServicioComponent implements OnInit {
   id: string;
   data: any;
   constructor(

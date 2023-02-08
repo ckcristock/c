@@ -276,6 +276,27 @@
                     >
                       <i class="far fa-edit"></i> Editar
                     </a>
+                    <a
+                      *ngIf="item.type == 'P'"
+                      class="dropdown-item waves-light text-primary caja-botones"
+                      href="javascript: void(0);"
+                      [routerLink]="['/crm/apu/copiar-apu-pieza', item.apu_id]"
+                      ><i class="fas fa-copy"></i> Copiar</a
+                    >
+                    <a
+                      *ngIf="item.type == 'C'"
+                      class="dropdown-item waves-light text-primary caja-botones"
+                      href="javascript: void(0);"
+                      [routerLink]="['/crm/apu/copiar-apu-conjunto', item.apu_id]"
+                      ><i class="fas fa-copy"></i> Copiar</a
+                    >
+                    <a
+                      *ngIf="item.type == 'S'"
+                      class="dropdown-item waves-light text-primary caja-botones"
+                      href="javascript: void(0);"
+                      [routerLink]="['/crm/apu/copiar-apu-servicio', item.apu_id]"
+                      ><i class="fas fa-copy"></i> Copiar</a
+                    >
                   </div>
                 </div>
               </td>

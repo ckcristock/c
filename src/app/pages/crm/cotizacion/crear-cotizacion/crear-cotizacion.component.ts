@@ -13,6 +13,7 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Texteditor2Service } from 'src/app/pages/ajustes/informacion-base/services/texteditor2.service';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
+import { NegociosService } from '../../negocios/negocios.service';
 @Component({
   selector: 'app-crear-cotizacion',
   templateUrl: './crear-cotizacion.component.html',
@@ -54,6 +55,7 @@ export class CrearCotizacionComponent implements OnInit {
     private _terceros: TercerosService,
     public _texteditor: Texteditor2Service,
     public _consecutivos: ConsecutivosService,
+    private _negocios: NegociosService,
   ) {
     this.path = this.route.snapshot.url[0].path;
   }
@@ -63,7 +65,7 @@ export class CrearCotizacionComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.id = params['id'];
     })
-    this.getCommercialTerms();
+    this.getTexts();
     this.getTRM();
     this.createForm();
     this.getThirdParties();
@@ -72,6 +74,7 @@ export class CrearCotizacionComponent implements OnInit {
       this.getQuotation(this.id)
     }
     await this.getCities();
+    this.getContacts();
     this.getConsecutivo();
   }
 
@@ -79,36 +82,33 @@ export class CrearCotizacionComponent implements OnInit {
     this._consecutivos.getConsecutivo('quotations').subscribe((r: any) => {
       this.datos.CodigoFormato = r.data.format_code
       this.form.patchValue({ format_code: this.datos.CodigoFormato })
-      if (this.path != 'editar') {
-        let con = this._consecutivos.construirConsecutivo(r.data);
-        this.datos.Codigo = con
-        this.form.patchValue({
-          code: con
-        })
-      } else {
-        this.datos.Codigo = this.quotation?.code
-        this.form.patchValue({
-          code: this.quotation?.code
-        })
-      }
-      if (this.path == 'copiar') {
-        let city = this.cities.find(x => x.value === this.form.controls.destinity_id.value)
-        let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
-        this.datos.Codigo = con
-        this.form.patchValue({
-          code: con
-        })
-      }
-      if (r.data.city) {
+      if (this.path !== 'editar') {
+        this.buildConsecutivo(this.form.get('destinity_id').value, r)
         this.form.get('destinity_id').valueChanges.subscribe(value => {
-          let city = this.cities.find(x => x.value === value)
-          let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
-          this.datos.Codigo = con
-          this.form.patchValue({
-            code: con
-          })
+          this.buildConsecutivo(value, r)
         });
+      } else {
+        this.datos.Codigo = this.quotation.code
+        this.form.patchValue({
+          code: this.quotation.code
+        })
+        this.form.get('destinity_id').disable()
       }
+    })
+  }
+  contacts: any[];
+  getContacts() {
+    this._negocios.getThirdPartyPersonForThird(this.form.value.customer_id).subscribe((resp: any) => {
+      this.contacts = resp.data;
+    });
+  }
+
+  buildConsecutivo(value, r, context = '') {
+    let city = this.cities.find(x => x.value === value)
+    let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
+    this.datos.Codigo = con
+    this.form.patchValue({
+      code: con
     })
   }
 
@@ -118,12 +118,13 @@ export class CrearCotizacionComponent implements OnInit {
     })
   }
 
-  getCommercialTerms() {
-    let params = {
-      id: 1
-    }
-    this._quotation.getCommercialTerms(params).subscribe((res: any) => {
-      this.form.patchValue({ commercial_terms: res.data.commercial_terms })
+  getTexts() {
+    this._quotation.getTexts().subscribe((res: any) => {
+      this.form.patchValue({
+        commercial_terms: res.data.commercial_terms,
+        legal_requirements: res.data.legal_requirements,
+        technical_requirements: res.data.technical_requirements
+      })
     })
   }
 
@@ -139,6 +140,7 @@ export class CrearCotizacionComponent implements OnInit {
         money_type: res.data.money_type,
         date: res.data.date,
         customer_id: res.data.customer_id,
+        third_party_person_id: res.data.third_party_person_id,
         destinity_id: res.data.destinity_id,
         line: res.data.line,
         trm: res.data.trm,
@@ -150,7 +152,9 @@ export class CrearCotizacionComponent implements OnInit {
         items: res.data.items,
         total_cop: res.data.total_cop,
         total_usd: res.data.total_usd,
-        commercial_terms: res.data.commercial_terms
+        commercial_terms: res.data.commercial_terms,
+        legal_requirements: res.data.legal_requirements,
+        technical_requirements: res.data.technical_requirements
       })
       if (res.data.budget_included == 'si') {
         this.form.get('budget_included').disable()
@@ -182,10 +186,13 @@ export class CrearCotizacionComponent implements OnInit {
       total_cop: 0,
       total_usd: 0,
       commercial_terms: [null, Validators.required],
+      legal_requirements: [null, Validators.required],
+      technical_requirements: [null, Validators.required],
       unit_value_prorrateado_cop: 0,
       unit_value_prorrateado_usd: 0,
       format_code: [''],
-      code: ['']
+      code: [''],
+      third_party_person_id: [null]
     });
   }
 

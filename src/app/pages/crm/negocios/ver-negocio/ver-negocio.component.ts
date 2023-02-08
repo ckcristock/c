@@ -6,7 +6,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { QuotationService } from '../../cotizacion/quotation.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/person.service';
 @Component({
@@ -47,6 +47,7 @@ export class VerNegocioComponent implements OnInit {
   }
   form_filters_budget: FormGroup;
   form_filters_quotations: FormGroup;
+  form_notes: FormGroup;
   constructor(
     private ruta: ActivatedRoute,
     private _negocio: NegociosService,
@@ -66,6 +67,7 @@ export class VerNegocioComponent implements OnInit {
     this.getBussines();
     this.createFormFiltersBudgets();
     this.createFormFiltersQuotations();
+    this.createFormNotes();
     this.getPeople();
   }
 
@@ -107,6 +109,44 @@ export class VerNegocioComponent implements OnInit {
     })
   }
 
+  createFormNotes() {
+    this.form_notes = this.fb.group({
+      person_id: [this.person_id],
+      note: ['', [Validators.required, Validators.maxLength(500)]],
+      business_id: [this.filtros.id]
+    });
+  }
+
+  saveNote() {
+    if (this.form_notes.valid) {
+      this._negocio.newNote(this.form_notes.value).subscribe(
+        (res: any) => {
+          this.form_notes.patchValue({
+            note: ''
+          })
+          this._swal.show({
+            icon: 'success',
+            title: res.data,
+            text: '',
+            showCancel: false,
+            timer: 1000
+          })
+        }
+      )
+      this._negocio.getNotes(this.filtros.id).subscribe((res:any) => {
+        this.negocio.notes = res.data[0]
+      })
+    } else {
+      this._swal.show({
+        icon:'error',
+        title: 'ERROR',
+        text: 'No puedes publicar una nota vacía o con más de 500 caracteres',
+        showCancel: false
+      })
+    }
+
+  }
+
   openConfirm(confirm) {
     this._modal.open(confirm, 'xl')
   }
@@ -123,7 +163,7 @@ export class VerNegocioComponent implements OnInit {
           status: status,
           label: label
         }
-        this._negocio.changeStatusQyB(data).subscribe((r:any) => {
+        this._negocio.changeStatusQyB(data).subscribe((r: any) => {
           this._swal.show({
             icon: 'success',
             title: 'Correcto',
@@ -139,9 +179,9 @@ export class VerNegocioComponent implements OnInit {
 
   getBussines() {
     this.loading = true;
-    this._negocio.getBusiness(this.filtros.id).subscribe((data: any) => {
-      this.qr = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + data.code)
-      this.negocio = data.data;
+    this._negocio.getBusiness(this.filtros.id).subscribe((res: any) => {
+      this.qr = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + res.code)
+      this.negocio = res.data;
       this.loading = false;
     })
     this.business_budget_id = this.ruta.snapshot.params.id;

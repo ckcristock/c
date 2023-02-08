@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { ApuPiezaService } from '../apu-pieza.service';
 import { ActivatedRoute } from '@angular/router';
+import { ApuPiezaService } from '../apu-pieza.service';
 
 @Component({
-  selector: 'app-editar-apu-pieza',
-  templateUrl: './editar-apu-pieza.component.html',
-  styleUrls: ['./editar-apu-pieza.component.scss']
+  selector: 'app-copiar-apu-pieza',
+  templateUrl: './copiar-apu-pieza.component.html',
+  styleUrls: ['./copiar-apu-pieza.component.scss']
 })
-export class EditarApuPiezaComponent implements OnInit {
+export class CopiarApuPiezaComponent implements OnInit {
   id: string;
   data: any;
   constructor(
     private actRoute: ActivatedRoute,
     private _apuPieza: ApuPiezaService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.params.id;

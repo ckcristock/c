@@ -52,6 +52,18 @@
         />
       </mat-form-field>
       <mat-form-field class="col" appearance="outline">
+        <mat-label>Observaciones</mat-label>
+        <input
+          matInput
+          type="text"
+          [(ngModel)]="filtros.description"
+          placeholder="Busca por observaciones"
+          (input)="getApus()"
+          name="line"
+          autocomplete="off"
+        />
+      </mat-form-field>
+      <mat-form-field class="col" appearance="outline">
         <mat-label>Tipo</mat-label>
         <mat-select
           name="type"

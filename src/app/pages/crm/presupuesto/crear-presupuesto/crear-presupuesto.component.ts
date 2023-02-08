@@ -68,36 +68,27 @@ export class CrearPresupuestoComponent implements OnInit {
     this._consecutivos.getConsecutivo('budgets').subscribe((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
       this.forma.patchValue({ format_code: this.datosCabecera.CodigoFormato })
-      if (this.path != 'editar') {
-        let con = this._consecutivos.construirConsecutivo(r.data);
-        this.datosCabecera.Codigo = con
-        this.forma.patchValue({
-          code: con
-        })
-      } else {
-        this.datosCabecera.Codigo = this.dataEdit?.code
-        this.forma.patchValue({
-          code: this.dataEdit?.code
-        })
-      }
-      if (this.path == 'copiar') {
-        let city = this.cities.find(x => x.value === this.forma.controls.destinity_id.value)
-        let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
-        this.datosCabecera.Codigo = con
-        this.forma.patchValue({
-          code: con
-        })
-      }
-      if (r.data.city) {
+      if (this.path !== 'editar') {
+        this.buildConsecutivo(this.forma.get('destinity_id').value, r)
         this.forma.get('destinity_id').valueChanges.subscribe(value => {
-          let city = this.cities.find(x => x.value === value)
-          let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
-          this.datosCabecera.Codigo = con
-          this.forma.patchValue({
-            code: con
-          })
+          this.buildConsecutivo(value, r)
         });
+      } else {
+        this.datosCabecera.Codigo = this.dataEdit.code
+        this.forma.patchValue({
+          code: this.dataEdit.code
+        })
+        this.forma.get('destinity_id').disable()
       }
+    })
+  }
+
+  buildConsecutivo(value, r, context = '') {
+    let city = this.cities.find(x => x.value === value)
+    let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
+    this.datosCabecera.Codigo = con
+    this.forma.patchValue({
+      code: con
     })
   }
 

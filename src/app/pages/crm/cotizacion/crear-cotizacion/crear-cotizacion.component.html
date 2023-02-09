@@ -14,6 +14,17 @@
     </ng-container>
     <form [formGroup]="form" novalidate>
       <div class="row">
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Descripción</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="description"
+            autocomplete="off"
+            placeholder="Ingresa la descripción"
+            required
+          />
+        </mat-form-field>
         <div class="col-md-3">
           <ng-select
             [items]="thirdParties"
@@ -53,21 +64,11 @@
           ></ng-select>
         </div>
         <mat-form-field class="col" appearance="outline">
-          <mat-label>Línea</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="line"
-            autocomplete="off"
-            placeholder="Ingresa la línea"
-            required
-          />
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
           <mat-label>TRM</mat-label>
           <input
             matInput
-            type="number"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             formControlName="trm"
             autocomplete="off"
             placeholder="Ingresa TRM"
@@ -75,17 +76,7 @@
           />
           <mat-hint>TRM del {{ today | date }}</mat-hint>
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Proyecto</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="project"
-            autocomplete="off"
-            placeholder="Ingresa el proyecto"
-            required
-          />
-        </mat-form-field>
+
         <mat-form-field class="col" appearance="outline">
           <mat-label>¿Incluye presupuesto?</mat-label>
           <mat-select required formControlName="budget_included">
@@ -164,5 +155,5 @@
 </ng-template>
 
 <ng-template #rt let-r="result" let-t="term">
-  <span>{{ r?.project }} - {{ r?.line }}</span>
+  <span>{{ r?.line +  ' - ' + r?.project}}</span>
 </ng-template>

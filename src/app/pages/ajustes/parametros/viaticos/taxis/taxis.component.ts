@@ -6,6 +6,7 @@ import { SwalService } from '../../../informacion-base/services/swal.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-taxis',
@@ -39,6 +40,8 @@ export class TaxisComponent implements OnInit {
   filtro = {
     tipo: ''
   }
+
+  masksMoney = consts;
   constructor(
     private fb: FormBuilder,
     private _cities: HotelesService,
@@ -77,7 +80,7 @@ export class TaxisComponent implements OnInit {
       id: [this.taxi.id],
       route: ['', this._validators.required],
       type: ['', this._validators.required],
-      city_id: ['', this._validators.required],
+      city_id: [null, this._validators.required],
       value: ['', this._validators.required],
       taxi_id: [this.taxi.taxi_id]
     })

@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import * as help from './helpers/imports';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { consts } from 'src/app/core/utils/consts';
+import { CalculationBasesService } from 'src/app/pages/ajustes/configuracion/base-calculos/calculation-bases.service';
 
 
 @Component({
@@ -27,6 +29,7 @@ export class CrearApuServicioComponent implements OnInit {
   mpMcollapsed: boolean[] = [];
   profiles: any[] = [];
   tEestimations: any = [];
+  calculationBase: any = {}
   desplazamientos = [
     { text: 'Aero', value: 1 },
     { text: 'Terrestre', value: 2 },
@@ -43,12 +46,13 @@ export class CrearApuServicioComponent implements OnInit {
     CodigoFormato: ''
   }
   user_id;
-
+  masksMoney = consts
   constructor(
     private _apuService: ApuServicioService,
     private fb: FormBuilder,
     private _swal: SwalService,
     private router: Router,
+    private _calculationBase: CalculationBasesService,
     public _consecutivos: ConsecutivosService,
     private _user: UserService
   ) {
@@ -59,6 +63,7 @@ export class CrearApuServicioComponent implements OnInit {
     this.datosCabecera.Fecha = this.id ? this.data?.created_at : new Date();
     this.datosCabecera.Titulo = this.title;
     this.loading = true;
+    await this.getBases()
     this.createForm();
     this.getProfiles();
     this.getClients();
@@ -70,10 +75,18 @@ export class CrearApuServicioComponent implements OnInit {
     this.loading = false;
   }
 
+  async getBases() {
+    await this._calculationBase.getAll().toPromise().then((r: any) => {
+      this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
+      /* if (this.dataEdit) {
+        this.calculationBase.trm.value = this.dataEdit.trm
+      } */
+    })
+  }
 
 
   createForm() {
-    this.form = help.functionsApuService.createForm(this.fb, this.clients, this.user_id);
+    this.form = help.functionsApuService.createForm(this.fb, this.clients, this.user_id, this.calculationBase);
   }
 
   validateData() {
@@ -156,6 +169,15 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   save() {
+    if (this.form.invalid) {
+      this._swal.show({
+        icon: 'error',
+        title: 'ERROR',
+        text: 'Revisa la información y vuelve a intentarlo',
+        showCancel: false
+      })
+      this.form.markAllAsTouched()
+    } else {
     this._swal
       .show({
         text: `Vamos a ${this.id && this.title == 'Editar servicio' ? 'editar' : 'crear'} un servicio`,
@@ -177,6 +199,7 @@ export class CrearApuServicioComponent implements OnInit {
           }
         }
       });
+    }
   }
 
   showSuccess() {

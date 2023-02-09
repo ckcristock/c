@@ -5,7 +5,7 @@
       <hr class="line" />
       <form [formGroup]="forma" (submit)="save()">
         <div class="row">
-          <div class="col-md-6 mb-4">
+          <div class="col-md-3 mb-4">
             <ng-select
               bindLabel="text"
               [items]="clients"
@@ -18,7 +18,7 @@
               [appendTo]="'body'"
             ></ng-select>
           </div>
-          <div class="col-md-6 mb-4">
+          <div class="col-md-2 mb-4">
             <ng-select
               [items]="cities"
               placeholder="Destino"
@@ -29,7 +29,7 @@
               formControlName="destinity_id"
             ></ng-select>
           </div>
-          <mat-form-field class="col" appearance="outline">
+          <mat-form-field class="col-md-3" appearance="outline">
             <mat-label>Línea</mat-label>
             <input
               matInput
@@ -39,17 +39,8 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>TRM</mat-label>
-            <input
-              matInput
-              type="number"
-              placeholder="Ingresa TRM"
-              formControlName="trm"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
+
+          <mat-form-field class="col-md-3" appearance="outline">
             <mat-label>Proyecto</mat-label>
             <input
               matInput
@@ -59,9 +50,19 @@
               autocomplete="off"
             />
           </mat-form-field>
+          <mat-form-field class="col-md-1 pl-0" appearance="outline">
+            <mat-label>TRM</mat-label>
+            <input
+              matInput
+              currencyMask
+              [options]="masksMoney.maskCOP"
+              placeholder="Ingresa TRM"
+              formControlName="trm"
+              autocomplete="off"
+            />
+          </mat-form-field>
         </div>
         <!-- END HEADER -->
-
         <div class="row">
           <mat-form-field
             class="col-md-12 mat-form-field-no-padding textarea"
@@ -99,9 +100,8 @@
                     <td class="col-10">{{ item.controls.name.value }}</td>
                     <td class="col-2">
                       <input
-                        type="number"
-                        min="0"
-                        step=".1"
+                        currencyMask
+                        [options]="masksMoney.maskPorcentaje"
                         class="form-control form-control-sm"
                         formControlName="percentage"
                       />

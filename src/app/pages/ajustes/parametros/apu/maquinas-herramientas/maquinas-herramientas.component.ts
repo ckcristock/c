@@ -6,6 +6,7 @@ import { MaquinasHerramientasService } from './maquinas-herramientas.service';
 import { UnidadesMedidasService } from '../unidades-medidas/unidades-medidas.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-maquinas-herramientas',
@@ -29,6 +30,7 @@ export class MaquinasHerramientasComponent implements OnInit {
   filtro: any = {
     name: ''
   }
+  masksMoney = consts
 
   openClose(){
     if (this.matPanel == false){
@@ -37,9 +39,9 @@ export class MaquinasHerramientasComponent implements OnInit {
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
-  
+
   constructor(
     private fb: FormBuilder,
     private _validators: ValidatorsService,

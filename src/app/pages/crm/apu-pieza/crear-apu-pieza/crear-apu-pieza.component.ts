@@ -561,6 +561,7 @@ export class CrearApuPiezaComponent implements OnInit {
         text: 'Revisa la información y vuelve a intentarlo',
         showCancel: false
       })
+      this.form.markAllAsTouched()
     } else {
       let filess = this.files;
       filess.forEach(elem => {

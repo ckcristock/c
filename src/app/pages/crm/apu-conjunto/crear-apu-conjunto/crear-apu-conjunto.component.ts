@@ -19,6 +19,7 @@ import { MaquinasHerramientasService } from 'src/app/pages/ajustes/parametros/ap
 import { UnidadesMedidasService } from 'src/app/pages/ajustes/parametros/apu/unidades-medidas/unidades-medidas.service';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { consts } from 'src/app/core/utils/consts';
 interface ApuPart {
   name: string;
   id: number;
@@ -73,6 +74,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   searchFailedSet: boolean;
   calculationBase: any = {}
   user_id;
+  masksMoney = consts
   @ViewChild('apus') apus: any
 
   constructor(
@@ -94,7 +96,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.datosCabecera.Fecha = this.id ? this.data?.created_at : new Date();
     this.datosCabecera.Titulo = this.title;
-    // await this.getBases()
+    await this.getBases()
     this.getPeople();
     this.getClients();
     this.getApuSets();
@@ -340,7 +342,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   createForm() {
-    this.form = help.functionsApuConjunto.createForm(this.fb, this.user_id);
+    this.form = help.functionsApuConjunto.createForm(this.fb, this.user_id, this.calculationBase);
     help.functionsApuConjunto.listerTotalDirectCost(this.form);
   }
 
@@ -527,6 +529,7 @@ export class CrearApuConjuntoComponent implements OnInit {
         text: 'Revisa la información y vuelve a intentarlo',
         showCancel: false
       })
+      this.form.markAllAsTouched()
     } else {
       let filess = this.files;
       filess.forEach(elem => {

@@ -23,7 +23,13 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Descripción</mat-label>
-            <input (input)="getEstimationValues()" [(ngModel)]="filtro.description" type="text" matInput placeholder="Busca por descripción" />
+            <input
+              (input)="getEstimationValues()"
+              [(ngModel)]="filtro.description"
+              type="text"
+              matInput
+              placeholder="Busca por descripción"
+            />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -42,7 +48,9 @@
             <th class="align-middle">Valor Nacional Aereo</th>
             <th class="align-middle">Valor Internacioal Aereo</th>
             <th class="align-middle">Fecha Creación</th>
-            <th class="align-middle col-md-1"><i class="mdi mdi-chevron-down"></i></th>
+            <th class="align-middle col-md-1">
+              <i class="mdi mdi-chevron-down"></i>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -51,19 +59,19 @@
               {{ item.travel_expense_estimation.description }}
             </td>
             <td class="align-middle">
-              {{ item.land_national_value | currency: "COP" }}
+              {{ item.land_national_value | number : "1.2" }}
             </td>
             <td class="align-middle">
-              {{ item.land_international_value | currency: "COP" }}
+              {{ item.land_international_value | number : "1.2" }}
             </td>
             <td class="align-middle">
-              {{ item.aerial_national_value | currency: "COP" }}
+              {{ item.aerial_national_value | number : "1.2" }}
             </td>
             <td class="align-middle">
-              {{ item.aerial_international_value | currency: "COP" }}
+              {{ item.aerial_international_value | number : "1.2" }}
             </td>
             <td class="align-middle">
-              {{ item.created_at | date: "longDate" }}
+              {{ item.created_at | date : "longDate" }}
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -133,7 +141,8 @@
           <mat-label>Valor nacional terrestre</mat-label>
           <input
             matInput
-            type="text"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor nacional terrestre"
             formControlName="land_national_value"
             autocomplete="off"
@@ -143,7 +152,8 @@
           <mat-label>Valor internacional terrestre</mat-label>
           <input
             matInput
-            type="text"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor internacional terrestre"
             formControlName="land_international_value"
             autocomplete="off"
@@ -153,7 +163,8 @@
           <mat-label>Valor nacional aéreo</mat-label>
           <input
             matInput
-            type="text"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor nacional aéreo"
             formControlName="aerial_national_value"
             autocomplete="off"
@@ -163,7 +174,8 @@
           <mat-label>Valor internacional aéreo</mat-label>
           <input
             matInput
-            type="text"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor internacional aéreo"
             formControlName="aerial_international_value"
             autocomplete="off"

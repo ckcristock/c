@@ -23,7 +23,13 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Perfil</mat-label>
-            <input (input)="getProfiles()" [(ngModel)]="filtro.profile" type="text" matInput placeholder="Busca por perfil" />
+            <input
+              (input)="getProfiles()"
+              [(ngModel)]="filtro.profile"
+              type="text"
+              matInput
+              placeholder="Busca por perfil"
+            />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -32,7 +38,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-
         *ngIf="!loading && profiles.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -59,22 +64,22 @@
             <td class="align-middle">{{ "P" + item.id }}</td>
             <td class="align-middle">{{ item.profile }}</td>
             <td class="align-middle">
-              {{ item.value_time_daytime_displacement | currency: "COP" }}
+              ${{ item.value_time_daytime_displacement | number : "1.2" }}
             </td>
             <td class="align-middle">
-              {{ item.value_time_night_displacement | currency: "COP" }}
+              ${{ item.value_time_night_displacement | number : "1.2" }}
             </td>
             <td class="align-middle">
-              {{ item.daytime_ordinary_hour_value | currency: "COP" }}
+              ${{ item.daytime_ordinary_hour_value | number : "1.2" }}
             </td>
             <td class="align-middle">
-              {{ item.night_ordinary_hour_value | currency: "COP" }}
+              ${{ item.night_ordinary_hour_value | number : "1.2" }}
             </td>
             <td class="align-middle">
-              {{ item.sunday_daytime_value | currency: "COP" }}
+              ${{ item.sunday_daytime_value | number : "1.2" }}
             </td>
             <td class="align-middle">
-              {{ item.sunday_night_time_value | currency: "COP" }}
+              ${{ item.sunday_night_time_value | number : "1.2" }}
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -165,7 +170,8 @@
           <mat-label>$/h desplazamiento diurna</mat-label>
           <input
             matInput
-            type="number"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor por hora"
             formControlName="value_time_daytime_displacement"
             required
@@ -175,7 +181,8 @@
           <mat-label>$/h desplazamiento nocturna</mat-label>
           <input
             matInput
-            type="number"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor por hora"
             formControlName="value_time_night_displacement"
             required
@@ -185,7 +192,8 @@
           <mat-label>$/h ordinaria diurna</mat-label>
           <input
             matInput
-            type="number"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor por hora"
             formControlName="daytime_ordinary_hour_value"
             required
@@ -195,7 +203,8 @@
           <mat-label>$/h ordinaria nocturna</mat-label>
           <input
             matInput
-            type="number"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor por hora"
             formControlName="night_ordinary_hour_value"
             required
@@ -205,7 +214,8 @@
           <mat-label>$/h dominical diurna</mat-label>
           <input
             matInput
-            type="number"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor por hora"
             formControlName="sunday_daytime_value"
             required
@@ -215,7 +225,8 @@
           <mat-label>$/h dominical nocturna</mat-label>
           <input
             matInput
-            type="number"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor por hora"
             formControlName="sunday_night_time_value"
             required

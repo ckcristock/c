@@ -8,6 +8,7 @@ import { BudgetService } from '../budget.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-crear-presupuesto',
@@ -37,7 +38,7 @@ export class CrearPresupuestoComponent implements OnInit {
     Codigo: '',
     CodigoFormato: ''
   }
-
+  masksMoney = consts
   constructor(
     private _apuPieza: ApuPiezaService,
     private fb: FormBuilder,

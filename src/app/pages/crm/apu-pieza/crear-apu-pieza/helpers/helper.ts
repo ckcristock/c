@@ -89,7 +89,7 @@ export const functionsApu = {
       person_id: [user_id],
       third_party_id: [null, Validators.required],
       line: ['', Validators.required],
-      amount: [1, Validators.required],
+      amount: [null, Validators.required],
       files: [''],
       observation: ['', Validators.required],
       materia_prima: fb.array([]),

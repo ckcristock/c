@@ -23,7 +23,13 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Descripción</mat-label>
-            <input (input)="getEstimations()" [(ngModel)]="filtro.description" type="text" matInput placeholder="Busca por descripción" />
+            <input
+              (input)="getEstimations()"
+              [(ngModel)]="filtro.description"
+              type="text"
+              matInput
+              placeholder="Busca por descripción"
+            />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -41,7 +47,7 @@
             <th>Cantidad</th>
             <th>Valor unitario</th>
             <th>Fecha Creación</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -50,10 +56,10 @@
             <td class="align-middle">{{ item.unit }}</td>
             <td class="align-middle">{{ item.amount }}</td>
             <td class="align-middle">
-              {{ item.unit_value | currency: "COP" }}
+              ${{ item.unit_value | number : "1.2" }}
             </td>
             <td class="align-middle">
-              {{ item.created_at | date: "longDate" }}
+              {{ item.created_at | date : "longDate" }}
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -122,7 +128,7 @@
             required
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-2" appearance="outline">
           <mat-label>Unidad</mat-label>
           <input
             matInput
@@ -133,22 +139,24 @@
             required
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-2" appearance="outline">
           <mat-label>Cantidad</mat-label>
           <input
             matInput
-            type="number"
+            currencyMask
+            [options]="masksMoney.maskNumbers"
             placeholder="Ingresa la cantidad"
             formControlName="amount"
             autocomplete="off"
             required
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-2" appearance="outline">
           <mat-label>Valor unitario</mat-label>
           <input
             matInput
-            type="number"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor unitario"
             formControlName="unit_value"
             autocomplete="off"

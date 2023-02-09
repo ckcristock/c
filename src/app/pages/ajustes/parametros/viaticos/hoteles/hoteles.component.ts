@@ -8,6 +8,7 @@ import { ValidatorsService } from '../../../informacion-base/services/reactive-v
 import { Observable } from 'rxjs';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { AccommodationsComponent } from './accommodations/accommodations.component';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-hoteles',
@@ -49,6 +50,7 @@ export class HotelesComponent implements OnInit {
   }
   accommodationsPaginate: any = {}
   accommodations: any[] = []
+  masksMoney = consts
 
   constructor(
     private fb: FormBuilder,

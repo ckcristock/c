@@ -24,7 +24,6 @@ export class ItemsComponent implements OnInit {
   types = [
     { name: 'P', value: 'P' },
     { name: 'S', value: 'S' },
-    { name: 'C', value: 'C' },
   ];
   /*  indirectCosts: any[] */
 
@@ -34,20 +33,10 @@ export class ItemsComponent implements OnInit {
 
   ) { }
   ngOnInit(): void {
-
     this.fillData();
-
-    /* this.loadApuParts()
-     */
-
-  }
-
-  get items() {
-    return this.forma.get('items') as FormArray;
   }
 
   fillData() {
-
     if (this.dataEdit) {
       this.dataEdit.items.forEach(item => {
         let itemGroup = this.addItems(item)
@@ -173,9 +162,6 @@ export class ItemsComponent implements OnInit {
     }
     return item
   }
-
-
-
 
   changeView(group: FormGroup, key: string) {
     const shows = group.get('shows').value
@@ -463,7 +449,6 @@ export class ItemsComponent implements OnInit {
       this.updateTotals('value_usd', 'total_usd');
 
     })
-
     /*   const percentage = subItem.get('percentage_sale').value
         let value_prorrota_usd = 0
         if (percentage > 0 && trm.value >0) {
@@ -480,7 +465,6 @@ export class ItemsComponent implements OnInit {
            }
         )
     }) */
-
     return subItemGroup
   }
 
@@ -494,8 +478,6 @@ export class ItemsComponent implements OnInit {
     })
     this.forma.patchValue({ [keytoUpdate]: total_key })
   }
-
-
 
   updateSubTotals(itemGroup: FormArray, keysToUpdate: Array<string>) {
     const subItems = itemGroup.value;
@@ -584,8 +566,6 @@ export class ItemsComponent implements OnInit {
           const indirectCosts: Array<any> = subItem.get('indirect_costs').value
           total += indirectCosts.find(x => x.indirect_cost_id == id).value
         });
-
-
         const toUpdate = indirectTotals.controls.find(r => r.get('indirect_cost_id').value == id);
         toUpdate.patchValue({ sub_total: total })
       }, 300);
@@ -631,9 +611,6 @@ export class ItemsComponent implements OnInit {
       return value.code
     return value;
   }
-
-
-  /*  */
   apuPart$: Observable<any>;
   apuPartLoading = false;
   apuPartInput$ = new Subject<string>();
@@ -658,5 +635,9 @@ export class ItemsComponent implements OnInit {
         })
       )
     );
+  }
+
+  get items() {
+    return this.forma.get('items') as FormArray;
   }
 }

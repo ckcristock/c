@@ -1,4 +1,4 @@
-<ng-container *ngIf="!loading; else notDataL">
+<ng-container *ngIf="!loading && form; else notDataL">
   <form [formGroup]="form">
     <div class="card">
       <div class="card-body">
@@ -21,6 +21,7 @@
               [items]="cities"
               bindLabel="text"
               appearance="outline"
+              [class.is-invalid]="form.get('city_id').invalid"
               [appendTo]="'body'"
               placeholder="Destino *"
               bindValue="value"
@@ -35,6 +36,7 @@
               [items]="clients"
               bindLabel="text"
               appearance="outline"
+              [class.is-invalid]="form.get('third_party_id').invalid"
               [appendTo]="'body'"
               placeholder="Cliente *"
               bindValue="value"
@@ -92,7 +94,9 @@
         </div>
         <ng-container *ngIf="cmoList.controls.length; else notData">
           <div class="rounded-top table-responsive">
-            <table class="table table-bordered table-striped table-sm">
+            <table
+              class="table table-bordered table-striped table-sm table-text-small"
+            >
               <thead>
                 <tr class="table-primary">
                   <th class="text-center" colspan="4"></th>
@@ -108,8 +112,8 @@
                   <th></th>
                 </tr>
               </thead>
-              <thead class="bg-light">
-                <tr class="text-center text-uppercase">
+              <thead>
+                <tr class="text-center text-uppercase table-active">
                   <th class="align-middle">Item</th>
                   <th class="align-middle">Perfil</th>
                   <th class="align-middle">Tipo Desplaza</th>
@@ -143,12 +147,14 @@
                         <td>
                           {{ i + 1 }}
                         </td>
-                        <td>
+                        <td class="p-0">
                           <select
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            class="form-control form-control-sm form-control-edit form-width"
                             formControlName="apu_profile_id"
                           >
+                            <option value="" disabled selected hidden>
+                              Selecciona
+                            </option>
                             <option
                               *ngFor="let item of profiles"
                               [value]="item.id"
@@ -159,10 +165,12 @@
                         </td>
                         <td>
                           <select
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            class="form-control form-control-sm form-control-edit form-width"
                             formControlName="displacement_type"
                           >
+                            <option value="" disabled selected hidden>
+                              Selecciona
+                            </option>
                             <option
                               *ngFor="let item of desplazamientos"
                               [value]="item.value"
@@ -173,26 +181,31 @@
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 3.4rem"
                             formControlName="people_number"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 2.5rem"
                             formControlName="days_number_displacement"
                           />
                         </td>
                         <td>
                           <select
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="workind_day_displacement"
                           >
+                            <option value="" disabled selected hidden>
+                              Selecciona
+                            </option>
                             <option
                               *ngFor="let item of jornadas"
                               [value]="item.value"
@@ -203,42 +216,49 @@
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 2.6rem"
                             formControlName="hours_displacement"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="hours_value_displacement"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="total_value_displacement"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 2.5rem"
                             formControlName="days_number_ordinary"
                           />
                         </td>
                         <td>
                           <select
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="working_day_ordinary"
                           >
+                            <option value="" disabled selected hidden>
+                              Selecciona
+                            </option>
                             <option
                               *ngFor="let item of jornadas"
                               [value]="item.value"
@@ -249,42 +269,49 @@
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 2.6rem"
                             formControlName="hours_ordinary"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="hours_value_ordinary"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="total_value_ordinary"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 2.5rem"
                             formControlName="days_number_festive"
                           />
                         </td>
                         <td>
                           <select
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="working_day_festive"
                           >
+                            <option value="" disabled selected hidden>
+                              Selecciona
+                            </option>
                             <option
                               *ngFor="let item of jornadas"
                               [value]="item.value"
@@ -295,33 +322,37 @@
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 2.6rem"
                             formControlName="hours_festive"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="hours_value_festive"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="total_value_festive"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="salary_value"
                           />
                         </td>
@@ -349,11 +380,11 @@
                         </td>
                       </tr>
                       <tr *ngIf="collapsed[i]">
-                        <td colspan="21">
-                          <div class="rounded-top table-responsive">
+                        <td colspan="10" class="border-0">
+                          <div class="rounded-top table-responsive m-4">
                             <table
                               [ngbCollapse]="!collapsed[i]"
-                              class="w-100 table table-bordered table-striped table-sm"
+                              class="w-100 table table-borderless table-striped table-sm table-text-small"
                             >
                               <thead>
                                 <tr class="table-primary">
@@ -386,59 +417,56 @@
                                     <td colspan="2">
                                       <input
                                         type="text"
-                                        class="form-control form-control-sm"
+                                        class="form-control form-control-sm form-control-edit"
                                         formControlName="description"
                                       />
                                     </td>
                                     <td>
                                       <input
                                         type="text"
-                                        class="form-control form-control-sm"
+                                        class="form-control form-control-sm form-control-edit"
                                         formControlName="unit"
                                       />
                                     </td>
                                     <td>
                                       <input
-                                        type="number"
-                                        class="form-control form-control-sm"
+                                        currencyMask
+                                        [options]="masksMoney.maskNumbers"
+                                        style="width: 3.5rem"
+                                        class="form-control form-control-sm form-control-edit"
                                         formControlName="amount"
                                       />
                                     </td>
-                                    <td>
-                                      <input
-                                        type="number"
-                                        readonly
-                                        class="form-control form-control-sm"
-                                        formControlName="unit_value"
-                                      />
+                                    <td class="p-2 text-right">
+                                      ${{
+                                        item.controls.unit_value.value
+                                          | number : "1.2"
+                                      }}
                                     </td>
-                                    <td>
-                                      <input
-                                        type="number"
-                                        class="form-control form-control-sm"
-                                        formControlName="total_value"
-                                      />
+                                    <td class="p-2 text-right">
+                                      ${{
+                                        item.controls.total_value.value
+                                          | number : "1.2"
+                                      }}
                                     </td>
                                   </tr>
                                 </ng-container>
                               </tbody>
-                              <tfoot>
-                                <tr>
-                                  <td
-                                    colspan="5"
-                                    class="text-right text-uppercase"
-                                  >
-                                    <label><b>Subtotal</b></label>
-                                  </td>
-                                  <td colspan="6" class="text-center">
-                                    <input
-                                      type="number"
-                                      class="form-control form-control-sm"
-                                      formControlName="subtotal"
-                                    />
-                                  </td>
-                                </tr>
-                              </tfoot>
+                              <tr>
+                                <td
+                                  colspan="5"
+                                  class="text-center font-weight-bolder"
+                                >
+                                  SUBTOTAL
+                                </td>
+                                <td colspan="1" class="text-center">
+                                  <input
+                                    type="number"
+                                    class="form-control form-control-sm form-control-edit"
+                                    formControlName="subtotal"
+                                  />
+                                </td>
+                              </tr>
                             </table>
                           </div>
                         </td>
@@ -453,41 +481,35 @@
         <ng-container *ngIf="cmoList.controls.length">
           <div class="row d-flex justify-content-end">
             <div class="col-md-6">
-              <div class="d-flex justify-content-between">
-                <div class="rounded-top table-responsive">
-                  <table class="table table-hover">
-                    <tbody>
-                      <tr>
-                        <td>SUBTOTAL MANO DE OBRA</td>
-                        <td class="text-right">
-                          ${{
-                            this.form.get("subtotal_labor").value
-                              | currency : "" : ""
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>SUBTOTAL VIÁTICOS</td>
-                        <td class="text-right">
-                          ${{
-                            this.form.get("subtotal_travel_expense").value
-                              | currency : "" : ""
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>SUBTOTAL VALID DIMENSIONAL</td>
-                        <td class="text-right">
-                          ${{
-                            this.form.get("subtotal_dimensional_validation")
-                              .value | currency : "" : ""
-                          }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <ul class="list-group list-group-flush">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center p-1"
+                >
+                  <span>SUBTOTAL MANO DE OBRA</span>
+                  <h6>${{ this.form.get("subtotal_labor").value | number: '1.2' }}</h6>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center p-1"
+                >
+                  <span>SUBTOTAL VIÁTICOS</span>
+                  <h6>
+                    ${{
+                      this.form.get("subtotal_travel_expense").value | number: '1.2'
+                    }}
+                  </h6>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center p-1"
+                >
+                  <span>SUBTOTAL VALID DIMENSIONAL</span>
+                  <h6>
+                    ${{
+                      this.form.get("subtotal_dimensional_validation").value
+                      | number: '1.2'
+                    }}
+                  </h6>
+                </li>
+              </ul>
             </div>
           </div>
         </ng-container>
@@ -517,7 +539,9 @@
           *ngIf="mpMCalculateLaborList.controls.length; else notData"
         >
           <div class="rounded-top table-responsive">
-            <table class="table table-bordered table-striped table-sm">
+            <table
+              class="table table-bordered table-striped table-sm table-text-small"
+            >
               <thead>
                 <tr class="table-primary">
                   <th colspan="4"></th>
@@ -528,7 +552,7 @@
                 </tr>
               </thead>
               <thead class="bg-light">
-                <tr class="text-center text-uppercase">
+                <tr class="text-center text-uppercase table-active">
                   <th class="align-middle">Item</th>
                   <th class="align-middle">Perfil</th>
                   <th class="align-middle">Tipo Desplaza</th>
@@ -567,10 +591,12 @@
                         </td>
                         <td>
                           <select
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            class="form-control form-control-sm form-control-edit form-width"
                             formControlName="apu_profile_id"
                           >
+                            <option value="" disabled selected hidden>
+                              Selecciona
+                            </option>
                             <option
                               *ngFor="let item of profiles"
                               [value]="item.id"
@@ -581,10 +607,12 @@
                         </td>
                         <td>
                           <select
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            class="form-control form-control-sm form-control-edit form-width"
                             formControlName="displacement_type"
                           >
+                            <option value="" disabled selected hidden>
+                              Selecciona
+                            </option>
                             <option
                               *ngFor="let item of desplazamientos"
                               [value]="item.value"
@@ -595,26 +623,31 @@
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 3.4rem"
                             formControlName="people_number"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 2.5rem"
                             formControlName="days_number_displacement"
                           />
                         </td>
                         <td>
                           <select
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="workind_day_displacement"
                           >
+                            <option value="" disabled selected hidden>
+                              Selecciona
+                            </option>
                             <option
                               *ngFor="let item of jornadas"
                               [value]="item.value"
@@ -625,42 +658,49 @@
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 2.6rem"
                             formControlName="hours_displacement"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="hours_value_displacement"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="total_value_displacement"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 2.5rem"
                             formControlName="days_number_ordinary"
                           />
                         </td>
                         <td>
                           <select
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="working_day_ordinary"
                           >
+                            <option value="" disabled selected hidden>
+                              Selecciona
+                            </option>
                             <option
                               *ngFor="let item of jornadas"
                               [value]="item.value"
@@ -671,42 +711,49 @@
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 2.6rem"
                             formControlName="hours_ordinary"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="hours_value_ordinary"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="total_value_ordinary"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 2.5rem"
                             formControlName="days_number_festive"
                           />
                         </td>
                         <td>
                           <select
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="working_day_festive"
                           >
+                            <option value="" disabled selected hidden>
+                              Selecciona
+                            </option>
                             <option
                               *ngFor="let item of jornadas"
                               [value]="item.value"
@@ -717,33 +764,37 @@
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 2.6rem"
                             formControlName="hours_festive"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="hours_value_festive"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="total_value_festive"
                           />
                         </td>
                         <td>
                           <input
-                            type="number"
-                            class="form-control form-control-sm"
-                            style="width: 100px"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            class="form-control form-control-sm form-control-edit"
+                            style="width: 5rem"
                             formControlName="salary_value"
                           />
                         </td>
@@ -771,8 +822,8 @@
                         </td>
                       </tr>
                       <tr *ngIf="mpMcollapsed[i]">
-                        <td colspan="21">
-                          <div class="rounded-top table-responsive">
+                        <td colspan="10" class="border-0">
+                          <div class="rounded-top table-responsive m-4">
                             <table
                               [ngbCollapse]="!mpMcollapsed[i]"
                               class="w-100 table table-bordered table-striped table-sm"
@@ -808,37 +859,37 @@
                                     <td colspan="2">
                                       <input
                                         type="text"
-                                        class="form-control form-control-sm"
+                                        class="form-control form-control-sm form-control-edit"
                                         formControlName="description"
                                       />
                                     </td>
                                     <td>
                                       <input
                                         type="text"
-                                        class="form-control form-control-sm"
+                                        class="form-control form-control-sm form-control-edit"
                                         formControlName="unit"
                                       />
                                     </td>
                                     <td>
                                       <input
-                                        type="number"
-                                        class="form-control form-control-sm"
+                                        currencyMask
+                                        [options]="masksMoney.maskNumbers"
+                                        style="width: 3.5rem"
+                                        class="form-control form-control-sm form-control-edit"
                                         formControlName="amount"
                                       />
                                     </td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        class="form-control form-control-sm"
-                                        formControlName="unit_value"
-                                      />
+                                    <td class="p-2 text-right">
+                                      ${{
+                                        item.controls.unit_value.value
+                                          | number : "1.2"
+                                      }}
                                     </td>
-                                    <td>
-                                      <input
-                                        type="text"
-                                        class="form-control form-control-sm"
-                                        formControlName="total_value"
-                                      />
+                                    <td class="p-2 text-right">
+                                      ${{
+                                        item.controls.total_value.value
+                                          | number : "1.2"
+                                      }}
                                     </td>
                                   </tr>
                                 </ng-container>
@@ -853,7 +904,8 @@
                                   </td>
                                   <td colspan="6" class="text-center">
                                     <input
-                                      type="number"
+                                      currencyMask
+                                      [options]="masksMoney.maskCOP"
                                       class="form-control form-control-sm"
                                       formControlName="subtotal"
                                     />
@@ -874,182 +926,171 @@
         <ng-container *ngIf="mpMCalculateLaborList.controls.length">
           <div class="row d-flex justify-content-end">
             <div class="col-md-6">
-              <div class="d-flex justify-content-between">
-                <div class="rounded-top table-responsive">
-                  <table class="table table-hover">
-                    <tbody>
-                      <tr>
-                        <td>SUBTOTAL MANO DE OBRA</td>
-                        <td class="text-right">
-                          ${{
-                            this.form.get("subtotal_labor_mpm").value
-                              | currency : "" : ""
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>SUBTOTAL VIÁTICOS</td>
-                        <td class="text-right">
-                          ${{
-                            this.form.get("subtotal_travel_expense_mpm").value
-                              | currency : "" : ""
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>SUBTOTAL MONTAJE Y PUESTA EN MARCHA</td>
-                        <td class="text-right">
-                          ${{
-                            this.form.get("subtotal_assembly_commissioning")
-                              .value | currency : "" : ""
-                          }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA</td>
-                        <td class="text-right">
-                          ${{
-                            this.form.get(
-                              "general_subtotal_travel_expense_labor"
-                            ).value | currency : "" : ""
-                          }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <ul class="list-group list-group-flush">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center p-1"
+                >
+                  <span>SUBTOTAL MANO DE OBRA</span>
+                  <h6>${{ this.form.get("subtotal_labor_mpm").value | number: '1.2' }}</h6>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center p-1"
+                >
+                  <span>SUBTOTAL VIÁTICOS</span>
+                  <h6>
+                    ${{
+                      this.form.get("subtotal_travel_expense_mpm").value | number: '1.2'
+                    }}
+                  </h6>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center p-1"
+                >
+                  <span>SUBTOTAL MONTAJE Y PUESTA EN MARCHA</span>
+                  <h6>
+                    ${{
+                      this.form.get("subtotal_assembly_commissioning").value
+                      | number: '1.2'
+                    }}
+                  </h6>
+                </li>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center p-1"
+                >
+                  <span>SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA</span>
+                  <h6>
+                    ${{
+                      this.form.get("general_subtotal_travel_expense_labor").value
+                      | number: '1.2'
+                    }}
+                  </h6>
+                </li>
+              </ul>
             </div>
           </div>
         </ng-container>
       </div>
     </div>
-    <div class="card">
+    <div class="card col-md-6 mx-auto">
       <div class="card-body">
         <h5 class="text-center">AIU</h5>
         <hr class="line" />
         <div class="d-flex justify-content-center">
           <div class="rounded-top table-responsive">
-            <table class="table table-hover">
-              <tbody>
+            <table class="table table-borderless">
+              <tbody class="text-uppercase">
                 <tr>
-                  <td class="col-8">Administrativos</td>
+                  <td class="col-7">Administrativos</td>
                   <td class="col-2">
                     <input
-                      type="number"
-                      min="0"
-                      step=".1"
+                      currencyMask
+                      [options]="masksMoney.maskPorcentaje"
                       class="form-control form-control-sm"
                       formControlName="administrative_percentage"
                     />
                   </td>
-                  <td class="col-2">
+                  <td class="col-3">
                     <input
-                      type="number"
-                      min="0"
-                      step=".1"
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       formControlName="administrative_value"
                     />
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-8">Imprevistos</td>
+                  <td class="col-7">Imprevistos</td>
                   <td class="col-2">
                     <input
-                      type="number"
-                      min="0"
-                      step=".1"
+                      currencyMask
+                      [options]="masksMoney.maskPorcentaje"
                       class="form-control form-control-sm"
                       formControlName="unforeseen_percentage"
                     />
                   </td>
-                  <td class="col-2">
+                  <td class="col-3">
                     <input
-                      type="number"
-                      min="0"
-                      step=".1"
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       formControlName="unforeseen_value"
                     />
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-10" colspan="2">Subtotal A + I</td>
-                  <td class="col-2">
+                  <td class="col-9" colspan="2">Subtotal A + I</td>
+                  <td class="col-3">
                     <input
-                      type="number"
-                      min="0"
-                      step=".1"
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       formControlName="subtotal_administrative_unforeseen"
                     />
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-10" colspan="2">Utilidad</td>
-                  <td class="col-2">
+                  <td class="col-9" colspan="2">Utilidad</td>
+                  <td class="col-3">
                     <input
-                      type="number"
-                      min="0"
-                      step=".1"
+                      currencyMask
+                      [options]="masksMoney.maskPorcentaje"
                       class="form-control form-control-sm"
                       formControlName="utility_percentage"
                     />
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-10" colspan="2">SubTotal A + I + U</td>
-                  <td class="col-2">
+                  <td class="col-9" colspan="2">SubTotal A + I + U</td>
+                  <td class="col-3">
                     <input
-                      type="number"
-                      min="0"
-                      step=".1"
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       formControlName="subtotal_administrative_unforeseen_utility"
                     />
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-10" colspan="2">
+                  <td class="col-9" colspan="2">
                     Precio venta COP incluye retención
                   </td>
-                  <td class="col-2">
-                    <input
-                      type="number"
-                      readonly
-                      min="0"
-                      step=".1"
-                      class="form-control form-control-sm"
-                      formControlName="sale_price_cop_withholding_total"
-                    />
+                  <td class="col-3 text-right">
+                    <h5>
+                      <span class="badge badge-success">
+                        $
+                        {{
+                          form.get("sale_price_cop_withholding_total").value
+                            | number : "1.2"
+                        }}
+                      </span>
+                    </h5>
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-10" colspan="2">TRM</td>
-                  <td class="col-2">
+                  <td class="col-9" colspan="2">TRM</td>
+                  <td class="col-3">
                     <input
-                      type="number"
-                      min="0"
-                      step=".1"
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       formControlName="trm"
                     />
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-10" colspan="2">
+                  <td class="col-9" colspan="2">
                     Precio venta USD incluye retención
                   </td>
-                  <td class="col-2">
-                    <input
-                      type="number"
-                      readonly
-                      min="0"
-                      step=".1"
-                      class="form-control form-control-sm"
-                      formControlName="sale_price_usd_withholding_total"
-                    />
+                  <td class="col-3 text-right">
+                    <h5>
+                      <span class="badge badge-success">
+                        USD
+                        {{
+                          form.get("sale_price_usd_withholding_total").value
+                            | number : "1.2"
+                        }}
+                      </span>
+                    </h5>
                   </td>
                 </tr>
               </tbody>
@@ -1069,5 +1110,9 @@
   </div>
 </ng-template>
 <ng-template #notDataL>
-  <app-not-data [loading]="loading"></app-not-data>
+  <div class="card">
+    <div class="card-body">
+      <app-not-data [loading]="loading"></app-not-data>
+    </div>
+  </div>
 </ng-template>

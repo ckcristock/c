@@ -1,4 +1,4 @@
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { cmoHelper } from './calculo-mano-obra';
 import { mpmCalculateLaborHelper } from './mp-calculo-mano-obra';
 
@@ -38,14 +38,14 @@ export const functionsApuService = {
     this.subscribes(form)
   },
 
-  createForm(fb: FormBuilder, clients:Array<any>, user_id) {
+  createForm(fb: FormBuilder, clients:Array<any>, user_id, calculationBase) {
     let group = fb.group({
-      name: [''],
-      city_id: [null],
+      name: ['', Validators.required],
+      city_id: [null, Validators.required],
       person_id: [user_id],
-      third_party_id:[null],
-      line: [''],
-      observation: [''],
+      third_party_id:[null, Validators.required],
+      line: ['', Validators.required],
+      observation: ['', Validators.required],
       subtotal_labor: [0],
       subtotal_labor_mpm: [0],
       subtotal_travel_expense: [0],
@@ -53,15 +53,15 @@ export const functionsApuService = {
       subtotal_dimensional_validation: [0],
       subtotal_assembly_commissioning: [0],
       general_subtotal_travel_expense_labor: [0],
-      administrative_percentage: [0],
+      administrative_percentage: [calculationBase.administration_percentage.value],
       administrative_value: [0],
-      unforeseen_percentage: [0],
+      unforeseen_percentage: [calculationBase.unforeseen_percentage.value],
       unforeseen_value: [0],
-      utility_percentage: [0],
+      utility_percentage: [calculationBase.utility_percentage.value],
       subtotal_administrative_unforeseen: [0],
       subtotal_administrative_unforeseen_utility: [0],
       sale_price_cop_withholding: [0],
-      trm: [0],
+      trm: [calculationBase.trm.value],
       sale_price_usd_withholding_total: [0],
       sale_price_cop_withholding_total: [0],
       calculate_labor: fb.array([]),

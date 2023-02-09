@@ -14,6 +14,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Texteditor2Service } from 'src/app/pages/ajustes/informacion-base/services/texteditor2.service';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 import { NegociosService } from '../../negocios/negocios.service';
+import { consts } from 'src/app/core/utils/consts';
 @Component({
   selector: 'app-crear-cotizacion',
   templateUrl: './crear-cotizacion.component.html',
@@ -41,6 +42,7 @@ export class CrearCotizacionComponent implements OnInit {
   id: number;
   quotation: any;
   loading: boolean;
+  masksMoney = consts
   thirdParties: any[] = [];
   constructor(
     private _apuPieza: ApuPiezaService,
@@ -142,9 +144,8 @@ export class CrearCotizacionComponent implements OnInit {
         customer_id: res.data.customer_id,
         third_party_person_id: res.data.third_party_person_id,
         destinity_id: res.data.destinity_id,
-        line: res.data.line,
         trm: res.data.trm,
-        project: res.data.project,
+        description: res.data.description,
         budget_included: res.data.budget_included,
         budget: res.data.budget,
         budget_id: res.data.budget_id,
@@ -174,9 +175,8 @@ export class CrearCotizacionComponent implements OnInit {
       date: new Date(),
       customer_id: [null, Validators.required],
       destinity_id: [null, Validators.required],
-      line: ['', Validators.required],
       trm: [this.trm, Validators.required],
-      project: ['', Validators.required],
+      description: ['', Validators.required],
       budget_included: ['', Validators.required],
       budget: [''],
       budget_id: [''],
@@ -209,7 +209,7 @@ export class CrearCotizacionComponent implements OnInit {
   }
 
   //*Typeahead que filtra el presupuesto
-  search: OperatorFunction<string, readonly { line; project }[]> = (text$: Observable<string>) =>
+  search: OperatorFunction<string, readonly { name }[]> = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       map((term) =>

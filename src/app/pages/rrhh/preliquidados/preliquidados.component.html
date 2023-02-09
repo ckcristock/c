@@ -16,10 +16,10 @@
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-          <ng-container [formGroup]="filters">
+          <ng-container [formGroup]="formFilters">
             <div class="col mat-form-field-wrapper">
               <ng-select
-                [items]="people"
+                [items]="preliquidados"
                 formControlName="person_id"
                 bindLabel="text"
                 appearance="outline"
@@ -36,11 +36,11 @@
     </mat-accordion>
     <div
       class="row d-flex align-items-stretch"
-      *ngIf="!loading && preliquidados.length > 0; else notData"
+      *ngIf="!loading && listPreliquidados.length > 0; else notData"
     >
       <div
         class="col-xxxl-1 col-xxl-2 col-xl-3 col-md-4 col-sm-12 col mb-4 d-flex align-items-stretch"
-        *ngFor="let preliquidado of preliquidados"
+        *ngFor="let preliquidado of listPreliquidados"
       >
         <div class="card border border-3 border-light w-100 text-center">
           <div class="card-body pb-0">
@@ -57,9 +57,9 @@
                   {{ preliquidado.first_surname }}
                 </strong>
                 <br />
-                <b>{{ preliquidado.position }}</b
+                <b>{{ preliquidado.contractultimate.position.name }}</b
                 ><br />
-                <small> {{ preliquidado.log_created_at.tiempo | uppercase}} </small>
+                <small> {{ preliquidado.one_preliquidated_log.created_at | uppercase | date}} </small>
               </p>
             </div>
           </div>
@@ -92,7 +92,7 @@
         </div>
       </div>
     </div>
-    <ngb-pagination
+   <!--  <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"
       (pageChange)="getPreliquidados($event)"
@@ -107,7 +107,22 @@
       ellipses="false"
       boundaryLinks="true"
     >
-    </ngb-pagination>
+    </ngb-pagination> -->
+    <div class="d-flex justify-content-between p-2">
+      <ngb-pagination
+        [collectionSize]="collectionSize"
+        [(page)]="page"
+        [pageSize]="pageSize"
+        (pageChange)="refreshCountries()"
+      >
+      </ngb-pagination>
+
+      <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
+        <option [ngValue]="2">2 items per page</option>
+        <option [ngValue]="4">4 items per page</option>
+        <option [ngValue]="6">6 items per page</option>
+      </select>
+    </div>
   </div>
 </div>
 <ng-template #notData>

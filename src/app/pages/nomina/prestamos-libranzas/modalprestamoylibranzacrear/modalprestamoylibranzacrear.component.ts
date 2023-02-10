@@ -18,6 +18,7 @@ import { ModalService } from 'src/app/core/services/modal.service';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-modalprestamoylibranzacrear',
@@ -29,6 +30,7 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
   @Input() abrirModal: Observable<any> = new Observable();
   @Output() recargarLista: EventEmitter<any> = new EventEmitter();
 
+  masksMoney = consts
   private _suscription: any;
   public Meses: any = [];
   public people: any = [];

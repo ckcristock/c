@@ -6,6 +6,7 @@ import { MatAccordion } from '@angular/material';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { DatePipe } from '@angular/common';
 import { DateAdapter } from 'saturn-datepicker';
+import { consts } from 'src/app/core/utils/consts';
 @Component({
   selector: 'app-prestamos-libranzas',
   templateUrl: './prestamos-libranzas.component.html',
@@ -13,6 +14,7 @@ import { DateAdapter } from 'saturn-datepicker';
 })
 export class PrestamosLibranzasComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
+  masksMoney = consts;
   matPanel = false;
   datePipe = new DatePipe('es-CO');
   public abrirModalPrestamoCrear: Subject<any> = new Subject;
@@ -57,6 +59,8 @@ export class PrestamosLibranzasComponent implements OnInit {
   getPeople(){
     this._people.getPeopleIndex().subscribe((res:any) => {
       this.people = res.data
+      console.log(res.data);
+
       this.people.unshift({ text: 'Todos', value: '' });
     })
   }
@@ -84,6 +88,8 @@ export class PrestamosLibranzasComponent implements OnInit {
     }
     this._loan.getAll(params).subscribe((r: any) => {
       this.Prestamos = r.data.data;
+      console.log(r.data.data);
+
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })

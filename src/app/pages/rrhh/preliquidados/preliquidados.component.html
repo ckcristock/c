@@ -30,6 +30,19 @@
               >
               </ng-select>
             </div>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Items por página</mat-label>
+              <mat-select
+                [(ngModel)]="pageSize"
+                (ngModelChange)="refreshCountries()"
+                [ngModelOptions]="{ standalone: true }"
+              >
+                <mat-option [value]="2">2 items por página</mat-option>
+                <mat-option [value]="4">4 items por página</mat-option>
+                <mat-option [value]="10">10 items por página</mat-option>
+                <mat-option [value]="20">20 items por página</mat-option>
+              </mat-select>
+            </mat-form-field>
           </ng-container>
         </div>
       </mat-expansion-panel>
@@ -59,7 +72,13 @@
                 <br />
                 <b>{{ preliquidado.contractultimate.position.name }}</b
                 ><br />
-                <small> {{ preliquidado.one_preliquidated_log.created_at | uppercase | date}} </small>
+                <small>
+                  {{
+                    preliquidado.one_preliquidated_log.created_at
+                      | uppercase
+                      | date
+                  }}
+                </small>
               </p>
             </div>
           </div>
@@ -92,7 +111,7 @@
         </div>
       </div>
     </div>
-   <!--  <ngb-pagination
+    <!--  <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"
       (pageChange)="getPreliquidados($event)"
@@ -103,26 +122,20 @@
       rotate="true"
       ellipses="false"
       boundaryLinks="true"
+    >
+    </ngb-pagination> -->
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="collectionSize"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      (pageChange)="refreshCountries()"
+      maxSize="5"
       rotate="true"
       ellipses="false"
       boundaryLinks="true"
     >
-    </ngb-pagination> -->
-    <div class="d-flex justify-content-between p-2">
-      <ngb-pagination
-        [collectionSize]="collectionSize"
-        [(page)]="page"
-        [pageSize]="pageSize"
-        (pageChange)="refreshCountries()"
-      >
-      </ngb-pagination>
-
-      <select class="form-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
-        <option [ngValue]="2">2 items per page</option>
-        <option [ngValue]="4">4 items per page</option>
-        <option [ngValue]="6">6 items per page</option>
-      </select>
-    </div>
+    </ngb-pagination>
   </div>
 </div>
 <ng-template #notData>

@@ -87,6 +87,7 @@ export class PreliquidadosComponent implements OnInit {
         this.listPreliquidados = res.data;
         this.collectionSize = res.data.length;
         this.loading = false;
+        this.refreshCountries()
         /* for (let index = 0; index < this.preliquidados.length; index++) {
           let fecha = this.preliquidados[index].log_created_at;
           let InfoH = fecha;

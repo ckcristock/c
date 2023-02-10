@@ -15,7 +15,9 @@ export const internalProcessesHelper = {
       data.internal.forEach((r) => {
         let group = fb.group({
           description: [r.description],
+          name_description: [r.internal.name],
           unit_id: [r.unit_id],
+          q_unit: [r.q_unit],
           amount: [r.amount],
           unit_cost: [r.unit_cost],
           total: [r.total]
@@ -26,12 +28,14 @@ export const internalProcessesHelper = {
     }
   },
 
-  createInternalProcessesGroup(form: FormGroup, fb: FormBuilder) {
+  createInternalProcessesGroup(form: FormGroup, fb: FormBuilder, element) {
     let internal = fb.group({
-      description: [''],
-      unit_id: [''],
+      description: [element.value],
+      name_description: [element.text],
+      unit_id: [element.unit_id],
+      unit_name: [element.unit.name],
       amount: [0],
-      unit_cost: [0],
+      unit_cost: [element.unit_cost],
       total: [0]
     });
     let list = form.get('internal_processes') as FormArray;

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location, PlatformLocation } from '@angular/common';
 import { ApusService } from 'src/app/pages/crm/apus/apus.service';
+import { combineLatest, from, zip } from 'rxjs';
 
 @Component({
   selector: 'app-get-apus',
@@ -11,7 +12,7 @@ import { ApusService } from 'src/app/pages/crm/apus/apus.service';
   styleUrls: ['./get-apus.component.scss']
 })
 export class GetApusComponent implements OnInit {
-  @Input('filter') filter:any;
+  @Input('filter') filter: any;
   @ViewChild('modal') modal: any;
   @Output('sendApus') sendApus = new EventEmitter()
   loading = false;
@@ -24,7 +25,7 @@ export class GetApusComponent implements OnInit {
   }
   filtros: any = {
     code: '',
-    date_one:'',
+    date_one: '',
     date_two: '',
     name: '',
     city: '',
@@ -76,6 +77,13 @@ export class GetApusComponent implements OnInit {
     }
     this._apu.getApus(params).subscribe((r: any) => {
       this.apus = r.data.data
+      this.apus.forEach(apu => {
+        this.state.forEach(sta => {
+          if (sta.apu_id == apu.apu_id && sta.type == apu.type) {
+            apu.selected = true
+          }
+        });
+      });
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
@@ -98,7 +106,7 @@ export class GetApusComponent implements OnInit {
       default:
         break;
     }
-    const url = this.href + `${uri}/${id}` ;
+    const url = this.href + `${uri}/${id}`;
 
     window.open(url, '_blank');
   }

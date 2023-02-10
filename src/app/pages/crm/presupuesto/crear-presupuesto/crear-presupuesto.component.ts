@@ -167,25 +167,7 @@ export class CrearPresupuestoComponent implements OnInit {
     });
   }
 
-  get total_cop() {
-    return this.forma.get('total_cop').value
-  }
-  get total_usd() {
-    return this.forma.get('total_usd').value
-  }
-  get unit_value_prorrateado_cop() {
-    return this.forma.get('unit_value_prorrateado_cop').value
-  }
-  get unit_value_prorrateado_usd() {
-    return this.forma.get('unit_value_prorrateado_usd').value
-  }
-  get indirecCostList() {
-    return this.forma.get('indirect_costs') as FormArray;
-  }
 
-  get hasItems() {
-    return this.forma.get('items').value.length
-  }
 
   indirectCostPush(indirect, all = true) {
     indirect.clear();
@@ -258,5 +240,25 @@ export class CrearPresupuestoComponent implements OnInit {
   updateData = () => {
     const data = this.forma.value;
     this._budget.update(data, this.id).subscribe(r => { })
+  }
+
+  get total_cop() {
+    return this.forma.get('total_cop').value
+  }
+  get total_usd() {
+    return this.forma.get('total_usd').value
+  }
+  get unit_value_prorrateado_cop() {
+    return this.forma.get('unit_value_prorrateado_cop').value
+  }
+  get unit_value_prorrateado_usd() {
+    return this.forma.get('unit_value_prorrateado_usd').value
+  }
+  get indirecCostList() {
+    return this.forma.get('indirect_costs') as FormArray;
+  }
+
+  get hasItems() {
+    return this.forma.get('items').value.length
   }
 }

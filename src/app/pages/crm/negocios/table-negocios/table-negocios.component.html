@@ -11,7 +11,7 @@
         <th>Empresa</th>
         <th>Presupuesto</th>
         <th>Fecha entrega</th>
-        <th>Etapa</th>
+        <th class="">Etapa</th>
         <th><i class="mdi mdi-chevron-down"></i></th>
       </tr>
     </thead>
@@ -33,7 +33,15 @@
         </td>
         <td class="align-middle">$ {{ neg.budget_value | number }}</td>
         <td class="align-middle">{{ neg.date | date }}</td>
-        <td class="align-middle">{{ neg.status }}</td>
+        <td class="align-middle p-0">
+          <select class="form-control form-control-sm" [value]="neg.status" (change)="changeState($event, neg)">
+            <option value="Prospección">Prospección</option>
+            <option value="Presupuesto">Presupuesto</option>
+            <option value="Cotización">Cotización</option>
+            <option value="Negociación">Negociación</option>
+            <option value="Adjudicación">Adjudicación</option>
+          </select>
+        </td>
         <td>
           <div ngbDropdown container="body" class="dropdown-primary">
             <button

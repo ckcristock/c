@@ -31,6 +31,16 @@
                 {{ negocio?.country.name | uppercase }} <br />
               </p>
             </small>
+            <mat-form-field class="pb-0" appearance="outline">
+              <mat-label>Etapa</mat-label>
+              <mat-select [value]="negocio.status" (selectionChange)="changeState($event)">
+                <mat-option value="Prospección">Prospección</mat-option>
+                <mat-option value="Presupuesto">Presupuesto</mat-option>
+                <mat-option value="Cotización">Cotización</mat-option>
+                <mat-option value="Negociación">Negociación</mat-option>
+                <mat-option value="Adjudicación">Adjudicación</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
           <div class="col-md-5">
             <h6>Detalles:</h6>

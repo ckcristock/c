@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ApuConjuntoService } from '../apu-conjunto.service';
 import * as help from './helpers/imports';
@@ -20,6 +20,7 @@ import { UnidadesMedidasService } from 'src/app/pages/ajustes/parametros/apu/uni
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { consts } from 'src/app/core/utils/consts';
+import { ViewportScroller } from '@angular/common';
 interface ApuPart {
   name: string;
   id: number;
@@ -35,6 +36,10 @@ export class CrearApuConjuntoComponent implements OnInit {
   @Input('data') data: any;
   @Input('title') title = 'Crear conjunto';
   @Output() obtenerDato = new EventEmitter;
+  pageYoffset = 0;
+  @HostListener('window:scroll', ['$event']) onScroll(event) {
+    this.pageYoffset = window.pageYOffset;
+  }
   form: FormGroup;
   formGroup: FormGroup;
   filters_apu = {
@@ -88,7 +93,8 @@ export class CrearApuConjuntoComponent implements OnInit {
     private _maquinas: MaquinasHerramientasService,
     private _units: UnidadesMedidasService,
     public _consecutivos: ConsecutivosService,
-    private _user: UserService
+    private _user: UserService,
+    private scroll: ViewportScroller,
   ) {
     this.user_id = _user.user.person.id
   }
@@ -409,8 +415,8 @@ export class CrearApuConjuntoComponent implements OnInit {
     piecesSetsHelper.subtotalPieceSets(this.piecesSetsList, this.form);
   }
 
-  machineToolsControl(): FormGroup {
-    let group = help.machineToolHelper.createMachineToolGroup(this.form, this.fb);
+  machineToolsControl(element): FormGroup {
+    let group = help.machineToolHelper.createMachineToolGroup(this.form, this.fb, element);
     return group;
   }
 
@@ -419,8 +425,17 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   newMachineTool() {
-    let machine = this.machineToolList;
-    machine.push(this.machineToolsControl())
+    if (this.form.valid) {
+      let maquinas_herramientas_aux = Array.from(this.maquinas_herramientas);
+      let machine = this.machineToolList;
+      const results = maquinas_herramientas_aux.filter(({ value: id1 }) => !machine.value.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
+      results.forEach(element => {
+        machine.push(this.machineToolsControl(element))
+      });
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
   }
 
   deleteMachineTool(i) {
@@ -432,8 +447,8 @@ export class CrearApuConjuntoComponent implements OnInit {
 
   /************** Procesos Internos Inicia ****************/
 
-  internalProcessesControl(): FormGroup {
-    let group = help.internalProcessesHelper.createInternalProcessesGroup(this.form, this.fb);
+  internalProcessesControl(element): FormGroup {
+    let group = help.internalProcessesHelper.createInternalProcessesGroup(this.form, this.fb, element);
     return group;
   }
 
@@ -442,8 +457,17 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   newInternalProccesses() {
-    let internalProccess = this.internalProcessList;
-    internalProccess.push(this.internalProcessesControl())
+    if (this.form.valid) {
+      let procesos_internos_aux = Array.from(this.procesos_internos);
+      let internalProccess = this.internalProcessList;
+      const results = procesos_internos_aux.filter(({ value: id1 }) => !internalProccess.value.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
+      results.forEach(element => {
+        internalProccess.push(this.internalProcessesControl(element))
+      });
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
   }
 
   deleteInternalProccess(i) {
@@ -455,8 +479,8 @@ export class CrearApuConjuntoComponent implements OnInit {
 
   /************** Procesos Externos Inicia ****************/
 
-  externalProcessesControl(): FormGroup {
-    let group = help.externalProcessesHelper.createExternalProcessesGroup(this.form, this.fb);
+  externalProcessesControl(element): FormGroup {
+    let group = help.externalProcessesHelper.createExternalProcessesGroup(this.form, this.fb, element);
     return group;
   }
 
@@ -465,8 +489,17 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   newExternalProccesses() {
-    let exteranlProccess = this.externalProcessList;
-    exteranlProccess.push(this.externalProcessesControl())
+    if (this.form.valid) {
+      let procesos_externos_aux = Array.from(this.procesos_externos);
+      let exteranlProccess = this.externalProcessList;
+      const results = procesos_externos_aux.filter(({ value: id1 }) => !exteranlProccess.value.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
+      results.forEach(element => {
+        exteranlProccess.push(this.externalProcessesControl(element))
+      });
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
   }
 
   deleteExternalProccess(i) {

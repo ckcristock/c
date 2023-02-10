@@ -289,7 +289,7 @@
                 <th class="align-middle">Item</th>
                 <th class="align-middle">Descripción</th>
                 <th class="align-middle">Unidad</th>
-                <th class="align-middle">Cantidad</th>
+                <th class="align-middle col-1">Cantidad</th>
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
@@ -306,7 +306,8 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.name_description }}
+                    <!-- <select
                       class="form-control form-control-sm"
                       formControlName="description"
                       (change)="machineSet(item, $event)"
@@ -320,10 +321,11 @@
                       >
                         {{ maquina.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.unit_name }}
+                    <!-- <select
                       class="form-control form-control-sm"
                       formControlName="unit_id"
                     >
@@ -333,7 +335,7 @@
                       <option *ngFor="let item of units" [value]="item.value">
                         {{ item.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
                     <input
@@ -345,26 +347,27 @@
                     />
                   </td>
                   <td class="align-middle">
-                    <input
+                    ${{ item.value.unit_cost | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_maquinas_herra"
                       formControlName="unit_cost"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
-                    <input
+                    ${{ item.value.total | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="total_maquinas_herra"
                       formControlName="total"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <button
-                      style="float: right"
                       class="btn btn-danger btn-sm"
                       placement="bottom"
                       type="button"
@@ -413,7 +416,7 @@
                 <th class="align-middle">Item</th>
                 <th class="align-middle">Descripción</th>
                 <th class="align-middle">Unidad</th>
-                <th class="align-middle">Cantidad</th>
+                <th class="align-middle col-1">Cantidad</th>
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
@@ -428,7 +431,8 @@
                 <tr [formGroupName]="i" class="text-center">
                   <td class="align-middle">{{ i + 1 }}</td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.name_description }}
+                    <!-- <select
                       class="form-control form-control-sm"
                       formControlName="description"
                       (change)="internalSet(item, $event)"
@@ -442,10 +446,11 @@
                       >
                         {{ interno.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.unit_name }}
+                    <!-- <select
                       class="form-control form-control-sm"
                       formControlName="unit_id"
                     >
@@ -455,7 +460,7 @@
                       <option *ngFor="let item of units" [value]="item.value">
                         {{ item.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
                     <input
@@ -467,26 +472,27 @@
                     />
                   </td>
                   <td class="align-middle">
-                    <input
+                    ${{ item.value.unit_cost | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_interno"
                       formControlName="unit_cost"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
-                    <input
+                    ${{ item.value.total | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="total_proceso_interno"
                       formControlName="total"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <button
-                      style="float: right"
                       class="btn btn-danger btn-sm"
                       placement="bottom"
                       type="button"
@@ -536,7 +542,7 @@
                 <th class="align-middle">Item</th>
                 <th class="align-middle">Descripción</th>
                 <th class="align-middle">Unidad</th>
-                <th class="align-middle">Cantidad</th>
+                <th class="align-middle col-1">Cantidad</th>
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
@@ -553,7 +559,8 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.name_description }}
+                   <!--  <select
                       class="form-control form-control-sm"
                       formControlName="description"
                       (change)="externalSet(item, $event)"
@@ -567,10 +574,11 @@
                       >
                         {{ externo.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.unit_name }}
+                    <!-- <select
                       class="form-control form-control-sm"
                       formControlName="unit_id"
                     >
@@ -580,7 +588,7 @@
                       <option *ngFor="let item of units" [value]="item.value">
                         {{ item.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
                     <input
@@ -592,26 +600,27 @@
                     />
                   </td>
                   <td class="align-middle">
-                    <input
+                    ${{ item.value.unit_cost | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_externo"
                       formControlName="unit_cost"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
-                    <input
+                    ${{ item.value.total | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="total_proceso_externo"
                       formControlName="total"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <button
-                      style="float: right"
                       class="btn btn-danger btn-sm"
                       placement="bottom"
                       type="button"

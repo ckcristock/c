@@ -44,6 +44,8 @@ export class NegociosComponent implements OnInit {
   contacts: any[];
   companies: any[];
   countries: any[];
+  negocios_quinta_etapa: Negocio[];
+  negocios_cuarta_etapa: Negocio[];
   negocios_tercera_etapa: Negocio[];
   negocios_segunda_etapa: Negocio[];
   negocios_primera_etapa: Negocio[];
@@ -59,6 +61,8 @@ export class NegociosComponent implements OnInit {
     first: 0,
     second: 0,
     third: 0,
+    quarter: 0,
+    fifth: 0
   };
   paginationBusiness: any = {
     page: 1,
@@ -109,17 +113,15 @@ export class NegociosComponent implements OnInit {
     this.permission = this._permission.validatePermissions(this.permission)
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     if (this.permission.permissions.show) {
       this.createForm();
       this.createFormFiltersBusiness();
       this.createFormFiltersBudgets();
       this.getCompanies();
-      this.getLists();
-      this.calcularTotal();
       this.getCountries();
-      this.route.queryParamMap
-        .subscribe((params) => {
+      await this.route.queryParamMap
+        .subscribe(async (params) => {
           this.orderObj = { ...params.keys, ...params };
           if (Object.keys(this.orderObj).length > 2) {
             this.filtrosActivos = true
@@ -130,35 +132,14 @@ export class NegociosComponent implements OnInit {
             this.formFiltersBusiness.patchValue(formValues['params']);
           }
           if (this.orderObj.params.pag) {
-            this.getNegocios(this.orderObj.params.pag);
+            await this.getNegocios(this.orderObj.params.pag);
           } else {
-            this.getNegocios()
+            await this.getNegocios()
           }
-          /* if (params.keys.length == 0) {
-            this.active = 1
-            this.changeUrl('?active=1')
-          } else if (this.orderObj.params.active == 2) {
-            this.active = 2
-            this.getNegocios()
-          } else if (this.orderObj.params.active == 1) {
-            this.active = 1
-            if (Object.keys(this.orderObj).length > 2) {
-              this.filtrosActivos = true
-              const formValues = {};
-              for (const param in params) {
-                formValues[param] = params[param];
-              }
-              this.formFiltersBusiness.patchValue(formValues['params']);
-            }
-            if (this.orderObj.params.pag) {
-              this.getNegocios(this.orderObj.params.pag);
-            } else {
-              this.getNegocios()
-            }
-          } */
         }
         );
-
+      /* this.getLists();
+      this.calcularTotal(); */
       //this.getQuotations();
     } else {
       this.router.navigate(['/notauthorized'])
@@ -242,7 +223,7 @@ export class NegociosComponent implements OnInit {
     this._modal.open(confirm, 'xl')
   }
 
-  getNegocios(page = 1) {
+  async getNegocios(page = 1) {
     this.paginationBusiness.page = page;
     this.loading = true;
     let params = {
@@ -250,12 +231,13 @@ export class NegociosComponent implements OnInit {
     }
     var paramsurl = this.SetFiltros(this.paginationBusiness.page);
     this.location.replaceState('/crm/negocios', paramsurl.toString());
-    this._negocios.getBusinesses(params).subscribe((resp: any) => {
+    await this._negocios.getBusinesses(params).toPromise().then((resp: any) => {
       this.loading = false;
       this.paginacion = resp.data
       this.business = resp.data.data;
       this.paginationBusiness.collectionSize = resp.data.total;
-      this.getLists()
+      this.getLists();
+      this.calcularTotal();
     });
   }
 
@@ -298,14 +280,20 @@ export class NegociosComponent implements OnInit {
 
   private getLists() {
     setTimeout(() => {
+      this.negocios_primera_etapa = this.business.filter(
+        (t) => t.status === 'Prospección'
+      );
       this.negocios_segunda_etapa = this.business.filter(
-        (t) => t.status === 'second'
+        (t) => t.status === 'Presupuesto'
       );
       this.negocios_tercera_etapa = this.business.filter(
-        (t) => t.status === 'third'
+        (t) => t.status === 'Cotización'
       );
-      this.negocios_primera_etapa = this.business.filter(
-        (t) => t.status === 'first'
+      this.negocios_cuarta_etapa = this.business.filter(
+        (t) => t.status === 'Negociación'
+      );
+      this.negocios_quinta_etapa = this.business.filter(
+        (t) => t.status === 'Adjudicación'
       );
     }, 1000);
 
@@ -316,24 +304,34 @@ export class NegociosComponent implements OnInit {
       first: 0,
       second: 0,
       third: 0,
+      quarter: 0,
+      fifth: 0
     };
-    setTimeout(() => {
-      this.negocios_tercera_etapa?.forEach((neg: Negocio) => {
-        neg.business_budget.forEach(el => {
-          this.total.third += el.budget.total_cop;
-        });
+    this.negocios_primera_etapa?.forEach((neg: Negocio) => {
+      neg.business_budget.forEach(el => {
+        this.total.first += el.budget.total_cop;
       });
-      this.negocios_primera_etapa?.forEach((neg: Negocio) => {
-        neg.business_budget.forEach(el => {
-          this.total.first += el.budget.total_cop;
-        });
+    });
+    this.negocios_segunda_etapa?.forEach((neg: Negocio) => {
+      neg.business_budget.forEach(el => {
+        this.total.second += el.budget.total_cop;
       });
-      this.negocios_segunda_etapa?.forEach((neg: Negocio) => {
-        neg.business_budget.forEach(el => {
-          this.total.second += el.budget.total_cop;
-        });
+    });
+    this.negocios_tercera_etapa?.forEach((neg: Negocio) => {
+      neg.business_budget.forEach(el => {
+        this.total.third += el.budget.total_cop;
       });
-    }, 1000);
+    });
+    this.negocios_cuarta_etapa?.forEach((neg: Negocio) => {
+      neg.business_budget.forEach(el => {
+        this.total.quarter += el.budget.total_cop;
+      });
+    });
+    this.negocios_quinta_etapa?.forEach((neg: Negocio) => {
+      neg.business_budget.forEach(el => {
+        this.total.fifth += el.budget.total_cop;
+      });
+    });
   }
 
   inputFormatBandListValue(value: any) {

@@ -8,7 +8,12 @@
             <span class="badge badge-primary badge-custom">{{ i + 1 }}</span>
           </h4>
           <div class="text-center w-100" [formGroupName]="i">
-            <input appAutoFocusDirective type="text" class="input-custom w-100" formControlName="name"/>
+            <input
+              appAutoFocusDirective
+              type="text"
+              class="input-custom w-100"
+              formControlName="name"
+            />
           </div>
           <div class="text-center span-custom">
             <i
@@ -199,7 +204,8 @@
                       </td>
                       <td class="align-middle">
                         <input
-                          type="number"
+                          currencyMask
+                          [options]="masksMoney.maskNumbers"
                           style="width: 80px"
                           formControlName="cuantity"
                           class="form-control form-control-sm"
@@ -207,7 +213,8 @@
                       </td>
                       <td class="align-middle">
                         <input
-                          type="number"
+                          currencyMask
+                          [options]="masksMoney.maskCOP"
                           style="width: 90px"
                           formControlName="unit_cost"
                           class="form-control form-control-sm"
@@ -216,7 +223,8 @@
                       <td class="align-middle">
                         <div class="values" style="width: 90px">
                           {{
-                            subItem.controls.total_cost.value | currency: "":""
+                            subItem.controls.total_cost.value
+                              | currency : "" : ""
                           }}
                         </div>
                       </td>
@@ -236,7 +244,8 @@
                           <td>
                             <div class="values" style="width: 90px">
                               {{
-                                indirect.controls.value.value | currency: "":""
+                                indirect.controls.value.value
+                                  | currency : "" : ""
                               }}
                             </div>
                           </td>
@@ -246,7 +255,7 @@
                         <div class="values" style="width: 90px">
                           {{
                             subItem.controls.subtotal_indirect_cost.value
-                              | currency: "":""
+                              | currency : "" : ""
                           }}
                         </div>
                       </td>
@@ -266,7 +275,8 @@
                         <td class="align-middle">
                           <div class="values" style="width: 90px">
                             {{
-                              subItem.controls.value_amd.value | currency: "":""
+                              subItem.controls.value_amd.value
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -282,7 +292,7 @@
                           <div class="values" style="width: 90px">
                             {{
                               subItem.controls.value_unforeseen.value
-                                | currency: "":""
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -298,7 +308,7 @@
                           <div class="values" style="width: 90px">
                             {{
                               subItem.controls.value_utility.value
-                                | currency: "":""
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -307,7 +317,7 @@
                         <div class="values" style="width: 90px">
                           {{
                             subItem.controls.total_amd_imp_uti.value
-                              | currency: "":""
+                              | currency : "" : ""
                           }}
                         </div>
                       </td>
@@ -327,14 +337,16 @@
                         <td class="align-middle">
                           <div class="values" style="width: 90px">
                             {{
-                              subItem.controls.subTotal.value | currency: "":""
+                              subItem.controls.subTotal.value
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
                         <td class="align-middle">
                           <div class="values" style="width: 90px">
                             {{
-                              subItem.controls.retention.value | currency: "":""
+                              subItem.controls.retention.value
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -347,14 +359,16 @@
                       <td class="align-middle">
                         <div class="values" style="width: 110px">
                           {{
-                            subItem.controls.value_cop.value | currency: "":""
+                            subItem.controls.value_cop.value
+                              | currency : "" : ""
                           }}
                         </div>
                       </td>
                       <td class="align-middle">
                         <div class="values" style="width: 110px">
                           {{
-                            subItem.controls.value_usd.value | currency: "":""
+                            subItem.controls.value_usd.value
+                              | currency : "" : ""
                           }}
                         </div>
                       </td>
@@ -364,7 +378,7 @@
                           <div class="values" style="width: 90px">
                             {{
                               subItem.controls.value_prorrota_cop.value
-                                | currency: "":""
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -372,7 +386,7 @@
                           <div class="values" style="width: 90px">
                             {{
                               subItem.controls.value_prorrota_usd.value
-                                | currency: "":""
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -380,7 +394,7 @@
                           <div class="values" style="width: 90px">
                             {{
                               subItem.controls.unit_value_prorrateado_cop.value
-                                | currency: "":""
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -388,7 +402,7 @@
                           <div class="values" style="width: 90px">
                             {{
                               subItem.controls.unit_value_prorrateado_usd.value
-                                | currency: "":""
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -419,12 +433,10 @@
                   </ng-container>
                 </ng-container>
                 <tr class="bg-gray">
-                  <td class="align-middle" colspan="6">
-                    SUBTOTAL
-                  </td>
+                  <td class="align-middle" colspan="6">SUBTOTAL</td>
                   <td class="align-middle">
                     <div class="values">
-                      {{ item.controls.total_cost.value | currency: "":"" }}
+                      {{ item.controls.total_cost.value | currency : "" : "" }}
                     </div>
                   </td>
                   <!-- TOTALS COSTOS INDIRECTOS -->
@@ -445,7 +457,7 @@
                         <div class="values">
                           {{
                             subtIndirect.controls.sub_total.value
-                              | currency: "":""
+                              | currency : "" : ""
                           }}
                         </div>
                       </td>
@@ -455,7 +467,7 @@
                     <div class="values">
                       {{
                         item.controls.subtotal_indirect_cost.value
-                          | currency: "":""
+                          | currency : "" : ""
                       }}
                     </div>
                   </td>
@@ -465,14 +477,15 @@
                     <td class="align-middle"></td>
                     <td class="align-middle">
                       <div class="values">
-                        {{ item.controls.value_amd.value | currency: "":"" }}
+                        {{ item.controls.value_amd.value | currency : "" : "" }}
                       </div>
                     </td>
                     <td class="align-middle"></td>
                     <td class="align-middle">
                       <div class="values">
                         {{
-                          item.controls.value_unforeseen.value | currency: "":""
+                          item.controls.value_unforeseen.value
+                            | currency : "" : ""
                         }}
                       </div>
                     </td>
@@ -480,7 +493,7 @@
                     <td class="align-middle">
                       <div class="values">
                         {{
-                          item.controls.value_utility.value | currency: "":""
+                          item.controls.value_utility.value | currency : "" : ""
                         }}
                       </div>
                     </td>
@@ -488,7 +501,8 @@
                   <td class="align-middle">
                     <div class="values">
                       {{
-                        item.controls.total_amd_imp_uti.value | currency: "":""
+                        item.controls.total_amd_imp_uti.value
+                          | currency : "" : ""
                       }}
                     </div>
                   </td>
@@ -496,18 +510,20 @@
                   <!-- TOTAL VALOR VENTA -->
                   <td class="align-middle">
                     <div class="values">
-                      {{ item.controls.another_values.value | currency: "":"" }}
+                      {{
+                        item.controls.another_values.value | currency : "" : ""
+                      }}
                     </div>
                   </td>
                   <ng-container *ngIf="item.controls.shows.value.total_sale">
                     <td class="align-middle">
                       <div class="values">
-                        {{ item.controls.subTotal.value | currency: "":"" }}
+                        {{ item.controls.subTotal.value | currency : "" : "" }}
                       </div>
                     </td>
                     <td class="align-middle">
                       <div class="values">
-                        {{ item.controls.retention.value | currency: "":"" }}
+                        {{ item.controls.retention.value | currency : "" : "" }}
                       </div>
                     </td>
                   </ng-container>
@@ -518,12 +534,12 @@
                   </td>
                   <td class="align-middle">
                     <div class="values">
-                      {{ item.controls.value_cop.value | currency: "":"" }}
+                      {{ item.controls.value_cop.value | currency : "" : "" }}
                     </div>
                   </td>
                   <td class="align-middle">
                     <div class="values">
-                      {{ item.controls.value_usd.value | currency: "":"" }}
+                      {{ item.controls.value_usd.value | currency : "" : "" }}
                     </div>
                   </td>
                   <!-- END TOTAL VALOR VENTA -->
@@ -549,7 +565,7 @@
                       <div class="values">
                         {{
                           item.controls.unit_value_prorrateado_cop.value
-                            | currency: "":""
+                            | currency : "" : ""
                         }}
                       </div>
                     </td>
@@ -557,7 +573,7 @@
                       <div class="values">
                         {{
                           item.controls.unit_value_prorrateado_usd.value
-                            | currency: "":""
+                            | currency : "" : ""
                         }}
                       </div>
                     </td>

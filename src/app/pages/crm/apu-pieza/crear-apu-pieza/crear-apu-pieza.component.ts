@@ -374,8 +374,8 @@ export class CrearApuPiezaComponent implements OnInit {
 
   /************** Maquinas Herramientas Inicia ****************/
 
-  machineToolsControl(): FormGroup {
-    let group = help.machineToolHelper.createMachineToolGroup(this.form, this.fb);
+  machineToolsControl(element): FormGroup {
+    let group = help.machineToolHelper.createMachineToolGroup(this.form, this.fb, element);
     return group;
   }
 
@@ -429,10 +429,14 @@ export class CrearApuPiezaComponent implements OnInit {
 
 
 
-  newMachineTool() {
+  async newMachineTool() {
     if (this.form.valid) {
+      let maquinas_herramientas_aux = Array.from(this.maquinas_herramientas);
       let machine = this.machineToolList;
-      machine.push(this.machineToolsControl())
+      const results = maquinas_herramientas_aux.filter(({ value: id1 }) => !machine.value.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
+      results.forEach(element => {
+        machine.push(this.machineToolsControl(element))
+      });
     } else {
       this.form.markAllAsTouched();
       this.scroll.scrollToPosition([0, 0]);
@@ -448,8 +452,8 @@ export class CrearApuPiezaComponent implements OnInit {
 
   /************** Procesos Internos Inicia ****************/
 
-  internalProccessesControl(): FormGroup {
-    let group = help.internalProccessesHelper.createInternalProccessesGroup(this.form, this.fb);
+  internalProccessesControl(element): FormGroup {
+    let group = help.internalProccessesHelper.createInternalProccessesGroup(this.form, this.fb, element);
     return group;
   }
 
@@ -457,10 +461,14 @@ export class CrearApuPiezaComponent implements OnInit {
     return this.form.get('internal_proccesses') as FormArray;
   }
 
-  newInternalProccesses() {
+  newInternalProccesses() { //!
     if (this.form.valid) {
+      let procesos_internos_aux = Array.from(this.procesos_internos);
       let internalProccess = this.internalProccessList;
-      internalProccess.push(this.internalProccessesControl())
+      const results = procesos_internos_aux.filter(({ value: id1 }) => !internalProccess.value.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
+      results.forEach(element => {
+        internalProccess.push(this.internalProccessesControl(element))
+      });
     } else {
       this.form.markAllAsTouched();
       this.scroll.scrollToPosition([0, 0]);
@@ -476,8 +484,8 @@ export class CrearApuPiezaComponent implements OnInit {
 
   /************** Procesos Externos Inicia ****************/
 
-  externalProccessesControl(): FormGroup {
-    let group = help.externalProccessesHelper.createExternalProccessesGroup(this.form, this.fb);
+  externalProccessesControl(element): FormGroup {
+    let group = help.externalProccessesHelper.createExternalProccessesGroup(this.form, this.fb, element);
     return group;
   }
 
@@ -487,8 +495,12 @@ export class CrearApuPiezaComponent implements OnInit {
 
   newExternalProccesses() {
     if (this.form.valid) {
+      let procesos_externos_aux = Array.from(this.procesos_externos);
       let exteranlProccess = this.externalProccessList;
-      exteranlProccess.push(this.externalProccessesControl())
+      const results = procesos_externos_aux.filter(({ value: id1 }) => !exteranlProccess.value.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
+      results.forEach(element => {
+        exteranlProccess.push(this.externalProccessesControl(element))
+      });
     } else {
       this.form.markAllAsTouched();
       this.scroll.scrollToPosition([0, 0]);

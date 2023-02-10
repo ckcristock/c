@@ -12,7 +12,9 @@ export const machineToolHelper = {
       data.machine.forEach((r) => {
         let group = fb.group({
           description: [r.description],
+          name_description: [r.machine.name],
           unit_id: [r.unit_id],
+          unit_name: [r.unit.name],
           amount: [r.amount],
           unit_cost: [r.unit_cost],
           total: [r.total]
@@ -23,12 +25,14 @@ export const machineToolHelper = {
     }
   },
 
-  createMachineToolGroup(form:FormGroup, fb: FormBuilder) {
+  createMachineToolGroup(form:FormGroup, fb: FormBuilder, element) {
     let machine = fb.group({
-      description: [''],
-      unit_id: [''],
+      description: [element.value],
+      name_description: [element.text],
+      unit_id: [element.unit_id],
+      unit_name: [element.unit.name],
       amount: [0],
-      unit_cost: [0],
+      unit_cost: [element.unit_cost],
       total: [0]
     });
     let list = form.get('machine_tools') as FormArray;

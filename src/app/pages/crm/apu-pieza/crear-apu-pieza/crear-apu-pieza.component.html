@@ -201,7 +201,7 @@
                           let j = index
                         "
                       >
-                        <td class="align-middle" >
+                        <td class="align-middle">
                           <input
                             currencyMask
                             [options]="masksMoney.maskNumbers"
@@ -900,8 +900,8 @@
                 <th class="align-middle">Item</th>
                 <th class="align-middle">Descripción</th>
                 <th class="align-middle">Unidad</th>
-                <th class="align-middle">Cant. Unitaria</th>
-                <th class="align-middle">Cant. Total</th>
+                <th class="align-middle col-1">Cant. Unitaria</th>
+                <th class="align-middle col-1">Cant. Total</th>
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
@@ -918,9 +918,11 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.name_description }}
+                    <!-- <select
                       class="form-control form-control-sm"
                       formControlName="description"
+                      disabled
                       (change)="machineSet(item, $event)"
                     >
                       <option value="" disabled selected hidden>
@@ -932,12 +934,14 @@
                       >
                         {{ maquina.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.unit_name }}
+                    <!-- <select
                       class="form-control form-control-sm"
                       formControlName="unit_id"
+                      disabled
                     >
                       <option value="" disabled selected hidden>
                         Selecciona
@@ -945,7 +949,7 @@
                       <option *ngFor="let item of units" [value]="item.value">
                         {{ item.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
                     <input
@@ -953,39 +957,44 @@
                       [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="q_unitaria_maquinas_herra"
+                      style="width: 6rem"
                       formControlName="q_unit"
                     />
                   </td>
-                  <td class="align-middle">
-                    <input
+                  <td class="align-middle font-weight-bold text-right">
+                    {{ item.value.q_total }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="q_total_maquinas_herra"
+                      readonly
                       formControlName="q_total"
-                    />
+                    /> -->
                   </td>
-                  <td class="align-middle">
-                    <input
+                  <td class="align-middle font-weight-bold text-right">
+                    ${{ item.value.unit_cost | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_maquinas_herra"
+                      readonly
                       formControlName="unit_cost"
-                    />
+                    /> -->
                   </td>
-                  <td class="align-middle">
-                    <input
+                  <td class="align-middle font-weight-bold text-right">
+                    ${{ item.value.total | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="total_maquinas_herra"
                       formControlName="total"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <button
-                      style="float: right"
                       class="btn btn-danger btn-sm"
                       placement="bottom"
                       type="button"
@@ -1034,8 +1043,8 @@
                 <th class="align-middle">Item</th>
                 <th class="align-middle">Descripción</th>
                 <th class="align-middle">Unidad</th>
-                <th class="align-middle">Cant. Unitaria</th>
-                <th class="align-middle">Cant. Total</th>
+                <th class="align-middle col-1">Cant. Unitaria</th>
+                <th class="align-middle col-1">Cant. Total</th>
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
@@ -1053,7 +1062,8 @@
                 <tr [formGroupName]="i" class="text-center">
                   <td class="align-middle">{{ i + 1 }}</td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.name_description }}
+                    <!-- <select
                       class="form-control form-control-sm"
                       formControlName="description"
                       (change)="internalSet(item, $event)"
@@ -1067,10 +1077,11 @@
                       >
                         {{ interno.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.unit_name }}
+                    <!-- <select
                       name=""
                       class="form-control form-control-sm"
                       id="unidad_proceso_interno"
@@ -1082,7 +1093,7 @@
                       <option *ngFor="let item of units" [value]="item.value">
                         {{ item.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
                     <input
@@ -1093,36 +1104,38 @@
                       formControlName="q_unit"
                     />
                   </td>
-                  <td class="align-middle">
-                    <input
+                  <td class="align-middle font-weight-bold text-right">
+                    {{ item.value.q_total }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="q_total_proceso_interno"
                       formControlName="q_total"
-                    />
+                    /> -->
                   </td>
-                  <td class="align-middle">
-                    <input
+                  <td class="align-middle font-weight-bold text-right">
+                    ${{ item.value.unit_cost | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_interno"
                       formControlName="unit_cost"
-                    />
+                    /> -->
                   </td>
-                  <td class="align-middle">
-                    <input
+                  <td class="align-middle font-weight-bold text-right">
+                    ${{ item.value.total | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="total_proceso_interno"
                       formControlName="total"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <button
-                      style="float: right"
                       class="btn btn-danger btn-sm"
                       placement="bottom"
                       type="button"
@@ -1172,8 +1185,8 @@
                 <th class="align-middle">Item</th>
                 <th class="align-middle">Descripción</th>
                 <th class="align-middle">Unidad</th>
-                <th class="align-middle">Cant. Unitaria</th>
-                <th class="align-middle">Cant. Total</th>
+                <th class="align-middle col-1">Cant. Unitaria</th>
+                <th class="align-middle col-1">Cant. Total</th>
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
@@ -1193,7 +1206,8 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.name_description }}
+                    <!--  <select
                       class="form-control form-control-sm"
                       formControlName="description"
                       (change)="externalSet(item, $event)"
@@ -1207,10 +1221,11 @@
                       >
                         {{ externo.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.unit_name }}
+                    <!-- <select
                       name=""
                       class="form-control form-control-sm"
                       id="unidad_proceso_externo"
@@ -1222,7 +1237,7 @@
                       <option *ngFor="let item of units" [value]="item.value">
                         {{ item.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
                     <input
@@ -1234,31 +1249,34 @@
                     />
                   </td>
                   <td class="align-middle">
-                    <input
+                    {{ item.value.q_total }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="q_total_proceso_externo"
                       formControlName="q_total"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
-                    <input
+                    ${{ item.value.unit_cost | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_externo"
                       formControlName="unit_cost"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
-                    <input
+                    ${{ item.value.total | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="total_proceso_externo"
                       formControlName="total"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <button

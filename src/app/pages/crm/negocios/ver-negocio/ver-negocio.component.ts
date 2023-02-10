@@ -57,7 +57,7 @@ export class VerNegocioComponent implements OnInit {
     private _user: UserService,
     private _swal: SwalService,
     private _person: PersonService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.filtros.id = this.ruta.snapshot.params.id;
     this.person_id = this._user.user.person.id
@@ -69,6 +69,18 @@ export class VerNegocioComponent implements OnInit {
     this.createFormFiltersQuotations();
     this.createFormNotes();
     this.getPeople();
+  }
+
+  changeState(event) {
+    this._negocio.changeState({ status: event.value }, this.filtros.id).subscribe(() => {
+      this._swal.show({
+        icon: 'success',
+        title: 'Operación exitosa',
+        text: 'Etapa cambiada con éxito',
+        showCancel: false,
+        timer: 1000
+      })
+    });
   }
 
   getPeople() {

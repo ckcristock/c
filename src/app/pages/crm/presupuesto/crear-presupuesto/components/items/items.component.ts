@@ -3,6 +3,8 @@ import { FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@ang
 import { diffDates } from '@fullcalendar/core/util/misc';
 import { concat, Observable, of, OperatorFunction, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
+import { consts } from 'src/app/core/utils/consts';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { ApuPiezaService } from 'src/app/pages/crm/apu-pieza/apu-pieza.service';
 import { ApuConjuntoService } from '../../../../apu-conjunto/apu-conjunto.service';
 
@@ -18,7 +20,7 @@ export class ItemsComponent implements OnInit {
   @Input('indirectCosts') indirectCosts: EventEmitter<any>
   @Input('calculationBase') calculationBase: any
   @Input('dataEdit') dataEdit: any
-
+  masksMoney = consts
   @ViewChild('apus') apus: any
   tempItem: FormGroup
   types = [
@@ -29,7 +31,8 @@ export class ItemsComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private _apuPieza: ApuPiezaService,
-    private _apuSet: ApuConjuntoService
+    private _apuSet: ApuConjuntoService,
+    private _swal: SwalService
 
   ) { }
   ngOnInit(): void {
@@ -228,12 +231,10 @@ export class ItemsComponent implements OnInit {
     this.apus.openConfirm()
   }
   getApus(e: any[]) {
-
     let subItems = this.tempItem.get('subItems') as FormArray
-
     e.forEach(apu => {
       const exist = subItems.value.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
-      !exist ? subItems.push(this.makeSubItem(apu)) : ''
+      !exist ? subItems.push(this.makeSubItem(apu)) : this._swal.show({icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false})
     });
 
   }
@@ -253,7 +254,7 @@ export class ItemsComponent implements OnInit {
 
     return this.fb.group({
       id: ((edit && apu?.id) ? apu.id : ''),
-      type: (apu ? apu.type : 'P'),
+      type: ((apu?.type == 'P' || apu?.type == 'C') ? 'P' : 'S'),
       description,
       apu_id: [(apu ? apu.apu_id : ''), Validators.required],
       cuantity: edit ? apu.cuantity : 0,

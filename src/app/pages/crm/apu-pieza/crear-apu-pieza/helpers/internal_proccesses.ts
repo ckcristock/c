@@ -1,4 +1,4 @@
-import { functionsApu} from './helper';
+import { functionsApu } from './helper';
 import {
   FormGroup,
   FormBuilder,
@@ -15,8 +15,10 @@ export const internalProccessesHelper = {
       data.internal.forEach((r) => {
         let group = fb.group({
           description: [r.description],
+          name_description: [r.internal.name],
           unit_id: [r.unit_id],
           q_unit: [r.q_unit],
+          unit_name: [r.unit.name],
           q_total: [r.q_total],
           unit_cost: [r.unit_cost],
           total: [r.total]
@@ -27,14 +29,16 @@ export const internalProccessesHelper = {
     }
   },
 
-  createInternalProccessesGroup(form: FormGroup, fb: FormBuilder) {
+  createInternalProccessesGroup(form: FormGroup, fb: FormBuilder, element) {
     let amount = form.get('amount').value;
     let internal = fb.group({
-      description: [''],
-      unit_id: [''],
+      description: [element.value],
+      name_description: [element.text],
+      unit_id: [element.unit_id],
+      unit_name: [element.unit.name],
       q_unit: [0],
       q_total: [amount],
-      unit_cost: [0],
+      unit_cost: [element.unit_cost],
       total: [0]
     });
     let list = form.get('internal_proccesses') as FormArray;
@@ -42,7 +46,7 @@ export const internalProccessesHelper = {
     return internal;
   },
 
-  subscribeInternalProcesses( internal: FormGroup, form:FormGroup, list: FormArray){
+  subscribeInternalProcesses(internal: FormGroup, form: FormGroup, list: FormArray) {
     internal.get('q_unit').valueChanges.subscribe(value => {
       let q_total = internal.get('q_total');
       let unit_cost = internal.get('unit_cost');
@@ -77,17 +81,17 @@ export const internalProccessesHelper = {
     });
   },
 
-  subtotalInternalProcesses(list: FormArray, form: FormGroup){
+  subtotalInternalProcesses(list: FormArray, form: FormGroup) {
     setTimeout(() => {
-      let total = 
-      list.value.reduce(
-        (a, b) => {
-          return  a + b.total
-        },0
-      );
+      let total =
+        list.value.reduce(
+          (a, b) => {
+            return a + b.total
+          }, 0
+        );
       form.patchValue({
         internal_proccesses_subtotal: total
-      }) 
+      })
     }, 100);
   }
 };

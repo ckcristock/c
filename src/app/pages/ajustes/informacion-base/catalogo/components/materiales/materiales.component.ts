@@ -10,6 +10,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { ModalService } from 'src/app/core/services/modal.service';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-materiales',
@@ -19,7 +20,7 @@ import { ModalService } from 'src/app/core/services/modal.service';
 export class MaterialesComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   @Input() cardBorder: any;
-
+  masksMoney = consts
   matPanel = false;
   loading: boolean = false;
   form: FormGroup;
@@ -177,11 +178,12 @@ export class MaterialesComponent implements OnInit {
       id: [this.material.id],
       name: ['', this._validators.required],
       unit: ['', this._validators.required],
-      type: ['', this._validators.required],
-      Id_Categoria: ['', this._validators.required],
-      Id_Subcategoria: ['', this._validators.required],
-      Codigo_Barras: ['', this._validators.required],
-      Tipo_Catalogo: ['', this._validators.required],
+      value_aux: ['', this._validators.required],
+      type: ['', /* this._validators.required */],
+      Id_Categoria: ['', /* this._validators.required */],
+      Id_Subcategoria: ['', /* this._validators.required */],
+      Codigo_Barras: ['', /* this._validators.required */],
+      Tipo_Catalogo: ['', /* this._validators.required */],
       product_id: [''],
       unit_price: [''],
       kg_value: ['', this._validators.required],
@@ -201,6 +203,7 @@ export class MaterialesComponent implements OnInit {
       name: this.material.name,
       unit: this.material.unit,
       type: this.material.type,
+      value_aux: this.material.value_aux,
       Codigo_Barras: this.material.product?.Codigo_Barras,
       Tipo_Catalogo: this.material.product?.Tipo_Catalogo,
       Id_Categoria: this.material.product?.Id_Categoria,

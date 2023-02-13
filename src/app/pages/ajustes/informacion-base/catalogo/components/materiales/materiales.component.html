@@ -49,7 +49,7 @@
             <th>Tipo</th>
             <th>Valor KG</th>
             <th>F. Creación</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -57,9 +57,9 @@
             <td class="align-middle">{{ item.name | uppercase }}</td>
             <td class="align-middle">{{ item.unit | titlecase }}</td>
             <td class="align-middle">{{ item.type }}</td>
-            <td class="align-middle">${{ item.kg_value | number: '1.2' }}</td>
+            <td class="align-middle">${{ item.kg_value | number : "1.2" }}</td>
             <td class="align-middle">
-              {{ item.created_at | date: "longDate" }}
+              {{ item.created_at | date : "longDate" }}
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -135,32 +135,45 @@
             required
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-2" appearance="outline">
           <mat-label>Unidad</mat-label>
           <mat-select name="color" formControlName="unit" required>
             <mat-option value="milimetros">Milimetros</mat-option>
             <mat-option value="unidad">Unidad</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <!-- <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo</mat-label>
           <mat-select name="color" formControlName="type" required>
             <mat-option value="Interno">Interno</mat-option>
             <mat-option value="Comercial">Comercial</mat-option>
           </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        </mat-form-field> -->
+        <mat-form-field class="col-md-2" appearance="outline">
           <mat-label>Valor (kg)</mat-label>
           <input
             matInput
-            type="number"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor"
             formControlName="kg_value"
             autocomplete="off"
             required
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-2" appearance="outline">
+          <mat-label>Campo auxiliar</mat-label>
+          <input
+            matInput
+            currencyMask
+            [options]="masksMoney.maskNumbersDecimal"
+            placeholder="Ingresa el valor"
+            formControlName="value_aux"
+            autocomplete="off"
+            required
+          />
+        </mat-form-field>
+        <!-- <mat-form-field class="col" appearance="outline">
           <mat-label>Código de barras</mat-label>
           <input
             matInput
@@ -170,15 +183,15 @@
             autocomplete="off"
             required
           />
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        </mat-form-field> -->
+        <!-- <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de catálogo</mat-label>
           <mat-select name="color" formControlName="Tipo_Catalogo" required>
             <mat-option value="Material">Material</mat-option>
             <mat-option value="Epp">EPP</mat-option>
           </mat-select>
-        </mat-form-field>
-        <div class="col-md-6 mb-4">
+        </mat-form-field> -->
+        <!-- <div class="col-md-6 mb-4">
           <ng-select
             formControlName="Id_Categoria"
             [items]="Categorias"
@@ -207,7 +220,7 @@
             ngDefaultControl
           >
           </ng-select>
-        </div>
+        </div> -->
         <ng-container formArrayName="dynamic">
           <ng-container
             *ngFor="let item of fieldDinamic.controls; let i = index"
@@ -246,7 +259,8 @@
                 <mat-label>{{ item.controls.thickness.value }}</mat-label>
                 <input
                   matInput
-                  type="number"
+                  currencyMask
+                  [options]="masksMoney.maskNumbersDecimal"
                   formControlName="value"
                   autocomplete="off"
                 />
@@ -254,7 +268,7 @@
             </ng-container>
           </div>
         </ng-container>
-        <ng-container>
+        <!-- <ng-container>
           <div class="rounded-top table-responsive">
             <table class="table table-bordered table-striped table-sm">
               <thead class="bg-light">
@@ -322,16 +336,12 @@
               </button>
             </div>
           </div>
-        </ng-container>
+        </ng-container> -->
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="_modal.close()"
-    >
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
       Cancelar
     </button>
     <button
@@ -404,11 +414,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="_modal.close()"
-    >
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
       Cerrar
     </button>
   </div>

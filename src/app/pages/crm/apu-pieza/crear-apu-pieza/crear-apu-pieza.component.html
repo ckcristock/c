@@ -11,6 +11,7 @@
             type="text"
             placeholder="Ingresa el nombre"
             formControlName="name"
+            autocomplete="off"
             required
           />
         </mat-form-field>
@@ -49,6 +50,7 @@
           <input
             matInput
             type="text"
+            autocomplete="off"
             required
             placeholder="Ingresa la línea"
             formControlName="line"
@@ -59,6 +61,7 @@
           <input
             matInput
             currencyMask
+            autocomplete="off"
             [options]="masksMoney.maskNumbers"
             required
             placeholder="Ingresa la cantidad"
@@ -214,18 +217,19 @@
                     <td class="align-middle">
                       <input
                         currencyMask
-                        [options]="masksMoney.maskNumbers"
+                        [options]="masksMoney.maskNumbersFiveDecimal"
                         class="form-control form-control-sm form-control-edit"
                         formControlName="weight_kg"
                       />
                     </td>
                     <td class="align-middle">
-                      <input
+                      {{ item.controls.q.value | number }}
+                      <!-- <input
                         currencyMask
                         [options]="masksMoney.maskNumbers"
                         class="form-control form-control-sm form-control-edit"
                         formControlName="q"
-                      />
+                      /> -->
                     </td>
                     <td class="align-middle">
                       <!-- <input
@@ -431,7 +435,19 @@
         </button>
       </div>
       <hr />
-      <h6 class="mt-3">Corte agua</h6>
+      <div class="d-flex justify-content-between">
+        <h6 class="mt-3">Corte agua</h6>
+        <mat-form-field appearance="outline" class="pb-0" style="width: 6rem;">
+          <mat-label>Valor minuto</mat-label>
+          <input
+            matInput
+            currencyMask
+            formControlName="minute_value_water"
+            [options]="masksMoney.maskCOP"
+            placeholder="Valor minuto"
+          />
+        </mat-form-field>
+      </div>
       <ng-container *ngIf="cutWaterList.controls.length; else notData">
         <div class="rounded-top table-responsive">
           <table
@@ -526,13 +542,14 @@
                     />
                   </td>
                   <td class="align-middle">
-                    <input
+                    {{ item.controls.total_length.value | number }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm form-control-edit"
                       id="longitud_total_corte_agua"
                       formControlName="total_length"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <input
@@ -553,33 +570,36 @@
                     />
                   </td>
                   <td class="align-middle">
-                    <input
+                    {{ item.controls.total_hole_perimeter.value | number }}
+                    <!-- <input
                       currencyMask
-                      [options]="masksMoney.maskNumbers"
+                      [options]="masksMoney.maskNumbersFiveDecimal"
                       class="form-control form-control-sm form-control-edit"
                       id="perimetro_corte_agua"
                       formControlName="total_hole_perimeter"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
-                    <input
+                    {{ item.controls.time.value | number }}
+                    <!-- <input
                       currencyMask
-                      [options]="masksMoney.maskNumbers"
+                      [options]="masksMoney.maskNumbersFiveDecimal"
                       readonly
                       class="form-control form-control-sm form-control-edit"
                       id="tiempo_corte_agua"
                       formControlName="time"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
-                    <input
+                    ${{ item.controls.minute_value.value | number: '1.2'}}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm form-control-edit"
                       style="min-width: 4rem"
                       id="valor_minuto_corte_agua"
                       formControlName="minute_value"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <input
@@ -659,7 +679,19 @@
         </button>
       </div>
       <hr />
-      <h6 class="mt-3">Corte láser</h6>
+      <div class="d-flex justify-content-between">
+        <h6 class="mt-3">Corte láser</h6>
+        <mat-form-field appearance="outline" class="pb-0" style="width: 6rem;">
+          <mat-label>Valor minuto</mat-label>
+          <input
+            matInput
+            currencyMask
+            formControlName="minute_value_laser"
+            [options]="masksMoney.maskCOP"
+            placeholder="Valor minuto"
+          />
+        </mat-form-field>
+      </div>
       <ng-container *ngIf="cutLaserList.controls.length; else notData">
         <div class="rounded-top table-responsive">
           <table
@@ -785,7 +817,7 @@
                   <td class="text-center">
                     <input
                       currencyMask
-                      [options]="masksMoney.maskNumbers"
+                      [options]="masksMoney.maskNumbersDecimal"
                       class="form-control form-control-sm form-control-edit"
                       id="perimetro_corte_laser"
                       formControlName="total_hole_perimeter"
@@ -794,7 +826,7 @@
                   <td class="text-center">
                     <input
                       currencyMask
-                      [options]="masksMoney.maskNumbers"
+                      [options]="masksMoney.maskNumbersDecimal"
                       readonly
                       class="form-control form-control-sm form-control-edit"
                       id="tiempo_corte_laser"
@@ -802,14 +834,15 @@
                     />
                   </td>
                   <td class="text-center">
-                    <input
+                    ${{ item.controls.minute_value.value | number : "1.2" }}
+                    <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm form-control-edit"
                       style="min-width: 4rem"
                       id="valor_minuto_corte_laser"
                       formControlName="minute_value"
-                    />
+                    /> -->
                   </td>
                   <td class="text-center">
                     <input

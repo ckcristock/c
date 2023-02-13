@@ -16,7 +16,7 @@
           <div class="btn-group rounded w-sm-100">
             <button
               class="btn btn-primary btn-sm"
-              (click)="modalNuevoNegocio.openModal()"
+              [routerLink]="['crear']"
             >
               <i class="fa fa-plus"></i> Agregar
             </button>
@@ -366,10 +366,10 @@
   </div>
 </ng-template>
 
-<app-modal-nuevo-negocio
+<!-- <app-modal-nuevo-negocio
   (updated)="getNegocios()"
   #modalNuevoNegocio
-></app-modal-nuevo-negocio>
+></app-modal-nuevo-negocio> -->
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

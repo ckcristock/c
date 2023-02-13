@@ -100,6 +100,7 @@ export const MY_FORMATS = {
   }
 };
 import { ProfilePermissionsComponent } from './funcionarios/detalle-funcionario/permissions/profile-permissions/profile-permissions.component';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 @NgModule({
   declarations: [
@@ -194,6 +195,7 @@ import { ProfilePermissionsComponent } from './funcionarios/detalle-funcionario/
     MatNativeDateModule,
     SatDatepickerModule,
     SatNativeDateModule,
+    CurrencyMaskModule,
     SweetAlert2Module.forRoot(),
   ],
   exports: [

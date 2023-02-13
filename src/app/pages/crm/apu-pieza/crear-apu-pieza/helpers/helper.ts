@@ -23,6 +23,8 @@ export const functionsApu = {
       third_party_id: data.third_party_id,
       line: data.line,
       amount: data.amount,
+      minute_value_laser: data.minute_value_laser,
+      minute_value_water: data.minute_value_water,
       observation: data.observation,
       direct_costs_indirect_costs_total: data.direct_costs_indirect_costs_total,
       direct_costs_indirect_costs_unit: data.direct_costs_indirect_costs_unit,
@@ -89,6 +91,8 @@ export const functionsApu = {
       person_id: [user_id],
       third_party_id: [null, Validators.required],
       line: ['', Validators.required],
+      minute_value_laser: [8500],
+      minute_value_water: [7500],
       amount: [null, Validators.required],
       files: [''],
       observation: ['', Validators.required],
@@ -191,6 +195,24 @@ export const functionsApu = {
       });
     });
 
+    group.get('minute_value_laser').valueChanges.subscribe(value => {
+      let cut_laser = group.get('cut_laser') as FormArray;
+      cut_laser.controls.forEach(element => {
+        element.patchValue({
+          minute_value: value
+        })
+      });
+    })
+
+    group.get('minute_value_water').valueChanges.subscribe(value => {
+      let cut_water = group.get('cut_water') as FormArray;
+      cut_water.controls.forEach(element => {
+        element.patchValue({
+          minute_value: value
+        })
+      });
+    })
+
     group.get('total_direct_cost').valueChanges.subscribe(value => {
       let indirect_cost_total = group.get('indirect_cost_total');
       let administrative_percentage = group.get('administrative_percentage');
@@ -202,6 +224,12 @@ export const functionsApu = {
       });
     });
     group.get('amount').valueChanges.subscribe(value => {
+      let materia_prima = group.get('materia_prima') as FormArray;
+      materia_prima.controls.forEach(element => {
+        element.patchValue({
+          q: value
+        })
+      });
       let direct_costs_indirect_costs_total = group.get('direct_costs_indirect_costs_total');
       let administrative_unforeseen_subtotal = group.get('administrative_unforeseen_subtotal');
       let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal');

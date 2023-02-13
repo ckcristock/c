@@ -310,7 +310,7 @@
               <div class="btn-group rounded w-sm-100">
                 <button
                   class="btn btn-primary btn-sm"
-                  [routerLink]="['/crm/cotizacion/crear']"
+                  (click)="openNewTab('/crm/cotizacion/crear')"
                 >
                   <i class="fa fa-plus"></i> Agregar
                 </button>
@@ -374,7 +374,7 @@
                         <a
                           class="dropdown-item waves-light text-success caja-botones"
                           href="javascript: void(0);"
-                          [routerLink]="['/crm/cotizacion/ver', item.id]"
+                          (click)="openNewTab('/crm/cotizacion/ver', item.id)"
                         >
                           <i class="fas fa-eye"></i> Ver</a
                         >
@@ -423,7 +423,7 @@
               <div class="btn-group rounded w-sm-100">
                 <button
                   class="btn btn-primary btn-sm"
-                  [routerLink]="['/crm/presupuesto/crear']"
+                  (click)="openNewTab('/crm/presupuesto/crear')"
                 >
                   <i class="fa fa-plus"></i> Agregar
                 </button>
@@ -484,7 +484,7 @@
                       <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                         <a
                           class="dropdown-item waves-light text-success caja-botones"
-                          [routerLink]="['/crm/presupuesto/ver', item.id]"
+                          (click)="openNewTab('/crm/presupuesto/ver', item.id)"
                         >
                           <i class="far fa-eye"></i> Ver
                         </a>
@@ -533,7 +533,7 @@
               <div class="btn-group rounded w-sm-100">
                 <button
                   class="btn btn-primary btn-sm"
-                  (click)="modalNuevoNegocio.openModal()"
+                  (click)="openNewTab('/crm/negocios/crear')"
                 >
                   <i class="fa fa-plus"></i> Agregar
                 </button>
@@ -585,7 +585,7 @@
                         <a
                           class="dropdown-item waves-light text-success caja-botones"
                           href="javascript: void(0);"
-                          [routerLink]="['/crm/negocios/', item.id]"
+                          (click)="openNewTab('/crm/negocios/', item.id)"
                         >
                           <i class="fas fa-eye"></i> Ver</a
                         >
@@ -653,7 +653,7 @@
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
-<app-modal-nuevo-negocio
+<!-- <app-modal-nuevo-negocio
   (updated)="getThird()"
   #modalNuevoNegocio
-></app-modal-nuevo-negocio>
+></app-modal-nuevo-negocio> -->

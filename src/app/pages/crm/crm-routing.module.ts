@@ -22,6 +22,7 @@ import { ViewThirdComponent } from './terceros/view-third/view-third.component';
 import { CopiarApuPiezaComponent } from './apu-pieza/copiar-apu-pieza/copiar-apu-pieza.component';
 import { CopiarApuConjuntoComponent } from './apu-conjunto/copiar-apu-conjunto/copiar-apu-conjunto.component';
 import { CopiarApuServicioComponent } from './apu-servicio/copiar-apu-servicio/copiar-apu-servicio.component';
+import { ModalNuevoNegocioComponent } from './negocios/modal-nuevo-negocio/modal-nuevo-negocio.component';
 
 const routes: Routes = [
   { path: 'terceros', component: TercerosComponent },
@@ -33,6 +34,7 @@ const routes: Routes = [
   { path: 'apus', component: ApusComponent },
   // { path: 'apu/apu-pieza', component: ApuPiezaComponent },
   { path: 'negocios', component: NegociosComponent },
+  { path: 'negocios/crear', component: ModalNuevoNegocioComponent },
   { path: 'negocios/:id', component: VerNegocioComponent },
 
   { path: 'apu/apu-pieza', component: ApuPiezaComponent },

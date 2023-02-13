@@ -1,19 +1,8 @@
-<ng-template #newBusiness let-modal>
-  <div class="modal-header">
-    <h4 class="text-primary modal-title">Nuevo negocio</h4>
-    <button
-      type="button"
-      class="close"
-      data-dismiss="modal"
-      aria-label="Close"
-      (click)="_modal.close()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
+<div class="card" *ngIf="form">
+  <div class="card-body">
     <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
-    <form [formGroup]="form">
+    <hr class="line" />
+    <ng-container [formGroup]="form">
       <div class="row">
         <mat-form-field class="col" appearance="outline">
           <mat-label>Nombre de la solicitud</mat-label>
@@ -114,6 +103,7 @@
           ></textarea>
         </mat-form-field>
       </div>
+      <hr />
       <div class="mt-3">
         <div class="row">
           <div class="col-md mb-3">
@@ -124,71 +114,82 @@
               <button
                 class="btn btn-primary btn-sm"
                 type="button"
-                (click)="_modal.close()"
                 [routerLink]="['/crm/presupuesto/crear']"
               >
                 <i class="fa fa-plus"></i> Agregar
               </button>
+              <button
+                class="btn btn-info btn-sm"
+                (click)="openClose(matPanelPresupuesto)"
+              >
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
             </div>
           </div>
         </div>
-        <div class="row">
-          <ng-container [formGroup]="formFiltersBudgets">
-            <div class="col-md-3 mat-form-field-wrapper">
-              <ng-select
-                [items]="people"
-                formControlName="person_id"
-                bindLabel="text"
-                appearance="outline"
-                [appendTo]="'body'"
-                [clearable]="false"
-                placeholder="Quién elabora"
-                bindValue="value"
-              >
-              </ng-select>
-            </div>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Código</mat-label>
-              <input
-                type="text"
-                matInput
-                placeholder="Busca por código"
-                formControlName="code"
-                autocomplete="off"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Cliente</mat-label>
-              <input
-                type="text"
-                matInput
-                placeholder="Busca por cliente"
-                formControlName="customer"
-                autocomplete="off"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Destino</mat-label>
-              <input
-                type="text"
-                matInput
-                placeholder="Busca por destino"
-                formControlName="municipality_id"
-                autocomplete="off"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Línea</mat-label>
-              <input
-                type="text"
-                matInput
-                placeholder="Busca por línea"
-                formControlName="line"
-                autocomplete="off"
-              />
-            </mat-form-field>
-          </ng-container>
-        </div>
+        <mat-expansion-panel
+          #matPanelPresupuesto="matExpansionPanel"
+          class="mat-elevation-z0"
+        >
+          <div class="row">
+            <ng-container [formGroup]="formFiltersBudgets">
+              <div class="col-md-3 mat-form-field-wrapper">
+                <ng-select
+                  [items]="people"
+                  formControlName="person_id"
+                  bindLabel="text"
+                  appearance="outline"
+                  [appendTo]="'body'"
+                  [clearable]="false"
+                  placeholder="Quién elabora"
+                  bindValue="value"
+                >
+                </ng-select>
+              </div>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Código</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Busca por código"
+                  formControlName="code"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <!-- <mat-form-field class="col" appearance="outline">
+                <mat-label>Cliente</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Busca por cliente"
+                  formControlName="customer"
+                  autocomplete="off"
+                />
+              </mat-form-field> -->
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Destino</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Busca por destino"
+                  formControlName="municipality_id"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Línea</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="Busca por línea"
+                  formControlName="line"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </ng-container>
+          </div>
+        </mat-expansion-panel>
+
         <ng-container
           *ngIf="!loadingBudgets && budgets.length > 0; else notDataBudgets"
         >
@@ -223,7 +224,6 @@
                       <mat-checkbox
                         color="primary"
                         (change)="guardarPresupuesto($event, item)"
-                        [id]="item.id"
                         >{{ item.code }}</mat-checkbox
                       >
                     </td>
@@ -294,6 +294,7 @@
           </ng-container>
         </ng-container>
       </div>
+      <hr />
       <div class="mt-3">
         <div class="row">
           <div class="col-md mb-3">
@@ -303,68 +304,79 @@
             <div class="btn-group rounded w-sm-100">
               <button
                 class="btn btn-primary btn-sm"
-                (click)="_modal.close()"
                 [routerLink]="['/crm/cotizacion/crear']"
               >
                 <i class="fa fa-plus"></i> Agregar
               </button>
+              <button
+                class="btn btn-info btn-sm"
+                (click)="openClose(matPanelCotizaciones)"
+              >
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
             </div>
           </div>
         </div>
-        <div class="row">
-          <ng-container [formGroup]="form_filters_quotations">
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Ciudad</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="city"
-                autocomplete="off"
-                placeholder="Busca por ciudad"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Código</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="code"
-                autocomplete="off"
-                placeholder="Busca por código"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Línea</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="line"
-                autocomplete="off"
-                placeholder="Busca por línea"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Cliente</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="client"
-                autocomplete="off"
-                placeholder="Busca por cliente"
-              />
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Descripción</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="description"
-                autocomplete="off"
-                placeholder="Busca por descripción"
-              />
-            </mat-form-field>
-          </ng-container>
-        </div>
+        <mat-expansion-panel
+          #matPanelCotizaciones="matExpansionPanel"
+          class="mat-elevation-z0"
+        >
+          <div class="row">
+            <ng-container [formGroup]="form_filters_quotations">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Ciudad</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="city"
+                  autocomplete="off"
+                  placeholder="Busca por ciudad"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Código</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="code"
+                  autocomplete="off"
+                  placeholder="Busca por código"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Línea</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="line"
+                  autocomplete="off"
+                  placeholder="Busca por línea"
+                />
+              </mat-form-field>
+              <!-- <mat-form-field class="col" appearance="outline">
+                <mat-label>Cliente</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="client"
+                  autocomplete="off"
+                  placeholder="Busca por cliente"
+                />
+              </mat-form-field> -->
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Descripción</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="description"
+                  autocomplete="off"
+                  placeholder="Busca por descripción"
+                />
+              </mat-form-field>
+            </ng-container>
+          </div>
+        </mat-expansion-panel>
+
         <ng-container
           *ngIf="
             !loadingQuotations && quotations.length > 0;
@@ -381,9 +393,8 @@
                   <tr class="text-center text-uppercase">
                     <th>Código</th>
                     <th>Fecha</th>
-                    <th>Cliente</th>
+                    <th>Descripción</th>
                     <th>Destino</th>
-                    <th>Linea</th>
                     <th>Total COP</th>
                     <th>Total USD</th>
                     <th><i class="mdi mdi-chevron-down"></i></th>
@@ -395,16 +406,14 @@
                       <mat-checkbox
                         color="primary"
                         (change)="guardarCotizacion($event, item)"
-                        [id]="item.id"
                         >{{ item.code }}</mat-checkbox
                       >
                     </td>
                     <td class="align-middle">
                       {{ item.created_at | date : "longDate" }}
                     </td>
-                    <td class="align-middle">{{ item.client.full_name }}</td>
+                    <td>{{ item.description }}</td>
                     <td>{{ item.municipality.name }}</td>
-                    <td class="align-middle">{{ item.line }}</td>
                     <td class="align-middle">
                       ${{ item.total_cop | currency : "" : "" }}
                     </td>
@@ -469,6 +478,7 @@
           </ng-container>
         </ng-container>
       </div>
+      <hr />
       <div class="mt-3">
         <div class="row">
           <div class="col-md mb-3">
@@ -478,15 +488,56 @@
             <div class="btn-group rounded w-sm-100">
               <button
                 class="btn btn-primary btn-sm"
-                (click)="_modal.close()"
                 [routerLink]="['/crm/apus']"
               >
                 <i class="fa fa-plus"></i> Ver y agregar
               </button>
+              <button
+                class="btn btn-info btn-sm"
+                (click)="openClose(matPanelAPU)"
+              >
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
             </div>
           </div>
         </div>
-        <!-- <div class="row">
+        <mat-expansion-panel
+          #matPanelAPU="matExpansionPanel"
+          class="mat-elevation-z0"
+        >
+          FILTROS
+        </mat-expansion-panel>
+      </div>
+    </ng-container>
+    <button
+      type="submit"
+      (click)="saveBusiness()"
+      class="btn btn-primary btn-block"
+    >
+      Guardar
+    </button>
+  </div>
+</div>
+
+<ng-template #notDataAd>
+  <div class="alert alert-warning" role="alert">
+    {{
+      form.controls.third_party_id.valid &&
+      (quotations.length || budgets.length)
+        ? "No hemos encontrado información para este cliente"
+        : "Selecciona un cliente para listar la información"
+    }}
+  </div>
+</ng-template>
+
+<ng-template #notDataBudgets>
+  <app-not-data [loading]="loadingBudgets"></app-not-data>
+</ng-template>
+<ng-template #notDataQuotations>
+  <app-not-data [loading]="loadingQuotations"></app-not-data>
+</ng-template>
+
+<!-- <div class="row">
           <ng-container [formGroup]="form_filters_quotations">
             <mat-form-field class="col" appearance="outline">
               <mat-label>Ciudad</mat-label>
@@ -643,38 +694,3 @@
             </ngb-pagination>
           </ng-container>
         </ng-container> -->
-      </div>
-
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="modal.dismiss('Cross click')"
-    >
-      Cancelar
-    </button>
-    <button type="submit" (click)="saveBusiness()" class="btn btn-primary">
-      Guardar
-    </button>
-  </div>
-</ng-template>
-
-<ng-template #notDataAd>
-  <div class="alert alert-warning" role="alert">
-    {{
-      form.controls.third_party_id.valid &&
-      (quotations.length || budgets.length)
-        ? "No hemos encontrado información para este cliente"
-        : "Selecciona un cliente para listar la información"
-    }}
-  </div>
-</ng-template>
-
-<ng-template #notDataBudgets>
-  <app-not-data [loading]="loadingBudgets"></app-not-data>
-</ng-template>
-<ng-template #notDataQuotations>
-  <app-not-data [loading]="loadingQuotations"></app-not-data>
-</ng-template>

@@ -41,6 +41,7 @@ import { BaseCalculoComponent } from './calculos/provisiones/base-calculo/base-c
 import { DiasVacacionesComponent } from './calculos/provisiones/dias-vacaciones/dias-vacaciones.component';
 import { ResumenProvisionesComponent } from './calculos/provisiones/resumen-provisiones/resumen-provisiones.component';
 import { NominaModule } from '../nomina.module';
+import { MatFormFieldModule, MatSelectModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,10 @@ import { NominaModule } from '../nomina.module';
     NgSelectModule,
     NgbTypeaheadModule,
     NgbTooltipModule,
-    NgbNavModule
+    NgbNavModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    NgbPaginationModule
   ],
   exports: [],
 })

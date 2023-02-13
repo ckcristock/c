@@ -17,7 +17,6 @@ export class PayRollService {
   }
 
   savePayroll( body ){
-
     return this.http.post(`${environment.base_url}/payroll/pay`, body );
   }
 
@@ -33,6 +32,11 @@ export class PayRollService {
   downloadExcNov(params:any){
     const headers = new HttpHeaders().set('Content-Type', 'application/json')
     return this.http.get(`${environment.base_url}/download-disabilities/${params.date_start}/${params.date_end}`,{headers, responseType: 'blob' as 'json'});
+  }
+
+  dowloadPdfColillas(params: any) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.post(`${environment.base_url}/nomina/get-colillas`, params, {headers, responseType: 'blob' as 'json'});
   }
 
 }

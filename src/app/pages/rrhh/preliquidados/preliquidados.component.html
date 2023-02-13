@@ -34,7 +34,7 @@
               <mat-label>Items por página</mat-label>
               <mat-select
                 [(ngModel)]="pageSize"
-                (ngModelChange)="refreshCountries()"
+                (ngModelChange)="refreshPreLiquidated()"
                 [ngModelOptions]="{ standalone: true }"
               >
                 <mat-option [value]="2">2 items por página</mat-option>
@@ -129,7 +129,7 @@
       [collectionSize]="collectionSize"
       [(page)]="page"
       [pageSize]="pageSize"
-      (pageChange)="refreshCountries()"
+      (pageChange)="refreshPreLiquidated()"
       maxSize="5"
       rotate="true"
       ellipses="false"

@@ -87,7 +87,7 @@ export class PreliquidadosComponent implements OnInit {
         this.listPreliquidados = res.data;
         this.collectionSize = res.data.length;
         this.loading = false;
-        this.refreshCountries()
+        this.refreshPreLiquidated()
         /* for (let index = 0; index < this.preliquidados.length; index++) {
           let fecha = this.preliquidados[index].log_created_at;
           let InfoH = fecha;
@@ -96,8 +96,7 @@ export class PreliquidadosComponent implements OnInit {
       })
   }
 
-  refreshCountries() {
-    console.log(this.preliquidados);
+  refreshPreLiquidated() {
 		 this.listPreliquidados = this.preliquidados.map((preliq, i) => ({ id: i + 1, ...preliq })).slice(
 			(this.page - 1) * this.pageSize,
 			(this.page - 1) * this.pageSize + this.pageSize,

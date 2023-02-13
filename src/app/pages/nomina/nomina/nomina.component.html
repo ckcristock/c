@@ -2,8 +2,9 @@
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
-        <h4 class="text-primary">{{nomina?.nomina_paga ? 'Vista del pago' : 'Pago de nómina'}}
-          <small *ngIf="nomina?.nomina_paga">({{nomina?.code}})</small>
+        <h4 class="text-primary">
+          {{ nomina?.nomina_paga ? "Vista del pago" : "Pago de nómina" }}
+          <small *ngIf="nomina?.nomina_paga">({{ nomina?.code }})</small>
         </h4>
       </div>
       <div class="col-md-6 px-0 text-md-right text-center">
@@ -97,44 +98,68 @@
       <h5 class="text-center">
         <i class="fas fa-money-bill"></i>
         <strong> Costo total empresa:</strong>
-        <span> $ {{ nomina.costo_total_empresa | currency: "":"" }} </span>
+        <span> $ {{ nomina.costo_total_empresa | currency : "" : "" }} </span>
       </h5>
       <hr />
       <!-- Eventos Nomina paga  -->
       <div class="row" *ngIf="nomina?.nomina_paga">
+        <!-- Resumen de nómina -->
         <div class="col">
           <button
-           class="btn btn-primary btn-sm btn-block"
-           (click)="getColilla(nomina)">
-            <span><i
-              class="fas"
-              [class]="!donwloadingExNom ? 'fas fa-download' : 'fa-spinner fa-spin'"
-            ></i>
-            {{ !donwloadingExNom ? "Resumen de nómina" : "Descargando" }}</span>
-          </button>
-        </div>
-
-        <div class="col">
-          <button
-           class="btn btn-primary btn-sm btn-block"
-           (click)="mostrarNovedades()">
-           <span><i
-            class="fas fa-bell"
-            [class]="!donwloadingExcNov ? 'fas fa-download' : 'fa-spinner fa-spin' "
-            ></i>{{ !donwloadingExNom ? "Resumen de novedades" : "Descargando" }}</span>
-          </button>
-        </div>
-
-        <div class="col">
-          <button
-           class="btn btn-primary btn-sm btn-block"
-           (click)="getColillasPago(nomina)"
-           >
-           <span><i
+            class="btn btn-primary btn-sm btn-block"
+            (click)="getColilla(nomina)"
+          >
+            <span
+              ><i
                 class="fas"
-                [class]="!donwloadingExcCol ? 'fas fa-download' : 'fa-spinner fa-spin'"
+                [class]="
+                  !donwloadingExNom ? 'fas fa-download' : 'fa-spinner fa-spin'
+                "
               ></i>
-              {{ !donwloadingExcCol ? "Colillas de pago" : "Descargando" }}</span>
+              {{
+                !donwloadingExNom ? "Resumen de nómina" : "Descargando"
+              }}</span
+            >
+          </button>
+        </div>
+
+        <!-- Resumen de novedades -->
+        <div class="col">
+          <button
+            class="btn btn-primary btn-sm btn-block"
+            (click)="mostrarNovedades()"
+          >
+            <span
+              ><i
+                class="fas fa-bell"
+                [class]="
+                  !donwloadingExcNov ? 'fas fa-download' : 'fa-spinner fa-spin'
+                "
+              ></i
+              >{{
+                !donwloadingExNom ? "Resumen de novedades" : "Descargando"
+              }}</span
+            >
+          </button>
+        </div>
+
+        <!-- Colillas de pago -->
+        <div class="col">
+          <button
+            class="btn btn-primary btn-sm btn-block"
+            (click)="getColillasPago(nomina)"
+          >
+            <span
+              ><i
+                class="fas"
+                [class]="
+                  !donwloadingExcCol ? 'fas fa-download' : 'fa-spinner fa-spin'
+                "
+              ></i>
+              {{
+                !donwloadingExcCol ? "Colillas de pago" : "Descargando"
+              }}</span
+            >
           </button>
         </div>
 
@@ -176,10 +201,10 @@
       </div>
       <hr *ngIf="nomina?.nomina_paga" />
       <div class="row card-title d-flex justify-content-between">
-        <div class="col-md-6 px-0">
+        <div class="col px-0">
           <h5 class="mt-2">Lista de funcionarios</h5>
         </div>
-        <div class="col-md-6 px-0 text-right">
+        <div class="col px-0 text-right">
           <ng-select
             [items]="people"
             (change)="filter($event?.value)"
@@ -193,6 +218,20 @@
           >
           </ng-select>
         </div>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Items por página</mat-label>
+          <mat-select
+            [(ngModel)]="pageSize"
+            (ngModelChange)="refreshFuncionario()"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <mat-option [value]="10">10 items por página</mat-option>
+            <mat-option [value]="20">20 items por página</mat-option>
+            <mat-option [value]="50">50 items por página</mat-option>
+            <mat-option [value]="100">100 items por página</mat-option>
+            <mat-option [value]="funcionarios.length">{{funcionarios.length}} items por página</mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
       <hr />
       <!-- <div class="form-group row">
@@ -208,7 +247,7 @@
       <div class="rounded-top table-responsive">
         <table
           class="table table-bordered table-striped table-sm"
-          *ngIf="!loadingPeople && funcionarios.length > 0; else notData"
+          *ngIf="!loadingPeople && listFuncionarios.length > 0; else notData"
         >
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
@@ -225,31 +264,34 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let funcionario of funcionarios" class="text-center">
+            <tr *ngFor="let funcionario of listFuncionarios" class="text-center">
               <td class="align-middle p-0">
                 <img
                   class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
-                  [src]="funcionario.image | image: 'users'"
+                  [src]="funcionario.image | image : 'users'"
                   onerror="this.src='../../../../../../../assets/images/noprofile.png'"
                 />
               </td>
-              <td *ngIf="nomina?.nomina_paga">{{funcionario.code}}</td>
+              <td *ngIf="nomina?.nomina_paga">{{ funcionario.code }}</td>
               <td class="align-middle">
                 {{ funcionario.name }}
                 {{ funcionario.surname }}
               </td>
               <td class="align-middle">
-                $ {{ funcionario.valor_ingresos_salariales | currency: "":"" }}
+                $
+                {{ funcionario.valor_ingresos_salariales | currency : "" : "" }}
               </td>
               <td class="align-middle">
                 $
-                {{ funcionario.valor_ingresos_no_salariales | currency: "":"" }}
+                {{
+                  funcionario.valor_ingresos_no_salariales | currency : "" : ""
+                }}
               </td>
               <td class="align-middle">
-                $ {{ funcionario.valor_deducciones | currency: "":"" }}
+                $ {{ funcionario.valor_deducciones | currency : "" : "" }}
               </td>
               <td class="align-middle">
-                $ {{ funcionario.salario_neto | currency: "":"" }} /
+                $ {{ funcionario.salario_neto | currency : "" : "" }} /
                 {{ nomina.frecuencia_pago }}
               </td>
               <td class="align-middle">
@@ -311,6 +353,18 @@
             </tr>
           </tbody>
         </table>
+        <ngb-pagination
+          class="d-flex justify-content-center pagination-rounded pagination-sm"
+          [collectionSize]="collectionSize"
+          [(page)]="page"
+          [pageSize]="pageSize"
+          (pageChange)="refreshFuncionario()"
+          maxSize="5"
+          rotate="true"
+          ellipses="false"
+          boundaryLinks="true"
+        >
+        </ngb-pagination>
       </div>
       <!-- Modal Extras y recargos-->
       <button

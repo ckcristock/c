@@ -19,6 +19,7 @@ export class NominaComponent implements OnInit {
   donwloadingExNom: boolean = false;
   donwloadingExcNov: boolean = false;
   donwloadingExcCol: boolean = false;
+  donwloadingPdfNom: boolean = false;
   pago: any = {};
   renderizar = false;
   funcionarios = [];
@@ -27,6 +28,12 @@ export class NominaComponent implements OnInit {
 
   inicioParemeter: ""
   finParemeter: ""
+
+  listFuncionarios: any = [];
+  page = 1;
+  pageSize = 10;
+  collectionSize = 0;
+
   constructor(
     private _payroll: PayRollService,
     private _people: PersonService,
@@ -45,9 +52,11 @@ export class NominaComponent implements OnInit {
     }
     this.getPagoNomina();
     this.getPeople();
+
   }
+
   estadoFiltros = false;
-  mostrarFiltros(){
+  mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
 
@@ -78,6 +87,15 @@ export class NominaComponent implements OnInit {
     this.funcionarios = data;
     this.funcionariosBase = data;
     this.renderizar = true;
+    this.collectionSize = this.funcionarios.length;
+    this.refreshFuncionario();
+  }
+
+  refreshFuncionario() {
+    this.listFuncionarios = this.funcionarios.map((func, i) => ({ id: i + 1, ...func })).slice(
+      (this.page - 1) * this.pageSize,
+      (this.page - 1) * this.pageSize + this.pageSize,
+    );
   }
 
   filter(event) {
@@ -129,8 +147,8 @@ export class NominaComponent implements OnInit {
 
   mostrarNovedades() {
     let params = {
-      date_start: moment("01-01-2020", ['DD-MM-YYYY']).format('YYYY-MM-DD'),
-      //date_start: moment(this.inicioPeriodo, ['DD/MM/YYYY']).format('YYYY-MM-DD'),
+      //date_start: moment("01-01-2020", ['DD-MM-YYYY']).format('YYYY-MM-DD'), //para pruebas y mostrar info
+      date_start: moment(this.inicioPeriodo, ['DD/MM/YYYY']).format('YYYY-MM-DD'),
       date_end: moment(this.finPeriodo, ['DD/MM/YYYY']).format('YYYY-MM-DD')
     }
 
@@ -143,7 +161,7 @@ export class NominaComponent implements OnInit {
       link.click();
       this.donwloadingExcNov = false;
     }),
-      (error:any) => {
+      (error: any) => {
         console.log(error);
         console.log('Error downloading the file');
         this.donwloadingExcNov = false;
@@ -152,7 +170,7 @@ export class NominaComponent implements OnInit {
         console.info('File downloaded successfully');
         this.donwloadingExcNov = false;
       };
-   }
+  }
 
   mostrarIngresosP(fun) { }
 
@@ -161,19 +179,38 @@ export class NominaComponent implements OnInit {
   mostrarDeducciones(fun) { }
 
 
-
-
-  getColillasPago(datos: any){
-    let mono = 'sapo'
+  //Colillas de pago
+  getColillasPago(datos: any) {
+    let pet = 'gato'
     console.log(`[${datos.frecuencia_pago}]`);
-    console.log([mono]);
+    console.log([pet]);
+
+    this.donwloadingPdfNom = true;
+    this._payroll.dowloadPdfColillas(datos)
+      .subscribe((res:BlobPart)=>{
+        let blob = new Blob([res], {type: ' application/pdf'});
+        let link = document.createElement("a");
+        const filename = 'colillas-nomina'; //se podría poner período
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.pdf`;
+        link.click();
+        this.donwloadingPdfNom = false;
+      }),
+      (err: any) =>{
+        console.log('Error downloading the file');
+      },
+      () => {
+        console.info('File downloaded successfully');
+        this.donwloadingPdfNom = false
+      }
+
   }
 
-  getColilla(fun:any) {
+  //Resumen de nómina
+  getColilla(fun: any) {
     this.donwloadingExNom = true;
-    //console.log(fun);
     this._payroll.downloadExNomina(fun)
-    .subscribe((res: BlobPart) => {
+      .subscribe((res: BlobPart) => {
         let blob = new Blob([res], { type: 'application/excel' });
         let link = document.createElement("a");
         const filename = 'reporte-nomina';
@@ -181,12 +218,13 @@ export class NominaComponent implements OnInit {
         link.download = `${filename}.xlsx`;
         link.click();
       }), (err: any) => {
-          console.log(err);
-          console.log('Error downloading the file');
+        console.log(err);
+        console.log('Error downloading the file');
       }, () => console.info('File downloaded successfully');
     this.donwloadingExNom = false;
   }
 
+  //Pagar Nomina
   postPagoNomina() {
     this.pago.start_period = this.nomina.inicio_periodo;
     this.pago.end_period = this.nomina.fin_periodo;
@@ -225,7 +263,7 @@ export class NominaComponent implements OnInit {
           timer: 1000,
           showCancel: false
         })
-        this.router.navigateByUrl('/nomina/historial-pagos')
+      this.router.navigateByUrl('/nomina/historial-pagos')
     }).catch((err: any) => {
       console.log(err);
     })

@@ -5,6 +5,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location, PlatformLocation } from '@angular/common';
 import { ApusService } from 'src/app/pages/crm/apus/apus.service';
 import { combineLatest, from, zip } from 'rxjs';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-get-apus',
@@ -41,17 +42,19 @@ export class GetApusComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     private platformLocation: PlatformLocation,
-    private _apu: ApusService
+    private _apu: ApusService,
+    private _swal: SwalService
   ) { }
   ngOnInit(): void {
     this.href = (this.platformLocation as any).location.origin
   }
 
   closeResult = '';
-  public openConfirm() {
+  multiple: boolean = true;
+  public openConfirm(multiple = true) {
     this.loading = true;
     this.state = []
-    //  this.modal.show();
+    this.multiple = multiple;
     this.getApus()
     this.modalService.open(this.modal, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -111,7 +114,7 @@ export class GetApusComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  setState(apu) {
+  /* setState(apu) {
     apu.selected = !apu.selected
     const index = this.state.findIndex(x => (x.apu_id == apu.apu_id && x.type == apu.type))
     if (index >= 0 && !apu.selected) {
@@ -119,6 +122,36 @@ export class GetApusComponent implements OnInit {
     } else {
       this.state.push(apu)
     }
+  } */
+
+  setState(apu, event) {
+    if (apu.selected && !this.multiple && this.state.length === 1) {
+      apu.selected = false
+      this._swal.show({
+        icon: 'error',
+        title: 'Error',
+        text: 'Solo puedes seleccionar un APU',
+        showCancel: false
+      });
+    } else {
+      const index = this.state.findIndex(x => (x.apu_id === apu.apu_id && x.type === apu.type));
+      if (apu.selected) {
+        if (!this.multiple) {
+          this.state.forEach(item => item.selected = false);
+        }
+        if (index === -1) {
+          this.state.push(apu);
+          apu.selected = true
+        }
+      } else {
+        if (index !== -1) {
+          this.state.splice(index, 1);
+          apu.selected = false
+        }
+      }
+    }
+    event.checked = apu.selected
+    event.source._checked = apu.selected
   }
 
   send() {

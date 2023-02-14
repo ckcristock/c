@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { diffDates } from '@fullcalendar/core/util/misc';
 import { concat, Observable, of, OperatorFunction, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
@@ -22,17 +23,19 @@ export class ItemsComponent implements OnInit {
   @Input('dataEdit') dataEdit: any
   masksMoney = consts
   @ViewChild('apus') apus: any
-  tempItem: FormGroup
+  tempItem: FormGroup;
+  tempSubItem: any;
   types = [
-    { name: 'P', value: 'P' },
-    { name: 'S', value: 'S' },
+    { name: 'Producto', value: 'P' },
+    { name: 'Servicio', value: 'S' },
   ];
   /*  indirectCosts: any[] */
 
   constructor(private fb: FormBuilder,
     private _apuPieza: ApuPiezaService,
     private _apuSet: ApuConjuntoService,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private router: Router
 
   ) { }
   ngOnInit(): void {
@@ -224,22 +227,105 @@ export class ItemsComponent implements OnInit {
     group.patchValue({ 'unit_cost': control.unit_direct_cost })
 
   }
-
-  findApus(item: FormGroup) {
+  multiple: boolean = true;
+  indexAux;
+  findApus(item: FormGroup, multiple = true, subItem: FormGroup, indexAux) {
     this.tempItem = item;
+    this.indexAux = indexAux
+    this.multiple = multiple
+    this.tempSubItem = subItem;
     //this.apus.show()
-    this.apus.openConfirm()
+    this.apus.openConfirm(multiple)
   }
+
   getApus(e: any[]) {
     let subItems = this.tempItem.get('subItems') as FormArray
+    let subItem = this.tempSubItem as FormGroup
+    console.log(subItem)
     e.forEach(apu => {
       const exist = subItems.value.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
-      !exist ? subItems.push(this.makeSubItem(apu)) : this._swal.show({icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false})
+      if (!this.multiple) {
+        if (!exist) {
+          //subItems.push(this.makeSubItem(apu))
+          //this.deleteSubItem(this.tempItem as FormGroup, this.indexAux)
+          subItems.setControl(this.indexAux, this.makeSubItem(apu))
+        } else {
+          this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
+        }
+
+      } else {
+        !exist ?
+          subItems.insert(this.indexAux, this.makeSubItem(apu)) :
+          this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
+      }
     });
 
   }
 
+  openNewTab(type, id) {
+    let uri = ''
+    switch (type) {
+      case 'apu_part':
+        uri = '/crm/apu/ver-apu-pieza';
+        break;
+      case 'apu_set':
+        uri = '/crm/apu/ver-apu-conjunto';
+        break;
+      case 'apu_service':
+        uri = '/crm/apu/ver-apu-servicio';
+        break;
+      default:
+        break;
+    }
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([uri + '/' + id])
+    );
+    window.open(url, '_blank');
+  }
+
+  replaceSubItem(apu) {
+    console.log(apu)
+    const percentages = {
+      percentage_amd: this.calculationBase.administration_percentage.value,
+      percentage_unforeseen: this.calculationBase.unforeseen_percentage.value,
+      percentage_utility: this.calculationBase.utility_percentage.value,
+    }
+    let description = apu.name
+    return {
+      id: apu.id,
+      type: ((apu?.type == 'P' || apu?.type == 'C') ? 'P' : 'S'),
+      description,
+      apu_id: apu.apu_id,
+      cuantity: apu.cuantity,
+      unit_cost: apu.unit_cost,
+      total_cost: apu.total_cost,
+      unit: 'UNIDAD',
+      subtotal_indirect_cost: apu.subtotal_indirect_cost,
+      ...percentages,
+      value_amd: apu.value_amd,
+      value_unforeseen: apu.value_unforeseen,
+      value_utility: apu.value_utility,
+      total_amd_imp_uti: apu.total_amd_imp_uti,
+      another_values: apu.another_values,
+      subTotal: apu.subTotal,
+      retention: 23,
+      percentage_sale: apu.percentage_sale,
+      value_cop: apu.value_cop,
+      value_usd: apu.value_usd,
+      unit_value_cop: apu.unit_value_cop,
+      unit_value_usd: apu.unit_value_usd,
+      value_prorrota_cop: apu.value_prorrota_cop,
+      value_prorrota_usd: apu.value_prorrota_usd,
+      unit_value_prorrateado_cop: apu.unit_value_prorrateado_cop,
+      unit_value_prorrateado_usd: apu.unit_value_prorrateado_usd,
+      observation: '',
+      type_module: apu.type_module,
+      //indirect_costs: this.makeIndirectCost(),
+    }
+  }
+
   makeSubItemGroup(apu, edit = false) {
+    console.log(apu)
     const percentages = {
       percentage_amd: edit ? apu.percentage_amd : this.calculationBase.administration_percentage.value,
       percentage_unforeseen: edit ? apu.percentage_unforeseen : this.calculationBase.unforeseen_percentage.value,
@@ -260,6 +346,7 @@ export class ItemsComponent implements OnInit {
       cuantity: edit ? apu.cuantity : 0,
       unit_cost: (apu ? apu.unit_cost : ''),
       total_cost: edit ? apu.total_cost : 0,
+      unit: edit ? apu.unit : 'UNIDAD',
       indirect_costs: this.makeIndirectCost(),
       subtotal_indirect_cost: edit ? apu.subtotal_indirect_cost : 0,
       ...percentages,

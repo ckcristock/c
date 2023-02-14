@@ -30,7 +30,7 @@
           >
             <thead>
               <tr class="text-center text-uppercase table-primary">
-                <th class="align-middle" colspan="7">Costos Directos</th>
+                <th class="align-middle" colspan="10">Costos Directos</th>
                 <th
                   class="align-middle"
                   [DynamicColspan]="'indirect_cost'"
@@ -94,9 +94,12 @@
                 <th></th>
               </tr>
               <tr class="text-center text-uppercase bg-light">
+                <th></th>
                 <th class="align-middle">#</th>
                 <th class="align-middle">Tipo</th>
+                <th></th>
                 <th class="align-middle">Descripción</th>
+                <th></th>
                 <th class="align-middle">Unidad</th>
                 <th class="align-middle">Cantidad</th>
                 <th class="align-middle">C. Unitario</th>
@@ -147,15 +150,23 @@
                     [formGroupName]="y"
                     *ngFor="
                       let subItem of item.controls.subItems.controls;
-                      let y = index
+                      let y = index;
+                      let last = last
                     "
                   >
                     <tr>
-                      <td class="align-middle">{{ i + 1 }}.{{ y + 1 }}</td>
+                      <a
+                        nohref=""
+                        (click)="findApus(item, true, subItem, y)"
+                        class="btn_agregar_tr"
+                      ></a>
+                      <td class="align-middle">
+                        {{ i + 1 }}.{{ y + 1 }}
+                      </td>
                       <td class="align-middle">
                         <select
                           formControlName="type"
-                          style="width: 50px"
+                          style="width: 4rem"
                           class="form-control form-control-sm"
                         >
                           <option
@@ -169,36 +180,74 @@
                           {{ subItem.controls.type.value }}
                         </ng-template>
                       </td>
+                      <td>
+                        <i
+                          class="fas"
+                          [class]="
+                            subItem.get('type_module').value == 'apu_part'
+                              ? 'fa-wrench'
+                              : subItem.get('type_module').value == 'apu_set'
+                              ? 'fa-cogs'
+                              : subItem.get('type_module').value ==
+                                'apu_service'
+                              ? 'fa-headset'
+                              : 'fa-box'
+                          "
+                        ></i>
+                      </td>
                       <td class="align-middle">
-                        <!--  <input type="text" style="width:280px" formControlName="description"
-                                                      class="form-control form-control-sm" /> -->
-                        <!--  <input id="typeahead-focus" type="text" class="form-control"
-                                                      [(ngModel)]="model" [ngbTypeahead]="search"
-                                                      (focus)="focus$.next($any($event).target.value)"
-                                                      (click)="click$.next($any($event).target.value)"
-                                                      #instance="ngbTypeahead" /> -->
-                        <div style="position: relative">
-                          <!-- [class.is-invalid]="(subItem.get('apu_id').invalid && subItem.get('description').touched)" -->
-                          <input
-                            style="width: 280px"
-                            id="typeahead-http"
-                            type="text"
-                            class="form-control form-control-sm"
-                            [readonly]="subItem.get('type_module').value"
-                            [ngClass]="{
-                              'form-control-plaintext':
-                                subItem.get('type_module').value
-                            }"
-                            formControlName="description"
-                          />
+                        <input
+                          style="width: 11rem"
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="Ingresa la descripción"
+                          [readonly]="subItem.get('type_module').value"
+                          [ngClass]="{
+                            'form-control-plaintext':
+                              subItem.get('type_module').value
+                          }"
+                          formControlName="description"
+                        />
+                      </td>
+                      <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                          <button
+                            type="button"
+                            *ngIf="last"
+                            (click)="addSubItem(item)"
+                            class="btn btn-success btn-sm"
+                          >
+                            <i class="fas fa-plus"></i>
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="!subItem.get('apu_id').value"
+                            (click)="findApus(item, false, subItem, y)"
+                            class="btn btn-info btn-sm"
+                          >
+                            <i class="fas fa-search"></i>
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="subItem.get('apu_id').value"
+                            (click)="
+                              openNewTab(
+                                subItem.get('type_module').value,
+                                subItem.get('apu_id').value
+                              )
+                            "
+                            class="btn btn-primary btn-sm"
+                          >
+                            <i class="fas fa-eye"></i>
+                          </button>
+                          <!-- llega aqui -->
                         </div>
-                        <!--  <small *ngIf="searching"
-                                                      class="form-text text-muted">searching...</small> -->
                       </td>
                       <td class="align-middle">
                         <input
                           type="text"
                           style="width: 70px"
+                          formControlName="unit"
                           class="form-control form-control-sm"
                         />
                       </td>
@@ -585,26 +634,6 @@
             </tbody>
           </table>
         </div>
-        <div class="text-right">
-          <div class="btn-group w-sm-100" role="group">
-            <button
-              ngbTooltip="Agregar subitem manual"
-              type="button"
-              (click)="addSubItem(item)"
-              class="btn btn-success btn-sm"
-            >
-              <i class="fas fa-plus"></i>
-            </button>
-            <button
-              ngbTooltip="Agregar subitem"
-              type="button"
-              (click)="findApus(item)"
-              class="btn btn-info btn-sm"
-            >
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-        </div>
       </div>
     </ng-container>
 
@@ -646,3 +675,23 @@
 </ng-template>
 
 <app-get-apus #apus (sendApus)="getApus($event)"> </app-get-apus>
+<!-- <input
+                          type="text"
+                          style="width: 280px"
+                          formControlName="description"
+                          class="form-control form-control-sm"
+                        /> -->
+<!-- <input
+                          id="typeahead-focus"
+                          type="text"
+                          class="form-control"
+                          [(ngModel)]="model"
+                          [ngbTypeahead]="search"
+                          (focus)="focus$.next($any($event).target.value)"
+                          (click)="click$.next($any($event).target.value)"
+                          #instance="ngbTypeahead"
+                        /> -->
+<!-- [class.is-invalid]="(subItem.get('apu_id').invalid && subItem.get('description').touched)" -->
+<!-- <small *ngIf="searching" class="form-text text-muted"
+                          >searching...</small
+                        > -->

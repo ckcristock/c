@@ -97,11 +97,10 @@
           <tbody>
             <tr *ngFor="let apu of apus" class="text-center">
               <td class="align-middle">
-                <input
-                  type="checkbox"
-                  [checked]="apu.selected"
-                  (change)="setState(apu)"
-                />
+                <mat-checkbox
+                  [(ngModel)]="apu.selected"
+                  (change)="setState(apu, $event)"
+                ></mat-checkbox>
               </td>
               <td class="align-middle">{{ apu.created_at | date }}</td>
               <td class="align-middle">{{ apu.code }}</td>

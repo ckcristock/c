@@ -9,6 +9,7 @@ import { ModalService } from 'src/app/core/services/modal.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { DateAdapter } from 'saturn-datepicker';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-detalle-funcionario',
@@ -33,6 +34,7 @@ export class DetalleFuncionarioComponent implements OnInit {
     title: ''
   };
   user: any = {};
+  responsable: any = {};
   form: FormGroup;
   datePipe = new DatePipe('es-CO');
   date = moment().format('YYYY-MM-DD');
@@ -44,6 +46,7 @@ export class DetalleFuncionarioComponent implements OnInit {
     private detalleService: DetalleService,
     private activateRoute: ActivatedRoute,
     private basicDataService: DatosBasicosService,
+    private _user: UserService,
     private location: Location,
     private _swal: SwalService,
     private _modal: ModalService,
@@ -62,6 +65,7 @@ export class DetalleFuncionarioComponent implements OnInit {
     });
     this.getUser();
     this.createForm();
+    this.responsable = this._user.user;
   }
 
   openConfirm(content) {
@@ -70,11 +74,11 @@ export class DetalleFuncionarioComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
-      date_from: ['', Validators.required],
+      date_from: [moment().format('YYYY-MM-DD'), Validators.required],
     })
   }
   selectedDate(fecha:any) {
-    if (fecha.valor >= moment()){
+    if (fecha.valor > moment()){
       this._swal.show({
         icon: 'error',
         title: 'Fecha incorrecta',
@@ -97,35 +101,62 @@ export class DetalleFuncionarioComponent implements OnInit {
     this.components = componente;
   }
 
-  liquidar(status) {
+  liquidar(status: any) {
+    console.log(this.funcionario);
     let dataForm = {
-      status
+      status,
     }
+    let info = {
+      id: this.funcionario.id,
+      identifier: this.funcionario.identifier,
+      full_name: this.funcionario.first_name+' '+this.funcionario.first_surname,
+      contract_work: this.funcionario.work_contract_id ?? 0,
+      liquidated_at: this.form.controls.date_from.value,
+      reponsible: {
+          person_id: this.responsable.id,
+          usuario: this.responsable.usuario
+      },
+      status: "PreLiquidado"
+    }
+    let data = {
+      state: 'Inactivo',
+    }
+    console.log(dataForm);
     this._swal.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
       text: 'El funcionario '+ this.funcionario.first_name+' no tendrá más acceso al sistema'
     }).then((result) => {
       if (result.isConfirmed) {
-        let data = {
-          state: 'Inactivo'
-        }
-        console.log(data);
-
-        this.detalleService.blockUser(data, this.id).subscribe((r: any) => {
-          console.log(r);
+        this.detalleService.setPreliquidadoLog(info).subscribe((r:any)=>{
+          if (r.status) {
+            this.detalleService.blockUser(data, this.id).subscribe((r: any) => {
+              console.log(r.status);
+            })
+            this.detalleService.liquidar(dataForm, this.id).subscribe((r: any) => {
+              this._swal.show({
+                icon: 'success',
+                title: 'Proceso finalizado',
+                text: r.data,
+                showCancel: false,
+                timer: 1000
+              });
+              this.getUser();
+              this.getBasicData();
+            });
+          } else {
+            this._swal.show({
+              icon: 'error',
+              title: 'Ha ocurrido un error inesperado',
+              //text: 'El funcionario ha sido preliquidado con éxito.',
+              //text: r.err.data,
+              text: r.err.message,
+              showCancel: false,
+              timer: 2000
+            });
+          }
         })
-        this.detalleService.liquidar(dataForm, this.id).subscribe((r: any) => {
-          this._swal.show({
-            icon: 'success',
-            title: 'Proceso finalizado',
-            //text: 'El funcionario ha sido preliquidado con éxito.',
-            text: r.data,
-            showCancel: false,
-            timer: 1000
-          });
-        });
-        this.getBasicData();
+
       }
     });
   }
@@ -136,9 +167,10 @@ export class DetalleFuncionarioComponent implements OnInit {
     })
   }
 
-  bloquear(state) {
+  bloquear(state: any) {
     let data = {
-      state
+      state,
+      responsible: this.responsable
     }
     this._swal.show({
       icon: 'question',
@@ -160,7 +192,6 @@ export class DetalleFuncionarioComponent implements OnInit {
       }
     });
   }
-
 
   getBasicData() {
     this.detalleService.getBasicData(this.id)

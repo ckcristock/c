@@ -94,7 +94,6 @@ export class NovedadesComponent implements OnInit {
         this.people = r.data.data
         this.pagination.collectionSize = r.data.total;
       })
-
   }
 
   count() {

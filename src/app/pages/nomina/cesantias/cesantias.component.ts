@@ -2,21 +2,22 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
-import { PrimasService } from './primas.service';
+import { ModalService } from 'src/app/core/services/modal.service';
 import Swal from 'sweetalert2';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
+import { PrimasService } from '../primas/primas.service';
 
 @Component({
-  selector: 'app-primas',
-  templateUrl: './primas.component.html',
-  styleUrls: ['./primas.component.scss']
+  selector: 'app-cesantias',
+  templateUrl: './cesantias.component.html',
+  styleUrls: ['./cesantias.component.scss']
 })
-export class PrimasComponent implements OnInit {
-  form: FormGroup;
-  loading: boolean = false;
+export class CesantiasComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @ViewChild('modalFuncionario') modalFuncionario: any;
   @Input('empleados') empleados;
+  form: FormGroup;
+  loading: boolean = false;
   years: any[] = [];
   premiums: any[] = [];
   premiumsPeople: any[] = [];
@@ -28,10 +29,13 @@ export class PrimasComponent implements OnInit {
     collectionSize: 0
   }
 
+  /**Cambiar los servicios a cesantías */
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private modalService: NgbModal,
+    private _modal: ModalService,
     private _primas: PrimasService,
     private _swal: SwalService
   ) { }
@@ -176,5 +180,7 @@ export class PrimasComponent implements OnInit {
         }
       })
   }
+
+
 
 }

@@ -10,7 +10,10 @@ import { ActivatedRoute } from '@angular/router';
 export class EditarApuPiezaComponent implements OnInit {
   id: string;
   data: any;
-  constructor( private actRoute: ActivatedRoute, private _apuPieza: ApuPiezaService ) { }
+  constructor(
+    private actRoute: ActivatedRoute,
+    private _apuPieza: ApuPiezaService
+    ) { }
 
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.params.id;

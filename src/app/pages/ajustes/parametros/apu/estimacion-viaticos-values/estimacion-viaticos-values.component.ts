@@ -5,6 +5,7 @@ import { ValidatorsService } from '../../../informacion-base/services/reactive-v
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { EstimationValuesService } from './estimation-values.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-estimacion-viaticos-values',
@@ -31,6 +32,8 @@ export class EstimacionViaticosValuesComponent implements OnInit {
     description: ''
   }
 
+  masksMoney = consts
+
   openClose(){
     if (this.matPanel == false){
       this.accordion.openAll()
@@ -38,7 +41,7 @@ export class EstimacionViaticosValuesComponent implements OnInit {
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
 
   constructor(
@@ -76,7 +79,7 @@ export class EstimacionViaticosValuesComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   openModal() {

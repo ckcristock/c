@@ -39,8 +39,4 @@ export class OrdenesProduccionService {
     return this.http.post(`${environment.base_url}/work-orders-blueprints`, data)
   }
 
-  getRequeriments(params = {}) {
-    return this.http.get(`${environment.base_url}/requeriments-company`, { params });
-  }
-
 }

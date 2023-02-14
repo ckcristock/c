@@ -157,7 +157,6 @@
             formControlName="name"
             required
             autocomplete="off"
-
           />
         </mat-form-field>
         <!-- <mat-form-field class="col" appearance="outline">
@@ -255,7 +254,8 @@
               <mat-label>Valor {{ item.value.name }}</mat-label>
               <input
                 matInput
-                type="number"
+                currencyMask
+                [options]="masksMoney.maskCOP"
                 placeholder="Ingresa la tasa {{ item.value.name }}"
                 formControlName="price"
                 autocomplete="off"
@@ -263,24 +263,23 @@
             </mat-form-field>
           </ng-container>
         </ng-container>
-
       </div>
     </form>
   </div>
-  <div class="modal-footer"  >
+  <div class="modal-footer">
     <button
       type="button"
       class="btn btn-danger"
       (click)="modal.dismiss('Cross click')"
     >
-      {{(title=='Ver hotel') ? 'Cerrar' : 'Cancelar'}}
+      {{ title == "Ver hotel" ? "Cerrar" : "Cancelar" }}
     </button>
     <button
       type="button"
       (click)="save()"
       [disabled]="!form.valid"
       class="btn btn-primary"
-      *ngIf=" title!='Ver hotel' "
+      *ngIf="title != 'Ver hotel'"
     >
       Guardar
     </button>

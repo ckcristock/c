@@ -27,9 +27,9 @@
                 <th rowspan="2"></th>
               </tr>
               <tr class="text-center text-uppercase">
-                <th>COP</th>
+                <th>COP sin iva</th>
                 <th>USD</th>
-                <th>COP</th>
+                <th>COP sin iva</th>
                 <th>USD</th>
               </tr>
             </thead>
@@ -60,19 +60,39 @@
                     </div>
                   </td>
                   <td>
-                    <input formControlName="cuantity_aux" />
+                    <input
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      formControlName="cuantity_aux"
+                    />
                   </td>
                   <td>
-                    <input formControlName="value_cop_aux" />
+                    <input
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
+                      formControlName="value_cop_aux"
+                    />
                   </td>
                   <td>
-                    <input formControlName="value_usd_aux" />
+                    <input
+                      currencyMask
+                      [options]="masksMoney.maskUSD"
+                      formControlName="value_usd_aux"
+                    />
                   </td>
                   <td>
-                    <input formControlName="total_cop_aux" />
+                    <input
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
+                      formControlName="total_cop_aux"
+                    />
                   </td>
                   <td>
-                    <input formControlName="total_usd_aux" />
+                    <input
+                      currencyMask
+                      [options]="masksMoney.maskUSD"
+                      formControlName="total_usd_aux"
+                    />
                   </td>
                   <td>
                     <i
@@ -107,18 +127,40 @@
                             formControlName="description"
                           />
                         </td>
-                        <td><input formControlName="cuantity_aux" /></td>
                         <td>
-                          <input formControlName="value_cop_aux" />
+                          <input
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
+                            formControlName="cuantity_aux"
+                          />
                         </td>
                         <td>
-                          <input formControlName="value_usd_aux" />
+                          <input
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            formControlName="value_cop_aux"
+                          />
                         </td>
                         <td>
-                          <input formControlName="total_cop_aux" />
+                          <input
+                            currencyMask
+                            [options]="masksMoney.maskUSD"
+                            formControlName="value_usd_aux"
+                          />
                         </td>
                         <td>
-                          <input formControlName="total_usd_aux" />
+                          <input
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
+                            formControlName="total_cop_aux"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            currencyMask
+                            [options]="masksMoney.maskUSD"
+                            formControlName="total_usd_aux"
+                          />
                         </td>
                         <td>
                           <i
@@ -156,21 +198,21 @@
           class="list-group-item d-flex justify-content-between align-items-center"
         >
           Total COP
-          <h4>
-            <span class="badge badge-danger badge-pill"
+          <h6>
+            <span class="badge badge-success badge-pill"
               >${{ form.controls.total_cop.value | currency : "COP" }}</span
             >
-          </h4>
+          </h6>
         </li>
         <li
           class="list-group-item d-flex justify-content-between align-items-center"
         >
           Total USD
-          <h4>
-            <span class="badge badge-danger badge-pill"
+          <h6>
+            <span class="badge badge-success badge-pill"
               >${{ form.controls.total_usd.value | currency }}</span
             >
-          </h4>
+          </h6>
         </li>
       </ul>
     </div>

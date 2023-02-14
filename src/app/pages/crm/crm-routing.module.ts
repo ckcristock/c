@@ -19,6 +19,10 @@ import { ApusComponent } from './apus/apus.component';
 import { NegociosComponent } from './negocios/negocios.component';
 import { VerNegocioComponent } from './negocios/ver-negocio/ver-negocio.component';
 import { ViewThirdComponent } from './terceros/view-third/view-third.component';
+import { CopiarApuPiezaComponent } from './apu-pieza/copiar-apu-pieza/copiar-apu-pieza.component';
+import { CopiarApuConjuntoComponent } from './apu-conjunto/copiar-apu-conjunto/copiar-apu-conjunto.component';
+import { CopiarApuServicioComponent } from './apu-servicio/copiar-apu-servicio/copiar-apu-servicio.component';
+import { ModalNuevoNegocioComponent } from './negocios/modal-nuevo-negocio/modal-nuevo-negocio.component';
 
 const routes: Routes = [
   { path: 'terceros', component: TercerosComponent },
@@ -30,22 +34,26 @@ const routes: Routes = [
   { path: 'apus', component: ApusComponent },
   // { path: 'apu/apu-pieza', component: ApuPiezaComponent },
   { path: 'negocios', component: NegociosComponent },
+  { path: 'negocios/crear', component: ModalNuevoNegocioComponent },
   { path: 'negocios/:id', component: VerNegocioComponent },
 
   { path: 'apu/apu-pieza', component: ApuPiezaComponent },
   { path: 'apu/crear-apu-pieza', component: CrearApuPiezaComponent },
   { path: 'apu/editar-apu-pieza/:id', component: EditarApuPiezaComponent },
+  { path: 'apu/copiar-apu-pieza/:id', component: CopiarApuPiezaComponent },
   { path: 'apu/ver-apu-pieza/:id', component: VerApuPiezaComponent },
 
   // { path: 'apu/apu-conjunto', component: ApuConjuntoComponent },
   { path: 'apu/crear-apu-conjunto', component: CrearApuConjuntoComponent },
   { path: 'apu/editar-apu-conjunto/:id', component: EditarApuConjuntoComponent },
   { path: 'apu/ver-apu-conjunto/:id', component: VerApuConjuntoComponent },
+  { path: 'apu/copiar-apu-conjunto/:id', component: CopiarApuConjuntoComponent },
 
   { path: 'apu/apu-servicio', component: ApuServicioComponent },
   { path: 'apu/crear-apu-servicio', component: CrearApuServicioComponent },
   { path: 'apu/editar-apu-servicio/:id', component: EditarApuServicioComponent },
   { path: 'apu/ver-apu-servicio/:id', component: VerApuServicioComponent },
+  { path: 'apu/copiar-apu-servicio/:id', component: CopiarApuServicioComponent },
 
   { path: 'presupuesto', loadChildren: () => import('./presupuesto/presupuesto.module').then(m => m.PresupuestoModule) },
   { path: 'cotizacion', loadChildren: () => import('./cotizacion/cotizacion.module').then(m => m.CotizacionModule) }

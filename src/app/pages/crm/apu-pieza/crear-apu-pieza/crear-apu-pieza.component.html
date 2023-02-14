@@ -4,21 +4,23 @@
       <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
       <hr class="line" />
       <div class="row">
-        <mat-form-field class="col-md-4" appearance="outline">
+        <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Nombre</mat-label>
           <input
             matInput
             type="text"
             placeholder="Ingresa el nombre"
             formControlName="name"
+            autocomplete="off"
             required
           />
         </mat-form-field>
-        <div class="col-md-4 mb-4">
+        <div class="col-md-3 mat-form-field-wrapper">
           <ng-select
             formControlName="city_id"
             [items]="cities"
             bindLabel="text"
+            [class.is-invalid]="form.get('city_id').invalid"
             appearance="outline"
             [appendTo]="'body'"
             placeholder="Destino *"
@@ -28,26 +30,13 @@
           >
           </ng-select>
         </div>
-        <div class="col-md-4 mb-4">
-          <ng-select
-            formControlName="person_id"
-            [items]="people"
-            bindLabel="text"
-            appearance="outline"
-            [appendTo]="'body'"
-            placeholder="¿Quién elbaora? *"
-            bindValue="value"
-            loadingText="loading"
-            ngDefaultControl
-          >
-          </ng-select>
-        </div>
-        <div class="col-md-4 mb-4">
+        <div class="col-md-3 mat-form-field-wrapper">
           <ng-select
             formControlName="third_party_id"
             [items]="clients"
             bindLabel="text"
             appearance="outline"
+            [class.is-invalid]="form.get('third_party_id').invalid"
             [appendTo]="'body'"
             placeholder="Cliente *"
             bindValue="value"
@@ -56,22 +45,24 @@
           >
           </ng-select>
         </div>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-2" appearance="outline">
           <mat-label>Línea</mat-label>
           <input
             matInput
             type="text"
+            autocomplete="off"
             required
             placeholder="Ingresa la línea"
             formControlName="line"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-1" appearance="outline">
           <mat-label>Cantidad</mat-label>
           <input
             matInput
-            type="number"
-            min="0"
+            currencyMask
+            autocomplete="off"
+            [options]="masksMoney.maskNumbers"
             required
             placeholder="Ingresa la cantidad"
             formControlName="amount"
@@ -98,8 +89,18 @@
     <div class="card-body">
       <h5 class="mt-2 text-center">Costos directos</h5>
       <hr class="line" />
-      <h6>Plano</h6>
-      <ngx-dropzone class="drop-zone" (change)="onSelect($event)">
+      <app-planos
+        *ngIf="planos.length > 0 && title == 'Editar pieza'"
+        (actualizar)="refreshData()"
+        [data]="planos"
+        [info]="'editar'"
+      ></app-planos>
+      <h6>Subir planos</h6>
+      <ngx-dropzone
+        class="drop-zone"
+        (change)="onSelect($event)"
+        accept="image/jpeg, image/jpg, image/png, application/pdf"
+      >
         <ngx-dropzone-label>
           <span><i class="fas fa-cloud-download-alt"></i></span>
           Arrastre y suelte el archivo
@@ -116,17 +117,17 @@
       <ng-container *ngIf="materiaList.controls.length; else notData">
         <div class="rounded-top table-responsive">
           <table
-            class="table table-bordered table-striped table-sm"
+            class="table table-bordered table-striped table-sm table-text-small"
             formArrayName="materia_prima"
           >
             <ng-container
               *ngFor="let item of materiaList.controls; let i = index"
             >
-              <div [formGroupName]="i">
+              <ng-container [formGroupName]="i">
                 <thead class="bg-light">
                   <tr class="text-center text-uppercase">
                     <th class="align-middle">Item</th>
-                    <th class="align-middle col-md-2">Geometría</th>
+                    <th class="align-middle">Geometría</th>
                     <th class="align-middle">Foto</th>
                     <th class="align-middle">Material</th>
                     <th
@@ -155,9 +156,13 @@
                     <td class="align-middle">
                       <select
                         name=""
-                        class="form-control form-control-sm"
+                        style="width: 9rem !important"
+                        class="form-control form-control-sm form-control-edit"
                         formControlName="geometry_id"
                       >
+                        <option value="" disabled selected hidden>
+                          Selecciona
+                        </option>
                         <option
                           *ngFor="let item of geometries"
                           [value]="item.value"
@@ -169,15 +174,20 @@
                     <td class="align-middle">
                       <img
                         [src]="item.controls.image.value"
+                        class="img-fluid"
                         onerror="this.src='../../../../../assets/images/nofound.png'"
                       />
                     </td>
                     <td class="align-middle">
                       <select
                         name=""
-                        class="form-control form-control-sm"
+                        class="form-control form-control-sm form-control-edit"
+                        style="width: 8rem !important"
                         formControlName="material_id"
                       >
+                        <option value="" disabled selected hidden>
+                          Selecciona
+                        </option>
                         <option
                           *ngFor="let item of materials"
                           [value]="item.id"
@@ -196,8 +206,8 @@
                       >
                         <td class="align-middle">
                           <input
-                            type="number"
-                            min="0"
+                            currencyMask
+                            [options]="masksMoney.maskNumbers"
                             class="form-control form-control-sm form-control-edit"
                             formControlName="value"
                           />
@@ -206,43 +216,47 @@
                     </ng-container>
                     <td class="align-middle">
                       <input
-                        type="number"
-                        min="0"
+                        currencyMask
+                        [options]="masksMoney.maskNumbersFiveDecimal"
                         class="form-control form-control-sm form-control-edit"
                         formControlName="weight_kg"
                       />
                     </td>
                     <td class="align-middle">
-                      <input
-                        type="number"
-                        min="0"
+                      {{ item.controls.q.value | number }}
+                      <!-- <input
+                        currencyMask
+                        [options]="masksMoney.maskNumbers"
                         class="form-control form-control-sm form-control-edit"
                         formControlName="q"
-                      />
+                      /> -->
                     </td>
                     <td class="align-middle">
-                      <input
-                        type="number"
-                        min="0"
+                      <!-- <input
+                        currencyMask
+                        [options]="masksMoney.maskNumbers"
                         class="form-control form-control-sm form-control-edit"
                         formControlName="weight_total"
-                      />
+                      /> -->
+                      {{ item.controls.weight_total.value | number }}
                     </td>
                     <td class="align-middle">
-                      <input
-                        type="number"
-                        min="0"
+                      <!-- <input
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm form-control-edit"
                         formControlName="value_kg"
-                      />
+                      /> -->
+                      ${{ item.controls.value_kg.value | number : "1.2" }}
                     </td>
                     <td class="align-middle">
-                      <input
-                        type="number"
-                        min="0"
+                      <!-- <input
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm form-control-edit"
                         formControlName="total_value"
-                      />
+                      /> -->
+                      ${{ item.controls.total_value.value | number : "1.2" }}
                     </td>
                     <td class="align-middle">
                       <button
@@ -257,29 +271,20 @@
                     </td>
                   </tr>
                 </tbody>
-              </div>
+              </ng-container>
             </ng-container>
           </table>
         </div>
         <div class="row d-flex justify-content-end">
           <div class="col-md-4">
-            <div class="d-flex justify-content-between">
-              <div class="rounded-top table-responsive">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <td>SUBTOTAL</td>
-                      <td class="text-right">
-                        ${{
-                          this.form.get("subtotal_raw_material").value
-                            | currency : "" : ""
-                        }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <h6 class="d-flex justify-content-between">
+              Subtotal
+              <span class="badge badge-success badge-pill"
+                >${{
+                  this.form.get("subtotal_raw_material").value | number : "1.2"
+                }}</span
+              >
+            </h6>
           </div>
         </div>
       </ng-container>
@@ -298,7 +303,9 @@
       <h6 class="mt-3">Materiales comerciales</h6>
       <ng-container *ngIf="materialsList.controls.length; else notData">
         <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-striped table-sm">
+          <table
+            class="table table-bordered table-striped table-sm table-text-small"
+          >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th class="align-middle">Item</th>
@@ -324,10 +331,13 @@
                   <td class="align-middle">
                     <select
                       name=""
-                      class="form-control form-control-sm"
+                      class="form-control form-control-sm form-control-edit"
                       id="material_materiales"
                       formControlName="material_id"
                     >
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
                       <option *ngFor="let item of materials" [value]="item.id">
                         {{ item.text }}
                       </option>
@@ -335,10 +345,13 @@
                   </td>
                   <td class="align-middle">
                     <select
-                      class="form-control form-control-sm"
+                      class="form-control form-control-sm form-control-edit"
                       id="unidad_materiales"
                       formControlName="unit_id"
                     >
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
                       <option *ngFor="let item of units" [value]="item.value">
                         {{ item.text }}
                       </option>
@@ -346,36 +359,36 @@
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="q_unitaria_materiales"
                       formControlName="q_unit"
                     />
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="q_total_materiales"
                       formControlName="q_total"
                     />
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
+                      class="form-control form-control-sm form-control-edit"
                       id="costo_unitario_materiales"
                       formControlName="unit_cost"
                     />
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
+                      class="form-control form-control-sm form-control-edit"
                       id="total_materiales"
                       formControlName="total"
                     />
@@ -398,23 +411,15 @@
         </div>
         <div class="row d-flex justify-content-end">
           <div class="col-md-4">
-            <div class="d-flex justify-content-between">
-              <div class="rounded-top table-responsive">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <td>SUBTOTAL</td>
-                      <td class="text-right">
-                        ${{
-                          this.form.get("commercial_materials_subtotal").value
-                            | currency : "" : ""
-                        }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <h6 class="d-flex justify-content-between">
+              Subtotal
+              <span class="badge badge-success badge-pill"
+                >${{
+                  this.form.get("commercial_materials_subtotal").value
+                    | number : "1.2"
+                }}</span
+              >
+            </h6>
           </div>
         </div>
       </ng-container>
@@ -430,10 +435,24 @@
         </button>
       </div>
       <hr />
-      <h6 class="mt-3">Corte agua</h6>
+      <div class="d-flex justify-content-between">
+        <h6 class="mt-3">Corte agua</h6>
+        <mat-form-field appearance="outline" class="pb-0" style="width: 6rem;">
+          <mat-label>Valor minuto</mat-label>
+          <input
+            matInput
+            currencyMask
+            formControlName="minute_value_water"
+            [options]="masksMoney.maskCOP"
+            placeholder="Valor minuto"
+          />
+        </mat-form-field>
+      </div>
       <ng-container *ngIf="cutWaterList.controls.length; else notData">
         <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-striped table-sm">
+          <table
+            class="table table-bordered table-striped table-sm table-text-small"
+          >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th class="align-middle">Item</th>
@@ -465,10 +484,14 @@
                   <td class="align-middle">
                     <select
                       name=""
-                      class="form-control form-control-sm"
+                      class="form-control form-control-sm form-control-edit"
+                      style="width: 9rem"
                       id="material_corte_agua"
                       formControlName="material_id"
                     >
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
                       <option *ngFor="let item of materials" [value]="item.id">
                         {{ item.text }}
                       </option>
@@ -476,10 +499,13 @@
                   </td>
                   <td class="align-middle">
                     <select
-                      class="form-control form-control-sm"
+                      class="form-control form-control-sm form-control-edit"
                       id="espesor_corte_agua"
                       formControlName="thickness_id"
                     >
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
                       <option
                         *ngFor="let item of thicknesses"
                         [value]="item.id"
@@ -490,91 +516,97 @@
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="cantidad_corte_agua"
                       formControlName="amount"
                     />
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="largo_corte_agua"
                       formControlName="long"
                     />
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="ancho_corte_agua"
                       formControlName="width"
                     />
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                    {{ item.controls.total_length.value | number }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="longitud_total_corte_agua"
                       formControlName="total_length"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="cantidad_corte_corte_agua"
                       formControlName="amount_cut"
                     />
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="diametro_corte_corte_agua"
                       formControlName="diameter"
                     />
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                    {{ item.controls.total_hole_perimeter.value | number }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskNumbersFiveDecimal"
+                      class="form-control form-control-sm form-control-edit"
                       id="perimetro_corte_agua"
                       formControlName="total_hole_perimeter"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
+                    {{ item.controls.time.value | number }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskNumbersFiveDecimal"
                       readonly
-                      class="form-control form-control-sm"
+                      class="form-control form-control-sm form-control-edit"
                       id="tiempo_corte_agua"
                       formControlName="time"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                    ${{ item.controls.minute_value.value | number: '1.2'}}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
+                      class="form-control form-control-sm form-control-edit"
+                      style="min-width: 4rem"
                       id="valor_minuto_corte_agua"
                       formControlName="minute_value"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
+                      class="form-control form-control-sm form-control-edit"
+                      style="min-width: 4rem"
                       id="valor_corte_agua"
                       formControlName="value"
                     />
@@ -597,41 +629,41 @@
         </div>
         <div class="row d-flex justify-content-end">
           <div class="col-md-4">
-            <div class="d-flex justify-content-between">
-              <div class="rounded-top table-responsive">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <td>SUBTOTAL UNITARIO</td>
-                      <td class="text-right">
-                        ${{
-                          this.form.get("cut_water_unit_subtotal").value
-                            | currency : "" : ""
-                        }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>CANTIDAD TOTAL</td>
-                      <td class="text-right">
-                        ${{
-                          this.form.get("cut_water_total_amount").value
-                            | currency : "" : ""
-                        }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>SUBTOTAL</td>
-                      <td class="text-right">
-                        ${{
-                          this.form.get("cut_water_subtotal").value
-                            | currency : "" : ""
-                        }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <ul class="list-group list-group-flush">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center p-1"
+              >
+                <h6>Cantidad total</h6>
+                <h6>
+                  {{ this.form.get("cut_water_total_amount").value | number }}
+                </h6>
+              </li>
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center p-1"
+              >
+                <h6>Subtotal unitario</h6>
+                <h6>
+                  <span class="badge badge-success badge-pill"
+                    >${{
+                      this.form.get("cut_water_unit_subtotal").value
+                        | number : "1.2"
+                    }}</span
+                  >
+                </h6>
+              </li>
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center p-1"
+              >
+                <h6>Subtotal</h6>
+                <h6>
+                  <span class="badge badge-success badge-pill"
+                    >${{
+                      this.form.get("cut_water_subtotal").value | number : "1.2"
+                    }}</span
+                  >
+                </h6>
+              </li>
+            </ul>
           </div>
         </div>
       </ng-container>
@@ -647,10 +679,24 @@
         </button>
       </div>
       <hr />
-      <h6 class="mt-3">Corte láser</h6>
+      <div class="d-flex justify-content-between">
+        <h6 class="mt-3">Corte láser</h6>
+        <mat-form-field appearance="outline" class="pb-0" style="width: 6rem;">
+          <mat-label>Valor minuto</mat-label>
+          <input
+            matInput
+            currencyMask
+            formControlName="minute_value_laser"
+            [options]="masksMoney.maskCOP"
+            placeholder="Valor minuto"
+          />
+        </mat-form-field>
+      </div>
       <ng-container *ngIf="cutLaserList.controls.length; else notData">
         <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-striped table-sm">
+          <table
+            class="table table-bordered table-striped table-sm table-text-small"
+          >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th class="align-middle">Item</th>
@@ -682,10 +728,14 @@
                   <td class="text-center">
                     <select
                       name=""
-                      class="form-control form-control-sm"
+                      class="form-control form-control-sm form-control-edit"
                       id="material_corte_laser"
+                      style="width: 9rem"
                       formControlName="cut_laser_material_id"
                     >
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
                       <option
                         *ngFor="let item of cutLaserMaterials"
                         [value]="item.id"
@@ -696,7 +746,7 @@
                   </td>
                   <td class="text-center">
                     <select
-                      class="form-control form-control-sm"
+                      class="form-control form-control-sm form-control-edit"
                       id="espesor_corte_laser"
                       formControlName="thicknessSelected"
                     >
@@ -712,91 +762,94 @@
                   </td>
                   <td class="text-center">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="cantidad_corte_laser"
                       formControlName="sheets_amount"
                     />
                   </td>
                   <td class="text-center">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="largo_corte_laser"
                       formControlName="long"
                     />
                   </td>
                   <td class="text-center">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="ancho_corte_laser"
                       formControlName="width"
                     />
                   </td>
                   <td class="text-center">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="longitud_total_corte_laser"
                       formControlName="total_length"
                     />
                   </td>
                   <td class="text-center">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="cantidad_agujeros_corte_laser"
                       formControlName="amount_holes"
                     />
                   </td>
                   <td class="text-center">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
+                      class="form-control form-control-sm form-control-edit"
                       id="diametro_corte_corte_laser"
                       formControlName="diameter"
                     />
                   </td>
                   <td class="text-center">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskNumbersDecimal"
+                      class="form-control form-control-sm form-control-edit"
                       id="perimetro_corte_laser"
                       formControlName="total_hole_perimeter"
                     />
                   </td>
                   <td class="text-center">
                     <input
-                      type="number"
-                      min="0"
+                      currencyMask
+                      [options]="masksMoney.maskNumbersDecimal"
                       readonly
-                      class="form-control form-control-sm"
+                      class="form-control form-control-sm form-control-edit"
                       id="tiempo_corte_laser"
                       formControlName="time"
                     />
                   </td>
                   <td class="text-center">
-                    <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                    ${{ item.controls.minute_value.value | number : "1.2" }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
+                      class="form-control form-control-sm form-control-edit"
+                      style="min-width: 4rem"
                       id="valor_minuto_corte_laser"
                       formControlName="minute_value"
-                    />
+                    /> -->
                   </td>
                   <td class="text-center">
                     <input
-                      type="number"
-                      min="0"
-                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
+                      class="form-control form-control-sm form-control-edit"
+                      style="min-width: 4rem"
                       id="valor_corte_laser"
                       formControlName="value"
                     />
@@ -818,43 +871,44 @@
             </tbody>
           </table>
         </div>
+
         <div class="row d-flex justify-content-end">
           <div class="col-md-4">
-            <div class="d-flex justify-content-between">
-              <div class="rounded-top table-responsive">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <td>SUBTOTAL UNITARIO</td>
-                      <td class="text-right">
-                        ${{
-                          this.form.get("cut_laser_unit_subtotal").value
-                            | currency : "" : ""
-                        }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>CANTIDAD TOTAL</td>
-                      <td class="text-right">
-                        ${{
-                          this.form.get("cut_laser_total_amount").value
-                            | currency : "" : ""
-                        }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>SUBTOTAL</td>
-                      <td class="text-right">
-                        ${{
-                          this.form.get("cut_laser_subtotal").value
-                            | currency : "" : ""
-                        }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <ul class="list-group list-group-flush">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center p-1"
+              >
+                <h6>Cantidad total</h6>
+                <h6>
+                  {{ this.form.get("cut_laser_total_amount").value | number }}
+                </h6>
+              </li>
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center p-1"
+              >
+                <h6>Subtotal unitario</h6>
+                <h6>
+                  <span class="badge badge-success badge-pill"
+                    >${{
+                      this.form.get("cut_laser_unit_subtotal").value
+                        | number : "1.2"
+                    }}</span
+                  >
+                </h6>
+              </li>
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center p-1"
+              >
+                <h6>Subtotal</h6>
+                <h6>
+                  <span class="badge badge-success badge-pill"
+                    >${{
+                      this.form.get("cut_laser_subtotal").value | number : "1.2"
+                    }}</span
+                  >
+                </h6>
+              </li>
+            </ul>
           </div>
         </div>
       </ng-container>
@@ -879,8 +933,8 @@
                 <th class="align-middle">Item</th>
                 <th class="align-middle">Descripción</th>
                 <th class="align-middle">Unidad</th>
-                <th class="align-middle">Cant. Unitaria</th>
-                <th class="align-middle">Cant. Total</th>
+                <th class="align-middle col-1">Cant. Unitaria</th>
+                <th class="align-middle col-1">Cant. Total</th>
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
@@ -897,68 +951,83 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.name_description }}
+                    <!-- <select
                       class="form-control form-control-sm"
                       formControlName="description"
+                      disabled
                       (change)="machineSet(item, $event)"
                     >
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
                       <option
                         *ngFor="let maquina of maquinas_herramientas"
                         [value]="maquina.value"
                       >
                         {{ maquina.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.unit_name }}
+                    <!-- <select
                       class="form-control form-control-sm"
                       formControlName="unit_id"
+                      disabled
                     >
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
                       <option *ngFor="let item of units" [value]="item.value">
                         {{ item.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="q_unitaria_maquinas_herra"
+                      style="width: 6rem"
                       formControlName="q_unit"
                     />
                   </td>
-                  <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
+                  <td class="align-middle font-weight-bold text-right">
+                    {{ item.value.q_total }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="q_total_maquinas_herra"
+                      readonly
                       formControlName="q_total"
-                    />
+                    /> -->
                   </td>
-                  <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
+                  <td class="align-middle font-weight-bold text-right">
+                    ${{ item.value.unit_cost | number : "1.2" }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_maquinas_herra"
+                      readonly
                       formControlName="unit_cost"
-                    />
+                    /> -->
                   </td>
-                  <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
+                  <td class="align-middle font-weight-bold text-right">
+                    ${{ item.value.total | number : "1.2" }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="total_maquinas_herra"
                       formControlName="total"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <button
-                      style="float: right"
                       class="btn btn-danger btn-sm"
                       placement="bottom"
                       type="button"
@@ -975,23 +1044,14 @@
         </div>
         <div class="row d-flex justify-content-end">
           <div class="col-md-4">
-            <div class="d-flex justify-content-between">
-              <div class="rounded-top table-responsive">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <td>SUBTOTAL</td>
-                      <td class="text-right">
-                        ${{
-                          this.form.get("machine_tools_subtotal").value
-                            | currency : "" : ""
-                        }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <h6 class="d-flex justify-content-between">
+              Subtotal
+              <span class="badge badge-success badge-pill"
+                >${{
+                  this.form.get("machine_tools_subtotal").value | number : "1.2"
+                }}</span
+              >
+            </h6>
           </div>
         </div>
       </ng-container>
@@ -1016,8 +1076,8 @@
                 <th class="align-middle">Item</th>
                 <th class="align-middle">Descripción</th>
                 <th class="align-middle">Unidad</th>
-                <th class="align-middle">Cant. Unitaria</th>
-                <th class="align-middle">Cant. Total</th>
+                <th class="align-middle col-1">Cant. Unitaria</th>
+                <th class="align-middle col-1">Cant. Total</th>
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
@@ -1035,70 +1095,80 @@
                 <tr [formGroupName]="i" class="text-center">
                   <td class="align-middle">{{ i + 1 }}</td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.name_description }}
+                    <!-- <select
                       class="form-control form-control-sm"
                       formControlName="description"
                       (change)="internalSet(item, $event)"
                     >
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
                       <option
                         *ngFor="let interno of procesos_internos"
                         [value]="interno.value"
                       >
                         {{ interno.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.unit_name }}
+                    <!-- <select
                       name=""
                       class="form-control form-control-sm"
                       id="unidad_proceso_interno"
                       formControlName="unit_id"
                     >
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
                       <option *ngFor="let item of units" [value]="item.value">
                         {{ item.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="q_unitaria_proceso_interno"
                       formControlName="q_unit"
                     />
                   </td>
-                  <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
+                  <td class="align-middle font-weight-bold text-right">
+                    {{ item.value.q_total }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="q_total_proceso_interno"
                       formControlName="q_total"
-                    />
+                    /> -->
                   </td>
-                  <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
+                  <td class="align-middle font-weight-bold text-right">
+                    ${{ item.value.unit_cost | number : "1.2" }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_interno"
                       formControlName="unit_cost"
-                    />
+                    /> -->
                   </td>
-                  <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
+                  <td class="align-middle font-weight-bold text-right">
+                    ${{ item.value.total | number : "1.2" }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="total_proceso_interno"
                       formControlName="total"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <button
-                      style="float: right"
                       class="btn btn-danger btn-sm"
                       placement="bottom"
                       type="button"
@@ -1115,23 +1185,15 @@
         </div>
         <div class="row d-flex justify-content-end">
           <div class="col-md-4">
-            <div class="d-flex justify-content-between">
-              <div class="rounded-top table-responsive">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <td>SUBTOTAL</td>
-                      <td class="text-right">
-                        ${{
-                          this.form.get("internal_proccesses_subtotal").value
-                            | currency : "" : ""
-                        }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <h6 class="d-flex justify-content-between">
+              Subtotal
+              <span class="badge badge-success badge-pill"
+                >${{
+                  this.form.get("internal_proccesses_subtotal").value
+                    | number : "1.2"
+                }}</span
+              >
+            </h6>
           </div>
         </div>
       </ng-container>
@@ -1156,8 +1218,8 @@
                 <th class="align-middle">Item</th>
                 <th class="align-middle">Descripción</th>
                 <th class="align-middle">Unidad</th>
-                <th class="align-middle">Cant. Unitaria</th>
-                <th class="align-middle">Cant. Total</th>
+                <th class="align-middle col-1">Cant. Unitaria</th>
+                <th class="align-middle col-1">Cant. Total</th>
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
@@ -1177,66 +1239,77 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.name_description }}
+                    <!--  <select
                       class="form-control form-control-sm"
                       formControlName="description"
                       (change)="externalSet(item, $event)"
                     >
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
                       <option
                         *ngFor="let externo of procesos_externos"
                         [value]="externo.value"
                       >
                         {{ externo.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
-                    <select
+                    {{ item.value.unit_name }}
+                    <!-- <select
                       name=""
                       class="form-control form-control-sm"
                       id="unidad_proceso_externo"
                       formControlName="unit_id"
                     >
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
                       <option *ngFor="let item of units" [value]="item.value">
                         {{ item.text }}
                       </option>
-                    </select>
+                    </select> -->
                   </td>
                   <td class="align-middle">
                     <input
-                      type="number"
-                      min="0"
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="q_unitaria_proceso_externo"
                       formControlName="q_unit"
                     />
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
+                    {{ item.value.q_total }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="q_total_proceso_externo"
                       formControlName="q_total"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
+                    ${{ item.value.unit_cost | number : "1.2" }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_externo"
                       formControlName="unit_cost"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
-                    <input
-                      type="number"
-                      min="0"
+                    ${{ item.value.total | number : "1.2" }}
+                    <!-- <input
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="total_proceso_externo"
                       formControlName="total"
-                    />
+                    /> -->
                   </td>
                   <td class="align-middle">
                     <button
@@ -1257,23 +1330,15 @@
         </div>
         <div class="row d-flex justify-content-end">
           <div class="col-md-4">
-            <div class="d-flex justify-content-between">
-              <div class="rounded-top table-responsive">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <td>SUBTOTAL</td>
-                      <td class="text-right">
-                        ${{
-                          this.form.get("external_proccesses_subtotal").value
-                            | currency : "" : ""
-                        }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <h6 class="d-flex justify-content-between">
+              Subtotal
+              <span class="badge badge-success badge-pill"
+                >${{
+                  this.form.get("external_proccesses_subtotal").value
+                    | number : "1.2"
+                }}</span
+              >
+            </h6>
           </div>
         </div>
       </ng-container>
@@ -1300,7 +1365,7 @@
       >
         <i
           class="fas"
-          [class]="otherCollapsed ? 'fa-chevron-right' : 'fa-chevron-down'"
+          [class]="!otherCollapsed ? 'fa-chevron-right' : 'fa-chevron-down'"
         ></i>
         Otros
       </a>
@@ -1335,6 +1400,7 @@
                         type="text"
                         class="form-control form-control-sm"
                         id="descripcion_otros"
+                        placeholder="Ingresa descripción"
                         formControlName="description"
                       />
                     </td>
@@ -1345,6 +1411,9 @@
                         id="unidad_otros"
                         formControlName="unit_id"
                       >
+                        <option value="" disabled selected hidden>
+                          Selecciona
+                        </option>
                         <option *ngFor="let item of units" [value]="item.value">
                           {{ item.text }}
                         </option>
@@ -1352,8 +1421,8 @@
                     </td>
                     <td class="align-middle">
                       <input
-                        type="number"
-                        min="0"
+                        currencyMask
+                        [options]="masksMoney.maskNumbers"
                         class="form-control form-control-sm"
                         id="q_unitaria_otros"
                         formControlName="q_unit"
@@ -1361,8 +1430,8 @@
                     </td>
                     <td class="align-middle">
                       <input
-                        type="number"
-                        min="0"
+                        currencyMask
+                        [options]="masksMoney.maskNumbers"
                         class="form-control form-control-sm"
                         id="q_total_otros"
                         formControlName="q_total"
@@ -1370,8 +1439,8 @@
                     </td>
                     <td class="align-middle">
                       <input
-                        type="number"
-                        min="0"
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm"
                         id="costo_unitario_otros"
                         formControlName="unit_cost"
@@ -1379,8 +1448,8 @@
                     </td>
                     <td class="align-middle">
                       <input
-                        type="number"
-                        min="0"
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm"
                         id="total_otros"
                         formControlName="total"
@@ -1405,23 +1474,14 @@
           </div>
           <div class="row d-flex justify-content-end">
             <div class="col-md-4">
-              <div class="d-flex justify-content-between">
-                <div class="rounded-top table-responsive">
-                  <table class="table table-hover">
-                    <tbody>
-                      <tr>
-                        <td>SUBTOTAL</td>
-                        <td class="text-right">
-                          ${{
-                            this.form.get("others_subtotal").value
-                              | currency : "" : ""
-                          }}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <h6 class="d-flex justify-content-between">
+                Subtotal
+                <span class="badge badge-success badge-pill"
+                  >${{
+                    this.form.get("others_subtotal").value | number : "1.2"
+                  }}</span
+                >
+              </h6>
             </div>
           </div>
         </ng-container>
@@ -1440,32 +1500,32 @@
       <hr />
       <div class="row d-flex justify-content-end">
         <div class="col-md-4">
-          <div class="d-flex justify-content-between">
-            <div class="rounded-top table-responsive">
-              <table class="table table-hover">
-                <tbody>
-                  <tr>
-                    <td>COSTO DIRECTO TOTAL</td>
-                    <td class="text-right">
-                      ${{
-                        this.form.get("total_direct_cost").value
-                          | currency : "" : ""
-                      }}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>COSTO DIRECTO UNITARIO</td>
-                    <td class="text-right">
-                      ${{
-                        this.form.get("unit_direct_cost").value
-                          | currency : "" : ""
-                      }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <ul class="list-group list-group-flush">
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center p-1"
+            >
+              <h6>COSTO DIRECTO TOTAL</h6>
+              <h6>
+                <span class="badge badge-success badge-pill"
+                  >${{
+                    this.form.get("total_direct_cost").value | number : "1.2"
+                  }}</span
+                >
+              </h6>
+            </li>
+            <li
+              class="list-group-item d-flex justify-content-between align-items-center p-1"
+            >
+              <h6>COSTO DIRECTO UNITARIO</h6>
+              <h6>
+                <span class="badge badge-success badge-pill"
+                  >${{
+                    this.form.get("unit_direct_cost").value | number : "1.2"
+                  }}</span
+                >
+              </h6>
+            </li>
+          </ul>
         </div>
       </div>
       <div class="row mt-3">
@@ -1490,8 +1550,8 @@
           <hr />
           <div class="collapse show" id="collapseIndirecto">
             <div class="rounded-top table-responsive">
-              <table class="table table-hover">
-                <tbody>
+              <table class="table table-borderless">
+                <tbody class="text-uppercase">
                   <ng-container formArrayName="indirect_cost">
                     <ng-container
                       *ngFor="
@@ -1500,21 +1560,20 @@
                       "
                     >
                       <tr [formGroupName]="i">
-                        <td class="col-8">{{ item.controls.name.value }}</td>
+                        <td class="col-7">{{ item.controls.name.value }}</td>
                         <td class="col-2">
                           <input
-                            type="number"
-                            min="0"
+                            currencyMask
+                            [options]="masksMoney.maskPorcentaje"
                             step=".1"
                             class="form-control form-control-sm"
                             formControlName="percentage"
                           />
                         </td>
-                        <td class="col-2">
+                        <td class="col-3">
                           <input
-                            type="number"
-                            min="0"
-                            step=".1"
+                            currencyMask
+                            [options]="masksMoney.maskCOP"
                             class="form-control form-control-sm"
                             formControlName="value"
                           />
@@ -1523,14 +1582,13 @@
                     </ng-container>
                   </ng-container>
                   <tr>
-                    <td colspan="2" class="col-10 text-uppercase">
+                    <td colspan="2" class="col-9 text-uppercase">
                       Costos indirectos
                     </td>
-                    <td class="col-2">
+                    <td class="col-3">
                       <input
-                        type="number"
-                        min="0"
-                        step=".1"
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm"
                         formControlName="indirect_cost_total"
                       />
@@ -1541,31 +1599,29 @@
             </div>
             <!-- <hr class="bg-dark"> -->
             <div class="rounded-top table-responsive">
-              <table class="table table-hover">
-                <tbody>
+              <table class="table table-borderless">
+                <tbody class="text-uppercase">
                   <tr>
-                    <td class="col-10">
+                    <td class="col-9">
                       Costos directos + costos indirectos totales
                     </td>
-                    <td class="col-2">
+                    <td class="col-3">
                       <input
-                        type="number"
-                        min="0"
-                        step=".1"
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm"
                         formControlName="direct_costs_indirect_costs_total"
                       />
                     </td>
                   </tr>
                   <tr>
-                    <td class="col-10">
+                    <td class="col-9">
                       Costos directos + costos indirectos unitario
                     </td>
-                    <td class="col-2">
+                    <td class="col-3">
                       <input
-                        type="number"
-                        step=".1"
-                        min="0"
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm"
                         formControlName="direct_costs_indirect_costs_unit"
                       />
@@ -1595,73 +1651,67 @@
           <hr />
           <div class="collapse show" id="collapseAUI">
             <div class="rounded-top table-responsive">
-              <table class="table table-hover">
-                <tbody>
+              <table class="table table-borderless">
+                <tbody class="text-uppercase">
                   <tr>
-                    <td class="col-8">Administrativos</td>
+                    <td class="col-7">Administrativos</td>
                     <td class="col-2">
                       <input
-                        type="number"
-                        min="0"
-                        step=".1"
+                        currencyMask
+                        [options]="masksMoney.maskPorcentaje"
                         class="form-control form-control-sm"
                         formControlName="administrative_percentage"
                       />
                     </td>
-                    <td class="col-2">
+                    <td class="col-3">
                       <input
-                        type="number"
-                        min="0"
-                        step=".1"
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm"
                         formControlName="administrative_value"
                       />
                     </td>
                   </tr>
                   <tr>
-                    <td class="col-8">Imprevistos</td>
+                    <td class="col-7">Imprevistos</td>
                     <td class="col-2">
                       <input
-                        type="number"
-                        min="0"
-                        step=".1"
+                        currencyMask
+                        [options]="masksMoney.maskPorcentaje"
                         class="form-control form-control-sm"
                         formControlName="unforeseen_percentage"
                       />
                     </td>
-                    <td class="col-2">
+                    <td class="col-3">
                       <input
-                        type="number"
-                        min="0"
-                        step=".1"
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm"
                         formControlName="unforeseen_value"
                       />
                     </td>
                   </tr>
                   <tr>
-                    <td colspan="2" class="col-10">
+                    <td colspan="2" class="col-9">
                       SubTotal + Administrativos + Imprevistos
                     </td>
-                    <td class="col-2">
+                    <td class="col-3">
                       <input
-                        type="number"
-                        min="0"
-                        step=".1"
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm"
                         formControlName="administrative_unforeseen_subtotal"
                       />
                     </td>
                   </tr>
                   <tr>
-                    <td class="col-10" colspan="2">
+                    <td class="col-9" colspan="2">
                       SubTotal + Administrativos + Imprevistos Unitario
                     </td>
-                    <td class="col-2">
+                    <td class="col-3">
                       <input
-                        type="number"
-                        min="0"
-                        step=".1"
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm"
                         formControlName="administrative_unforeseen_unit"
                       />
@@ -1672,43 +1722,40 @@
             </div>
             <!-- <hr class="bg-dark"> -->
             <div class="rounded-top table-responsive">
-              <table class="table table-hover">
-                <tbody>
+              <table class="table table-borderless">
+                <tbody class="text-uppercase">
                   <tr>
-                    <td class="col-10">Utilidad</td>
-                    <td class="col-2">
+                    <td class="col-9">Utilidad</td>
+                    <td class="col-3">
                       <input
-                        type="number"
-                        min="0"
-                        step=".1"
+                        currencyMask
+                        [options]="masksMoney.maskPorcentaje"
                         class="form-control form-control-sm"
                         formControlName="utility_percentage"
                       />
                     </td>
                   </tr>
                   <tr>
-                    <td class="col-10">
+                    <td class="col-9">
                       SubTotal + Admin + Imprevisto + Utilidad
                     </td>
-                    <td class="col-2">
+                    <td class="col-3">
                       <input
-                        type="number"
-                        min="0"
-                        step=".1"
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm"
                         formControlName="admin_unforeseen_utility_subtotal"
                       />
                     </td>
                   </tr>
                   <tr>
-                    <td class="col-10">
+                    <td class="col-9">
                       SubTotal + Admin + Imprevisto + Utilidad Unitario
                     </td>
-                    <td class="col-2">
+                    <td class="col-3">
                       <input
-                        type="number"
-                        min="0"
-                        step=".1"
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         class="form-control form-control-sm"
                         formControlName="admin_unforeseen_utility_unit"
                       />
@@ -1719,30 +1766,33 @@
             </div>
           </div>
           <div class="rounded-top table-responsive">
-            <table class="table table-hover">
-              <tbody>
+            <table class="table table-borderless">
+              <tbody class="text-uppercase">
                 <tr>
-                  <td class="col-10">Precio Venta Total COP + Retención</td>
-                  <td class="col-2">
-                    <input
-                      type="number"
-                      readonly
-                      class="form-control form-control-sm"
-                      formControlName="sale_price_cop_withholding_total"
-                    />
+                  <td class="col-9">Precio Venta Total COP + Retención</td>
+                  <td class="col-3 text-right">
+                    <h5>
+                      <span class="badge badge-success">
+                        $
+                        {{
+                          form.get("sale_price_cop_withholding_total").value
+                            | number : "1.2"
+                        }}
+                      </span>
+                    </h5>
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-10">Valor de Venta Unitario COP</td>
-                  <td class="col-2">
-                    <input
-                      type="number"
-                      readonly
-                      min="0"
-                      step=".1"
-                      class="form-control form-control-sm"
-                      formControlName="sale_value_cop_unit"
-                    />
+                  <td class="col-9">Valor de Venta Unitario COP</td>
+                  <td class="col-3 text-right">
+                    <h5>
+                      <span class="badge badge-success">
+                        $
+                        {{
+                          form.get("sale_value_cop_unit").value | number : "1.2"
+                        }}
+                      </span>
+                    </h5>
                   </td>
                 </tr>
               </tbody>
@@ -1750,15 +1800,14 @@
           </div>
           <!-- <hr class="bg-dark"> -->
           <div class="rounded-top table-responsive">
-            <table class="table table-hover">
-              <tbody>
+            <table class="table table-borderless">
+              <tbody class="text-uppercase">
                 <tr>
-                  <td class="col-10">TRM</td>
-                  <td class="col-2">
+                  <td class="col-9">TRM</td>
+                  <td class="col-3">
                     <input
-                      type="number"
-                      min="0"
-                      step=".1"
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       formControlName="trm"
                     />
@@ -1769,30 +1818,33 @@
           </div>
           <!-- <hr class="bg-dark"> -->
           <div class="rounded-top table-responsive">
-            <table class="table table-hover">
-              <tbody>
+            <table class="table table-borderless">
+              <tbody class="text-uppercase">
                 <tr>
-                  <td class="col-10">Precio Venta Total USD + Retención</td>
-                  <td class="col-2">
-                    <input
-                      type="number"
-                      readonly
-                      min="0"
-                      class="form-control form-control-sm"
-                      formControlName="sale_price_usd_withholding_total"
-                    />
+                  <td class="col-9">Precio Venta Total USD + Retención</td>
+                  <td class="col-3 text-right">
+                    <h5>
+                      <span class="badge badge-success">
+                        USD
+                        {{
+                          form.get("sale_price_usd_withholding_total").value
+                            | number : "1.2"
+                        }}
+                      </span>
+                    </h5>
                   </td>
                 </tr>
                 <tr>
-                  <td class="col-10">Valor de Venta Unitario USD</td>
-                  <td class="col-2">
-                    <input
-                      type="number"
-                      readonly
-                      min="0"
-                      class="form-control form-control-sm"
-                      formControlName="sale_value_usd_unit"
-                    />
+                  <td class="col-9">Valor de Venta Unitario USD</td>
+                  <td class="col-3 text-right">
+                    <h5>
+                      <span class="badge badge-success">
+                        USD
+                        {{
+                          form.get("sale_value_usd_unit").value | number : "1.2"
+                        }}
+                      </span>
+                    </h5>
                   </td>
                 </tr>
               </tbody>
@@ -1815,7 +1867,11 @@
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 <ng-template #wait>
-  <div class="container p-4 text-center">
-    <i class="fas fa-sync fa-spin fa-7x text-primary"></i>
+  <div class="card">
+    <div class="card-body">
+      <div class="container p-4 text-center">
+        <i class="fas fa-sync fa-spin fa-7x text-info"></i>
+      </div>
+    </div>
   </div>
 </ng-template>

@@ -5,7 +5,7 @@
       <hr class="line" />
       <h5 class="card-title">Señores:</h5>
       <p class="card-text">
-        {{
+        {{quotation.third_person.name}} - {{
           quotation.client.social_reason
             ? quotation.client.social_reason
             : quotation.client.full_name
@@ -14,7 +14,7 @@
         {{ quotation.municipality.name }}
       </p>
       <div class="alert alert-primary" role="alert">
-        <i class="fas fa-cogs"></i> {{ quotation.line }} {{ quotation.project }}
+        <i class="fas fa-cogs"></i>{{ quotation.description }}
       </div>
       <div class="rounded-top table-responsive">
         <table class="table table-bordered table-striped table-sm">
@@ -44,12 +44,12 @@
               </td>
               <td>{{ item.cuantity }}</td>
               <ng-container *ngIf="quotation.money_type == 'cop'; else usd">
-                <td>${{ item.value_cop | currency : "COP" }}</td>
-                <td>${{ item.total_cop | currency : "COP" }}</td>
+                <td>${{ item.value_cop | number: '1.2' }} sin IVA</td>
+                <td>${{ item.total_cop | number: '1.2' }} sin IVA</td>
               </ng-container>
               <ng-template #usd>
-                <td>{{ item.value_usd | currency }}</td>
-                <td>{{ item.total_usd | currency }}</td>
+                <td>USD {{ item.value_usd | number: '1.2' }}</td>
+                <td>USD {{ item.total_usd | number: '1.2' }}</td>
               </ng-template>
             </tr>
           </tbody>
@@ -66,6 +66,18 @@
       <div
         class="alert alert-light alert-custom-quotation pb-0"
         [innerHTML]="quotation.commercial_terms"
+        role="alert"
+        [ngClass]="'alert-p-0'"
+      ></div>
+      <div
+        class="alert alert-light alert-custom-quotation pb-0"
+        [innerHTML]="quotation.legal_requirements"
+        role="alert"
+        [ngClass]="'alert-p-0'"
+      ></div>
+      <div
+        class="alert alert-light alert-custom-quotation pb-0"
+        [innerHTML]="quotation.technical_requirements"
         role="alert"
         [ngClass]="'alert-p-0'"
       ></div>

@@ -21,7 +21,9 @@ export class ConsecutivosService {
     return this.http.get(`${environment.base_url}/get-consecutivo/${table}`);
   }
 
-  construirConsecutivo(object, city = '') {
+  construirConsecutivo(object, city = '', context = 'crear') {
+    let con = object.Consecutivo
+    context != 'editar' ? con = con + 1 : ''
     let today = new Date();
     let today_ = {
       anio: '',
@@ -32,7 +34,7 @@ export class ConsecutivosService {
     today_.mes = today.toLocaleDateString('es', { month: '2-digit' })
     today_.dia = today.toLocaleDateString('es', { day: '2-digit' })
     let consecutivo = object.Prefijo + (object.city ? ('.' + city) : '-') +
-      (object.Consecutivo + 1).toString().padStart(object.longitud, 0) +
+      (con).toString().padStart(object.longitud, 0) +
       (object.Anio || object.Mes || object.Dia ? "-" : "") +
       (object.Anio ? today_.anio : "") +
       (object.Mes ? today_.mes : "") +

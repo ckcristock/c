@@ -23,6 +23,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { AutoFocusDirectiveDirective } from './crear-presupuesto/components/items/auto-focus-directive.directive';
 import { CopiarPresupuestoComponent } from './copiar-presupuesto/copiar-presupuesto.component';
+import { CurrencyMaskModule } from "ng2-currency-mask";
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import { CopiarPresupuestoComponent } from './copiar-presupuesto/copiar-presupue
         MatInputModule,
         MatSelectModule,
         MatCheckboxModule,
+        CurrencyMaskModule,
         MatPaginatorModule
     ],
     exports: [AutoFocusDirectiveDirective],

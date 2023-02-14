@@ -16,7 +16,7 @@
           <div class="btn-group rounded w-sm-100">
             <button
               class="btn btn-primary btn-sm"
-              (click)="modalNuevoNegocio.openModal()"
+              [routerLink]="['crear']"
             >
               <i class="fa fa-plus"></i> Agregar
             </button>
@@ -123,18 +123,20 @@
           </a>
           <ng-template ngbNavContent>
             <div
-              class="row mt-3"
+              class="row mt-3" style="font-size: 0.7rem;"
               *ngIf="!loading && business.length > 0; else notData"
             >
-              <div class="col-md-4">
+              <div class="col-lg">
+                <h6>
+                  <span class="badge badge-danger badge-pill position-absolute" style="top: -0.3rem; right: -0.3rem;">
+                    {{ negocios_primera_etapa.length }}
+                  </span>
+                </h6>
                 <div class="card bg-light">
-                  <div class="card-body border-bottom">
-                    <h4 class="card-title text-center">Etapa 1</h4>
-                    <div class="d-flex justify-content-between mb-3">
-                      <span
-                        >{{ negocios_primera_etapa.length }} Negocio(s)</span
-                      >
-                      <span>$ {{ total.first | number }}</span>
+                  <div class="card-body border-bottom px-2">
+                    <h6 class="card-title text-center">Prospección</h6>
+                    <div class="text-center">
+                      <span>$ {{ total.first | number: '1.2' }}</span>
                     </div>
                     <div
                       id="Todo-task"
@@ -142,7 +144,7 @@
                       dndDropzone
                       dndEffectAllowed="move"
                       (dndDrop)="
-                        onDrop($event, negocios_primera_etapa, 'first')
+                        onDrop($event, negocios_primera_etapa, 'Prospección')
                       "
                     >
                       <ng-container *ngFor="let task of negocios_primera_etapa">
@@ -163,15 +165,17 @@
                 </div>
               </div>
 
-              <div class="col-md-4">
+              <div class="col-lg">
                 <div class="card bg-light">
-                  <div class="card-body border-bottom">
-                    <h4 class="card-title text-center">Etapa 2</h4>
-                    <div class="d-flex justify-content-between mb-3">
-                      <span
-                        >{{ negocios_segunda_etapa.length }} Negocio(s)</span
-                      >
-                      <span>$ {{ total.second | number }}</span>
+                  <h6>
+                    <span class="badge badge-danger badge-pill position-absolute" style="top: -0.3rem; right: -0.3rem;">
+                      {{ negocios_segunda_etapa.length }}
+                    </span>
+                  </h6>
+                  <div class="card-body border-bottom px-2">
+                    <h6 class="card-title text-center">Presupuesto</h6>
+                    <div class="text-center">
+                      <span>$ {{ total.second | number: '1.2' }}</span>
                     </div>
                     <div
                       id="Progress-task"
@@ -179,7 +183,7 @@
                       dndDropzone
                       dndEffectAllowed="move"
                       (dndDrop)="
-                        onDrop($event, negocios_segunda_etapa, 'second')
+                        onDrop($event, negocios_segunda_etapa, 'Presupuesto')
                       "
                     >
                       <ng-container *ngFor="let task of negocios_segunda_etapa">
@@ -199,15 +203,18 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
+
+              <div class="col-lg">
                 <div class="card bg-light">
-                  <div class="card-body border-bottom">
-                    <h4 class="card-title text-center">Etapa 3</h4>
-                    <div class="d-flex justify-content-between mb-3">
-                      <span
-                        >{{ negocios_tercera_etapa.length }} Negocio(s)</span
-                      >
-                      <span>$ {{ total.third | number }}</span>
+                  <h6>
+                    <span class="badge badge-danger badge-pill position-absolute" style="top: -0.3rem; right: -0.3rem;">
+                      {{ negocios_tercera_etapa.length }}
+                    </span>
+                  </h6>
+                  <div class="card-body border-bottom px-2">
+                    <h6 class="card-title text-center">Cotización</h6>
+                    <div class="text-center">
+                      <span>$ {{ total.third | number: '1.2' }}</span>
                     </div>
                     <div
                       id="Progress-task"
@@ -215,7 +222,7 @@
                       dndDropzone
                       dndEffectAllowed="move"
                       (dndDrop)="
-                        onDrop($event, negocios_tercera_etapa, 'third')
+                        onDrop($event, negocios_tercera_etapa, 'Cotización')
                       "
                     >
                       <ng-container *ngFor="let neg of negocios_tercera_etapa">
@@ -235,6 +242,85 @@
                   </div>
                 </div>
               </div>
+
+              <div class="col-lg">
+                <div class="card bg-light">
+                  <h6>
+                    <span class="badge badge-danger badge-pill position-absolute" style="top: -0.3rem; right: -0.3rem;">
+                      {{ negocios_cuarta_etapa.length }}
+                    </span>
+                  </h6>
+                  <div class="card-body border-bottom px-2">
+                    <h6 class="card-title text-center">Negociación</h6>
+                    <div class="text-center">
+                      <span>$ {{ total.quarter | number: '1.2' }}</span>
+                    </div>
+                    <div
+                      id="Progress-task"
+                      class="task-list"
+                      dndDropzone
+                      dndEffectAllowed="move"
+                      (dndDrop)="
+                        onDrop($event, negocios_cuarta_etapa, 'Negociación')
+                      "
+                    >
+                      <ng-container *ngFor="let neg of negocios_cuarta_etapa">
+                        <div
+                          [dndDraggable]="neg"
+                          dndEffectAllowed="move"
+                          (dndMoved)="onDragged(neg, negocios_cuarta_etapa)"
+                        >
+                          <ng-template
+                            [ngTemplateOutlet]="NegocioContent"
+                            [ngTemplateOutletContext]="{ neg: neg }"
+                          >
+                          </ng-template>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg">
+                <div class="card bg-light">
+                  <h6>
+                    <span class="badge badge-danger badge-pill position-absolute" style="top: -0.3rem; right: -0.3rem;">
+                      {{ negocios_quinta_etapa.length }}
+                    </span>
+                  </h6>
+                  <div class="card-body border-bottom px-2">
+                    <h6 class="card-title text-center">Adjudicación</h6>
+                    <div class="text-center">
+                      <span>$ {{ total.fifth | number: '1.2' }}</span>
+                    </div>
+                    <div
+                      id="Progress-task"
+                      class="task-list"
+                      dndDropzone
+                      dndEffectAllowed="move"
+                      (dndDrop)="
+                        onDrop($event, negocios_quinta_etapa, 'Adjudicación')
+                      "
+                    >
+                      <ng-container *ngFor="let neg of negocios_quinta_etapa">
+                        <div
+                          [dndDraggable]="neg"
+                          dndEffectAllowed="move"
+                          (dndMoved)="onDragged(neg, negocios_quinta_etapa)"
+                        >
+                          <ng-template
+                            [ngTemplateOutlet]="NegocioContent"
+                            [ngTemplateOutletContext]="{ neg: neg }"
+                          >
+                          </ng-template>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </ng-template>
         </li>
@@ -247,7 +333,7 @@
 <ng-template #NegocioContent let-neg="neg">
   <div class="card task-box">
     <div class="card-body" style="cursor: move">
-      <div class="progress progress-sm animated-progess" style="height: 3px">
+      <!-- <div class="progress progress-sm animated-progess" style="height: 3px">
         <div
           class="progress-bar"
           role="progressbar"
@@ -256,11 +342,9 @@
           aria-valuemin="0"
           aria-valuemax="100"
         ></div>
-      </div>
-      <div class="d-flex justify-content-between my-2">
-        <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{ neg.code }}</a>
-        <span>{{ neg.date | date : "mediumDate" }}</span>
-      </div>
+      </div> -->
+      <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{ neg.code }}</a>
+      <div><span>{{ neg.date | date : "mediumDate" }}</span></div>
       <div>
         <h5 class="font-size-16">
           <a class="text-dark">{{
@@ -275,17 +359,17 @@
       <div class="d-inline-flex team mb-0">
         <div class="mr-3 align-self-center">
           Presupuesto :
-          <span class="mb-4">{{ neg.budget_value | number }}</span>
+          <span class="mb-4">${{ neg.budget_value | number: '1.2' }}</span>
         </div>
       </div>
     </div>
   </div>
 </ng-template>
 
-<app-modal-nuevo-negocio
+<!-- <app-modal-nuevo-negocio
   (updated)="getNegocios()"
   #modalNuevoNegocio
-></app-modal-nuevo-negocio>
+></app-modal-nuevo-negocio> -->
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

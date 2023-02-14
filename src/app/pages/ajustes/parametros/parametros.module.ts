@@ -51,6 +51,7 @@ import { ParametrosNominaComponent } from './params-nomina/parametros-nomina/par
 import { TiposModule } from "../tipos/tipos.module";
 import { AccommodationsComponent } from './viaticos/hoteles/accommodations/accommodations.component';
 import { MatCard, MatRadioGroup, MatSlideToggleModule } from "@angular/material";
+import { CurrencyMaskModule } from "ng2-currency-mask";
 
 
 
@@ -115,7 +116,8 @@ import { MatCard, MatRadioGroup, MatSlideToggleModule } from "@angular/material"
         MatPaginatorModule,
         SweetAlert2Module.forRoot(),
         InformacionBaseModule,
-        TiposModule
+        TiposModule,
+        CurrencyMaskModule,
     ],
     exports: [
         CuentasBancariasComponent,

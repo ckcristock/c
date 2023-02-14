@@ -47,7 +47,7 @@
             <th>Trayecto</th>
             <th>Ciudad</th>
             <th>Tarifa</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -55,7 +55,7 @@
             <td class="align-middle">{{ item.type }}</td>
             <td class="align-middle">{{ item.taxi.route }}</td>
             <td class="align-middle">{{ item.city.name }}</td>
-            <td class="align-middle">{{ item.value | currency: "COP" }}</td>
+            <td class="align-middle">${{ item.value | number : "1.2" }}</td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -141,6 +141,8 @@
             bindValue="value"
             appearance="outline"
             [appendTo]="'body'"
+            [class.is-invalid]="form.get('city_id').valid"
+            [clearable]="false"
             placeholder="Ciudad"
             loadingText="loading "
             ngDefaultControl
@@ -151,7 +153,8 @@
           <mat-label>Tarifa</mat-label>
           <input
             matInput
-            type="number"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa la tarifa"
             required
             formControlName="value"
@@ -169,7 +172,12 @@
     >
       Cancelar
     </button>
-    <button type="button" (click)="save()" [disabled]="!form.valid" class="btn btn-primary">
+    <button
+      type="button"
+      (click)="save()"
+      [disabled]="!form.valid"
+      class="btn btn-primary"
+    >
       Guardar
     </button>
   </div>

@@ -54,7 +54,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
     })
     this.createForm();
     this.getData();
-    this.getRequeriments();
     if (this.path == 'editar') {
       this.getWorkOrder(this.id, 'editar')
     } else if (this.path == 'copiar') {
@@ -156,18 +155,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
   getThirdPerson(third_id) {
     this._third_party.getThirdPartyPersonForThird(third_id).subscribe((res: any) => {
       this.third_people = res.data
-    })
-  }
-
-  getRequeriments() {
-    let params = {
-      id: 1
-    }
-    this._work_order.getRequeriments(params).subscribe((res: any) => {
-      this.form.patchValue({
-        technical_requirements: res.data.technical_requirements,
-        legal_requirements: res.data.legal_requirements,
-      })
     })
   }
 

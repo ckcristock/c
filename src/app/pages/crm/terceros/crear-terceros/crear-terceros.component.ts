@@ -217,7 +217,7 @@ export class CrearTercerosComponent implements OnInit, AfterViewInit {
   personControl() {
     let group = this.fb.group({
       name: ['', Validators.required],
-      n_document: ['', Validators.required],
+      n_document: [''],
       landline: [''],
       cell_phone: [''],
       email: ['', Validators.required],

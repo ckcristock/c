@@ -206,10 +206,10 @@
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th>Fecha</th>
+                <th>Descripción</th>
                 <th>Ciudad</th>
                 <th>Código</th>
                 <th>Cliente</th>
-                <th>Descripción</th>
                 <th>Presupuesto</th>
                 <th>Estado</th>
                 <th><i class="mdi mdi-chevron-down"></i></th>
@@ -228,6 +228,7 @@
                 <td (click)="openList(item.id)">
                   {{ item.created_at | date : "MMM d, y, h:mm a" }}
                 </td>
+                <td (click)="openList(item.id)">{{ item.description }}</td>
                 <td (click)="openList(item.id)">
                   {{ item.municipality.name }}
                 </td>
@@ -239,7 +240,7 @@
                       : item.client.full_name
                   }}
                 </td>
-                <td (click)="openList(item.id)">{{ item.observation }}</td>
+
                 <td
                   [role]="item.budget_included == 'si' ? 'button' : ''"
                   [class]="item.budget_included == 'si' ? 'text-primary' : ''"

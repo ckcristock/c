@@ -5,6 +5,7 @@ import { ValidatorsService } from '../../../informacion-base/services/reactive-v
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { CostosIndirectosService } from './costos-indirectos.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-costos-indirectos',
@@ -29,6 +30,8 @@ export class CostosIndirectosComponent implements OnInit {
     name: ''
   }
 
+  masksMoney = consts
+
   openClose(){
     if (this.matPanel == false){
       this.accordion.openAll()
@@ -36,7 +39,7 @@ export class CostosIndirectosComponent implements OnInit {
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
 
   constructor(
@@ -62,7 +65,7 @@ export class CostosIndirectosComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   openModal() {

@@ -63,4 +63,8 @@ export class ApuConjuntoService {
     return this.http.get(`${environment.base_url}/apu-set/pdf/${id}`, { headers, responseType: 'blob' as 'json' });
   }
 
+  deleteFile(id) {
+    return this.http.get(`${environment.base_url}/apu-set-delete-file/${id}`);
+  }
+
 }

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NumberPipePipe } from 'src/app/core/pipes/number-pipe.pipe';
+import { consts } from 'src/app/core/utils/consts';
 import { BudgetService } from 'src/app/pages/crm/presupuesto/budget.service';
 
 @Component({
@@ -14,9 +14,9 @@ export class ItemsQuotationComponent implements OnInit {
   subItemsToDelete: Array<number> = [];
   tempItem: FormGroup;
   numberInput: any = '500000';
+  masksMoney = consts
   constructor(
     private fb: FormBuilder,
-    private _numberPipe: NumberPipePipe
   ) { }
 
   ngOnInit(): void {
@@ -50,13 +50,13 @@ export class ItemsQuotationComponent implements OnInit {
       name: [item_to_add ? item_to_add.name : '', Validators.required],
       cuantity_aux: [1, Validators.required],
       cuantity: 1,
-      value_cop_aux: item_to_add ? this._numberPipe.transform(item_to_add.value_cop.toString(), '$') : 0,
+      value_cop_aux: item_to_add ? item_to_add.value_cop : 0,
       value_cop: item_to_add ? item_to_add.value_cop : 0,
-      value_usd_aux: item_to_add ? this._numberPipe.transform(item_to_add.value_usd.toString(), '$') : 0,
+      value_usd_aux: item_to_add ? item_to_add.value_usd : 0,
       value_usd: item_to_add ? item_to_add.value_usd : 0,
-      total_cop_aux: { value: item_to_add ? this._numberPipe.transform(item_to_add.value_cop.toString(), '$') : 0, disabled: true },
+      total_cop_aux: { value: item_to_add ? item_to_add.value_cop : 0, disabled: true },
       total_cop: { value: item_to_add ? item_to_add.value_cop : 0, disabled: true },
-      total_usd_aux: { value: item_to_add ? this._numberPipe.transform(item_to_add.value_usd.toString(), '$') : 0, disabled: true },
+      total_usd_aux: { value: item_to_add ? item_to_add.value_usd : 0, disabled: true },
       total_usd: { value: item_to_add ? item_to_add.value_usd : 0, disabled: true },
       type: type == 'only_item' ? false : type == 'withSub' ? true : true,
     })
@@ -89,56 +89,37 @@ export class ItemsQuotationComponent implements OnInit {
     const total_cop_aux = item.get('total_cop_aux')
     const total_usd_aux = item.get('total_usd_aux')
     value_cop_aux.valueChanges.subscribe(r => {
-      if (typeof r === 'string') {
-        const maskedVal = this._numberPipe.transform(r, '$');
-        if (r !== maskedVal) {
-          item.patchValue({ value_cop_aux: maskedVal });
-        }
-      }
-      let cuantity_aux = item.get('cuantity_aux').value.toString().split(',').join('')
-      let value_cop_aux = item.get('value_cop_aux').value.toString().split(/[,$]+/).join('')
+      let cuantity_aux = item.get('cuantity_aux').value
+      let value_cop_aux = item.get('value_cop_aux').value
       let total_cop_aux = value_cop_aux * cuantity_aux
       item.patchValue({
-        total_cop_aux: this._numberPipe.transform(total_cop_aux.toString(), '$'),
+        total_cop_aux: total_cop_aux,
         value_cop: value_cop_aux,
         total_cop: total_cop_aux,
       })
     })
 
     value_usd_aux.valueChanges.subscribe(r => {
-      if (typeof r === 'string') {
-        const maskedVal = this._numberPipe.transform(r, '$');
-        if (r !== maskedVal) {
-          item.patchValue({ value_usd_aux: maskedVal });
-        }
-      }
-      let cuantity_aux = item.get('cuantity_aux').value.toString().split(',').join('')
-      let value_usd_aux = item.get('value_usd_aux').value.toString().split(/[,$]+/).join('')
+      let cuantity_aux = item.get('cuantity_aux').value
+      let value_usd_aux = item.get('value_usd_aux').value
       let total_usd_aux = value_usd_aux * cuantity_aux
       item.patchValue({
-        total_usd_aux: this._numberPipe.transform(total_usd_aux.toString(), '$'),
+        total_usd_aux: total_usd_aux,
         value_usd: total_usd_aux,
         total_usd: total_usd_aux,
       })
     })
     /* this.changesValues(item, money_type_value) */
     cuantity_aux.valueChanges.subscribe(r => {
-      if (typeof r === 'string') {
-        const maskedVal = this._numberPipe.transform(r, '');
-        if (r !== maskedVal) {
-          item.patchValue({ cuantity_aux: maskedVal });
-        }
-      }
-      let value_cop_aux = item.get('value_cop_aux').value.toString().split(/[,$]+/).join('')
-      let value_usd_aux = item.get('value_usd_aux').value.toString().split(/[,$]+/).join('')
-      let cuantity_aux = item.get('cuantity_aux').value.toString().split(/[,$]+/).join('')
-
-      let total_cop_aux = value_cop_aux * cuantity_aux.split(',').join('')
-      let total_usd_aux = value_usd_aux * cuantity_aux.split(',').join('')
+      let value_cop_aux = item.get('value_cop_aux').value
+      let value_usd_aux = item.get('value_usd_aux').value
+      let cuantity_aux = item.get('cuantity_aux').value
+      let total_cop_aux = value_cop_aux * cuantity_aux
+      let total_usd_aux = value_usd_aux * cuantity_aux
       item.patchValue({
-        total_cop_aux: this._numberPipe.transform(total_cop_aux.toString(), '$'),
+        total_cop_aux: total_cop_aux,
         total_cop: total_cop_aux,
-        total_usd_aux: this._numberPipe.transform(total_usd_aux.toString(), '$'),
+        total_usd_aux: total_usd_aux,
         total_usd: total_usd_aux,
         cuantity: cuantity_aux,
       })
@@ -176,8 +157,8 @@ export class ItemsQuotationComponent implements OnInit {
     let total_usd: number = 0
     let form = this.form.getRawValue()
     form.items.forEach(item => {
-      total_cop += Number(item.total_cop_aux.toString().split(/[,$]+/).join(''))
-      total_usd += Number(item.total_usd_aux.toString().split(/[,$]+/).join(''))
+      total_cop += Number(item.total_cop_aux)
+      total_usd += Number(item.total_usd_aux)
     });
     this.form.patchValue({
       total_cop: total_cop,
@@ -239,13 +220,13 @@ export class ItemsQuotationComponent implements OnInit {
     this.value_cop_temp = 0
     this.value_usd_temp = 0
     item_pre.getRawValue().subItems.forEach(subItem => {
-      this.value_cop_temp += Number(subItem.total_cop_aux.toString().split(/[,$]+/).join(''))
-      this.value_usd_temp += Number(subItem.total_usd_aux.toString().split(/[,$]+/).join(''))
+      this.value_cop_temp += Number(subItem.total_cop_aux)
+      this.value_usd_temp += Number(subItem.total_usd_aux)
     });
-    let value_cop = this.value_cop_temp * Number(item_pre.controls.cuantity_aux.value.toString().split(/[,$]+/).join(''))
+    let value_cop = this.value_cop_temp * Number(item_pre.controls.cuantity_aux.value)
     item_pre.patchValue({
-      value_cop_aux: this._numberPipe.transform(this.value_cop_temp.toString(), '$'),
-      value_usd_aux: this._numberPipe.transform(this.value_usd_temp.toString(), '$'),
+      value_cop_aux: this.value_cop_temp,
+      value_usd_aux: this.value_usd_temp,
     })
 
   }
@@ -259,57 +240,39 @@ export class ItemsQuotationComponent implements OnInit {
     const total_usd_aux = subItemGroup.get('total_usd_aux')
     const suma = (a, b) => parseFloat(a) * parseFloat(b);
     cuantity_aux.valueChanges.subscribe(r => {
-      if (typeof r === 'string') {
-        const maskedVal = this._numberPipe.transform(r, '');
-        if (r !== maskedVal) {
-          subItemGroup.patchValue({ cuantity_aux: maskedVal });
-        }
-      }
-      let value_cop_aux = subItemGroup.get('value_cop_aux').value.toString().split(/[,$]+/).join('')
-      let value_usd_aux = subItemGroup.get('value_usd_aux').value.toString().split(/[,$]+/).join('')
-      let cuantity_aux = subItemGroup.get('cuantity_aux').value.toString().split(/[,$]+/).join('')
+      let value_cop_aux = subItemGroup.get('value_cop_aux').value
+      let value_usd_aux = subItemGroup.get('value_usd_aux').value
+      let cuantity_aux = subItemGroup.get('cuantity_aux').value
 
-      let total_cop_aux = value_cop_aux * cuantity_aux.split(',').join('')
-      let total_usd_aux = value_usd_aux * cuantity_aux.split(',').join('')
+      let total_cop_aux = value_cop_aux * cuantity_aux
+      let total_usd_aux = value_usd_aux * cuantity_aux
 
       subItemGroup.patchValue({
-        total_cop_aux: this._numberPipe.transform(total_cop_aux.toString(), '$'),
+        total_cop_aux: total_cop_aux,
         total_cop: total_cop_aux,
-        total_usd_aux: this._numberPipe.transform(total_usd_aux.toString(), '$'),
+        total_usd_aux: total_usd_aux,
         total_usd: total_usd_aux,
         cuantity: cuantity_aux,
       })
       this.recalculate(subItemGroup, group)
     })
     value_cop_aux.valueChanges.subscribe(r => {
-      if (typeof r === 'string') {
-        const maskedVal = this._numberPipe.transform(r, '$');
-        if (r !== maskedVal) {
-          subItemGroup.patchValue({ value_cop_aux: maskedVal });
-        }
-      }
-      let cuantity_aux = subItemGroup.get('cuantity_aux').value.toString().split(',').join('')
-      let value_cop_aux = subItemGroup.get('value_cop_aux').value.toString().split(/[,$]+/).join('')
+      let cuantity_aux = subItemGroup.get('cuantity_aux').value
+      let value_cop_aux = subItemGroup.get('value_cop_aux').value
       let total_cop_aux = value_cop_aux * cuantity_aux
       subItemGroup.patchValue({
-        total_cop_aux: this._numberPipe.transform(total_cop_aux.toString(), '$'),
+        total_cop_aux: total_cop_aux,
         value_cop: value_cop_aux,
         total_cop: total_cop_aux,
       })
       this.recalculate(subItemGroup, group)
     })
     value_usd_aux.valueChanges.subscribe(r => {
-      if (typeof r === 'string') {
-        const maskedVal = this._numberPipe.transform(r, '$');
-        if (r !== maskedVal) {
-          subItemGroup.patchValue({ value_usd_aux: maskedVal });
-        }
-      }
-      let cuantity_aux = subItemGroup.get('cuantity_aux').value.toString().split(',').join('')
-      let value_usd_aux = subItemGroup.get('value_usd_aux').value.toString().split(/[,$]+/).join('')
+      let cuantity_aux = subItemGroup.get('cuantity_aux').value
+      let value_usd_aux = subItemGroup.get('value_usd_aux').value
       let total_usd_aux = value_usd_aux * cuantity_aux
       subItemGroup.patchValue({
-        total_usd_aux: this._numberPipe.transform(total_usd_aux.toString(), '$'),
+        total_usd_aux: total_usd_aux,
         value_usd: value_usd_aux,
         total_usd: total_usd_aux,
       })
@@ -340,13 +303,13 @@ export class ItemsQuotationComponent implements OnInit {
       description: [((edit && pre?.description) ? pre.description : ''), Validators.required],
       cuantity_aux: ((edit && pre?.cuantity) ? pre.cuantity : 1),
       cuantity: ((edit && pre?.cuantity) ? pre.cuantity : 1),
-      value_cop_aux: ((edit && pre?.value_cop) ? this._numberPipe.transform((pre.value_cop / pre.cuantity).toString(), '$') : 0),
+      value_cop_aux: ((edit && pre?.value_cop) ? pre.value_cop / pre.cuantity : 0),
       value_cop: ((edit && pre?.value_cop) ? pre.value_cop / pre.cuantity : 0),
-      value_usd_aux: ((edit && pre?.value_usd) ? this._numberPipe.transform((pre.value_usd / pre.cuantity).toString(), '$') : 0),
+      value_usd_aux: ((edit && pre?.value_usd) ? pre.value_usd / pre.cuantity : 0),
       value_usd: ((edit && pre?.value_usd) ? pre.value_usd / pre.cuantity : 0),
-      total_cop_aux: { value: ((edit && pre?.value_cop) ? this._numberPipe.transform((pre.value_cop).toString(), '$') : 0), disabled: true },
+      total_cop_aux: { value: ((edit && pre?.value_cop) ? pre.value_cop : 0), disabled: true },
       total_cop: { value: ((edit && pre?.value_cop) ? pre.value_cop : 0), disabled: true },
-      total_usd_aux: { value: ((edit && pre?.value_usd) ? this._numberPipe.transform((pre.value_usd).toString(), '$') : 0), disabled: true },
+      total_usd_aux: { value: ((edit && pre?.value_usd) ? pre.value_usd : 0), disabled: true },
       total_usd: { value: ((edit && pre?.value_usd) ? pre.value_usd : 0), disabled: true },
       type: type == 'only_item' ? true : false,
     })

@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import * as help from './helpers/import';
 import * as moment from 'moment';
 import { OrdenesProduccionService } from 'src/app/pages/manufactura/services/ordenes-produccion.service';
+import { Observable, OperatorFunction } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 @Component({
   selector: 'app-crear-viaticos',
   templateUrl: './crear-viaticos.component.html',
@@ -80,6 +82,17 @@ export class CrearViaticosComponent implements OnInit {
   regresar() {
     this.location.back();
   }
+
+  formatter = (x: any) => x.text;
+
+	search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+		text$.pipe(
+			debounceTime(200),
+			distinctUntilChanged(),
+			map((term) =>
+				term.length < 2 ? [] : this.work_orders.filter((v) => v.text.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
+			),
+		);
 
   getPeople() {
     this._viatico.getPeople().subscribe((res: any) => {
@@ -261,6 +274,14 @@ export class CrearViaticosComponent implements OnInit {
   }
 
   crearViatico() {
+    /* if (this.form.valid) {
+
+    } else {
+
+    } */
+    this.form.patchValue({
+      work_order_id: this.form.get('work_order_id').value.value
+    })
     this._swal.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',

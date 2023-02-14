@@ -35,8 +35,8 @@ export class QuotationService {
     return this.http.get(`${environment.base_url}/quotations/${id}`);
   }
 
-  getCommercialTerms(params = {}) {
-    return this.http.get(`${environment.base_url}/commercial-terms`, { params });
+  getTexts() {
+    return this.http.get(`${environment.base_url}/get-texts-company`);
   }
 
   download(id: any) {

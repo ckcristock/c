@@ -8,9 +8,10 @@ import { environment } from 'src/environments/environment';
 export class PreliquidadosService {
 
   constructor( private http: HttpClient ) { }
-  
+
   getPreliquidados( params = {} ) {
-    return this.http.get(`${environment.base_url}/preLiquidado`, {params});
+    //return this.http.get(`${environment.base_url}/preLiquidado`, {params});
+    return this.http.get(`${environment.base_url}/preliquidation`, {params});
   }
 
   activate(data:any, id){

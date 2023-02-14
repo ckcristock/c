@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { NegociosComponent } from '../../negocios/negocios.component';
 import { TercerosService } from '../terceros.service';
@@ -63,6 +63,7 @@ export class ViewThirdComponent implements OnInit {
     private _tercero: TercerosService,
     private route: ActivatedRoute,
     private _modal: ModalService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -99,6 +100,13 @@ export class ViewThirdComponent implements OnInit {
       this.loading = false;
       this.graficar()
     })
+  }
+
+  openNewTab(route, id = '') {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([route + '/' + id])
+    );
+    window.open(url, '_blank');
   }
 
   handlePageEvent(event: PageEvent, type) {

@@ -8,6 +8,7 @@ import { BudgetService } from '../budget.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-crear-presupuesto',
@@ -37,7 +38,7 @@ export class CrearPresupuestoComponent implements OnInit {
     Codigo: '',
     CodigoFormato: ''
   }
-
+  masksMoney = consts
   constructor(
     private _apuPieza: ApuPiezaService,
     private fb: FormBuilder,
@@ -68,36 +69,27 @@ export class CrearPresupuestoComponent implements OnInit {
     this._consecutivos.getConsecutivo('budgets').subscribe((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
       this.forma.patchValue({ format_code: this.datosCabecera.CodigoFormato })
-      if (this.path != 'editar') {
-        let con = this._consecutivos.construirConsecutivo(r.data);
-        this.datosCabecera.Codigo = con
-        this.forma.patchValue({
-          code: con
-        })
-      } else {
-        this.datosCabecera.Codigo = this.dataEdit?.code
-        this.forma.patchValue({
-          code: this.dataEdit?.code
-        })
-      }
-      if (this.path == 'copiar') {
-        let city = this.cities.find(x => x.value === this.forma.controls.destinity_id.value)
-        let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
-        this.datosCabecera.Codigo = con
-        this.forma.patchValue({
-          code: con
-        })
-      }
-      if (r.data.city) {
+      if (this.path !== 'editar') {
+        this.buildConsecutivo(this.forma.get('destinity_id').value, r)
         this.forma.get('destinity_id').valueChanges.subscribe(value => {
-          let city = this.cities.find(x => x.value === value)
-          let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
-          this.datosCabecera.Codigo = con
-          this.forma.patchValue({
-            code: con
-          })
+          this.buildConsecutivo(value, r)
         });
+      } else {
+        this.datosCabecera.Codigo = this.dataEdit.code
+        this.forma.patchValue({
+          code: this.dataEdit.code
+        })
+        this.forma.get('destinity_id').disable()
       }
+    })
+  }
+
+  buildConsecutivo(value, r, context = '') {
+    let city = this.cities.find(x => x.value === value)
+    let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
+    this.datosCabecera.Codigo = con
+    this.forma.patchValue({
+      code: con
     })
   }
 
@@ -175,25 +167,7 @@ export class CrearPresupuestoComponent implements OnInit {
     });
   }
 
-  get total_cop() {
-    return this.forma.get('total_cop').value
-  }
-  get total_usd() {
-    return this.forma.get('total_usd').value
-  }
-  get unit_value_prorrateado_cop() {
-    return this.forma.get('unit_value_prorrateado_cop').value
-  }
-  get unit_value_prorrateado_usd() {
-    return this.forma.get('unit_value_prorrateado_usd').value
-  }
-  get indirecCostList() {
-    return this.forma.get('indirect_costs') as FormArray;
-  }
 
-  get hasItems() {
-    return this.forma.get('items').value.length
-  }
 
   indirectCostPush(indirect, all = true) {
     indirect.clear();
@@ -266,5 +240,25 @@ export class CrearPresupuestoComponent implements OnInit {
   updateData = () => {
     const data = this.forma.value;
     this._budget.update(data, this.id).subscribe(r => { })
+  }
+
+  get total_cop() {
+    return this.forma.get('total_cop').value
+  }
+  get total_usd() {
+    return this.forma.get('total_usd').value
+  }
+  get unit_value_prorrateado_cop() {
+    return this.forma.get('unit_value_prorrateado_cop').value
+  }
+  get unit_value_prorrateado_usd() {
+    return this.forma.get('unit_value_prorrateado_usd').value
+  }
+  get indirecCostList() {
+    return this.forma.get('indirect_costs') as FormArray;
+  }
+
+  get hasItems() {
+    return this.forma.get('items').value.length
   }
 }

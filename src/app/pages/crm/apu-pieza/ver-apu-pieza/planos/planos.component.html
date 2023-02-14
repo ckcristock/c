@@ -1,0 +1,48 @@
+<h6>Planos cargados</h6>
+<div class="row">
+  <ng-container *ngFor="let item of data; let i = index">
+    <div class="col-md-2 text-truncate d-flex align-items-stretch">
+      <a
+        class="card border w-100"
+        data-toggle="tooltip"
+        data-placement="top"
+        [title]="item.name"
+        role="button"
+        [href]="
+          env && item.type == 'application/pdf'
+            ? 'https://docs.google.com/viewer?url=' + item.file
+            : item.file
+        "
+        target="_blank"
+      >
+        <ng-container *ngIf="item.type == 'application/pdf'; else image">
+          <a class="card-body">
+            <div class="d-flex justify-content-center">
+              <i class="fas fa-file-pdf text-danger fa-5x"></i>
+            </div>
+            <div class="pt-4">
+              <h6 class="text-truncate">{{ item.name }}</h6>
+            </div>
+          </a>
+        </ng-container>
+        <ng-template #image>
+          <img
+            [src]="item.file"
+            class="card-img-top"
+            style="height: 6rem; object-fit: cover; border-top: 3rem"
+          />
+          <a class="card-body">
+            <h6 class="text-truncate">{{ item.name }}</h6>
+          </a>
+        </ng-template>
+        <ng-container *ngIf="info == 'editar'">
+          <div class="card-footer p-0">
+            <button type="button" class="btn btn-danger btn-sm btn-block" (click)="borrarPlano($event, item)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </ng-container>
+      </a>
+    </div>
+  </ng-container>
+</div>

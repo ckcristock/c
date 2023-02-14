@@ -11,16 +11,17 @@ export class EditarApuServicioComponent implements OnInit {
   id: string;
   data: any;
   constructor(
-              private actRoute: ActivatedRoute, private _apuService: ApuServicioService
-              ) { }
+    private actRoute: ActivatedRoute,
+    private _apuService: ApuServicioService
+  ) { }
 
   ngOnInit(): void {
     this.id = this.actRoute.snapshot.params.id;
     this.getData();
   }
 
-  getData(){
-    this._apuService.getApuService(this.id).subscribe((r:any) => {
+  getData() {
+    this._apuService.getApuService(this.id).subscribe((r: any) => {
       this.data = r.data;
     })
   }

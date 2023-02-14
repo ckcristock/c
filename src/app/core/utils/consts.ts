@@ -188,6 +188,24 @@ export const consts = {
     precision: 0
   },
 
+  maskNumbersDecimal: {
+    prefix: ' ',
+    suffix: "",
+    thousands: '.',
+    decimal: ',',
+    allowNegative: false,
+    precision: 2
+  },
+
+  maskNumbersFiveDecimal: {
+    prefix: ' ',
+    suffix: "",
+    thousands: '.',
+    decimal: ',',
+    allowNegative: false,
+    precision: 5
+  },
+
   maskPorcentaje: {
     prefix: ' ',
     suffix: "%",

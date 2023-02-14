@@ -23,7 +23,13 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre</mat-label>
-            <input (input)="getMachines()" [(ngModel)]="filtro.name" type="text" matInput placeholder="Busca por nombre" />
+            <input
+              (input)="getMachines()"
+              [(ngModel)]="filtro.name"
+              type="text"
+              matInput
+              placeholder="Busca por nombre"
+            />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -32,7 +38,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && machines.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -41,14 +46,14 @@
             <th>Unidad</th>
             <th>Costo</th>
             <th>Tipo</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of machines" class="text-center">
             <td class="align-middle">{{ item.name }}</td>
             <td class="align-middle">{{ item.unit_name }}</td>
-            <td class="align-middle">{{ item.unit_cost }}</td>
+            <td class="align-middle">${{ item.unit_cost | number : "1.2" }}</td>
             <td class="align-middle">{{ item.type }}</td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -63,11 +68,11 @@
                   <a
                     class="dropdown-item waves-light text-info caja-botones"
                     href="javascript: void(0);"
-                    (click)="openConfirm(add, 'Actualizar máquina'); 
-                      getMaquine(item)
+                    (click)="
+                      openConfirm(add, 'Actualizar máquina'); getMaquine(item)
                     "
                   >
-                  <!-- cambiar el segndo parametro del openconfirm afecta un condicional del form -->
+                    <!-- cambiar el segndo parametro del openconfirm afecta un condicional del form -->
                     <i class="far fa-edit"></i> Editar
                   </a>
                 </div>
@@ -131,7 +136,8 @@
           <mat-label>Costo</mat-label>
           <input
             matInput
-            type="number"
+            currencyMask
+            [options]="masksMoney.maskCOP"
             placeholder="Ingresa el costo"
             formControlName="unit_cost"
             required
@@ -139,7 +145,10 @@
         </mat-form-field>
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Tipo</mat-label>
-          <mat-select formControlName="type_id" [disabled]="title == 'Actualizar máquina'">
+          <mat-select
+            formControlName="type_id"
+            [disabled]="title == 'Actualizar máquina'"
+          >
             <mat-option value="1">Máquinas herramientas</mat-option>
             <mat-option value="2">Procesos internos</mat-option>
             <mat-option value="3">Procesos externos</mat-option>

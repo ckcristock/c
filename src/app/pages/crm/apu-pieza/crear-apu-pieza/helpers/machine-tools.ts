@@ -13,7 +13,9 @@ export const machineToolHelper = {
       data.machine.forEach((r) => {
         let group = fb.group({
           description: [r.description],
+          name_description: [r.machine.name],
           unit_id: [r.unit_id],
+          unit_name: [r.unit.name],
           q_unit: [r.q_unit],
           q_total: [r.q_total],
           unit_cost: [r.unit_cost],
@@ -25,14 +27,16 @@ export const machineToolHelper = {
     }
   },
 
-  createMachineToolGroup(form:FormGroup, fb: FormBuilder) {
+  createMachineToolGroup(form:FormGroup, fb: FormBuilder, element) {
     let amount = form.get('amount').value;
     let machine = fb.group({
-      description: [''],
-      unit_id: [''],
+      description: [element.value],
+      name_description: [element.text],
+      unit_id: [element.unit_id],
+      unit_name: [element.unit.name],
       q_unit: [0],
       q_total: [amount],
-      unit_cost: [0],
+      unit_cost: [element.unit_cost],
       total: [0]
     });
     let list = form.get('machine_tools') as FormArray;
@@ -77,7 +81,7 @@ export const machineToolHelper = {
 
   subtotalMachine(list: FormArray, form: FormGroup){
     setTimeout(() => {
-      let total = 
+      let total =
       list.value.reduce(
         (a, b) => {
           return  a + b.total
@@ -85,7 +89,7 @@ export const machineToolHelper = {
       );
       form.patchValue({
         machine_tools_subtotal: total
-      }) 
+      })
     }, 100);
   }
 

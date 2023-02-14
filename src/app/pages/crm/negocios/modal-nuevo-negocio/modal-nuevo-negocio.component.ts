@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { UserService } from 'src/app/core/services/user.service';
@@ -57,6 +58,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
     private _swal: SwalService,
     private _user: UserService,
     private _person: PersonService,
+    private router: Router,
     public _consecutivos: ConsecutivosService,
   ) {
     this.id = this._user.user.person.id;
@@ -65,10 +67,6 @@ export class ModalNuevoNegocioComponent implements OnInit {
   ngOnInit(): void {
     this.datosCabecera.Fecha = new Date().toString();
     this.datosCabecera.Titulo = 'Nuevo negocio';
-  }
-
-  openModal() {
-    this._modal.open(this.newBusiness, 'xl')
     this.createForm();
     this.createFormFiltersBudgets();
     this.createFormFiltersQuotations();
@@ -76,6 +74,11 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this.getCountries();
     this.getPeople();
     this.getConsecutivo();
+  }
+
+  openModal() {
+    //this._modal.open(this.newBusiness, 'xl')
+
   }
 
   getConsecutivo() {
@@ -230,27 +233,25 @@ export class ModalNuevoNegocioComponent implements OnInit {
       this.paginationQuotations.collectionSize = res.data.total;
     })
   }
+  // if (this.budgetsSelected.includes(value)) {
+  //   this.budgetsSelected = this.budgetsSelected.filter(
+  //     (data) => data !== value
+  //     );
+  //     console.log(this.budgetsSelected);
+  //   return;
+  // }
+  // this.budgetsSelected.push(value);
+  // return;
 
   guardarPresupuesto(event, item) {
     if (event.checked) {
-      // Add the new value in the selected options
       this.budgetsSelected.push((item));
     } else {
-      ;
-      // removes the unselected option
       this.budgetsSelected = this.budgetsSelected.filter((selected) => {
         return selected.id !== event.source.id
       });
     }
-    // if (this.budgetsSelected.includes(value)) {
-    //   this.budgetsSelected = this.budgetsSelected.filter(
-    //     (data) => data !== value
-    //     );
-    //     console.log(this.budgetsSelected);
-    //   return;
-    // }
-    // this.budgetsSelected.push(value);
-    // return;
+
   }
   guardarCotizacion(event, item) {
     if (event.checked) {
@@ -260,6 +261,10 @@ export class ModalNuevoNegocioComponent implements OnInit {
         return selected.id !== event.source.id
       });
     }
+  }
+
+  openClose(matPanel) {
+    matPanel.toggle();
   }
 
   saveBusiness() {
@@ -280,13 +285,12 @@ export class ModalNuevoNegocioComponent implements OnInit {
             return this.form.addControl('quotation_value', this.fb.control(a + b.total_cop))
           }, 0)
           this._negocios.saveNeg(this.form.value).subscribe(r => {
-            this._modal.close()
             this.form.reset();
             this.budgetsSelected = [];
             this.quotationSelected = [];
             this.budgets = [];
             this.quotations = [];
-            this.updated.emit()
+            this.router.navigateByUrl('/crm/negocios')
             //this.getNegocios();
           });
           //this.addEventToHistory('Negocio Creado');

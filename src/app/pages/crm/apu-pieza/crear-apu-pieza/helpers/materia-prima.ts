@@ -3,10 +3,11 @@ import {
   FormBuilder,
   FormArray
 } from '@angular/forms';
-
+import { angularMath } from 'angular-ts-math/dist/angular-ts-math/angular-ts-math';
+import * as math from 'mathjs';
 export const materiaHelper = {
 
-  createFillInMateria(form: FormGroup, fb: FormBuilder, data, geometriesList: Array<any>, materials:Array<any>) {
+  createFillInMateria(form: FormGroup, fb: FormBuilder, data, geometriesList: Array<any>, materials: Array<any>) {
     if (data.rawmaterial) {
       let materia_prima = form.get('materia_prima') as FormArray;
       data.rawmaterial.forEach((r) => {
@@ -18,7 +19,7 @@ export const materiaHelper = {
             name: [m.name],
             measure: [m.measure]
           });
-          this.operation(measure);
+          this.operation(measure, materials);
           measuress.push(measure);
         });
         let group = fb.group({
@@ -39,7 +40,7 @@ export const materiaHelper = {
     }
   },
 
-  createMateriaGroup(form:FormGroup, fb: FormBuilder, geometriesList: Array<any>, materials:Array<any>) {
+  createMateriaGroup(form: FormGroup, fb: FormBuilder, geometriesList: Array<any>, materials: Array<any>) {
     let materia = fb.group({
       geometry_id: [''],
       image: [''],
@@ -47,7 +48,7 @@ export const materiaHelper = {
       measures: fb.array([]),
       weight_formula: [''],
       weight_kg: [0],
-      q: [0],
+      q: [form.get('amount').value],
       weight_total: [0],
       value_kg: [0],
       total_value: [0]
@@ -57,38 +58,43 @@ export const materiaHelper = {
     return materia;
   },
 
-  createMeasuresGroup(element, fb: FormBuilder, materia: FormGroup) {
+  createMeasuresGroup(element, fb: FormBuilder, materia: FormGroup, materials) {
     let group = fb.group({
       measure_id: element.id,
       value: [0],
       name: [element.name],
       measure: [element.measure]
     });
-    this.operation(group, materia);
+    this.operation(group, materials);
     return group;
   },
 
-  operation(group: FormGroup){
+  operation(group: FormGroup, materials) {
     group.get('value').valueChanges.subscribe(r => {
-      let materia:any = group.parent.parent;
-      let materiaControl:any = group.parent.parent.controls;
-      let measureGroup:any = group.parent;
+      let materia: any = group.parent.parent;
+      let materiaControl: any = group.parent.parent.controls;
+      let measureGroup: any = group.parent;
       let weight_formula = materiaControl.weight_formula.value;
       let formula = weight_formula;
       measureGroup.controls.forEach(element => {
         let measure = element.controls.measure.value;
         let value = element.controls.value.value;
+        formula = formula.replace('{' + measure + '}', value);
         console.log(formula);
-        formula = formula.replace( '{' + measure + '}',  value );
-      });  
-      let result = eval(formula);
+      });
+      let data = materials.find(m => m.id == materiaControl.material_id.value);
+      let result;
+      try {
+        result = math.evaluate(formula);
+      } catch (error) {
+      }
       materia.patchValue({
-        weight_kg: result
+        weight_kg: result * data.value_aux   //multiplicar por una variable del manterial aun no existente
       })
     })
   },
 
-  subscribeMateria(group: FormGroup, list: FormArray, form: FormGroup, geometriesList: Array<any>, fb: FormBuilder, materials:Array<any>){
+  subscribeMateria(group: FormGroup, list: FormArray, form: FormGroup, geometriesList: Array<any>, fb: FormBuilder, materials: Array<any>) {
     group.get('q').valueChanges.subscribe(value => {
       let weight_kg = group.get('weight_kg').value;
       group.patchValue({
@@ -121,14 +127,20 @@ export const materiaHelper = {
         image: data.image,
         weight_formula: data.weight_formula
       })
-      let measure =  group.get('measures') as FormArray;
+      let measure = group.get('measures') as FormArray;
       measure.clear();
       data.measures.forEach(element => {
-        measure.push(this.createMeasuresGroup(element, fb, group));
-      }); 
+        measure.push(this.createMeasuresGroup(element, fb, group, materials));
+      });
     });
     group.get('material_id').valueChanges.subscribe(value => {
       let data = materials.find(m => m.id == value);
+      let measure = group.get('measures') as FormArray;
+      measure.controls.forEach(element => {
+        element.patchValue({
+          value: 0
+        })
+      });
       group.patchValue({
         value_kg: data.kg_value
       })
@@ -147,19 +159,19 @@ export const materiaHelper = {
     });
   },
 
-  subtotalMateria(list: FormArray, form:FormGroup) {
+  subtotalMateria(list: FormArray, form: FormGroup) {
     setTimeout(() => {
-      let total = 
-      list.value.reduce(
-        (a, b) => {
-          return  a + b.total_value
-        },0
-      );
+      let total =
+        list.value.reduce(
+          (a, b) => {
+            return a + b.total_value
+          }, 0
+        );
       form.patchValue({
         subtotal_raw_material: total
-      }) 
+      })
     }, 130);
   },
-  
+
 
 };

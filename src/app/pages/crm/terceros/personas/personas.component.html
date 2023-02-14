@@ -37,7 +37,7 @@
                   type="text"
                   matInput
                   placeholder="Busca por nombre"
-                  formControlName = "name"
+                  formControlName="name"
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
@@ -46,17 +46,17 @@
                   type="text"
                   matInput
                   placeholder="Busca por documento"
-                  formControlName = "documento"
+                  formControlName="documento"
                 />
               </mat-form-field>
               <div class="col-md-3 mb-4">
                 <ng-select
-                  formControlName = "third"
+                  formControlName="third"
                   [items]="thirds"
                   bindLabel="text"
                   appearance="outline"
                   [appendTo]="'body'"
-                  placeholder="Tercero *"
+                  placeholder="Tercero"
                   bindValue="value"
                   [clearable]="false"
                   loadingText="loading"
@@ -69,7 +69,7 @@
                   type="text"
                   matInput
                   placeholder="Busca por celular"
-                  formControlName = "phone"
+                  formControlName="phone"
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
@@ -78,7 +78,7 @@
                   type="email"
                   matInput
                   placeholder="Busca por email"
-                  formControlName = "email"
+                  formControlName="email"
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
@@ -87,16 +87,7 @@
                   type="text"
                   matInput
                   placeholder="Busca por cargo"
-                  formControlName = "cargo"
-                />
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Observación</mat-label>
-                <input
-                  type="text"
-                  matInput
-                  placeholder="Busca por observación"
-                  formControlName = "observacion"
+                  formControlName="cargo"
                 />
               </mat-form-field>
             </ng-container>
@@ -121,18 +112,18 @@
             <mat-checkbox color="primary" [(ngModel)]="checkCargo"
               >Cargo</mat-checkbox
             >
-            <mat-checkbox color="primary" [(ngModel)]="checkObservacion"
-              >Observacón</mat-checkbox
-            >
           </section>
         </mat-expansion-panel>
       </mat-accordion>
       <div class="alert alert-info" *ngIf="filtrosActivos" role="alert">
         <strong
-          >Hay filtros de búsqueda activos, para mostrar todos los resultados haz
-          click
+          >Hay filtros de búsqueda activos, para mostrar todos los resultados
+          haz click
         </strong>
-        <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link"
+        <a
+          href="javascript: void(0)"
+          (click)="resetFiltros()"
+          class="alert-link"
           >aquí</a
         >
       </div>
@@ -149,13 +140,14 @@
               <th *ngIf="checkTelefono">Tel. Celular</th>
               <th *ngIf="checkEmail">Email</th>
               <th *ngIf="checkCargo">Cargo</th>
-              <th *ngIf="checkObservacion">Observación</th>
               <th><i class="mdi mdi-chevron-down"></i></th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let person of people" class="text-center">
-              <td class="align-middle" *ngIf="checkPersona">{{ person.name }}</td>
+              <td class="align-middle" *ngIf="checkPersona">
+                {{ person.name }}
+              </td>
               <td class="align-middle">{{ person.n_document }}</td>
               <td class="align-middle" *ngIf="checkTercero">
                 {{
@@ -167,12 +159,11 @@
               <td class="align-middle" *ngIf="checkTelefono">
                 {{ person.cell_phone }}
               </td>
-              <td class="align-middle" *ngIf="checkEmail">{{ person.email }}</td>
+              <td class="align-middle" *ngIf="checkEmail">
+                {{ person.email }}
+              </td>
               <td class="align-middle" *ngIf="checkCargo">
                 {{ person.position }}
-              </td>
-              <td class="align-middle" *ngIf="checkObservacion">
-                {{ person.observation }}
               </td>
               <td class="p-0 align-middle">
                 <div ngbDropdown container="body" class="dropdown-primary">
@@ -190,6 +181,13 @@
                       (click)="openConfirm(add); personForm(person)"
                     >
                       <i class="far fa-edit"></i> Editar
+                    </a>
+                    <a
+                      class="dropdown-item waves-light text-success caja-botones"
+                      href="javascript:void(0)"
+                      (click)="openConfirm(observations); personForm(person)"
+                    >
+                      <i class="fas fa-info-circle"></i> Observaciones
                     </a>
                   </div>
                 </div>
@@ -227,20 +225,23 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <form [formGroup]="form">
+  <ng-container [formGroup]="form">
     <div class="modal-body">
-      <ng-container *ngIf="!form.controls.id.value">
-        <small class="text-danger">
-          <b>
-            *Recuerda que este módulo es para agregar una persona que no
-            pertenezca a un tercero. <br />
-            Si deseas agregar una persona que pertenezca a un tercero debes
-            ingresar por el menú CRM - Terceros - Editar
-          </b>
-        </small>
-        <br />
-      </ng-container>
       <div class="row">
+        <div class="col-12 mat-form-field-wrapper">
+          <ng-select
+            formControlName="third_party_id"
+            [items]="thirds_aux"
+            bindLabel="text"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Tercero *"
+            bindValue="value"
+            [clearable]="false"
+            loadingText="loading"
+          >
+          </ng-select>
+        </div>
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Nombre</mat-label>
           <input
@@ -259,7 +260,6 @@
             matInput
             formControlName="n_document"
             placeholder="Ingresa el número de documento"
-            required
           />
           <mat-error *ngIf="n_document_valid">Campo obligatorio</mat-error>
         </mat-form-field>
@@ -301,14 +301,19 @@
             placeholder="Ingresa el cargo"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-12" appearance="outline">
+
+        <mat-form-field
+          class="col-md-12 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
           <mat-label>Observaciones</mat-label>
-          <input
-            type="text"
+          <textarea
             matInput
+            placeholder="Ingrese las observaciones"
             formControlName="observation"
-            placeholder="Ingresa las observaciones"
-          />
+            [cdkTextareaAutosize]="true"
+            rows="5"
+          ></textarea>
         </mat-form-field>
       </div>
     </div>
@@ -320,17 +325,43 @@
       >
         Cancelar
       </button>
-      <button
-        type="submit"
-        (click)="addPerson()"
-        class="btn btn-primary"
-      >
+      <button type="submit" (click)="addPerson()" class="btn btn-primary">
         Guardar
       </button>
     </div>
-  </form>
+  </ng-container>
 </ng-template>
 
+<ng-template #observations let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Observaciones</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <ng-container *ngIf="person.observation; else notObservations">
+      {{ person.observation }}
+    </ng-container>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cerrar
+    </button>
+  </div>
+</ng-template>
 <ng-template #noPermissions>
   <app-no-permissions></app-no-permissions>
+</ng-template>
+<ng-template #notObservations>
+  <div class="alert alert-info" role="alert">
+    No hay observaciones para mostrar.
+  </div>
 </ng-template>

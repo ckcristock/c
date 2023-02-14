@@ -88,8 +88,8 @@ export class TableInventaryComponent implements OnInit {
 
 
   constructor(
-    private _dotation: DotacionService, 
-    private modalService: NgbModal, 
+    private _dotation: DotacionService,
+    private modalService: NgbModal,
     private _person: PersonService,
     private _swal: SwalService,
     ) {
@@ -114,7 +114,7 @@ export class TableInventaryComponent implements OnInit {
 
   closeResult = '';
   public openConfirm(value: string, tablestock) {
-    
+
     //this.configEntrega(value)
     this.modalService.open(this.add, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -123,15 +123,15 @@ export class TableInventaryComponent implements OnInit {
     });
     console.log(value)
     console.log(tablestock)
-    tablestock.search(value); 
+    tablestock.search(value);
   }
   private getDismissReason(reason: any) {
-    
+
   }
 
   filtrar() {
-    this.ListarDotaciones(); 
-    this.listarTotales(null); 
+    this.ListarDotaciones();
+    this.listarTotales(null);
     this.Graficar()
   }
 
@@ -256,6 +256,7 @@ export class TableInventaryComponent implements OnInit {
     }
     this.loading = true;
     this._dotation.getDotations(params).subscribe((r: any) => {
+      console.log(r)
       this.Lista_Dotaciones = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;

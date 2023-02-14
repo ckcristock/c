@@ -4,6 +4,7 @@ import { PerfilesApuService } from './perfiles-apu.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-perfiles-apu',
@@ -28,7 +29,7 @@ export class PerfilesApuComponent implements OnInit {
   filtro: any = {
     name: ''
   }
-
+  masksMoney = consts
   openClose(){
     if (this.matPanel == false){
       this.accordion.openAll()
@@ -36,7 +37,7 @@ export class PerfilesApuComponent implements OnInit {
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
 
   constructor(
@@ -76,7 +77,7 @@ export class PerfilesApuComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   openModal() {
@@ -155,7 +156,7 @@ export class PerfilesApuComponent implements OnInit {
 
   save() {
     this._profiles.save(this.form.value).subscribe((r: any) => {
-      this.modalService.dismissAll(); 
+      this.modalService.dismissAll();
       this.form.reset();
       this.getProfiles();
       this._swal.show({

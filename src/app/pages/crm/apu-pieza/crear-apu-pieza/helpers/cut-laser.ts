@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 
 export const cutLaserHelper = {
-  
+
   createFillInCutLaser(form: FormGroup, fb: FormBuilder, data, materials:Array<any>) {
     if (data.cutlaser) {
       let cut_laser = form.get('cut_laser') as FormArray;
@@ -55,7 +55,7 @@ export const cutLaserHelper = {
       diameter: [0],
       total_hole_perimeter: [0],
       time: [0],
-      minute_value: [0],
+      minute_value: [form.get('minute_value_laser').value],
       value: [0],
       formula: [''],
       unit_value: [0],
@@ -201,7 +201,7 @@ export const cutLaserHelper = {
       let total = list.value.reduce( (a, b) => { return  a + b.value }, 0);
       form.patchValue({
         cut_laser_unit_subtotal: total
-      }) 
+      })
     }, 100);
   },
 
@@ -212,13 +212,13 @@ export const cutLaserHelper = {
       let result = value * subTotalUnit.value;
       form.patchValue({
         cut_laser_subtotal: result
-      }) 
+      })
     });
     subTotalUnit.valueChanges.subscribe(value => {
       let result = value * cut_laser_total_amount.value;
       form.patchValue({
         cut_laser_subtotal: result
-      }) 
+      })
     });
   }
 

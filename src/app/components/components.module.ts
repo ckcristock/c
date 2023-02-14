@@ -16,7 +16,7 @@ import { NotDataComponent } from './not-data/not-data.component';
 import { ApplicantComponent } from './applicant/applicant.component';
 import { GetApusComponent } from './get-apus/get-apus.component';
 import { CabeceraComponent } from './cabecera/cabecera.component';
-import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule } from '@angular/material';
 import { NoPermissionsComponent } from './no-permissions/no-permissions.component';
 
 @NgModule({
@@ -59,7 +59,8 @@ import { NoPermissionsComponent } from './no-permissions/no-permissions.componen
     MatIconModule,
     NgbDropdownModule,
     NgbPaginationModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCheckboxModule
   ]
 })
 export class ComponentsModule { }

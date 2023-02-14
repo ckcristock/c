@@ -25,7 +25,7 @@ export const functions = {
       baggage_cop: data.baggage_cop,
       total_laundry_cop: data.total_laundry_cop,
       total_laundry_usd: data.total_laundry_usd,
-      work_order_id: parseInt(data.work_order_id)
+      work_order_id: data.work_order
     })
 
     hospedajeHelper.createFillHotel(form, fb, data);

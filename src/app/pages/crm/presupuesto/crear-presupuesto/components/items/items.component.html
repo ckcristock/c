@@ -8,7 +8,12 @@
             <span class="badge badge-primary badge-custom">{{ i + 1 }}</span>
           </h4>
           <div class="text-center w-100" [formGroupName]="i">
-            <input appAutoFocusDirective type="text" class="input-custom w-100" formControlName="name"/>
+            <input
+              appAutoFocusDirective
+              type="text"
+              class="input-custom w-100"
+              formControlName="name"
+            />
           </div>
           <div class="text-center span-custom">
             <i
@@ -25,7 +30,7 @@
           >
             <thead>
               <tr class="text-center text-uppercase table-primary">
-                <th class="align-middle" colspan="7">Costos Directos</th>
+                <th class="align-middle" colspan="10">Costos Directos</th>
                 <th
                   class="align-middle"
                   [DynamicColspan]="'indirect_cost'"
@@ -89,9 +94,12 @@
                 <th></th>
               </tr>
               <tr class="text-center text-uppercase bg-light">
+                <th></th>
                 <th class="align-middle">#</th>
                 <th class="align-middle">Tipo</th>
+                <th></th>
                 <th class="align-middle">Descripción</th>
+                <th></th>
                 <th class="align-middle">Unidad</th>
                 <th class="align-middle">Cantidad</th>
                 <th class="align-middle">C. Unitario</th>
@@ -142,16 +150,23 @@
                     [formGroupName]="y"
                     *ngFor="
                       let subItem of item.controls.subItems.controls;
-                      let y = index
+                      let y = index;
+                      let last = last
                     "
                   >
                     <tr>
-                      <td class="align-middle">{{ i + 1 }}.{{ y + 1 }}</td>
+                      <a
+                        nohref=""
+                        (click)="findApus(item, true, subItem, y)"
+                        class="btn_agregar_tr"
+                      ></a>
+                      <td class="align-middle">
+                        {{ i + 1 }}.{{ y + 1 }}
+                      </td>
                       <td class="align-middle">
                         <select
                           formControlName="type"
-                          *ngIf="!subItem.controls.type_module.value; else type"
-                          style="width: 50px"
+                          style="width: 4rem"
                           class="form-control form-control-sm"
                         >
                           <option
@@ -165,42 +180,81 @@
                           {{ subItem.controls.type.value }}
                         </ng-template>
                       </td>
+                      <td>
+                        <i
+                          class="fas"
+                          [class]="
+                            subItem.get('type_module').value == 'apu_part'
+                              ? 'fa-wrench'
+                              : subItem.get('type_module').value == 'apu_set'
+                              ? 'fa-cogs'
+                              : subItem.get('type_module').value ==
+                                'apu_service'
+                              ? 'fa-headset'
+                              : 'fa-box'
+                          "
+                        ></i>
+                      </td>
                       <td class="align-middle">
-                        <!--  <input type="text" style="width:280px" formControlName="description"
-                                                      class="form-control form-control-sm" /> -->
-                        <!--  <input id="typeahead-focus" type="text" class="form-control"
-                                                      [(ngModel)]="model" [ngbTypeahead]="search"
-                                                      (focus)="focus$.next($any($event).target.value)"
-                                                      (click)="click$.next($any($event).target.value)"
-                                                      #instance="ngbTypeahead" /> -->
-                        <div style="position: relative">
-                          <!-- [class.is-invalid]="(subItem.get('apu_id').invalid && subItem.get('description').touched)" -->
-                          <input
-                            style="width: 280px"
-                            id="typeahead-http"
-                            type="text"
-                            class="form-control form-control-sm"
-                            [readonly]="subItem.get('type_module').value"
-                            [ngClass]="{
-                              'form-control-plaintext':
-                                subItem.get('type_module').value
-                            }"
-                            formControlName="description"
-                          />
+                        <input
+                          style="width: 11rem"
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="Ingresa la descripción"
+                          [readonly]="subItem.get('type_module').value"
+                          [ngClass]="{
+                            'form-control-plaintext':
+                              subItem.get('type_module').value
+                          }"
+                          formControlName="description"
+                        />
+                      </td>
+                      <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                          <button
+                            type="button"
+                            *ngIf="last"
+                            (click)="addSubItem(item)"
+                            class="btn btn-success btn-sm"
+                          >
+                            <i class="fas fa-plus"></i>
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="!subItem.get('apu_id').value"
+                            (click)="findApus(item, false, subItem, y)"
+                            class="btn btn-info btn-sm"
+                          >
+                            <i class="fas fa-search"></i>
+                          </button>
+                          <button
+                            type="button"
+                            *ngIf="subItem.get('apu_id').value"
+                            (click)="
+                              openNewTab(
+                                subItem.get('type_module').value,
+                                subItem.get('apu_id').value
+                              )
+                            "
+                            class="btn btn-primary btn-sm"
+                          >
+                            <i class="fas fa-eye"></i>
+                          </button>
+                          <!-- llega aqui -->
                         </div>
-                        <!--  <small *ngIf="searching"
-                                                      class="form-text text-muted">searching...</small> -->
                       </td>
                       <td class="align-middle">
                         <input
                           type="text"
                           style="width: 70px"
+                          formControlName="unit"
                           class="form-control form-control-sm"
                         />
                       </td>
                       <td class="align-middle">
                         <input
-                          type="number"
+                          currencyMask
+                          [options]="masksMoney.maskNumbers"
                           style="width: 80px"
                           formControlName="cuantity"
                           class="form-control form-control-sm"
@@ -208,7 +262,8 @@
                       </td>
                       <td class="align-middle">
                         <input
-                          type="number"
+                          currencyMask
+                          [options]="masksMoney.maskCOP"
                           style="width: 90px"
                           formControlName="unit_cost"
                           class="form-control form-control-sm"
@@ -217,7 +272,8 @@
                       <td class="align-middle">
                         <div class="values" style="width: 90px">
                           {{
-                            subItem.controls.total_cost.value | currency: "":""
+                            subItem.controls.total_cost.value
+                              | currency : "" : ""
                           }}
                         </div>
                       </td>
@@ -237,7 +293,8 @@
                           <td>
                             <div class="values" style="width: 90px">
                               {{
-                                indirect.controls.value.value | currency: "":""
+                                indirect.controls.value.value
+                                  | currency : "" : ""
                               }}
                             </div>
                           </td>
@@ -247,7 +304,7 @@
                         <div class="values" style="width: 90px">
                           {{
                             subItem.controls.subtotal_indirect_cost.value
-                              | currency: "":""
+                              | currency : "" : ""
                           }}
                         </div>
                       </td>
@@ -267,7 +324,8 @@
                         <td class="align-middle">
                           <div class="values" style="width: 90px">
                             {{
-                              subItem.controls.value_amd.value | currency: "":""
+                              subItem.controls.value_amd.value
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -283,7 +341,7 @@
                           <div class="values" style="width: 90px">
                             {{
                               subItem.controls.value_unforeseen.value
-                                | currency: "":""
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -299,7 +357,7 @@
                           <div class="values" style="width: 90px">
                             {{
                               subItem.controls.value_utility.value
-                                | currency: "":""
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -308,7 +366,7 @@
                         <div class="values" style="width: 90px">
                           {{
                             subItem.controls.total_amd_imp_uti.value
-                              | currency: "":""
+                              | currency : "" : ""
                           }}
                         </div>
                       </td>
@@ -328,14 +386,16 @@
                         <td class="align-middle">
                           <div class="values" style="width: 90px">
                             {{
-                              subItem.controls.subTotal.value | currency: "":""
+                              subItem.controls.subTotal.value
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
                         <td class="align-middle">
                           <div class="values" style="width: 90px">
                             {{
-                              subItem.controls.retention.value | currency: "":""
+                              subItem.controls.retention.value
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -348,14 +408,16 @@
                       <td class="align-middle">
                         <div class="values" style="width: 110px">
                           {{
-                            subItem.controls.value_cop.value | currency: "":""
+                            subItem.controls.value_cop.value
+                              | currency : "" : ""
                           }}
                         </div>
                       </td>
                       <td class="align-middle">
                         <div class="values" style="width: 110px">
                           {{
-                            subItem.controls.value_usd.value | currency: "":""
+                            subItem.controls.value_usd.value
+                              | currency : "" : ""
                           }}
                         </div>
                       </td>
@@ -365,7 +427,7 @@
                           <div class="values" style="width: 90px">
                             {{
                               subItem.controls.value_prorrota_cop.value
-                                | currency: "":""
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -373,7 +435,7 @@
                           <div class="values" style="width: 90px">
                             {{
                               subItem.controls.value_prorrota_usd.value
-                                | currency: "":""
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -381,7 +443,7 @@
                           <div class="values" style="width: 90px">
                             {{
                               subItem.controls.unit_value_prorrateado_cop.value
-                                | currency: "":""
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -389,7 +451,7 @@
                           <div class="values" style="width: 90px">
                             {{
                               subItem.controls.unit_value_prorrateado_usd.value
-                                | currency: "":""
+                                | currency : "" : ""
                             }}
                           </div>
                         </td>
@@ -420,12 +482,10 @@
                   </ng-container>
                 </ng-container>
                 <tr class="bg-gray">
-                  <td class="align-middle" colspan="6">
-                    SUBTOTAL
-                  </td>
+                  <td class="align-middle" colspan="6">SUBTOTAL</td>
                   <td class="align-middle">
                     <div class="values">
-                      {{ item.controls.total_cost.value | currency: "":"" }}
+                      {{ item.controls.total_cost.value | currency : "" : "" }}
                     </div>
                   </td>
                   <!-- TOTALS COSTOS INDIRECTOS -->
@@ -446,7 +506,7 @@
                         <div class="values">
                           {{
                             subtIndirect.controls.sub_total.value
-                              | currency: "":""
+                              | currency : "" : ""
                           }}
                         </div>
                       </td>
@@ -456,7 +516,7 @@
                     <div class="values">
                       {{
                         item.controls.subtotal_indirect_cost.value
-                          | currency: "":""
+                          | currency : "" : ""
                       }}
                     </div>
                   </td>
@@ -466,14 +526,15 @@
                     <td class="align-middle"></td>
                     <td class="align-middle">
                       <div class="values">
-                        {{ item.controls.value_amd.value | currency: "":"" }}
+                        {{ item.controls.value_amd.value | currency : "" : "" }}
                       </div>
                     </td>
                     <td class="align-middle"></td>
                     <td class="align-middle">
                       <div class="values">
                         {{
-                          item.controls.value_unforeseen.value | currency: "":""
+                          item.controls.value_unforeseen.value
+                            | currency : "" : ""
                         }}
                       </div>
                     </td>
@@ -481,7 +542,7 @@
                     <td class="align-middle">
                       <div class="values">
                         {{
-                          item.controls.value_utility.value | currency: "":""
+                          item.controls.value_utility.value | currency : "" : ""
                         }}
                       </div>
                     </td>
@@ -489,7 +550,8 @@
                   <td class="align-middle">
                     <div class="values">
                       {{
-                        item.controls.total_amd_imp_uti.value | currency: "":""
+                        item.controls.total_amd_imp_uti.value
+                          | currency : "" : ""
                       }}
                     </div>
                   </td>
@@ -497,18 +559,20 @@
                   <!-- TOTAL VALOR VENTA -->
                   <td class="align-middle">
                     <div class="values">
-                      {{ item.controls.another_values.value | currency: "":"" }}
+                      {{
+                        item.controls.another_values.value | currency : "" : ""
+                      }}
                     </div>
                   </td>
                   <ng-container *ngIf="item.controls.shows.value.total_sale">
                     <td class="align-middle">
                       <div class="values">
-                        {{ item.controls.subTotal.value | currency: "":"" }}
+                        {{ item.controls.subTotal.value | currency : "" : "" }}
                       </div>
                     </td>
                     <td class="align-middle">
                       <div class="values">
-                        {{ item.controls.retention.value | currency: "":"" }}
+                        {{ item.controls.retention.value | currency : "" : "" }}
                       </div>
                     </td>
                   </ng-container>
@@ -519,12 +583,12 @@
                   </td>
                   <td class="align-middle">
                     <div class="values">
-                      {{ item.controls.value_cop.value | currency: "":"" }}
+                      {{ item.controls.value_cop.value | currency : "" : "" }}
                     </div>
                   </td>
                   <td class="align-middle">
                     <div class="values">
-                      {{ item.controls.value_usd.value | currency: "":"" }}
+                      {{ item.controls.value_usd.value | currency : "" : "" }}
                     </div>
                   </td>
                   <!-- END TOTAL VALOR VENTA -->
@@ -550,7 +614,7 @@
                       <div class="values">
                         {{
                           item.controls.unit_value_prorrateado_cop.value
-                            | currency: "":""
+                            | currency : "" : ""
                         }}
                       </div>
                     </td>
@@ -558,7 +622,7 @@
                       <div class="values">
                         {{
                           item.controls.unit_value_prorrateado_usd.value
-                            | currency: "":""
+                            | currency : "" : ""
                         }}
                       </div>
                     </td>
@@ -569,26 +633,6 @@
               </ng-container>
             </tbody>
           </table>
-        </div>
-        <div class="text-right">
-          <div class="btn-group w-sm-100" role="group">
-            <button
-              ngbTooltip="Agregar subitem manual"
-              type="button"
-              (click)="addSubItem(item)"
-              class="btn btn-success btn-sm"
-            >
-              <i class="fas fa-plus"></i>
-            </button>
-            <button
-              ngbTooltip="Agregar subitem"
-              type="button"
-              (click)="findApus(item)"
-              class="btn btn-info btn-sm"
-            >
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
         </div>
       </div>
     </ng-container>
@@ -631,3 +675,23 @@
 </ng-template>
 
 <app-get-apus #apus (sendApus)="getApus($event)"> </app-get-apus>
+<!-- <input
+                          type="text"
+                          style="width: 280px"
+                          formControlName="description"
+                          class="form-control form-control-sm"
+                        /> -->
+<!-- <input
+                          id="typeahead-focus"
+                          type="text"
+                          class="form-control"
+                          [(ngModel)]="model"
+                          [ngbTypeahead]="search"
+                          (focus)="focus$.next($any($event).target.value)"
+                          (click)="click$.next($any($event).target.value)"
+                          #instance="ngbTypeahead"
+                        /> -->
+<!-- [class.is-invalid]="(subItem.get('apu_id').invalid && subItem.get('description').touched)" -->
+<!-- <small *ngIf="searching" class="form-text text-muted"
+                          >searching...</small
+                        > -->

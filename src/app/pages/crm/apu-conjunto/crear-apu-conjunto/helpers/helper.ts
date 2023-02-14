@@ -1,4 +1,4 @@
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { machineToolHelper } from './machine-tools';
 import { internalProcessesHelper } from './internal_proccesses';
 import { externalProcessesHelper } from './external_proccesses';
@@ -60,13 +60,13 @@ export const functionsApuConjunto = {
     }
   },
 
-  createForm(fb: FormBuilder) {
+  createForm(fb: FormBuilder, user_id, calculationBase) {
     let group = fb.group({
-      name: [''],
-      city_id: [null],
-      person_id: [null],
-      third_party_id:[null],
-      line: [''],
+      name: ['', Validators.required],
+      city_id: [null, Validators.required],
+      person_id: [user_id],
+      third_party_id:[null, Validators.required],
+      line: ['', Validators.required],
       files: [''],
       observation: [''],
       list_pieces_sets: fb.array([]),
@@ -83,16 +83,16 @@ export const functionsApuConjunto = {
       indirect_cost: fb.array([]),
       indirect_cost_total: [0],
       direct_costs_indirect_costs_total: [0],
-      administrative_percentage: [0],
+      administrative_percentage: [calculationBase.administration_percentage.value],
       administrative_value: [0],
-      unforeseen_percentage: [0],
+      unforeseen_percentage: [calculationBase.unforeseen_percentage.value],
       unforeseen_value: [0],
       administrative_unforeseen_subtotal: [0],
       administrative_unforeseen_unit: [0],
-      utility_percentage: [0],
+      utility_percentage: [calculationBase.utility_percentage.value],
       admin_unforeseen_utility_subtotal: [0],
       sale_price_cop_withholding_total: [0],
-      trm: [0],
+      trm: [calculationBase.trm.value],
       sale_price_usd_withholding_total: [0],
       format_code: [''],
       code: ['']

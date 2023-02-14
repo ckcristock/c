@@ -11,7 +11,8 @@ import {
   NgbCollapseModule,
   NgbNavModule,
   NgbTooltipModule,
-  NgbTypeaheadModule
+  NgbTypeaheadModule,
+  NgbPopoverModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -80,6 +81,11 @@ import { ChartModule } from 'angular2-chartjs';
 import { ChartsModule } from 'ng2-charts';
 import { CurrencyMaskModule } from "ng2-currency-mask";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { PlanosComponent } from './apu-pieza/ver-apu-pieza/planos/planos.component';
+import { PlanosConjuntoComponent } from './apu-conjunto/ver-apu-conjunto/planos-conjunto/planos-conjunto.component';
+import { CopiarApuPiezaComponent } from './apu-pieza/copiar-apu-pieza/copiar-apu-pieza.component';
+import { CopiarApuConjuntoComponent } from './apu-conjunto/copiar-apu-conjunto/copiar-apu-conjunto.component';
+import { CopiarApuServicioComponent } from './apu-servicio/copiar-apu-servicio/copiar-apu-servicio.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -132,6 +138,11 @@ export const MY_FORMATS = {
     TableNegociosComponent,
     ViewThirdComponent,
     ModalNuevoNegocioComponent,
+    PlanosComponent,
+    PlanosConjuntoComponent,
+    CopiarApuPiezaComponent,
+    CopiarApuConjuntoComponent,
+    CopiarApuServicioComponent,
   ],
   providers: [
     {
@@ -185,7 +196,8 @@ export const MY_FORMATS = {
     ChartModule,
     ChartsModule,
     CurrencyMaskModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgbPopoverModule
   ]
 })
 export class CrmModule { }

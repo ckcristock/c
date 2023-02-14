@@ -5,7 +5,7 @@
       <hr class="line" />
       <form [formGroup]="forma" (submit)="save()">
         <div class="row">
-          <div class="col-md-6 mb-4">
+          <div class="col-md-3 mb-4">
             <ng-select
               bindLabel="text"
               [items]="clients"
@@ -18,7 +18,7 @@
               [appendTo]="'body'"
             ></ng-select>
           </div>
-          <div class="col-md-6 mb-4">
+          <div class="col-md-2 mb-4">
             <ng-select
               [items]="cities"
               placeholder="Destino"
@@ -29,7 +29,7 @@
               formControlName="destinity_id"
             ></ng-select>
           </div>
-          <mat-form-field class="col" appearance="outline">
+          <mat-form-field class="col-md-3" appearance="outline">
             <mat-label>Línea</mat-label>
             <input
               matInput
@@ -39,17 +39,8 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>TRM</mat-label>
-            <input
-              matInput
-              type="number"
-              placeholder="Ingresa TRM"
-              formControlName="trm"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
+
+          <mat-form-field class="col-md-3" appearance="outline">
             <mat-label>Proyecto</mat-label>
             <input
               matInput
@@ -59,35 +50,19 @@
               autocomplete="off"
             />
           </mat-form-field>
+          <mat-form-field class="col-md-1 pl-0" appearance="outline">
+            <mat-label>TRM</mat-label>
+            <input
+              matInput
+              currencyMask
+              [options]="masksMoney.maskCOP"
+              placeholder="Ingresa TRM"
+              formControlName="trm"
+              autocomplete="off"
+            />
+          </mat-form-field>
         </div>
         <!-- END HEADER -->
-        <!-- Configuracion presupuestal -->
-        <h6 class="text-center">Porcentaje de configuración presupuestal</h6>
-        <div class="rounded-top table-responsive">
-          <table class="table table-striped table-sm">
-            <tbody>
-              <ng-container formArrayName="indirect_costs">
-                <ng-container
-                  *ngFor="let item of indirecCostList.controls; let i = index"
-                >
-                  <tr [formGroupName]="i">
-                    <td class="col-10">{{ item.controls.name.value }}</td>
-                    <td class="col-2">
-                      <input
-                        type="number"
-                        min="0"
-                        step=".1"
-                        class="form-control form-control-sm"
-                        formControlName="percentage"
-                      />
-                    </td>
-                  </tr>
-                </ng-container>
-              </ng-container>
-            </tbody>
-          </table>
-        </div>
-        <!--  END  Configuracion presupuestal -->
         <div class="row">
           <mat-form-field
             class="col-md-12 mat-form-field-no-padding textarea"
@@ -112,6 +87,32 @@
           [calculationBase]="calculationBase"
         >
         </app-items>
+        <!-- Configuracion presupuestal -->
+        <h6 class="text-center">Porcentaje de configuración presupuestal</h6>
+        <div class="rounded-top table-responsive">
+          <table class="table table-striped table-sm">
+            <tbody>
+              <ng-container formArrayName="indirect_costs">
+                <ng-container
+                  *ngFor="let item of indirecCostList.controls; let i = index"
+                >
+                  <tr [formGroupName]="i">
+                    <td class="col-10">{{ item.controls.name.value }}</td>
+                    <td class="col-2">
+                      <input
+                        currencyMask
+                        [options]="masksMoney.maskPorcentaje"
+                        class="form-control form-control-sm"
+                        formControlName="percentage"
+                      />
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <!--  END  Configuracion presupuestal -->
         <div *ngIf="hasItems">
           <h5 class="text-center">PRESUPUESTO TOTAL</h5>
           <div class="rounded-top table-responsive">

@@ -439,7 +439,7 @@
                   class="list-group-item d-flex justify-content-between align-items-center p-1"
                 >
                   <span>SUBTOTAL MANO DE OBRA</span>
-                  <h6>${{ this.form.get("subtotal_labor").value | number: '1.2' }}</h6>
+                  <h6>${{ this.form.get("subtotal_labor").value | number : "1.2-2" }}</h6>
                 </li>
                 <li
                   class="list-group-item d-flex justify-content-between align-items-center p-1"
@@ -447,7 +447,7 @@
                   <span>SUBTOTAL VIÁTICOS</span>
                   <h6>
                     ${{
-                      this.form.get("subtotal_travel_expense").value | number: '1.2'
+                      this.form.get("subtotal_travel_expense").value | number : "1.2-2"
                     }}
                   </h6>
                 </li>
@@ -458,7 +458,7 @@
                   <h6>
                     ${{
                       this.form.get("subtotal_dimensional_validation").value
-                      | number: '1.2'
+                      | number : "1.2-2"
                     }}
                   </h6>
                 </li>
@@ -837,7 +837,7 @@
                   class="list-group-item d-flex justify-content-between align-items-center p-1"
                 >
                   <span>SUBTOTAL MANO DE OBRA</span>
-                  <h6>${{ this.form.get("subtotal_labor_mpm").value | number: '1.2' }}</h6>
+                  <h6>${{ this.form.get("subtotal_labor_mpm").value | number : "1.2-2" }}</h6>
                 </li>
                 <li
                   class="list-group-item d-flex justify-content-between align-items-center p-1"
@@ -845,7 +845,7 @@
                   <span>SUBTOTAL VIÁTICOS</span>
                   <h6>
                     ${{
-                      this.form.get("subtotal_travel_expense_mpm").value | number: '1.2'
+                      this.form.get("subtotal_travel_expense_mpm").value | number : "1.2-2"
                     }}
                   </h6>
                 </li>
@@ -856,7 +856,7 @@
                   <h6>
                     ${{
                       this.form.get("subtotal_assembly_commissioning").value
-                      | number: '1.2'
+                      | number : "1.2-2"
                     }}
                   </h6>
                 </li>
@@ -867,7 +867,7 @@
                   <h6>
                     ${{
                       this.form.get("general_subtotal_travel_expense_labor").value
-                      | number: '1.2'
+                      | number : "1.2-2"
                     }}
                   </h6>
                 </li>
@@ -895,13 +895,8 @@
                       formControlName="administrative_percentage"
                     />
                   </td>
-                  <td class="col-3">
-                    <input
-                      currencyMask
-                      [options]="masksMoney.maskCOP"
-                      class="form-control form-control-sm"
-                      formControlName="administrative_value"
-                    />
+                  <td class="col-3 text-right">
+                    ${{ form.controls.administrative_value.value | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>
@@ -914,24 +909,14 @@
                       formControlName="unforeseen_percentage"
                     />
                   </td>
-                  <td class="col-3">
-                    <input
-                      currencyMask
-                      [options]="masksMoney.maskCOP"
-                      class="form-control form-control-sm"
-                      formControlName="unforeseen_value"
-                    />
+                  <td class="col-3 text-right">
+                    ${{ form.controls.unforeseen_value.value | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>
                   <td class="col-9" colspan="2">Subtotal A + I</td>
-                  <td class="col-3">
-                    <input
-                      currencyMask
-                      [options]="masksMoney.maskCOP"
-                      class="form-control form-control-sm"
-                      formControlName="subtotal_administrative_unforeseen"
-                    />
+                  <td class="col-3 text-right">
+                    ${{ form.controls.subtotal_administrative_unforeseen.value | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>
@@ -947,13 +932,8 @@
                 </tr>
                 <tr>
                   <td class="col-9" colspan="2">SubTotal A + I + U</td>
-                  <td class="col-3">
-                    <input
-                      currencyMask
-                      [options]="masksMoney.maskCOP"
-                      class="form-control form-control-sm"
-                      formControlName="subtotal_administrative_unforeseen_utility"
-                    />
+                  <td class="col-3 text-right">
+                    ${{ form.controls.subtotal_administrative_unforeseen_utility.value | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>

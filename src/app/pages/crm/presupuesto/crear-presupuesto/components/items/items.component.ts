@@ -21,6 +21,7 @@ export class ItemsComponent implements OnInit {
   @Input('indirectCosts') indirectCosts: EventEmitter<any>
   @Input('calculationBase') calculationBase: any
   @Input('dataEdit') dataEdit: any
+  @Input('cities') cities: any
   masksMoney = consts
   @ViewChild('apus') apus: any
   tempItem: FormGroup;
@@ -53,7 +54,33 @@ export class ItemsComponent implements OnInit {
     }
   }
   count = 0;
+  subscribeRetention() {
+    this.forma.get('destinity_id').valueChanges.subscribe(value => {
+      let data = this.cities.find(c => c.value == value);
+      if (data) {
+        this.forma.controls.items['controls'].forEach((item) => {
+          item.controls.subItems.controls.forEach((subitem) => {
+            console.log(subitem)
+            let subtotal = subitem.value.subTotal
+            if (subitem.value.type == 'S') {
+              let retention = (subtotal / ((100 - data.percentage_service) * 0.01)) - subtotal
+              subitem.patchValue({
+                retention: retention
+              })
+            } else if (subitem.value.type == 'P') {
+              let retention = (subtotal / ((100 - data.percentage_product) * 0.01)) - subtotal
+              subitem.patchValue({
+                retention: retention
+              })
+            }
+          });
+        });
+      }
+    })
+  }
+
   addItems(itemToAdd = null) {
+    this.subscribeRetention()
     this.count++
     let item = this.fb.group(
       {
@@ -281,49 +308,7 @@ export class ItemsComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  replaceSubItem(apu) {
-    console.log(apu)
-    const percentages = {
-      percentage_amd: this.calculationBase.administration_percentage.value,
-      percentage_unforeseen: this.calculationBase.unforeseen_percentage.value,
-      percentage_utility: this.calculationBase.utility_percentage.value,
-    }
-    let description = apu.name
-    return {
-      id: apu.id,
-      type: ((apu?.type == 'P' || apu?.type == 'C') ? 'P' : 'S'),
-      description,
-      apu_id: apu.apu_id,
-      cuantity: apu.cuantity,
-      unit_cost: apu.unit_cost,
-      total_cost: apu.total_cost,
-      unit: 'UNIDAD',
-      subtotal_indirect_cost: apu.subtotal_indirect_cost,
-      ...percentages,
-      value_amd: apu.value_amd,
-      value_unforeseen: apu.value_unforeseen,
-      value_utility: apu.value_utility,
-      total_amd_imp_uti: apu.total_amd_imp_uti,
-      another_values: apu.another_values,
-      subTotal: apu.subTotal,
-      retention: 23,
-      percentage_sale: apu.percentage_sale,
-      value_cop: apu.value_cop,
-      value_usd: apu.value_usd,
-      unit_value_cop: apu.unit_value_cop,
-      unit_value_usd: apu.unit_value_usd,
-      value_prorrota_cop: apu.value_prorrota_cop,
-      value_prorrota_usd: apu.value_prorrota_usd,
-      unit_value_prorrateado_cop: apu.unit_value_prorrateado_cop,
-      unit_value_prorrateado_usd: apu.unit_value_prorrateado_usd,
-      observation: '',
-      type_module: apu.type_module,
-      //indirect_costs: this.makeIndirectCost(),
-    }
-  }
-
   makeSubItemGroup(apu, edit = false) {
-    console.log(apu)
     const percentages = {
       percentage_amd: edit ? apu.percentage_amd : this.calculationBase.administration_percentage.value,
       percentage_unforeseen: edit ? apu.percentage_unforeseen : this.calculationBase.unforeseen_percentage.value,
@@ -372,7 +357,23 @@ export class ItemsComponent implements OnInit {
   makeSubItem(apu = null, edit = false) {
 
     const subItemGroup = this.makeSubItemGroup(apu, edit)
-
+    let city_id = this.forma.get('destinity_id').value;
+    let city = this.cities.find(c => c.value == city_id);
+    let subtotal = subItemGroup.get('subTotal').value
+    if (city) {
+      let type = subItemGroup.get('type').value
+      if (type == 'S') {
+        let retention = (subtotal / ((100 - city.percentage_service) * 0.01)) - subtotal
+        subItemGroup.patchValue({
+          retention: retention
+        })
+      } else if (type == 'P') {
+        let retention = (subtotal / ((100 - city.percentage_product) * 0.01)) - subtotal
+        subItemGroup.patchValue({
+          retention: retention
+        })
+      }
+    }
     const cuantity = subItemGroup.get('cuantity')
     const unitCost = subItemGroup.get('unit_cost')
     const indirectCosts = subItemGroup.get('indirect_costs') as FormArray
@@ -403,6 +404,20 @@ export class ItemsComponent implements OnInit {
     const partId = subItemGroup.get('apu_part_id')
     const serviceId = subItemGroup.get('service_id')
     type.valueChanges.subscribe(r => {
+      let subtotal = subItemGroup.get('subTotal').value
+      if (city) {
+        if (r == 'S') {
+          let retention = (subtotal / ((100 - city.percentage_service) * 0.01)) - subtotal
+          subItemGroup.patchValue({
+            retention: retention
+          })
+        } else if (r == 'P') {
+          let retention = (subtotal / ((100 - city.percentage_product) * 0.01)) - subtotal
+          subItemGroup.patchValue({
+            retention: retention
+          })
+        }
+      }
       const set = r == 'P' ? subItemGroup.get('total_cost').value : 0
 
       const value = this.calculateSutIndirectos(indirectCosts, set)
@@ -480,6 +495,22 @@ export class ItemsComponent implements OnInit {
 
     subTotal.valueChanges.subscribe(r => {
       const base = r + retention.value
+      let city_id = this.forma.get('destinity_id').value;
+      let city = this.cities.find(c => c.value == city_id);
+      if (city) {
+        let type = subItemGroup.get('type').value
+        if (type == 'S') {
+          let retention = (r / ((100 - city.percentage_service) * 0.01)) - r
+          subItemGroup.patchValue({
+            retention: retention
+          })
+        } else if (type == 'P') {
+          let retention = (r / ((100 - city.percentage_product) * 0.01)) - r
+          subItemGroup.patchValue({
+            retention: retention
+          })
+        }
+      }
       subItemGroup.patchValue(
         {
           value_cop: base,

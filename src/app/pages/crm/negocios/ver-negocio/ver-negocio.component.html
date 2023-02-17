@@ -33,7 +33,10 @@
             </small>
             <mat-form-field class="pb-0" appearance="outline">
               <mat-label>Etapa</mat-label>
-              <mat-select [value]="negocio.status" (selectionChange)="changeState($event)">
+              <mat-select
+                [value]="negocio.status"
+                (selectionChange)="changeState($event)"
+              >
                 <mat-option value="Prospección">Prospección</mat-option>
                 <mat-option value="Presupuesto">Presupuesto</mat-option>
                 <mat-option value="Cotización">Cotización</mat-option>
@@ -103,8 +106,8 @@
                 <td class="align-middle">
                   {{ pres?.budget.created_at | date }}
                 </td>
-                <td class="align-middle">
-                  $ {{ pres?.budget.total_cop | number }}
+                <td class="align-middle text-right">
+                  $ {{ pres?.budget.total_cop | number : "1.2-2" }}
                 </td>
 
                 <td class="align-middle">
@@ -135,10 +138,12 @@
                       <a
                         class="dropdown-item waves-light text-success caja-botones"
                         href="javascript: void(0);"
-                        [routerLink]="[
-                          '/crm/presupuesto/ver/',
-                          pres?.budget.id
-                        ]"
+                        (click)="
+                          openNewTab(
+                            '/crm/presupuesto/ver/',
+                            pres?.budget.id
+                          )
+                        "
                       >
                         <i class="fas fa-eye"></i> Ver</a
                       >
@@ -221,7 +226,9 @@
               <tr *ngFor="let item of negocio?.quotations" class="text-center">
                 <th scope="row">{{ item.code }}</th>
                 <td>{{ item.created_at | date }}</td>
-                <td>$ {{ item.total_cop | number }}</td>
+                <td class="text-right">
+                  $ {{ item.total_cop | number : "1.2-2" }}
+                </td>
                 <td
                   [role]="item.budget_included == 'si' ? 'button' : ''"
                   [class]="item.budget_included == 'si' ? 'text-primary' : ''"
@@ -265,10 +272,12 @@
                       <a
                         class="dropdown-item waves-light text-success caja-botones"
                         href="javascript: void(0);"
-                        [routerLink]="[
-                          '/crm/cotizacion/ver/',
-                          item.pivot.quotation_id
-                        ]"
+                        (click)="
+                          openNewTab(
+                            '/crm/cotizacion/ver/',
+                            item.pivot.quotation_id
+                          )
+                        "
                       >
                         <i class="fas fa-eye"></i> Ver</a
                       >
@@ -317,6 +326,108 @@
                           <i class="fas fa-clock"></i> Pendiente</a
                         >
                       </ng-template>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h4 class="text-primary">APU</h4>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button (click)="findApus()" class="text-center btn btn-primary btn-sm" role="button">
+                <i class="fa fa-plus"></i> Agregar
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          class="rounded-top table-responsive"
+          *ngIf="!loading && negocio?.apus.length > 0; else notData"
+        >
+          <table class="table table-bordered table-striped table-sm">
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Línea</th>
+                <th>Tipo</th>
+                <th>Valor unitario</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of negocio?.apus" class="text-center">
+                <td>{{ item.apuable.code }}</td>
+                <td>{{ item.apuable.name }}</td>
+                <td>{{ item.apuable.line }}</td>
+                <td>{{ item.apuable.typeapu_name }}</td>
+                <td class="text-right">
+                  ${{
+                    (item.apuable.typeapu_name == "Pieza"
+                      ? item.apuable.unit_direct_cost
+                      : item.apuable.typeapu_name == "Conjunto"
+                      ? item.apuable.total_direct_cost
+                      : item.apuable.typeapu_name == "Servicio"
+                      ? item.apuable.general_subtotal_travel_expense_labor
+                      : ""
+                    ) | number : "1.2-2"
+                  }}
+                </td>
+                <td>
+                  <div ngbDropdown container="body" class="dropdown-primary">
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm waves-light"
+                      type="button"
+                    >
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <a
+                        *ngIf="item.apuable.typeapu_name == 'Servicio'"
+                        class="dropdown-item waves-light text-success caja-botones"
+                        href="javascript: void(0);"
+                        (click)="
+                          openNewTab(
+                            '/crm/apu/ver-apu-servicio',
+                            item.apuable_id
+                          )
+                        "
+                      >
+                        <i class="far fa-eye"></i> Ver
+                      </a>
+                      <a
+                        *ngIf="item.apuable.typeapu_name == 'Pieza'"
+                        class="dropdown-item waves-light text-success caja-botones"
+                        href="javascript: void(0);"
+                        (click)="
+                          openNewTab('/crm/apu/ver-apu-pieza', item.apuable_id)
+                        "
+                      >
+                        <i class="far fa-eye"></i> Ver
+                      </a>
+                      <a
+                        *ngIf="item.apuable.typeapu_name == 'Conjunto'"
+                        class="dropdown-item waves-light text-success caja-botones"
+                        href="javascript: void(0);"
+                        (click)="
+                          openNewTab(
+                            '/crm/apu/ver-apu-conjunto',
+                            item.apuable_id
+                          )
+                        "
+                      >
+                        <i class="far fa-eye"></i> Ver
+                      </a>
                     </div>
                   </div>
                 </td>
@@ -427,6 +538,8 @@
     </div>
   </div>
 </div>
+
+<app-get-apus #apus (sendApus)="getApus($event)"> </app-get-apus>
 
 <ng-template #add let-modal>
   <div class="modal-header">

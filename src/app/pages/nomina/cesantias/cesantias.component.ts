@@ -1,11 +1,18 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ModalService } from 'src/app/core/services/modal.service';
 import Swal from 'sweetalert2';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
-import { PrimasService } from '../primas/primas.service';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
+import { PermissionService } from 'src/app/core/services/permission.service';
+import { MatAccordion } from '@angular/material/expansion';
+import { CesantiasService } from './cesantias.service';
+import { DateAdapter } from 'saturn-datepicker';
+import { debounceTime } from 'rxjs/operators';
+import { PageEvent } from '@angular/material';
+import { HttpParams } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-cesantias',
@@ -13,14 +20,16 @@ import { PrimasService } from '../primas/primas.service';
   styleUrls: ['./cesantias.component.scss']
 })
 export class CesantiasComponent implements OnInit {
-  @ViewChild('modal') modal: any;
-  @ViewChild('modalFuncionario') modalFuncionario: any;
-  @Input('empleados') empleados;
-  form: FormGroup;
-  loading: boolean = false;
-  years: any[] = [];
-  premiums: any[] = [];
-  premiumsPeople: any[] = [];
+  @ViewChild(MatAccordion) accordion: MatAccordion;
+  datePipe = new DatePipe('es-CO');
+  matPanel: boolean;
+  permission: Permissions = {
+    menu: 'Cesatía',
+    permissions: {
+      show: true,
+      add: true
+    }
+  };
   year = new Date().getFullYear();
   habilitarPagar: boolean = false;
   pagination = {
@@ -28,68 +37,185 @@ export class CesantiasComponent implements OnInit {
     page: 1,
     collectionSize: 0
   }
+  loading: boolean = false;
+  estadoFiltros: boolean = false;
+  formFilters: FormGroup;
+  activeFilters: boolean = false;
+  orderObj: any;
+  cesantiasList: any = [];
+
+/*   @ViewChild('modal') modal: any;
+  @ViewChild('modalFuncionario') modalFuncionario: any;
+  @Input('empleados') empleados;
+  form: FormGroup;
+  years: any[] = []; */
+
+
 
   /**Cambiar los servicios a cesantías */
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private modalService: NgbModal,
+    private route: ActivatedRoute,
+    private dateAdapter: DateAdapter<any>,
+    private _permission: PermissionService,
     private _modal: ModalService,
-    private _primas: PrimasService,
-    private _swal: SwalService
-  ) { }
+    private _swal: SwalService,
 
-  ngOnInit(): void {
-    this.getPrimasList();
-    this.createForm();
-    // this.getPrimasList();
-    let year = new Date().getFullYear();
-    for (let index = year - 5; index <= year; index++) {
-      this.years.push(index);
-    }
-    this.habilitarBotonPagar();
+    private _cesantias: CesantiasService,
+  ) {
+    this.dateAdapter.setLocale('es');
+    this.permission = this._permission.validatePermissions(this.permission);
   }
 
-  closeResult = '';
-  public openConfirmOld(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  ngOnInit(): void {
+    if (this.permission.permissions.show) {
+      this.createFormFilters();
+      this.route.queryParamMap.subscribe((params: any) =>{
+        if (params.params.pageSize) {
+          this.pagination.pageSize = params.params.pageSize
+        } else {
+          this.pagination.pageSize = 10
+        }
+        if (params.params.pag) {
+          this.pagination.page = params.params.pag
+        } else {
+          this.pagination.page = 1
+        }
+        this.orderObj = { ...params.keys, ...params }
+
+        if (Object.keys(this.orderObj).length > 4) {
+          this.activeFilters = true
+          const formValues = {};
+          for (const param in params) {
+            formValues[param] = params[param];
+          }
+          this.formFilters.patchValue(formValues['params']);
+        }
+      });
+      /**acá van los get de las cesantías */
+
+      //this.createForm();
+      this.habilitarBotonPagar();
+    } else { //sino, no está autorizado
+      this.router.navigate(['/notautorized']);
+    }
+  }
+
+    /***
+     * La primera consulta es el historial de las cesantías
+     * la segunda es el individual,
+     * y el generar el actual
+     */
+
+  openClose(){ //para los filtros
+    this.matPanel = !this.matPanel;
+    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
+  }
+
+  handlePageEvent(event: PageEvent) {
+    this.pagination.pageSize = event.pageSize
+    this.pagination.page = event.pageIndex + 1
+    this.getCesantiasList()
+  }
+
+  resetFiltros() {
+    for (const controlName in this.formFilters.controls) {
+      this.formFilters.get(controlName).setValue('');
+    }
+    this.activeFilters = false
+  }
+
+  SetFiltros(paginacion) {
+    let params = new HttpParams;
+    params = params.set('pag', paginacion)
+    //params = params.set('pageSize', this.pagination.pageSize)  //ojo
+    for (const controlName in this.formFilters.controls) {
+      const control = this.formFilters.get(controlName);
+      if (control.value) {
+        params = params.set(controlName, control.value);
+      }
+    }
+    return params;
+  }
+
+  createFormFilters() {
+    this.formFilters = this.fb.group({
+      people_id: [''],
+      date_from: [''],
+      date_to: [''],
+    })
+    this.formFilters.valueChanges.pipe(
+      debounceTime(500),
+    ).subscribe(r => {
+      this.getCesantiasList();
+    })
+    //Falta chequear la relación entre los filtros para establecer las peticiones al cambiar la seleccion
+   /*  this.formFilters.get('group_id').valueChanges.subscribe((valor) => {
+      if (valor) {
+        this.formFilters.get('dependency_id').enable();
+        //this.getDependencies(valor);
+      } else {
+        this.formFilters.patchValue({ dependency_id: 0 });
+        this.formFilters.get('dependency_id').disable();
+      }
+    }); */
+  }
+
+
+  /***
+   * para el fitro por fecha, pero poner el combo por año puesto
+   * que las cesantías se pagan anual
+   */
+  selectedDate(fecha) {
+    if (fecha.value) {
+      this.formFilters.patchValue({
+        date_from: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
+        date_to: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+      })
+    } else {
+      this.formFilters.patchValue({
+        date_from: '',
+        date_to: ''
+      });
+    }
+    this.getCesantiasList()
+  }
+
+  getCesantiasList(page = 1){
+    this.loading = true
+    this.pagination.page = page;
+    let params = {
+      ...this.pagination
+    }
+    this._cesantias.getLayoffsListPaginated(params)
+      .subscribe((r: any) => {
+        this.cesantiasList = r.data.data;
+        this.pagination.collectionSize = r.data.total
+        this.loading = false
+      })
   }
 
   openConfirm() {
-    //chequear que no exista prima en ese periodo
-    let mes = new Date().getMonth();
-    let semestre = 1;
-    let lapso: string;
-    if (mes <= 6) {
-      semestre = 1;
-      lapso = ' enero - junio ';
-    } else {
-      semestre = 2;
-      lapso = ' julio - diciembre ';
-
-    }
+    //chequear que no exista cesantía paga en ese añó
     let params = {
-      periodo: semestre,
       yearSelected: this.year,
     }
-
     //console.log(params)
-
-    this._primas.checkBonuses(params.yearSelected + '-' + params.periodo).subscribe(res => {
+     this._cesantias.getCheckLayoffs(params.yearSelected).subscribe(res => {
       //chequea en la DB si existe prima de este periodo
+      console.log(res);
+      console.log(this.router.navigate(['/nomina/cesantias/', params.yearSelected, 0]));
+
       if (res['data'] == null) {
-        this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 0])
+        this.router.navigate(['/nomina/cesantias/', params.yearSelected, 0])//modificar esta ruta
       } else {
         //si existe, si está paga o no
         if (res['data']['status'] == 'pagado') {
           Swal.fire({
             title: 'Prima',
-            html: 'Ya se ha pagado las primas del ' + semestre + ' semestre (periodo: ' + lapso + ' ' + this.year + ').' + '<br>' + 'Solo podrá visualizar',
+            html: 'Ya se han pagado las cesantías del año: ' + this.year + ').' + '<br>' + 'Solo podrá visualizar',
             icon: 'warning',
             showCancelButton: false,
             confirmButtonColor: '#A3BD30',
@@ -99,19 +225,22 @@ export class CesantiasComponent implements OnInit {
             confirmButtonText: 'Sí, confirmar'
           }).then((res)=>{
             if(res.isConfirmed){
-              this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 0])
+              console.log('redirigir a la cesantía del anio mencionado');
+              this.router.navigate(['/nomina/cesantia/', params.yearSelected, false]) //modificar esta ruta
             }
           })
         } else {
           this._swal.show({
             title: 'Prima',
-            text: `Ya se ha generado un listado ¿Desea regenerar las primas del ${semestre} semestre ${params.yearSelected}?(periodo: ${lapso})`,
+            text: `Ya se ha generado un listado ¿Desea regenerar la lista de cesantías del año ${params.yearSelected}?`,
             icon: 'warning',
             showCancel: true
           }, (res: any) => {
             if (res) {
               if (res) {
-                this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 1])
+                console.log(res);
+                console.log('REDIRIJIR A OTRA PARTE');
+                this.router.navigate(['/nomina/cesantia/', params.yearSelected, true]) //cambiar esta ruta
               }
             }
           })
@@ -120,9 +249,8 @@ export class CesantiasComponent implements OnInit {
     });
   }
 
-  private getDismissReason(reason: any) {
-  }
-
+////////////////////////////////
+/*
   openModal() {
     this.modal.show();
   }
@@ -136,31 +264,19 @@ export class CesantiasComponent implements OnInit {
 
   openModalFuncionario() {
     this.modalFuncionario.show();
-  }
+  } */
 
-  getPrimasList(page = 1) {
-    this.loading = true
-    this.pagination.page = page;
-    let params = {
-      ...this.pagination
-    }
-    this._primas.getPrimasPaginated(params)
-      .subscribe((r: any) => {
-        this.loading = false
-        this.premiums = r.data.data;
-        this.pagination.collectionSize = r.data.total
-      })
-  }
+  //////////
+
 
   habilitarBotonPagar (){
     const hoy = new Date;
-    const hoyMes = hoy.getMonth()
-
+    //const hoy = new Date(2022,11,10);
+    const hoyMes = hoy.getMonth();
     // 0: Enero, 1: Febrere, 2: Marzo, 3: Abril,
     // 4: Mayo, 5: Junio, 6: Julio, 7: Agosto,
     // 8: Septiembre, 9: Octubre, 10: Noviembre, 11: Diciembre
-
-    if (hoyMes == 5 || hoyMes == 6 || hoyMes == 11 || hoyMes == 0)  {
+    if (hoyMes == 0 || hoyMes == 1 )  {
       this.habilitarPagar = true;
     } else {
       this.habilitarPagar = false;
@@ -168,19 +284,21 @@ export class CesantiasComponent implements OnInit {
   }
 
   VerPrimaFuncionarios(period) {
+    /***consulta al servicio que trae los calculos,
+    requiero suledo base,
+    los días trabajados y
+    el fondo de pensión al que está afiliado*/
     let params = {
       period: period,
       yearSelected: period.split('-')[0],
       periodo: period.split('-')[1],
     }
-    this._primas.setBonus(params)
+    /* this._primas.setBonus(params)
       .subscribe((r: any) => {
         if (r.data != null) {
-          this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 1])
+          this.router.navigate(['/nomina/cesantia', params.yearSelected, true])
         }
-      })
+      }) */
   }
-
-
 
 }

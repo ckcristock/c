@@ -171,9 +171,9 @@
     </ng-container>.
 
     <ng-container>
-      <div *ngIf="!habilitarPagar" >
+      <div *ngIf="!habilitarPagar && empleados.status != 'pagado'" >
         <div class="alert alert-danger m-0 text-center" role="alert">
-          Solo podrá pagar primas en los meses de Junio/Julio y en Diciembre/Enero
+          Solo podrá pagar primas en los meses de Junio y en Diciembre
         </div>
       </div>
       <button

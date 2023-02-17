@@ -48,6 +48,7 @@ import {
 } from '@angular/material-moment-adapter';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CesantiasComponent } from './cesantias/cesantias.component';
+import { CesantiaCurrentComponent } from './cesantias/cesantia-current/cesantia-current.component';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -104,6 +105,7 @@ export const MY_FORMATS = {
     LegalizarComponent,
     HistorialPagosComponent,
     CesantiasComponent,
+    CesantiaCurrentComponent,
   ],
   providers: [
     {

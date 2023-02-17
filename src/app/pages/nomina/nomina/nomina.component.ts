@@ -181,10 +181,6 @@ export class NominaComponent implements OnInit {
 
   //Colillas de pago
   getColillasPago(datos: any) {
-    let pet = 'gato'
-    console.log(`[${datos.frecuencia_pago}]`);
-    console.log([pet]);
-
     this.donwloadingPdfNom = true;
     this._payroll.dowloadPdfColillas(datos)
       .subscribe((res:BlobPart)=>{

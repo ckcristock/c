@@ -50,8 +50,6 @@ export class CesantiasComponent implements OnInit {
   form: FormGroup;
   years: any[] = []; */
 
-
-
   /**Cambiar los servicios a cesantías */
 
   constructor(
@@ -95,7 +93,6 @@ export class CesantiasComponent implements OnInit {
         }
       });
       /**acá van los get de las cesantías */
-
       //this.createForm();
       this.habilitarBotonPagar();
     } else { //sino, no está autorizado
@@ -151,18 +148,7 @@ export class CesantiasComponent implements OnInit {
     ).subscribe(r => {
       this.getCesantiasList();
     })
-    //Falta chequear la relación entre los filtros para establecer las peticiones al cambiar la seleccion
-   /*  this.formFilters.get('group_id').valueChanges.subscribe((valor) => {
-      if (valor) {
-        this.formFilters.get('dependency_id').enable();
-        //this.getDependencies(valor);
-      } else {
-        this.formFilters.patchValue({ dependency_id: 0 });
-        this.formFilters.get('dependency_id').disable();
-      }
-    }); */
   }
-
 
   /***
    * para el fitro por fecha, pero poner el combo por año puesto
@@ -206,10 +192,9 @@ export class CesantiasComponent implements OnInit {
      this._cesantias.getCheckLayoffs(params.yearSelected).subscribe(res => {
       //chequea en la DB si existe prima de este periodo
       console.log(res);
-      console.log(this.router.navigate(['/nomina/cesantias/', params.yearSelected, 0]));
-
-      if (res['data'] == null) {
-        this.router.navigate(['/nomina/cesantias/', params.yearSelected, 0])//modificar esta ruta
+      //console.log(this.router.navigate(['/nomina/cesantias/', params.yearSelected, 0]));
+      if (!res['status']) {
+        this.router.navigate(['/nomina/cesantias/', params.yearSelected, false])
       } else {
         //si existe, si está paga o no
         if (res['data']['status'] == 'pagado') {
@@ -226,7 +211,7 @@ export class CesantiasComponent implements OnInit {
           }).then((res)=>{
             if(res.isConfirmed){
               console.log('redirigir a la cesantía del anio mencionado');
-              this.router.navigate(['/nomina/cesantia/', params.yearSelected, false]) //modificar esta ruta
+              this.router.navigate(['/nomina/cesantia/', params.yearSelected, true]) //modificar esta ruta
             }
           })
         } else {
@@ -240,7 +225,7 @@ export class CesantiasComponent implements OnInit {
               if (res) {
                 console.log(res);
                 console.log('REDIRIJIR A OTRA PARTE');
-                this.router.navigate(['/nomina/cesantia/', params.yearSelected, true]) //cambiar esta ruta
+                this.router.navigate(['/nomina/cesantia/', params.yearSelected, false]) //cambiar esta ruta
               }
             }
           })

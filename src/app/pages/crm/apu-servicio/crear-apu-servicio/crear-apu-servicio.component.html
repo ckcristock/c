@@ -64,7 +64,6 @@
               matInput
               placeholder="Ingrese las observaciones"
               rows="5"
-              required
               formControlName="observation"
               [cdkTextareaAutosize]="true"
             ></textarea>
@@ -223,23 +222,11 @@
                             formControlName="hours_displacement"
                           />
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="hours_value_displacement"
-                          />
+                        <td class="px-2">
+                          ${{ item.controls.hours_value_displacement.value | number : "1.2-2" }}
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="total_value_displacement"
-                          />
+                        <td class="px-2">
+                          ${{ item.controls.total_value_displacement.value | number : "1.2-2" }}
                         </td>
                         <td>
                           <input
@@ -276,23 +263,11 @@
                             formControlName="hours_ordinary"
                           />
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="hours_value_ordinary"
-                          />
+                        <td class="px-2">
+                          ${{ item.controls.hours_value_ordinary.value | number : "1.2-2" }}
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="total_value_ordinary"
-                          />
+                        <td class="px-2">
+                          ${{ item.controls.total_value_ordinary.value | number : "1.2-2" }}
                         </td>
                         <td>
                           <input
@@ -329,32 +304,14 @@
                             formControlName="hours_festive"
                           />
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="hours_value_festive"
-                          />
+                        <td class="px-2">
+                          ${{ item.controls.hours_value_festive.value | number : "1.2-2" }}
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="total_value_festive"
-                          />
+                        <td class="px-2">
+                          ${{ item.controls.total_value_festive.value | number : "1.2-2" }}
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="salary_value"
-                          />
+                        <td class="px-2">
+                          ${{ item.controls.salary_value.value | number : "1.2-2" }}
                         </td>
                         <td>
                           <div class="btn-group">
@@ -362,7 +319,7 @@
                               class="btn btn-outline-success btn-sm"
                               placement="top"
                               type="button"
-                              ngbTooltip="Est. Viáticos"
+                              matTooltip="Est. viáticos"
                               (click)="collapsed[i] = !collapsed[i]"
                               [attr.aria-expanded]="!collapsed"
                               aria-controls="collapseExample2"
@@ -440,13 +397,13 @@
                                     <td class="p-2 text-right">
                                       ${{
                                         item.controls.unit_value.value
-                                          | number : "1.2"
+                                          | number : '1.2-2'
                                       }}
                                     </td>
                                     <td class="p-2 text-right">
                                       ${{
                                         item.controls.total_value.value
-                                          | number : "1.2"
+                                          | number : '1.2-2'
                                       }}
                                     </td>
                                   </tr>
@@ -455,16 +412,12 @@
                               <tr>
                                 <td
                                   colspan="5"
-                                  class="text-center font-weight-bolder"
+                                  class="text-right font-weight-bolder"
                                 >
                                   SUBTOTAL
                                 </td>
-                                <td colspan="1" class="text-center">
-                                  <input
-                                    type="number"
-                                    class="form-control form-control-sm form-control-edit"
-                                    formControlName="subtotal"
-                                  />
+                                <td colspan="1" class="text-right">
+                                  ${{ item.controls.subtotal.value | number : "1.2-2" }}
                                 </td>
                               </tr>
                             </table>
@@ -665,23 +618,11 @@
                             formControlName="hours_displacement"
                           />
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="hours_value_displacement"
-                          />
+                        <td class="text-right px-2">
+                          ${{ item.controls.hours_value_displacement.value | number : "1.2-2" }}
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="total_value_displacement"
-                          />
+                        <td class="text-right px-2">
+                          ${{ item.controls.total_value_displacement.value | number : "1.2-2" }}
                         </td>
                         <td>
                           <input
@@ -718,23 +659,11 @@
                             formControlName="hours_ordinary"
                           />
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="hours_value_ordinary"
-                          />
+                        <td class="text-right px-2">
+                          ${{ item.controls.hours_value_ordinary.value | number : "1.2-2" }}
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="total_value_ordinary"
-                          />
+                        <td class="text-right px-2">
+                          ${{ item.controls.total_value_ordinary.value | number : "1.2-2" }}
                         </td>
                         <td>
                           <input
@@ -771,32 +700,14 @@
                             formControlName="hours_festive"
                           />
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="hours_value_festive"
-                          />
+                        <td class="text-right px-2">
+                          ${{ item.controls.hours_value_festive.value | number : "1.2-2" }}
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="total_value_festive"
-                          />
+                        <td class="text-right px-2">
+                          ${{ item.controls.total_value_festive.value | number : "1.2-2" }}
                         </td>
-                        <td>
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            class="form-control form-control-sm form-control-edit"
-                            style="width: 5rem"
-                            formControlName="salary_value"
-                          />
+                        <td class="text-right px-2">
+                          ${{ item.controls.salary_value.value | number : "1.2-2" }}
                         </td>
                         <td>
                           <div class="btn-group">
@@ -804,7 +715,7 @@
                               class="btn btn-outline-success btn-sm"
                               placement="top"
                               type="button"
-                              ngbTooltip="Est. Viáticos"
+                              matTooltip="Est. viáticos"
                               (click)="mpMcollapsed[i] = !mpMcollapsed[i]"
                               [attr.aria-expanded]="!collapsed"
                               aria-controls="collapseExample2"
@@ -882,13 +793,13 @@
                                     <td class="p-2 text-right">
                                       ${{
                                         item.controls.unit_value.value
-                                          | number : "1.2"
+                                          | number : '1.2-2'
                                       }}
                                     </td>
                                     <td class="p-2 text-right">
                                       ${{
                                         item.controls.total_value.value
-                                          | number : "1.2"
+                                          | number : '1.2-2'
                                       }}
                                     </td>
                                   </tr>
@@ -902,13 +813,8 @@
                                   >
                                     <span><b>Subtotal</b></span>
                                   </td>
-                                  <td colspan="6" class="text-center">
-                                    <input
-                                      currencyMask
-                                      [options]="masksMoney.maskCOP"
-                                      class="form-control form-control-sm"
-                                      formControlName="subtotal"
-                                    />
+                                  <td colspan="1" class="text-right">
+                                    ${{ item.controls.subtotal.value | number : "1.2-2" }}
                                   </td>
                                 </tr>
                               </tfoot>
@@ -1060,7 +966,7 @@
                         $
                         {{
                           form.get("sale_price_cop_withholding_total").value
-                            | number : "1.2"
+                            | number : '1.2-2'
                         }}
                       </span>
                     </h5>
@@ -1087,7 +993,7 @@
                         USD
                         {{
                           form.get("sale_price_usd_withholding_total").value
-                            | number : "1.2"
+                            | number : '1.2-2'
                         }}
                       </span>
                     </h5>

@@ -122,6 +122,11 @@
                   </td>
                   <td class="align-middle">
                     <select
+                      *ngIf="
+                        !item.get('apu_part_id').value &&
+                          !item.get('apu_set_child_id').value;
+                        else apuType
+                      "
                       class="form-control form-control-sm"
                       id="descripcion"
                       formControlName="apu_type"
@@ -129,12 +134,24 @@
                       <option value="P">Pieza</option>
                       <option value="C">Conjunto</option>
                     </select>
+                    <ng-template #apuType>
+                      {{
+                        item.controls.apu_type.value == "P"
+                          ? "Pieza"
+                          : item.controls.apu_type.value == "C"
+                          ? "Conjunto"
+                          : ""
+                      }}
+                    </ng-template>
                   </td>
                   <td class="align-middle">
-                    <div style="position: relative">
+                    <div class="position-relative">
                       <input
-                        *ngIf="item['controls']['apu_type']['value'] == 'P'"
-                        style="width: 13rem"
+                        *ngIf="
+                          item['controls']['apu_type']['value'] == 'P' &&
+                          !item.get('apu_part_id').value
+                        "
+                        style="min-width: 13rem"
                         id="typeahead-http"
                         type="text"
                         class="form-control form-control-sm"
@@ -145,11 +162,12 @@
                         formControlName="description"
                         (change)="select(item, 'description', 'apu_part_id')"
                       />
-                    </div>
-                    <div style="position: relative">
                       <input
-                        *ngIf="item['controls']['apu_type']['value'] == 'C'"
-                        style="width: 13rem"
+                        *ngIf="
+                          item['controls']['apu_type']['value'] == 'C' &&
+                          !item.get('apu_set_child_id').value
+                        "
+                        style="min-width: 13rem"
                         id="typeahead-httpp"
                         type="text"
                         class="form-control form-control-sm"
@@ -163,6 +181,14 @@
                         "
                       />
                     </div>
+                    <ng-container
+                      *ngIf="
+                        item.get('apu_part_id').value ||
+                        item.get('apu_set_child_id').value
+                      "
+                    >
+                      {{ item.get("description").value.name }}
+                    </ng-container>
                     <!-- <ng-select
                       [items]="apuPart$ | async"
                       bindLabel="name"
@@ -209,22 +235,10 @@
                     />
                   </td>
                   <td class="align-middle">
-                    <input
-                      currencyMask
-                      [options]="masksMoney.maskCOP"
-                      class="form-control form-control-sm"
-                      id="costo_unitario_maquinas_herra"
-                      formControlName="unit_cost"
-                    />
+                    ${{ item.controls.unit_cost.value | number : "1.2-2" }}
                   </td>
                   <td class="align-middle">
-                    <input
-                      currencyMask
-                      [options]="masksMoney.maskCOP"
-                      class="form-control form-control-sm"
-                      id="total_maquinas_herra"
-                      formControlName="total"
-                    />
+                    ${{ item.controls.total.value | number : "1.2-2" }}
                   </td>
                   <td class="align-middle">
                     <button
@@ -250,7 +264,7 @@
               <span class="badge badge-success badge-pill"
                 >${{
                   this.form.get("list_pieces_sets_subtotal").value
-                    | number : "1.2"
+                    | number : "1.2-2"
                 }}</span
               >
             </h6>
@@ -347,7 +361,7 @@
                     />
                   </td>
                   <td class="align-middle">
-                    ${{ item.value.unit_cost | number : "1.2" }}
+                    ${{ item.value.unit_cost | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
@@ -357,7 +371,7 @@
                     /> -->
                   </td>
                   <td class="align-middle">
-                    ${{ item.value.total | number : "1.2" }}
+                    ${{ item.value.total | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
@@ -388,7 +402,8 @@
               Subtotal
               <span class="badge badge-success badge-pill"
                 >${{
-                  this.form.get("machine_tools_subtotal").value | number : "1.2"
+                  this.form.get("machine_tools_subtotal").value
+                    | number : "1.2-2"
                 }}</span
               >
             </h6>
@@ -472,7 +487,7 @@
                     />
                   </td>
                   <td class="align-middle">
-                    ${{ item.value.unit_cost | number : "1.2" }}
+                    ${{ item.value.unit_cost | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
@@ -482,7 +497,7 @@
                     /> -->
                   </td>
                   <td class="align-middle">
-                    ${{ item.value.total | number : "1.2" }}
+                    ${{ item.value.total | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
@@ -514,7 +529,7 @@
               <span class="badge badge-success badge-pill"
                 >${{
                   this.form.get("internal_processes_subtotal").value
-                    | number : "1.2"
+                    | number : "1.2-2"
                 }}</span
               >
             </h6>
@@ -560,7 +575,7 @@
                   </td>
                   <td class="align-middle">
                     {{ item.value.name_description }}
-                   <!--  <select
+                    <!--  <select
                       class="form-control form-control-sm"
                       formControlName="description"
                       (change)="externalSet(item, $event)"
@@ -600,7 +615,7 @@
                     />
                   </td>
                   <td class="align-middle">
-                    ${{ item.value.unit_cost | number : "1.2" }}
+                    ${{ item.value.unit_cost | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
@@ -610,7 +625,7 @@
                     /> -->
                   </td>
                   <td class="align-middle">
-                    ${{ item.value.total | number : "1.2" }}
+                    ${{ item.value.total | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       [options]="masksMoney.maskCOP"
@@ -642,7 +657,7 @@
               <span class="badge badge-success badge-pill"
                 >${{
                   this.form.get("external_processes_subtotal").value
-                    | number : "1.2"
+                    | number : "1.2-2"
                 }}</span
               >
             </h6>
@@ -742,13 +757,7 @@
                       />
                     </td>
                     <td class="align-middle">
-                      <input
-                        currencyMask
-                        [options]="masksMoney.maskCOP"
-                        class="form-control form-control-sm"
-                        id="total_otros"
-                        formControlName="total"
-                      />
+                      ${{ item.controls.total.value | number : "1.2-2" }}
                     </td>
                     <td class="align-middle">
                       <button
@@ -773,7 +782,7 @@
                 Subtotal
                 <span class="badge badge-success badge-pill"
                   >${{
-                    this.form.get("others_subtotal").value | number : "1.2"
+                    this.form.get("others_subtotal").value | number : "1.2-2"
                   }}</span
                 >
               </h6>
@@ -799,7 +808,7 @@
             COSTO DIRECTO TOTAL
             <span class="badge badge-success badge-pill"
               >${{
-                this.form.get("total_direct_cost").value | number : "1.2"
+                this.form.get("total_direct_cost").value | number : "1.2-2"
               }}</span
             >
           </h6>
@@ -847,30 +856,18 @@
                             formControlName="percentage"
                           />
                         </td>
-                        <td class="col-3">
-                          <input
-                            currencyMask
-                            [options]="masksMoney.maskCOP"
-                            step=".1"
-                            class="form-control form-control-sm"
-                            formControlName="value"
-                          />
+                        <td class="col-3 text-right">
+                          ${{ item.controls.value.value | number : "1.2-2" }}
                         </td>
                       </tr>
                     </ng-container>
                   </ng-container>
                   <tr>
-                    <td colspan="2" class="text-uppercase col-10">
+                    <th colspan="2" class="text-uppercase col-10">
                       Costos Indirectos
-                    </td>
-                    <td>
-                      <input
-                        currencyMask
-                        [options]="masksMoney.maskCOP"
-                        step=".1"
-                        class="form-control form-control-sm"
-                        formControlName="indirect_cost_total"
-                      />
+                    </th>
+                    <td class="text-right">
+                      ${{ form.controls.indirect_cost_total.value | number : "1.2-2" }}
                     </td>
                   </tr>
                 </tbody>
@@ -884,14 +881,8 @@
                     <td class="col-9">
                       Costos directos + costos indirectos totales
                     </td>
-                    <td class="col-3">
-                      <input
-                        currencyMask
-                        [options]="masksMoney.maskCOP"
-                        step=".1"
-                        class="form-control form-control-sm"
-                        formControlName="direct_costs_indirect_costs_total"
-                      />
+                    <td class="col-3 text-right">
+                      ${{ form.controls.direct_costs_indirect_costs_total.value | number : "1.2-2" }}
                     </td>
                   </tr>
                 </tbody>
@@ -931,13 +922,8 @@
                         formControlName="administrative_percentage"
                       />
                     </td>
-                    <td class="col-3">
-                      <input
-                        currencyMask
-                        [options]="masksMoney.maskCOP"
-                        class="form-control form-control-sm"
-                        formControlName="administrative_value"
-                      />
+                    <td class="col-3 text-right">
+                      ${{ form.controls.administrative_value.value | number : "1.2-2" }}
                     </td>
                   </tr>
                   <tr>
@@ -950,26 +936,16 @@
                         formControlName="unforeseen_percentage"
                       />
                     </td>
-                    <td class="col-3">
-                      <input
-                        currencyMask
-                        [options]="masksMoney.maskCOP"
-                        class="form-control form-control-sm"
-                        formControlName="unforeseen_value"
-                      />
+                    <td class="col-3 text-right">
+                      ${{ form.controls.unforeseen_value.value | number : "1.2-2" }}
                     </td>
                   </tr>
                   <tr>
                     <td colspan="2" class="col-9">
                       SubTotal + Administrativos + Imprevistos
                     </td>
-                    <td class="col-3">
-                      <input
-                        currencyMask
-                        [options]="masksMoney.maskCOP"
-                        class="form-control form-control-sm"
-                        formControlName="administrative_unforeseen_subtotal"
-                      />
+                    <td class="col-3 text-right">
+                      ${{ form.controls.administrative_unforeseen_subtotal.value | number : "1.2-2" }}
                     </td>
                   </tr>
                 </tbody>
@@ -991,17 +967,12 @@
                       />
                     </td>
                   </tr>
-                  <tr >
+                  <tr>
                     <td class="col-9">
                       SubTotal + Admin + Imprevisto + Utilidad
                     </td>
-                    <td class="col-3">
-                      <input
-                        currencyMask
-                        [options]="masksMoney.maskCOP"
-                        class="form-control form-control-sm"
-                        formControlName="admin_unforeseen_utility_subtotal"
-                      />
+                    <td class="col-3 text-right">
+                      ${{ form.controls.admin_unforeseen_utility_subtotal.value | number : "1.2-2" }}
                     </td>
                   </tr>
                 </tbody>
@@ -1019,7 +990,7 @@
                         $
                         {{
                           form.get("sale_price_cop_withholding_total").value
-                            | number : "1.2"
+                            | number : "1.2-2"
                         }}
                       </span>
                     </h5>
@@ -1058,7 +1029,7 @@
                         USD
                         {{
                           form.get("sale_price_usd_withholding_total").value
-                            | number : "1.2"
+                            | number : "1.2-2"
                         }}
                       </span>
                     </h5>

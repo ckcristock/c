@@ -246,8 +246,6 @@ export class ItemsComponent implements OnInit {
       const exist = subItems.value.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
       if (!this.multiple) {
         if (!exist) {
-          //subItems.push(this.makeSubItem(apu))
-          //this.deleteSubItem(this.tempItem as FormGroup, this.indexAux)
           subItems.setControl(this.indexAux, this.makeSubItem(apu))
         } else {
           this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })

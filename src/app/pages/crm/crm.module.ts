@@ -67,7 +67,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatRadioModule } from '@angular/material/radio';
 import { HistorialNegocioComponent } from './negocios/historial-negocio/historial-negocio.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableModule } from '@angular/material';
+import { MatBottomSheetModule, MatTableModule, MatTooltipModule } from '@angular/material';
 import { ConfiguracionModule } from '../ajustes/configuracion/configuracion.module';
 import { PagesModule } from '../pages.module';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -197,7 +197,9 @@ export const MY_FORMATS = {
     ChartsModule,
     CurrencyMaskModule,
     MatSnackBarModule,
-    NgbPopoverModule
+    NgbPopoverModule,
+    MatTooltipModule,
+    MatBottomSheetModule,
   ]
 })
 export class CrmModule { }

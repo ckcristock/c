@@ -10,18 +10,20 @@ import { ApuServicioService } from '../apu-servicio.service';
 export class EditarApuServicioComponent implements OnInit {
   id: string;
   data: any;
+  loading: boolean = true
   constructor(
     private actRoute: ActivatedRoute,
     private _apuService: ApuServicioService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.id = this.actRoute.snapshot.params.id;
-    this.getData();
+    await this.getData();
+    this.loading = false
   }
 
-  getData() {
-    this._apuService.getApuService(this.id).subscribe((r: any) => {
+  async getData() {
+    await this._apuService.getApuService(this.id).toPromise().then((r: any) => {
       this.data = r.data;
     })
   }

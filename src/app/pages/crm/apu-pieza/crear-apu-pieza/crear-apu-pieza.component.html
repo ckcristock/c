@@ -1,4 +1,7 @@
-<form [formGroup]="form" *ngIf="form; else wait">
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<form [formGroup]="form" *ngIf="!loading; else placeholder">
   <div class="card">
     <div class="card-body">
       <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>

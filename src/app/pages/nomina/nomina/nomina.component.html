@@ -98,7 +98,7 @@
       <h5 class="text-center">
         <i class="fas fa-money-bill"></i>
         <strong> Costo total empresa:</strong>
-        <span> $ {{ nomina.costo_total_empresa | currency : "" : "" }} </span>
+        <span> $ {{ nomina.costo_total_empresa | number : "1.2-2" }} </span>
       </h5>
       <hr />
       <!-- Eventos Nomina paga  -->
@@ -279,19 +279,19 @@
               </td>
               <td class="align-middle">
                 $
-                {{ funcionario.valor_ingresos_salariales | currency : "" : "" }}
+                {{ funcionario.valor_ingresos_salariales | number : "1.2-2" }}
               </td>
               <td class="align-middle">
                 $
                 {{
-                  funcionario.valor_ingresos_no_salariales | currency : "" : ""
+                  funcionario.valor_ingresos_no_salariales | number : "1.2-2"
                 }}
               </td>
               <td class="align-middle">
-                $ {{ funcionario.valor_deducciones | currency : "" : "" }}
+                $ {{ funcionario.valor_deducciones | number : "1.2-2" }}
               </td>
               <td class="align-middle">
-                $ {{ funcionario.salario_neto | currency : "" : "" }} /
+                $ {{ funcionario.salario_neto | number : "1.2-2" }} /
                 {{ nomina.frecuencia_pago }}
               </td>
               <td class="align-middle">

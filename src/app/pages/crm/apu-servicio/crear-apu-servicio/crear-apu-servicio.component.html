@@ -1,4 +1,7 @@
-<ng-container *ngIf="!loading && form; else notDataL">
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<ng-container *ngIf="!loading && form; else placeholder">
   <form [formGroup]="form">
     <div class="card">
       <div class="card-body">

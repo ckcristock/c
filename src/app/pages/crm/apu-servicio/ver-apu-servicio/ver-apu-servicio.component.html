@@ -1,5 +1,5 @@
-<div class="card">
-  <ng-container *ngIf="!loading; else notDataL">
+<ng-container *ngIf="!loading; else placeholder">
+  <div class="card">
     <div class="card-body">
       <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
       <hr class="line" />
@@ -12,66 +12,60 @@
           >
             <i class="fas fa-edit"></i> Editar
           </button>
+          <button
+            class="btn btn-success btn-sm"
+            type="button"
+            [routerLink]="['/crm/apu/copiar-apu-servicio/', data.id]"
+          >
+            <i class="fas fa-copy"></i> Copiar
+          </button>
+          <button (click)="download()" class="btn btn-danger btn-sm">
+            <span
+              ><i
+                class="fas"
+                [class]="
+                  !donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'
+                "
+              ></i>
+              {{ !donwloading ? "Descargar" : "Descargando" }}</span
+            >
+          </button>
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="rounded-top table-responsive">
-            <table class="table table-borderless">
-              <tbody>
-                <tr>
-                  <th scope="row">Nombre</th>
-                  <td>{{ data.name }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Destino</th>
-                  <td>{{ data.city.name }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Quién elabora</th>
-                  <td>
-                    {{ data.person.name }}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Fecha</th>
-                  <td>
-                    {{ data.created_at | date : "EEEE, MMMM d, y" | titlecase }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="rounded-top table-responsive">
-            <table class="table table-borderless">
-              <tbody>
-                <tr>
-                  <th scope="row">Cliente</th>
-                  <td>
-                    {{ data.thirdparty.name }}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Línea</th>
-                  <td>{{ data.line }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Observaciones</th>
-                  <td>
-                    {{ data.observation }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div class="rounded-top table-responsive mt-2">
+        <table class="table table-borderless text-center text-uppercase">
+          <thead>
+            <tr class="table-secondary">
+              <th scope="row">Nombre</th>
+              <th scope="row">Destino</th>
+              <th scope="row">Quién elabora</th>
+              <th scope="row">Cliente</th>
+              <th scope="row">Línea</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ data.name }}</td>
+              <td>{{ data.city.name }}</td>
+              <td>{{ data.person.name }}</td>
+              <td>{{ data.thirdparty.name }}</td>
+              <td>{{ data.line }}</td>
+            </tr>
+            <tr class="text-left">
+              <th colspan="100%">Observaciones</th>
+            </tr>
+            <tr class="text-left">
+              <td colspan="100%">{{ data.observation }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
       <ng-container *ngIf="data.dimensional_validation.length > 0">
-        <hr />
         <h5 class="mt-2 text-center">Validación dimensional</h5>
-        <hr />
         <h6>Cálculo de mano de obra</h6>
         <app-validacion-dimensional
           [data]="data.dimensional_validation"
@@ -85,13 +79,13 @@
                     <tr>
                       <td>SUBTOTAL MANO DE OBRA</td>
                       <td class="text-right">
-                        ${{ data.subtotal_labor | currency : "" : "" }}
+                        ${{ data.subtotal_labor | number : "1.2-2" }}
                       </td>
                     </tr>
                     <tr>
                       <td>SUBTOTAL VIÁTICOS</td>
                       <td class="text-right">
-                        ${{ data.subtotal_travel_expense | currency : "" : "" }}
+                        ${{ data.subtotal_travel_expense | number : "1.2-2" }}
                       </td>
                     </tr>
                     <tr>
@@ -99,7 +93,7 @@
                       <td class="text-right">
                         ${{
                           data.subtotal_dimensional_validation
-                            | currency : "" : ""
+                            | number : "1.2-2"
                         }}
                       </td>
                     </tr>
@@ -110,10 +104,12 @@
           </div>
         </div>
       </ng-container>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
       <ng-container *ngIf="data.assemblies_start_up.length > 0">
-        <hr />
         <h5 class="text-center">Montaje y puesta en marcha</h5>
-        <hr />
         <h6>Cálculo de mano de obra</h6>
         <app-montaje-puesta-marcha
           [data]="data.assemblies_start_up"
@@ -127,14 +123,14 @@
                     <tr>
                       <td>SUBTOTAL MANO DE OBRA</td>
                       <td class="text-right">
-                        ${{ data.subtotal_labor_mpm | currency : "" : "" }}
+                        ${{ data.subtotal_labor_mpm | number : "1.2-2" }}
                       </td>
                     </tr>
                     <tr>
                       <td>SUBTOTAL VIÁTICOS</td>
                       <td class="text-right">
                         ${{
-                          data.subtotal_travel_expense_mpm | currency : "" : ""
+                          data.subtotal_travel_expense_mpm | number : "1.2-2"
                         }}
                       </td>
                     </tr>
@@ -143,7 +139,7 @@
                       <td class="text-right">
                         ${{
                           data.subtotal_assembly_commissioning
-                            | currency : "" : ""
+                            | number : "1.2-2"
                         }}
                       </td>
                     </tr>
@@ -152,7 +148,7 @@
                       <td class="text-right">
                         ${{
                           data.general_subtotal_travel_expense_labor
-                            | currency : "" : ""
+                            | number : "1.2-2"
                         }}
                       </td>
                     </tr>
@@ -163,7 +159,10 @@
           </div>
         </div>
       </ng-container>
-      <hr />
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
       <h4 class="text-center">AIU</h4>
       <hr />
       <div class="d-flex justify-content-center">
@@ -175,18 +174,18 @@
               <tr>
                 <td class="text-left">Administrativos</td>
                 <td>{{ data.administrative_percentage }}%</td>
-                <td>${{ data.administrative_value | currency : "" : "" }}</td>
+                <td>${{ data.administrative_value | number : "1.2-2" }}</td>
               </tr>
               <tr>
                 <td class="text-left">Imprevistos</td>
                 <td>{{ data.unforeseen_percentage }}%</td>
-                <td>${{ data.unforeseen_value | currency : "" : "" }}</td>
+                <td>${{ data.unforeseen_value | number : "1.2-2" }}</td>
               </tr>
               <tr>
                 <td class="text-left" colspan="2">Subtotal A + I</td>
                 <td>
                   ${{
-                    data.subtotal_administrative_unforeseen | currency : "" : ""
+                    data.subtotal_administrative_unforeseen | number : "1.2-2"
                   }}
                 </td>
               </tr>
@@ -199,7 +198,7 @@
                 <td>
                   ${{
                     data.subtotal_administrative_unforeseen_utility
-                      | currency : "" : ""
+                      | number : "1.2-2"
                   }}
                 </td>
               </tr>
@@ -209,13 +208,13 @@
                 </td>
                 <td>
                   ${{
-                    data.sale_price_cop_withholding_total | currency : "" : ""
+                    data.sale_price_cop_withholding_total | number : "1.2-2"
                   }}
                 </td>
               </tr>
               <tr>
                 <td class="text-left" colspan="2">TRM</td>
-                <td>${{ data.trm | currency : "" : "" }}</td>
+                <td>${{ data.trm | number : "1.2-2" }}</td>
               </tr>
               <tr>
                 <td class="text-left" colspan="2">
@@ -227,18 +226,13 @@
           </table>
         </div>
       </div>
-      <button (click)="download()" class="btn btn-primary btn-block">
-        <span
-          ><i
-            class="fas"
-            [class]="!donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'"
-          ></i>
-          {{ !donwloading ? "Descargar" : "Descargando" }}</span
-        >
-      </button>
     </div>
-  </ng-container>
-</div>
+  </div>
+</ng-container>
+
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
 
 <ng-template #notDataL>
   <app-not-data [loading]="loading"></app-not-data>

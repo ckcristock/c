@@ -689,7 +689,7 @@
                 {{ form.get("total_hotels_usd").value | currency }}
               </td>
               <td class="col-2">
-                {{ form.get("total_hotels_cop").value | currency : "COP" }}
+                {{ form.get("total_hotels_cop").value | number : "1.2-2" }}
               </td>
             </tr>
 
@@ -697,7 +697,7 @@
               <th class="align-middle">Transporte terrestre</th>
               <td>{{ 0 | currency }}</td>
               <td>
-                {{ form.get("total_transports_cop").value | currency : "COP" }}
+                {{ form.get("total_transports_cop").value | number : "1.2-2" }}
               </td>
             </tr>
 
@@ -705,7 +705,7 @@
               <th class="align-middle">Taxis</th>
               <td>{{ form.get("total_taxis_usd").value | currency }}</td>
               <td>
-                {{ form.get("total_taxis_cop").value | currency : "COP" }}
+                {{ form.get("total_taxis_cop").value | number : "1.2-2" }}
               </td>
             </tr>
 
@@ -715,7 +715,7 @@
                 {{ form.get("total_feedings_usd").value | currency }}
               </td>
               <td>
-                {{ form.get("total_feedings_cop").value | currency : "COP" }}
+                {{ form.get("total_feedings_cop").value | number : "1.2-2" }}
               </td>
             </tr>
             <tr class="text-center">
@@ -772,7 +772,7 @@
             <tr class="text-center">
               <th class="align-middle"><b>TOTAL</b></th>
               <th>{{ form.get("total_usd").value | currency }}</th>
-              <th>{{ form.get("total_cop").value | currency : "COP" }}</th>
+              <th>{{ form.get("total_cop").value | number : "1.2-2" }}</th>
             </tr>
           </tbody>
         </table>

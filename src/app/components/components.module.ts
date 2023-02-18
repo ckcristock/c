@@ -18,6 +18,7 @@ import { GetApusComponent } from './get-apus/get-apus.component';
 import { CabeceraComponent } from './cabecera/cabecera.component';
 import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule } from '@angular/material';
 import { NoPermissionsComponent } from './no-permissions/no-permissions.component';
+import { PlaceholderFormComponent } from './placeholder-form/placeholder-form.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { NoPermissionsComponent } from './no-permissions/no-permissions.componen
     GetApusComponent,
     CabeceraComponent,
     NoPermissionsComponent,
+    PlaceholderFormComponent,
   ],
   exports: [
     ModalBasicComponent,
@@ -43,7 +45,8 @@ import { NoPermissionsComponent } from './no-permissions/no-permissions.componen
     GetApusComponent,
     CabeceraComponent,
     PipesModule,
-    NoPermissionsComponent
+    NoPermissionsComponent,
+    PlaceholderFormComponent
   ],
   imports: [
     NgbAccordionModule,

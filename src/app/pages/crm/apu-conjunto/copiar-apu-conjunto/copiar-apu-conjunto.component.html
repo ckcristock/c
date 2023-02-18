@@ -1,6 +1,9 @@
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
 <app-crear-apu-conjunto
   [title]="'Copiar conjunto'"
   [data]="data"
   [id]="id"
-  *ngIf="data"
+  *ngIf="!loading && data; else placeholder"
 ></app-crear-apu-conjunto>

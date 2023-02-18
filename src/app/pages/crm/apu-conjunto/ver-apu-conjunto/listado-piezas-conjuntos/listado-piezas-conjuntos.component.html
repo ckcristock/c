@@ -37,8 +37,8 @@
             <td>
               {{ item.amount }}
             </td>
-            <td>${{ item.unit_cost | currency : "" : "" }}</td>
-            <td>${{ item.total | currency : "" : "" }}</td>
+            <td>${{ item.unit_cost | number : "1.2-2" }}</td>
+            <td>${{ item.total | number : "1.2-2" }}</td>
           </tr>
         </ng-container>
       </ng-container>
@@ -47,19 +47,11 @@
 </div>
 <div class="row d-flex justify-content-end">
   <div class="col-md-4">
-    <div class="d-flex justify-content-between">
-      <div class="rounded-top table-responsive">
-        <table class="table table-hover">
-          <tbody>
-            <tr>
-              <td>SUBTOTAL</td>
-              <td class="text-right">
-                ${{ list_pieces_sets_subtotal | currency : "" : "" }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <h6 class="d-flex justify-content-between">
+      Subtotal
+      <span class="badge badge-success badge-pill"
+        >${{ list_pieces_sets_subtotal | number : "1.2-2" }}</span
+      >
+    </h6>
   </div>
 </div>

@@ -79,6 +79,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   searchFailedSet: boolean;
   calculationBase: any = {}
   user_id;
+  loading: boolean = true;
   masksMoney = consts
   @ViewChild('apus') apus: any
 
@@ -115,11 +116,12 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.collapses();
     this.loadPeople();
     this.getVariablesApu();
-    this.getConsecutivo();
+    await this.getConsecutivo();
+    this.loading = false
   }
 
-  getConsecutivo() {
-    this._consecutivos.getConsecutivo('apu_sets').subscribe((r: any) => {
+  async getConsecutivo() {
+    await this._consecutivos.getConsecutivo('apu_sets').toPromise().then((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
       this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
       if (this.title !== 'Editar conjunto') {

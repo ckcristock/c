@@ -67,7 +67,7 @@ export class CrearApuPiezaComponent implements OnInit {
   otherCollapsed: boolean;
   indirectCollapsed: boolean;
   auiCollapsed: boolean;
-  loading: boolean;
+  loading: boolean = true;
   user_id;
   calculationBase: any = {}
   masksMoney = consts
@@ -92,7 +92,6 @@ export class CrearApuPiezaComponent implements OnInit {
   async ngOnInit() {
     this.datosCabecera.Fecha = this.id ? this.data?.created_at : new Date();
     this.datosCabecera.Titulo = this.title;
-    this.loading = false
     await this.getBases()
     this.createForm();
     this.getClients();
@@ -107,8 +106,8 @@ export class CrearApuPiezaComponent implements OnInit {
     await this.getCutLaserMaterial();
     this.validateData();
     this.getConsecutivo();
-    this.loading = true;
-    this.getVariablesApu();
+    await this.getVariablesApu();
+    this.loading = false;
   }
 
   collapses() {
@@ -145,14 +144,14 @@ export class CrearApuPiezaComponent implements OnInit {
     })
   }
 
-  getVariablesApu() {
-    this._externos.getExternos().subscribe((res: any) => {
+  async getVariablesApu() {
+    await this._externos.getExternos().toPromise().then((res: any) => {
       this.procesos_externos = res.data
     })
-    this._maquinas.getMaquinas().subscribe((res: any) => {
+    await this._maquinas.getMaquinas().toPromise().then((res: any) => {
       this.maquinas_herramientas = res.data
     })
-    this._internos.getExternos().subscribe((res: any) => {
+    await this._internos.getExternos().toPromise().then((res: any) => {
       this.procesos_internos = res.data
     })
   }

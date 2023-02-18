@@ -88,11 +88,11 @@
                 {{ empleado.first_surname }} {{ empleado.second_surname }}
               </td>
               <td class="text-right">
-                ${{ empleado.avg_salary | currency : "" : "" }}
+                ${{ empleado.avg_salary | number : "1.2-2" }}
               </td>
               <td class="text-center">{{ empleado.worked_days }}</td>
               <td class="text-right">
-                ${{ empleado.bonus | currency : "" : "" }}
+                ${{ empleado.bonus | number : "1.2-2" }}
               </td>
               <!-- <td class="align-middle" *ngIf="empleados.status=='pagado'">
                 <button
@@ -166,7 +166,7 @@
       ></mat-paginator>
 
       <div class="alert alert-info text-center" role="alert">
-        <b>TOTAL PRIMA: </b>$ {{ empleados.total_primas | currency : "" : "" }}
+        <b>TOTAL PRIMA: </b>$ {{ empleados.total_primas | number : "1.2-2" }}
       </div>
     </ng-container>.
 

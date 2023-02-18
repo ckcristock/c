@@ -1,8 +1,8 @@
 <h6 class="mt-2">Cálculo de materia prima</h6>
-<div class="rounded-top table-responsive">
-  <table class="table table-bordered table-striped table-sm">
-    <ng-container *ngIf="rawMateria.length">
-      <ng-container *ngFor="let item of rawMateria; let i = index">
+<ng-container *ngIf="rawMateria.length">
+  <ng-container *ngFor="let item of rawMateria; let i = index">
+    <div class="rounded-top table-responsive">
+      <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th class="align-middle">Item</th>
@@ -49,32 +49,24 @@
               {{ item.weight_total }}
             </td>
             <td class="align-middle">
-              ${{ item.value_kg | currency : "" : "" }}
+              ${{ item.value_kg | number : "1.2-2" }}
             </td>
             <td class="align-middle">
-              ${{ item.total_value | currency : "" : "" }}
+              ${{ item.total_value | number : "1.2-2" }}
             </td>
           </tr>
         </tbody>
-      </ng-container>
-    </ng-container>
-  </table>
-</div>
+      </table>
+    </div>
+  </ng-container>
+</ng-container>
 <div class="row d-flex justify-content-end">
   <div class="col-md-4">
-    <div class="d-flex justify-content-between">
-      <div class="rounded-top table-responsive">
-        <table class="table table-hover">
-          <tbody>
-            <tr>
-              <td>SUBTOTAL</td>
-              <td class="text-right">
-                ${{ subtotal_raw_material | currency : "" : "" }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <h6 class="d-flex justify-content-between">
+      Subtotal
+      <span class="badge badge-success badge-pill"
+        >${{ subtotal_raw_material | number : "1.2-2" }}</span
+      >
+    </h6>
   </div>
 </div>

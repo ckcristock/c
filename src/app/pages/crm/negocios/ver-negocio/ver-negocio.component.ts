@@ -27,6 +27,7 @@ export class VerNegocioComponent implements OnInit {
   presupuestosSeleccionados: any[] = [];
   cotizaciones: any;
   cotizacionesSeleccionadas: any[] = [];
+  apuSelected: any[] = [];
   business_budget_id: any = '';
   budget_value: number;
   quotation_value: number;
@@ -73,12 +74,27 @@ export class VerNegocioComponent implements OnInit {
     this.getPeople();
   }
 
-  getApus(e: any[]) {
-    e.forEach(apu => {
+  async getApus(e: any[]) {
+    await e.forEach(apu => {
       const exist = this.negocio['apus'].some(x => (x.apuable_id == apu.apu_id && x.apuable.typeapu_name == apu.type_name))
-      !exist ?
-        console.log('agregar') :
+      if (!exist) {
+        this.apuSelected.push(apu)
+      } else {
         this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
+      }
+    }, Promise.resolve());
+    this.addApu()
+  }
+
+  addApu() {
+    let data = {
+      business_id: this.filtros.id,
+      apus: this.apuSelected,
+      person_id: this.person_id
+    }
+    this._negocio.newBusinessApu(data).subscribe(data => {
+      this.getBussines();
+      this.apuSelected = [];
     });
   }
 
@@ -294,8 +310,9 @@ export class VerNegocioComponent implements OnInit {
       this._modal.close();
       this.cotizacionesSeleccionadas = [];
     });
-
   }
+
+
 
   obtenerContactos(thirdCompany: string) {
     let params = {

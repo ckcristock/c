@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { ValidatorsService } from '../../../../informacion-base/services/reactive-validation/validators.service';
+import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 import { MaterialesService } from './materiales.service';
-import { SwalService } from '../../../../informacion-base/services/swal.service';
-import { CategoryService } from '../../../services/category.service';
+import { SwalService } from '../../../informacion-base/services/swal.service';
+import { CategoryService } from '../../../informacion-base/services/category.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { throwIfEmpty } from 'rxjs/operators';
 import { MatAccordion } from '@angular/material/expansion';
@@ -26,6 +26,7 @@ export class MaterialesComponent implements OnInit {
   form: FormGroup;
   title: any = '';
   materials: any[] = [];
+  materialsIndex: any[] = [];
   Categorias: any[] = [];
   SubCategorias: any[] = [];
   Producto: any = {};
@@ -59,6 +60,7 @@ export class MaterialesComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.getMaterials();
+    this.getMaterialsIndex();
     this.getThicknesses();
     this.getCategory();
     this.getDotationType();
@@ -72,6 +74,12 @@ export class MaterialesComponent implements OnInit {
       this.accordion.closeAll()
       this.matPanel = false;
     }
+  }
+
+  getMaterialsIndex(){
+    this._materials.getMaterialsIndex().subscribe((res:any) => {
+      this.materialsIndex = res.data
+    })
   }
 
   getCategory() {
@@ -138,14 +146,14 @@ export class MaterialesComponent implements OnInit {
 
 
   openConfirm(confirm, titulo) {
-    this.fieldDinamic.clear();
+    /* this.fieldDinamic.clear(); */
     this.title = titulo;
     this._modal.open(confirm, 'lg')
     if (titulo != 'Editar material') {
-      this.fieldList.clear();
+      /* this.fieldList.clear(); */
       this.form.reset();
       this.thicknessList.clear();
-      this.fieldList.clear();
+      /* this.fieldList.clear(); */
       this.getThicknesses();
     }
   }
@@ -176,20 +184,12 @@ export class MaterialesComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [this.material.id],
-      name: ['', this._validators.required],
-      unit: ['', this._validators.required],
+      material_id: ['', this._validators.required],
       value_aux: ['', this._validators.required],
-      type: ['', /* this._validators.required */],
-      Id_Categoria: ['', /* this._validators.required */],
-      Id_Subcategoria: ['', /* this._validators.required */],
-      Codigo_Barras: ['', /* this._validators.required */],
-      Tipo_Catalogo: ['', /* this._validators.required */],
-      product_id: [''],
-      unit_price: [''],
       kg_value: ['', this._validators.required],
-      fields: this.fb.array([]),
       thicknesses: this.fb.array([]),
-      dynamic: this.fb.array([]),
+      /* fields: this.fb.array([]), */
+      /* dynamic: this.fb.array([]), */
 
     });
   }
@@ -199,22 +199,19 @@ export class MaterialesComponent implements OnInit {
     this.material = { ...material };
     this.form.patchValue({
       id: this.material.id,
-      product_id: this.material.product_id,
-      name: this.material.name,
-      unit: this.material.unit,
-      type: this.material.type,
+      material_id: this.material.material_id,
       value_aux: this.material.value_aux,
+      kg_value: this.material.kg_value
+      /* product_id: this.material.product_id,
+      type: this.material.type,
+      unit: this.material.unit,
       Codigo_Barras: this.material.product?.Codigo_Barras,
       Tipo_Catalogo: this.material.product?.Tipo_Catalogo,
       Id_Categoria: this.material.product?.Id_Categoria,
       Id_Subcategoria: Number(this.material.product?.Id_Subcategoria),
-      unit_price: this.material.unit_price,
-      kg_value: this.material.kg_value
+      unit_price: this.material.unit_price, */
     });
-
-    console.log(this.material);
-
-    this.getSubCategories(this.material.product?.Id_Subcategoria);
+    /* this.getSubCategories(this.material.product?.Id_Subcategoria);
     this.getSubCategoryEditar(this.material.product_id, this.material.product?.Id_Subcategoria);
     this.fieldList.clear();
     this.material.material_field.forEach(r => {
@@ -224,7 +221,7 @@ export class MaterialesComponent implements OnInit {
         value: [r.value]
       });
       this.fieldList.push(group);
-    });
+    }); */
     this.thicknessList.clear();
     this.material.material_thickness.forEach(r => {
       let group = this.fb.group({

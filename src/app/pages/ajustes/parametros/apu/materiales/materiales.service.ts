@@ -13,6 +13,10 @@ export class MaterialesService {
     return this.http.get(`${environment.base_url}/paginateMaterial`, {params});
   }
 
+  getMaterialsIndex() {
+    return this.http.get(`${environment.base_url}/get-materials`);
+  }
+
   getThicknesses(){
     return this.http.get(`${environment.base_url}/thicknesses`);
   }

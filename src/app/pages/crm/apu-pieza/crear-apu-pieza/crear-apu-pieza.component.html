@@ -187,7 +187,7 @@
                           Selecciona
                         </option>
                         <option
-                          *ngFor="let item of materials"
+                          *ngFor="let item of materialsIndex"
                           [value]="item.id"
                         >
                           {{ item.text }}
@@ -308,7 +308,7 @@
                       <option value="" disabled selected hidden>
                         Selecciona
                       </option>
-                      <option *ngFor="let item of materials" [value]="item.id">
+                      <option *ngFor="let item of materialsIndex" [value]="item.id">
                         {{ item.text }}
                       </option>
                     </select>
@@ -665,7 +665,7 @@
                         *ngFor="let item of cutLaserMaterials"
                         [value]="item.id"
                       >
-                        {{ item.name | titlecase }}
+                        {{ item.name }}
                       </option>
                     </select>
                   </td>

@@ -25,6 +25,7 @@ import {
   ViewportScroller
 } from '@angular/common';
 import { UserService } from 'src/app/core/services/user.service';
+import { MaterialesService } from 'src/app/pages/ajustes/parametros/apu/materiales/materiales.service';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -64,6 +65,7 @@ export class CrearApuPiezaComponent implements OnInit {
   file = '';
   fileArr: any[] = [];
   cutLaserMaterials: any[] = [];
+  materialsIndex: any[] = [];
   otherCollapsed: boolean;
   indirectCollapsed: boolean;
   auiCollapsed: boolean;
@@ -82,6 +84,7 @@ export class CrearApuPiezaComponent implements OnInit {
     private _externos: ProcesosExternosService,
     private _internos: ProcesosInternosService,
     public _consecutivos: ConsecutivosService,
+    private _materials: MaterialesService,
     private _maquinas: MaquinasHerramientasService,
     private scroll: ViewportScroller,
     private _user: UserService
@@ -103,11 +106,18 @@ export class CrearApuPiezaComponent implements OnInit {
     await this.getCities();
     this.collapses();
     this.getThicknesses();
+    this.getMaterialsFull();
     await this.getCutLaserMaterial();
     this.validateData();
     this.getConsecutivo();
     await this.getVariablesApu();
     this.loading = false;
+  }
+
+  getMaterialsFull(){
+    this._materials.getMaterialsIndex().subscribe((res:any) => {
+      this.materialsIndex = res.data
+    })
   }
 
   collapses() {

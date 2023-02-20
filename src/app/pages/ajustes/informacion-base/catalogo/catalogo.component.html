@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="row card-title d-flex justify-content-between">
           <div class="col px-0">
-            <h4 class="text-primary">Categorías</h4>
+            <h6 class="text-primary">Categorías</h6>
           </div>
         </div>
         <hr class="line" />
@@ -18,11 +18,11 @@
             [disabled]="categoria.subcategory.length == 0"
             [expanded]="selectedCategory.categoria.id == categoria.Id_Categoria_Nueva"
           >
-            <mat-expansion-panel-header>
+            <mat-expansion-panel-header class="px-1">
               {{ categoria.Nombre }}
             </mat-expansion-panel-header>
             <ng-container *ngIf="categoria.subcategory.length > 0; else noSub">
-              <mat-action-list dense class="small ml-4 my-0">
+              <mat-action-list dense class="small ml-1 my-0 rounded">
                 <button
                   mat-list-item
                   *ngFor="let subcategoria of categoria.subcategory"
@@ -60,7 +60,7 @@
       <div class="card-body">
         <div class="row card-title d-flex justify-content-between">
           <div class="col-md-6 px-0">
-            <h4 class="text-primary">Productos</h4>
+            <h6 class="text-primary">Productos</h6>
           </div>
           <div class="col-md-6 px-0 text-right">
             <div
@@ -134,14 +134,14 @@
             </div>
           </form>
         </mat-expansion-panel>
-        <h5 class="text-dark" *ngIf="selectedCategory.categoria.id !== null">
-          Categoría:
-          {{
-            selectedCategory.categoria.nombre +
-              " > " +
-              selectedCategory.subcategoria.nombre | lowercase
-          }}
-        </h5>
+        <ng-container class="text-dark" *ngIf="selectedCategory.categoria.id">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">{{selectedCategory.categoria.nombre}}</li>
+              <li class="breadcrumb-item">{{selectedCategory.subcategoria.nombre}}</li>
+            </ol>
+          </nav>
+        </ng-container>
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
@@ -269,7 +269,7 @@
 
 <ng-template #add let-modalCatalogo>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">{{ title }} Producto</h4>
+    <h4 class="text-primary modal-title">{{ title }} producto</h4>
     <button
       type="button"
       class="close"
@@ -324,7 +324,6 @@
             matInput
             placeholder="Codigo de barras"
             autocomplete="off"
-            required
           />
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
@@ -350,7 +349,6 @@
             type="file"
             id="file"
             accept=".png, .jpg, .jpeg"
-            required
           /><!--
             formControlName="Foto" -->
           <button

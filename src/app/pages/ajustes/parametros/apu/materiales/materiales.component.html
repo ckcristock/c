@@ -1,108 +1,122 @@
-<div class="card" [ngClass]="cardBorder ? 'border-0 shadow-none mb-0' : 'card'">
-  <div class="card-body">
-    <div class="row card-title d-flex justify-content-between">
-      <div class="col-md-6 px-0">
-        <h4 class="text-primary">Materiales</h4>
-      </div>
-      <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded w-sm-100">
-          <button
-            class="btn btn-primary btn-sm"
-            (click)="openConfirm(add, 'Nuevo material')"
-          >
-            <i class="fa fa-plus"></i> Agregar
-          </button>
-          <button class="btn btn-info btn-sm" (click)="openClose()">
-            <i class="fas fa-sliders-h"></i> Filtros
-          </button>
-        </div>
-      </div>
-    </div>
-    <hr class="line" />
-    <mat-accordion multi>
-      <mat-expansion-panel class="mat-elevation-z0">
-        <div class="row">
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Nombre</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por nombre"
-              [(ngModel)]="filtro.name"
-              (input)="getMaterials()"
-              name="name"
-              autocomplete="off"
-            />
-          </mat-form-field>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <div class="rounded-top table-responsive">
-      <table
-        class="table table-bordered table-striped table-sm mb-0"
-        *ngIf="!loading && materials.length > 0; else notData"
-      >
-        <thead class="bg-light">
-          <tr class="text-center text-uppercase">
-            <th>Nombre</th>
-            <th>Unidad</th>
-            <th>Tipo</th>
-            <th>Valor KG</th>
-            <th>F. Creación</th>
-            <th><i class="mdi mdi-chevron-down"></i></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of materials" class="text-center">
-            <td class="align-middle">{{ item.name | uppercase }}</td>
-            <td class="align-middle">{{ item.unit | titlecase }}</td>
-            <td class="align-middle">{{ item.type }}</td>
-            <td class="align-middle">${{ item.kg_value | number : '1.2-2' }}</td>
-            <td class="align-middle">
-              {{ item.created_at | date : "longDate" }}
-            </td>
-            <td class="align-middle">
-              <div ngbDropdown container="body" class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
-                  type="button"
-                >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    href="javascript:void(0)"
-                    class="dropdown-item waves-light text-success caja-botones"
-                    (click)="openConfirm(view, ''); getMaterial(item)"
-                  >
-                    <i class="far fa-eye"></i> Ver
-                  </a>
-                  <a
-                    href="javascript:void(0)"
-                    class="dropdown-item waves-light text-info caja-botones"
-                    (click)="
-                      getMaterial(item); openConfirm(add, 'Editar material')
-                    "
-                  >
-                    <i class="far fa-edit"></i> Editar
-                  </a>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <mat-paginator
-      *ngIf="paginacion"
-      [length]="paginacion.total"
-      [pageSize]="paginacion.per_page"
-      [pageIndex]="paginacion.current_page - 1"
-      (page)="handlePageEvent($event)"
-      aria-label="Select page"
+<div class="row">
+  <div class="col-md-6">
+    <div
+      class="card"
+      [ngClass]="cardBorder ? 'border-0 shadow-none mb-0' : 'card'"
     >
-    </mat-paginator>
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h4 class="text-primary">Materiales corte agua</h4>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button
+                class="btn btn-primary btn-sm"
+                (click)="openConfirm(add, 'Nuevo material')"
+              >
+                <i class="fa fa-plus"></i> Agregar
+              </button>
+              <button class="btn btn-info btn-sm" (click)="openClose()">
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
+            </div>
+          </div>
+        </div>
+        <hr class="line" />
+        <mat-accordion multi>
+          <mat-expansion-panel class="mat-elevation-z0">
+            <div class="row">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Nombre</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Busca por nombre"
+                  [(ngModel)]="filtro.name"
+                  (input)="getMaterials()"
+                  name="name"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <div class="rounded-top table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm mb-0"
+            *ngIf="!loading && materials.length > 0; else notData"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Nombre</th>
+                <th>Unidad</th>
+                <th>Valor KG</th>
+                <th>Fecha de Creación</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of materials" class="text-center">
+                <td class="align-middle">
+                  {{ item.product.name | uppercase }}
+                </td>
+                <td class="align-middle">
+                  {{ item.product.unit.name | titlecase }}
+                </td>
+                <td class="align-middle">
+                  ${{ item.kg_value | number : "1.2-2" }}
+                </td>
+                <td class="align-middle">
+                  {{ item.created_at | date }}
+                </td>
+                <td class="align-middle">
+                  <div ngbDropdown container="body" class="dropdown-primary">
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm waves-light"
+                      type="button"
+                    >
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <a
+                        href="javascript:void(0)"
+                        class="dropdown-item waves-light text-success caja-botones"
+                        (click)="openConfirm(view, ''); getMaterial(item)"
+                      >
+                        <i class="far fa-eye"></i> Ver
+                      </a>
+                      <a
+                        href="javascript:void(0)"
+                        class="dropdown-item waves-light text-info caja-botones"
+                        (click)="
+                          getMaterial(item); openConfirm(add, 'Editar material')
+                        "
+                      >
+                        <i class="far fa-edit"></i> Editar
+                      </a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <mat-paginator
+          *ngIf="paginacion"
+          [length]="paginacion.total"
+          [pageSize]="paginacion.per_page"
+          [pageIndex]="paginacion.current_page - 1"
+          (page)="handlePageEvent($event)"
+          aria-label="Select page"
+        >
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <app-corte-laser-material></app-corte-laser-material>
   </div>
 </div>
 
@@ -119,29 +133,32 @@
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <input
+        <!-- <input
           type="hidden"
           class="form-control form-control-sm"
           formControlName="product_id"
-        />
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Ingresa el nombre"
-            formControlName="name"
-            autocomplete="off"
-            required
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
+        /> -->
+        <div class="col-md-6 mat-form-field-wrapper">
+          <ng-select
+            [items]="materialsIndex"
+            [class.is-invalid]="form.get('material_id').invalid"
+            formControlName="material_id"
+            bindLabel="text"
+            appearance="outline"
+            [appendTo]="'body'"
+            placeholder="Material *"
+            bindValue="value"
+            [clearable]="false"
+          >
+          </ng-select>
+        </div>
+        <!-- <mat-form-field class="col-md-2" appearance="outline">
           <mat-label>Unidad</mat-label>
           <mat-select name="color" formControlName="unit" required>
             <mat-option value="milimetros">Milimetros</mat-option>
             <mat-option value="unidad">Unidad</mat-option>
           </mat-select>
-        </mat-form-field>
+        </mat-form-field> -->
         <!-- <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo</mat-label>
           <mat-select name="color" formControlName="type" required>
@@ -149,7 +166,7 @@
             <mat-option value="Comercial">Comercial</mat-option>
           </mat-select>
         </mat-form-field> -->
-        <mat-form-field class="col-md-2" appearance="outline">
+        <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Valor (kg)</mat-label>
           <input
             matInput
@@ -161,7 +178,7 @@
             required
           />
         </mat-form-field>
-        <mat-form-field class="col-md-2" appearance="outline">
+        <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Densidad</mat-label>
           <input
             matInput
@@ -221,7 +238,7 @@
           >
           </ng-select>
         </div> -->
-        <ng-container formArrayName="dynamic">
+        <!-- <ng-container formArrayName="dynamic">
           <ng-container
             *ngFor="let item of fieldDinamic.controls; let i = index"
           >
@@ -245,7 +262,7 @@
               />
             </mat-form-field>
           </ng-container>
-        </ng-container>
+        </ng-container> -->
       </div>
       <h6 class="text-center">Espesores</h6>
       <div class="row">

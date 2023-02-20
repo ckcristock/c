@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
-        <h4 class="text-primary">Corte láser - Materiales</h4>
+        <h4 class="text-primary">Materiales corte láser</h4>
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
@@ -43,15 +43,15 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
-            <th>F. Creación</th>
+            <th>Fecha de Creación</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of materials" class="text-center">
-            <td class="align-middle">{{ item.name | uppercase }}</td>
+            <td class="align-middle">{{ item.product.name | uppercase }}</td>
             <td class="align-middle">
-              {{ item.created_at | date : "longDate" }}
+              {{ item.created_at | date }}
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -122,16 +122,20 @@
       <div class="row">
         <div class="col-lg-5">
           <div class="row">
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Nombre</mat-label>
-              <input
-                matInput
-                type="text"
-                placeholder="Ingresa el nombre"
-                formControlName="name"
-                autocomplete="off"
-              />
-            </mat-form-field>
+            <div class="col-md-12 mat-form-field-wrapper">
+              <ng-select
+                [items]="materialsIndex"
+                [class.is-invalid]="form.get('material_id').invalid"
+                formControlName="material_id"
+                bindLabel="text"
+                appearance="outline"
+                [appendTo]="'body'"
+                placeholder="Material *"
+                bindValue="value"
+                [clearable]="false"
+              >
+              </ng-select>
+            </div>
           </div>
           <div class="rounded-top table-responsive">
             <table class="table table-bordered table-striped table-sm">

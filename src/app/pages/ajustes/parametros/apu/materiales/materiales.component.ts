@@ -57,9 +57,9 @@ export class MaterialesComponent implements OnInit {
     this.paginator.itemsPerPageLabel = "Items por página:";
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.createForm();
-    this.getMaterials();
+    await this.getMaterials();
     this.getMaterialsIndex();
     this.getThicknesses();
     this.getCategory();
@@ -78,7 +78,10 @@ export class MaterialesComponent implements OnInit {
 
   getMaterialsIndex(){
     this._materials.getMaterialsIndex().subscribe((res:any) => {
-      this.materialsIndex = res.data
+      this.materialsIndex = res.data.filter(material => {
+        const exists = this.materials.some(m => m.material_id === material.id);
+        return !exists;
+      });
     })
   }
 
@@ -185,8 +188,6 @@ export class MaterialesComponent implements OnInit {
     this.form = this.fb.group({
       id: [this.material.id],
       material_id: ['', this._validators.required],
-      value_aux: ['', this._validators.required],
-      kg_value: ['', this._validators.required],
       thicknesses: this.fb.array([]),
       /* fields: this.fb.array([]), */
       /* dynamic: this.fb.array([]), */
@@ -200,8 +201,6 @@ export class MaterialesComponent implements OnInit {
     this.form.patchValue({
       id: this.material.id,
       material_id: this.material.material_id,
-      value_aux: this.material.value_aux,
-      kg_value: this.material.kg_value
       /* product_id: this.material.product_id,
       type: this.material.type,
       unit: this.material.unit,
@@ -290,7 +289,7 @@ export class MaterialesComponent implements OnInit {
     this.fieldList.removeAt(i);
   }
 
-  getMaterials(page = 1) {
+  async getMaterials(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination,
@@ -300,7 +299,7 @@ export class MaterialesComponent implements OnInit {
     }
 
     this.loading = true;
-    this._materials.getMaterials(params).subscribe((r: any) => {
+    await this._materials.getMaterials(params).toPromise().then((r: any) => {
       this.materials = r.data.data;
       this.loading = false;
       this.paginacion = r.data
@@ -310,12 +309,13 @@ export class MaterialesComponent implements OnInit {
 
   save() {
     if (this.form.get('id').value) {
-      this._materials.update(this.form.value, this.material.id).subscribe((r: any) => {
+      this._materials.update(this.form.value, this.material.id).subscribe(async (r: any) => {
         this.form.reset();
         this.modalService.dismissAll();
         this.thicknessList.clear();
         this.fieldList.clear();
-        this.getMaterials();
+        await this.getMaterials();
+        this.getMaterialsIndex();
         this._swal.show({
           icon: 'success',
           title: 'Material actualizado con éxito',
@@ -325,12 +325,13 @@ export class MaterialesComponent implements OnInit {
         })
       })
     } else {
-      this._materials.save(this.form.value).subscribe((r: any) => {
+      this._materials.save(this.form.value).subscribe(async (r: any) => {
         this.form.reset();
         this.modalService.dismissAll();
         this.thicknessList.clear();
         this.fieldList.clear();
-        this.getMaterials();
+        await this.getMaterials();
+        this.getMaterialsIndex();
         this._swal.show({
           icon: 'success',
           title: 'Material creado con éxito',

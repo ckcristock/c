@@ -26,6 +26,7 @@ import {
 } from '@angular/common';
 import { UserService } from 'src/app/core/services/user.service';
 import { MaterialesService } from 'src/app/pages/ajustes/parametros/apu/materiales/materiales.service';
+import { MaterialesMateriaPrimaService } from 'src/app/pages/ajustes/parametros/apu/materiales-materia-prima/materiales-materia-prima.service';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -65,6 +66,7 @@ export class CrearApuPiezaComponent implements OnInit {
   file = '';
   fileArr: any[] = [];
   cutLaserMaterials: any[] = [];
+  commercialMaterials: any[] = [];
   materialsIndex: any[] = [];
   otherCollapsed: boolean;
   indirectCollapsed: boolean;
@@ -84,8 +86,9 @@ export class CrearApuPiezaComponent implements OnInit {
     private _externos: ProcesosExternosService,
     private _internos: ProcesosInternosService,
     public _consecutivos: ConsecutivosService,
-    private _materials: MaterialesService,
+    private _rawMaterialMaterials: MaterialesMateriaPrimaService,
     private _maquinas: MaquinasHerramientasService,
+    private _materials: MaterialesService,
     private scroll: ViewportScroller,
     private _user: UserService
   ) {
@@ -106,6 +109,7 @@ export class CrearApuPiezaComponent implements OnInit {
     await this.getCities();
     this.collapses();
     this.getThicknesses();
+    this.getCommercialMaterials();
     this.getMaterialsFull();
     await this.getCutLaserMaterial();
     this.validateData();
@@ -117,6 +121,12 @@ export class CrearApuPiezaComponent implements OnInit {
   getMaterialsFull(){
     this._materials.getMaterialsIndex().subscribe((res:any) => {
       this.materialsIndex = res.data
+    })
+  }
+
+  getCommercialMaterials(){
+    this._rawMaterialMaterials.getRawMaterialMaterialsIndex().subscribe((res:any) => {
+      this.commercialMaterials = res.data
     })
   }
 
@@ -273,7 +283,7 @@ export class CrearApuPiezaComponent implements OnInit {
   }
   /************** Materia Prima Inicio ****************/
   basicControl(): FormGroup {
-    let group = help.materiaHelper.createMateriaGroup(this.form, this.fb, this.geometries, this.materials);
+    let group = help.materiaHelper.createMateriaGroup(this.form, this.fb, this.geometries, this.commercialMaterials);
     return group;
   }
 

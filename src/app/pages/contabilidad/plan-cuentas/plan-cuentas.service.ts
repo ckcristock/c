@@ -12,7 +12,7 @@ export class PlanCuentasService {
   getAccount_plan( params = {} ) {
     return this.http.get(`${environment.base_url}/account_plan`, {params});
   }
-    
+
   createAccount_plan( data:any ) {
     return this.http.post(`${environment.base_url}/account_plan`, data);
   }
@@ -25,4 +25,10 @@ export class PlanCuentasService {
     return this.http.get(`${environment.base_url}/company`);
   }
 
+
+  /* Servicios de php */
+
+  getPlanCuentas( params = {} ) {
+    return this.http.get(`${environment.base_url}/php/plancuentas/lista_plan_cuentas.php${params}`);
+  }
 }

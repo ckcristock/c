@@ -12,17 +12,9 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <a
-            class="btn btn-success btn-sm"
-            href="{{
-              env.ruta
-            }}php/contabilidad/plancuentas/descargar_informe_plan_cuentas_excel.php?id={{
-              company_id
-            }}"
-            target="_blank"
-          >
-            <i class="fas fa-table"></i> Exportar
-          </a>
+          <button class="btn btn-success btn-sm" (click)="openInNewTab()">
+            <i class="fas fa-file-excel"></i> Exportar
+          </button>
           <button
             class="btn btn-info btn-sm"
             style="float: right"
@@ -38,7 +30,7 @@
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
           <mat-form-field class="col" appearance="outline">
-            <mat-label>Código Cuenta</mat-label>
+            <mat-label>Código</mat-label>
             <input
               type="text"
               matInput
@@ -46,11 +38,11 @@
               (input)="filtros()"
               name="codigoniif"
               autocomplete="off"
-              placeholder="Busca por código de Cuenta"
+              placeholder="Busca por código"
             />
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
-            <mat-label>Nombre Cuenta</mat-label>
+            <mat-label>Nombre</mat-label>
             <input
               type="text"
               matInput
@@ -58,7 +50,7 @@
               (input)="filtros()"
               name="nombreniif"
               autocomplete="off"
-              placeholder="Busca por nombre Cuenta"
+              placeholder="Busca por nombre"
             />
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
@@ -68,76 +60,77 @@
               (selectionChange)="filtros()"
             >
               <mat-option value="">Todos</mat-option>
-              <mat-option value="ACTIVO">ACTIVO</mat-option>
-              <mat-option value="INACTIVO">INACTIVO</mat-option>
+              <mat-option value="ACTIVO">Activo</mat-option>
+              <mat-option value="INACTIVO">Inactivo</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <div class="rounded-top table-responsive"></div>
-    <table
-      class="table table-bordered table-striped table-sm"
-      style="font-size: small"
-      *ngIf="!Cargando && Planes.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th class="col-2">Codigo Cuenta</th>
-          <th>Nombre Cuenta</th>
-          <th class="col-1">Estado</th>
-          <th class="col-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of Planes">
-          <td
-            class="align-middle"
-            [ngClass]="
-              item.Estado != 'ACTIVO' ? 'text-danger font-weight-bold' : ''
-            "
-          >
-            {{ item.Codigo_Niif }}
-          </td>
-          <td
-            class="align-middle"
-            [ngClass]="
-              item.Estado != 'ACTIVO' ? 'text-danger font-weight-bold' : ''
-            "
-          >
-            {{ item.Nombre_Niif }}
-          </td>
-          <td class="align-middle text-center">
-            <span
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        style="font-size: small"
+        *ngIf="!Cargando && Planes.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Codigo</th>
+            <th>Nombre</th>
+            <th>Estado</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of Planes">
+            <td
+              class="align-middle"
               [ngClass]="
-                item.Estado == 'ACTIVO'
-                  ? 'align-middle badge badge-success'
-                  : 'align-middle badge badge-danger'
+                item.Estado != 'ACTIVO' ? 'text-danger font-weight-bold' : ''
               "
             >
-              {{ item.Estado }}
-            </span>
-          </td>
-          <td class="align-middle">
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
+              {{ item.Codigo_Niif }}
+            </td>
+            <td
+              class="align-middle"
+              [ngClass]="
+                item.Estado != 'ACTIVO' ? 'text-danger font-weight-bold' : ''
+              "
+            >
+              {{ item.Nombre_Niif }}
+            </td>
+            <td class="align-middle text-center">
+              <span
+                [ngClass]="
+                  item.Estado == 'ACTIVO'
+                    ? 'align-middle badge badge-success'
+                    : 'align-middle badge badge-danger'
+                "
+              >
+                {{ item.Estado }}
+              </span>
+            </td>
+            <td class="align-middle text-center">
+              <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
+                  class="btn btn-primary btn-sm waves-light"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item text-success waves-light waves-effect caja-botones"
+                    class="dropdown-item text-success waves-light caja-botones"
+                    href="javascript: void(0);"
                     (click)="VerPlanCuenta(item.Id_Plan_Cuentas, verCuenta)"
                   >
                     <i class="far fa-eye"></i> Ver</a
                   >
                   <a
                     *ngIf="item.Estado != 'INACTIVO'"
-                    class="dropdown-item text-info waves-light waves-effect caja-botones"
+                    href="javascript: void(0);"
+                    class="dropdown-item text-info waves-light caja-botones"
                     (click)="
                       EditarPlanCuenta(item.Id_Plan_Cuentas, editarCuenta)
                     "
@@ -146,42 +139,28 @@
                   >
                   <a
                     *ngIf="item.Estado != 'INACTIVO'"
-                    class="text-danger dropdown-item waves-light waves-effect caja-botones"
-                    [swal]="{
-                      title: '¿Está Seguro?',
-                      text: 'Se Dispone a cambiar el estado de esta Cuenta Contable',
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonText: 'Si, Cambiar',
-                      cancelButtonText: 'No, Dejame Comprobar!'
-                    }"
-                    (confirm)="CambiarEstadoPlan(item.Id_Plan_Cuentas)"
+                    href="javascript: void(0);"
+                    class="text-danger dropdown-item waves-light caja-botones"
+                    (click)="CambiarEstadoPlan(item.Id_Plan_Cuentas)"
                   >
-                    <i class="far fa-trash-alt"></i> Desactivar</a
+                    <i class="far fa-trash-alt"></i> Anular</a
                   >
 
                   <a
                     *ngIf="item.Estado == 'INACTIVO'"
-                    class="text-warning dropdown-item waves-light waves-effect caja-botones"
-                    [swal]="{
-                      title: '¿Está Seguro?',
-                      text: 'Se Dispone a cambiar el estado de esta Cuenta Contable',
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonText: 'Si, Cambiar',
-                      cancelButtonText: 'No, Dejame Comprobar!'
-                    }"
-                    (confirm)="CambiarEstadoPlan(item.Id_Plan_Cuentas)"
+                    href="javascript: void(0);"
+                    class="text-success dropdown-item waves-light caja-botones"
+                    (click)="CambiarEstadoPlan(item.Id_Plan_Cuentas)"
                   >
-                    <i class="fa fa-arrow-circle-left"></i> Reactivar</a
+                    <i class="fas fa-check"></i> Activar</a
                   >
                 </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="TotalItems"

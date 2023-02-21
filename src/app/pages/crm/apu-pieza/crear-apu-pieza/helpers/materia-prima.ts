@@ -89,7 +89,7 @@ export const materiaHelper = {
       } catch (error) {
       }
       materia.patchValue({
-        weight_kg: result * data.value_aux   //multiplicar por una variable del manterial aun no existente
+        weight_kg: result * data.density   //multiplicar por una variable del manterial aun no existente
       })
     })
   },

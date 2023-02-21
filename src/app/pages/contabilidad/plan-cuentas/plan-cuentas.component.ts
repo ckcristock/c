@@ -110,16 +110,15 @@ export class PlanCuentasComponent implements OnInit {
 
   ngOnInit() {
     this.RecargarDatos();
-
     //this.ListaPlanCuentas();
     this.ListarBancos();
     this.envirom = environment;
     this.company_id = this._user.user.person.company_worked.id;
   }
 
-  ListaPlanCuentas() {
+  /* ListaPlanCuentas() {
     this.http
-      .get(environment.ruta + 'php/plancuentas/lista_plan_cuentas.php', {
+      .get(environment.base_url + 'php/plancuentas/lista_plan_cuentas.php', {
         params: { company_id: this._user.user.person.company_worked.id },
       })
       .subscribe(
@@ -129,7 +128,7 @@ export class PlanCuentasComponent implements OnInit {
         },
         (error) => {}
       );
-  }
+  } */
 
   SetInformacionPaginacion() {
     var calculoHasta = this.page * this.pageSize;
@@ -192,23 +191,27 @@ export class PlanCuentasComponent implements OnInit {
   //Aplicar filtros en la tabla
   filtros(paginacion: boolean = false) {
     this.Cargando = true;
-    var params = this.SetFiltros(paginacion);
+    var param2 = {
+      ...this.filtros,
+      pag: this.page,
+      company_id: this._user.user.person.company_worked.id
+    }
+    let params = this.SetFiltros(paginacion);
 
     this.location.replaceState('/contabilidad/plan-cuentas', params);
-
-    this.http
-      .get(environment.ruta + 'php/plancuentas/lista_plan_cuentas.php' + params)
-      .subscribe((data: any) => {
-        this.Planes = data.query_result;
-        this.TotalItems = data.numReg;
-        this.SetInformacionPaginacion();
-        this.Cargando = false;
-      });
+    console.log(params)
+    this._planCuentas.getPlanCuentas(params).subscribe((data: any) => {
+      this.Planes = data.query_result;
+      this.TotalItems = data.numReg;
+      this.SetInformacionPaginacion();
+      this.Cargando = false;
+    })
   }
+
 
   openInNewTab() {
     window
-      .open(this.envirom.ruta + 'php/centroscostos/exportar.php', '_blank')
+      .open(this.envirom.base_url + '/php/contabilidad/plancuentas/descargar_informe_plan_cuentas_excel.php?id=' + this.company_id, '_blank')
       .focus();
   }
 
@@ -225,7 +228,7 @@ export class PlanCuentasComponent implements OnInit {
 
   ListarBancos() {
     this.http
-      .get(environment.ruta + 'php/plancuentas/lista_bancos.php')
+      .get(environment.base_url + '/php/plancuentas/lista_bancos.php')
       .subscribe((data: any) => {
         this.Bancos = data;
       });
@@ -311,7 +314,7 @@ export class PlanCuentasComponent implements OnInit {
     }
     this.http
       .post(
-        environment.ruta + 'php/contabilidad/plancuentas/guardar_puc.php',
+        environment.base_url + '/php/contabilidad/plancuentas/guardar_puc.php',
         datos
       )
       .subscribe((data: any) => {
@@ -328,8 +331,8 @@ export class PlanCuentasComponent implements OnInit {
   EditarPlanCuenta(idPlanCuenta, content) {
     this.http
       .get(
-        environment.ruta +
-          'php/contabilidad/plancuentas/detalle_plan_cuenta.php',
+        environment.base_url +
+          '/php/contabilidad/plancuentas/detalle_plan_cuenta.php',
         { params: { id_cuenta: idPlanCuenta } }
       )
       .subscribe((data: any) => {
@@ -346,8 +349,8 @@ export class PlanCuentasComponent implements OnInit {
   VerPlanCuenta(idPlanCuenta, content) {
     this.http
       .get(
-        environment.ruta +
-          'php/contabilidad/plancuentas/detalle_plan_cuenta.php',
+        environment.base_url +
+          '/php/contabilidad/plancuentas/detalle_plan_cuenta.php',
         { params: { id_cuenta: idPlanCuenta } }
       )
       .subscribe((data: any) => {
@@ -357,20 +360,28 @@ export class PlanCuentasComponent implements OnInit {
   }
 
   CambiarEstadoPlan(idPlanCuenta) {
-    let datos = new FormData();
-    datos.append('id_cuenta',idPlanCuenta);
-    this.http
-      .post( environment.ruta + 'php/contabilidad/plancuentas/cambiar_estado.php', datos )
-      .subscribe((data: any) => {
-        Swal.fire({
-          icon: data.icon,
-          title: data.title,
-          text: data.msg,
-        });
-        setTimeout(() => {
-          this.filtros();
-        }, 1000);
-      });
+    this.swalService.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      text: 'Vamos a cambiar el estado de la cuenta contable'
+    }).then(r => {
+      if (r.isConfirmed){
+        let datos = new FormData();
+        datos.append('id_cuenta',idPlanCuenta);
+        this.http
+          .post( environment.base_url + '/php/contabilidad/plancuentas/cambiar_estado.php', datos )
+          .subscribe((data: any) => {
+            this.swalService.show({
+              icon: data.icon,
+              title: data.title,
+              text: data.msg,
+              showCancel: false,
+              timer: 1000
+            })
+            this.filtros();
+          });
+      }
+    })
   }
 
   ShowSwal(tipo, titulo: string, msg: string) {
@@ -378,16 +389,6 @@ export class PlanCuentasComponent implements OnInit {
     this.alertSwal.title = titulo;
     this.alertSwal.text = msg;
     this.alertSwal.fire();
-  }
-
-  ImprimirExcel() {
-    this.http
-      .get(
-        environment.ruta +
-          'php/contabilidad/plancuentas/descargar_informe_plan_cuentas_excel.php',
-        { params: { company_id: this._user.user.person.company_worked.id } }
-      )
-      .subscribe((data: any) => {});
   }
 
   ImprimirPdf() {

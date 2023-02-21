@@ -67,9 +67,9 @@ export class CorteLaserMaterialComponent implements OnInit {
 
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.createForm();
-    this.getMaterials();
+    await this.getMaterials();
     this.getMaterialsIndex();
   }
   closeResult = '';
@@ -96,7 +96,10 @@ export class CorteLaserMaterialComponent implements OnInit {
 
   getMaterialsIndex(){
     this._materials.getMaterialsIndex().subscribe((res:any) => {
-      this.materialsIndex = res.data
+      this.materialsIndex = res.data.filter(material => {
+        const exists = this.materials.some(m => m.material_id === material.id);
+        return !exists;
+      });
     })
   }
 
@@ -164,13 +167,13 @@ export class CorteLaserMaterialComponent implements OnInit {
     this.materialsList.removeAt(i);
   }
 
-  getMaterials(page = 1) {
+  async getMaterials(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtro
     }
     this.loading = true;
-    this._cutLaserM.getMaterials(params).subscribe((r: any) => {
+    await this._cutLaserM.getMaterials(params).toPromise().then((r: any) => {
       this.materials = r.data.data;
       this.loading = false;
       this.pagination.collectionSize = r.data.total;
@@ -179,11 +182,12 @@ export class CorteLaserMaterialComponent implements OnInit {
 
   save() {
     if (this.form.get('id').value) {
-      this._cutLaserM.update(this.form.value, this.material.id).subscribe((r: any) => {
+      this._cutLaserM.update(this.form.value, this.material.id).subscribe(async (r: any) => {
         this.form.reset();
         this.modalService.dismissAll();
         this.materialsList.clear();
-        this.getMaterials();
+        await this.getMaterials();
+        this.getMaterialsIndex();
         this._swal.show({
           icon: 'success',
           title: 'Material actualizado con éxito',
@@ -193,11 +197,12 @@ export class CorteLaserMaterialComponent implements OnInit {
         })
       })
     } else {
-      this._cutLaserM.save(this.form.value).subscribe((r: any) => {
+      this._cutLaserM.save(this.form.value).subscribe(async (r: any) => {
         this.form.reset();
         this.modalService.dismissAll();
         this.materialsList.clear();
-        this.getMaterials();
+        await this.getMaterials();
+        this.getMaterialsIndex();
         this._swal.show({
           icon: 'success',
           title: 'Material creado con éxito',

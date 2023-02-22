@@ -51,120 +51,92 @@
         </div>
       </mat-expansion-panel>
     </mat-accordion>
-    <table
-      class="table table-bordered table-striped table-sm table-responsive-sm"
-      style="font-size: small"
-      *ngIf="!Cargando && items.length > 0; else notData"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Codigo</th>
-          <th>Nombre</th>
-          <th>Centro Padre</th>
-          <th>Tipo Centro</th>
-          <th>Asignado a</th>
-          <th class="col-md-1">Estado</th>
-          <th class="col-md-1">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          *ngFor="let item of items"
-          [ngClass]="{
-            'text-danger font-weight-bold': item.Estado == 'Inactivo'
-          }"
-        >
-          <td class="align-middle">{{ item.Codigo }}</td>
-          <td class="align-middle">{{ item.Nombre }}</td>
-          <td class="align-middle text-center">{{ item.PadreCentro }}</td>
-          <td class="align-middle text-center">
-            {{ item.Tipo_Centro != "" ? item.Tipo_Centro : "Sin Asignar" }}
-          </td>
-          <td class="align-middle text-center">
-            {{
-              item.ValorTipoCentro != "" ? item.ValorTipoCentro : "Sin Asignar"
-            }}
-          </td>
-          <td class="align-middle text-center">
-            <span
-              [ngClass]="
-                item.Estado == 'Activo'
-                  ? 'align-middle badge badge-success'
-                  : 'align-middle badge badge-danger'
-              "
-            >
-              {{ item.Estado }}
-            </span>
-          </td>
-          <td class="align-middle">
-            <div class="text-center">
-              <div ngbDropdown class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-effect waves-light"
-                  type="button"
-                >
-                  <i class="mdi mdi-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item text-info waves-light waves-effect caja-botones"
-                    (click)="
-                      EditarCentroCosto(item.Id_Centro_Costo, editarCentroCosto)
-                    "
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm table-responsive-sm"
+        *ngIf="!Cargando && items.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Codigo</th>
+            <th>Nombre</th>
+            <th>Centro Padre</th>
+            <th>Tipo Centro</th>
+            <th>Asignado a</th>
+            <th class="col-md-1">Estado</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items" class="text-uppercase">
+            <td class="align-middle">{{ item.Codigo }}</td>
+            <td class="align-middle">{{ item.Nombre }}</td>
+            <td class="align-middle text-center">
+              {{ item.PadreCentro || "Sin padre" }}
+            </td>
+            <td class="align-middle text-center">
+              {{ item.Tipo_Centro || "Sin Asignar" }}
+            </td>
+            <td class="align-middle text-center">
+              {{ item.ValorTipoCentro || "Sin Asignar" }}
+            </td>
+            <td class="align-middle text-center">
+              <span
+                [ngClass]="
+                  item.Estado == 'Activo'
+                    ? 'align-middle badge badge-success'
+                    : 'align-middle badge badge-danger'
+                "
+              >
+                {{ item.Estado }}
+              </span>
+            </td>
+            <td class="align-middle">
+              <div class="text-center">
+                <div ngbDropdown container="body" class="dropdown-primary">
+                  <button
+                    ngbDropdownToggle
+                    class="btn btn-primary btn-sm waves-light"
+                    type="button"
                   >
-                    <i class="far fa-edit"></i> Editar</a
-                  >
-                  <a
-                    class="dropdown-item text-danger waves-light waves-effect caja-botones"
-                    [swal]="{
-                      title: 'Eliminar',
-                      text: 'Se dispone a eliminar el centro de costo.',
-                      icon: 'error',
-                      showCancelButton: true,
-                      confirmButtonText: 'Confirmar',
-                      cancelButtonText: 'Cancelar',
-                      reverseButtons: true
-                    }"
-                    (confirm)="Eliminar(item.Id_Centro_Costo)"
-                  >
-                    <i class="far fa-trash-alt"></i> Eliminar</a
-                  >
-                  <a
-                    class="dropdown-item text-warning waves-light waves-effect caja-botones"
-                    [swal]="{
-                      title: 'Cambio de estado',
-                      text: 'Se dispone a cambiar el estado de este centro de costo.',
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonText: 'Confirmar',
-                      cancelButtonText: 'Cancelar',
-                      reverseButtons: true
-                    }"
-                    (confirm)="CambiarEstado(item.Id_Centro_Costo)"
-                  >
-                    <span *ngIf="item.Estado == 'Activo'">
-                      <i class="fas fa-times"> </i> Inactivar
-                    </span>
-                    <span *ngIf="item.Estado == 'Inactivo'">
-                      <i class="fas fa-check"> </i> Activar
-                    </span>
-                  </a>
+                    <i class="mdi mdi-chevron-down"></i>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <a
+                      class="dropdown-item text-info"
+                      href="javascript: void(0);"
+                      (click)="
+                        EditarCentroCosto(
+                          item.Id_Centro_Costo,
+                          editarCentroCosto
+                        )
+                      "
+                    >
+                      <i class="far fa-edit"></i> Editar</a
+                    >
+                    <a
+                      class="dropdown-item"
+                      [class]="
+                        item.Estado == 'Activo' ? 'text-danger' : 'text-success'
+                      "
+                      href="javascript: void(0);"
+                      (click)="CambiarEstado(item.Id_Centro_Costo)"
+                    >
+                      <span *ngIf="item.Estado == 'Activo'">
+                        <i class="far fa-trash-alt"> </i> Anular
+                      </span>
+                      <span *ngIf="item.Estado == 'Inactivo'">
+                        <i class="fas fa-check"> </i> Activar
+                      </span>
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-          </td>
-
-          <!-- PROCESO DE CARGA RECURVISA (SE COMENTA EL 09/02/2019 PORQUE POR AHORA NO SE VA A UTILIZAR) -->
-          <!-- <td colspan="7" style="padding:0px;">
-              <ng-container *ngTemplateOutlet="centrosRecursivos; context:{ $implicit: items }"></ng-container>
-            </td> -->
-        </tr>
-      </tbody>
-    </table>
-    <!-- {{ page * maxSize - maxSize + 1 }} al
-      {{ TotalItems > page * maxSize ? page * maxSize : TotalItems }} de
-      {{ TotalItems }} -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [(collectionSize)]="TotalItems"
@@ -258,18 +230,17 @@
       </mat-form-field>
       <mat-form-field class="col-md-4" appearance="outline">
         <mat-label>{{ ValorTipo }}</mat-label>
-        <select
-          matNativeControl
+        <mat-select
           name="Valor_Centro_Costo"
           id="Valor_Centro"
           [disabled]="CentroCostoModel.Tipo == ''"
           [(ngModel)]="CentroCostoModel.Valor_Tipo_Centro"
         >
-          <option value="" selected>Escoja el {{ ValorTipo }}</option>
-          <option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">
+          <mat-option value="" selected>Escoja el {{ ValorTipo }}</mat-option>
+          <mat-option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">
             {{ vtc.Nombre }}
-          </option>
-        </select>
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </form>
   </div>
@@ -284,18 +255,7 @@
 
     <button
       type="button"
-      [swal]="{
-        title: '¿Está seguro(a)?',
-        text: 'Se dispone a guardar un centro de costo',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Guardar',
-        cancelButtonText: 'Cancelar',
-        reverseButtons: true
-      }"
-      (confirm)="
-        GuardarCentroCosto(FormCentroCosto, modalCentroCosto, 'guardar')
-      "
+      (click)="GuardarCentroCosto(FormCentroCosto, modalCentroCosto, 'guardar')"
       [disabled]="!FormCentroCosto.valid"
       class="btn btn-primary"
     >
@@ -379,18 +339,17 @@
       </mat-form-field>
       <mat-form-field class="col-md-4" appearance="outline">
         <mat-label>{{ ValorTipo }}</mat-label>
-        <select
-          matNativeControl
+        <mat-select
           name="Valor_Centro_Costo"
           id="Valor_Centro"
           [disabled]="EditarCentroCostoModel.Tipo == ''"
           [(ngModel)]="EditarCentroCostoModel.Valor_Tipo_Centro"
         >
-          <option value="" selected>Escoja el {{ ValorTipo }}</option>
-          <option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">
+          <mat-option value="" selected>Escoja el {{ ValorTipo }}</mat-option>
+          <mat-option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">
             {{ vtc.Nombre }}
-          </option>
-        </select>
+          </mat-option>
+        </mat-select>
       </mat-form-field>
     </form>
   </div>
@@ -404,16 +363,7 @@
     </button>
     <button
       type="button"
-      [swal]="{
-        title: '¿Está seguro(a)?',
-        text: 'Se dispone a guardar un centro de costo',
-        icon: 'question',
-        showCancelButton: true,
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Guardar',
-        reverseButtons: true
-      }"
-      (confirm)="
+      (click)="
         GuardarCentroCosto(
           FormEditarCentroCosto,
           modalEditarCentroCosto,
@@ -428,9 +378,11 @@
   </div>
 </ng-template>
 
-<swal #alertSwal title="" text="" type=""></swal>
+<ng-template #notData>
+  <app-not-data [loading]="Cargando"></app-not-data>
+</ng-template>
 
-<ng-template #centrosRecursivos let-lista>
+<!-- <ng-template #centrosRecursivos let-lista>
   <table
     #tablaData
     class="table"
@@ -458,14 +410,14 @@
           <div ngbDropdown class="dropdown-primary">
             <button
               ngbDropdownToggle
-              class="btn btn-secondary btn-mini waves-effect waves-light"
+              class="btn btn-secondary btn-mini waves-light"
               type="button"
             >
               Acciones
             </button>
             <div ngbDropdownMenu>
               <a
-                class="dropdown-item waves-light waves-effect caja-botones"
+                class="dropdown-item waves-light caja-botones"
                 (click)="
                   EditarCentroCosto(it.Id_Centro_Costo, modalEditarCentroCosto)
                 "
@@ -473,7 +425,7 @@
                 <i class="ti-pencil"></i> Editar</a
               >
               <a
-                class="dropdown-item waves-light waves-effect caja-botones"
+                class="dropdown-item waves-light caja-botones"
                 [swal]="{
                   title: 'Cambio de Estado',
                   text: 'Se dispone a cambiar el estado de este centro de costo.\n¿Está seguro(a)?',
@@ -505,12 +457,4 @@
       </td>
     </tr>
   </table>
-</ng-template>
-
-<!--<ng-template #opcionesPadres let-list>
-        <option *ngFor="let p of list" [value]="p.Id_Centro_Costo">{{p.nivel}} - {{p.Nombre}}</option>
-        <ng-container *ngTemplateOutlet="opcionesPadres; context:{ $implicit: p.hijos }"></ng-container>
-    </ng-template>-->
-<ng-template #notData>
-  <app-not-data [loading]="Cargando"></app-not-data>
-</ng-template>
+</ng-template> -->

@@ -11,65 +11,65 @@ import { MatAccordion } from '@angular/material/expansion';
 export class TabladepreciacionesComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
-  enviromen:any;
-  public Cargando:boolean = false;
-  public Filtros:any = {
-    codigo_acta:'',
-    codigo_orden:'',
-    fechas_acta:'',
-    fechas_orden:'',
-    facturas:'',
-    proveedor:''
+  enviromen: any;
+  public Cargando: boolean = false;
+  public Filtros: any = {
+    codigo_acta: '',
+    codigo_orden: '',
+    fechas_acta: '',
+    fechas_orden: '',
+    facturas: '',
+    proveedor: ''
   };
-  public Depreciaciones:Array<any> = [];
+  public Depreciaciones: Array<any> = [];
 
   //Paginación
   public maxSize = 5;
   public pageSize = 10;
-  public TotalItems:number;
+  public TotalItems: number;
   public page = 1;
-  public InformacionPaginacion:any = {
+  public InformacionPaginacion: any = {
     desde: 0,
     hasta: 0,
     total: 0
   }
 
   public myDateRangePickerOptions: IMyDrpOptions = {
-    width:'250px', 
+    width: '250px',
     height: '28px',
-    selectBeginDateTxt:'Inicio',
-    selectEndDateTxt:'Fin',
+    selectBeginDateTxt: 'Inicio',
+    selectEndDateTxt: 'Fin',
     selectionTxtFontSize: '10px',
     dateFormat: 'yyyy-mm-dd',
   };
-  constructor( private http: HttpClient ) {
-      this.ConsultaFiltrada();
-     }
+  constructor(private http: HttpClient) {
+    this.ConsultaFiltrada();
+  }
 
   ngOnInit() {
     this.enviromen = environment;
   }
   estadoFiltros = false;
-  mostrarFiltros(){
+  mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
-  SetFiltros(paginacion:boolean) {
-    let params:any = {};
+  SetFiltros(paginacion: boolean) {
+    let params: any = {};
 
     params.tam = this.pageSize;
 
-    if(paginacion === true){
+    if (paginacion === true) {
       params.pag = this.page;
-    }else{        
+    } else {
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
     }
@@ -97,46 +97,46 @@ export class TabladepreciacionesComponent implements OnInit {
     if (this.Filtros.facturas.trim() != "") {
       params.facturas = this.Filtros.facturas;
     }
-    
+
     return params;
   }
 
-  ConsultaFiltrada(paginacion:boolean = false) {
+  ConsultaFiltrada(paginacion: boolean = false) {
 
     var params = this.SetFiltros(paginacion);
 
-    if(params === ''){
+    if (params === '') {
       this.ResetValues();
       return;
     }
-    
+
     this.Cargando = true;
-    this.http.get(environment.ruta +'php/depreciacion/get_depreciaciones.php', {params: params})
-    .subscribe((data:any) => {
-      if (data.codigo == 'success') {
-        this.Depreciaciones = data.query_result;
-        this.TotalItems = data.numReg;
-      }else{
-        this.Depreciaciones = [];
-      }
-      this.Cargando = false;
-      this.SetInformacionPaginacion();
-    })
+    this.http.get(environment.base_url + '/php/depreciacion/get_depreciaciones.php', { params: params })
+      .subscribe((data: any) => {
+        if (data.codigo == 'success') {
+          this.Depreciaciones = data.query_result;
+          this.TotalItems = data.numReg;
+        } else {
+          this.Depreciaciones = [];
+        }
+        this.Cargando = false;
+        this.SetInformacionPaginacion();
+      })
   }
 
-  ResetValues(){
+  ResetValues() {
     this.Filtros = {
-      codigo_acta:'',
-      codigo_orden:'',
-      fechas_acta:'',
-      fechas_orden:'',
-      facturas:'',
-      proveedor:''
+      codigo_acta: '',
+      codigo_orden: '',
+      fechas_acta: '',
+      fechas_orden: '',
+      facturas: '',
+      proveedor: ''
     };
   }
-  SetInformacionPaginacion(){
-    var calculoHasta = (this.page*this.pageSize);
-    var desde = calculoHasta-this.pageSize+1;
+  SetInformacionPaginacion() {
+    var calculoHasta = (this.page * this.pageSize);
+    var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
 
     this.InformacionPaginacion['desde'] = desde;
@@ -144,31 +144,31 @@ export class TabladepreciacionesComponent implements OnInit {
     this.InformacionPaginacion['total'] = this.TotalItems;
   }
 
-  fechita:any;
-  fechitaF(event){    
-    this.fechita = event.target.value;  
-    if(this.fechita2 !=null){
+  fechita: any;
+  fechitaF(event) {
+    this.fechita = event.target.value;
+    if (this.fechita2 != null) {
       this.Filtros.fechas_acta = this.fechita + ' - ' + this.fechita2;
       this.ConsultaFiltrada();
-    }  
+    }
   }
-  fechita2:any;
-  fechitaF2(event){
+  fechita2: any;
+  fechitaF2(event) {
     this.fechita2 = event.target.value;
-    if(this.fechita !=null){
+    if (this.fechita != null) {
       this.Filtros.fechas_acta = this.fechita + ' - ' + this.fechita2;
       this.ConsultaFiltrada();
-    }  
+    }
   }
 
-/*   public OnDateRangeChanged( event:any){
-    console.log(event.targetElement.value)
-    if (event.formatted != "") {
-      this.Filtros.fechas_acta = event.formatted;
-    } else {
-      this.Filtros.fechas_acta = '';
-    }
-      this.ConsultaFiltrada(); 
-    
-  } */
+  /*   public OnDateRangeChanged( event:any){
+      console.log(event.targetElement.value)
+      if (event.formatted != "") {
+        this.Filtros.fechas_acta = event.formatted;
+      } else {
+        this.Filtros.fechas_acta = '';
+      }
+        this.ConsultaFiltrada();
+
+    } */
 }

@@ -12,10 +12,7 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -25,10 +22,7 @@
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-          <mat-form-field
-            class="col"
-            appearance="outline"
-          >
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Fecha de inicio</mat-label>
             <input
               matInput
@@ -39,10 +33,7 @@
               placeholder="Busca por fecha"
             />
           </mat-form-field>
-          <mat-form-field
-            class="col"
-            appearance="outline"
-          >
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Fecha de fin</mat-label>
             <input
               matInput
@@ -53,10 +44,7 @@
               placeholder="Busca por fecha"
             />
           </mat-form-field>
-          <mat-form-field
-            class="col"
-            appearance="outline"
-          >
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Código</mat-label>
             <input
               matInput
@@ -72,7 +60,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!Cargando && Depreciaciones.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -83,7 +70,7 @@
             <th>Año</th>
             <th>Mes</th>
             <th class="col-1">Estado</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -93,7 +80,7 @@
             class="text-center"
           >
             <td class="align-middle">
-              {{ ai.Fecha_Registro | date: "longDate" }}
+              {{ ai.Fecha_Registro | date : "longDate" }}
             </td>
             <td class="align-middle">
               <strong>{{ ai.Codigo }}</strong>
@@ -124,27 +111,27 @@
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item text-info waves-light caja-botones"
+                  <!-- <a
+                    class="dropdown-item text-info"
                     href="{{
-                      enviromen.ruta
-                    }}php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro={{
+                      enviromen.base_url
+                    }}/php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro={{
                       ai.Id_Depreciacion
                     }}&id_funcionario_elabora={{ 1 }}"
                     target="_blank"
                   >
                     <i class="fa fa-print"></i> Ver PCGA
-                  </a>
+                  </a> -->
                   <a
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     href="{{
-                      enviromen.ruta
-                    }}php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro={{
+                      enviromen.base_url
+                    }}/php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro={{
                       ai.Id_Depreciacion
                     }}&id_funcionario_elabora={{ 1 }}&tipo_valor=Niif"
                     target="_blank"
                   >
-                    <i class="fa fa-print"></i> Ver NIIF
+                    <i class="fas fa-file-pdf"></i> Descargar NIIF
                   </a>
                 </div>
               </div>

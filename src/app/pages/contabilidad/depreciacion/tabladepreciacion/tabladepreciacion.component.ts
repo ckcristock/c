@@ -68,12 +68,12 @@ export class TabladepreciacionComponent implements OnInit {
     let info = JSON.stringify(this.DepreciacionModel);
     let datos = new FormData();
     datos.append('datos', info);
-    this.http.post(environment.ruta + 'php/depreciacion/guardar_depreciacion.php', datos).subscribe((data: any) => {
+    this.http.post(environment.base_url + '/php/depreciacion/guardar_depreciacion.php', datos).subscribe((data: any) => {
       if (data.tipo == 'success') {
 
-        window.open(environment.ruta + 'php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro=' + data.Id + '&id_funcionario_elabora=' + this.DepreciacionModel.Identificacion_Funcionario, '_blank');
+        window.open(environment.base_url + 'php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro=' + data.Id + '&id_funcionario_elabora=' + this.DepreciacionModel.Identificacion_Funcionario, '_blank');
 
-        window.open(environment.ruta + 'php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro=' + data.Id + '&id_funcionario_elabora=' + this.DepreciacionModel.Identificacion_Funcionario + '&tipo_valor=Niif', '_blank');
+        window.open(environment.base_url + 'php/contabilidad/movimientoscontables/movimientos_depreciacion_pdf.php?id_registro=' + data.Id + '&id_funcionario_elabora=' + this.DepreciacionModel.Identificacion_Funcionario + '&tipo_valor=Niif', '_blank');
         this._swal.show({
           title: data.titulo,
           text: data.mensaje,

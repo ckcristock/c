@@ -1,65 +1,61 @@
 <div class="row">
-    <mat-form-field class="col-md-3" appearance="outline">
-      <mat-label>Mes</mat-label>
-      <mat-select
-        name="Mes"
-        id="mes"
-        [(ngModel)]="DepreciacionModel.Mes"
-        (selectionChange)="setQueryParams()"
-      >
-        <ng-container *ngFor="let mes of Meses; let i = index">
-          <mat-option *ngIf="i <= mesActual - 1" [value]="i + 1">
-            {{ mes }}
-          </mat-option>
-        </ng-container>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field class="col-md-3" appearance="outline">
-      <mat-label>Año</mat-label>
-      <mat-select
-        name="Year"
-        id="year"
-        [(ngModel)]="DepreciacionModel.Year"
-        (selectionChange)="setQueryParams()"
-      >
-        <ng-container *ngFor="let year of Years">
-          <mat-option [value]="year">{{ year }}</mat-option>
-        </ng-container>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field class="col-md-3" appearance="outline">
-      <mat-label>Tipo</mat-label>
-      <mat-select
-        name="Tipo"
-        id="tipo"
-        [(ngModel)]="DepreciacionModel.Tipo"
-        (selectionChange)="setQueryParams()"
-      >
-        <mat-option value="PCGA" selected>PCGA</mat-option>
-        <mat-option value="NIIF">NIIF</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div class="col-md-3 mb-4">
-      <a
-        class="btn btn-primary btn-block mt-1"
-        href="{{ enviromen.ruta }}php/depreciacion/vista_previa.php?{{
-          queryParams
-        }}"
-        role="button"
-        target="_blank"
-        [ngClass]="{ disabled: queryParams === '' }"
-        ><i class="fa fa-eye"></i> Vista Previa
-      </a>
-    </div>
-    <div class="col-md-12">
-      <button
-        class="btn btn-primary btn-block"
-        [swal]="confirmacionGuardar"
-      >
-        <i class="fas fa-plus"></i> Contabilizar
-      </button>
-    </div>
-  </div>
-  
-  <swal #alertSwal title="" text="" type=""></swal>
-  <swal #confirmacionGuardar [swalOptions]="alertOption"></swal>
+  <mat-form-field class="col" appearance="outline">
+    <mat-label>Mes</mat-label>
+    <mat-select
+      name="Mes"
+      id="mes"
+      [(ngModel)]="DepreciacionModel.Mes"
+      (selectionChange)="setQueryParams()"
+    >
+      <ng-container *ngFor="let mes of Meses; let i = index">
+        <mat-option *ngIf="i <= mesActual - 1" [value]="i + 1">
+          {{ mes }}
+        </mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="col" appearance="outline">
+    <mat-label>Año</mat-label>
+    <mat-select
+      name="Year"
+      id="year"
+      [(ngModel)]="DepreciacionModel.Year"
+      (selectionChange)="setQueryParams()"
+    >
+      <ng-container *ngFor="let year of Years">
+        <mat-option [value]="year">{{ year }}</mat-option>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="col" appearance="outline">
+    <mat-label>Tipo</mat-label>
+    <mat-select
+      name="Tipo"
+      id="tipo"
+      [(ngModel)]="DepreciacionModel.Tipo"
+      (selectionChange)="setQueryParams()"
+    >
+      <mat-option value="PCGA" selected>PCGA</mat-option>
+      <mat-option value="NIIF">NIIF</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div class="btn-group btn-block" role="group" aria-label="Button group">
+  <a
+    class="btn btn-info"
+    href="{{ enviromen.base_url }}/php/depreciacion/vista_previa.php?{{
+      queryParams
+    }}"
+    role="button"
+    target="_blank"
+    [ngClass]="{ disabled: queryParams === '' }"
+    ><i class="fa fa-eye"></i> Vista Previa
+  </a>
+  <button class="btn btn-primary" [swal]="confirmacionGuardar">
+    <i class="fas fa-plus"></i> Contabilizar
+  </button>
+</div>
+
+<swal #alertSwal title="" text="" type=""></swal>
+<swal #confirmacionGuardar [swalOptions]="alertOption"></swal>

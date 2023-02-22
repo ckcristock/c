@@ -217,7 +217,13 @@
               appearance="outline"
             >
               <mat-label>Tipo Cuenta</mat-label>
-              <mat-select required name="Tipo_Niif" id="Tipo_Niif" ngModel>
+              <mat-select
+                required
+                name="Tipo_Niif"
+                [(ngModel)]="Tipo_Niif"
+                id="Tipo_Niif"
+                ngModel
+              >
                 <mat-option value="CLASE">CLASE</mat-option>
                 <mat-option value="GRUPO">GRUPO</mat-option>
                 <mat-option value="CUENTA">CUENTA</mat-option>
@@ -551,15 +557,7 @@
       <button
         type="button"
         class="btn btn-primary"
-        [swal]="{
-          title: '¿Está seguro(a)?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Guardar',
-          cancelButtonText: 'Cancelar',
-          reverseButtons: true
-        }"
-        (confirm)="guardarPlan(FormPlan, 'guardar')"
+        (click)="guardarPlan(FormPlan, 'guardar')"
         [disabled]="!FormPlan.valid"
       >
         Guardar
@@ -593,6 +591,7 @@
               <mat-select
                 required
                 name="Tipo_Niif"
+                [(ngModel)]="Tipo_Niif_Editar"
                 id="Tipo_Niif_Editar"
                 [(ngModel)]="PlanCuentaModel.Tipo_Niif"
               >
@@ -921,15 +920,7 @@
       <button
         type="button"
         class="btn btn-primary"
-        [swal]="{
-          title: '¿Está seguro(a)?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Guardar',
-          cancelButtonText: 'Cancelar',
-          reverseButtons: true
-        }"
-        (confirm)="guardarPlan(FormEditarPlan, 'editar')"
+        (click)="guardarPlan(FormEditarPlan, 'editar')"
       >
         Guardar
       </button>

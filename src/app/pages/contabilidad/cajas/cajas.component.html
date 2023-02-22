@@ -29,7 +29,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && prettyCashList.length; else notData"
       >
         <thead class="bg-light">
@@ -46,7 +45,7 @@
           <tr *ngFor="let item of prettyCashList" class="text-center">
             <td class="align-middle">{{ item.description }}</td>
             <td class="align-middle">
-              {{ item.account_plan.name }} - {{ item.account_plan.code }}
+              {{ item.account_plan?.name }} - {{ item.account_plan?.code }}
             </td>
             <td class="align-middle">
               {{ item.person.first_name }} {{ item.person.first_surname }}
@@ -56,7 +55,9 @@
               {{ item.user.person.first_surname }}
             </td>
             <td class="align-middle">{{ item.initial_balance }}</td>
-            <td class="align-middle">{{ item.account_plan.balance.balance }}</td>
+            <td class="align-middle">
+              {{ item.account_plan?.balance.balance }}
+            </td>
           </tr>
         </tbody>
       </table>

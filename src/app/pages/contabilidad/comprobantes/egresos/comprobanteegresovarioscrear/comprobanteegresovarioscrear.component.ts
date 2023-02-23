@@ -20,50 +20,50 @@ import { CentroCostosService } from '../../../centro-costos/centro-costos.servic
 })
 export class ComprobanteegresovarioscrearComponent implements OnInit {
 
-  public datosCabecera:any = {
+  public datosCabecera: any = {
     Titulo: 'Nuevo egreso',
     Fecha: new Date(),
     Codigo: ''
   }
-  
-  public Tipo_Comprobante:string = 'Egreso'
-  public alertOption:SweetAlertOptions = {};
-  public Cargando:boolean = false;
-  public Mostrar_Facturas:boolean = false;
-  public Facturas:any = [];
-  public position_document:number;
 
-  public ChequesSeleccionados : any =[];
+  public Tipo_Comprobante: string = 'Egreso'
+  public alertOption: SweetAlertOptions = {};
+  public Cargando: boolean = false;
+  public Mostrar_Facturas: boolean = false;
+  public Facturas: any = [];
+  public position_document: number;
+
+  public ChequesSeleccionados: any = [];
 
   @ViewChild('FormEgreso') FormEgreso: any;
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   @ViewChild('confirmacionGuardarCheque') confirmacionGuardarCheque: SwalComponent;
   @ViewChild('modalAgregarCheque') modalAgregarCheque: any;
-  public fecha=new Date();
-  public Fecha:any = '';
-  public display_Banco:string = 'none';
-  public Proveedores:any[]=[];
-  public Lista_Facturas:any[]=[{
-    RetencionesFactura:[]
+  public fecha = new Date();
+  public Fecha: any = '';
+  public display_Banco: string = 'none';
+  public Proveedores: any[] = [];
+  public Lista_Facturas: any[] = [{
+    RetencionesFactura: []
   }];
 
   public alertOption2: SweetAlertOptions = {};
-  public Centro_Costo= '';
-  public Nom_Centro_Costo:any= '';
-  public Fecha_Nota_Contable=this.fechaHoy();
+  public Centro_Costo = '';
+  public Nom_Centro_Costo: any = '';
+  public Fecha_Nota_Contable = this.fechaHoy();
   public Id_Proveedor: any = '';
-  public Id_Empresa:any = '';
+  public Id_Empresa: any = '';
   public NombreProveedor: string = '';
-  public Nom_Cliente:any;
+  public Nom_Cliente: any;
   public Id_Cliente = '';
   public Cliente = [];
   // public Funcionario=JSON.parse(localStorage.getItem("User"));
-  public Cuenta=[];
+  public Cuenta = [];
   public Bancos: Array<any>;
-  public FormaPago:any = [ ];
-  public Rentenciones:any[]=[];
-  public RentencionesFactura:any[]=[];
-  public Cuentas_Contables:any[]=[{
+  public FormaPago: any = [];
+  public Rentenciones: any[] = [];
+  public RentencionesFactura: any[] = [];
+  public Cuentas_Contables: any[] = [{
     Cuenta: '',
     Cheque: '',
     Nit: '',
@@ -76,14 +76,14 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     Deb_Niif: 0,
     Cred_Niif: 0
   }];
-  public Cuenta_Banco='';
+  public Cuenta_Banco = '';
   public Costo_Ingreso = 0;
-  public Total_Debito:number = 0;
-  public Total_Credito:number = 0;
-  public Retenciones_Totales =0;
-  public Mostrar:boolean=false;
-  public Mostrar_Cliente:boolean=false;
-  public Forma_Pago:string='Cheque';
+  public Total_Debito: number = 0;
+  public Total_Credito: number = 0;
+  public Retenciones_Totales = 0;
+  public Mostrar: boolean = false;
+  public Mostrar_Cliente: boolean = false;
+  public Forma_Pago: string = 'Cheque';
   public Impuesto = 0;
   public reducer = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Subtotal);
   public reducer_deb = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Debito);
@@ -92,15 +92,15 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   public reducer_abono = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Abono);
   public reducer3 = (accumulator, currentValue) => {
     var acu_iva = 0;
-    currentValue.RetencionesFacturas.forEach((v, i)=>{
-      
+    currentValue.RetencionesFacturas.forEach((v, i) => {
+
       acu_iva += parseFloat(v.Valor);
     });
-    
+
     return accumulator + acu_iva;
   };
   ListaRetenciones: any = [];
-  ListaFact:any = [];
+  ListaFact: any = [];
   Total_Facturas: number = 0;
   Mostrar_Opciones: boolean = true;
   Mostrar_Input_Cli: boolean = true;
@@ -109,7 +109,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   Documento: string = '';
   Concepto: string = '';
   Cheques: any = [];
-  public ModelCheque:any = {
+  public ModelCheque: any = {
     Id_Plan_Cuentas: '',
     Prefijo: '',
     Inicial: null,
@@ -118,19 +118,19 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   mostrarCheque: boolean = true;
   idBorrador: any = '';
   Codigo: string = '';
-  public Total_Abono:number = 0;
-  companies:any[] = [];
+  public Total_Abono: number = 0;
+  companies: any[] = [];
 
-  constructor( 
-              private route: ActivatedRoute, 
-              private http: HttpClient, 
-              private router: Router, 
-              // private swalService: SwalService, 
-              private _egresos: EgresosService,
-              private _general: NotasContablesService,
-              private _companies: CentroCostosService
-              ) { 
-    
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private router: Router,
+    // private swalService: SwalService,
+    private _egresos: EgresosService,
+    private _general: NotasContablesService,
+    private _companies: CentroCostosService
+  ) {
+
     this.http.get(environment.ruta + 'php/contabilidad/proveedor_buscar.php').subscribe((data: any) => {
       this.Proveedores = data;
     });
@@ -147,7 +147,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       inputOptions: {
         Pcga: 'Imprimir en PCGA',
         Niif: 'Imprimir en NIIF'
-      }, 
+      },
       preConfirm: (value) => {
         return new Promise((resolve) => {
           this.guardarEgreso(this.FormEgreso, value);
@@ -175,56 +175,56 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   }
 
   search = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    map(term => term.length < 4 ? []
-      : this.Cliente.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
-  );
-    formatter = (x: { Nombre: string }) => x.Nombre;
+    text$.pipe(
+      debounceTime(200),
+      map(term => term.length < 4 ? []
+        : this.Cliente.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
+    );
+  formatter = (x: { Nombre: string }) => x.Nombre;
 
-    search1 = (text$: Observable<string>) =>
+  search1 = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       map(term => term.length < 4 ? []
         : this.Cuenta.filter(v => v.Codigo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
     );
-    formatter1 = (x: { Codigo: string }) => x.Codigo;
-    
-    search2 = (text$: Observable<string>) =>
+  formatter1 = (x: { Codigo: string }) => x.Codigo;
+
+  search2 = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       map(term => term.length < 2 ? []
         : this.Centros.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
     );
-    formatter2 = (x: { Nombre: string }) => x.Nombre;
+  formatter2 = (x: { Nombre: string }) => x.Nombre;
 
-    ngOnInit() {
-      this.http.get(environment.ruta + 'php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
-        this.Cliente = data;
-      });
-      this.http.get(environment.ruta + 'php/comprobantes/cuentas.php').subscribe((data: any) => {
-        this.Bancos = data;
-      });
-      this.http.get(environment.ruta + 'php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
-        this.Cuenta = data.Activo;        
-      });
-      this.http.get(environment.ruta + 'php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
-        this.Centros = data;
-      });
+  ngOnInit() {
+    this.http.get(environment.ruta + 'php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
+      this.Cliente = data;
+    });
+    this.http.get(environment.ruta + 'php/comprobantes/cuentas.php').subscribe((data: any) => {
+      this.Bancos = data;
+    });
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
+      this.Cuenta = data.Activo;
+    });
+    this.http.get(environment.ruta + 'php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
+      this.Centros = data;
+    });
 
-      this.getCodigoEgreso();
+    this.getCodigoEgreso();
 
-      this.ListarRetenciones();
+    this.ListarRetenciones();
 
-      this.listarCheques();
-      // this.getCompanies();
-    }
+    this.listarCheques();
+    // this.getCompanies();
+  }
 
-    /* getCompanies(){
-      this._companies.getCompanies().subscribe((data:any) => {
-        this.companies = data.data;
-      })
-    } */
+  /* getCompanies(){
+    this._companies.getCompanies().subscribe((data:any) => {
+      this.companies = data.data;
+    })
+  } */
 
   BuscarProveedor(modelo) {
     this.NombreProveedor = modelo.Proveedores;
@@ -238,16 +238,16 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       this.Cuentas_Contables[pos].Tipo_Nit = cliente.Tipo;
     } else {
 
-      this.Id_Cliente=cliente.ID;
+      this.Id_Cliente = cliente.ID;
       this.Tipo_Beneficiario = cliente.Tipo;
     }
-    
+
   }
 
   getDatosTercero(nit) {
     return this.Cliente.find(x => x.ID == nit);
   }
-  
+
   BuscarDatosCentro(centro, pos?) {
 
     if (pos != undefined && pos != null) {
@@ -260,62 +260,62 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     } else {
       this.Centro_Costo = centro.Id_Centro_Costo;
     }
-    
-  }
- 
 
-  BuscarCuenta(cuenta, pos){
-   let pos2=pos+1;
-
-      if (cuenta.Centro_Costo == 'S') { // Validar si la cuenta es para Centro de costos o no.
-        this.Cuentas_Contables[pos].Centro_Costo = this.Nom_Centro_Costo;
-        this.Cuentas_Contables[pos].Id_Centro_Costo = this.Nom_Centro_Costo.Id_Centro_Costo;
-        (document.getElementById('Centro_Costo'+pos) as HTMLInputElement).style.display = 'block';
-      } else {
-        this.Cuentas_Contables[pos].Centro_Costo = '';
-        this.Cuentas_Contables[pos].Id_Centro_Costo = 0;
-        (document.getElementById('Centro_Costo'+pos) as HTMLInputElement).style.display = 'none';
-      }
-
-      this.Cuentas_Contables[pos].Id_Plan_Cuentas=cuenta.Id_Plan_Cuentas;
-      this.Cuentas_Contables[pos].Documento= this.Documento;
-      this.Cuentas_Contables[pos].Concepto= this.Concepto;
-
-      // Nit Beneficiario
-      this.Cuentas_Contables[pos].Nit = this.Nom_Cliente;
-      this.Cuentas_Contables[pos].Nit_Cuenta = this.Nom_Cliente.ID;
-      this.Cuentas_Contables[pos].Tipo_Nit = this.Nom_Cliente.Tipo;
-
-      let posicion = this.ListaRetenciones.findIndex(x => x.Id_Plan_Cuenta === cuenta.Id_Plan_Cuentas);
-
-      this.isBank(cuenta, pos); // Validar si la cuenta es un banco.
-
-      if (posicion >= 0) {
-        (document.getElementById('Base'+pos) as HTMLInputElement).readOnly = false;
-        this.Cuentas_Contables[pos].Porcentaje = this.ListaRetenciones[posicion].Porcentaje;
-      }
-      
-      if(cuenta.Id_Plan_Cuentas){
-        if (this.Cuentas_Contables[pos2] == undefined){
-          this.Cuentas_Contables.push({
-            Cuenta: '',
-            Cheque: '',
-            Nit: '',
-            Centro_Costo: '',
-            Documento: '',
-            Concepto: '',
-            Base: 0,
-            Debito: 0,
-            Credito: 0,
-            Deb_Niif: 0,
-            Cred_Niif: 0
-          });
-        }
-      }
-  
   }
 
- 
+
+  BuscarCuenta(cuenta, pos) {
+    let pos2 = pos + 1;
+
+    if (cuenta.Centro_Costo == 'S') { // Validar si la cuenta es para Centro de costos o no.
+      this.Cuentas_Contables[pos].Centro_Costo = this.Nom_Centro_Costo;
+      this.Cuentas_Contables[pos].Id_Centro_Costo = this.Nom_Centro_Costo.Id_Centro_Costo;
+      (document.getElementById('Centro_Costo' + pos) as HTMLInputElement).style.display = 'block';
+    } else {
+      this.Cuentas_Contables[pos].Centro_Costo = '';
+      this.Cuentas_Contables[pos].Id_Centro_Costo = 0;
+      (document.getElementById('Centro_Costo' + pos) as HTMLInputElement).style.display = 'none';
+    }
+
+    this.Cuentas_Contables[pos].Id_Plan_Cuentas = cuenta.Id_Plan_Cuentas;
+    this.Cuentas_Contables[pos].Documento = this.Documento;
+    this.Cuentas_Contables[pos].Concepto = this.Concepto;
+
+    // Nit Beneficiario
+    this.Cuentas_Contables[pos].Nit = this.Nom_Cliente;
+    this.Cuentas_Contables[pos].Nit_Cuenta = this.Nom_Cliente.ID;
+    this.Cuentas_Contables[pos].Tipo_Nit = this.Nom_Cliente.Tipo;
+
+    let posicion = this.ListaRetenciones.findIndex(x => x.Id_Plan_Cuenta === cuenta.Id_Plan_Cuentas);
+
+    this.isBank(cuenta, pos); // Validar si la cuenta es un banco.
+
+    if (posicion >= 0) {
+      (document.getElementById('Base' + pos) as HTMLInputElement).readOnly = false;
+      this.Cuentas_Contables[pos].Porcentaje = this.ListaRetenciones[posicion].Porcentaje;
+    }
+
+    if (cuenta.Id_Plan_Cuentas) {
+      if (this.Cuentas_Contables[pos2] == undefined) {
+        this.Cuentas_Contables.push({
+          Cuenta: '',
+          Cheque: '',
+          Nit: '',
+          Centro_Costo: '',
+          Documento: '',
+          Concepto: '',
+          Base: 0,
+          Debito: 0,
+          Credito: 0,
+          Deb_Niif: 0,
+          Cred_Niif: 0
+        });
+      }
+    }
+
+  }
+
+
 
   ActualizaValores(pos?) {
 
@@ -323,119 +323,119 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       this.Cuentas_Contables[pos].Deb_Niif = this.Cuentas_Contables[pos].Debito;
       this.Cuentas_Contables[pos].Cred_Niif = this.Cuentas_Contables[pos].Credito;
     }
-    
+
     this.Total_Credito = this.Cuentas_Contables.reduce(this.reducer_cred, 0);
     this.Total_Debito = this.Cuentas_Contables.reduce(this.reducer_deb, 0);
   }
 
-  EliminarCuenta(pos){
+  EliminarCuenta(pos) {
 
-    this.Cuentas_Contables.splice(pos,1);
+    this.Cuentas_Contables.splice(pos, 1);
 
     setTimeout(() => {
       this.ActualizaValores();
     }, 100);
-    
+
   }
 
-  guardarEgreso(Formulario:NgForm, tipo) {
+  guardarEgreso(Formulario: NgForm, tipo) {
 
     let info = JSON.stringify(Formulario.value);
 
-    let datos = new FormData(); 
+    let datos = new FormData();
 
     datos.append('Datos', info);
     datos.append('Cuentas_Contables', JSON.stringify(this.Cuentas_Contables));
 
-    this.http.post(environment.ruta+'php/comprobantes/guardar_egreso.php', datos).subscribe((data:any)=>{
+    this.http.post(environment.ruta + 'php/comprobantes/guardar_egreso.php', datos).subscribe((data: any) => {
 
-      this.confirmacionSwal.title =data.titulo;
+      this.confirmacionSwal.title = data.titulo;
       this.confirmacionSwal.text = data.mensaje;
       this.confirmacionSwal.icon = data.tipo;
       this.confirmacionSwal.fire();
 
       if (data.tipo == 'success' && data.id != undefined) {
-        if (tipo == 'Pcga') { 
-          window.open(environment.ruta+'php/comprobantes/egreso_descarga_pdf.php?id='+data.id,'_blank'); // SE IMPRIME EN FORMATO PCGA
+        if (tipo == 'Pcga') {
+          window.open(environment.ruta + 'php/comprobantes/egreso_descarga_pdf.php?id=' + data.id, '_blank'); // SE IMPRIME EN FORMATO PCGA
         } else {
-          window.open(environment.ruta+'php/comprobantes/egreso_descarga_pdf.php?id='+data.id+'&tipo=Niif','_blank'); // SE IMPRIME EN FORMATO NIIF
+          window.open(environment.ruta + 'php/comprobantes/egreso_descarga_pdf.php?id=' + data.id + '&tipo=Niif', '_blank'); // SE IMPRIME EN FORMATO NIIF
         }
         setTimeout(() => {
-        
+
           this.router.navigate(['/comprobantes/egresos']);
         }, 1000);
       }
-      
+
     }, error => {
       this.confirmacionSwal.text = "Ha ocurrido un error inesperado, la conexión a fallado.";
       this.confirmacionSwal.title = "Oops!";
       this.confirmacionSwal.icon = "error";
       this.confirmacionSwal.fire();
     });
-    
+
   }
 
   HomologoDebCred(tipo, pos) {
 
     switch (tipo) {
       case 'Debito':
-        
+
         this.Cuentas_Contables[pos].Deb_Niif = this.Cuentas_Contables[pos].Debito;
         break;
-    
+
       case 'Credito':
 
         this.Cuentas_Contables[pos].Cred_Niif = this.Cuentas_Contables[pos].Credito;
         break;
     }
-    
+
   }
 
   ListarRetenciones() {
 
-    this.http.get(environment.ruta+'php/contabilidad/lista_retenciones.php').subscribe((data:any)=>{
+    this.http.get(environment.ruta + 'php/contabilidad/lista_retenciones.php').subscribe((data: any) => {
       this.ListaRetenciones = data;
     })
-    
+
   }
 
   calcularBase(pos, valor) {
 
     if (valor != '') {
-      
-      this.Cuentas_Contables[pos].Credito = Math.round(parseFloat(valor) * (parseFloat(this.Cuentas_Contables[pos].Porcentaje)/100));
-      this.Cuentas_Contables[pos].Cred_Niif = Math.round(parseFloat(valor) * (parseFloat(this.Cuentas_Contables[pos].Porcentaje)/100));
-      
+
+      this.Cuentas_Contables[pos].Credito = Math.round(parseFloat(valor) * (parseFloat(this.Cuentas_Contables[pos].Porcentaje) / 100));
+      this.Cuentas_Contables[pos].Cred_Niif = Math.round(parseFloat(valor) * (parseFloat(this.Cuentas_Contables[pos].Porcentaje) / 100));
+
     } else {
       this.Cuentas_Contables[pos].Deb_Niif = 0;
     }
 
     this.ActualizaValores();
-    
+
   }
 
-  fechaHoy(){
-    let fecha:any = new Date();
+  fechaHoy() {
+    let fecha: any = new Date();
     fecha = (fecha.toISOString()).split('T')[0];
 
     return fecha
   }
 
-  getCodigoEgreso(fecha?:string) {
+  getCodigoEgreso(fecha?: string) {
 
-    let datos:any = {Tipo:'Egreso'};
+    let datos: any = { Tipo: 'Egreso' };
 
     if (fecha != undefined && fecha != null) {
       datos.Fecha = fecha;
     }
-    
-    this.http.get(environment.ruta+'php/comprobantes/get_codigo.php', {params: datos}).subscribe((data:any) => {
+
+    this.http.get(environment.ruta + 'php/comprobantes/get_codigo.php', { params: datos }).subscribe((data: any) => {
       this.datosCabecera.Codigo = data.consecutivo;
       this.Codigo = data.consecutivo;
-    }) 
+    })
   }
 
-  validarDebCred(pos:number, campo:string) {
+  validarDebCred(pos: number, campo: string) {
     if (campo === 'Credito') {
       if (this.Cuentas_Contables[pos].Credito == '' || this.Cuentas_Contables[pos].Credito == null || this.Cuentas_Contables[pos].Cred_Niif == '' || this.Cuentas_Contables[pos].Cred_Niif == null) {
         this.Cuentas_Contables[pos].Credito = 0;
@@ -453,16 +453,16 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     }
   }
 
-  showFacturas(nit:any, pos) {
+  showFacturas(nit: any, pos) {
     if (nit != undefined && nit != '' && nit != null) {
       this.position_document = pos;
-      let p:any = {nit: nit};
+      let p: any = { nit: nit };
       let id_plan_cuenta = this.Cuentas_Contables[pos].Id_Plan_Cuentas;
 
       if (id_plan_cuenta != '') {
         p.id_plan_cuenta = id_plan_cuenta;
       }
-      this.http.get(environment.ruta + 'php/contabilidad/notascontables/lista_facturas.php',{params: p}).subscribe((data: any) => {
+      this.http.get(environment.ruta + 'php/contabilidad/notascontables/lista_facturas.php', { params: p }).subscribe((data: any) => {
         this.Lista_Facturas = data.Facturas;
         this.Mostrar_Facturas = true;
 
@@ -495,11 +495,11 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     let nit = this.Cuentas_Contables[this.position_document].Nit_Cuenta;
     this.Cuentas_Contables.splice(this.position_document, 1); // Eliminando una fila para introducir las nuevas cuentas.
     let count = this.Cuentas_Contables.length; // Total de filas de las cuentas.
-    
-    if (this.Cuentas_Contables[(count-1)] != undefined) {
-      if (this.Cuentas_Contables[(count-1)].Nit_Cuenta == undefined || this.Cuentas_Contables[(count-1)].Nit_Cuenta == '') {
-        this.Cuentas_Contables.splice((count-1), 1); // Eliminando ultima fila.
-        
+
+    if (this.Cuentas_Contables[(count - 1)] != undefined) {
+      if (this.Cuentas_Contables[(count - 1)].Nit_Cuenta == undefined || this.Cuentas_Contables[(count - 1)].Nit_Cuenta == '') {
+        this.Cuentas_Contables.splice((count - 1), 1); // Eliminando ultima fila.
+
       }
     }
 
@@ -513,7 +513,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
         Nit_Cuenta: nit,
         Tipo_Nit: this.getDatosTercero(nit).Tipo,
         Documento: f.Factura,
-        Concepto: 'Pago o Abono Factura Nro. '+ f.Factura,
+        Concepto: 'Pago o Abono Factura Nro. ' + f.Factura,
         Base: 0,
         Debito: this.validarDebeOHaber('D', f.Movimiento, f.Abono),
         Credito: this.validarDebeOHaber('C', f.Movimiento, f.Abono),
@@ -553,12 +553,12 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     }, 200);
 
   }
-  
-  obtenerPlanCuenta(codigo:string) {
+
+  obtenerPlanCuenta(codigo: string) {
     return this.Cuenta.find(x => x.Codigo_Cuenta === codigo);
   }
 
-  validarDebeOHaber(campo:string, tipo:string, valor:number) { // Funcion que me permite validar si el valor que viene de la factura va al Debe o al Haber
+  validarDebeOHaber(campo: string, tipo: string, valor: number) { // Funcion que me permite validar si el valor que viene de la factura va al Debe o al Haber
     if (campo === tipo) {
       return Math.abs(valor);
     }
@@ -566,20 +566,20 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   }
 
   listarCheques() {
-    this.http.get(environment.ruta+'php/comprobantes/lista_cheques.php').subscribe((data:any) => {
+    this.http.get(environment.ruta + 'php/comprobantes/lista_cheques.php').subscribe((data: any) => {
       this.Cheques = data;
     });
   }
 
-  nuevoCheque(modal){
+  nuevoCheque(modal) {
 
     let info = this._egresos.normalize(JSON.stringify(this.ModelCheque));
 
     let datos = new FormData();
     datos.append('datos', info);
 
-    this.http.post(environment.ruta+'php/comprobantes/nuevo_cheque.php', datos).subscribe((data:any)=>{
-      let toastObj = {textos:[data.titulo, data.mensaje], tipo:data.tipo, duracion:4000};
+    this.http.post(environment.ruta + 'php/comprobantes/nuevo_cheque.php', datos).subscribe((data: any) => {
+      let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.tipo, duracion: 4000 };
       this._egresos.ShowToast(toastObj);
 
       modal.hide();
@@ -593,8 +593,8 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
         Inicial: null,
         Final: null
       }
-      
-      
+
+
     });
 
     // return true;
@@ -606,16 +606,16 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
 
     if (existe >= 0) {
       if (this.Forma_Pago == 'Cheque') {
-        (document.getElementById('cheque'+pos) as HTMLInputElement).style.display = 'block';
+        (document.getElementById('cheque' + pos) as HTMLInputElement).style.display = 'block';
       }
     } else {
-      (document.getElementById('cheque'+pos) as HTMLInputElement).style.display = 'none';
+      (document.getElementById('cheque' + pos) as HTMLInputElement).style.display = 'none';
       this.Cuentas_Contables[pos].Cheque = '';
     }
   }
 
   validarCampo(campo, event, tipo) { // Funcion que validará los campos de typeahead
-    if (typeof(campo) != 'object' && campo != '') {
+    if (typeof (campo) != 'object' && campo != '') {
       let id = event.target.id;
       (document.getElementById(id) as HTMLInputElement).focus();
       Swal.fire({
@@ -655,7 +655,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     }
   }
 
-  tab(event,ele) {
+  tab(event, ele) {
 
     this._general.tabular(event, ele);
 
@@ -665,8 +665,8 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     this.http.get(environment.ruta + 'php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
       this.Cliente = data;
     });
-    this.http.get(environment.ruta + 'php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
-      this.Cuenta = data.Activo;        
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
+      this.Cuenta = data.Activo;
     });
     this.http.get(environment.ruta + 'php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
       this.Centros = data;
@@ -700,18 +700,18 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
         // Identificacion_Funcionario: this.Funcionario.Identificacion_Funcionario,
         Datos: Datos
       }
-  
+
       let info = this._egresos.Utf8.encode(JSON.stringify(datosBorrador));
-  
+
       let datos = new FormData();
       datos.append('datos', info);
-      this.http.post(environment.ruta+'php/contabilidad/guardar_borrador_contable.php', datos)
-      .subscribe((data:any) => {
-        if (data.status == 202) {
-          if (this.idBorrador == '')
-            this.idBorrador = data.Id_Borrador;
-        }
-      })
+      this.http.post(environment.ruta + 'php/contabilidad/guardar_borrador_contable.php', datos)
+        .subscribe((data: any) => {
+          if (data.status == 202) {
+            if (this.idBorrador == '')
+              this.idBorrador = data.Id_Borrador;
+          }
+        })
     }, 300);
   }
 
@@ -742,34 +742,34 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
 
   resetModel() {
     this.Fecha_Nota_Contable = this.fechaHoy();
-      this.Nom_Cliente = '';
-      this.Id_Cliente = '';
-      this.Nom_Centro_Costo = '';
-      this.Centro_Costo = '';
-      this.Documento = '';
-      this.Concepto = '';
-      
-      this.Cuentas_Contables = [{
-        Cuenta: '',
-        Cheque: '',
-        Nit: '',
-        Centro_Costo: '',
-        Documento: '',
-        Concepto: '',
-        Base: 0,
-        Debito: 0,
-        Credito: 0,
-        Deb_Niif: 0,
-        Cred_Niif: 0
-      }];
+    this.Nom_Cliente = '';
+    this.Id_Cliente = '';
+    this.Nom_Centro_Costo = '';
+    this.Centro_Costo = '';
+    this.Documento = '';
+    this.Concepto = '';
 
-      this.ChequesSeleccionados = [];
+    this.Cuentas_Contables = [{
+      Cuenta: '',
+      Cheque: '',
+      Nit: '',
+      Centro_Costo: '',
+      Documento: '',
+      Concepto: '',
+      Base: 0,
+      Debito: 0,
+      Credito: 0,
+      Deb_Niif: 0,
+      Cred_Niif: 0
+    }];
 
-      this.datosCabecera.Codigo = this.getCodigoEgreso();
+    this.ChequesSeleccionados = [];
+
+    this.datosCabecera.Codigo = this.getCodigoEgreso();
   }
 
   calcularTotalAbonoCartera() {
-    this.Total_Abono = this.Lista_Facturas.reduce(this.reducer_abono,0);
+    this.Total_Abono = this.Lista_Facturas.reduce(this.reducer_abono, 0);
   }
 
 

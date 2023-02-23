@@ -200,7 +200,7 @@ export class EgresosComponent implements OnInit {
       this.ClientesFiltrar = data;
     });
 
-    this.http.get(environment.ruta + 'php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
       this.CuentasActivos = data.Activo;
       this.CuentasPasivos = data.Pasivo;
     });
@@ -216,7 +216,7 @@ export class EgresosComponent implements OnInit {
     this.RecargarDatos();
     // this.listarEmpresas();
   }
-  /* 
+  /*
       listarEmpresas(){
         this._company.getCompanies().subscribe((data:any) => {
           this.companies = data.data;
@@ -515,7 +515,7 @@ export class EgresosComponent implements OnInit {
     let data = new FormData();
     data.append('datos', info);
 
-    return this.http.post(environment.ruta + 'php/contabilidad/anular_documento.php', data);
+    return this.http.post(environment.base_url + '/php/contabilidad/anular_documento.php', data);
   }
 
 }

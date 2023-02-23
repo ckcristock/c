@@ -17,45 +17,45 @@ import { environment } from '../../../../../../environments/environment';
 })
 export class NotascarteracrearComponent implements OnInit {
 
-  public datosCabecera:any = {
+  public datosCabecera: any = {
     Titulo: 'Nueva nota cartera',
     Fecha: new Date(),
     Codigo: ''
   }
-  
+
   public Tipo_Comprobante = 'Nota Cartera';
-  public alertOption:SweetAlertOptions = {};
-  public Cargando:boolean = false;
-  public Mostrar_Facturas:boolean = false;
-  public Facturas:any = [];
-  public position_document:number;
-  public Tipo_Documento:string = '';
+  public alertOption: SweetAlertOptions = {};
+  public Cargando: boolean = false;
+  public Mostrar_Facturas: boolean = false;
+  public Facturas: any = [];
+  public position_document: number;
+  public Tipo_Documento: string = '';
 
   @ViewChild('FormNotaContable') FormNotaContable: any;
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
-  public fecha=new Date();
-  public Fecha:any = '';
-  public display_Banco:string = 'none';
-  public Proveedores:any[]=[];
-  public Lista_Facturas:any[]=[{
-    RetencionesFactura:[]
+  public fecha = new Date();
+  public Fecha: any = '';
+  public display_Banco: string = 'none';
+  public Proveedores: any[] = [];
+  public Lista_Facturas: any[] = [{
+    RetencionesFactura: []
   }];
 
-  public Centro_Costo= '';
-  public Nom_Centro_Costo:any= '';
-  public Fecha_Nota_Contable=this.fechaHoy();
+  public Centro_Costo = '';
+  public Nom_Centro_Costo: any = '';
+  public Fecha_Nota_Contable = this.fechaHoy();
   public Id_Proveedor: any = '';
   public NombreProveedor: string = '';
-  public Nom_Cliente:any;
+  public Nom_Cliente: any;
   public Id_Cliente = '';
   public Cliente = [];
   // public Funcionario=JSON.parse(localStorage.getItem("User"));
-  public Cuenta=[];
+  public Cuenta = [];
   public Cuentas: Array<any>;
-  public FormaPago:any = [ ];
-  public Rentenciones:any[]=[];
-  public RentencionesFactura:any[]=[];
-  public Cuentas_Contables:any[]=[{
+  public FormaPago: any = [];
+  public Rentenciones: any[] = [];
+  public RentencionesFactura: any[] = [];
+  public Cuentas_Contables: any[] = [{
     Cuenta: '',
     Nit: '',
     Centro_Costo: '',
@@ -67,13 +67,13 @@ export class NotascarteracrearComponent implements OnInit {
     Deb_Niif: 0,
     Cred_Niif: 0
   }];
-  public Cuenta_Banco='';
+  public Cuenta_Banco = '';
   public Costo_Ingreso = 0;
-  public Total_Debito:number = 0;
-  public Total_Credito:number = 0;
-  public Retenciones_Totales =0;
-  public Mostrar:boolean=false;
-  public Mostrar_Cliente:boolean=false;
+  public Total_Debito: number = 0;
+  public Total_Credito: number = 0;
+  public Retenciones_Totales = 0;
+  public Mostrar: boolean = false;
+  public Mostrar_Cliente: boolean = false;
   public Impuesto = 0;
   public reducer = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Subtotal);
   public reducer_deb = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Debito);
@@ -82,15 +82,15 @@ export class NotascarteracrearComponent implements OnInit {
   public reducer_abono = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Abono);
   public reducer3 = (accumulator, currentValue) => {
     var acu_iva = 0;
-    currentValue.RetencionesFacturas.forEach((v, i)=>{
-      
+    currentValue.RetencionesFacturas.forEach((v, i) => {
+
       acu_iva += parseFloat(v.Valor);
     });
-    
+
     return accumulator + acu_iva;
   };
   ListaRetenciones: any = [];
-  ListaFact:any = [];
+  ListaFact: any = [];
   Total_Facturas: number = 0;
   Mostrar_Opciones: boolean = true;
   Mostrar_Input_Cli: boolean = true;
@@ -100,37 +100,37 @@ export class NotascarteracrearComponent implements OnInit {
   Concepto: string = '';
   idBorrador: any = '';
   Codigo: string = '';
-  public Total_Abono:number = 0;
+  public Total_Abono: number = 0;
 
-  
-  constructor( 
-                private route: ActivatedRoute, 
-                private http: HttpClient, 
-                private router: Router, 
-                private swalService: SwalService,
-                private _notas: NotasCarterasService
-              ) {
-    
+
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private router: Router,
+    private swalService: SwalService,
+    private _notas: NotasCarterasService
+  ) {
+
     let queryParams = this.route.snapshot.queryParams;
 
-    
+
 
     if (queryParams.facturas != undefined && queryParams.cliente != undefined) {
-      
+
       this.Id_Cliente = queryParams.cliente;
       this.Cargando = true;
       this.Mostrar_Opciones = false;
       this.Mostrar_Cliente = true;
-      this.http.get(environment.ruta + 'php/comprobantes/facturas_seleccionadas_cliente.php',{ params: queryParams }).subscribe((data: any) => {
+      this.http.get(environment.ruta + 'php/comprobantes/facturas_seleccionadas_cliente.php', { params: queryParams }).subscribe((data: any) => {
         this.Mostrar = false;
         this.Cargando = false;
         this.Mostrar_Input_Cli = false;
-        
+
         this.Lista_Facturas = data.Facturas;
         this.Nom_Cliente = data.Cliente.Nombre;
       });
     }
-    
+
     this.http.get(environment.ruta + 'php/contabilidad/proveedor_buscar.php').subscribe((data: any) => {
       this.Proveedores = data;
     });
@@ -147,7 +147,7 @@ export class NotascarteracrearComponent implements OnInit {
       inputOptions: {
         Pcga: 'Imprimir en PCGA',
         Niif: 'Imprimir en NIIF'
-      }, 
+      },
       preConfirm: (value) => {
         return new Promise((resolve) => {
           this.guardarNotaCartera(this.FormNotaContable, value);
@@ -157,48 +157,48 @@ export class NotascarteracrearComponent implements OnInit {
     }
   }
   search = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    map(term => term.length < 4 ? []
-      : this.Cliente.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
-  );
-    formatter = (x: { Nombre: string }) => x.Nombre;
+    text$.pipe(
+      debounceTime(200),
+      map(term => term.length < 4 ? []
+        : this.Cliente.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
+    );
+  formatter = (x: { Nombre: string }) => x.Nombre;
 
-    search1 = (text$: Observable<string>) =>
+  search1 = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       map(term => term.length < 4 ? []
         : this.Cuenta.filter(v => v.Codigo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
     );
-    formatter1 = (x: { Codigo: string }) => x.Codigo;
-    
-    search2 = (text$: Observable<string>) =>
+  formatter1 = (x: { Codigo: string }) => x.Codigo;
+
+  search2 = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       map(term => term.length < 2 ? []
         : this.Centros.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
     );
-    formatter2 = (x: { Nombre: string }) => x.Nombre;
+  formatter2 = (x: { Nombre: string }) => x.Nombre;
 
-    ngOnInit() {
-      this.http.get(environment.ruta + 'php/contabilidad/notascarteras/nit_buscar.php').subscribe((data: any) => {
-        this.Cliente = data;
-      });
-      this.http.get(environment.ruta + 'php/comprobantes/cuentas.php').subscribe((data: any) => {
-        this.Cuentas = data;
-      });
-      this.http.get(environment.ruta + 'php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
-        this.Cuenta = data.Activo;        
-      });
-      this.http.get(environment.ruta + 'php/contabilidad/notascarteras/centrocosto_buscar.php').subscribe((data: any) => {
-        this.Centros = data;
-      });
+  ngOnInit() {
+    this.http.get(environment.ruta + 'php/contabilidad/notascarteras/nit_buscar.php').subscribe((data: any) => {
+      this.Cliente = data;
+    });
+    this.http.get(environment.ruta + 'php/comprobantes/cuentas.php').subscribe((data: any) => {
+      this.Cuentas = data;
+    });
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
+      this.Cuenta = data.Activo;
+    });
+    this.http.get(environment.ruta + 'php/contabilidad/notascarteras/centrocosto_buscar.php').subscribe((data: any) => {
+      this.Centros = data;
+    });
 
-      // this.getCodigoNuevaNota();
+    // this.getCodigoNuevaNota();
 
-      this.ListarRetenciones();
+    this.ListarRetenciones();
 
-    }
+  }
   BuscarProveedor(modelo) {
     this.NombreProveedor = modelo.Proveedores;
     this.Id_Proveedor = modelo.Id_Proveedor;
@@ -211,16 +211,16 @@ export class NotascarteracrearComponent implements OnInit {
       this.Cuentas_Contables[pos].Tipo_Nit = cliente.Tipo;
     } else {
 
-      this.Id_Cliente=cliente.ID;
+      this.Id_Cliente = cliente.ID;
       this.Tipo_Beneficiario = cliente.Tipo;
     }
-    
+
   }
 
   getDatosTercero(nit) {
     return this.Cliente.find(x => x.ID == nit);
   }
-  
+
   BuscarDatosCentro(centro, pos?) {
 
     if (pos != undefined && pos != null) {
@@ -233,59 +233,59 @@ export class NotascarteracrearComponent implements OnInit {
     } else {
       this.Centro_Costo = centro.Id_Centro_Costo;
     }
-    
-  }
- 
 
-  BuscarCuenta(cuenta, pos){
-   let pos2=pos+1;
-
-      if (cuenta.Centro_Costo == 'S') { // Validar si la cuenta es para Centro de costos o no.
-        this.Cuentas_Contables[pos].Centro_Costo = this.Nom_Centro_Costo;
-        this.Cuentas_Contables[pos].Id_Centro_Costo = this.Nom_Centro_Costo.Id_Centro_Costo;
-        (document.getElementById('Centro_Costo'+pos) as HTMLInputElement).style.display = 'block';
-      } else {
-        this.Cuentas_Contables[pos].Centro_Costo = '';
-        this.Cuentas_Contables[pos].Id_Centro_Costo = 0;
-        (document.getElementById('Centro_Costo'+pos) as HTMLInputElement).style.display = 'none';
-      }
-
-      this.Cuentas_Contables[pos].Id_Plan_Cuentas=cuenta.Id_Plan_Cuentas;
-      this.Cuentas_Contables[pos].Documento= this.Documento;
-      this.Cuentas_Contables[pos].Concepto= this.Concepto;
-
-      // Nit Beneficiario
-      this.Cuentas_Contables[pos].Nit = this.Nom_Cliente;
-      this.Cuentas_Contables[pos].Nit_Cuenta = this.Nom_Cliente.ID;
-      this.Cuentas_Contables[pos].Tipo_Nit = this.Nom_Cliente.Tipo;
-
-      let posicion = this.ListaRetenciones.findIndex(x => x.Id_Plan_Cuenta === cuenta.Id_Plan_Cuentas);
-
-      if (posicion >= 0) {
-        (document.getElementById('Base'+pos) as HTMLInputElement).readOnly = false;
-        this.Cuentas_Contables[pos].Porcentaje = this.ListaRetenciones[posicion].Porcentaje;
-      }
-      
-      if(cuenta.Id_Plan_Cuentas){
-        if (this.Cuentas_Contables[pos2] == undefined){
-          this.Cuentas_Contables.push({
-            Cuenta: '',
-            Nit: '',
-            Centro_Costo: '',
-            Documento: '',
-            Concepto: '',
-            Base: 0,
-            Debito: 0,
-            Credito: 0,
-            Deb_Niif: 0,
-            Cred_Niif: 0
-          });
-        }
-      }
-  
   }
 
- 
+
+  BuscarCuenta(cuenta, pos) {
+    let pos2 = pos + 1;
+
+    if (cuenta.Centro_Costo == 'S') { // Validar si la cuenta es para Centro de costos o no.
+      this.Cuentas_Contables[pos].Centro_Costo = this.Nom_Centro_Costo;
+      this.Cuentas_Contables[pos].Id_Centro_Costo = this.Nom_Centro_Costo.Id_Centro_Costo;
+      (document.getElementById('Centro_Costo' + pos) as HTMLInputElement).style.display = 'block';
+    } else {
+      this.Cuentas_Contables[pos].Centro_Costo = '';
+      this.Cuentas_Contables[pos].Id_Centro_Costo = 0;
+      (document.getElementById('Centro_Costo' + pos) as HTMLInputElement).style.display = 'none';
+    }
+
+    this.Cuentas_Contables[pos].Id_Plan_Cuentas = cuenta.Id_Plan_Cuentas;
+    this.Cuentas_Contables[pos].Documento = this.Documento;
+    this.Cuentas_Contables[pos].Concepto = this.Concepto;
+
+    // Nit Beneficiario
+    this.Cuentas_Contables[pos].Nit = this.Nom_Cliente;
+    this.Cuentas_Contables[pos].Nit_Cuenta = this.Nom_Cliente.ID;
+    this.Cuentas_Contables[pos].Tipo_Nit = this.Nom_Cliente.Tipo;
+
+    let posicion = this.ListaRetenciones.findIndex(x => x.Id_Plan_Cuenta === cuenta.Id_Plan_Cuentas);
+
+    if (posicion >= 0) {
+      (document.getElementById('Base' + pos) as HTMLInputElement).readOnly = false;
+      this.Cuentas_Contables[pos].Porcentaje = this.ListaRetenciones[posicion].Porcentaje;
+    }
+
+    if (cuenta.Id_Plan_Cuentas) {
+      if (this.Cuentas_Contables[pos2] == undefined) {
+        this.Cuentas_Contables.push({
+          Cuenta: '',
+          Nit: '',
+          Centro_Costo: '',
+          Documento: '',
+          Concepto: '',
+          Base: 0,
+          Debito: 0,
+          Credito: 0,
+          Deb_Niif: 0,
+          Cred_Niif: 0
+        });
+      }
+    }
+
+  }
+
+
 
   ActualizaValores(pos?) {
 
@@ -293,107 +293,107 @@ export class NotascarteracrearComponent implements OnInit {
       this.Cuentas_Contables[pos].Deb_Niif = this.Cuentas_Contables[pos].Debito;
       this.Cuentas_Contables[pos].Cred_Niif = this.Cuentas_Contables[pos].Credito;
     }
-    
+
     this.Total_Credito = this.Cuentas_Contables.reduce(this.reducer_cred, 0);
     this.Total_Debito = this.Cuentas_Contables.reduce(this.reducer_deb, 0);
   }
 
-  EliminarCuenta(pos){
+  EliminarCuenta(pos) {
 
-    this.Cuentas_Contables.splice(pos,1);
+    this.Cuentas_Contables.splice(pos, 1);
 
     setTimeout(() => {
       this.ActualizaValores();
     }, 100);
-    
+
   }
 
-  guardarNotaCartera(Formulario:NgForm, tipo) {
+  guardarNotaCartera(Formulario: NgForm, tipo) {
 
     let info = JSON.stringify(Formulario.value);
 
-    let datos = new FormData(); 
+    let datos = new FormData();
 
     datos.append('Datos', info);
     datos.append('Cuentas_Contables', JSON.stringify(this.Cuentas_Contables));
 
-    this.http.post(environment.ruta+'php/contabilidad/notascarteras/guardar_nota.php', datos).subscribe((data:any)=>{
+    this.http.post(environment.ruta + 'php/contabilidad/notascarteras/guardar_nota.php', datos).subscribe((data: any) => {
 
-      this.confirmacionSwal.title =data.titulo;
+      this.confirmacionSwal.title = data.titulo;
       this.confirmacionSwal.text = data.mensaje;
       this.confirmacionSwal.type = data.tipo;
       this.confirmacionSwal.show();
 
       if (data.tipo == 'success' && data.id != undefined) {
         localStorage.removeItem('borradorContable');
-        if (tipo == 'Pcga') { 
-          window.open(environment.ruta+'php/contabilidad/notascarteras/descarga_pdf.php?id='+data.id,'_blank'); // SE IMPRIME EN FORMATO PCGA
+        if (tipo == 'Pcga') {
+          window.open(environment.ruta + 'php/contabilidad/notascarteras/descarga_pdf.php?id=' + data.id, '_blank'); // SE IMPRIME EN FORMATO PCGA
         } else {
-          window.open(environment.ruta+'php/contabilidad/notascarteras/descarga_pdf.php?id='+data.id+'&tipo=Niif','_blank'); // SE IMPRIME EN FORMATO NIIF
+          window.open(environment.ruta + 'php/contabilidad/notascarteras/descarga_pdf.php?id=' + data.id + '&tipo=Niif', '_blank'); // SE IMPRIME EN FORMATO NIIF
         }
         setTimeout(() => {
-        
+
           this.router.navigate(['/comprobante/notascartera']);
         }, 1000);
       }
-      
+
     }, error => {
       this.confirmacionSwal.text = "Ha ocurrido un error inesperado, la conexión a fallado.";
       this.confirmacionSwal.title = "Oops!";
       this.confirmacionSwal.type = "error";
       this.confirmacionSwal.show();
     });
-    
+
   }
 
   HomologoDebCred(tipo, pos) {
 
     switch (tipo) {
       case 'Debito':
-        
+
         this.Cuentas_Contables[pos].Deb_Niif = this.Cuentas_Contables[pos].Debito;
         break;
-    
+
       case 'Credito':
 
         this.Cuentas_Contables[pos].Cred_Niif = this.Cuentas_Contables[pos].Credito;
         break;
     }
-    
+
   }
 
   ListarRetenciones() {
 
-    this.http.get(environment.ruta+'php/contabilidad/lista_retenciones.php').subscribe((data:any)=>{
+    this.http.get(environment.ruta + 'php/contabilidad/lista_retenciones.php').subscribe((data: any) => {
       this.ListaRetenciones = data;
     })
-    
+
   }
 
   calcularBase(pos, valor) {
 
     if (valor != '') {
-      
-      this.Cuentas_Contables[pos].Credito = Math.round(parseFloat(valor) * (parseFloat(this.Cuentas_Contables[pos].Porcentaje)/100));
-      this.Cuentas_Contables[pos].Cred_Niif = Math.round(parseFloat(valor) * (parseFloat(this.Cuentas_Contables[pos].Porcentaje)/100));
-      
+
+      this.Cuentas_Contables[pos].Credito = Math.round(parseFloat(valor) * (parseFloat(this.Cuentas_Contables[pos].Porcentaje) / 100));
+      this.Cuentas_Contables[pos].Cred_Niif = Math.round(parseFloat(valor) * (parseFloat(this.Cuentas_Contables[pos].Porcentaje) / 100));
+
     } else {
       this.Cuentas_Contables[pos].Deb_Niif = 0;
     }
 
     this.ActualizaValores();
-    
+
   }
 
-  fechaHoy(){
-    let fecha:any = new Date();
+  fechaHoy() {
+    let fecha: any = new Date();
     fecha = (fecha.toISOString()).split('T')[0];
 
     return fecha
   }
 
-  getCodigoNuevaNota(fecha?:string) {
-    let datos:any = {};
+  getCodigoNuevaNota(fecha?: string) {
+    let datos: any = {};
 
     if (fecha != undefined && fecha != null) {
       datos.Fecha = fecha;
@@ -404,16 +404,16 @@ export class NotascarteracrearComponent implements OnInit {
     if (this.Tipo_Documento != '') {
       datos.Tipo = this.Tipo_Documento;
 
-      this.http.get(environment.ruta+'php/contabilidad/notascarteras/get_codigo.php', {params: datos}).subscribe((data:any) => {
+      this.http.get(environment.ruta + 'php/contabilidad/notascarteras/get_codigo.php', { params: datos }).subscribe((data: any) => {
         this.datosCabecera.Codigo = data.consecutivo;
         this.Codigo = data.consecutivo;
       })
     }
-    
+
 
   }
 
-  validarDebCred(pos:number, campo:string) {
+  validarDebCred(pos: number, campo: string) {
     if (campo === 'Credito') {
       if (this.Cuentas_Contables[pos].Credito == '' || this.Cuentas_Contables[pos].Credito == null || this.Cuentas_Contables[pos].Cred_Niif == '' || this.Cuentas_Contables[pos].Cred_Niif == null) {
         this.Cuentas_Contables[pos].Credito = 0;
@@ -431,16 +431,16 @@ export class NotascarteracrearComponent implements OnInit {
     }
   }
 
-  showFacturas(nit:any, pos) {
+  showFacturas(nit: any, pos) {
     if (nit != undefined && nit != '' && nit != null) {
       this.position_document = pos;
-      let p:any = {nit: nit};
+      let p: any = { nit: nit };
       let id_plan_cuenta = this.Cuentas_Contables[pos].Id_Plan_Cuentas;
 
       if (id_plan_cuenta != '') {
         p.id_plan_cuenta = id_plan_cuenta;
       }
-      this.http.get(environment.ruta + 'php/contabilidad/notascarteras/lista_facturas.php',{ params: p}).subscribe((data: any) => {
+      this.http.get(environment.ruta + 'php/contabilidad/notascarteras/lista_facturas.php', { params: p }).subscribe((data: any) => {
         this.Lista_Facturas = data.Facturas;
         this.Mostrar_Facturas = true;
 
@@ -472,11 +472,11 @@ export class NotascarteracrearComponent implements OnInit {
     let nit = this.Cuentas_Contables[this.position_document].Nit_Cuenta;
     this.Cuentas_Contables.splice(this.position_document, 1); // Eliminando una fila para introducir las nuevas cuentas.
     let count = this.Cuentas_Contables.length; // Total de filas de las cuentas.
-    
-    if (this.Cuentas_Contables[(count-1)] != undefined) {
-      if (this.Cuentas_Contables[(count-1)].Nit_Cuenta == undefined || this.Cuentas_Contables[(count-1)].Nit_Cuenta == '') {
-        this.Cuentas_Contables.splice((count-1), 1); // Eliminando ultima fila.
-        
+
+    if (this.Cuentas_Contables[(count - 1)] != undefined) {
+      if (this.Cuentas_Contables[(count - 1)].Nit_Cuenta == undefined || this.Cuentas_Contables[(count - 1)].Nit_Cuenta == '') {
+        this.Cuentas_Contables.splice((count - 1), 1); // Eliminando ultima fila.
+
       }
     }
 
@@ -491,7 +491,7 @@ export class NotascarteracrearComponent implements OnInit {
         Nit_Cuenta: nit,
         Tipo_Nit: this.getDatosTercero(nit).Tipo,
         Documento: f.Factura,
-        Concepto: 'Pago o Abono Factura Nro. '+ f.Factura,
+        Concepto: 'Pago o Abono Factura Nro. ' + f.Factura,
         Base: 0,
         Debito: this.validarDebeOHaber('D', f.Movimiento, f.Abono),
         Credito: this.validarDebeOHaber('C', f.Movimiento, f.Abono),
@@ -526,7 +526,7 @@ export class NotascarteracrearComponent implements OnInit {
     }, 200);
 
   }
-  
+
   obtenerPlanPorTipo(tipo) {
     let tipo_facturas = {
       Factura_Venta: {
@@ -562,11 +562,11 @@ export class NotascarteracrearComponent implements OnInit {
     return tipo_facturas[tipo];
   }
 
-  obtenerPlanCuenta(codigo:string) {
+  obtenerPlanCuenta(codigo: string) {
     return this.Cuenta.find(x => x.Codigo_Cuenta === codigo);
   }
 
-  validarDebeOHaber(campo:string, tipo:string, valor:number) { // Funcion que me permite validar si el valor que viene de la factura va al Debe o al Haber
+  validarDebeOHaber(campo: string, tipo: string, valor: number) { // Funcion que me permite validar si el valor que viene de la factura va al Debe o al Haber
     if (campo === tipo) {
       return Math.abs(valor);
     }
@@ -574,7 +574,7 @@ export class NotascarteracrearComponent implements OnInit {
   }
 
   validarCampo(campo, event, tipo) { // Funcion que validará los campos de typeahead
-    if (typeof(campo) != 'object' && campo != '') {
+    if (typeof (campo) != 'object' && campo != '') {
       let id = event.target.id;
       (document.getElementById(id) as HTMLInputElement).focus();
       let swal = {
@@ -606,7 +606,7 @@ export class NotascarteracrearComponent implements OnInit {
     }, 200);
   }
 
-  tab(event,ele) {
+  tab(event, ele) {
 
     this._notas.tabular(event, ele);
 
@@ -616,8 +616,8 @@ export class NotascarteracrearComponent implements OnInit {
     this.http.get(environment.ruta + 'php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
       this.Cliente = data;
     });
-    this.http.get(environment.ruta + 'php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
-      this.Cuenta = data.Activo;        
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
+      this.Cuenta = data.Activo;
     });
     this.http.get(environment.ruta + 'php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
       this.Centros = data;
@@ -650,18 +650,18 @@ export class NotascarteracrearComponent implements OnInit {
         // Identificacion_Funcionario: this.Funcionario.Identificacion_Funcionario,
         Datos: Datos
       }
-  
+
       let info = this._notas.Utf8.encode(JSON.stringify(datosBorrador));
-  
+
       let datos = new FormData();
       datos.append('datos', info);
-      this.http.post(environment.ruta+'php/contabilidad/guardar_borrador_contable.php', datos)
-      .subscribe((data:any) => {
-        if (data.status == 202) {
-          if (this.idBorrador == '')
-            this.idBorrador = data.Id_Borrador;
-        }
-      })
+      this.http.post(environment.ruta + 'php/contabilidad/guardar_borrador_contable.php', datos)
+        .subscribe((data: any) => {
+          if (data.status == 202) {
+            if (this.idBorrador == '')
+              this.idBorrador = data.Id_Borrador;
+          }
+        })
     }, 300);
   }
 
@@ -691,32 +691,32 @@ export class NotascarteracrearComponent implements OnInit {
 
   resetModel() {
     this.Fecha_Nota_Contable = this.fechaHoy();
-      this.Nom_Cliente = '';
-      this.Id_Cliente = '';
-      this.Nom_Centro_Costo = '';
-      this.Centro_Costo = '';
-      this.Documento = '';
-      this.Concepto = '';
-      
-      this.Cuentas_Contables = [{
-        Cuenta: '',
-        Nit: '',
-        Centro_Costo: '',
-        Documento: '',
-        Concepto: '',
-        Base: 0,
-        Debito: 0,
-        Credito: 0,
-        Deb_Niif: 0,
-        Cred_Niif: 0
-      }];
+    this.Nom_Cliente = '';
+    this.Id_Cliente = '';
+    this.Nom_Centro_Costo = '';
+    this.Centro_Costo = '';
+    this.Documento = '';
+    this.Concepto = '';
 
-      this.datosCabecera.Codigo = this.getCodigoNuevaNota();
+    this.Cuentas_Contables = [{
+      Cuenta: '',
+      Nit: '',
+      Centro_Costo: '',
+      Documento: '',
+      Concepto: '',
+      Base: 0,
+      Debito: 0,
+      Credito: 0,
+      Deb_Niif: 0,
+      Cred_Niif: 0
+    }];
+
+    this.datosCabecera.Codigo = this.getCodigoNuevaNota();
 
   }
 
   calcularTotalAbonoCartera() {
-    this.Total_Abono = this.Lista_Facturas.reduce(this.reducer_abono,0);
+    this.Total_Abono = this.Lista_Facturas.reduce(this.reducer_abono, 0);
   }
 
 }

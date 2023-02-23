@@ -92,11 +92,10 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!Cargando && NotasContables.length > 0; else notData"
       >
-        <thead>
-          <tr>
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
             <th>Fecha</th>
             <!-- <th>Empresa</th> -->
             <th>Documento</th>
@@ -108,12 +107,13 @@
             <th>Total Credito NIIF</th>
             <th>Funcionario</th>
             <th class="col-1">Estado</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr
             *ngFor="let item of NotasContables"
+            class="text-center"
             [ngClass]="{ 'text-danger': item.Estado == 'Anulada' }"
           >
             <td>{{ item.Fecha }}</td>
@@ -121,10 +121,10 @@
             <td>{{ item.Codigo }}</td>
             <td>{{ item.Beneficiario }} - {{ item.Tercero }}</td>
             <td>{{ item.Concepto }}</td>
-            <td>{{ item.Total_Debe_PCGA | currency: "":"" }}</td>
-            <td>{{ item.Total_Haber_PCGA | currency: "":"" }}</td>
-            <td>{{ item.Total_Debe_NIIF | currency: "":"" }}</td>
-            <td>{{ item.Total_Haber_NIIF | currency: "":"" }}</td>
+            <td>${{ item.Total_Debe_PCGA | number : "1.2-2" }}</td>
+            <td>${{ item.Total_Haber_PCGA | number : "1.2-2" }}</td>
+            <td>${{ item.Total_Debe_NIIF | number : "1.2-2" }}</td>
+            <td>${{ item.Total_Haber_NIIF | number : "1.2-2" }}</td>
             <td>{{ item.Funcionario }}</td>
             <td>
               <span
@@ -181,7 +181,7 @@
         </tbody>
       </table>
     </div>
-   <!--  <small *ngIf="TotalItems != 0" class="d-flex justify-content-center">
+    <!--  <small *ngIf="TotalItems != 0" class="d-flex justify-content-center">
       {{ page * maxSize - maxSize + 1 }} al
       {{ page * maxSize > TotalItems ? TotalItems : page * maxSize }} de
       {{ TotalItems }}

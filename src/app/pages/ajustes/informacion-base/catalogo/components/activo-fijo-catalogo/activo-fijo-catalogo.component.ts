@@ -64,7 +64,7 @@ export class ActivoFijoCatalogoComponent implements OnInit {
 
   GetTipoActivos() {
     this.http
-      .get(environment.ruta + 'php/tipoactivo/get_tipo_activos.php')
+      .get(environment.base_url + '/php/tipoactivo/get_tipo_activos.php')
       .subscribe((data: any) => {
         if ((data.codigo = 'success')) {
           this.TipoActivos = data.query_result;
@@ -140,7 +140,7 @@ export class ActivoFijoCatalogoComponent implements OnInit {
   }
 
   closeModal() {
-    this.modalService.dismissAll(); 
+    this.modalService.dismissAll();
   }
 
   closeResult = '';
@@ -154,7 +154,7 @@ export class ActivoFijoCatalogoComponent implements OnInit {
   private getDismissReason(reason: any) {
     this.form.reset();
     this.fieldDinamic.clear();
-    
+
   }
 
   saveGeneric() {
@@ -170,7 +170,7 @@ export class ActivoFijoCatalogoComponent implements OnInit {
             showCancel: false,
           });
           this.getActives();
-          this.modalService.dismissAll(); 
+          this.modalService.dismissAll();
         });
     } else {
       this._category.save(this.form.value).subscribe((r: any) => {
@@ -181,7 +181,7 @@ export class ActivoFijoCatalogoComponent implements OnInit {
           showCancel: false,
         });
         this.getActives();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
       });
     }
 

@@ -159,7 +159,7 @@ export class IngresosComponent implements OnInit {
     this.http.get(environment.ruta + 'php/comprobantes/lista_cliente.php').subscribe((data: any) => {
       this.Cliente = data;
     });
-    this.http.get(environment.ruta + 'php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
       this.Cuenta = data.Activo;
       this.Cuenta_Pasivos = data.Pasivo;
     });
@@ -431,7 +431,7 @@ export class IngresosComponent implements OnInit {
     let data = new FormData();
     data.append('datos', info);
 
-    return this.http.post(environment.ruta + 'php/contabilidad/anular_documento.php', data);
+    return this.http.post(environment.base_url + '/php/contabilidad/anular_documento.php', data);
   }
 
 }

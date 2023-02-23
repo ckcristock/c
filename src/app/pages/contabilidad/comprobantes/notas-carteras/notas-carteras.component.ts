@@ -17,42 +17,42 @@ import { MatAccordion } from '@angular/material/expansion';
 export class NotasCarterasComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
-  public NotasCarteras:any = [];
-  public Cargando:boolean = true;
-  public maxSize = 20; 
-  public TotalItems:number;
+  public NotasCarteras: any = [];
+  public Cargando: boolean = true;
+  public maxSize = 20;
+  public TotalItems: number;
   public page = 1;
-  public filtros:any = {
+  public filtros: any = {
     codigo: '',
     fechas: '',
     tercero: '',
     estado: '',
   }
-public filtro_fecha:any='';
+  public filtro_fecha: any = '';
   myDateRangePickerOptions: IMyDrpOptions = {
-    width:'240px', 
+    width: '240px',
     height: '28px',
-    selectBeginDateTxt:'Inicio',
-    selectEndDateTxt:'Fin',
+    selectBeginDateTxt: 'Inicio',
+    selectEndDateTxt: 'Fin',
     selectionTxtFontSize: '10px',
     dateFormat: 'yyyy-mm-dd',
   };
   IdDocumento: string = '';
   // id_funcionario: any = JSON.parse(localStorage.getItem('User')).Identificacion_Funcionario;
   alertOption: SweetAlertOptions;
-  perfilUsuario:any = localStorage.getItem('miPerfil');
-  envirom:any;
+  perfilUsuario: any = localStorage.getItem('miPerfil');
+  envirom: any;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location, private swalService: SwalService) { 
+  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location, private swalService: SwalService) {
     this.alertOption = {
       title: "¿Está Seguro?",
       text: "Se dispone a Anular este Documento",
@@ -77,52 +77,52 @@ public filtro_fecha:any='';
   }
 
   estadoFiltros = false;
-  mostrarFiltros(){
+  mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
 
 
   ListarNotasCarteras() {
 
-    this.http.get(environment.ruta+'php/contabilidad/notascarteras/lista_notas_carteras.php').subscribe((data:any) => {
+    this.http.get(environment.ruta + 'php/contabilidad/notascarteras/lista_notas_carteras.php').subscribe((data: any) => {
       this.Cargando = false;
       this.NotasCarteras = data.Notas;
       this.TotalItems = data.numReg;
       console.log(this.NotasCarteras);
-      
-    });    
-    
+
+    });
+
   }
 
   dateRangeChanged(event) {
-    
+
     if (event.formatted != "") {
       this.filtros.fechas = event.formatted;
     } else {
       this.filtros.fechas = '';
     }
-    
-    this.filtrar(); 
+
+    this.filtrar();
   }
-  fechita:any;
-  fechitaF(event){    
-    this.fechita = event.target.value;  
-    if(this.fechita2 !=null){
+  fechita: any;
+  fechitaF(event) {
+    this.fechita = event.target.value;
+    if (this.fechita2 != null) {
       this.filtros.fechas = this.fechita + ' - ' + this.fechita2;
       this.filtrar();
-    }  
+    }
   }
-  fechita2:any;
-  fechitaF2(event){
+  fechita2: any;
+  fechitaF2(event) {
     this.fechita2 = event.target.value;
-    if(this.fechita !=null){
+    if (this.fechita != null) {
       this.filtros.fechas = this.fechita + ' - ' + this.fechita2;
       this.filtrar();
-    }  
+    }
   }
 
   getStrConditions(pagination = false) {
-    let params:any = {};
+    let params: any = {};
 
     if (this.filtros.codigo != '') {
       params.cod = this.filtros.codigo;
@@ -155,22 +155,22 @@ public filtro_fecha:any='';
 
     this.Cargando = true;
 
-    this.http.get(environment.ruta+'php/contabilidad/notascarteras/lista_notas_carteras.php?'+queryString).subscribe((data:any) => {
+    this.http.get(environment.ruta + 'php/contabilidad/notascarteras/lista_notas_carteras.php?' + queryString).subscribe((data: any) => {
       this.Cargando = false;
       this.NotasCarteras = data.Notas;
       this.TotalItems = data.numReg;
-    });    
-    
+    });
+
   }
 
   anularDocumento() {
-    let datos:any = {
+    let datos: any = {
       Id_Registro: this.IdDocumento,
       Tipo: 'Notas_Cartera',
       // Identificacion_Funcionario: this.id_funcionario
     }
 
-    this.AnularDocumentoContable(datos).subscribe((data:any) => {
+    this.AnularDocumentoContable(datos).subscribe((data: any) => {
       let swal = {
         codigo: data.tipo,
         titulo: data.titulo,
@@ -187,7 +187,7 @@ public filtro_fecha:any='';
       };
       this.swalService.ShowMessage(swal);
     });
-    
+
   }
 
   public AnularDocumentoContable(datos) {
@@ -196,6 +196,6 @@ public filtro_fecha:any='';
     let data = new FormData();
     data.append('datos', info);
 
-    return this.http.post(environment.ruta+'php/contabilidad/anular_documento.php', data);
+    return this.http.post(environment.base_url + '/php/contabilidad/anular_documento.php', data);
   }
 }

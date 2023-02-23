@@ -24,7 +24,7 @@ export class AdicionesActivoFijoComponent implements OnInit {
 
   listarAdicionesActivo() {
     this.loading = true
-    this.http.get(environment.ruta + 'php/activofijo/adiciones_activo.php', { params: { id: this.Id } }).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/activofijo/adiciones_activo.php', { params: { id: this.Id } }).subscribe((data: any) => {
       this.Adiciones = data;
       this.loading = false
     })

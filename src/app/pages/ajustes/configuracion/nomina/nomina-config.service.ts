@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 export class NominaConfigService {
   constructor(private http: HttpClient) { }
 
-  getAllParams(){
+  getAllParams() {
     return this.http.get(
       `${environment.base_url}/parametrizacion/nomina/all`
     );
@@ -51,39 +51,38 @@ export class NominaConfigService {
     );
   }
 
-  getTipoActivosFijos(params){  //del php puro, es tipo de activos
+  /* getTipoActivosFijos(params){  //del php puro, es tipo de activos
     return this.http.get(
-      `${environment.ruta}php/tipoactivo/get_lista_tipo_activo.php?`, {params}
+      `${environment.base_url}/php/tipoactivo/get_lista_tipo_activo.php?`, {params}
     );
-    //this.http.get(environment.ruta+'php/tipoactivo/get_lista_tipo_activo.php?'+params).subscribe((data:any) => {
-  }
+  } */
 
-  getAccountingAccount(params){
+  getAccountingAccount(params) {
     return this.http.get<readonly string[]>(
-      `${environment.ruta}php/plancuentas/filtrar_cuentas.php`, params
+      `${environment.base_url}/php/plancuentas/filtrar_cuentas.php`, params
     )
-    //http.get<readonly string[]>(environment.ruta + "php/plancuentas/filtrar_cuentas.php", { params: { coincidencia: term, tipo: 'niif' }})
+    //http.get<readonly string[]>(environment.base_url + "/php/plancuentas/filtrar_cuentas.php", { params: { coincidencia: term, tipo: 'niif' }})
   }
 
-  getCountableIncome(){
+  getCountableIncome() {
     return this.http.get(
       `${environment.base_url}/parametrizacion/nomina/income`
     );
   }
 
-  getCountableDeductions(){
+  getCountableDeductions() {
     return this.http.get(
       `${environment.base_url}/parametrizacion/nomina/deductions`
     );
   }
 
-  getLiquidation(){
+  getLiquidation() {
     return this.http.get(
       `${environment.base_url}/parametrizacion/nomina/liquidations`
     );
   }
 
-  getSalariosSubsidios(){
+  getSalariosSubsidios() {
     return this.http.get(
       `${environment.base_url}/parametrizacion/nomina/salarios-subsidios`
     );
@@ -134,23 +133,23 @@ export class NominaConfigService {
     return this.http.post(`${environment.base_url}/disability-leaves`, data);
   }
 
-  updateCreateIngresos(data={}) {
+  updateCreateIngresos(data = {}) {
     return this.http.post(`${environment.base_url}/parametrizacion/nomina/income/update`, data);
   }
 
-  updateCreateEgresos(data={}) {
+  updateCreateEgresos(data = {}) {
     return this.http.post(`${environment.base_url}/parametrizacion/nomina/deductions/update`, data);
   }
 
-  updateCreateLiquidaciones(data={}) {
+  updateCreateLiquidaciones(data = {}) {
     return this.http.post(`${environment.base_url}/parametrizacion/nomina/liquidations/update`, data);
   }
 
-  updateCreateSalariosSubsidios(data={}) {
+  updateCreateSalariosSubsidios(data = {}) {
     return this.http.post(`${environment.base_url}/parametrizacion/nomina/salarios-subsidios/update`, data);
   }
 
-  updateCreatePayrollManager(data){
+  updateCreatePayrollManager(data) {
     return this.http.post(
       `${environment.base_url}/payroll-manager`, data
     )

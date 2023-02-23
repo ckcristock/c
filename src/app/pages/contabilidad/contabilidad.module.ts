@@ -48,6 +48,7 @@ import {
   MomentDateAdapter,
 } from '@angular/material-moment-adapter';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MatButtonModule, MatIconModule } from '@angular/material';
 
 export const MY_FORMATS = {
   parse: {
@@ -110,6 +111,8 @@ export const MY_FORMATS = {
     MatNativeDateModule,
     SatDatepickerModule,
     SatNativeDateModule,
+    MatButtonModule,
+    MatIconModule
   ],
   providers: [
     Globales,

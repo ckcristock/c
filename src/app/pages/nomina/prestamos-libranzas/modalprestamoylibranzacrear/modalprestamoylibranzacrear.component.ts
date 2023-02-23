@@ -127,7 +127,7 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       tap(() => (this.searchPC = true)),
       switchMap(term =>
-        this.http.get<readonly string[]>(environment.ruta + "php/plancuentas/filtrar_cuentas.php", { params: { coincidencia: term, tipo: 'niif' } }).pipe(
+        this.http.get<readonly string[]>(environment.base_url + "/php/plancuentas/filtrar_cuentas.php", { params: { coincidencia: term, tipo: 'niif' } }).pipe(
           tap(() => this.searchPC = false),
           catchError(() => {
             this.searchPC = true;

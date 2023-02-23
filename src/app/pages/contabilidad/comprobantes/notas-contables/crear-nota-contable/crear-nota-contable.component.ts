@@ -196,14 +196,14 @@ export class CrearNotaContableComponent implements OnInit {
   formatter2 = (x: { Nombre: string }) => x.Nombre;
 
   ngOnInit() {
-    this.http.get(environment.ruta + 'php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
       this.Cliente = data;
       console.log(this.Cliente)
     });
     this.http.get(environment.ruta + 'php/comprobantes/cuentas.php').subscribe((data: any) => {
       this.Cuentas = data;
     });
-    this.http.get(environment.ruta + 'php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
       this.Cuenta = data.Activo;
     });
     this.http.get(environment.ruta + 'php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
@@ -704,7 +704,7 @@ export class CrearNotaContableComponent implements OnInit {
     this.http.get(environment.ruta + 'php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
       this.Cliente = data;
     });
-    this.http.get(environment.ruta + 'php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
       this.Cuenta = data.Activo;
     });
     this.http.get(environment.ruta + 'php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {

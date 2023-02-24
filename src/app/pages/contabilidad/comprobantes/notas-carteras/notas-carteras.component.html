@@ -94,7 +94,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!Cargando && NotasCarteras.length > 0; else notData"
       >
         <thead>
@@ -109,7 +108,7 @@
             <th>Total Credito NIIF</th>
             <th>Funcionario</th>
             <th class="col-1">Estado</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -121,10 +120,10 @@
             <td>{{ item.Codigo }}</td>
             <td>{{ item.Beneficiario }} - {{ item.Tercero }}</td>
             <td>{{ item.Concepto }}</td>
-            <td>{{ item.Total_Debe_PCGA | currency: "":"" }}</td>
-            <td>{{ item.Total_Haber_PCGA | currency: "":"" }}</td>
-            <td>{{ item.Total_Debe_NIIF | currency: "":"" }}</td>
-            <td>{{ item.Total_Haber_NIIF | currency: "":"" }}</td>
+            <td>{{ item.Total_Debe_PCGA | currency : "" : "" }}</td>
+            <td>{{ item.Total_Haber_PCGA | currency : "" : "" }}</td>
+            <td>{{ item.Total_Debe_NIIF | currency : "" : "" }}</td>
+            <td>{{ item.Total_Haber_NIIF | currency : "" : "" }}</td>
             <td>{{ item.Funcionario }}</td>
             <td>
               <span
@@ -146,8 +145,8 @@
                   <a
                     class="dropdown-item waves-light caja-botones"
                     href="{{
-                      envirom.ruta
-                    }}php/contabilidad/notascontables/descarga_pdf.php?id={{
+                      envirom.base_url
+                    }}/php/contabilidad/notascontables/descarga_pdf.php?id={{
                       item.Id_Documento_Contable
                     }}"
                     target="_blank"
@@ -157,8 +156,8 @@
                   <a
                     class="dropdown-item waves-light caja-botones"
                     href="{{
-                      envirom.ruta
-                    }}php/contabilidad/notascontables/descarga_pdf.php?id={{
+                      envirom.base_url
+                    }}/php/contabilidad/notascontables/descarga_pdf.php?id={{
                       item.Id_Documento_Contable
                     }}&tipo=Niif"
                     target="_blank"

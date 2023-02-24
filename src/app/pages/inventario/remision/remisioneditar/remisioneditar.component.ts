@@ -153,7 +153,7 @@ export class RemisioneditarComponent implements OnInit {
   formatter1 = (x: { Nombre: string }) => x.Nombre;
   ngOnInit() {
     let id = this.route.snapshot.params["id"];
-    this.http.get(environment.ruta + 'php/lista_generales.php', { params: { modulo: 'Impuesto' } }).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/lista_generales.php', { params: { modulo: 'Impuesto' } }).subscribe((data: any) => {
       this.Impuesto = data;
     });
     this.http.get(environment.ruta + 'php/remision/detalle_remison.php', {

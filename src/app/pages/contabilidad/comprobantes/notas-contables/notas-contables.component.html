@@ -111,11 +111,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let item of NotasContables"
-            class="text-center"
-            [ngClass]="{ 'text-danger': item.Estado == 'Anulada' }"
-          >
+          <tr *ngFor="let item of NotasContables" class="text-center">
             <td>{{ item.Fecha }}</td>
             <!-- <td> {{ item.Empresa }} </td> -->
             <td>{{ item.Codigo }}</td>
@@ -128,8 +124,10 @@
             <td>{{ item.Funcionario }}</td>
             <td>
               <span
-                *ngIf="item.Estado != 'Anulada'"
-                class="badge badge-success"
+                class="badge"
+                [class]="
+                  item.Estado == 'Anulada' ? 'badge-danger' : 'badge-success'
+                "
                 >{{ item.Estado }}</span
               >
             </td>
@@ -143,22 +141,22 @@
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item waves-light caja-botones"
+                  <!-- <a
+                    class="dropdown-item"
                     href="{{
-                      envirom.ruta
-                    }}php/contabilidad/notascontables/descarga_pdf.php?id={{
+                      envirom.base_url
+                    }}/php/contabilidad/notascontables/descarga_pdf.php?id={{
                       item.Id_Documento_Contable
                     }}"
                     target="_blank"
                   >
                     <i class="fa fa-print"></i> Ver PCGA</a
-                  >
+                  > -->
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item text-info"
                     href="{{
-                      envirom.ruta
-                    }}php/contabilidad/notascontables/descarga_pdf.php?id={{
+                      envirom.base_url
+                    }}/php/contabilidad/notascontables/descarga_pdf.php?id={{
                       item.Id_Documento_Contable
                     }}&tipo=Niif"
                     target="_blank"
@@ -166,13 +164,13 @@
                     <i class="fa fa-print"></i> Ver NIIF</a
                   >
                   <a
-                    *ngIf="item.Estado != 'Anulada' && perfilUsuario == '27'"
-                    class="dropdown-item waves-light caja-botones bg-danger"
+                    *ngIf="item.Estado != 'Anulada'"
+                    class="dropdown-item text-danger"
                     href="javascript:;"
                     [swal]="confirmacionAnular"
                     (click)="IdDocumento = item.Id_Documento_Contable"
                   >
-                    <i class="fa fa-close"></i> Anular</a
+                    <i class="fas fa-trash-alt"></i> Anular</a
                   >
                 </div>
               </div>

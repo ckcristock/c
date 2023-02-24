@@ -131,7 +131,7 @@ export class EgresosComponent implements OnInit {
     private swalService: SwalService,
     private _company: CentroCostosService
   ) {
-    this.http.get(environment.ruta + 'php/contabilidad/proveedor_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/proveedor_buscar.php').subscribe((data: any) => {
       this.Proveedores = data;
     });
 

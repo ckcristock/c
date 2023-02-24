@@ -89,31 +89,31 @@ export class CrearProductoComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private _user: UserService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.http
-      .get(environment.ruta + 'php/lista_generales.php', {
+      .get(environment.base_url + '/php/lista_generales.php', {
         params: { modulo: 'Familia' },
       })
       .subscribe((data: any) => {
         this.Familias = data;
       });
     this.http
-      .get(environment.ruta + 'php/lista_generales.php', {
+      .get(environment.base_url + '/php/lista_generales.php', {
         params: { modulo: 'Subcategoria' },
       })
       .subscribe((data: any) => {
         this.Subcategoria = data;
       });
     this.http
-      .get(environment.ruta + 'php/lista_generales.php', {
+      .get(environment.base_url + '/php/lista_generales.php', {
         params: { modulo: 'Lista_Ganancia' },
       })
       .subscribe((data: any) => {
         this.Lista = data;
       });
-   // this.company_id = parseInt(this._user.user.person.company_worked.id);
+    // this.company_id = parseInt(this._user.user.person.company_worked.id);
   }
   normalize = (function () {
     var from = 'ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç',

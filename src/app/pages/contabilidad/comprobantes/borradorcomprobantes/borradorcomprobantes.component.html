@@ -1,4 +1,22 @@
-<select name="borrador" id="borrador" class="form-control form-control-sm" (change)="sendDatosBorrador($event.target.value)">
-    <option value="">Ninguno</option>
-    <option *ngFor="let item of borradores" [value]="item.ID">{{ item.Title }}</option>
-</select>
+<!-- <select
+  name="borrador"
+  id="borrador"
+  class="form-control form-control-sm"
+  (change)="sendDatosBorrador($event.target.value)"
+>
+  <option value="">Ninguno</option>
+  <option *ngFor="let item of borradores" [value]="item.ID">
+    {{ item.Title }}
+  </option>
+</select> -->
+<div class="row">
+  <mat-form-field class="col" appearance="outline">
+    <mat-label>Borradores</mat-label>
+    <mat-select>
+      <mat-option value="">Ninguno</mat-option>
+      <mat-option *ngFor="let item of borradores" [value]="item.ID">{{
+        item.Title
+      }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

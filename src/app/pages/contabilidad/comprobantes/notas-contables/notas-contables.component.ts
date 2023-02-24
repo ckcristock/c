@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { CentroCostosService } from '../../centro-costos/centro-costos.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-notas-contables',
@@ -51,20 +52,31 @@ export class NotasContablesComponent implements OnInit {
   };
   IdDocumento: string = '';
   envirom: any;
-  // id_funcionario: any = JSON.parse(localStorage.getItem('User')).Identificacion_Funcionario;
+  id_funcionario;
   alertOption: SweetAlertOptions;
   // perfilUsuario:any = localStorage.getItem('miPerfil');
   companies: any[] = [];
-  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location, private swalService: SwalService, private _company: CentroCostosService) {
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private location: Location,
+    private swalService: SwalService,
+    private _company: CentroCostosService,
+    private _user: UserService
+  ) {
+    this.id_funcionario = this._user.user.person.id
     this.alertOption = {
-      title: "¿Está Seguro?",
-      text: "Se dispone a Anular este Documento",
+      title: "¿Estás seguro(a)?",
+      text: "Vamos a anular el documento",
       showCancelButton: true,
-      cancelButtonText: "No, Dejame Comprobar!",
-      confirmButtonText: 'Si, Anular',
+      cancelButtonText: "Cancelar",
+      confirmButtonText: '¡Sí, confirmar!',
+      cancelButtonColor: '#d33',
+      confirmButtonColor: '#A3BD30',
+      reverseButtons: true,
       showLoaderOnConfirm: true,
       focusCancel: true,
-      icon: 'warning',
+      icon: 'question',
       preConfirm: () => {
         return new Promise((resolve) => {
           this.anularDocumento();
@@ -175,7 +187,7 @@ export class NotasContablesComponent implements OnInit {
     let datos: any = {
       Id_Registro: this.IdDocumento,
       Tipo: 'Notas_Contables',
-      // Identificacion_Funcionario: this.id_funcionario
+      Identificacion_Funcionario: this.id_funcionario
     }
 
     this.AnularDocumentoContable(datos).subscribe((data: any) => {

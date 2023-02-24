@@ -84,7 +84,7 @@ export class NotasCarterasComponent implements OnInit {
 
   ListarNotasCarteras() {
 
-    this.http.get(environment.ruta + 'php/contabilidad/notascarteras/lista_notas_carteras.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/notascarteras/lista_notas_carteras.php').subscribe((data: any) => {
       this.Cargando = false;
       this.NotasCarteras = data.Notas;
       this.TotalItems = data.numReg;
@@ -155,7 +155,7 @@ export class NotasCarterasComponent implements OnInit {
 
     this.Cargando = true;
 
-    this.http.get(environment.ruta + 'php/contabilidad/notascarteras/lista_notas_carteras.php?' + queryString).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/notascarteras/lista_notas_carteras.php?' + queryString).subscribe((data: any) => {
       this.Cargando = false;
       this.NotasCarteras = data.Notas;
       this.TotalItems = data.numReg;

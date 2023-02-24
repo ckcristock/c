@@ -71,7 +71,7 @@ export class RemisionnuevoService {
 
 
   // public GetImpuestos(): Observable<any> {
-  //   return this.client.get(environment.ruta + 'php/lista_generales.php', { params: { modulo: 'Impuesto' } });
+  //   return this.client.get(environment.base_url + '/php/lista_generales.php', { params: { modulo: 'Impuesto' } });
   // }
 
   // public GetBorrador(codigo: string): Observable<any> {

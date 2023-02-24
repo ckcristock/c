@@ -125,7 +125,7 @@ export class ComprobanteingresocrearComponent implements OnInit {
       });
     }
 
-    this.http.get(environment.ruta + 'php/contabilidad/proveedor_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/proveedor_buscar.php').subscribe((data: any) => {
       this.Proveedores = data;
     });
     this.alertOption = {
@@ -170,7 +170,7 @@ export class ComprobanteingresocrearComponent implements OnInit {
     this.http.get(environment.ruta + 'php/comprobantes/lista_cliente.php').subscribe((data: any) => {
       this.Cliente = data;
     });
-    this.http.get(environment.ruta + 'php/comprobantes/cuentas.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/cuentas.php').subscribe((data: any) => {
       this.Cuentas = data;
     });
     this.http.get(environment.ruta + 'php/comprobantes/formas_pago.php').subscribe((data: any) => {
@@ -179,7 +179,7 @@ export class ComprobanteingresocrearComponent implements OnInit {
     this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
       this.Cuenta = data.Activo;
     });
-    this.http.get(environment.ruta + 'php/lista_generales.php', { params: { modulo: 'Impuesto' } }).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/lista_generales.php', { params: { modulo: 'Impuesto' } }).subscribe((data: any) => {
       this.Impuesto = data;
     });
 
@@ -504,7 +504,7 @@ export class ComprobanteingresocrearComponent implements OnInit {
 
   ListarRetenciones() {
 
-    this.http.get(environment.ruta + 'php/contabilidad/lista_retenciones.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/lista_retenciones.php').subscribe((data: any) => {
       this.ListaRetenciones = data;
     })
 

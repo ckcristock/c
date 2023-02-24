@@ -131,7 +131,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     private _companies: CentroCostosService
   ) {
 
-    this.http.get(environment.ruta + 'php/contabilidad/proveedor_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/proveedor_buscar.php').subscribe((data: any) => {
       this.Proveedores = data;
     });
     this.alertOption = {
@@ -199,16 +199,16 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   formatter2 = (x: { Nombre: string }) => x.Nombre;
 
   ngOnInit() {
-    this.http.get(environment.ruta + 'php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
       this.Cliente = data;
     });
-    this.http.get(environment.ruta + 'php/comprobantes/cuentas.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/cuentas.php').subscribe((data: any) => {
       this.Bancos = data;
     });
     this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
       this.Cuenta = data.Activo;
     });
-    this.http.get(environment.ruta + 'php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
       this.Centros = data;
     });
 
@@ -393,7 +393,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
 
   ListarRetenciones() {
 
-    this.http.get(environment.ruta + 'php/contabilidad/lista_retenciones.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/lista_retenciones.php').subscribe((data: any) => {
       this.ListaRetenciones = data;
     })
 
@@ -662,13 +662,13 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   }
 
   reloadData() {
-    this.http.get(environment.ruta + 'php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
       this.Cliente = data;
     });
     this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
       this.Cuenta = data.Activo;
     });
-    this.http.get(environment.ruta + 'php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
       this.Centros = data;
     });
 

@@ -76,7 +76,7 @@ export class ActivoFijoCatalogoComponent implements OnInit {
   }
   getSubcategories() {
     this.http
-      .get(environment.ruta + 'php/lista_generales.php', {
+      .get(environment.base_url + '/php/lista_generales.php', {
         params: { modulo: 'Subcategoria' },
       })
       .subscribe((data: any) => {

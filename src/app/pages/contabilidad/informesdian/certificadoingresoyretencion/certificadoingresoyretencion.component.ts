@@ -13,84 +13,84 @@ import { environment } from 'src/environments/environment';
 })
 export class CertificadoingresoyretencionComponent implements OnInit {
 
-  public datosCabecera:any = {
+  public datosCabecera: any = {
     Titulo: 'Ingreso y retención',
     Fecha: new Date()
   }
   public CertificadoRetencionModel: CertificadoRetencionModel = new CertificadoRetencionModel();
-  public TerceroSeleccionado:any;
+  public TerceroSeleccionado: any;
   queryParams: string;
-  private _rutaBase:string = environment.ruta+'php/terceros/';
-  terceros:any[] = [];
-  
+  private _rutaBase: string = environment.base_url + '/php/terceros/';
+  terceros: any[] = [];
+
   constructor(private globales: Globales, private http: HttpClient) { }
 
   ngOnInit() {
-    this.FiltrarTerceros().subscribe((data:any) => {
+    this.FiltrarTerceros().subscribe((data: any) => {
       this.terceros = data;
     })
   }
 
   search_tercero = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    map(term => term.length < 4 ? []
-      : this.terceros.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
-  );
+    text$.pipe(
+      debounceTime(200),
+      map(term => term.length < 4 ? []
+        : this.terceros.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
+    );
   formatter_tercero = (x: { Nombre: string }) => x.Nombre;
 
-AsignarTercero(model){
-    
-  if (typeof(model) == 'object') {
+  AsignarTercero(model) {
 
-    this.CertificadoRetencionModel.Nit = model.Nit;      
-    this.CertificadoRetencionModel.Tipo_Nit = model.Tipo;      
-  }else{
-    this.CertificadoRetencionModel.Nit = '';
-    this.CertificadoRetencionModel.Tipo_Nit = '';
+    if (typeof (model) == 'object') {
+
+      this.CertificadoRetencionModel.Nit = model.Nit;
+      this.CertificadoRetencionModel.Tipo_Nit = model.Tipo;
+    } else {
+      this.CertificadoRetencionModel.Nit = '';
+      this.CertificadoRetencionModel.Tipo_Nit = '';
+    }
+
+    this.setQueryParams();
+
   }
 
-  this.setQueryParams();
-
-}
-
-FiltrarTerceros():Observable<any>{
-  // let p = {coincidencia:match};
-  return this.http.get(this._rutaBase+'filtrar_terceros.php');
-}
-
-setQueryParams() {
-
-  let params:any = {};
-    
-  if (this.CertificadoRetencionModel.Fecha_Inicial != '') {
-    params.Fecha_Inicial = this.CertificadoRetencionModel.Fecha_Inicial
-  }
-  if (this.CertificadoRetencionModel.Fecha_Final != '') {
-    params.Fecha_Final = this.CertificadoRetencionModel.Fecha_Final
+  FiltrarTerceros(): Observable<any> {
+    // let p = {coincidencia:match};
+    return this.http.get(this._rutaBase + 'filtrar_terceros.php');
   }
 
-  if (this.CertificadoRetencionModel.Cuentas != '') {
-    params.Cuentas = this.CertificadoRetencionModel.Cuentas.join(',');
-  }
-  if (this.CertificadoRetencionModel.Nit != '') {
-    params.Nit = this.CertificadoRetencionModel.Nit
-  }
-  if (this.CertificadoRetencionModel.Tipo_Nit != '') {
-    params.Tipo_Nit = this.CertificadoRetencionModel.Tipo_Nit
-  }
-  if (this.CertificadoRetencionModel.Fecha_Expedicion != '') {
-    params.Fecha_Expedicion = this.CertificadoRetencionModel.Fecha_Expedicion
+  setQueryParams() {
+
+    let params: any = {};
+
+    if (this.CertificadoRetencionModel.Fecha_Inicial != '') {
+      params.Fecha_Inicial = this.CertificadoRetencionModel.Fecha_Inicial
+    }
+    if (this.CertificadoRetencionModel.Fecha_Final != '') {
+      params.Fecha_Final = this.CertificadoRetencionModel.Fecha_Final
+    }
+
+    if (this.CertificadoRetencionModel.Cuentas != '') {
+      params.Cuentas = this.CertificadoRetencionModel.Cuentas.join(',');
+    }
+    if (this.CertificadoRetencionModel.Nit != '') {
+      params.Nit = this.CertificadoRetencionModel.Nit
+    }
+    if (this.CertificadoRetencionModel.Tipo_Nit != '') {
+      params.Tipo_Nit = this.CertificadoRetencionModel.Tipo_Nit
+    }
+    if (this.CertificadoRetencionModel.Fecha_Expedicion != '') {
+      params.Fecha_Expedicion = this.CertificadoRetencionModel.Fecha_Expedicion
+    }
+
+    this.queryParams = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+
+
   }
 
-  this.queryParams = Object.keys(params).map(key => key + '=' + params[key]).join('&');
-  
-  
-}
+  generarCertificado() {
 
-generarCertificado() {
-  
-  window.open(environment.ruta+'php/contabilidad/certificadoingresoretencion/certificado.php?'+this.queryParams,'_blank');
-}
+    window.open(environment.ruta + 'php/contabilidad/certificadoingresoretencion/certificado.php?' + this.queryParams, '_blank');
+  }
 
 }

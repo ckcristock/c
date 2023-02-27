@@ -209,7 +209,7 @@ export class EgresosComponent implements OnInit {
       this.Bancos = data;
     });
 
-    this.http.get(environment.ruta + 'php/comprobantes/formas_pago.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/formas_pago.php').subscribe((data: any) => {
       this.FormaPago = data;
     });
 

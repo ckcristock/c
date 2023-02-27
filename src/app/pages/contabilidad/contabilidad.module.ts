@@ -49,6 +49,8 @@ import {
 } from '@angular/material-moment-adapter';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { MatButtonModule, MatIconModule } from '@angular/material';
+import { ImportCommercialPucComponent } from './plan-cuentas/import-commercial-puc/import-commercial-puc.component';
+import { ImportPucComponent } from './plan-cuentas/import-puc/import-puc.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -83,6 +85,8 @@ export const MY_FORMATS = {
     ModalcierrecontableComponent,
     ModalplancuentasComponent,
     InventariosValorizadosComponent,
+    ImportCommercialPucComponent,
+    ImportPucComponent,
   ],
   imports: [
     CommonModule,

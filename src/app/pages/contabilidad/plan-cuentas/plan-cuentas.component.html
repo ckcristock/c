@@ -15,10 +15,13 @@
           <button class="btn btn-success btn-sm" (click)="openInNewTab()">
             <i class="fas fa-file-excel"></i> Exportar
           </button>
+          <button class="btn btn-warning btn-sm" (click)="importPuc.open()">
+            <i class="fas fa-file-upload"></i> Importar PUC
+          </button>
           <button
             class="btn btn-info btn-sm"
             style="float: right"
-            (click)="openClose()"
+            (click)="matPanel.toggle()"
           >
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
@@ -26,8 +29,8 @@
       </div>
     </div>
     <hr class="line" />
-    <mat-accordion multi>
-      <mat-expansion-panel class="mat-elevation-z0">
+    <mat-accordion>
+      <mat-expansion-panel class="mat-elevation-z0" #matPanel>
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Código</mat-label>
@@ -70,8 +73,7 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        style="font-size: small"
-        *ngIf="!Cargando && Planes.length > 0; else notData"
+        *ngIf="!loading && plans.length > 0; else notData"
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
@@ -82,21 +84,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of Planes">
-            <td
-              class="align-middle"
-              [ngClass]="
-                item.Estado != 'ACTIVO' ? 'text-danger font-weight-bold' : ''
-              "
-            >
+          <tr *ngFor="let item of plans">
+            <td class="align-middle">
               {{ item.Codigo_Niif }}
             </td>
-            <td
-              class="align-middle"
-              [ngClass]="
-                item.Estado != 'ACTIVO' ? 'text-danger font-weight-bold' : ''
-              "
-            >
+            <td class="align-middle">
               {{ item.Nombre_Niif }}
             </td>
             <td class="align-middle text-center">
@@ -174,20 +166,10 @@
       (pageChange)="filtros(true)"
       [boundaryLinks]="true"
     ></ngb-pagination>
-    <!-- <div id="paginacion-container" *ngIf="Planes.length > 0">
-                  <div class="row">
-                      <div class="col-md-3">
-                          <p><b>Mostrando del {{InformacionPaginacion.desde}} al {{InformacionPaginacion.hasta}} de {{ InformacionPaginacion.total }}</b></p>
-                      </div>
-                      <div class="col-md-9">
-                          class="d-flex justify-content-center pagination-rounded pagination-sm" [collectionSize]="pagination.collectionSize" (pageChange)="getApus($event)" maxSize="5" rotate="true" ellipses="false" boundaryLinks="true" [pageSize]="pagination.pageSize"
-[(page)]="pagination.page" aria-label="Default pagination"
-                      </div>
-                  </div>
-              </div> -->
-    <!-- {{(page*maxSize)-maxSize+1}} al {{ TotalItems>page*maxSize ? (page*maxSize) : TotalItems }} de {{ TotalItems }} <ngb-pagination class="pull-right" [(collectionSize)]="TotalItems" [(page)]="page" [maxSize]="10" [pageSize]="maxSize" size="sm" (pageChange)="paginacion()" [rotate]="true" [boundaryLinks]="true"></ngb-pagination> -->
   </div>
 </div>
+
+<app-import-puc #importPuc></app-import-puc>
 
 <ng-template #crearCuenta let-modal>
   <div class="modal-content">
@@ -210,55 +192,49 @@
           type="hidden"
         />
         <div class="row">
-          <div class="col-md-12">
-            <h6 class="text-center">Datos Cuenta Contable</h6>
-            <mat-form-field
-              class="col-md-2 pl-md-0 pr-md-0"
-              appearance="outline"
+          <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              ngModel
+              type="text"
+              placeholder="Ingresa el nombre NIIF"
+              name="Nombre_Niif"
+              id="Nombre_Niif"
+              autocomplete="off"
+              required
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select
+              required
+              name="Tipo_Niif"
+              [(ngModel)]="Tipo_Niif"
+              id="Tipo_Niif"
+              ngModel
             >
-              <mat-label>Tipo Cuenta</mat-label>
-              <mat-select
-                required
-                name="Tipo_Niif"
-                [(ngModel)]="Tipo_Niif"
-                id="Tipo_Niif"
-                ngModel
-              >
-                <mat-option value="CLASE">CLASE</mat-option>
-                <mat-option value="GRUPO">GRUPO</mat-option>
-                <mat-option value="CUENTA">CUENTA</mat-option>
-                <mat-option value="SUBCUENTA">SUBCUENTA</mat-option>
-                <mat-option value="AUXILIAR">AUXILIAR</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="col-md-2 pr-md-0" appearance="outline">
-              <mat-label>Código Cuenta</mat-label>
-              <input
-                matInput
-                ngModel
-                type="text"
-                placeholder="Ingresa el código NIIF"
-                name="Codigo_Niif"
-                id="Codigo_Niif"
-                autocomplete="off"
-                required
-                (blur)="validarPUC($event, 'niif')"
-              />
-            </mat-form-field>
-            <mat-form-field class="col-md-8 pr-md-0" appearance="outline">
-              <mat-label>Nombre Cuenta</mat-label>
-              <input
-                matInput
-                ngModel
-                type="text"
-                placeholder="Ingresa el nombre NIIF"
-                name="Nombre_Niif"
-                id="Nombre_Niif"
-                autocomplete="off"
-                required
-              />
-            </mat-form-field>
-          </div>
+              <mat-option value="CLASE">CLASE</mat-option>
+              <mat-option value="GRUPO">GRUPO</mat-option>
+              <mat-option value="CUENTA">CUENTA</mat-option>
+              <mat-option value="SUBCUENTA">SUBCUENTA</mat-option>
+              <mat-option value="AUXILIAR">AUXILIAR</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Código</mat-label>
+            <input
+              matInput
+              ngModel
+              type="text"
+              placeholder="Ingresa el código NIIF"
+              name="Codigo_Niif"
+              id="Codigo_Niif"
+              autocomplete="off"
+              required
+              (blur)="validarPUC($event, 'niif')"
+            />
+          </mat-form-field>
         </div>
         <hr class="mt-0" />
         <div class="row">
@@ -423,7 +399,7 @@
                 disabled
               >
                 <option value="">Seleccione</option>
-                <option *ngFor="let item of Bancos" [value]="item.id">
+                <option *ngFor="let item of banks" [value]="item.id">
                   {{ item.name }}
                 </option>
               </select>
@@ -788,7 +764,7 @@
                 class="form-control input form"
               >
                 <option value="">Seleccione</option>
-                <option *ngFor="let item of Bancos" [value]="item.Id_Banco">
+                <option *ngFor="let item of banks" [value]="item.Id_Banco">
                   {{ item.Nombre }}
                 </option>
               </select>
@@ -1078,7 +1054,6 @@
   </div>
 </ng-template>
 
-<swal #alertSwal title="" text="" icon=""> </swal>
 <ng-template #notData>
-  <app-not-data [loading]="Cargando"></app-not-data>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

@@ -309,10 +309,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngIf="Lista_Facturas.length == 0 && !Cargando">
-                <td colspan="11">
-                  <i class="fa fa-exclamation-circle fa-5x"></i>
-                  <h4>No Existen Facturas para mostrar</h4>
+              <tr
+                *ngIf="Lista_Facturas.length == 0 && !Cargando"
+                class="text-center"
+              >
+                <td colspan="100%" class="p-5">
+                  <i class="fa fa-exclamation-circle fa-9x m-4"></i>
+                  <h4>No existen facturas para mostrar</h4>
                 </td>
               </tr>
               <tr
@@ -359,7 +362,7 @@
             </tbody>
           </table>
         </div>
-        <button class="btn btn-info btn-sm" (click)="addInvoicesToAccount()">
+        <button class="btn btn-primary btn-sm" (click)="addInvoicesToAccount()">
           Confirmar
         </button>
       </ng-container>

@@ -167,13 +167,13 @@ export class ComprobanteingresocrearComponent implements OnInit {
   formatter1 = (x: { Codigo: string }) => x.Codigo;
   ngOnInit() {
     // this.ListasEmpresas();
-    this.http.get(environment.ruta + 'php/comprobantes/lista_cliente.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cliente.php').subscribe((data: any) => {
       this.Cliente = data;
     });
     this.http.get(environment.base_url + '/php/comprobantes/cuentas.php').subscribe((data: any) => {
       this.Cuentas = data;
     });
-    this.http.get(environment.ruta + 'php/comprobantes/formas_pago.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/formas_pago.php').subscribe((data: any) => {
       this.FormaPago = data;
     });
     this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
@@ -712,7 +712,7 @@ export class ComprobanteingresocrearComponent implements OnInit {
       datos.Fecha = fecha;
     }
 
-    this.http.get(environment.ruta + 'php/comprobantes/get_codigo.php', { params: datos }).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/get_codigo.php', { params: datos }).subscribe((data: any) => {
       this.datosCabecera.Codigo = data.consecutivo;
     })
   }

@@ -429,7 +429,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       datos.Fecha = fecha;
     }
 
-    this.http.get(environment.ruta + 'php/comprobantes/get_codigo.php', { params: datos }).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/get_codigo.php', { params: datos }).subscribe((data: any) => {
       this.datosCabecera.Codigo = data.consecutivo;
       this.Codigo = data.consecutivo;
     })
@@ -566,7 +566,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   }
 
   listarCheques() {
-    this.http.get(environment.ruta + 'php/comprobantes/lista_cheques.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cheques.php').subscribe((data: any) => {
       this.Cheques = data;
     });
   }

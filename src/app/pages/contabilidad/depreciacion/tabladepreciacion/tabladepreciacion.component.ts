@@ -18,7 +18,7 @@ export class TabladepreciacionComponent implements OnInit {
     Mes: '',
     Inicio: '',
     Fin: '',
-    Tipo: 'PCGA',
+    Tipo: 'NIIF',
     Identificacion_Funcionario: '1'
     // Identificacion_Funcionario: JSON.parse(localStorage.getItem('User')).Identificacion_Funcionario
   };
@@ -31,7 +31,7 @@ export class TabladepreciacionComponent implements OnInit {
   public Years: Array<string> = [];
 
   public mesActual: number = this.getMesActual();
-  //public yearActual:number = this.getYearActual();
+  public yearActual: number = this.getYearActual();
 
   constructor(private http: HttpClient, private _swal: SwalService,) {
     this.alertOption = {
@@ -57,10 +57,11 @@ export class TabladepreciacionComponent implements OnInit {
 
   ngOnInit() {
     this.enviromen = environment;
-    let year_ini = 2018;
+    let year_ini = 2022;
     let year_fin = this.Fecha.getFullYear();
     for (let i = year_ini; i <= year_fin; i++) {
       this.Years.push(i.toString());
+      this.Years.reverse()
     }
   }
 
@@ -155,14 +156,11 @@ export class TabladepreciacionComponent implements OnInit {
 
     return parseInt(mes);
   }
-  /*
-  getYearActual():number {
+  getYearActual(): number {
 
     let fecha = new Date();
     let year = fecha.getFullYear().toString();
-    console.log('Año Actual: ',year);
     return parseInt(year);
   }
-  */
 
 }

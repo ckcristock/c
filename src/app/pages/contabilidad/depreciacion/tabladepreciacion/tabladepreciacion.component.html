@@ -1,20 +1,5 @@
 <div class="row">
   <mat-form-field class="col" appearance="outline">
-    <mat-label>Mes</mat-label>
-    <mat-select
-      name="Mes"
-      id="mes"
-      [(ngModel)]="DepreciacionModel.Mes"
-      (selectionChange)="setQueryParams()"
-    >
-      <ng-container *ngFor="let mes of Meses; let i = index">
-        <mat-option *ngIf="i <= mesActual - 1" [value]="i + 1">
-          {{ mes }}
-        </mat-option>
-      </ng-container>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field class="col" appearance="outline">
     <mat-label>Año</mat-label>
     <mat-select
       name="Year"
@@ -28,6 +13,36 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field class="col" appearance="outline">
+    <mat-label>Mes</mat-label>
+    <mat-select
+      name="Mes"
+      id="mes"
+      [(ngModel)]="DepreciacionModel.Mes"
+      (selectionChange)="setQueryParams()"
+    >
+      <ng-container *ngFor="let mes of Meses; let i = index">
+        <ng-container
+          *ngIf="DepreciacionModel.Year && DepreciacionModel.Year == yearActual"
+        >
+          <mat-option *ngIf="i <= mesActual - 1" [value]="i + 1">
+            {{ mes }}
+          </mat-option>
+        </ng-container>
+        <ng-container
+          *ngIf="
+            DepreciacionModel.Year && DepreciacionModel.Year != yearActual;
+            else pastYears
+          "
+        >
+          <mat-option [value]="i + 1">
+            {{ mes }}
+          </mat-option>
+        </ng-container>
+      </ng-container>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="col" appearance="outline">
     <mat-label>Tipo</mat-label>
     <mat-select
       name="Tipo"
@@ -35,7 +50,6 @@
       [(ngModel)]="DepreciacionModel.Tipo"
       (selectionChange)="setQueryParams()"
     >
-      <mat-option value="PCGA" selected>PCGA</mat-option>
       <mat-option value="NIIF">NIIF</mat-option>
     </mat-select>
   </mat-form-field>
@@ -50,7 +64,7 @@
     role="button"
     target="_blank"
     [ngClass]="{ disabled: queryParams === '' }"
-    ><i class="fa fa-eye"></i> Vista Previa
+    ><i class="fa fa-eye"></i> Vista previa
   </a>
   <button class="btn btn-primary" [swal]="confirmacionGuardar">
     <i class="fas fa-plus"></i> Contabilizar

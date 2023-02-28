@@ -46,7 +46,7 @@
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
             <th>NIT</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -63,14 +63,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       getSeverance(severance);
@@ -81,7 +81,7 @@
                   <a
                     *ngIf="severance.status == 'Activo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     (click)="activateOrInactivate(severance, 'Inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -89,7 +89,7 @@
                   <a
                     *ngIf="severance.status == 'Inactivo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-success waves-light caja-botones"
+                    class="dropdown-item text-success"
                     (click)="activateOrInactivate(severance, 'Activo')"
                   >
                     <i class="fas fa-check"></i> Activar</a

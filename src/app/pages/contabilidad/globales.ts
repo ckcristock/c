@@ -1,73 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '../../../../node_modules/@angular/common/http';
 import { PlatformLocation } from '../../../../node_modules/@angular/common';
-import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class Globales {
-  // ruta: string = 'http://localhost:4500/';
-
-  ruta: string;
-
-  Nombre: string = '';
-  Nit: string = 'NIT ';
-  Direccion: string = '';
-  Condiciones_Comerciales: string = '';
-  Telefono: string = 'Tel ';
-  mensajeComprasNacionales = "Rotativo Nacional "
-  mensajeComprasInternacionales = "Rotativo Internacional"
-
-  public urlLogoColor: string;
-  public urlLogoNegro: string;
-  public urlLogoBlanco: string;
-  public Resolucion: any;
-  public Nota_1: any;
-  public Nota_2: any;
-  public Cuenta_Bancaria: any;
-  public porcentaje_rotativo: any;
-  public dias_1: any;
-  public dias_2: any;
-  public funcionarios_autorizados_inventario: any;
   public meses: any = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-  public Pendientes_Libres: any = 'No';
 
-  //llamar de base de datos para obtener los datos de configuración
-  //se declara constructor para poderlo inicalizar
-  constructor(private http: HttpClient, public platformLocation: PlatformLocation) {
-
-    if ((platformLocation as any).location.origin == 'https://sigespro.com.co') {
-      this.ruta = 'https://sigespro.com.co/';
-    } else if ((platformLocation as any).location.origin == 'http://localhost:4200') {
-      this.ruta = 'http://localhost/sigespro/back/';
-    } else {
-      this.ruta = 'http://inventario.sigmaqmo.com/';
-    }
-    this.ruta = 'http://inventario.sigmaqmo.com/';
-
-
-
-    this.http.get(environment.base_url + '/php/genericos/detalle.php', {
-      params: { modulo: 'Configuracion', id: '1' }
-    }).subscribe((data: any) => {
-      this.Nombre = data.Nombre_Empresa;
-      this.Nit += data.NIT;
-      this.Direccion = data.Direccion;
-      this.Condiciones_Comerciales = data.Condiciones_Comerciales;
-      this.Telefono += data.Telefono;
-      this.Resolucion = data.Resolucion;
-      this.Nota_1 = data.Nota_1;
-      this.Nota_2 = data.Nota_2;
-      this.Cuenta_Bancaria = data.Cuenta_Bancaria;
-      this.urlLogoColor = this.ruta + 'IMAGENES/LOGOS/' + data.Logo_Color;
-      this.urlLogoNegro = this.ruta + 'IMAGENES/LOGOS/' + data.Logo_Negro;
-      this.urlLogoBlanco = this.ruta + 'IMAGENES/LOGOS/' + data.Logo_Blanco;
-      this.porcentaje_rotativo = data.Porcentaje_Rotativo;
-      this.dias_1 = data.Dias_Capita;
-      this.dias_2 = data.Dias_Otros_Servicios;
-      this.funcionarios_autorizados_inventario = data.Funcionarios_Autorizados_Inventario;
-      this.Pendientes_Libres = data.Productos_Pendientes_Libres;
-    });
-  }
+  constructor(
+    private http: HttpClient,
+    public platformLocation: PlatformLocation
+  ) { }
 
   ConvertToStringDate(date: string) {
     let splittedDate = date.split("-");

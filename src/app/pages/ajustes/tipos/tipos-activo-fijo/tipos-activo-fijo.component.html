@@ -122,14 +122,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       openConfirm(add, 'Editar tipo de activo fijo');
@@ -140,7 +140,7 @@
                   >
                   <a
                     *ngIf="taf.Estado == 'Activo'"
-                    class="dropdown-item waves-light text-danger caja-botones"
+                    class="dropdown-item text-danger"
                     href="javascript: void(0);"
                     (click)="activateOrInactivate(taf, 'Inactivo')"
                   >
@@ -148,7 +148,7 @@
                   >
                   <a
                     *ngIf="taf.Estado == 'Inactivo'"
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                     href="javascript: void(0);"
                     (click)="activateOrInactivate(taf, 'Activo')"
                   >
@@ -491,7 +491,7 @@
             <th class="align-middle">% Depreciación</th>
             <th class="align-middle">Cuenta Depreciación</th>
             <th class="align-middle">Cuenta activo</th>
-           
+
             <th class="align-middle">Cuenta Credito</th>
             <th class="align-middle col-1"><i class="mdi mdi-chevron-down"></i></th>
           </tr>
@@ -514,7 +514,7 @@
               {{ item.niif_account_plan_debit_depreciation }}
             </td>
             <td class="align-middle">{{ item.niif_account_plan }}</td>
-            
+
             <td class="align-middle">
               {{ item.niif_account_plan_credit_depreciation }}
             </td>
@@ -522,14 +522,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm "
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item  text-info "
                     href="javascript: void(0);"
                     (click)="
                       getFixedAsset(item);
@@ -541,7 +541,7 @@
                   <a
                     *ngIf="item.state == 'Activo'"
                     href="javascript: void(0);"
-                    class="dropdown-item waves-light text-danger caja-botones"
+                    class="dropdown-item  text-danger "
                     (click)="activateOrInactivate(item, 'Inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -549,7 +549,7 @@
                   <a
                     *ngIf="item.state == 'Inactivo'"
                     href="javascript: void(0);"
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item  text-success "
                     (click)="activateOrInactivate(item, 'Activo')"
                   >
                     <i class="fa fa-check"></i> Activar</a
@@ -622,7 +622,7 @@
             (change)="calculateDepreciationPercentage('niif')"
             autocomplete="off"
           />
-        </mat-form-field>        
+        </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Porcentaje de depreciación anual</mat-label>
           <input
@@ -634,7 +634,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        
+
         <mat-form-field class="col" appearance="outline">
           <mat-label>Cuenta activo</mat-label>
           <input
@@ -649,7 +649,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        
+
         <mat-form-field class="col" appearance="outline">
           <mat-label>Cuenta débito depreciación</mat-label>
           <input
@@ -664,7 +664,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        
+
         <mat-form-field class="col" appearance="outline">
           <mat-label>Cuenta crédito depreciación</mat-label>
           <input

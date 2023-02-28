@@ -42,7 +42,7 @@
         <div class="row text-right" style="margin-right: 5px">
           <div class="col-sm-12">
             <h4>Devolución de Dotación</h4>
-            <h6>{{ fecha | date: "dd/MM/yyyy" }}</h6>
+            <h6>{{ fecha | date : "dd/MM/yyyy" }}</h6>
             <div class="clearfix"></div>
           </div>
         </div>
@@ -322,12 +322,12 @@
                           </td>
                           <td>
                               <div ngbDropdown container="body" class="dropdown-primary">
-                                  <button ngbDropdownToggle class="btn btn-secondary btn-sm  waves-light " type="button"><i class="mdi mdi-chevron-down"></i></button>
+                                  <button ngbDropdownToggle class="btn btn-secondary btn-sm   " type="button"><i class="mdi mdi-chevron-down"></i></button>
                                   <div ngbDropdownMenu>
-                                      <a *ngIf="item.state!='Anulada'" class="dropdown-item waves-light  caja-botones" (click)="anularDotacion(item.id)">
+                                      <a *ngIf="item.state!='Anulada'" class="dropdown-item   " (click)="anularDotacion(item.id)">
                                           <i class="fa fa-times"></i> Anular
                                       </a>
-                                      <a *ngIf="item.delivery_state == 'Pendiente'" class="dropdown-item waves-light  caja-botones" (click)="aprobarDotacion(item.id)">
+                                      <a *ngIf="item.delivery_state == 'Pendiente'" class="dropdown-item   " (click)="aprobarDotacion(item.id)">
                                           <i class="far fa-thumbs-up"></i> Aprobar
                                       </a>
                                   </div>
@@ -593,12 +593,12 @@
                                         </td>
                                         <td>
                                             <div ngbDropdown container="body" class="dropdown-primary">
-                                                <button ngbDropdownToggle class="btn btn-secondary btn-sm  waves-light " type="button"><i class="mdi mdi-chevron-down"></i></button>
+                                                <button ngbDropdownToggle class="btn btn-secondary btn-sm   " type="button"><i class="mdi mdi-chevron-down"></i></button>
                                                 <div ngbDropdownMenu>
-                                                    <a *ngIf="item.state!='Anulada'" class="dropdown-item waves-light  caja-botones" (click)="anularDotacion(item.id)">
+                                                    <a *ngIf="item.state!='Anulada'" class="dropdown-item   " (click)="anularDotacion(item.id)">
                                                         <i class="fa fa-times"></i> Anular
                                                     </a>
-                                                    <a *ngIf="item.delivery_state == 'Pendiente'" class="dropdown-item waves-light  caja-botones" (click)="aprobarDotacion(item.id)">
+                                                    <a *ngIf="item.delivery_state == 'Pendiente'" class="dropdown-item   " (click)="aprobarDotacion(item.id)">
                                                         <i class="far fa-thumbs-up"></i> Aprobar
                                                     </a>
                                                 </div>

@@ -31,7 +31,7 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Profesión</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -47,7 +47,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -55,7 +55,7 @@
                 <div ngbDropdownMenu>
                   <a
                     *ngIf="profession.state == 'Inactivo'"
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                     href="javascript: void(0);"
                     (click)="activateOrInactivate(profession, 'Activo')"
                   >
@@ -63,7 +63,7 @@
                   </a>
                   <a
                     *ngIf="profession.state == 'Activo'"
-                    class="dropdown-item waves-light text-danger caja-botones"
+                    class="dropdown-item text-danger"
                     href="javascript: void(0);"
                     (click)="activateOrInactivate(profession, 'Inactivo')"
                   >

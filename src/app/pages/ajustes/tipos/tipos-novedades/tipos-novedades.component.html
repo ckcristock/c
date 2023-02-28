@@ -47,7 +47,7 @@
             <th>Tipo de la Novedad</th>
             <th>Modalidad de Novedad</th>
             <th>Novedad</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -65,14 +65,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       getData(novelty);
@@ -84,7 +84,7 @@
                   <a
                     *ngIf="novelty.status == 'Activo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     (click)="activateOrInactivate(novelty, 'Inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -92,7 +92,7 @@
                   <a
                     *ngIf="novelty.status == 'Inactivo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-success waves-light caja-botones"
+                    class="dropdown-item text-success"
                     (click)="activateOrInactivate(novelty, 'Activo')"
                   >
                     <i class="fas fa-check"></i> Activar</a

@@ -29,7 +29,7 @@
   <div class="rounded-top table-responsive">
     <table
       class="table table-bordered table-striped table-sm"
-      
+
       *ngIf="Productos.length && !loading; else notData"
     >
       <thead class="bg-light">
@@ -70,7 +70,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm "
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -78,7 +78,7 @@
                 <div ngbDropdownMenu>
                   <a
                     href="javascript:void(0)"
-                    class="dropdown-item text-info waves-light"
+                    class="dropdown-item text-info "
                     (click)="
                       editDotationProduct(producto);
                       openConfirm(add, 'Editar Producto')
@@ -88,7 +88,7 @@
                   </a>
                   <a
                     href="javascript:void(0)"
-                    class="dropdown-item text-danger waves-light"
+                    class="dropdown-item text-danger "
                     [swal]="{
                       title: '¿Está Seguro?',
                       text: 'Se dispone a Eliminar esta Subcategoria, esta acción no se puede revertir',

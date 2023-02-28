@@ -16,7 +16,9 @@
             class="mat-elevation-z0 my-0"
             *ngFor="let categoria of Categorias"
             [disabled]="categoria.subcategory.length == 0"
-            [expanded]="selectedCategory.categoria.id == categoria.Id_Categoria_Nueva"
+            [expanded]="
+              selectedCategory.categoria.id == categoria.Id_Categoria_Nueva
+            "
           >
             <mat-expansion-panel-header class="px-1">
               {{ categoria.Nombre }}
@@ -108,7 +110,7 @@
                   formControlName="estado"
                   matInput
                   placeholder="Estado del producto"
-                ><!--
+                  ><!--
                   (selectionChange)="getProducts()" -->
                   <mat-option value="">Todos</mat-option>
                   <mat-option
@@ -124,7 +126,7 @@
                   formControlName="imagen"
                   matInput
                   placeholder="Mostrar registros con imagen?"
-                ><!--
+                  ><!--
                   (selectionChange)="getProducts()" -->
                   <mat-option value="">Todos</mat-option>
                   <mat-option value="con">Mostrar con foto</mat-option>
@@ -137,8 +139,12 @@
         <ng-container class="text-dark" *ngIf="selectedCategory.categoria.id">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li class="breadcrumb-item">{{selectedCategory.categoria.nombre}}</li>
-              <li class="breadcrumb-item">{{selectedCategory.subcategoria.nombre}}</li>
+              <li class="breadcrumb-item">
+                {{ selectedCategory.categoria.nombre }}
+              </li>
+              <li class="breadcrumb-item">
+                {{ selectedCategory.subcategoria.nombre }}
+              </li>
             </ol>
           </nav>
         </ng-container>
@@ -181,7 +187,7 @@
                     <div ngbDropdown container="body" class="dropdown-primary">
                       <button
                         ngbDropdownToggle
-                        class="btn btn-primary btn-sm waves-light"
+                        class="btn btn-primary btn-sm"
                         type="button"
                       >
                         <!-- [ngClass]="{ 'bg-white text-primary': grupo.selected }" -->
@@ -190,25 +196,21 @@
                       <div ngbDropdownMenu>
                         <a
                           role="button"
-                          class="dropdown-item waves-light caja-botones text-info"
+                          class="dropdown-item text-info"
                           (click)="openConfirm(add, 'Editar', producto)"
                         >
                           <i class="far fa-edit"></i> Editar
                         </a>
                         <a
                           role="button"
-                          class="dropdown-item waves-light caja-botones"
-
-                          [routerLink]="[
-                            'ver',
-                            producto.Id_Producto
-                          ]"
-                        ><!-- (click)="openConfirm(detalleCatalogo, 'Detalle del', producto)" -->
+                          class="dropdown-item"
+                          [routerLink]="['ver', producto.Id_Producto]"
+                          ><!-- (click)="openConfirm(detalleCatalogo, 'Detalle del', producto)" -->
                           <i class="fa fa-file-invoice"></i> Ver detalle
                         </a>
                         <a
                           role="button"
-                          class="dropdown-item waves-light caja-botones"
+                          class="dropdown-item"
                           [ngClass]="{
                             'text-danger': producto.Estado == 'Activo',
                             'text-success': producto.Estado == 'Inactivo'
@@ -466,11 +468,12 @@
   <div class="modal-body">
     <div class="row">
       <div class="col-md-3">
-        <img class="img-rounded d-block rounded img-fluid"
+        <img
+          class="img-rounded d-block rounded img-fluid"
           onerror="this.src='../../../../assets/images/not-available.png'"
           [src]="productoDetalle.Foto"
           alt="Vista previa del producto"
-        >
+        />
       </div>
     </div>
   </div>

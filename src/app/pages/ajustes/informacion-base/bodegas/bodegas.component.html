@@ -102,7 +102,7 @@
                 <div ngbDropdown container="body" class="dropdown-primary">
                   <button
                     ngbDropdownToggle
-                    class="btn btn-primary btn-sm waves-light"
+                    class="btn btn-primary btn-sm"
                     type="button"
                   >
                     <i class="mdi mdi-chevron-down"></i>
@@ -110,7 +110,7 @@
                   <div ngbDropdownMenu>
                     <a
                       role="button"
-                      class="dropdown-item waves-light caja-botones text-info"
+                      class="dropdown-item text-info"
                       href="javascript: void(0);"
                       (click)="openConfirm(add, 'Editar'); getBodega(bodega)"
                     >
@@ -118,11 +118,8 @@
                     >
                     <a
                       role="button"
-                      class="dropdown-item waves-light waves-effect caja-botones"
-                      [routerLink]="[
-                        'grupoestiba',
-                        bodega.Id_Bodega_Nuevo
-                      ]"
+                      class="dropdown-item waves-effect"
+                      [routerLink]="['grupoestiba', bodega.Id_Bodega_Nuevo]"
                     >
                       <i class="fa fa-cubes"></i> Grupos - Estibas</a
                     >
@@ -132,8 +129,13 @@
                         'text-danger': bodega.Estado == 'Activo',
                         'text-success': bodega.Estado == 'Inactivo'
                       }"
-                      class="dropdown-item waves-light caja-botones text-success"
-                      (click)=" cambiarEstado(bodega, bodega.Estado == 'Activo' ? 'Inactivo' : 'Activo')"
+                      class="dropdown-item text-success"
+                      (click)="
+                        cambiarEstado(
+                          bodega,
+                          bodega.Estado == 'Activo' ? 'Inactivo' : 'Activo'
+                        )
+                      "
                     >
                       <i
                         class="fas"
@@ -142,7 +144,9 @@
                           'fa-check': bodega.Estado == 'Inactivo'
                         }"
                       ></i>
-                      {{ bodega.Estado == "Activo" ? " Inactivar" : " Activar" }}
+                      {{
+                        bodega.Estado == "Activo" ? " Inactivar" : " Activar"
+                      }}
                     </a>
                   </div>
                 </div>
@@ -238,7 +242,7 @@
 
       <div class="col-12 px-0">
         <div class="form-group text-center">
-          <div class="custom-input-file w-100 ">
+          <div class="custom-input-file w-100">
             <input
               type="file"
               placeholder="Mapa de la Bodega"
@@ -251,18 +255,16 @@
             Cargar <span *ngIf="bodega.Mapa">nuevo</span> mapa de la bodega.
           </div>
           <div class="col-md-12 text-center">
-            <small *ngIf="file&&type" class="text-success">Documento cargado</small>
+            <small *ngIf="file && type" class="text-success"
+              >Documento cargado</small
+            >
           </div>
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="_modal.close()"
-    >
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
       Cancelar
     </button>
     <button

@@ -24,7 +24,7 @@
           <tr *ngFor="let vacation of vacations" class="text-center">
             <td class="text-center p-0">
               <img
-                src="{{ vacation.person.image | image: 'users' }}"
+                src="{{ vacation.person.image | image : 'users' }}"
                 onerror="this.src='../../../../assets/images/noprofile.png'"
                 class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
               />
@@ -36,10 +36,10 @@
               {{ vacation.person.contractultimate.position.dependency.name }}
             </td>
             <td>
-              {{ vacation.date_start | date: "longDate" }}
+              {{ vacation.date_start | date : "longDate" }}
             </td>
             <td>
-              {{ vacation.date_end | date: "longDate" }}
+              {{ vacation.date_end | date : "longDate" }}
             </td>
             <td>
               <span
@@ -57,14 +57,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <button
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     [ngClass]="{
                       'text-info': vacation.pay_vacations.length > 0,
                       'text-success': vacation.pay_vacations.length == 0
@@ -81,7 +81,7 @@
                     {{ vacation.pay_vacations.length > 0 ? "Ver" : "Pagar" }}
                   </button>
                   <button
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     *ngIf="vacation.pay_vacations.length > 0"
                     (click)="download(vacation)"
                   >
@@ -148,14 +148,14 @@
         <tbody>
           <tr class="text-center">
             <td>
-              {{ vacation.person.contractultimate.salary | currency: "COP" }}
+              {{ vacation.person.contractultimate.salary | currency : "COP" }}
             </td>
             <td>{{ daysDiference }}</td>
             <td>
               {{ vacation.person.contractultimate.salary }} *
               {{ daysDiference }} / 30
             </td>
-            <td class="text-primary">${{ valor | currency: "COP" }}</td>
+            <td class="text-primary">${{ valor | currency : "COP" }}</td>
           </tr>
         </tbody>
       </table>

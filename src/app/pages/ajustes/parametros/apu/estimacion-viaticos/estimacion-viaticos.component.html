@@ -56,7 +56,7 @@
             <td class="align-middle">{{ item.unit }}</td>
             <td class="align-middle">{{ item.amount }}</td>
             <td class="align-middle">
-              ${{ item.unit_value | number : '1.2-2' }}
+              ${{ item.unit_value | number : "1.2-2" }}
             </td>
             <td class="align-middle">
               {{ item.created_at | date : "longDate" }}
@@ -65,14 +65,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript:void(0)"
                     (click)="
                       getEstimation(item);

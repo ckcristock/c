@@ -106,14 +106,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item text-success waves-light caja-botones"
+                    class="dropdown-item text-success"
                     href="javascript: void(0);"
                     (click)="VerPlanCuenta(item.Id_Plan_Cuentas, verCuenta)"
                   >
@@ -122,7 +122,7 @@
                   <a
                     *ngIf="item.Estado != 'INACTIVO'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-info"
                     (click)="
                       EditarPlanCuenta(item.Id_Plan_Cuentas, editarCuenta)
                     "
@@ -132,7 +132,7 @@
                   <a
                     *ngIf="item.Estado != 'INACTIVO'"
                     href="javascript: void(0);"
-                    class="text-danger dropdown-item waves-light caja-botones"
+                    class="text-danger dropdown-item"
                     (click)="CambiarEstadoPlan(item.Id_Plan_Cuentas)"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -141,7 +141,7 @@
                   <a
                     *ngIf="item.Estado == 'INACTIVO'"
                     href="javascript: void(0);"
-                    class="text-success dropdown-item waves-light caja-botones"
+                    class="text-success dropdown-item"
                     (click)="CambiarEstadoPlan(item.Id_Plan_Cuentas)"
                   >
                     <i class="fas fa-check"></i> Activar</a

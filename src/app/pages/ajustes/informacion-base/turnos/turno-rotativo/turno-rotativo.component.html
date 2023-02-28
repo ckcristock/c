@@ -18,7 +18,13 @@
     <div class="row">
       <mat-form-field class="col" appearance="outline">
         <mat-label>Nombre</mat-label>
-        <input (input)="getAll()" [(ngModel)]="filtro.name" type="text" matInput placeholder="Busca por nombre" />
+        <input
+          (input)="getAll()"
+          [(ngModel)]="filtro.name"
+          type="text"
+          matInput
+          placeholder="Busca por nombre"
+        />
       </mat-form-field>
     </div>
   </mat-expansion-panel>
@@ -26,7 +32,6 @@
 <div class="rounded-top table-responsive">
   <table
     class="table table-bordered table-striped table-sm"
-    
     *ngIf="turnosRotativo.length && !loading; else notData"
   >
     <thead class="bg-light">
@@ -60,16 +65,16 @@
           <td class="align-middle">Descanso</td>
         </ng-template>
         <td class="align-middle">
-          {{ "01/01/2000 " + turno.entry_time | date: "HH:mm" }} -
-          {{ "01/01/2000 " + turno.leave_time | date: "HH:mm" }}
+          {{ "01/01/2000 " + turno.entry_time | date : "HH:mm" }} -
+          {{ "01/01/2000 " + turno.leave_time | date : "HH:mm" }}
         </td>
         <td class="align-middle" *ngIf="turno.launch == 1; else no">
-          {{ "01/01/2000 " + turno.launch_time | date: "HH:mm" }} -
-          {{ "01/01/2000 " + turno.launch_time_two | date: "HH:mm" }}
+          {{ "01/01/2000 " + turno.launch_time | date : "HH:mm" }} -
+          {{ "01/01/2000 " + turno.launch_time_two | date : "HH:mm" }}
         </td>
         <td class="align-middle" *ngIf="turno.breack == 1; else no">
-          {{ "01/01/2000 " + turno.breack_time | date: "HH:mm" }} -
-          {{ "01/01/2000 " + turno.breack_time_two | date: "HH:mm" }}
+          {{ "01/01/2000 " + turno.breack_time | date : "HH:mm" }} -
+          {{ "01/01/2000 " + turno.breack_time_two | date : "HH:mm" }}
         </td>
         <ng-template #no>
           <td class="align-middle"><i class="fas fa-times"></i></td>
@@ -89,7 +94,7 @@
           <div ngbDropdown container="body" class="dropdown-primary">
             <button
               ngbDropdownToggle
-              class="btn btn-primary btn-sm waves-light"
+              class="btn btn-primary btn-sm"
               type="button"
             >
               <i class="mdi mdi-chevron-down"></i>
@@ -98,12 +103,12 @@
               <a
                 (click)="create(turno.value)"
                 href="javascript: void(0);"
-                class="dropdown-item text-info waves-light caja-botones"
+                class="dropdown-item text-info"
               >
                 <i class="far fa-edit"></i> Editar
               </a>
               <a
-                class="dropdown-item waves-light caja-botones"
+                class="dropdown-item"
                 href="javascript: void(0);"
                 [ngClass]="{
                   'text-success': turno.state == 'Inactivo',
@@ -127,10 +132,18 @@
     </tbody>
   </table>
 </div>
-<ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
-  [collectionSize]="pagination.collectionSize" (pageChange)="getAll($event)" maxSize="5" rotate="true"
-  ellipses="false" boundaryLinks="true" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
-  aria-label="Default pagination">
+<ngb-pagination
+  class="d-flex justify-content-center pagination-rounded pagination-sm"
+  [collectionSize]="pagination.collectionSize"
+  (pageChange)="getAll($event)"
+  maxSize="5"
+  rotate="true"
+  ellipses="false"
+  boundaryLinks="true"
+  [pageSize]="pagination.pageSize"
+  [(page)]="pagination.page"
+  aria-label="Default pagination"
+>
 </ngb-pagination>
 
 <ng-template #notData>

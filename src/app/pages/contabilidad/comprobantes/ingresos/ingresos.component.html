@@ -16,7 +16,7 @@
             <i class="fa fa-plus"></i>
             Agregar
           </button>
-          <button class="btn btn-info btn-sm" (click)="openClose()">
+          <button class="btn btn-info btn-sm" (click)="matPanel.toggle()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -24,7 +24,7 @@
     </div>
     <hr class="line" />
     <mat-accordion multi>
-      <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel #matPanel class="mat-elevation-z0">
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Fecha de inicio</mat-label>
@@ -96,49 +96,49 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!Cargando && Comprobantes.length > 0; else notData"
       >
-        <thead>
-          <tr>
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
             <th>Código</th>
-            <th>Concepto</th>
+            <th>Proveedor</th>
             <th>Fecha</th>
             <th>Cliente</th>
             <th>Tipo Pago</th>
             <th class="col-1">Estado</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let comprobante of Comprobantes"
-            [ngClass]="{ 'text-danger': comprobante.Estado == 'Anulada' }"
-          >
+          <tr *ngFor="let comprobante of Comprobantes" class="text-center">
             <td>{{ comprobante.Codigo }}</td>
-            <td>{{ comprobante.Concepto }}</td>
-            <td>{{ comprobante.Fecha_Comprobante | date: "dd/MM/yyyy" }}</td>
+            <td>{{ comprobante.Proveedor }}</td>
+            <td>{{ comprobante.Fecha_Comprobante | date : "dd/MM/yyyy" }}</td>
             <td>{{ comprobante.Cliente }}</td>
             <td>{{ comprobante.Forma_Pago }}</td>
             <td>
               <span
-                *ngIf="comprobante.Estado != 'Anulada'"
-                class="badge badge-success"
-                >{{ comprobante.Estado }}</span
+                [ngClass]="
+                  comprobante.Estado == 'Anulada'
+                    ? 'badge badge-danger'
+                    : 'badge badge-success'
+                "
               >
+                {{ comprobante.Estado }}
+              </span>
             </td>
             <td>
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-mini waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item text-info"
                     href="{{
                       envirom.ruta
                     }}php/comprobantes/comprobantes_pdf.php?id={{
@@ -148,8 +148,8 @@
                   >
                     <i class="fa fa-eye"></i> Ver</a
                   >
-                  <a
-                    class="dropdown-item waves-light caja-botones"
+                  <!-- <a
+                    class="dropdown-item"
                     href="{{
                       envirom.ruta
                     }}php/contabilidad/movimientoscontables/movimientos_comprobante_pdf.php?id_registro={{
@@ -158,9 +158,9 @@
                     target="_blank"
                   >
                     <i class="fa fa-book"></i> Contab. PCGA</a
-                  >
+                  > -->
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     href="{{
                       envirom.ruta
                     }}php/contabilidad/movimientoscontables/movimientos_comprobante_pdf.php?id_registro={{
@@ -170,13 +170,13 @@
                     }}&tipo=Ingreso&tipo_valor=Niif"
                     target="_blank"
                   >
-                    <i class="fa fa-book"></i> Contab. NIIF</a
+                    <i class="fas fa-file-pdf"></i> Contab. NIIF</a
                   >
                   <a
                     *ngIf="
                       comprobante.Estado != 'Anulada' && perfilUsuario == '27'
                     "
-                    class="dropdown-item waves-light caja-botones bg-danger"
+                    class="dropdown-item bg-danger"
                     href="javascript:;"
                     [swal]="confirmacionAnular"
                     (click)="IdDocumento = comprobante.Id_Comprobante"

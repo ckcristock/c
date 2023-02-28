@@ -23,7 +23,13 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre</mat-label>
-            <input (input)="getUnits()" [(ngModel)]="filtro.name" type="text" matInput placeholder="Busca por nombre" />
+            <input
+              (input)="getUnits()"
+              [(ngModel)]="filtro.name"
+              type="text"
+              matInput
+              placeholder="Busca por nombre"
+            />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -38,7 +44,7 @@
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
             <th>Unidad</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -49,7 +55,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -57,11 +63,8 @@
                 <div ngbDropdownMenu>
                   <a
                     href="javascript: void(0);"
-                    class="dropdown-item waves-light text-info caja-botones"
-                    (click)="
-                      getUnit(item);
-                      openConfirm(add, 'Actualizar UM')
-                    "
+                    class="dropdown-item text-info"
+                    (click)="getUnit(item); openConfirm(add, 'Actualizar UM')"
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>

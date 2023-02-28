@@ -1,7 +1,7 @@
 <ng-template #ModalCierreContable let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">
-      Cierre de {{ modelCierre.Tipo_Cierre }}
+      Cierre de {{ modelCierre.Tipo_Cierre == "Mes" ? "mes" : "año" }}
     </h4>
     <button
       type="button"
@@ -16,7 +16,7 @@
   <div class="modal-body">
     <form #FormCierre="ngForm">
       <div class="row">
-        <mat-form-field class="col-md-6" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Año</mat-label>
           <mat-select
             name="Anio"
@@ -29,7 +29,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field
-          class="col-md-6"
+          class="col"
           appearance="outline"
           *ngIf="modelCierre.Tipo_Cierre == 'Mes'"
         >
@@ -59,7 +59,7 @@
             [(ngModel)]="modelCierre.Observaciones"
             id="Observaciones"
             name="Observaciones"
-            rows="10"
+            rows="5"
             [cdkTextareaAutosize]="true"
           ></textarea>
         </mat-form-field>
@@ -77,11 +77,10 @@
     <button
       type="button"
       class="btn btn-primary"
-      [swal]="confirmacionGuardar"
+      (click)="validarCierre()"
       [disabled]="!FormCierre.valid"
     >
       Guardar
     </button>
   </div>
 </ng-template>
-<swal #confirmacionGuardar [swalOptions]="alertOption"></swal>

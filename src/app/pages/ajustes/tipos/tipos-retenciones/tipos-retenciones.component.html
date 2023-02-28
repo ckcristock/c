@@ -56,17 +56,17 @@
         </mat-form-field>
         <mat-form-field class="col-md-3 pl-0" appearance="outline">
           <mat-label>Estado</mat-label>
-            <mat-select
-              matInput
-              placeholder="Busca por estado"
-              [(ngModel)]="filtros.estado"
-              (selectionChange)="getRetentionTypes()"
-            >
-              <mat-option value="">Todos</mat-option>
-              <mat-option value="Activo">Activo</mat-option>
-              <mat-option value="Inactivo">Inactivo</mat-option>
-            </mat-select>
-          </mat-form-field>
+          <mat-select
+            matInput
+            placeholder="Busca por estado"
+            [(ngModel)]="filtros.estado"
+            (selectionChange)="getRetentionTypes()"
+          >
+            <mat-option value="">Todos</mat-option>
+            <mat-option value="Activo">Activo</mat-option>
+            <mat-option value="Inactivo">Inactivo</mat-option>
+          </mat-select>
+        </mat-form-field>
       </mat-expansion-panel>
     </mat-accordion>
 
@@ -81,7 +81,7 @@
             <th>Descripción</th>
             <th>Porcentaje</th>
             <th>Cuenta Asociada</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -100,7 +100,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -112,7 +112,7 @@
                       openConfirm(add, 'Editar tipo de retención')
                     "
                     href="javascript: void(0);"
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                   >
                     <i class="far fa-edit"></i> Editar</a
                   >
@@ -120,7 +120,7 @@
                     *ngIf="item.state == 'Inactivo'"
                     href="javascript: void(0);"
                     (click)="activateOrInactivate(item, 'Activo')"
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                   >
                     <i class="fa fa-check"></i> Activar</a
                   >
@@ -128,7 +128,7 @@
                     *ngIf="item.state == 'Activo'"
                     href="javascript: void(0);"
                     (click)="activateOrInactivate(item, 'Inactivo')"
-                    class="dropdown-item waves-light text-danger caja-botones"
+                    class="dropdown-item text-danger"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
                   >

@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 import { PlanCuentasService } from '../../plan-cuentas/plan-cuentas.service';
 import Swal from 'sweetalert2';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-modalcierrecontable',
@@ -15,7 +16,6 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./modalcierrecontable.component.scss']
 })
 export class ModalcierrecontableComponent implements OnInit, OnDestroy {
-
   @ViewChild('ModalCierreContable') ModalCierreContable: any;
   @Input() abrirModal: Observable<any> = new Observable;
   @Output() recargarListas: EventEmitter<any> = new EventEmitter;
@@ -36,54 +36,15 @@ export class ModalcierrecontableComponent implements OnInit, OnDestroy {
     private cierreContableService: CierrecontableService,
     private swalService: SwalService,
     private http: HttpClient,
-    private modalService: NgbModal,
-    private _planCuentas: PlanCuentasService
-  ) {
-
-    this.alertOption = {
-      title: "¿Está Seguro?",
-      text: "Se dispone a guardar el proceso de cierre",
-      showCancelButton: true,
-      cancelButtonText: "No, Dejame Comprobar!",
-      confirmButtonText: 'Si, Guardar',
-      showLoaderOnConfirm: true,
-      focusCancel: true,
-      icon: 'info',
-      input: 'select',
-      inputOptions: {
-        Pcga: 'Imprimir en PCGA',
-        Niif: 'Imprimir en NIIF'
-      },
-      preConfirm: (value) => {
-        return new Promise((resolve) => {
-          this.validarCierre(value)
-        })
-      },
-      allowOutsideClick: () => !swal.isLoading()
-    }
-  }
+    private _modal: ModalService,
+  ) { }
 
   ngOnInit() {
     this._suscription = this.abrirModal.subscribe((data: any) => {
       this.modelCierre.Tipo_Cierre = data;
-      this.openConfirm(this.ModalCierreContable)
-      //this.ModalCierreContable.show();
+      this._modal.open(this.ModalCierreContable)
     });
-
     this.getMeses();
-    // this.ListasEmpresas();
-  }
-
-  closeResult = '';
-  public openConfirm(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any) {
-    
   }
 
   ngOnDestroy() {
@@ -91,54 +52,84 @@ export class ModalcierrecontableComponent implements OnInit, OnDestroy {
       this._suscription.unsubscribe();
     }
   }
-  /* 
-    ListasEmpresas(){
-      this._planCuentas.getCompanies().subscribe((data:any) => {
-        this.companies = data.data;
-      })
-    } */
+
+
 
   private guardarCierre(datos, tipo) {
-    this.http.post(environment.ruta + 'php/contabilidad/cierres/guardar_cierre.php', datos).subscribe((data: any) => {
+    this.http.post(environment.base_url + '/php/contabilidad/cierres/guardar_cierre.php', datos).subscribe((data: any) => {
       if (data.nroId) {
         this.openComprobantesCierreAnio(data.nroId, tipo);
       }
-      //this.ModalCierreContable.hide();
-      this.modalService.dismissAll(); 
+      this._modal.close();
       this.resetModel();
-      Swal.fire({
+      this.swalService.show({
         icon: data.codigo,
         title: data.titulo,
-        text: data.mensaje
+        text: data.mensaje,
+        showCancel: false
       })
-      // this.swalService.ShowMessage(data);
       this.recargarListas.emit();
     })
   }
 
   private openComprobantesCierreAnio(id, tipo) {
-    /* tipo = tipo == 'Pcga' ? '' : '&tipo_valor=Niif';
-    window.open(this.generalService.Ruta_Principal+'php/contabilidad/cierres/movimientos_cierreanio_excel.php?id_registro='+id+'&id_funcionario_elabora='+this.Funcionario+tipo,'_blank');
-    window.open(this.generalService.Ruta_Principal+'php/contabilidad/cierres/movimientos_cierreanio_excel.php?id_registro='+id+'&id_funcionario_elabora='+this.Funcionario+'&tipo_rep=act-pas'+tipo,'_blank'); */
+    console.log('Sin ruta')
   }
 
-  validarCierre(tipo) {
-    let info = this.cierreContableService.Utf8.encode(JSON.stringify(this.modelCierre));
-    let datos = new FormData;
-    datos.append('datos', info);
-
-    this.http.post(environment.ruta + 'php/contabilidad/cierres/validar_cierre.php', datos).subscribe((data: any) => {
-      if (data.codigo == 'success') {
-        this.guardarCierre(datos, tipo);
-      } else {
-        Swal.fire({
-          icon: data.codigo,
-          text: data.mensaje,
-          title: data.titulo
+  validarCierre() {
+    Swal.fire({
+      title: '¿Estás seguro(a)?',
+      text: "Vamos a guardar el proceso de cierre",
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Confirmar',
+      showLoaderOnConfirm: true,
+      focusCancel: true,
+      icon: 'question',
+      input: 'select',
+      inputOptions: {
+        Pcga: 'Imprimir en PCGA',
+        Niif: 'Imprimir en NIIF'
+      },
+      inputPlaceholder: 'Seleccione',
+      confirmButtonColor: '#A3BD30',
+      cancelButtonColor: '#d33',
+      reverseButtons: true,
+      inputValidator: (value) => {
+        return new Promise((resolve) => {
+          if (value) {
+            resolve('')
+          } else {
+            resolve('Necesitas seleccionar un tipo de moneda')
+          }
         })
-        // this.swalService.ShowMessage(data);
+      }
+    }).then(r => {
+      if (r.isConfirmed) {
+        let info = this.cierreContableService.Utf8.encode(JSON.stringify(this.modelCierre));
+        let datos = new FormData;
+        datos.append('datos', info);
+
+        this.http.post(environment.base_url + '/php/contabilidad/cierres/validar_cierre.php', datos).subscribe((data: any) => {
+          if (data.codigo == 'success') {
+            this.guardarCierre(datos, r.value);
+          } else {
+            this.swalService.show({
+              icon: data.codigo,
+              text: data.mensaje,
+              title: data.titulo,
+              showCancel: false
+            })
+          }
+        })
       }
     })
+
+
+
+
+
+
   }
 
   private resetModel() {
@@ -156,3 +147,13 @@ export class ModalcierrecontableComponent implements OnInit, OnDestroy {
   }
 
 }
+
+
+
+
+
+ // ListasEmpresas() {
+  //   this._planCuentas.getCompanies().subscribe((data: any) => {
+  //     this.companies = data.data;
+  //   })
+  // }

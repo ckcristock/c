@@ -229,7 +229,9 @@
             <mat-option [value]="20">20 items por página</mat-option>
             <mat-option [value]="50">50 items por página</mat-option>
             <mat-option [value]="100">100 items por página</mat-option>
-            <mat-option [value]="funcionarios.length">{{funcionarios.length}} items por página</mat-option>
+            <mat-option [value]="funcionarios.length"
+              >{{ funcionarios.length }} items por página</mat-option
+            >
           </mat-select>
         </mat-form-field>
       </div>
@@ -264,7 +266,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let funcionario of listFuncionarios" class="text-center">
+            <tr
+              *ngFor="let funcionario of listFuncionarios"
+              class="text-center"
+            >
               <td class="align-middle p-0">
                 <img
                   class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
@@ -298,46 +303,46 @@
                 <div ngbDropdown container="body" class="dropdown-primary">
                   <button
                     ngbDropdownToggle
-                    class="btn btn-primary btn-sm waves-light"
+                    class="btn btn-primary btn-sm"
                     type="button"
                   >
                     <i class="mdi mdi-chevron-down"></i>
                   </button>
                   <div ngbDropdownMenu>
                     <a
-                      class="dropdown-item waves-light caja-botones"
+                      class="dropdown-item"
                       href="javascript:void(0)"
                       (click)="modalExtras.show(funcionario)"
                       >Extras y recargos</a
                     >
                     <a
-                      class="dropdown-item waves-light caja-botones"
+                      class="dropdown-item"
                       href="javascript:void(0)"
                       (click)="modalNovedades.show(funcionario)"
                       >Vacaciones, incapacidades <br />
                       y licencias</a
                     >
                     <a
-                      class="dropdown-item waves-light caja-botones"
+                      class="dropdown-item"
                       href="javascript:void(0)"
                       (click)="modalIngPrest.show(funcionario)"
                       >Ingresos prestacionales</a
                     >
                     <a
-                      class="dropdown-item waves-light caja-botones"
+                      class="dropdown-item"
                       href="javascript:void(0)"
                       (click)="modalIngNoPrest.show(funcionario)"
                       >Otros ingresos</a
                     >
                     <a
-                      class="dropdown-item waves-light caja-botones"
+                      class="dropdown-item"
                       href="javascript:void(0)"
                       (click)="modalDeducciones.show(funcionario)"
                       >Deducciones</a
                     >
                     <div class="dropdown-divider"></div>
                     <a
-                      class="dropdown-item waves-light caja-botones"
+                      class="dropdown-item"
                       href="javascript:void(0)"
                       [routerLink]="[
                         'colilla',

@@ -129,20 +129,17 @@
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
                       ngbDropdownToggle
-                      class="btn btn-primary btn-sm waves-light"
+                      class="btn btn-primary btn-sm"
                       type="button"
                     >
                       <i class="mdi mdi-chevron-down"></i>
                     </button>
                     <div ngbDropdownMenu>
                       <a
-                        class="dropdown-item waves-light text-success caja-botones"
+                        class="dropdown-item text-success"
                         href="javascript: void(0);"
                         (click)="
-                          openNewTab(
-                            '/crm/presupuesto/ver/',
-                            pres?.budget.id
-                          )
+                          openNewTab('/crm/presupuesto/ver/', pres?.budget.id)
                         "
                       >
                         <i class="fas fa-eye"></i> Ver</a
@@ -151,7 +148,7 @@
                         *ngIf="pres?.status == 'Pendiente'; else pendiente2"
                       >
                         <a
-                          class="dropdown-item waves-light text-success caja-botones"
+                          class="dropdown-item text-success"
                           href="javascript: void(0);"
                           (click)="
                             changeStatusInBusiness('Aprobado', pres, 'budget')
@@ -160,7 +157,7 @@
                           <i class="fas fa-thumbs-up"></i> Aprobar</a
                         >
                         <a
-                          class="dropdown-item waves-light text-danger caja-botones"
+                          class="dropdown-item text-danger"
                           href="javascript: void(0);"
                           (click)="
                             changeStatusInBusiness('Rechazado', pres, 'budget')
@@ -171,7 +168,7 @@
                       </ng-container>
                       <ng-template #pendiente2>
                         <a
-                          class="dropdown-item waves-light text-warning caja-botones"
+                          class="dropdown-item text-warning"
                           href="javascript: void(0);"
                           (click)="
                             changeStatusInBusiness('Pendiente', pres, 'budget')
@@ -263,14 +260,14 @@
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
                       ngbDropdownToggle
-                      class="btn btn-primary btn-sm waves-light"
+                      class="btn btn-primary btn-sm"
                       type="button"
                     >
                       <i class="mdi mdi-chevron-down"></i>
                     </button>
                     <div ngbDropdownMenu>
                       <a
-                        class="dropdown-item waves-light text-success caja-botones"
+                        class="dropdown-item text-success"
                         href="javascript: void(0);"
                         (click)="
                           openNewTab(
@@ -285,7 +282,7 @@
                         *ngIf="item.pivot.status == 'Pendiente'; else pendiente"
                       >
                         <a
-                          class="dropdown-item waves-light text-success caja-botones"
+                          class="dropdown-item text-success"
                           href="javascript: void(0);"
                           (click)="
                             changeStatusInBusiness(
@@ -298,7 +295,7 @@
                           <i class="fas fa-thumbs-up"></i> Aprobar</a
                         >
                         <a
-                          class="dropdown-item waves-light text-danger caja-botones"
+                          class="dropdown-item text-danger"
                           href="javascript: void(0);"
                           (click)="
                             changeStatusInBusiness(
@@ -313,7 +310,7 @@
                       </ng-container>
                       <ng-template #pendiente>
                         <a
-                          class="dropdown-item waves-light text-warning caja-botones"
+                          class="dropdown-item text-warning"
                           href="javascript: void(0);"
                           (click)="
                             changeStatusInBusiness(
@@ -343,7 +340,11 @@
           </div>
           <div class="col-md-6 px-0 text-right">
             <div class="btn-group rounded w-sm-100">
-              <button (click)="findApus()" class="text-center btn btn-primary btn-sm" role="button">
+              <button
+                (click)="findApus()"
+                class="text-center btn btn-primary btn-sm"
+                role="button"
+              >
                 <i class="fa fa-plus"></i> Agregar
               </button>
             </div>
@@ -386,7 +387,7 @@
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
                       ngbDropdownToggle
-                      class="btn btn-primary btn-sm waves-light"
+                      class="btn btn-primary btn-sm"
                       type="button"
                     >
                       <i class="mdi mdi-chevron-down"></i>
@@ -394,7 +395,7 @@
                     <div ngbDropdownMenu>
                       <a
                         *ngIf="item.apuable.typeapu_name == 'Servicio'"
-                        class="dropdown-item waves-light text-success caja-botones"
+                        class="dropdown-item text-success"
                         href="javascript: void(0);"
                         (click)="
                           openNewTab(
@@ -407,7 +408,7 @@
                       </a>
                       <a
                         *ngIf="item.apuable.typeapu_name == 'Pieza'"
-                        class="dropdown-item waves-light text-success caja-botones"
+                        class="dropdown-item text-success"
                         href="javascript: void(0);"
                         (click)="
                           openNewTab('/crm/apu/ver-apu-pieza', item.apuable_id)
@@ -417,7 +418,7 @@
                       </a>
                       <a
                         *ngIf="item.apuable.typeapu_name == 'Conjunto'"
-                        class="dropdown-item waves-light text-success caja-botones"
+                        class="dropdown-item text-success"
                         href="javascript: void(0);"
                         (click)="
                           openNewTab(
@@ -685,14 +686,14 @@
                 </button>
                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                   <a
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                     [routerLink]="['/crm/presupuesto/ver', item.id]"
                     (click)="_modal.close()"
                   >
                     <i class="far fa-eye"></i> Ver
                   </a>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     [routerLink]="['/crm/presupuesto/editar', item.id]"
                     (click)="_modal.close()"
                   >
@@ -860,14 +861,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                     href="javascript: void(0);"
                     [routerLink]="['/crm/cotizacion/ver/', item.id]"
                     (click)="_modal.close()"
@@ -875,14 +876,14 @@
                     <i class="fas fa-eye"></i> Ver</a
                   >
                   <a
-                    class="dropdown-item waves-light text-primary caja-botones"
+                    class="dropdown-item text-primary"
                     href="javascript: void(0);"
                     [routerLink]="['/crm/cotizacion/copiar/', item.id]"
                     (click)="_modal.close()"
                     ><i class="fas fa-copy"></i> Copiar</a
                   >
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     [routerLink]="['/crm/cotizacion/editar/', item.id]"
                     (click)="_modal.close()"

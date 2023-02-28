@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { Globales } from '../../../globales';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { environment } from 'src/environments/environment';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-notascreditocrear',
@@ -67,7 +68,13 @@ export class NotascreditocrearComponent implements OnInit {
   @ViewChild('FormNotaCredito') FormNotaCredito: any;
   @ViewChild('check') checks: HTMLCollectionOf<Element>;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, public globales: Globales, private router: Router) {
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    public globales: Globales,
+    private router: Router,
+    private _user: UserService
+  ) {
     this.alerOptions = {
       title: "¿Está Seguro?",
       icon: 'warning',
@@ -84,6 +91,7 @@ export class NotascreditocrearComponent implements OnInit {
       },
       allowOutsideClick: () => !swal.isLoading()
     }
+    this.user = _user.user.person.id;
   }
 
   ngOnInit() {
@@ -212,8 +220,8 @@ export class NotascreditocrearComponent implements OnInit {
     this.Total = 0;
     this.Id_Factura = id;
     //buscamos en la api los datos que coincidan con el id y tipo de factura
-    this.http.get(environment.ruta + 'php/notas_credito_nuevo/lista_producto_notas_credito.php', { params: { id: id, modelo: this.Tipo_Factura_Selected } }).subscribe((data: any) => {
-      this.Lista_Productos = data.Productos;
+    this.http.get(environment.base_url + '/php/notas_credito_nuevo/lista_producto_notas_credito.php', { params: { id: id, modelo: this.Tipo_Factura_Selected } }).subscribe((data: any) => {
+      this.Lista_Productos = data.data;
       this.SubTotalGeneral = data.Total_General_Producto_Facturas;
       this.SubTotalDisponible = data.Subtotal_Disponible;
 
@@ -249,20 +257,16 @@ export class NotascreditocrearComponent implements OnInit {
         title: 'Operación denegada',
         text: 'Debe agregar al menos un producto para realizar la nota crédito'
       })
-      /* this.confirmacionSwal.title="Operación denegada";
-      this.confirmacionSwal.text= "Debe agregar al menos un producto para realizar la nota crédito";
-      this.confirmacionSwal.icon= "error";
-      this.confirmacionSwal.fire(); */
       return false;
     }
 
     let productos = this.normalize(JSON.stringify(this.Lista_Productos));
 
 
-    let funcionario = this.user.Identificacion_Funcionario;
+    let funcionario = this.user;
     console.log(this.SubTotalGeneral);
 
-    let subTotalGeneral = this.SubTotalGeneral.toString();
+    let subTotalGeneral = this.SubTotalGeneral ? this.SubTotalGeneral.toString() : '0';
     let total = this.Total;
     let moduloFactura = this.Tipo_Factura_Selected;
     let codigoFactua = this.Codigo_Factura;
@@ -285,7 +289,7 @@ export class NotascreditocrearComponent implements OnInit {
     datos.append("funcionario", funcionario);
     datos.append("cliente", cliente);
 
-    this.http.post(environment.ruta + 'php/notas_credito_nuevo/guardar_nota_credito.php', datos).subscribe((data: any) => {
+    this.http.post(environment.base_url + '/php/notas_credito_nuevo/guardar_nota_credito.php', datos).subscribe((data: any) => {
       if (data.tipo == 'success') {
         Swal.fire({
           icon: data.tipo,

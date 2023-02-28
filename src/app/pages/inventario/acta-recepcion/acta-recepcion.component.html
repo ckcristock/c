@@ -77,7 +77,7 @@
                   <strong>{{ item.Codigo }}</strong>
                 </td>
                 <td class="align-middle">
-                  {{ item.Fecha | date: "dd/MM/yyyy" }}
+                  {{ item.Fecha | date : "dd/MM/yyyy" }}
                 </td>
                 <td class="align-middle">{{ item.Nombre }}</td>
                 <td class="align-middle">{{ item.Items }}</td>
@@ -85,21 +85,21 @@
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
                       ngbDropdownToggle
-                      class="btn btn-primary btn-sm waves-light"
+                      class="btn btn-primary btn-sm"
                       type="button"
                     >
                       <i class="mdi mdi-chevron-down"></i>
                     </button>
                     <div ngbDropdownMenu>
                       <a
-                        class="dropdown-item waves-light caja-botones"
+                        class="dropdown-item"
                         href=""
                         [routerLink]="['crear', item.Codigo, 'Nacional']"
                       >
                         <i class="fa fa-server"></i> Realizar</a
                       >
                       <a
-                        class="dropdown-item waves-light caja-botones"
+                        class="dropdown-item"
                         [routerLink]="[
                           '/compras/ver-nacional',
                           item.Id_Orden_Compra_Nacional
@@ -123,7 +123,7 @@
                 </td>
                 <td class="align-middle">{{ item.Codigo }}</td>
                 <td class="align-middle">
-                  {{ item.Fecha | date: "dd/MM/yyyy" }}
+                  {{ item.Fecha | date : "dd/MM/yyyy" }}
                 </td>
                 <td class="align-middle">{{ item.Nombre }}</td>
                 <td class="align-middle">{{ item.Items }}</td>
@@ -131,14 +131,14 @@
                   <div ngbDropdown class="dropdown-info">
                     <button
                       ngbDropdownToggle
-                      class="btn btn-info btn-sm waves-light"
+                      class="btn btn-info btn-sm"
                       type="button"
                     >
                       <i class="fa fa-bars"></i>
                     </button>
                     <div ngbDropdownMenu>
                       <a
-                        class="dropdown-item waves-light caja-botones"
+                        class="dropdown-item"
                         href=""
                         [routerLink]="[
                           '/actarecepcionnuevocrear',
@@ -149,7 +149,7 @@
                         <i class="fa fa-server"></i> Realizar</a
                       >
                       <a
-                        class="dropdown-item waves-light caja-botones"
+                        class="dropdown-item"
                         [routerLink]="[
                           '/compranacional',
                           item.Id_Orden_Compra_Nacional
@@ -205,7 +205,7 @@
                   <strong>{{ item.Codigo }}</strong>
                 </td>
                 <td class="align-middle">
-                  {{ item.Fecha_Creacion | date: "dd/MM/yyyy" }}
+                  {{ item.Fecha_Creacion | date : "dd/MM/yyyy" }}
                 </td>
                 <td class="align-middle">
                   <strong>{{
@@ -219,14 +219,14 @@
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
                       ngbDropdownToggle
-                      class="btn btn-primary btn-sm waves-light"
+                      class="btn btn-primary btn-sm"
                       type="button"
                     >
                       <i class="mdi mdi-chevron-down"></i>
                     </button>
                     <div ngbDropdownMenu>
                       <a
-                        class="dropdown-item text-success waves-light caja-botones"
+                        class="dropdown-item text-success"
                         href=""
                         [routerLink]="[
                           '/inventario/acta-recepcion/ver',
@@ -235,9 +235,9 @@
                       >
                         <i class="fas fa-eye"></i> Ver</a
                       >
-                      <!-- <a class="dropdown-item waves-light  caja-botones" [routerLink]="[ '/actarecepcioneditar', item.Id_Acta_Recepcion ]"><i class="fa fa-pencil"></i> Editar</a> -->
+                      <!-- <a class="dropdown-item   " [routerLink]="[ '/actarecepcioneditar', item.Id_Acta_Recepcion ]"><i class="fa fa-pencil"></i> Editar</a> -->
                       <a
-                        class="dropdown-item text-primary waves-light caja-botones"
+                        class="dropdown-item text-primary"
                         href="{{
                           envi.ruta
                         }}php/actarecepcion/descarga_pdf.php?tipo=Acta_Recepcion&id={{
@@ -251,16 +251,16 @@
                         *ngIf="
                           perfilAdministrador() && item.Estado != 'Anulada'
                         "
-                        class="dropdown-item waves-light caja-botones"
+                        class="dropdown-item"
                         (click)="AsignarDatos(item.Id_Acta_Recepcion)"
                       >
                         <i class="ti-close"></i> Anular
                       </a>
                       <!--
-                                <a class="dropdown-item waves-light  caja-botones" href="{{envi.ruta}}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_{{item.Tipo}}&id={{item.Id_Orden_Compra}}"
+                                <a class="dropdown-item   " href="{{envi.ruta}}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_{{item.Tipo}}&id={{item.Id_Orden_Compra}}"
                                   target="_blank">
                                   <i class="ti-printer"></i> Imprimir OC {{item.Tipo}}</a>
-                                <a class="dropdown-item waves-light  caja-botones" href="{{envi.ruta}}php/archivos/descarga_etiqueta_zebra.php?id={{item.Id_Acta_Recepcion}}"
+                                <a class="dropdown-item   " href="{{envi.ruta}}php/archivos/descarga_etiqueta_zebra.php?id={{item.Id_Acta_Recepcion}}"
                                   target="_blank">
                                   <i class="fa fa-tag"></i> Descargar Etiquetas</a> -->
                     </div>
@@ -499,7 +499,7 @@
               <strong>{{ item.Codigo }}</strong>
             </td>
             <td class="align-middle">
-              {{ item.Fecha_Creacion | date: "dd/MM/yyyy" }}
+              {{ item.Fecha_Creacion | date : "dd/MM/yyyy" }}
             </td>
             <td class="align-middle">
               <strong>{{
@@ -511,8 +511,8 @@
             <td class="align-middle">
               {{
                 item.Fecha_Compra_N != ""
-                  ? (item.Fecha_Compra_N | date: "dd/MM/yyyy")
-                  : (item.Fecha_Compra_I | date: "dd/MM/yyyy")
+                  ? (item.Fecha_Compra_N | date : "dd/MM/yyyy")
+                  : (item.Fecha_Compra_I | date : "dd/MM/yyyy")
               }}
             </td>
             <!--  <td *ngIf=" item.Tipo_Acomodar == 'Ajuste_Individual' ">
@@ -526,21 +526,18 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="fas fa-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item text-success waves-light caja-botones"
-                    (click)="verActa(item)"
-                  >
+                  <a class="dropdown-item text-success" (click)="verActa(item)">
                     <i class="fas fa-eye"></i> Ver</a
                   >
                   <!-- <a
                     *ngIf="item.Tipo_Acomodar == 'Ajuste_Individual'"
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item   "
                     href=""
                     [routerLink]="['/ajustesinventariover', item.Id_Acta]"
                   >
@@ -548,7 +545,7 @@
                   >
                   <a
                     *ngIf="item.Tipo_Acomodar == 'Nota_Credito'"
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item   "
                     href=""
                     [routerLink]="['/notascreditover', item.Id_Acta]"
                   >
@@ -558,7 +555,7 @@
                   <!--ACTA RECEPCION-->
                   <a
                     *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-info"
                     href="{{
                       envi.ruta
                     }}php/actarecepcion/descarga_pdf.php?tipo=Acta_Recepcion&id={{
@@ -570,7 +567,7 @@
                   >
                   <a
                     *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-info"
                     href="{{
                       envi.ruta
                     }}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_{{
@@ -583,7 +580,7 @@
                   <!--Nota_Credito-->
                   <a
                     *ngIf="item.Tipo_Acomodar == 'Nota_Credito'"
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-info"
                     href="{{
                       envi.ruta
                     }}php/notascredito/descarga_pdf.php?tipo=Nota_Credito&id={{
@@ -595,7 +592,7 @@
                   >
                   <a
                     *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
-                    class="dropdown-item text-primary waves-light caja-botones"
+                    class="dropdown-item text-primary"
                     href="{{
                       envi.ruta
                     }}php/archivos/descarga_etiqueta_zebra.php?id={{
@@ -607,14 +604,14 @@
                   >
                   <a
                     *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     (click)="verContabilidad(item, 'PGCA')"
                   >
                     <i class="fa fa-book"></i> Contab. PCGA
                   </a>
                   <a
                     *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     (click)="verContabilidad(item, 'NIF')"
                   >
                     <i class="fa fa-book"></i> Contab. NIIF
@@ -625,7 +622,7 @@
                       (perfilUsuario == '27' || perfilUsuario == '16') &&
                       item.Tipo_Acomodar == 'Acta_Recepcion'
                     "
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item   "
                     href="{{
                       envi.ruta
                     }}php/contabilidad/movimientoscontables/movimientos_acta_recepcion_pdf.php?id_registro={{
@@ -642,7 +639,7 @@
                       (perfilUsuario == '27' || perfilUsuario == '16') &&
                       item.Tipo_Acomodar == 'Acta_Recepcion'
                     "
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item   "
                     href="{{
                       envi.ruta
                     }}php/contabilidad/movimientoscontables/movimientos_acta_recepcion_pdf.php?id_registro={{
@@ -660,7 +657,7 @@
                       (perfilUsuario == '27' || perfilUsuario == '16') &&
                       item.Tipo_Acomodar == 'Ajuste_Individual'
                     "
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item   "
                     href="{{
                       envi.ruta
                     }}php/contabilidad/movimientoscontables/movimientos_ajuste_individual_pdf.php?id_registro={{
@@ -677,7 +674,7 @@
                       (perfilUsuario == '27' || perfilUsuario == '16') &&
                       item.Tipo_Acomodar == 'Ajuste_Individual'
                     "
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item   "
                     href="{{
                       envi.ruta
                     }}php/contabilidad/movimientoscontables/movimientos_ajuste_individual_pdf.php?id_registro={{
@@ -695,7 +692,7 @@
                       (perfilUsuario == '27' || perfilUsuario == '16') &&
                       item.Tipo_Acomodar == 'Nota_Credito'
                     "
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item   "
                     href="{{
                       envi.ruta
                     }}php/contabilidad/movimientoscontables/movimientos_nota_credito_pdf.php?id_registro={{
@@ -712,7 +709,7 @@
                       (perfilUsuario == '27' || perfilUsuario == '16') &&
                       item.Tipo_Acomodar == 'Nota_Credito'
                     "
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item   "
                     href="{{
                       envi.ruta
                     }}php/contabilidad/movimientoscontables/movimientos_nota_credito_pdf.php?id_registro={{

@@ -76,8 +76,18 @@
               <td>{{ item.created_at | date }}</td>
               <td>{{ item.hours }}h. {{ item.minutes }}m.</td>
               <td>{{ item.allocator_person.person }}</td>
-              <td>{{ (item.start_time | date: 'MMM d, y, h:mm a') || 'SIN INFORMACIÓN' }}</td>
-              <td>{{ (item.end_time | date: 'MMM d, y, h:mm a') || 'SIN INFORMACIÓN' }}</td>
+              <td>
+                {{
+                  (item.start_time | date : "MMM d, y, h:mm a") ||
+                    "SIN INFORMACIÓN"
+                }}
+              </td>
+              <td>
+                {{
+                  (item.end_time | date : "MMM d, y, h:mm a") ||
+                    "SIN INFORMACIÓN"
+                }}
+              </td>
               <td>{{ item.duration || "Espera..." }}</td>
               <td>
                 <span
@@ -98,14 +108,14 @@
                 <div ngbDropdown container="body" class="dropdown-primary">
                   <button
                     ngbDropdownToggle
-                    class="btn btn-primary btn-sm waves-light"
+                    class="btn btn-primary btn-sm"
                     type="button"
                   >
                     <i class="mdi mdi-chevron-down"></i>
                   </button>
                   <div ngbDropdownMenu>
                     <a
-                      class="dropdown-item waves-light text-success caja-botones"
+                      class="dropdown-item text-success"
                       href="javascript: void(0);"
                       [routerLink]="['/manufactura/diseño/ver', item.id]"
                     >

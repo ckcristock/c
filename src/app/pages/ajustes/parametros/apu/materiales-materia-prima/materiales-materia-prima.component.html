@@ -64,7 +64,7 @@
               ${{ item.kg_value | number : "1.2-2" }}
             </td>
             <td class="align-middle">
-              {{ item.density | number}}
+              {{ item.density | number }}
             </td>
             <td class="align-middle">
               {{ item.created_at | date }}
@@ -73,7 +73,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -81,14 +81,14 @@
                 <div ngbDropdownMenu>
                   <a
                     href="javascript:void(0)"
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                     (click)="openConfirm(view, ''); getMaterial(item)"
                   >
                     <i class="far fa-eye"></i> Ver
                   </a>
                   <a
                     href="javascript:void(0)"
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     (click)="
                       getMaterial(item); openConfirm(add, 'Editar material')
                     "
@@ -176,11 +176,7 @@
     <button type="button" class="btn btn-danger" (click)="_modal.close()">
       Cancelar
     </button>
-    <button
-      type="button"
-      (click)="save()"
-      class="btn btn-primary"
-    >
+    <button type="button" (click)="save()" class="btn btn-primary">
       Guardar
     </button>
   </div>

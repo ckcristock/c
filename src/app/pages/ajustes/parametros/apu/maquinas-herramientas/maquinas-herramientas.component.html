@@ -53,20 +53,22 @@
           <tr *ngFor="let item of machines" class="text-center">
             <td class="align-middle">{{ item.name }}</td>
             <td class="align-middle">{{ item.unit_name }}</td>
-            <td class="align-middle">${{ item.unit_cost | number : '1.2-2' }}</td>
+            <td class="align-middle">
+              ${{ item.unit_cost | number : "1.2-2" }}
+            </td>
             <td class="align-middle">{{ item.type }}</td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       openConfirm(add, 'Actualizar máquina'); getMaquine(item)

@@ -40,13 +40,13 @@
             <td>
               <strong>{{ item.Codigo }}</strong>
             </td>
-            <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
+            <td>{{ item.Fecha | date : "dd/MM/yyyy" }}</td>
             <td class="text-left">{{ item.Nombre }}</td>
             <td>{{ item.Items }}</td>
             <td>
               <button
                 type="button"
-                class="btn btn-info btn-mini waves-light"
+                class="btn btn-info btn-sm"
                 href=""
                 [routerLink]="['/notascreditover', item.Id_Nota_Credito]"
               >
@@ -84,7 +84,7 @@
               <strong>{{ item.Origen }}</strong>
             </td>
             <td class="text-center">
-              {{ item.Fecha | date: "dd/MM/yyyy" }}
+              {{ item.Fecha | date : "dd/MM/yyyy" }}
             </td>
             <td class="text-center">{{ item.Items }}</td>
             <td>
@@ -92,14 +92,14 @@
                 <div ngbDropdown container="body" class="dropdown-primary">
                   <button
                     ngbDropdownToggle
-                    class="btn btn-info btn-mini waves-light"
+                    class="btn btn-info btn-sm"
                     type="button"
                   >
                     <i class="fa fa-bars"></i>
                   </button>
                   <div ngbDropdownMenu>
                     <a
-                      class="dropdown-item waves-light caja-botones"
+                      class="dropdown-item"
                       href="{{
                         globales.ruta
                       }}/php/tablero_jefe_bodega/movimiento_pdf.php?id={{
@@ -110,7 +110,7 @@
                       <i class="fa fa-eye"></i>Ver</a
                     >
                     <a
-                      class="dropdown-item waves-light caja-botones"
+                      class="dropdown-item"
                       [swal]="{
                         title: '¿Está Seguro?',
                         text: 'Se dispone marcar que se este movimiento se reviso y se realizo el traslado de todos los medicamentos a la bodega Vencimientos, Ingrese las observaciones ',
@@ -183,13 +183,13 @@
             <td>
               <strong>{{ item.Codigo }}</strong>
             </td>
-            <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
+            <td>{{ item.Fecha | date : "dd/MM/yyyy" }}</td>
             <td class="text-left">{{ item.Nombre }}</td>
             <td>{{ item.Items }}</td>
             <td>
               <button
                 type="button"
-                class="btn btn-info btn-mini waves-light"
+                class="btn btn-info btn-sm"
                 href=""
                 [routerLink]="['/actarecepcioncrear', item.Codigo, 'Nacional']"
               >
@@ -220,7 +220,7 @@
             <td>
               <button
                 type="button"
-                class="btn btn-info btn-mini waves-light"
+                class="btn btn-info btn-sm "
                 href=""
                 [routerLink]="[
                   '/actarecepcioncrear',
@@ -283,13 +283,13 @@
             <td>
               <strong>{{ item.Codigo }}</strong>
             </td>
-            <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
+            <td>{{ item.Fecha | date : "dd/MM/yyyy" }}</td>
             <td class="text-left">{{ item.Nombre_Funcionario }}</td>
             <td>{{ item.Items }}</td>
             <td>
               <button
                 type="button"
-                class="btn btn-info btn-mini waves-light"
+                class="btn btn-info btn-sm"
                 href=""
                 (click)="
                   ProductosAjustePendienteSalida(item.Id_Ajuste_Individual)
@@ -399,7 +399,9 @@
               <th class="f-12" style="width: 80px">Codigo</th>
               <th class="f-12" style="width: 80px">Estado Alistamiento</th>
               <th class="f-12" style="width: 150px">Fecha Inicio</th>
-              <th class="f-12" style="width: 80px"><i class="mdi mdi-chevron-down"></i></th>
+              <th class="f-12" style="width: 80px">
+                <i class="mdi mdi-chevron-down"></i>
+              </th>
             </tr>
           </thead>
           <tbody>

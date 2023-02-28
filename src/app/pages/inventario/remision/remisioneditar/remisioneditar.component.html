@@ -32,7 +32,7 @@
               <div class="row text-right" style="margin-right: 5px">
                 <div class="col-sm-12">
                   <h4>Editar Remisión</h4>
-                  <h6>{{ remision.Fecha | date: "dd/MM/yyyy" }}</h6>
+                  <h6>{{ remision.Fecha | date : "dd/MM/yyyy" }}</h6>
 
                   <span class="f-right">
                     {{ remision.Cliente }}
@@ -267,7 +267,7 @@
                           class="mytooltip tooltip-effect-2"
                           ><span class="tooltip-item2">
                             <p>
-                              {{ item.Embalaje | truncate: 12 }}
+                              {{ item.Embalaje | truncate : 12 }}
                             </p></span
                           ><span class="tooltip-content4 clearfix"
                             ><span class="tooltip-text2">{{
@@ -421,7 +421,7 @@
                           (confirm)="
                             EliminaProductoFinal(i, item.Id_Producto_Remision)
                           "
-                          class="btn btn-mini btn-danger"
+                          class="btn btn-sm btn-danger"
                         >
                           <span>
                             <i class="fa fa-trash-o"></i>
@@ -430,7 +430,7 @@
 
                         <button
                           *ngIf="item.Id_Producto_Remision == ''"
-                          class="btn btn-mini btn-danger"
+                          class="btn btn-sm btn-danger"
                           (click)="EliminarProductoRemsion(i)"
                         >
                           <span>
@@ -446,9 +446,7 @@
             <div class="row" [ngStyle]="{ display: display_Cliente }">
               <div class="col-sm-12">
                 <div class="rounded-top table-responsive">
-                  <table
-                    class="table invoice-table invoice-total"
-                  >
+                  <table class="table invoice-table invoice-total">
                     <tbody>
                       <tr>
                         <th>Subtotal:</th>

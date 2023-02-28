@@ -10,32 +10,32 @@ import { DatePipe } from '@angular/common';
 })
 export class BalanceGeneralComponent implements OnInit {
 
-  public datosCabecera:any = {
+  public datosCabecera: any = {
     Titulo: 'Balance general',
     Fecha: new Date()
   }
 
   public Centro_Costos: Array<any>;
-  public Centro_Costo:any = '';
+  public Centro_Costo: any = '';
 
-  public Cuenta:any = {
+  public Cuenta: any = {
     Inicial: '',
     Final: ''
   }
 
-  public Parametros:any = {
-    Fecha_Corte:'',
+  public Parametros: any = {
+    Fecha_Corte: '',
     Tipo_Reporte: 'Pcga',
     Nivel: '8',
     Centro_Costo: ''
   }
 
-  public Tipo:string = '';
-  public Niveles = [1,2,3,4,5,6,7,8,9,10,11];
+  public Tipo: string = '';
+  public Niveles = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   Cuentas: any = [];
-  Cuenta_Inicial:any = '';
-  Cuenta_Final:any = '';
-  Discriminado:any = '';
+  Cuenta_Inicial: any = '';
+  Cuenta_Final: any = '';
+  Discriminado: any = '';
   queryParams: string = '';
   envirom: any;
 
@@ -48,16 +48,16 @@ export class BalanceGeneralComponent implements OnInit {
 
   ListarCentroCostos() {
 
-    this.http.get(environment.ruta+'php/contabilidad/balanceprueba/lista_centro_costos.php').subscribe((data:any)=>{
+    this.http.get(environment.base_url + '/php/contabilidad/balanceprueba/lista_centro_costos.php').subscribe((data: any) => {
       this.Centro_Costos = data;
       console.log(this.Centro_Costos)
     })
-    
+
   }
-  datePipeString : string;
-  getQueryParams(){
-    this.datePipeString = this.datePipe.transform(this.Parametros.Fecha_Corte,'yyyy-MM-dd')
-    let params:any = {
+  datePipeString: string;
+  getQueryParams() {
+    this.datePipeString = this.datePipe.transform(this.Parametros.Fecha_Corte, 'yyyy-MM-dd')
+    let params: any = {
       tipo: this.Parametros.Tipo_Reporte,
       fecha_corte: this.datePipeString,
       nivel: this.Parametros.Nivel
@@ -68,7 +68,7 @@ export class BalanceGeneralComponent implements OnInit {
 
     this.queryParams = Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
-    
+
   }
 
 }

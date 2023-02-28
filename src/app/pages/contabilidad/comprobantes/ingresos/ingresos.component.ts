@@ -18,17 +18,6 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./ingresos.component.scss']
 })
 export class IngresosComponent implements OnInit {
-  @ViewChild(MatAccordion) accordion: MatAccordion;
-  matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
-  }
   @ViewChild('modalNuevoComprobante') modalNuevoComprobante: any;
   @ViewChild('modalVerComprobante') modalVerComprobante: any;
   @ViewChild('alertSwal') alertSwal: any;
@@ -164,7 +153,7 @@ export class IngresosComponent implements OnInit {
       this.Cuenta_Pasivos = data.Pasivo;
     });
 
-    this.http.get(environment.ruta + 'php/comprobantes/lista_bancos.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/plancuentas/lista_bancos.php').subscribe((data: any) => {
       this.Bancos = data;
     });
     this.http.get(environment.base_url + '/php/comprobantes/formas_pago.php').subscribe((data: any) => {
@@ -172,7 +161,7 @@ export class IngresosComponent implements OnInit {
     });
   }
   ListarComprobantes() {
-    this.http.get(environment.ruta + 'php/comprobantes/lista_comprobantes.php', { params: { tipo_comprobante: 'ingreso' } }).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_comprobantes.php', { params: { tipo_comprobante: 'ingreso' } }).subscribe((data: any) => {
       this.Cargando = false
       this.Comprobantes = data.Lista;
       this.TotalItems = data.numReg;
@@ -213,7 +202,7 @@ export class IngresosComponent implements OnInit {
     this.location.replaceState('/comprobante/ingresos', queryString);
 
 
-    this.http.get(environment.ruta + 'php/comprobantes/lista_comprobantes.php' + queryString).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_comprobantes.php' + queryString).subscribe((data: any) => {
       this.Comprobantes = data.Lista;
       this.TotalItems = data.numReg;
     });
@@ -229,7 +218,7 @@ export class IngresosComponent implements OnInit {
     this.location.replaceState('/comprobantes/ingresos', queryString);
 
 
-    this.http.get(environment.ruta + 'php/comprobantes/lista_comprobantes.php' + queryString).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_comprobantes.php' + queryString).subscribe((data: any) => {
       this.Cargando = false
       this.Comprobantes = data.Lista;
       this.TotalItems = data.numReg;

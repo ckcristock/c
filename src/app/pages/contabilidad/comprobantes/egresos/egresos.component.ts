@@ -19,17 +19,6 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./egresos.component.scss']
 })
 export class EgresosComponent implements OnInit {
-  @ViewChild(MatAccordion) accordion: MatAccordion;
-  matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
-  }
   public fecha = new Date();
   public Proveedores: any[] = [];
   public Id_Proveedor: any = '';
@@ -196,7 +185,7 @@ export class EgresosComponent implements OnInit {
     this.enviromen = environment
     this.ListarComprobantes();
 
-    this.http.get(environment.ruta + 'php/comprobantes/lista_proveedores.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_proveedores.php').subscribe((data: any) => {
       this.ClientesFiltrar = data;
     });
 
@@ -205,7 +194,7 @@ export class EgresosComponent implements OnInit {
       this.CuentasPasivos = data.Pasivo;
     });
 
-    this.http.get(environment.ruta + 'php/comprobantes/lista_bancos.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/plancuentas/lista_bancos.php').subscribe((data: any) => {
       this.Bancos = data;
     });
 
@@ -233,7 +222,7 @@ export class EgresosComponent implements OnInit {
   }
 
   ListarComprobantes() {
-    this.http.get(environment.ruta + 'php/comprobantes/lista_egresos.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_egresos.php').subscribe((data: any) => {
       this.Cargando = false
       this.Comprobantes = data.Lista;
       this.TotalItems = data.numReg;
@@ -423,7 +412,7 @@ export class EgresosComponent implements OnInit {
 
     this.location.replaceState('/contabilidad/comprobantes/egresos', params);
 
-    this.http.get(environment.ruta + 'php/comprobantes/lista_egresos.php' + params).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_egresos.php' + params).subscribe((data: any) => {
       this.Cargando = false;
       this.Comprobantes = data.Lista;
       this.TotalItems = data.numReg;

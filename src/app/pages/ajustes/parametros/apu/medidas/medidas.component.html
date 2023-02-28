@@ -67,14 +67,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       getMeasure(item); openConfirm(add, 'Actualizar medida')
@@ -86,7 +86,7 @@
                     *ngIf="item.state == 'Activo'"
                     href="javascript: void(0);"
                     (click)="changeState(item, 'Inactivo')"
-                    class="dropdown-item waves-light text-danger caja-botones"
+                    class="dropdown-item text-danger"
                   >
                     <i class="far fa-trash-alt"></i> Anular
                   </a>
@@ -94,7 +94,7 @@
                     *ngIf="item.state == 'Inactivo'"
                     href="javascript: void(0);"
                     (click)="changeState(item, 'Activo')"
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                   >
                     <i class="fas fa-check"></i> Activar
                   </a>

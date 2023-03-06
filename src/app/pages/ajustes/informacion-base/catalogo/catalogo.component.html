@@ -183,63 +183,59 @@
                 <td class="align-middle">{{ producto.Nombre_Comercial }}</td>
                 <td class="align-middle">{{ producto.Embalaje }}</td>
                 <td class="align-middle">
-                  <div class="text-center">
-                    <div ngbDropdown container="body" class="dropdown-primary">
-                      <button
-                        ngbDropdownToggle
-                        class="btn btn-primary btn-sm"
-                        type="button"
+                  <div ngbDropdown container="body" class="dropdown-primary">
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm"
+                      type="button"
+                    >
+                      <!-- [ngClass]="{ 'bg-white text-primary': grupo.selected }" -->
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <a
+                        role="button"
+                        class="dropdown-item text-info"
+                        (click)="openConfirm(add, 'Editar', producto)"
                       >
-                        <!-- [ngClass]="{ 'bg-white text-primary': grupo.selected }" -->
-                        <i class="mdi mdi-chevron-down"></i>
-                      </button>
-                      <div ngbDropdownMenu>
-                        <a
-                          role="button"
-                          class="dropdown-item text-info"
-                          (click)="openConfirm(add, 'Editar', producto)"
-                        >
-                          <i class="far fa-edit"></i> Editar
-                        </a>
-                        <a
-                          role="button"
-                          class="dropdown-item"
-                          [routerLink]="['ver', producto.Id_Producto]"
-                          ><!-- (click)="openConfirm(detalleCatalogo, 'Detalle del', producto)" -->
-                          <i class="fa fa-file-invoice"></i> Ver detalle
-                        </a>
-                        <a
-                          role="button"
-                          class="dropdown-item"
-                          [ngClass]="{
-                            'text-danger': producto.Estado == 'Activo',
-                            'text-success': producto.Estado == 'Inactivo'
-                          }"
-                          (click)="
-                            cambiarEstado(
-                              producto,
-                              producto.Estado == 'Activo'
-                                ? 'Inactivo'
-                                : 'Activo'
-                            )
+                        <i class="far fa-edit"></i> Editar
+                      </a>
+                      <a
+                        role="button"
+                        class="dropdown-item"
+                        [routerLink]="['ver', producto.Id_Producto]"
+                        ><!-- (click)="openConfirm(detalleCatalogo, 'Detalle del', producto)" -->
+                        <i class="fa fa-file-invoice"></i> Ver detalle
+                      </a>
+                      <a
+                        role="button"
+                        class="dropdown-item"
+                        [ngClass]="{
+                          'text-danger': producto.Estado == 'Activo',
+                          'text-success': producto.Estado == 'Inactivo'
+                        }"
+                        (click)="
+                          cambiarEstado(
+                            producto,
+                            producto.Estado == 'Activo' ? 'Inactivo' : 'Activo'
+                          )
+                        "
+                      >
+                        <i
+                          class="fas"
+                          [ngClass]="
+                            {
+                              Activo: 'fa-ban',
+                              Inactivo: 'fa-check'
+                            }[producto.Estado]
                           "
-                        >
-                          <i
-                            class="fas"
-                            [ngClass]="
-                              {
-                                Activo: 'fa-ban',
-                                Inactivo: 'fa-check'
-                              }[producto.Estado]
-                            "
-                          ></i>
-                          {{
-                            producto.Estado == "Activo"
-                              ? " Inactivar"
-                              : " Activar"
-                          }}
-                        </a>
-                      </div>
+                        ></i>
+                        {{
+                          producto.Estado == "Activo"
+                            ? " Inactivar"
+                            : " Activar"
+                        }}
+                      </a>
                     </div>
                   </div>
                 </td>

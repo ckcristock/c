@@ -15,23 +15,23 @@ import Swal from 'sweetalert2';
 })
 export class MediomagneticoagrupacioncrearComponent implements OnInit {
 
-  public datosCabecera:any = {
+  public datosCabecera: any = {
     Titulo: 'Agrupar medios magnéticos',
     Fecha: new Date(),
   }
-  
-  public MediosMagModel:any = {
+
+  public MediosMagModel: any = {
     Codigo_Formato: '',
     Nombre_Formato: ''
   }
 
-  public Formatos:any = [{
+  public Formatos: any = [{
     Formato: ''
   }];
   public listaFormatosEspeciales: Array<any>;
   public alertOption: SweetAlertOptions;
-  
-  constructor(private globales: Globales, private http: HttpClient, private router: Router, private swalService: SwalService, private route: ActivatedRoute) { 
+
+  constructor(private globales: Globales, private http: HttpClient, private router: Router, private swalService: SwalService, private route: ActivatedRoute) {
     this.alertOption = {
       title: "¿Está Seguro?",
       text: "Se dispone a Guardar este Formato",
@@ -56,16 +56,16 @@ export class MediomagneticoagrupacioncrearComponent implements OnInit {
     let id = this.route.snapshot.params.id;
 
     if (id !== null && id !== undefined) {
-      this.getDetallesFormato(id); 
+      this.getDetallesFormato(id);
     }
   }
 
   nuevoFormato(pos) {
-    let pos2 = pos+1;
+    let pos2 = pos + 1;
 
     if (this.Formatos[pos2] == undefined) {
-      
-      let obj:any = {
+
+      let obj: any = {
         Formato: ''
       };
 
@@ -74,7 +74,7 @@ export class MediomagneticoagrupacioncrearComponent implements OnInit {
   }
 
   eliminarFila(pos) {
-    this.Formatos.splice(pos,1);
+    this.Formatos.splice(pos, 1);
   }
 
   guardarMediosMag() {
@@ -86,48 +86,48 @@ export class MediomagneticoagrupacioncrearComponent implements OnInit {
     datos.append('datos', info);
     datos.append('formatos', formatos);
 
-   this.http.post(environment.ruta+'php/contabilidad/mediosmagneticos/guardar_agrupacion_especiales.php',datos).subscribe((data:any)=>{
-    if (data.tipo == 'success') {
+    this.http.post(environment.ruta + 'php/contabilidad/mediosmagneticos/guardar_agrupacion_especiales.php', datos).subscribe((data: any) => {
+      if (data.tipo == 'success') {
+        Swal.fire({
+          icon: data.tipo,
+          title: data.titulo,
+          text: data.mensaje
+        });
+        // this.swalService.ShowMessage(swal);
+
+        setTimeout(() => {
+          this.router.navigate(['/contabilidad/informesdian/agruparmediosmagneticos']);
+        }, 300);
+      }
+    }, error => {
       Swal.fire({
-        icon: data.tipo,
-        title: data.titulo,
-        text: data.mensaje
+        icon: 'warning',
+        text: 'Se perdió la conexión a internet. Por favor vuelve a intentarlo',
+        title: 'Oops!'
       });
       // this.swalService.ShowMessage(swal);
 
-      setTimeout(() => {
-        this.router.navigate(['/contabilidad/informesdian/agruparmediosmagneticos']);
-      }, 300);
-    }
-   }, error => {
-    Swal.fire({
-      icon: 'warning',
-      text: 'Se perdió la conexión a internet. Por favor vuelve a intentarlo',
-      title: 'Oops!'
-    });
-    // this.swalService.ShowMessage(swal);
-     
-   }) 
+    })
   }
 
   getListaFormatosEspeciales() {
-    this.http.get(environment.ruta+'php/contabilidad/mediosmagneticos/formatos_especiales.php').subscribe((data:any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/mediosmagneticos/formatos_especiales.php').subscribe((data: any) => {
       this.listaFormatosEspeciales = data;
     })
   }
 
   getDetallesFormato(id) {
-    let p = {id: id};
+    let p = { id: id };
 
-    this.http.get(environment.ruta+'php/contabilidad/mediosmagneticos/detalles_formatos_agrup.php',{params: p}).subscribe((data:any) => {
+    this.http.get(environment.ruta + 'php/contabilidad/mediosmagneticos/detalles_formatos_agrup.php', { params: p }).subscribe((data: any) => {
       this.MediosMagModel = data.encabezado;
       this.Formatos = data.formatos;
 
       setTimeout(() => {
-        let obj:any = {
+        let obj: any = {
           Formato: ''
         };
-  
+
         this.Formatos.push(obj);
       }, 300);
     })

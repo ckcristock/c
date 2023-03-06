@@ -133,7 +133,7 @@ export class MediomagneticocrearComponent implements OnInit {
 
   tiposDocumentos(tipo?) {
     let p: any = tipo != null && tipo != undefined ? { Tipo: 'Normal' } : {};
-    this.http.get(environment.ruta + 'php/contabilidad/tipos_documentos.php', { params: p })
+    this.http.get(environment.base_url + '/php/contabilidad/tipos_documentos.php', { params: p })
       .subscribe((data: any) => {
         this.listaTiposDocumentos = data;
       })
@@ -223,7 +223,7 @@ export class MediomagneticocrearComponent implements OnInit {
   getDetallesMedioMag(id) {
     let p = { id: id };
 
-    this.http.get(environment.ruta + 'php/contabilidad/mediosmagneticos/detalles.php', { params: p }).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/mediosmagneticos/detalles.php', { params: p }).subscribe((data: any) => {
       this.MediosMagModel = data.encabezado;
       this.Cuentas_Contables = JSON.parse(data.cuentas);
       this.Tipos_Documentos = JSON.parse(data.tipos);

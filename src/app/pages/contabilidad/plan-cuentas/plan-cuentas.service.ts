@@ -25,6 +25,14 @@ export class PlanCuentasService {
     return this.http.get(`${environment.base_url}/company`);
   }
 
+  importCommercialPuc() {
+    return this.http.get(`${environment.base_url}/import-commercial-puc`);
+  }
+
+
+  paginate2() {
+    return this.http.get(`${environment.base_url}/plan-cuentas-paginacion`);
+  }
 
   /* Servicios de php */
 

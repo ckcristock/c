@@ -75,6 +75,8 @@ export class PlanCuentasComponent implements OnInit {
     }
   }
 
+  plan2: any[] = [];
+
   constructor(
     private http: HttpClient,
     private location: Location,
@@ -90,10 +92,34 @@ export class PlanCuentasComponent implements OnInit {
   ngOnInit() {
     this.RecargarDatos();
     this.ListarBancos();
+    this.getPlanCuentas()
+  }
+
+  getPlanCuentas() {
+    this._planCuentas.paginate2().subscribe((res: any) => {
+      this.plan2 = res.data;
+    })
   }
 
   importCommercialPuc() {
-
+    this.swalService.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      text: 'Vamos a eliminar todo y remplazar por el PUC comercial existente'
+    }).then(r => {
+      if (r.isConfirmed) {
+        this._planCuentas.importCommercialPuc().subscribe((res: any) => {
+          this.swalService.show({
+            icon: 'success',
+            title: 'Actualizado con éxito',
+            text: '',
+            showCancel: false,
+            timer: 1000
+          }, true)
+          this.RecargarDatos();
+        })
+      }
+    })
   }
 
   RecargarDatos() {
@@ -358,6 +384,7 @@ export class PlanCuentasComponent implements OnInit {
 
   Tipo_Niif;
   Tipo_Niif_Editar;
+  Codigo_Padre;
   validarPUC(campo, tipo_puc, editar = false) {
     let codigo = campo.target.value;
     let id_campo = campo.target.id;
@@ -367,11 +394,13 @@ export class PlanCuentasComponent implements OnInit {
     setTimeout(() => {
       if (tipo_plan != '') {
         if (codigo.length != this.lengthByType(tipo_plan)) {
-          swal.fire({
+          this.swalService.show({
             icon: 'error',
-            title: 'Ooops!',
-            text: `El código no corresponde al tipo de plan "${tipo_plan}"`,
-          });
+            title: 'Error',
+            text: `El código no corresponde al tipo de plan "${tipo_plan}".`,
+            showCancel: false,
+          })
+
         } else if (tipo_plan != 'grupo') {
           let p: any = {
             Tipo_Plan: tipo_plan,
@@ -386,10 +415,13 @@ export class PlanCuentasComponent implements OnInit {
                 text: `El código ${codigo} no pertenece al nivel superior "${data.nivel_superior}"`,
               });
             }
+            else {
+              this.Codigo_Padre = codigo.length === 1 ? "" : codigo.length === 2 ? codigo.substr(0, codigo.length - 1) : codigo.substr(0, codigo.length - 2);
+            }
           });
         }
       }
-    }, 300);
+    }, 0);
   }
 
   showAlert(tipo, titulo, mensaje) {

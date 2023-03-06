@@ -89,7 +89,7 @@ export class MovimientoGlobalizadoComponent implements OnInit {
 
   tiposDocumentos(tipo) {
     let p: any = tipo != null && tipo != undefined ? { Tipo: 'Normal' } : {};
-    this.http.get(environment.ruta + 'php/contabilidad/tipos_documentos.php', { params: p })
+    this.http.get(environment.base_url + '/php/contabilidad/tipos_documentos.php', { params: p })
       .subscribe((data: any) => {
         this.listaTiposDocumentos = data;
       })

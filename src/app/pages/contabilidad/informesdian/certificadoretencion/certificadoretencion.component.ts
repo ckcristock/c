@@ -67,7 +67,7 @@ export class CertificadoretencionComponent implements OnInit {
   formatter1 = (x: { Codigo: string }) => x.Codigo;
 
   ListarCuentas() {
-    this.http.get(environment.ruta + 'php/contabilidad/certificadoretencion/lista_cuentas.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/certificadoretencion/lista_cuentas.php').subscribe((data: any) => {
       this.Cuentas = data;
     });
     /* this.http.get(this.globales.ruta+'php/contabilidad/balanceprueba/lista_cuentas.php').subscribe((data:any)=>{

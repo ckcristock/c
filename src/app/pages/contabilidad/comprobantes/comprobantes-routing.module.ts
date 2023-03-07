@@ -13,17 +13,17 @@ import { NotascreditocrearComponent } from './notascredito/notascreditocrear/not
 import { NotascreditoverComponent } from './notascredito/notascreditover/notascreditover.component';
 
 const routes: Routes = [
-    { path: 'notas-contables', component: NotasContablesComponent },
-    { path: 'crear-nota-contable', component: CrearNotaContableComponent },
-    { path: 'egresos', component: EgresosComponent },
-    { path: 'comprobanteegresovarioscrear', component: ComprobanteegresovarioscrearComponent },
-    { path: 'ingresos', component: IngresosComponent },
-    { path: 'comprobanteingresocrear', component: ComprobanteingresocrearComponent },
-    { path: 'notas-cartera', component: NotasCarterasComponent },
-    { path: 'notas-cartera-crear', component: NotascarteracrearComponent },
-    { path: 'notas-credito', component: NotascreditoComponent },
-    { path: 'notas-credito/crear', component: NotascreditocrearComponent },
-    { path: 'notas-credito/ver/:id', component: NotascreditoverComponent },
+  { path: 'notas-contables', component: NotasContablesComponent },
+  { path: 'crear-nota-contable', component: CrearNotaContableComponent },
+  { path: 'egresos', component: EgresosComponent },
+  { path: 'comprobanteegresovarioscrear', component: ComprobanteegresovarioscrearComponent },
+  { path: 'ingresos', component: IngresosComponent },
+  { path: 'comprobanteingresocrear', component: ComprobanteingresocrearComponent },
+  /* { path: 'notas-cartera', component: NotasCarterasComponent },
+  { path: 'notas-cartera-crear', component: NotascarteracrearComponent }, */
+  { path: 'notas-credito', component: NotascreditoComponent },
+  { path: 'notas-credito/crear', component: NotascreditocrearComponent },
+  { path: 'notas-credito/ver/:id', component: NotascreditoverComponent },
 
 
 ];
@@ -32,4 +32,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ComprobantesRoutingModule {}
+export class ComprobantesRoutingModule { }

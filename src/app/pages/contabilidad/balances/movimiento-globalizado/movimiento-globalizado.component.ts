@@ -96,6 +96,6 @@ export class MovimientoGlobalizadoComponent implements OnInit {
   }
 
   generarReporte() {
-    window.open(environment.ruta + 'php/contabilidad/movimientoglobalizado/generar_reporte.php?' + this.queryParams, '_blank');
+    window.open(environment.base_url + '/php/contabilidad/movimientoglobalizado/generar_reporte.php?' + this.queryParams, '_blank');
   }
 }

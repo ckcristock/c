@@ -25,8 +25,8 @@ export class BalanceGeneralComponent implements OnInit {
 
   public Parametros: any = {
     Fecha_Corte: '',
-    Tipo_Reporte: 'Pcga',
-    Nivel: '8',
+    Tipo_Reporte: 'Niif',
+    Nivel: 8,
     Centro_Costo: ''
   }
 

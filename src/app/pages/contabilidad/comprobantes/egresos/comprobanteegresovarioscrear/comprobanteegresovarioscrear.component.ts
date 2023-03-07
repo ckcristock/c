@@ -186,9 +186,9 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     text$.pipe(
       debounceTime(200),
       map(term => term.length < 4 ? []
-        : this.Cuenta.filter(v => v.Codigo.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
+        : this.Cuenta.filter(v => v.Label.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
     );
-  formatter1 = (x: { Codigo: string }) => x.Codigo;
+  formatter1 = (x: { label: string }) => x.label;
 
   search2 = (text$: Observable<string>) =>
     text$.pipe(
@@ -206,7 +206,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       this.Bancos = data;
     });
     this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
-      this.Cuenta = data.Activo;
+      this.Cuenta = data;
     });
     this.http.get(environment.base_url + '/php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
       this.Centros = data;
@@ -347,7 +347,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     datos.append('Datos', info);
     datos.append('Cuentas_Contables', JSON.stringify(this.Cuentas_Contables));
 
-    this.http.post(environment.ruta + 'php/comprobantes/guardar_egreso.php', datos).subscribe((data: any) => {
+    this.http.post(environment.base_url + '/php/comprobantes/guardar_egreso.php', datos).subscribe((data: any) => {
 
       this.confirmacionSwal.title = data.titulo;
       this.confirmacionSwal.text = data.mensaje;
@@ -362,7 +362,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
         }
         setTimeout(() => {
 
-          this.router.navigate(['/comprobantes/egresos']);
+          this.router.navigate(['/contabilidad/comprobantes/egresos']);
         }, 1000);
       }
 
@@ -462,7 +462,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       if (id_plan_cuenta != '') {
         p.id_plan_cuenta = id_plan_cuenta;
       }
-      this.http.get(environment.ruta + 'php/contabilidad/notascontables/lista_facturas.php', { params: p }).subscribe((data: any) => {
+      this.http.get(environment.base_url + '/php/contabilidad/notascontables/lista_facturas.php', { params: p }).subscribe((data: any) => {
         this.Lista_Facturas = data.Facturas;
         this.Mostrar_Facturas = true;
 
@@ -666,7 +666,8 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       this.Cliente = data;
     });
     this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
-      this.Cuenta = data.Activo;
+      this.Cuenta = data;
+      console.log(data, this.Cuenta)
     });
     this.http.get(environment.base_url + '/php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
       this.Centros = data;

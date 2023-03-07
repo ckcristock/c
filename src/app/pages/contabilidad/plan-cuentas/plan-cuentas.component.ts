@@ -261,6 +261,7 @@ export class PlanCuentasComponent implements OnInit {
   openModal(content) {
     this._modal.openScrollableContent(content)
   }
+
   habCampos(value) {
     this.PlanCuentaModel = value.query_result;
     if (typeof value == 'object') {
@@ -334,7 +335,7 @@ export class PlanCuentasComponent implements OnInit {
     }
     this._planCuentas.obtenerPlan(params).subscribe((data: any) => {
       this.PlanCuentaModel = data.query_result;
-      this.openModal(content)
+      this._modal.open(content)
     });
   }
 
@@ -386,42 +387,44 @@ export class PlanCuentasComponent implements OnInit {
   Tipo_Niif_Editar;
   Codigo_Padre;
   validarPUC(campo, tipo_puc, editar = false) {
-    let codigo = campo.target.value;
+    let codigo: string = campo.target.value;
     let id_campo = campo.target.id;
     let tipo_plan = '';
     tipo_plan = !editar ? this.Tipo_Niif.toLowerCase() : this.Tipo_Niif_Editar.toLowerCase()
 
-    setTimeout(() => {
-      if (tipo_plan != '') {
-        if (codigo.length != this.lengthByType(tipo_plan)) {
-          this.swalService.show({
-            icon: 'error',
-            title: 'Error',
-            text: `El código no corresponde al tipo de plan "${tipo_plan}".`,
-            showCancel: false,
-          })
+    if (tipo_plan != '') {
+      if (codigo.length != this.lengthByType(tipo_plan)) {
+        this.swalService.show({
+          icon: 'error',
+          title: 'Error',
+          text: `El código no corresponde al tipo de plan "${tipo_plan}".`,
+          showCancel: false,
+        })
 
-        } else if (tipo_plan != 'grupo') {
-          let p: any = {
-            Tipo_Plan: tipo_plan,
-            Codigo: codigo,
-            Tipo_Puc: tipo_puc,
-          };
-          this._planCuentas.validarNiveles(p).subscribe((data: any) => {
-            if (data.validacion == 0) {
-              swal.fire({
-                icon: 'error',
-                title: 'Ooops!',
-                text: `El código ${codigo} no pertenece al nivel superior "${data.nivel_superior}"`,
-              });
-            }
-            else {
-              this.Codigo_Padre = codigo.length === 1 ? "" : codigo.length === 2 ? codigo.substr(0, codigo.length - 1) : codigo.substr(0, codigo.length - 2);
-            }
-          });
-        }
+      } else if (tipo_plan != 'grupo') {
+        let p: any = {
+          Tipo_Plan: tipo_plan,
+          Codigo: codigo,
+          Tipo_Puc: tipo_puc,
+        };
+        this._planCuentas.validarNiveles(p).subscribe((data: any) => {
+          if (data.validacion == 0) {
+            swal.fire({
+              icon: 'error',
+              title: 'Ooops!',
+              text: `El código ${codigo} no pertenece al nivel superior "${data.nivel_superior}"`,
+            });
+          } else {
+            console.log(codigo.length)
+            this.Codigo_Padre = codigo.length === 1 ? "No aplica" : codigo.length === 2 ? codigo.slice(0, - 1) : codigo.slice(0, - 2);
+          }
+
+        });
+      } else {
+        console.log(codigo.length)
+        this.Codigo_Padre = codigo.length === 1 ? "No aplica" : codigo.length === 2 ? codigo.slice(0, - 1) : codigo.slice(0, - 2);
       }
-    }, 0);
+    }
   }
 
   showAlert(tipo, titulo, mensaje) {

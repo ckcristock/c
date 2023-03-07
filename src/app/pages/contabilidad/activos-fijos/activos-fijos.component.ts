@@ -143,19 +143,6 @@ export class ActivosFijosComponent implements OnInit {
   ngOnInit() {
   }
 
-  search_tercero = (text$: Observable<string>) =>
-    text$
-      .pipe(
-        debounceTime(200),
-        distinctUntilChanged(),
-        switchMap(term => term.length < 4 ? [] :
-          this._activoFijo.FiltrarTerceros(term)
-            .map(response => response)
-        )
-      );
-
-  formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero;
-
   GuardarActivoFijo() {
     if (!this.ValidateBeforeSubmit()) {
       return;
@@ -518,43 +505,4 @@ export class ActivosFijosComponent implements OnInit {
     })
   }
 
-
-
-
-  //!FUNCION COMENTADA POR FALTA DE USO, CONTIENE UNA PETICIÓN A BACKEND PHP PERO NO SE MIGRA
-  /* AdicionActivoFijo(event, id) {
-    let datos = new FormData();
-
-    datos.append('adicion', event);
-    datos.append('id', id);
-
-    this.http.post(environment.ruta + 'php/activofijo/adicion_activo.php', datos)
-      .subscribe((data: any) => {
-
-        this.ShowSwal(data.codigo, data.titulo, data.mensaje);
-        this.ConsultaFiltrada();
-
-      })
-  } */
-
-  //!FUNCION COMENTADA POR FALTA DE USO, CONTIENE UNA PETICIÓN A BACKEND PHP PERO NO SE MIGRA
-  /* EditarActivoFijo(idActivo: string) {
-    let p = { id_activo: idActivo };
-    this.http.get(environment.ruta + 'php/activofijo/get_activo_fijo.php', { params: p })
-      .subscribe((data: any) => {
-        if (data.codigo = 'success') {
-          this.ActivoFijoModel = data.Activo;
-          this.TerceroSeleccionado = data.Tercero;
-          this.Campo_Centro_Costo = data.Centro_Costo;
-          this.Campo_Rete_Ica = data.Rete_Iva;
-          this.Campo_Rete_Fuente = data.Rete_Fuente;
-          this.Campo_Contrapartida = data.Contrapartida;
-          this.Codigo = data.Activo.Codigo;
-          this.ModalActivoFijo.show();
-        } else {
-
-          this.ShowSwal(data.codigo, data.titulo, data.mensaje);
-        }
-      });
-  } */
 }

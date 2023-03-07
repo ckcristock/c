@@ -39,7 +39,7 @@ export class BorradorcomprobantesComponent implements OnInit {
 
   sendDatosBorrador(id_borrador) {
     if (id_borrador != '') {
-      this.http.get(environment.ruta + 'php/contabilidad/detalles_borrador_contable.php', { params: { id: id_borrador } }).subscribe((data: any) => {
+      this.http.get(environment.base_url + '/php/contabilidad/detalles_borrador_contable.php', { params: { id: id_borrador } }).subscribe((data: any) => {
         this.Borrador.emit(data);
       });
     } else {

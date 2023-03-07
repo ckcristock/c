@@ -236,7 +236,9 @@
           [disabled]="CentroCostoModel.Tipo == ''"
           [(ngModel)]="CentroCostoModel.Valor_Tipo_Centro"
         >
-          <mat-option value="" selected>Escoja el {{ ValorTipo }}</mat-option>
+          <mat-option value="" selected disabled
+            >Selecciona {{ ValorTipo | lowercase }}</mat-option
+          >
           <mat-option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">
             {{ vtc.Nombre }}
           </mat-option>

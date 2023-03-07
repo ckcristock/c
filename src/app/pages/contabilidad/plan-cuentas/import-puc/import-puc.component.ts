@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
@@ -10,12 +10,14 @@ import { PlanCuentasService } from '../plan-cuentas.service';
   styleUrls: ['./import-puc.component.scss']
 })
 export class ImportPucComponent implements OnInit {
-
   @ViewChild('modal') modal;
-  view: boolean;
+  @Output('reload') reload = new EventEmitter();
   fileString: any;
   file: any;
+  deletePlans: boolean = false;
+  cargado: boolean;
   type: any;
+  data: any;
   constructor(
     private _modal: ModalService,
     private _swal: SwalService,
@@ -27,10 +29,25 @@ export class ImportPucComponent implements OnInit {
 
   open() {
     this._modal.open(this.modal, 'lg')
+    this.fileString = undefined;
+    this.file = undefined;
+    this.deletePlans = false;
+    this.cargado = undefined;
+    this.type = undefined;
+    this.data = undefined;
   }
 
   save() {
-
+    if (!this.data) {
+      this._swal.show({
+        icon: 'error',
+        title: 'Error',
+        text: 'Carga un archivo',
+        showCancel: false
+      })
+    } else {
+      this.validateImport(this.data)
+    }
   }
 
   onFileSelected(event) {
@@ -44,6 +61,7 @@ export class ImportPucComponent implements OnInit {
           showCancel: false,
           text: 'El tipo de archivo no es válido'
         });
+        this.cargado = false;
         return null
       }
 
@@ -57,15 +75,26 @@ export class ImportPucComponent implements OnInit {
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         data.file = base64;
-        this.validateImport(data)
+        this.data = data
+        this.cargado = true;
+        //this.validateImport(data)
       });
 
     }
   }
 
   validateImport(data) {
-    this._planCuentas.validateImport(data).subscribe((res: any) => {
-
+    this._planCuentas.validateImport(data, this.deletePlans).subscribe((res: any) => {
+      this._swal.show({
+        icon: 'success',
+        title: 'Archivo cargado con éxito',
+        text: '',
+        showCancel: false,
+        timer: 1000
+      })
+      this._modal.close();
+      this.reload.emit()
+      console.log(res)
     })
   }
 

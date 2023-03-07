@@ -49,7 +49,7 @@ export class CentroCostosComponent implements OnInit {
   public company_id: any;
 
   public items: any = [];
-  public ValorTipo: any = 'Escoja tipo';
+  public ValorTipo: any = 'tipo';
 
   public CentroCostoModel: any = {
     Nombre: '',
@@ -128,6 +128,7 @@ export class CentroCostosComponent implements OnInit {
   }
 
   openModal(content) {
+    this.ValorTipo = 'tipo'
     this._modal.openLg(content)
   }
 

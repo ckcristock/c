@@ -57,7 +57,7 @@ export class PlanCuentasService {
     return this.http.get(`${environment.base_url}/php/plancuentas/validar_puc_niveles.php`, { params });
   }
 
-  validateImport(data) {
-    return this.http.post(`${environment.base_url}/import-validator-account-plans`, data)
+  validateImport(data, boolean) {
+    return this.http.post(`${environment.base_url}/import-validator-account-plans/${boolean}`, data)
   }
 }

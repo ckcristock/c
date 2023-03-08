@@ -24,6 +24,9 @@
           >
             <i class="fas fa-file-upload"></i> Importar PUC comercial
           </button>
+          <button class="btn btn-warning btn-sm">
+            <i class="fas fa-file-upload"></i> Importar saldos iniciales
+          </button>
           <button
             class="btn btn-info btn-sm"
             style="float: right"
@@ -1037,7 +1040,15 @@
           </tr>
           <tr>
             <th>Naturaleza</th>
-            <td>{{ PlanCuentaModel.Naturaleza || "Sin asignar" }}</td>
+            <td>
+              {{
+                PlanCuentaModel.Naturaleza == "D"
+                  ? "Débito"
+                  : PlanCuentaModel.Naturaleza == "C"
+                  ? "Crédito"
+                  : "Sin asignar"
+              }}
+            </td>
           </tr>
         </tbody>
       </table>

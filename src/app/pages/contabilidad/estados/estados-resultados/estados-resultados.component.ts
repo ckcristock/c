@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-estados-resultados',
@@ -39,7 +40,7 @@ export class EstadosResultadosComponent implements OnInit {
   Cuenta_Final: any = '';
   Discriminado: any = '';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private _swal: SwalService) { }
 
   ngOnInit() {
     this.ListarCentroCostos();
@@ -75,7 +76,19 @@ export class EstadosResultadosComponent implements OnInit {
     }
 
     this.queryParams = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+  }
 
-
+  openNewTab(route) {
+    if (Object.keys(this.EstResultadoModel).every(key => this.EstResultadoModel[key])) {
+      const url = `${environment.ruta}${route}${this.queryParams}`
+      window.open(url, '_blank');
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'Error',
+        text: 'Completa toda la información.',
+        showCancel: false
+      })
+    }
   }
 }

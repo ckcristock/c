@@ -59,7 +59,7 @@ export class SwalService {
     if (preConfirm) {
       swal = {
         ...swal,
-        preConfirm,
+        ...preConfirm,
         allowOutsideClick: () => !Swal.isLoading(),
         showLoaderOnConfirm: true
       }

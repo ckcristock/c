@@ -13,6 +13,7 @@
               [(ngModel)]="Parametros.Fecha_Corte"
               (dateInput)="getQueryParams()"
               autocomplete="off"
+              required
               placeholder="Elije una fecha"
             />
             <mat-datepicker-toggle
@@ -25,7 +26,7 @@
             <mat-label>Tipo de reporte</mat-label>
             <mat-select
               [(ngModel)]="Parametros.Tipo_Reporte"
-              value=""
+              required
               (selectionChange)="getQueryParams()"
             >
               <!-- <mat-option value="Pcga">PCGA</mat-option> -->
@@ -36,10 +37,9 @@
             <mat-label>Nivel</mat-label>
             <mat-select
               [(ngModel)]="Parametros.Nivel"
-              value="seleccione"
+              required
               (selectionChange)="getQueryParams()"
             >
-              <mat-option value="seleccione">Seleccione nivel</mat-option>
               <mat-option *ngFor="let Nivel of Niveles" [value]="Nivel">{{
                 Nivel
               }}</mat-option>
@@ -49,10 +49,9 @@
             <mat-label>Centro costo</mat-label>
             <mat-select
               [(ngModel)]="Parametros.Centro_Costo"
-              value=""
+              required
               (selectionChange)="getQueryParams()"
             >
-              <mat-option value="">Seleccione centro costo</mat-option>
               <mat-option
                 *ngFor="let item of Centro_Costos"
                 [value]="item.value"
@@ -67,29 +66,19 @@
           aria-label="Vertical button group"
         >
           <a
-            name=""
-            id=""
             class="btn btn-danger"
-            href="{{
-              envirom.base_url
-            }}/php/contabilidad/balancegeneral/descarga_pdf.php?{{
-              queryParams
-            }}"
+            (click)="
+              openNewTab('/php/contabilidad/balancegeneral/descarga_pdf.php?')
+            "
             role="button"
-            target="_blank"
             ><i class="fas fa-file-pdf"></i> PDF</a
           >
           <a
-            name=""
-            id=""
             class="btn btn-primary"
-            href="{{
-              envirom.base_url
-            }}/php/contabilidad/balancegeneral/descarga_excel.php?{{
-              queryParams
-            }}"
+            (click)="
+              openNewTab('/php/contabilidad/balancegeneral/descarga_excel.php?')
+            "
             role="button"
-            target="_blank"
             ><i class="fas fa-file-excel"></i> EXCEL</a
           >
         </div>

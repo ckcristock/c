@@ -60,4 +60,5 @@ export class PlanCuentasService {
   validateImport(data, boolean) {
     return this.http.post(`${environment.base_url}/import-validator-account-plans/${boolean}`, data)
   }
+
 }

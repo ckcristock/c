@@ -78,25 +78,19 @@
           aria-label="Vertical button group"
         >
           <a
-            class="btn btn-danger btn-lg"
-            href="{{
-              envirom.ruta
-            }}php/contabilidad/estadoresultado/descarga_pdf.php?{{
-              queryParams
-            }}"
+            class="btn btn-danger"
+            (click)="
+              openNewTab('php/contabilidad/estadoresultado/descarga_pdf.php?')
+            "
             role="button"
-            target="_blank"
             ><i class="fas fa-file-pdf"></i> PDF</a
           >
           <a
-            class="btn btn-primary btn-lg"
-            href="{{
-              envirom.ruta
-            }}php/contabilidad/estadoresultado/descarga_excel.php?{{
-              queryParams
-            }}"
+            class="btn btn-primary"
+            (click)="
+              openNewTab('php/contabilidad/estadoresultado/descarga_excel.php?')
+            "
             role="button"
-            target="_blank"
             ><i class="fas fa-file-excel"></i> EXCEL</a
           >
         </div>

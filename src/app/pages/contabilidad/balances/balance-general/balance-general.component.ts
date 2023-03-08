@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { DatePipe } from '@angular/common';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-balance-general',
@@ -38,8 +39,13 @@ export class BalanceGeneralComponent implements OnInit {
   Discriminado: any = '';
   queryParams: string = '';
   envirom: any;
+  datePipeString: string;
 
-  constructor(private http: HttpClient, private datePipe: DatePipe) { }
+  constructor(
+    private http: HttpClient,
+    private datePipe: DatePipe,
+    private _swal: SwalService
+  ) { }
 
   ngOnInit() {
     this.ListarCentroCostos();
@@ -47,14 +53,12 @@ export class BalanceGeneralComponent implements OnInit {
   }
 
   ListarCentroCostos() {
-
     this.http.get(environment.base_url + '/php/contabilidad/balanceprueba/lista_centro_costos.php').subscribe((data: any) => {
       this.Centro_Costos = data;
       console.log(this.Centro_Costos)
     })
-
   }
-  datePipeString: string;
+
   getQueryParams() {
     this.datePipeString = this.datePipe.transform(this.Parametros.Fecha_Corte, 'yyyy-MM-dd')
     let params: any = {
@@ -65,10 +69,21 @@ export class BalanceGeneralComponent implements OnInit {
     if (this.Parametros.Centro_Costo != '') {
       params.centro_costo = this.Parametros.Centro_Costo;
     }
-
     this.queryParams = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+  }
 
-
+  openNewTab(route) {
+    if (Object.keys(this.Parametros).every(key => this.Parametros[key])) {
+      const url = `${environment.base_url}${route}${this.queryParams}`
+      window.open(url, '_blank');
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'Error',
+        text: 'Completa toda la información.',
+        showCancel: false
+      })
+    }
   }
 
 }

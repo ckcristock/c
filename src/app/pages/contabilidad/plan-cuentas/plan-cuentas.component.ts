@@ -106,17 +106,19 @@ export class PlanCuentasComponent implements OnInit {
       icon: 'question',
       title: '¿Estás seguro(a)?',
       text: 'Vamos a eliminar todo y remplazar por el PUC comercial existente'
-    }).then(r => {
-      if (r.isConfirmed) {
-        this._planCuentas.importCommercialPuc().subscribe((res: any) => {
-          this.swalService.show({
-            icon: 'success',
-            title: 'Actualizado con éxito',
-            text: '',
-            showCancel: false,
-            timer: 1000
-          }, true)
-          this.RecargarDatos();
+    }, {
+      preConfirm: (value) => {
+        return new Promise((resolve) => {
+          this._planCuentas.importCommercialPuc().subscribe((res: any) => {
+            this.swalService.show({
+              icon: 'success',
+              title: 'Actualizado con éxito',
+              text: '',
+              showCancel: false,
+              timer: 1000
+            }, true)
+            this.RecargarDatos();
+          })
         })
       }
     })

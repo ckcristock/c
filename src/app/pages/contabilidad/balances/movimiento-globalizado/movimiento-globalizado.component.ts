@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-movimiento-globalizado',
@@ -23,7 +24,7 @@ export class MovimientoGlobalizadoComponent implements OnInit {
   public TerceroSeleccionado: any;
   private _rutaBase: string = environment.base_url + '/php/terceros/';
   terceros: any[] = [];
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private _swal: SwalService) { }
 
   ngOnInit() {
     this.tiposDocumentos('Normal');
@@ -96,6 +97,15 @@ export class MovimientoGlobalizadoComponent implements OnInit {
   }
 
   generarReporte() {
-    window.open(environment.base_url + '/php/contabilidad/movimientoglobalizado/generar_reporte.php?' + this.queryParams, '_blank');
+    if (Object.keys(this.MovimientoGlobalizadoModel).filter(key => key != 'Estado').every(key => this.MovimientoGlobalizadoModel[key])) {
+      window.open(environment.base_url + '/php/contabilidad/movimientoglobalizado/generar_reporte.php?' + this.queryParams, '_blank');
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'Error',
+        text: 'Completa toda la información.',
+        showCancel: false
+      })
+    }
   }
 }

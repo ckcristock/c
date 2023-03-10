@@ -1,8 +1,12 @@
 import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAccordion } from '@angular/material/expansion';
+import { Router } from '@angular/router';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 import { ModalService } from 'src/app/core/services/modal.service';
+import { PermissionService } from 'src/app/core/services/permission.service';
 import { PrettyCashService } from 'src/app/core/services/pretty-cash.service';
+import { UserService } from 'src/app/core/services/user.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 
@@ -25,18 +29,38 @@ export class CajasComponent implements OnInit {
     collectionSize: 0
   }
   filtros = {
-    name: ''
+    name: '',
+    person_id: ''
   }
+  permission: Permissions = {
+    menu: 'Cajas',
+    permissions: {
+      show: true,
+      show_all: true
+    }
+  };
+
   constructor(
     private _prettyCash: PrettyCashService,
     private _modal: ModalService,
     private fb: FormBuilder,
     private _person: PersonService,
-    private _swal: SwalService
-  ) { }
+    private _swal: SwalService,
+    private router: Router,
+    public _user: UserService,
+    private _permission: PermissionService,
+  ) {
+    this.permission = this._permission.validatePermissions(this.permission);
+  }
 
   ngOnInit(): void {
-    this.getPrettyCash();
+    console.log(this.permission)
+    if (this.permission.permissions.show) {
+      this.filtros.person_id = this.permission.permissions.show_all ? '' : this._user.user.person.id
+      this.getPrettyCash();
+    } else {
+      this.router.navigate(['/notauthorized'])
+    }
   }
 
   getPeople() {

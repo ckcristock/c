@@ -245,10 +245,10 @@
               <th></th>
               <th>Concepto</th>
               <th>Base</th>
-              <th>Debito</th>
-              <th>Credito</th>
-              <th>Deb Niif</th>
-              <th>Cred Niif</th>
+              <!-- <th>Debito</th>
+              <th>Credito</th> -->
+              <th>Débito</th>
+              <th>Crédito</th>
               <th><i class="mdi mdi-chevron-down"></i></th>
             </tr>
           </thead>
@@ -355,7 +355,7 @@
                     readonly
                   />
                 </td>
-                <td>
+                <!-- <td>
                   <input
                     name="Debito{{ i }}"
                     id="Debito{{ i }}"
@@ -380,7 +380,7 @@
                     class="form-control form-control-sm text-right"
                     type="number"
                   />
-                </td>
+                </td> -->
                 <td>
                   <input
                     name="Deb_Niif{{ i }}"
@@ -457,21 +457,21 @@
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
+            <!-- <th>Total Debito</th>
+            <th>Total Credito</th> -->
             <th>Total Debito</th>
             <th>Total Credito</th>
-            <th>Total Debito NIFF</th>
-            <th>Total Credito NIFF</th>
+            <!-- <th>Diferencia</th> -->
             <th>Diferencia</th>
-            <th>Diferencia NIFF</th>
           </tr>
         </thead>
         <tbody>
           <tr class="text-center">
-            <td>${{ Total_Debito | number : "1.2-2" }}</td>
-            <td>${{ Total_Credito | number : "1.2-2" }}</td>
+            <!-- <td>${{ Total_Debito | number : "1.2-2" }}</td>
+            <td>${{ Total_Credito | number : "1.2-2" }}</td> -->
             <td>${{ Total_Debito_Niif | number : "1.2-2" }}</td>
             <td>${{ Total_Credito_Niif | number : "1.2-2" }}</td>
-            <td>${{ Total_Debito - Total_Credito | number : "1.2-2" }}</td>
+            <!-- <td>${{ Total_Debito - Total_Credito | number : "1.2-2" }}</td> -->
             <td>
               ${{ Total_Debito_Niif - Total_Credito_Niif | number : "1.2-2" }}
             </td>

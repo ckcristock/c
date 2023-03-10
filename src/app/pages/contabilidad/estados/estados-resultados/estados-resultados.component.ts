@@ -18,8 +18,8 @@ export class EstadosResultadosComponent implements OnInit {
   public EstResultadoModel: any = {
     Fecha_Inicial: '',
     Fecha_Final: '',
-    Tipo: 'Pcga',
-    Nivel: '4',
+    Tipo: 'Niif',
+    Nivel: 4,
     Centro_Costo: null
   };
 
@@ -80,7 +80,8 @@ export class EstadosResultadosComponent implements OnInit {
 
   openNewTab(route) {
     if (Object.keys(this.EstResultadoModel).every(key => this.EstResultadoModel[key])) {
-      const url = `${environment.ruta}${route}${this.queryParams}`
+      console.log(this.queryParams)
+      const url = `${environment.base_url}${route}${this.queryParams}`
       window.open(url, '_blank');
     } else {
       this._swal.show({

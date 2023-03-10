@@ -52,7 +52,7 @@
                 (selectionChange)="setQueryParams()"
                 required
               >
-                <mat-option value="Pcga">PCGA</mat-option>
+                <!-- <mat-option value="Pcga">PCGA</mat-option> -->
                 <mat-option value="Niif">NIIF</mat-option>
               </mat-select>
             </mat-form-field>
@@ -64,6 +64,8 @@
                 placeholder="Centro de costo"
                 appearance="outline"
                 [clearable]="false"
+                bindLabel="label"
+                bindValue="value"
                 [appendTo]="'body'"
                 [items]="Centro_Costos"
                 (ngModelChange)="setQueryParams()"
@@ -80,7 +82,7 @@
           <a
             class="btn btn-danger"
             (click)="
-              openNewTab('php/contabilidad/estadoresultado/descarga_pdf.php?')
+              openNewTab('/php/contabilidad/estadoresultado/descarga_pdf.php?')
             "
             role="button"
             ><i class="fas fa-file-pdf"></i> PDF</a
@@ -88,7 +90,9 @@
           <a
             class="btn btn-primary"
             (click)="
-              openNewTab('php/contabilidad/estadoresultado/descarga_excel.php?')
+              openNewTab(
+                '/php/contabilidad/estadoresultado/descarga_excel.php?'
+              )
             "
             role="button"
             ><i class="fas fa-file-excel"></i> EXCEL</a

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { PlanCuentasService } from './plan-cuentas.service';
@@ -291,7 +291,8 @@ export class PlanCuentasComponent implements OnInit {
     }).then(r => {
       if (r.isConfirmed) {
         let datos = new FormData();
-
+        const token = this._user.token;
+        const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
         if (accion == 'guardar') {
           let info = JSON.stringify(Formulario.value);
           datos.append('Datos', info);
@@ -299,10 +300,11 @@ export class PlanCuentasComponent implements OnInit {
           let info = JSON.stringify(this.PlanCuentaModel);
           datos.append('Datos', info);
         }
+        /* this._planCuentas.guardarPlan(datos) */
         this.http
           .post(
             environment.base_url + '/php/contabilidad/plancuentas/guardar_puc.php',
-            datos
+            datos, { headers }
           )
           .subscribe((data: any) => {
             let title = data.tipo == 'error' ? 'Error' : 'Exito';

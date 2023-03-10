@@ -21,8 +21,17 @@
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel #matPanel class="mat-elevation-z0">
-        <div class="alert alert-danger text-center" role="alert">
-          Aún no tenemos filtros para esta sección.
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              type="text"
+              autocomplete="off"
+              [(ngModel)]="filtros.name"
+              (input)="getPrettyCash()"
+            />
+          </mat-form-field>
         </div>
       </mat-expansion-panel>
     </mat-accordion>

@@ -13,7 +13,7 @@ export class PrettyCashService {
   }
 
   getAll(params = {}) {
-    return this.http.get(`${environment.base_url}/pretty-cash`, { params });
+    return this.http.get(`${environment.base_url}/pretty-cash-paginate`, { params });
   }
 
   getCaja(id) {

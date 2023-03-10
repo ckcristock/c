@@ -24,6 +24,9 @@ export class CajasComponent implements OnInit {
     pageSize: 10,
     collectionSize: 0
   }
+  filtros = {
+    name: ''
+  }
   constructor(
     private _prettyCash: PrettyCashService,
     private _modal: ModalService,
@@ -85,7 +88,7 @@ export class CajasComponent implements OnInit {
   getPrettyCash(page = 1) {
     this.pagination.page = page;
     let params = {
-      ...this.pagination
+      ...this.pagination, ...this.filtros
     }
     this.loading = true;
     this._prettyCash.getAll(params).subscribe((r: any) => {

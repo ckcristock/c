@@ -11,6 +11,7 @@ import { NotascarteracrearComponent } from './notas-carteras/notascarteracrear/n
 import { NotascreditoComponent } from './notascredito/notascredito.component';
 import { NotascreditocrearComponent } from './notascredito/notascreditocrear/notascreditocrear.component';
 import { NotascreditoverComponent } from './notascredito/notascreditover/notascreditover.component';
+import { NotasDebitoComponent } from './notas-debito/notas-debito.component';
 
 const routes: Routes = [
   { path: 'notas-contables', component: NotasContablesComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'notas-credito', component: NotascreditoComponent },
   { path: 'notas-credito/crear', component: NotascreditocrearComponent },
   { path: 'notas-credito/ver/:id', component: NotascreditoverComponent },
+  { path: 'notas-debito', component: NotasDebitoComponent },
 
 
 ];

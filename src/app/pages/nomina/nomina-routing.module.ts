@@ -12,6 +12,7 @@ import { PrimaFuncionarioComponent } from './primas/prima-funcionario/prima-func
 import { LegalizarComponent } from './viaticos/legalizar/legalizar.component';
 import { HistorialPagosComponent } from './historial-pagos/historial-pagos.component';
 import { CesantiasComponent } from './cesantias/cesantias.component';
+import { CesantiaCurrentComponent } from './cesantias/cesantia-current/cesantia-current.component';
 
 const routes: Routes = [
     { path:'prestamos', component: PrestamosLibranzasComponent},
@@ -22,11 +23,12 @@ const routes: Routes = [
     { path: 'viaticos/legalizar/:id', component: LegalizarComponent },
     /* { path: 'vacaciones', component: VacacionesComponent}, */
     { path: 'nomina', component: NominaComponent},
+    { path: 'nomina',   loadChildren : () => import('./nomina/pago-nomina.module').then(m => m.PagoNominaModule )},
     { path: 'primas', component: PrimasComponent},
     { path: 'prima/:anio/:periodo/:pagado', component: PrimaFuncionarioComponent},
-    { path: 'nomina',   loadChildren : () => import('./nomina/pago-nomina.module').then(m => m.PagoNominaModule )},
     { path: 'historial-pagos', component: HistorialPagosComponent},
-    { path: 'cesantias', component: CesantiasComponent }
+    { path: 'cesantias', component: CesantiasComponent },
+    { path: 'cesantias/:anio/:pagado', component: CesantiaCurrentComponent }
 
 ]
 

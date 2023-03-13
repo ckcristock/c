@@ -6,12 +6,22 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class PrettyCashService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   save(body) {
     return this.http.post(environment.base_url + '/pretty-cash', body);
   }
-  getAll() {
-    return this.http.get(environment.base_url + '/pretty-cash');
-}
+
+  getAll(params = {}) {
+    return this.http.get(`${environment.base_url}/pretty-cash-paginate`, { params });
+  }
+
+  getCaja(id) {
+    return this.http.get(`${environment.base_url}/pretty-cash/${id}`);
+  }
+
+  update(data, id) {
+    return this.http.put(`${environment.base_url}/pretty-cash/${id}`, data);
+  }
+
 }

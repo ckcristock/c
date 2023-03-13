@@ -172,7 +172,7 @@
             <td class="align-middle">{{ item.delivery_code }}</td>
             <td class="align-middle">{{ item.type }}</td>
             <td class="align-middle">
-              {{ item.created_at | date: "dd/MM/yyyy" }}
+              {{ item.created_at | date : "dd/MM/yyyy" }}
             </td>
             <td class="align-middle">{{ item.entrega }}</td>
             <td class="align-middle">{{ item.recibe }}</td>
@@ -193,7 +193,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -201,7 +201,7 @@
                 <div ngbDropdownMenu>
                   <a
                     *ngIf="item.state != 'Anulada'"
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     href="javascript:void(0)"
                     (click)="anularDotacion(item.id)"
                   >
@@ -210,7 +210,7 @@
                   <a
                     *ngIf="item.delivery_state == 'Pendiente'"
                     href="javascript:void(0)"
-                    class="dropdown-item text-success waves-light caja-botones"
+                    class="dropdown-item text-success"
                     (click)="aprobarDotacion(item.id)"
                   >
                     <i class="fas fa-check"></i> Aprobar
@@ -221,7 +221,7 @@
                       item.state == 'Anulada'
                     "
                     href="javascript:void(0)"
-                    class="dropdown-item text-dark waves-light caja-botones"
+                    class="dropdown-item text-dark"
                   >
                     <i class="fas fa-ban"></i> Nada por hacer
                   </a>
@@ -272,9 +272,7 @@
         </div>
       </div>
       <div class="col-lg-6">
-        <h5 class="text-center">
-          Dotación y EPP's por categorías
-        </h5>
+        <h5 class="text-center">Dotación y EPP's por categorías</h5>
         <div #dotacion_chart>
           <canvas
             baseChart

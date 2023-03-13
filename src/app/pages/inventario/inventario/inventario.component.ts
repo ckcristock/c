@@ -126,7 +126,7 @@ export class InventarioComponent implements OnInit {
   ngOnInit() {
 
     this.http
-      .get(environment.ruta + "php/lista_generales.php", { params: { modulo: "Lista_Ganancia" }, }).subscribe((data: any) => {
+      .get(environment.base_url + "/php/lista_generales.php", { params: { modulo: "Lista_Ganancia" }, }).subscribe((data: any) => {
         this.listas = data;
         console.log(data)
       });
@@ -159,7 +159,7 @@ export class InventarioComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.limpiarContrato()
-    
+
   }
   selectedDate(fecha) {
     //console.log(fecha);

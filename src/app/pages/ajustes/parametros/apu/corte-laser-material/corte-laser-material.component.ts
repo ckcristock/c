@@ -5,6 +5,7 @@ import { CorteLaserMaterialService } from './corte-laser-material.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
+import { MaterialesService } from '../materiales/materiales.service';
 
 @Component({
   selector: 'app-corte-laser-material',
@@ -17,8 +18,9 @@ export class CorteLaserMaterialComponent implements OnInit {
   matPanel = false;
   loading: boolean = false;
   form: FormGroup;
-  title: any = 'Nuevo Material';
+  title: any = 'Nuevo material';
   materials: any[] = [];
+  materialsIndex: any[] = [];
   thicknesses: any[] = [];
   material: any = {};
   pagination = {
@@ -37,7 +39,7 @@ export class CorteLaserMaterialComponent implements OnInit {
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   variables = [
     { label: 'Espesor', var: 'thickness' },
@@ -60,16 +62,18 @@ export class CorteLaserMaterialComponent implements OnInit {
     private _validators: ValidatorsService,
     private _cutLaserM: CorteLaserMaterialService,
     private _swal: SwalService,
+    private _materials: MaterialesService,
     private modalService: NgbModal,
 
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.createForm();
-    this.getMaterials();
+    await this.getMaterials();
+    this.getMaterialsIndex();
   }
   closeResult = '';
-  
+
   public openConfirm(confirm, titulo) {
     this.title = titulo;
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true }).result.then((result) => {
@@ -88,16 +92,24 @@ export class CorteLaserMaterialComponent implements OnInit {
   private getDismissReason(reason: any) {
     this.form.reset();
     this.materialsList.clear();
-    
+  }
+
+  getMaterialsIndex(){
+    this._materials.getMaterialsIndex().subscribe((res:any) => {
+      this.materialsIndex = res.data.filter(material => {
+        const exists = this.materials.some(m => m.material_id === material.id);
+        return !exists;
+      });
+    })
   }
 
   openModal() {
     this.modal.show();
-    
+
   }
 
   closeModalVer() {
-    this.modalService.dismissAll(); 
+    this.modalService.dismissAll();
     this.materialsList.clear();
     this.form.reset();
   }
@@ -105,7 +117,7 @@ export class CorteLaserMaterialComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [this.material.id],
-      name: ['', this._validators.required],
+      material_id: ['', this._validators.required],
       formula: ['', this._validators.required],
       materials: this.fb.array([]),
     });
@@ -116,7 +128,7 @@ export class CorteLaserMaterialComponent implements OnInit {
     //this.title = 'Editar Material';
     this.form.patchValue({
       id: this.material.id,
-      name: this.material.name,
+      material_id: this.material.material_id,
       formula: this.material.formula
     });
     this.materialsList.clear();
@@ -155,13 +167,13 @@ export class CorteLaserMaterialComponent implements OnInit {
     this.materialsList.removeAt(i);
   }
 
-  getMaterials(page = 1) {
+  async getMaterials(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtro
     }
     this.loading = true;
-    this._cutLaserM.getMaterials(params).subscribe((r: any) => {
+    await this._cutLaserM.getMaterials(params).toPromise().then((r: any) => {
       this.materials = r.data.data;
       this.loading = false;
       this.pagination.collectionSize = r.data.total;
@@ -170,11 +182,12 @@ export class CorteLaserMaterialComponent implements OnInit {
 
   save() {
     if (this.form.get('id').value) {
-      this._cutLaserM.update(this.form.value, this.material.id).subscribe((r: any) => {
+      this._cutLaserM.update(this.form.value, this.material.id).subscribe(async (r: any) => {
         this.form.reset();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.materialsList.clear();
-        this.getMaterials();
+        await this.getMaterials();
+        this.getMaterialsIndex();
         this._swal.show({
           icon: 'success',
           title: 'Material actualizado con éxito',
@@ -184,11 +197,12 @@ export class CorteLaserMaterialComponent implements OnInit {
         })
       })
     } else {
-      this._cutLaserM.save(this.form.value).subscribe((r: any) => {
+      this._cutLaserM.save(this.form.value).subscribe(async (r: any) => {
         this.form.reset();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.materialsList.clear();
-        this.getMaterials();
+        await this.getMaterials();
+        this.getMaterialsIndex();
         this._swal.show({
           icon: 'success',
           title: 'Material creado con éxito',

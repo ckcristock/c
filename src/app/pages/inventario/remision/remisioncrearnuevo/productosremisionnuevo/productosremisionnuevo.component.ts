@@ -160,7 +160,7 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
     this.RotativoModel.Fecha_Inicio = this.fecha_mes_anterior.toISOString().split("T")[0];
     this.RotativoModel.Fecha_Fin = this.Fecha.toISOString().split("T")[0];
 
-    this.http.get(environment.ruta + 'php/genericos/detalle.php', {
+    this.http.get(environment.base_url + '/php/genericos/detalle.php', {
       params: { modulo: 'Configuracion', id: '1' }
     }).subscribe((data: any) => {
       this.ItemsRemision = parseInt(data.Max_Item_Remision);
@@ -291,7 +291,7 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
   }
 
   private GetImpuestos() {
-    this.http.get(environment.ruta + 'php/lista_generales.php', { params: { modulo: 'Impuesto' } }).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/lista_generales.php', { params: { modulo: 'Impuesto' } }).subscribe((data: any) => {
       this.Impuestos = data;
     });
   }

@@ -19,17 +19,6 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./egresos.component.scss']
 })
 export class EgresosComponent implements OnInit {
-  @ViewChild(MatAccordion) accordion: MatAccordion;
-  matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
-  }
   public fecha = new Date();
   public Proveedores: any[] = [];
   public Id_Proveedor: any = '';
@@ -131,7 +120,7 @@ export class EgresosComponent implements OnInit {
     private swalService: SwalService,
     private _company: CentroCostosService
   ) {
-    this.http.get(environment.ruta + 'php/contabilidad/proveedor_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/proveedor_buscar.php').subscribe((data: any) => {
       this.Proveedores = data;
     });
 
@@ -196,27 +185,27 @@ export class EgresosComponent implements OnInit {
     this.enviromen = environment
     this.ListarComprobantes();
 
-    this.http.get(environment.ruta + 'php/comprobantes/lista_proveedores.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_proveedores.php').subscribe((data: any) => {
       this.ClientesFiltrar = data;
     });
 
-    this.http.get(environment.ruta + 'php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
       this.CuentasActivos = data.Activo;
       this.CuentasPasivos = data.Pasivo;
     });
 
-    this.http.get(environment.ruta + 'php/comprobantes/lista_bancos.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/plancuentas/lista_bancos.php').subscribe((data: any) => {
       this.Bancos = data;
     });
 
-    this.http.get(environment.ruta + 'php/comprobantes/formas_pago.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/formas_pago.php').subscribe((data: any) => {
       this.FormaPago = data;
     });
 
     this.RecargarDatos();
     // this.listarEmpresas();
   }
-  /* 
+  /*
       listarEmpresas(){
         this._company.getCompanies().subscribe((data:any) => {
           this.companies = data.data;
@@ -233,7 +222,7 @@ export class EgresosComponent implements OnInit {
   }
 
   ListarComprobantes() {
-    this.http.get(environment.ruta + 'php/comprobantes/lista_egresos.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_egresos.php').subscribe((data: any) => {
       this.Cargando = false
       this.Comprobantes = data.Lista;
       this.TotalItems = data.numReg;
@@ -423,7 +412,7 @@ export class EgresosComponent implements OnInit {
 
     this.location.replaceState('/contabilidad/comprobantes/egresos', params);
 
-    this.http.get(environment.ruta + 'php/comprobantes/lista_egresos.php' + params).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_egresos.php' + params).subscribe((data: any) => {
       this.Cargando = false;
       this.Comprobantes = data.Lista;
       this.TotalItems = data.numReg;
@@ -515,7 +504,7 @@ export class EgresosComponent implements OnInit {
     let data = new FormData();
     data.append('datos', info);
 
-    return this.http.post(environment.ruta + 'php/contabilidad/anular_documento.php', data);
+    return this.http.post(environment.base_url + '/php/contabilidad/anular_documento.php', data);
   }
 
 }

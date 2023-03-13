@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NegociosService } from '../negocios.service';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -16,6 +16,7 @@ import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/pe
 })
 export class VerNegocioComponent implements OnInit {
   @ViewChild('modalCotizaciones') modalCotizaciones: any;
+  @ViewChild('apus') apus: any
   active = 1;
   loading: boolean;
   contactos: any[];
@@ -26,6 +27,7 @@ export class VerNegocioComponent implements OnInit {
   presupuestosSeleccionados: any[] = [];
   cotizaciones: any;
   cotizacionesSeleccionadas: any[] = [];
+  apuSelected: any[] = [];
   business_budget_id: any = '';
   budget_value: number;
   quotation_value: number;
@@ -58,6 +60,7 @@ export class VerNegocioComponent implements OnInit {
     private _swal: SwalService,
     private _person: PersonService,
     private fb: FormBuilder,
+    private router: Router
   ) {
     this.filtros.id = this.ruta.snapshot.params.id;
     this.person_id = this._user.user.person.id
@@ -71,6 +74,34 @@ export class VerNegocioComponent implements OnInit {
     this.getPeople();
   }
 
+  async getApus(e: any[]) {
+    await e.forEach(apu => {
+      const exist = this.negocio['apus'].some(x => (x.apuable_id == apu.apu_id && x.apuable.typeapu_name == apu.type_name))
+      if (!exist) {
+        this.apuSelected.push(apu)
+      } else {
+        this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
+      }
+    }, Promise.resolve());
+    this.addApu()
+  }
+
+  addApu() {
+    let data = {
+      business_id: this.filtros.id,
+      apus: this.apuSelected,
+      person_id: this.person_id
+    }
+    this._negocio.newBusinessApu(data).subscribe(data => {
+      this.getBussines();
+      this.apuSelected = [];
+    });
+  }
+
+  findApus() {
+    this.apus.openConfirm()
+  }
+
   changeState(event) {
     this._negocio.changeState({ status: event.value }, this.filtros.id).subscribe(() => {
       this._swal.show({
@@ -81,6 +112,13 @@ export class VerNegocioComponent implements OnInit {
         timer: 1000
       })
     });
+  }
+
+  openNewTab(route, id = '') {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([route + '/' + id])
+    );
+    window.open(url, '_blank');
   }
 
   getPeople() {
@@ -145,12 +183,12 @@ export class VerNegocioComponent implements OnInit {
           })
         }
       )
-      this._negocio.getNotes(this.filtros.id).subscribe((res:any) => {
+      this._negocio.getNotes(this.filtros.id).subscribe((res: any) => {
         this.negocio.notes = res.data[0]
       })
     } else {
       this._swal.show({
-        icon:'error',
+        icon: 'error',
         title: 'ERROR',
         text: 'No puedes publicar una nota vacía o con más de 500 caracteres',
         showCancel: false
@@ -272,8 +310,9 @@ export class VerNegocioComponent implements OnInit {
       this._modal.close();
       this.cotizacionesSeleccionadas = [];
     });
-
   }
+
+
 
   obtenerContactos(thirdCompany: string) {
     let params = {

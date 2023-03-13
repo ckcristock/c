@@ -13,52 +13,52 @@ import { environment } from 'src/environments/environment';
 })
 export class CertificadoretencionComponent implements OnInit {
 
-  public datosCabecera:any = {
+  public datosCabecera: any = {
     Titulo: 'Certificados de retención',
     Fecha: new Date()
   }
-  public TerceroSeleccionado:any;
+  public TerceroSeleccionado: any;
 
   public CertificadoRetencionModel: CertificadoRetencionModel = new CertificadoRetencionModel();
   queryParams: string;
   Cuentas: any = [];
-  enviromen:any;
-  private _rutaBase:string = environment.ruta+'php/terceros/';
-  terceros:any[] = [];
-  
+  enviromen: any;
+  private _rutaBase: string = environment.base_url + '/php/terceros/';
+  terceros: any[] = [];
+
 
   constructor(private globales: Globales, private http: HttpClient) { }
 
   ngOnInit() {
     this.ListarCuentas();
     this.enviromen = environment;
-    this.FiltrarTerceros().subscribe((data:any) => {
+    this.FiltrarTerceros().subscribe((data: any) => {
       this.terceros = data;
     })
   }
 
   search_tercero = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    map(term => term.length < 4 ? []
-      : this.terceros.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
-  );
+    text$.pipe(
+      debounceTime(200),
+      map(term => term.length < 4 ? []
+        : this.terceros.filter(v => v.Nombre.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
+    );
   formatter_tercero = (x: { Nombre: string }) => x.Nombre;
 
-/*   search_tercero = (text$: Observable<string>) =>
-  text$
-  .pipe(
-    debounceTime(500),
-    distinctUntilChanged(),
-    switchMap( term => term.length < 4 ? [] :
-      this._terceroService.FiltrarTerceros(term)
-      .map(response => response)
-    )
-  );
+  /*   search_tercero = (text$: Observable<string>) =>
+    text$
+    .pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap( term => term.length < 4 ? [] :
+        this._terceroService.FiltrarTerceros(term)
+        .map(response => response)
+      )
+    );
 
-formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero; */
+  formatter_tercero = (x: { Nombre_Tercero: string }) => x.Nombre_Tercero; */
 
-search1 = (text$: Observable<string>) =>
+  search1 = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       map(term => term.length < 4 ? []
@@ -67,7 +67,7 @@ search1 = (text$: Observable<string>) =>
   formatter1 = (x: { Codigo: string }) => x.Codigo;
 
   ListarCuentas() {
-    this.http.get(environment.ruta+'php/contabilidad/certificadoretencion/lista_cuentas.php').subscribe((data:any)=>{
+    this.http.get(environment.base_url + '/php/contabilidad/certificadoretencion/lista_cuentas.php').subscribe((data: any) => {
       this.Cuentas = data;
     });
     /* this.http.get(this.globales.ruta+'php/contabilidad/balanceprueba/lista_cuentas.php').subscribe((data:any)=>{
@@ -75,71 +75,71 @@ search1 = (text$: Observable<string>) =>
     }); */
   }
 
-  FiltrarTerceros():Observable<any>{
+  FiltrarTerceros(): Observable<any> {
     // let p = {coincidencia:match};
-    return this.http.get(this._rutaBase+'filtrar_terceros.php');
+    return this.http.get(this._rutaBase + 'filtrar_terceros.php');
   }
 
-AsignarTercero(model){
-    
-  if (typeof(model) == 'object') {
+  AsignarTercero(model) {
 
-    this.CertificadoRetencionModel.Nit = model.Nit;      
-    this.CertificadoRetencionModel.Tipo_Nit = model.Tipo;      
-  }else{
-    this.CertificadoRetencionModel.Nit = '';
-    this.CertificadoRetencionModel.Tipo_Nit = '';
-  }
+    if (typeof (model) == 'object') {
 
-  this.setQueryParams();
-
-}
-
-BuscarCuenta(model, tipo) {
-    
-  if (typeof(model) == 'object') {
-    if (tipo == 'Inicial') {
-      this.CertificadoRetencionModel.Cuenta_Inicial = model.Codigo_Centro;
+      this.CertificadoRetencionModel.Nit = model.Nit;
+      this.CertificadoRetencionModel.Tipo_Nit = model.Tipo;
     } else {
-      this.CertificadoRetencionModel.Cuenta_Final = model.Codigo_Centro;
+      this.CertificadoRetencionModel.Nit = '';
+      this.CertificadoRetencionModel.Tipo_Nit = '';
     }
+
+    this.setQueryParams();
+
   }
 
-  this.setQueryParams();
-  
-}
+  BuscarCuenta(model, tipo) {
 
-setQueryParams() {
+    if (typeof (model) == 'object') {
+      if (tipo == 'Inicial') {
+        this.CertificadoRetencionModel.Cuenta_Inicial = model.Codigo_Centro;
+      } else {
+        this.CertificadoRetencionModel.Cuenta_Final = model.Codigo_Centro;
+      }
+    }
 
-  let params:any = {};
+    this.setQueryParams();
 
-  console.log(this.CertificadoRetencionModel.Cuentas);
-  
-    
-  if (this.CertificadoRetencionModel.Fecha_Inicial != '') {
-    params.Fecha_Inicial = this.CertificadoRetencionModel.Fecha_Inicial
-  }
-  if (this.CertificadoRetencionModel.Fecha_Final != '') {
-    params.Fecha_Final = this.CertificadoRetencionModel.Fecha_Final
-  }
-  if (this.CertificadoRetencionModel.Nit != '') {
-    params.Nit = this.CertificadoRetencionModel.Nit
-  }
-  if (this.CertificadoRetencionModel.Fecha_Expedicion != '') {
-    params.Fecha_Expedicion = this.CertificadoRetencionModel.Fecha_Expedicion
-  }
-  if (this.CertificadoRetencionModel.Cuentas.length > 0) {
-    params.Cuentas = this.CertificadoRetencionModel.Cuentas.join();
   }
 
-  this.queryParams = Object.keys(params).map(key => key + '=' + params[key]).join('&');
-  
-  
-}
+  setQueryParams() {
 
-generarCertificado() {
-  
-  window.open(environment.ruta+'php/contabilidad/certificadoretencion/certificado.php?'+this.queryParams,'_blank');
-}
+    let params: any = {};
+
+    console.log(this.CertificadoRetencionModel.Cuentas);
+
+
+    if (this.CertificadoRetencionModel.Fecha_Inicial != '') {
+      params.Fecha_Inicial = this.CertificadoRetencionModel.Fecha_Inicial
+    }
+    if (this.CertificadoRetencionModel.Fecha_Final != '') {
+      params.Fecha_Final = this.CertificadoRetencionModel.Fecha_Final
+    }
+    if (this.CertificadoRetencionModel.Nit != '') {
+      params.Nit = this.CertificadoRetencionModel.Nit
+    }
+    if (this.CertificadoRetencionModel.Fecha_Expedicion != '') {
+      params.Fecha_Expedicion = this.CertificadoRetencionModel.Fecha_Expedicion
+    }
+    if (this.CertificadoRetencionModel.Cuentas.length > 0) {
+      params.Cuentas = this.CertificadoRetencionModel.Cuentas.join();
+    }
+
+    this.queryParams = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+
+
+  }
+
+  generarCertificado() {
+
+    window.open(environment.ruta + 'php/contabilidad/certificadoretencion/certificado.php?' + this.queryParams, '_blank');
+  }
 
 }

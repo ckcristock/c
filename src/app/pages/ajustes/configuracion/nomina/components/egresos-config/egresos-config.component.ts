@@ -41,7 +41,7 @@ export class EgresosConfigComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this._suscription = this.open.subscribe(()=>{
+    this._suscription = this.open.subscribe(() => {
       this._modal.open(this.modalEgreso, 'md', false)
     });
     this.createForm();
@@ -54,7 +54,7 @@ export class EgresosConfigComponent implements OnInit {
     })
   }
 
-  formatter = (cuentas: { Nombre_Niif: string , Codigo_Niif: string }) => cuentas.Codigo_Niif+' || '+cuentas.Nombre_Niif;
+  formatter = (cuentas: { Nombre_Niif: string, Codigo_Niif: string }) => cuentas.Codigo_Niif + ' || ' + cuentas.Nombre_Niif;
 
   search_cuenta_niif = (text$: Observable<string>) =>
     text$.pipe(
@@ -65,9 +65,9 @@ export class EgresosConfigComponent implements OnInit {
         this.searchFail = false;
       }),
       switchMap(term =>
-        this.http.get(`${environment.ruta}php/plancuentas/filtrar_cuentas.php?`, { params: { coincidencia: term}}).pipe(
-          tap((res : Array<{ Nombre_Niif: string , Codigo_Niif: string }>) => {
-            if(res.length==0){
+        this.http.get(`${environment.base_url}/php/plancuentas/filtrar_cuentas.php?`, { params: { coincidencia: term } }).pipe(
+          tap((res: Array<{ Nombre_Niif: string, Codigo_Niif: string }>) => {
+            if (res.length == 0) {
               this.searchFail = true
             }
           }),
@@ -86,18 +86,18 @@ export class EgresosConfigComponent implements OnInit {
       [variable]: event
     }
     this._nominaService.updateCreateEgresos(params)
-    .subscribe((res: any) => {
-      this._swal.show({
-        icon: 'success',
-        title: 'Egresos',
-        text: res.data,
-        showCancel: false,
-        timer: 1000
+      .subscribe((res: any) => {
+        this._swal.show({
+          icon: 'success',
+          title: 'Egresos',
+          text: res.data,
+          showCancel: false,
+          timer: 1000
+        })
       })
-    })
   }
 
-  save(){
+  save() {
     let params = {
       concept: this.form.value.concept,
       accounting_account: this.form.value.accounting_account.Codigo_Niif,
@@ -105,18 +105,18 @@ export class EgresosConfigComponent implements OnInit {
       editable: false
     }
     this._nominaService.updateCreateEgresos(params)
-    .subscribe((res: any) => {
-      this._modal.close()
-      this._swal.show({
-        icon: 'success',
-        title: 'Egresos',
-        text: res.data,
-        showCancel: false,
-        timer: 1000
+      .subscribe((res: any) => {
+        this._modal.close()
+        this._swal.show({
+          icon: 'success',
+          title: 'Egresos',
+          text: res.data,
+          showCancel: false,
+          timer: 1000
+        })
+        this.form.reset()
+        this.refresh.emit()
       })
-      this.form.reset()
-      this.refresh.emit()
-    })
   }
 
 }

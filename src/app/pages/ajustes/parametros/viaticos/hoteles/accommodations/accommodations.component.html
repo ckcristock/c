@@ -2,7 +2,7 @@
   <div class="col-lg-5 px-0">
     <form [formGroup]="form">
       <mat-form-field class="col px-0 edit pb-0" appearance="outline">
-        <mat-label>{{title}} alojamiento</mat-label>
+        <mat-label>{{ title }} alojamiento</mat-label>
         <input
           matInput
           type="text"
@@ -59,9 +59,13 @@
           'text-danger font-weight-bold': value.name === 'Inactivo'
         }"
       >
-        <td class="align-middle" scope="row" [ngClass]="{
-                  'text-success': value.deleted_at == undefined,
-                  'text-danger': value.deleted_at != undefined}"
+        <td
+          class="align-middle"
+          scope="row"
+          [ngClass]="{
+            'text-success': value.deleted_at == undefined,
+            'text-danger': value.deleted_at != undefined
+          }"
         >
           {{ value.name }}
         </td>
@@ -70,31 +74,31 @@
           <div ngbDropdown container="body" class="dropdown-primary">
             <button
               ngbDropdownToggle
-              class="btn btn-primary btn-sm waves-light"
+              class="btn btn-primary btn-sm"
               type="button"
             >
               <i class="mdi mdi-chevron-down"></i>
             </button>
             <div ngbDropdownMenu>
               <a
-                class="dropdown-item waves-light text-info caja-botones"
+                class="dropdown-item text-info"
                 href="javascript: void(0);"
                 (click)="getValue(value)"
               >
                 <i class="far fa-edit"></i> Editar</a
               >
               <a
-                *ngIf="value.deleted_at == undefined "
+                *ngIf="value.deleted_at == undefined"
                 href="javascript: void(0);"
-                class="dropdown-item text-danger waves-light caja-botones"
+                class="dropdown-item text-danger"
                 (click)="anularOActivar(value, 'Inactivo')"
               >
                 <i class="far fa-trash-alt"></i> Anular</a
               >
               <a
-                *ngIf="value.deleted_at != undefined "
+                *ngIf="value.deleted_at != undefined"
                 href="javascript: void(0);"
-                class="dropdown-item text-success waves-light caja-botones"
+                class="dropdown-item text-success"
                 (click)="anularOActivar(value, 'Activo')"
               >
                 <i class="fas fa-check"></i> Activar</a

@@ -9,7 +9,8 @@
           </div>
           <div class="col-md-6 px-0 text-right">
             <div class="btn-group rounded w-sm-100">
-              <button class="btn btn-sm btn-warning m-0"
+              <button
+                class="btn btn-sm btn-warning m-0"
                 (click)="openConfirm(mapaBodega, alertOptionMapa.title)"
               >
                 <i class="fa fa-map"></i> Ver mapa
@@ -96,13 +97,17 @@
                     nombre: grupo.Nombre
                   };
                   createFormEstiba();
-                  selected(grupos,grupo.Id_Grupo_Estiba);
-                  getEstibas(grupo.Id_Grupo_Estiba);
+                  selected(grupos, grupo.Id_Grupo_Estiba);
+                  getEstibas(grupo.Id_Grupo_Estiba)
                 "
                 [ngClass]="
-                  (grupo.selected && grupo.Estado === 'Activo')?'bg-secondary text-white font-weight-bold':
-                  (grupo.selected && grupo.Estado === 'Inactivo')?'bg-danger text-white font-weight-bold':
-                  (!grupo.selected && grupo.Estado === 'Inactivo')?'text-danger font-weight-bold ':''
+                  grupo.selected && grupo.Estado === 'Activo'
+                    ? 'bg-secondary text-white font-weight-bold'
+                    : grupo.selected && grupo.Estado === 'Inactivo'
+                    ? 'bg-danger text-white font-weight-bold'
+                    : !grupo.selected && grupo.Estado === 'Inactivo'
+                    ? 'text-danger font-weight-bold '
+                    : ''
                 "
               >
                 <td class="align-middle">{{ grupo.Nombre }}</td>
@@ -113,18 +118,21 @@
                     <div ngbDropdown container="body" class="dropdown-primary">
                       <button
                         ngbDropdownToggle
-                        class="btn btn-primary btn-sm waves-light"
-
+                        class="btn btn-primary btn-sm"
                         type="button"
-                      ><!-- [ngClass]="{ 'bg-white text-primary': grupo.selected }" -->
+                      >
+                        <!-- [ngClass]="{ 'bg-white text-primary': grupo.selected }" -->
                         <i class="mdi mdi-chevron-down"></i>
                       </button>
                       <div ngbDropdownMenu>
                         <a
                           role="button"
-                          class="dropdown-item waves-light caja-botones text-info"
+                          class="dropdown-item text-info"
                           href="javascript: void(0);"
-                          (click)="openConfirm(addGrupo, 'Editar', 'grupo'); getGrupo(grupo)"
+                          (click)="
+                            openConfirm(addGrupo, 'Editar', 'grupo');
+                            getGrupo(grupo)
+                          "
                         >
                           <i class="far fa-edit"></i> Editar</a
                         >
@@ -134,8 +142,13 @@
                             'text-danger': grupo.Estado == 'Activo',
                             'text-success': grupo.Estado == 'Inactivo'
                           }"
-                          class="dropdown-item waves-light caja-botones text-success"
-                          (click)=" cambiarEstado(grupo, grupo.Estado == 'Activo' ? 'Inactivo' : 'Activo')"
+                          class="dropdown-item text-success"
+                          (click)="
+                            cambiarEstado(
+                              grupo,
+                              grupo.Estado == 'Activo' ? 'Inactivo' : 'Activo'
+                            )
+                          "
                         >
                           <i
                             class="fas"
@@ -144,7 +157,9 @@
                               'fa-check': grupo.Estado == 'Inactivo'
                             }"
                           ></i>
-                          {{ grupo.Estado == "Activo" ? " Inactivar" : " Activar" }}
+                          {{
+                            grupo.Estado == "Activo" ? " Inactivar" : " Activar"
+                          }}
                         </a>
                       </div>
                     </div>
@@ -154,7 +169,8 @@
             </tbody>
           </table>
         </div>
-        <ngb-pagination *ngIf="pagination.grupos.collectionSize > 0"
+        <ngb-pagination
+          *ngIf="pagination.grupos.collectionSize > 0"
           #paginationGrupos
           class="d-flex justify-content-center pagination-rounded pagination-sm"
           [collectionSize]="pagination.grupos.collectionSize"
@@ -179,7 +195,10 @@
           <div class="col-md-6 px-0">
             <h4 class="text-primary">Estibas</h4>
           </div>
-          <div class="col-md-6 px-0 text-right" *ngIf="grupoSelected.id != null">
+          <div
+            class="col-md-6 px-0 text-right"
+            *ngIf="grupoSelected.id != null"
+          >
             <div class="btn-group rounded w-sm-100">
               <button
                 class="btn btn-sm btn-primary"
@@ -236,7 +255,9 @@
             </div>
           </mat-expansion-panel>
         </mat-accordion>
-        <h5 class="text-dark" *ngIf="grupoSelected.nombre">Grupo {{ grupoSelected.nombre | lowercase }}</h5>
+        <h5 class="text-dark" *ngIf="grupoSelected.nombre">
+          Grupo {{ grupoSelected.nombre | lowercase }}
+        </h5>
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
@@ -267,7 +288,7 @@
                     <div ngbDropdown container="body" class="dropdown-primary">
                       <button
                         ngbDropdownToggle
-                        class="btn btn-primary btn-sm waves-light"
+                        class="btn btn-primary btn-sm"
                         type="button"
                       >
                         <i class="mdi mdi-chevron-down"></i>
@@ -275,10 +296,12 @@
                       <div ngbDropdownMenu>
                         <a
                           role="button"
-                          class="dropdown-item waves-light caja-botones text-info"
+                          class="dropdown-item text-info"
                           href="javascript: void(0);"
                           (click)="
-                            openConfirm(addEstiba, 'Editar', 'estiba'); getEstiba(estiba);"
+                            openConfirm(addEstiba, 'Editar', 'estiba');
+                            getEstiba(estiba)
+                          "
                         >
                           <i class="far fa-edit"></i> Editar</a
                         >
@@ -290,7 +313,8 @@
             </tbody>
           </table>
         </div>
-        <ngb-pagination *ngIf="pagination.estibas.collectionSize > 0"
+        <ngb-pagination
+          *ngIf="pagination.estibas.collectionSize > 0"
           #paginationEstibas
           class="d-flex justify-content-center pagination-rounded pagination-sm"
           [collectionSize]="pagination.estibas.collectionSize"
@@ -330,7 +354,8 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre grupo bodega</mat-label>
-            <input matInput
+            <input
+              matInput
               type="text"
               formControlName="nombre"
               placeholder="Nombre del grupo de la bodega"
@@ -339,7 +364,9 @@
             />
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
-            <mat-label for="Aplica_Separacion_Categorias">Fecha de vencimiento?</mat-label>
+            <mat-label for="Aplica_Separacion_Categorias"
+              >Fecha de vencimiento?</mat-label
+            >
             <mat-select
               formControlName="fechaVencimiento"
               placeholder="Fecha de vencimiento?"
@@ -350,7 +377,9 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
-            <mat-label for="Aplica_Separacion_Categorias">Presentación?</mat-label>
+            <mat-label for="Aplica_Separacion_Categorias"
+              >Presentación?</mat-label
+            >
             <mat-select
               formControlName="presentacion"
               placeholder="Presentación?"
@@ -364,11 +393,7 @@
       </form>
     </div>
     <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-danger"
-        (click)="_modal.close()"
-      >
+      <button type="button" class="btn btn-danger" (click)="_modal.close()">
         Cancelar
       </button>
       <button
@@ -421,9 +446,7 @@
             />
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
-            <mat-label for="Aplica_Separacion_Categorias"
-              >Estado?</mat-label
-            >
+            <mat-label for="Aplica_Separacion_Categorias">Estado?</mat-label>
             <mat-select
               formControlName="estado"
               id="Estado"
@@ -439,11 +462,7 @@
       </form>
     </div>
     <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-danger"
-        (click)="_modal.close()"
-      >
+      <button type="button" class="btn btn-danger" (click)="_modal.close()">
         Cancelar
       </button>
       <button
@@ -464,14 +483,12 @@
       </h4>
     </div>
     <div class="modal-body">
-      <img [src]="alertOptionMapa.imageUrl" alt="" class=" w-100 h-100">
+      <img [src]="alertOptionMapa.imageUrl" alt="" class="w-100 h-100" />
     </div>
     <div class="modal-footer">
-      <button
-        type="button"
-        class="btn btn-danger"
-        (click)="_modal.close()"
-      >Cerrar</button>
+      <button type="button" class="btn btn-danger" (click)="_modal.close()">
+        Cerrar
+      </button>
     </div>
   </ng-template>
 
@@ -482,7 +499,13 @@
   </ng-template>
 
   <ng-template #notDataEstibas>
-    <app-not-data *ngIf="grupoSelected.id != null" [loading]="loadingEstibas"></app-not-data>
-    <app-not-data *ngIf="grupoSelected.id == null" text="Seleccione un grupo para ver las estibas en ese grupo"></app-not-data>
+    <app-not-data
+      *ngIf="grupoSelected.id != null"
+      [loading]="loadingEstibas"
+    ></app-not-data>
+    <app-not-data
+      *ngIf="grupoSelected.id == null"
+      text="Seleccione un grupo para ver las estibas en ese grupo"
+    ></app-not-data>
   </ng-template>
 </div>

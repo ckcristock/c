@@ -46,7 +46,7 @@
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
             <th>Código</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -63,14 +63,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       getBank(bank); openConfirm(add, 'Actualizar banco')
@@ -80,7 +80,7 @@
                   <a
                     *ngIf="bank.status == 'Activo'"
                     href="javascript: void(0);"
-                    class="text-danger dropdown-item waves-light caja-botones"
+                    class="text-danger dropdown-item"
                     (click)="activateOrInactivate(bank, 'Inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -88,7 +88,7 @@
                   <a
                     *ngIf="bank.status == 'Inactivo'"
                     href="javascript: void(0);"
-                    class="text-success dropdown-item waves-light caja-botones"
+                    class="text-success dropdown-item"
                     (click)="activateOrInactivate(bank, 'Activo')"
                   >
                     <i class="fas fa-check"></i> Activar</a

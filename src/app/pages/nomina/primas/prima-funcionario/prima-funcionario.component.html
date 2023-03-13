@@ -23,7 +23,9 @@
             <span
               ><i
                 class="fas"
-                [class]="!donwloadingPdfs ? 'fa-file-pdf' : 'fa-spinner fa-spin'"
+                [class]="
+                  !donwloadingPdfs ? 'fa-file-pdf' : 'fa-spinner fa-spin'
+                "
               ></i>
               {{ !donwloadingPdfs ? "Descargar" : "Descargando" }}</span
             >
@@ -88,11 +90,11 @@
                 {{ empleado.first_surname }} {{ empleado.second_surname }}
               </td>
               <td class="text-right">
-                ${{ empleado.avg_salary | currency : "" : "" }}
+                ${{ empleado.avg_salary | number : "1.2-2" }}
               </td>
               <td class="text-center">{{ empleado.worked_days }}</td>
               <td class="text-right">
-                ${{ empleado.bonus | currency : "" : "" }}
+                ${{ empleado.bonus | number : "1.2-2" }}
               </td>
               <!-- <td class="align-middle" *ngIf="empleados.status=='pagado'">
                 <button
@@ -108,7 +110,7 @@
                 <div ngbDropdown container="body" class="dropdown-primary">
                   <button
                     ngbDropdownToggle
-                    class="btn btn-primary btn-sm waves-light"
+                    class="btn btn-primary btn-sm"
                     type="button"
                   >
                     <i class="mdi mdi-chevron-down"></i>
@@ -124,7 +126,7 @@
                   </button>
                   <div ngbDropdownMenu>
                     <!-- <button
-                      class="dropdown-item waves-light caja-botones"
+                      class="dropdown-item "
                       [ngClass]="{
                         'text-info': vacation.pay_vacations.length > 0,
                         'text-success': vacation.pay_vacations.length == 0
@@ -141,7 +143,7 @@
                       {{ vacation.pay_vacations.length > 0 ? "Ver" : "Pagar" }}
                     </button> -->
                     <button
-                      class="dropdown-item text-danger waves-light caja-botones"
+                      class="dropdown-item text-danger"
                       *ngIf="empleados.status == 'pagado'"
                       (click)="getOneReportPdfs(empleado.id, empleados.period)"
                     >
@@ -166,14 +168,15 @@
       ></mat-paginator>
 
       <div class="alert alert-info text-center" role="alert">
-        <b>TOTAL PRIMA: </b>$ {{ empleados.total_primas | currency : "" : "" }}
-      </div>
-    </ng-container>.
+        <b>TOTAL PRIMA: </b>$ {{ empleados.total_primas | number : "1.2-2" }}
+      </div> </ng-container
+    >.
 
     <ng-container>
       <div *ngIf="!habilitarPagar && empleados.status != 'pagado'" >
         <div class="alert alert-danger m-0 text-center" role="alert">
           Solo podrá pagar primas en los meses de Junio y en Diciembre
+
         </div>
       </div>
       <button
@@ -184,7 +187,6 @@
         Pagar
       </button>
     </ng-container>
-
   </div>
 </div>
 

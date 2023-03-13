@@ -89,7 +89,7 @@
             <th scope="col">Fecha Inicial</th>
             <th scope="col">Fecha Final</th>
             <th scope="col" class="col-1">Estado</th>
-            <th scope="col" ><i class="mdi mdi-chevron-down"></i></th>
+            <th scope="col"><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -137,7 +137,7 @@
                 <div ngbDropdown container="body" class="dropdown-primary">
                   <button
                     ngbDropdownToggle
-                    class="btn btn-primary btn-sm waves-light"
+                    class="btn btn-primary btn-sm"
                     type="button"
                   >
                     <i class="mdi mdi-chevron-down"></i>
@@ -145,14 +145,14 @@
                   <div ngbDropdownMenu>
                     <a
                       *ngIf="proces.file != null"
-                      class="dropdown-item text-info waves-light caja-botones"
+                      class="dropdown-item text-info"
                       (click)="download(proces.file)"
                       href="javascript:void(0)"
                     >
                       <i class="fas fa-file"></i> Ver evidencia
                     </a>
                     <a
-                      class="dropdown-item text-success waves-light caja-botones"
+                      class="dropdown-item text-success"
                       [routerLink]="[
                         '/rrhh/procesos/disciplinarios/',
                         proces.id
@@ -169,7 +169,7 @@
                         '/rrhh/procesos/disciplinarios/cerrar/',
                         proces.id
                       ]"
-                      class="dropdown-item text-danger waves-light caja-botones"
+                      class="dropdown-item text-danger"
                     >
                       <i class="fa fa-times-circle"></i> Cerrar proceso
                     </a>
@@ -180,7 +180,7 @@
                       "
                       (click)="aprobar(proces.id)"
                       href="javascript:void(0)"
-                      class="dropdown-item text-success waves-light caja-botones"
+                      class="dropdown-item text-success"
                     >
                       <i class="far fa-thumbs-up"></i> Aprobar
                     </a>
@@ -356,7 +356,7 @@
                       Memorando |
                       <i styles="color:gray;">
                         {{
-                          historyInf.created_at_memorandum | date: "MM-dd-yy"
+                          historyInf.created_at_memorandum | date : "MM-dd-yy"
                         }}
                       </i> </b
                     ><br />
@@ -376,7 +376,7 @@
                   <b lass="fs-3">
                     Proceso Disciplinario |
                     <i styles="color:gray;">
-                      {{ process.created_at_process | date: "MM-dd-yy" }}
+                      {{ process.created_at_process | date : "MM-dd-yy" }}
                     </i> </b
                   ><br />
                   <strong>Categoria:</strong> <b> Sin Categoria </b>

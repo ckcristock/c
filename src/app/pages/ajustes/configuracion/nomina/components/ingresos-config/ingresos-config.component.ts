@@ -39,7 +39,7 @@ export class IngresosConfigComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this._suscription = this.open.subscribe(()=>{
+    this._suscription = this.open.subscribe(() => {
       this._modal.open(this.modalIngreso, 'md', false)
     });
     this.createForm();
@@ -55,7 +55,7 @@ export class IngresosConfigComponent implements OnInit {
     })
   }
 
-  formatter = (cuentas: { Nombre_Niif: string , Codigo_Niif: string }) => cuentas.Codigo_Niif+' || '+cuentas.Nombre_Niif;
+  formatter = (cuentas: { Nombre_Niif: string, Codigo_Niif: string }) => cuentas.Codigo_Niif + ' || ' + cuentas.Nombre_Niif;
 
   search_cuenta_niif = (text$: Observable<string>) =>
     text$.pipe(
@@ -66,9 +66,9 @@ export class IngresosConfigComponent implements OnInit {
         this.searchFail = false;
       }),
       switchMap(term =>
-        this.http.get(`${environment.ruta}php/plancuentas/filtrar_cuentas.php?`, { params: { coincidencia: term}}).pipe(
-          tap((res : Array<{ Nombre_Niif: string , Codigo_Niif: string }>) => {
-            if(res.length==0){
+        this.http.get(`${environment.base_url}/php/plancuentas/filtrar_cuentas.php?`, { params: { coincidencia: term } }).pipe(
+          tap((res: Array<{ Nombre_Niif: string, Codigo_Niif: string }>) => {
+            if (res.length == 0) {
               this.searchFail = true
             }
           }),
@@ -97,7 +97,7 @@ export class IngresosConfigComponent implements OnInit {
     })
   }
 
-  save(){
+  save() {
     let params = {
       concept: this.form.value.concept,
       type: this.form.value.type,

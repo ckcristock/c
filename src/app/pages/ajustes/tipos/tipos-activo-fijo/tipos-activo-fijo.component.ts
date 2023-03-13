@@ -15,9 +15,9 @@ import { SwalService } from '../../informacion-base/services/swal.service';
 })
 export class TiposActivoFijoComponent implements OnInit {
 
-  @Output() MostrarSwal:EventEmitter<any> = new EventEmitter();
+  @Output() MostrarSwal: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild('ModalTipoActivo') ModalTipoActivo:any;
+  @ViewChild('ModalTipoActivo') ModalTipoActivo: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
   matPanel = false;
@@ -37,15 +37,15 @@ export class TiposActivoFijoComponent implements OnInit {
 
   private campoEnfocado: string;
 
-  public Cargando:boolean = false;
-  public TiposActivosFijos:Array<any> = [];
-  public tipoActivosFijos:any = {};
+  public Cargando: boolean = false;
+  public TiposActivosFijos: Array<any> = [];
+  public tipoActivosFijos: any = {};
   // public Funcionario:any = JSON.parse(localStorage['User']);
- /*  public SwalDataObj:any = {
-    icon: 'warning',
-    title: 'Alerta',
-    msg: 'Default'
-  }; */
+  /*  public SwalDataObj:any = {
+     icon: 'warning',
+     title: 'Alerta',
+     msg: 'Default'
+   }; */
   /* public TipoActivoModel:any = {
     Nombre_Tipo_Activo: '',
     Categoria: '',
@@ -60,25 +60,25 @@ export class TiposActivoFijoComponent implements OnInit {
     Id_Plan_Cuenta_Credito_Depreciacion_PCGA: '',
     Id_Plan_Cuenta_Credito_Depreciacion_NIIF: ''
   }; */
-  public Filtros:any = {
-    nombre:'',
-    categoria:'',
-    vida_util:'',
-    depreciacion:''
+  public Filtros: any = {
+    nombre: '',
+    categoria: '',
+    vida_util: '',
+    depreciacion: ''
   };
   //public CuentaCreditoDepreciacionPcga:any='';
-  public CuentaCreditoDepreciacionNiif:any='';
-  public CuentaDepreciacionNiif:any = '';
+  public CuentaCreditoDepreciacionNiif: any = '';
+  public CuentaDepreciacionNiif: any = '';
   //public CuentaDepreciacionPcga:any = '';
-  public CuentaNiif:any = '';
+  public CuentaNiif: any = '';
   //public CuentaPcga:any = '';
 
   //Paginación
   public maxSize = 5;
   public pageSize = 10;
-  public TotalItems:number;
+  public TotalItems: number;
   public page = 1;
-  public InformacionPaginacion:any = {
+  public InformacionPaginacion: any = {
     desde: 0,
     hasta: 0,
     total: 0
@@ -120,8 +120,8 @@ export class TiposActivoFijoComponent implements OnInit {
     });
   }
 
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
@@ -130,8 +130,8 @@ export class TiposActivoFijoComponent implements OnInit {
     }
   }
 
-  selCampoEnfocado(tipo){
-    this.campoEnfocado=tipo;
+  selCampoEnfocado(tipo) {
+    this.campoEnfocado = tipo;
   }
 
   gettipoActivosFijos(tipoActivosFijos) {
@@ -156,15 +156,15 @@ export class TiposActivoFijoComponent implements OnInit {
       Id_Plan_Cuenta_Credito_Depreciacion_PCGA: this.tipoActivosFijos.Id_Plan_Cuenta_Credito_Depreciacion_NIIF,
       //Id_Plan_Cuenta_Credito_Depreciacion_PCGA: this.tipoActivosFijos.Id_Plan_Cuenta_Credito_Depreciacion_PCGA
     });
-    this.CuentaNiif=this.tipoActivosFijos.Cuenta_Niif;
-    this.CuentaDepreciacionNiif=this.tipoActivosFijos.Cuenta_Depreciacion_NIIF;
-    this.CuentaCreditoDepreciacionNiif=this.tipoActivosFijos.Cuenta_Credito_Niif;
+    this.CuentaNiif = this.tipoActivosFijos.Cuenta_Niif;
+    this.CuentaDepreciacionNiif = this.tipoActivosFijos.Cuenta_Depreciacion_NIIF;
+    this.CuentaCreditoDepreciacionNiif = this.tipoActivosFijos.Cuenta_Credito_Niif;
   }
 
   closeResult = '';
   public openConfirm(confirm, titulo) {
     this.title = titulo;
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md'}).result.then((result) => {
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -173,16 +173,16 @@ export class TiposActivoFijoComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    this.CuentaNiif='';
-    this.CuentaCreditoDepreciacionNiif='';
-    this.CuentaDepreciacionNiif='';
+    this.CuentaNiif = '';
+    this.CuentaCreditoDepreciacionNiif = '';
+    this.CuentaDepreciacionNiif = '';
   }
 
   closeModal() {
     this.modalService.dismissAll();
   }
 
-  activateOrInactivate(tipoActivo,estado) {
+  activateOrInactivate(tipoActivo, estado) {
     let dataEstadoTipo = {
       Id_Tipo_Activo_Fijo: tipoActivo.Id_Tipo_Activo_Fijo,
       Estado: estado
@@ -197,7 +197,7 @@ export class TiposActivoFijoComponent implements OnInit {
       showCancel: true
     }).then((result) => {
       if (result.isConfirmed) {
-          this.http.post(environment.ruta+'php/tipoactivo/guardar_tipo_activo.php', data).subscribe((r: any) => {
+        this.http.post(environment.base_url + '/php/tipoactivo/guardar_tipo_activo.php', data).subscribe((r: any) => {
           this._swal.show({
             icon: 'success',
             title: 'Tarea completada con éxito!',
@@ -205,7 +205,7 @@ export class TiposActivoFijoComponent implements OnInit {
             timer: 1000,
             showCancel: false
           })
-          this.ConsultaFiltrada(true,this.page);
+          this.ConsultaFiltrada(true, this.page);
         })
       }
     })
@@ -216,7 +216,7 @@ export class TiposActivoFijoComponent implements OnInit {
       to = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuuNncc--*",
       mapping = {};
 
-    for (var i = 0, j = from.length; i < j; i++){
+    for (var i = 0, j = from.length; i < j; i++) {
 
       mapping[from.charAt(i)] = to.charAt(i);
     }
@@ -238,19 +238,19 @@ export class TiposActivoFijoComponent implements OnInit {
 
   calcularPorcentajeDepreciacion() {
     let porcentaje = (100 / parseInt(this.form.value.Vida_Util)).toFixed(4);
-      this.form.patchValue({
-        Porcentaje_Depreciacion_Anual_PCGA: porcentaje,
-        Porcentaje_Depreciacion_Anual: porcentaje,
-        Vida_Util_PCGA: this.form.value.Vida_Util
-      })
+    this.form.patchValue({
+      Porcentaje_Depreciacion_Anual_PCGA: porcentaje,
+      Porcentaje_Depreciacion_Anual: porcentaje,
+      Vida_Util_PCGA: this.form.value.Vida_Util
+    })
   }
 
-  GuardarTipoActivo(){
+  GuardarTipoActivo() {
     let data = new FormData();
     let modelo = this.normalize(JSON.stringify(this.form.value));
     data.append("modelo", modelo);
 
-    this.http.post(environment.ruta+'php/tipoactivo/guardar_tipo_activo.php', data).subscribe((r: any) => {
+    this.http.post(environment.base_url + '/php/tipoactivo/guardar_tipo_activo.php', data).subscribe((r: any) => {
       if (r.codigo == 'success') {
         this._swal.show({
           icon: 'success',
@@ -259,21 +259,21 @@ export class TiposActivoFijoComponent implements OnInit {
           timer: 1000,
           showCancel: false
         })
-        this.ConsultaFiltrada(true,this.page);
+        this.ConsultaFiltrada(true, this.page);
         this.closeModal();
       }
     })
   }
 
-  SetFiltros(paginacion:boolean) {
+  SetFiltros(paginacion: boolean) {
 
-    let params:any = {};
+    let params: any = {};
 
     params.tam = this.pageSize;
 
-    if(paginacion === true){
+    if (paginacion === true) {
       params.pag = this.page;
-    }else{
+    } else {
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
     }
@@ -298,21 +298,21 @@ export class TiposActivoFijoComponent implements OnInit {
     return queryString;
   }
 
-  ConsultaFiltrada(paginacion:boolean = false, event = 1) {
+  ConsultaFiltrada(paginacion: boolean = false, event = 1) {
     this.page = event;
     var params = this.SetFiltros(paginacion);
 
-    if(params === ''){
+    if (params === '') {
       this.ResetValues();
       return;
     }
 
     this.Cargando = true;
-    this.http.get(environment.ruta+'php/tipoactivo/get_lista_tipo_activo.php?'+params).subscribe((data:any) => {
+    this.http.get(environment.base_url + '/php/tipoactivo/get_lista_tipo_activo.php?' + params).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this.TiposActivosFijos = data.query_result;
         this.TotalItems = data.numReg;
-      }else{
+      } else {
         this.TiposActivosFijos = [];
       }
 
@@ -321,18 +321,18 @@ export class TiposActivoFijoComponent implements OnInit {
     });
   }
 
-  ResetValues(){
+  ResetValues() {
     this.Filtros = {
-      nombre:'',
-      categoria:'',
-      vida_util:'',
-      depreciacion:''
+      nombre: '',
+      categoria: '',
+      vida_util: '',
+      depreciacion: ''
     };
   }
 
-  SetInformacionPaginacion(){
-    var calculoHasta = (this.page*this.pageSize);
-    var desde = calculoHasta-this.pageSize+1;
+  SetInformacionPaginacion() {
+    var calculoHasta = (this.page * this.pageSize);
+    var desde = calculoHasta - this.pageSize + 1;
     var hasta = calculoHasta > this.TotalItems ? this.TotalItems : calculoHasta;
 
     this.InformacionPaginacion['desde'] = desde;
@@ -343,25 +343,25 @@ export class TiposActivoFijoComponent implements OnInit {
   //formatter1 = (x: { Nombre_Cuenta: string }) => x.Nombre_Cuenta;
   formatter2 = (x: { Nombre_Niif: string }) => x.Nombre_Niif;
   search_cuenta_niif = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(300),
-    distinctUntilChanged(),
-    tap(() => (this.buscandoCuenta[this.campoEnfocado] = true)),
-    switchMap(term =>
-      this.http.get<readonly string[]>(environment.ruta + "php/plancuentas/filtrar_cuentas.php", { params: { coincidencia: term, tipo: 'niif' }}).pipe(
-        tap(() => this.busquedaCuentaFallida[this.campoEnfocado] = false),
-        catchError(() => {
-          this.busquedaCuentaFallida[this.campoEnfocado] = true;
-          return of([]);
-        })
-      )
-    ),
-    tap(() => (this.buscandoCuenta[this.campoEnfocado] = false))
-  );
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.buscandoCuenta[this.campoEnfocado] = true)),
+      switchMap(term =>
+        this.http.get<readonly string[]>(environment.base_url + "/php/plancuentas/filtrar_cuentas.php", { params: { coincidencia: term, tipo: 'niif' } }).pipe(
+          tap(() => this.busquedaCuentaFallida[this.campoEnfocado] = false),
+          catchError(() => {
+            this.busquedaCuentaFallida[this.campoEnfocado] = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.buscandoCuenta[this.campoEnfocado] = false))
+    );
 
-  AsignarCuenta(e: NgbTypeaheadSelectItemEvent,tipo: string) {
-    this.form.get(tipo+'_NIIF').setValue(e.item.Id_Plan_Cuentas);
-    this.form.get(tipo+'_PCGA').setValue(e.item.Id_Plan_Cuentas);
+  AsignarCuenta(e: NgbTypeaheadSelectItemEvent, tipo: string) {
+    this.form.get(tipo + '_NIIF').setValue(e.item.Id_Plan_Cuentas);
+    this.form.get(tipo + '_PCGA').setValue(e.item.Id_Plan_Cuentas);
   }
 }
 

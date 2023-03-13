@@ -23,7 +23,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!Cargando && Documentos.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -61,7 +60,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   *ngIf="
                     documento.Estado == 'Primer Conteo' ||
                     documento.Estado == 'Pendiente Primer Conteo' ||
@@ -74,7 +73,7 @@
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     *ngIf="
                       documento.Estado == 'Pendiente Primer Conteo' &&
                       documento.Tipo == 'General'
@@ -88,7 +87,7 @@
                     <i class="ti-printer"></i> Continuar conteo
                   </a>
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     *ngIf="
                       documento.Estado == 'Segundo Conteo' &&
                       documento.Tipo == 'General'
@@ -113,7 +112,7 @@
                     <i class="ti-printer"></i> Ajustar documentos
                   </a>
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     *ngIf="
                       documento.Estado == 'Primer Conteo' &&
                       documento.Tipo == 'General'
@@ -139,7 +138,7 @@
                   </a>
                   <!-- cambiar estados -->
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     *ngIf="
                       documento.Estado == 'Haciendo Primer Conteo' &&
                       miPerfil == '16' &&
@@ -154,14 +153,17 @@
                     }"
                     href="javascript:void(0)"
                     (confirm)="
-                      CambiarEstadoDocumento('Haciendo Primer Conteo', documento)
+                      CambiarEstadoDocumento(
+                        'Haciendo Primer Conteo',
+                        documento
+                      )
                     "
                   >
                     <i class="ti-printer"></i> Cambiar estado primer conteo
                   </a>
                   <!-- cambiar estados -->
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     *ngIf="
                       documento.Estado == 'Haciendo Segundo Conteo' &&
                       miPerfil == '16' &&
@@ -177,7 +179,10 @@
                     }"
                     href="javascript:void(0)"
                     (confirm)="
-                      CambiarEstadoDocumento('Haciendo Segundo Conteo', documento)
+                      CambiarEstadoDocumento(
+                        'Haciendo Segundo Conteo',
+                        documento
+                      )
                     "
                   >
                     <i class="ti-printer"></i> Cambiar estado segundo conteo
@@ -186,7 +191,7 @@
                         Estados para inventario auditable
                         */ -->
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     *ngIf="
                       documento.Estado == 'Pendiente Primer Conteo' &&
                       documento.Tipo == 'Auditoria'
@@ -197,7 +202,7 @@
                     <i class="ti-printer"></i> Continuar conteo
                   </a>
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     *ngIf="
                       documento.Estado == 'Segundo Conteo' &&
                       documento.Tipo == 'Auditoria'
@@ -223,7 +228,7 @@
                     <i class="ti-printer"></i> Ajustar documentos
                   </a>
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     *ngIf="
                       documento.Estado == 'Primer Conteo' &&
                       documento.Tipo == 'Auditoria'
@@ -248,7 +253,7 @@
                     <i class="ti-printer"></i> Reconteo
                   </a>
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     *ngIf="
                       documento.Estado == 'Haciendo Primer Conteo' &&
                       miPerfil == '16' &&
@@ -263,13 +268,16 @@
                       cancelButtonText: 'Cancelar'
                     }"
                     (confirm)="
-                      CambiarEstadoDocumento('Haciendo Primer Conteo', documento)
+                      CambiarEstadoDocumento(
+                        'Haciendo Primer Conteo',
+                        documento
+                      )
                     "
                   >
                     <i class="ti-printer"></i> Cambiar estado primer conteo
                   </a>
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     *ngIf="
                       documento.Estado == 'Haciendo Segundo Conteo' &&
                       miPerfil == '16' &&
@@ -285,7 +293,10 @@
                       type: 'warning'
                     }"
                     (confirm)="
-                      CambiarEstadoDocumento('Haciendo Segundo Conteo', documento)
+                      CambiarEstadoDocumento(
+                        'Haciendo Segundo Conteo',
+                        documento
+                      )
                     "
                   >
                     <i class="ti-printer"></i> Cambiar estado segundo conteo
@@ -378,7 +389,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!Cargando2 && Inventarios_Terminados.length > 0; else notData2"
       >
         <thead class="bg-light">
@@ -403,7 +413,7 @@
               {{ item.Id_Inventario_Fisico_Nuevo }}
             </td>
             <td class="align-middle">
-              {{ item.Fecha | date: "dd/MM/yyyy hh:mm:ss a" }}
+              {{ item.Fecha | date : "dd/MM/yyyy hh:mm:ss a" }}
             </td>
             <td class="align-middle">{{ item.Nombre_Funcionario_Autorizo }}</td>
             <td class="align-middle">{{ item.Nombre_Bodega }}</td>
@@ -412,7 +422,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -422,7 +432,7 @@
                     *ngIf="item.Tipo != 'Auditoria'; else elseTemplate"
                   >
                     <a
-                      class="dropdown-item waves-light caja-botones"
+                      class="dropdown-item"
                       [routerLink]="[
                         '/inventario/inventariofisicoestibas',
                         item.Id_Inventario_Fisico_Nuevo
@@ -433,7 +443,7 @@
                   </ng-container>
                   <ng-template #elseTemplate>
                     <a
-                      class="dropdown-item waves-light caja-botones"
+                      class="dropdown-item"
                       [routerLink]="[
                         '/inventarioauditor',
                         item.Id_Inventario_Fisico_Nuevo

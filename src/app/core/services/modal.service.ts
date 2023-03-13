@@ -18,8 +18,8 @@ export class ModalService {
     this.modalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: size, scrollable: scroll });
   }
   close() {
-    /* this.modalService.dismissAll(); */
-    this.modalRef.dismiss(this.modalRef);
+    this.modalService.dismissAll();
+    /* this.modalRef.dismiss(this.modalRef); */
   }
   openSm(content) {
     this.modalService.open(content, { size: 'sm' });

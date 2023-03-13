@@ -176,7 +176,7 @@ export class CrearCotizacionComponent implements OnInit {
       customer_id: [null, Validators.required],
       destinity_id: [null, Validators.required],
       trm: [this.trm, Validators.required],
-      description: ['', Validators.required],
+      description: [''],
       budget_included: ['', Validators.required],
       budget: [''],
       budget_id: [''],
@@ -192,7 +192,7 @@ export class CrearCotizacionComponent implements OnInit {
       unit_value_prorrateado_usd: 0,
       format_code: [''],
       code: [''],
-      third_party_person_id: [null]
+      third_party_person_id: [null, Validators.required]
     });
   }
 

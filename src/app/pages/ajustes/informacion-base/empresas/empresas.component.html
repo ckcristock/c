@@ -7,36 +7,37 @@
     </div>
     <hr class="line" />
     <div class="rounded-top table-responsive">
-      <table
-        class="table table-bordered table-striped table-sm"
-
-      >
+      <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
             <th>Razón social</th>
             <th>NIT</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of enterprises" class="text-center">
             <td class="align-middle">{{ item.name }}</td>
             <td class="align-middle">{{ item.social_reason }}</td>
-            <td class="align-middle">{{ item.document_number | number }}-{{item.verification_digit}}</td>
+            <td class="align-middle">
+              {{ item.document_number | number }}-{{ item.verification_digit }}
+            </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item text-info waves-light caja-botones"
-                    [routerLink]="'/ajustes/configuracion/configuracion-empresa/informacion'"
+                    class="dropdown-item text-info"
+                    [routerLink]="
+                      '/ajustes/configuracion/configuracion-empresa/informacion'
+                    "
                   >
                     <i class="fas fa-search-plus text-info"></i> Ver y editar</a
                   >

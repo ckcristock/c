@@ -45,7 +45,8 @@
               [value]="date"
               (dateChange)="selectedDate($event)"
               (dateInput)="selectedDate($event)"
-              name="daterange" autocomplete="off"
+              name="daterange"
+              autocomplete="off"
               required
             />
             <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
@@ -79,10 +80,17 @@
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
             <mat-label>Estado</mat-label>
-            <mat-select [(ngModel)]="filtros.est" (selectionChange)="listarComprasNacionales()">
+            <mat-select
+              [(ngModel)]="filtros.est"
+              (selectionChange)="listarComprasNacionales()"
+            >
               <mat-option value="">Todos</mat-option>
-              <mat-option *ngFor="let item of estadosCompra" [value]="item.estado">
-                {{ item.estado }}</mat-option>
+              <mat-option
+                *ngFor="let item of estadosCompra"
+                [value]="item.estado"
+              >
+                {{ item.estado }}</mat-option
+              >
               <!-- <mat-option value="Pendiente">Pendiente</mat-option>
               <mat-option value="No conforme">No Conforme</mat-option>estadosCompra
               <mat-option value="Anulada">Anulada</mat-option>
@@ -123,7 +131,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-
         *ngIf="comprasnacionales.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -151,19 +158,26 @@
               {{ compra.Funcionario }}
             </td>
             <td class="align-middle" *ngIf="checkVerCols.Fecha">
-              {{ compra.Fecha | date: "longDate" }}
+              {{ compra.Fecha | date : "longDate" }}
             </td>
-            <td class="align-middle" *ngIf="checkVerCols.Codigo">{{ compra.Codigo }}</td>
+            <td class="align-middle" *ngIf="checkVerCols.Codigo">
+              {{ compra.Codigo }}
+            </td>
             <td class="align-middle" *ngIf="checkVerCols.Proveedor">
               {{ compra.Proveedor }}
             </td>
             <td class="align-middle" *ngIf="checkVerCols.Estado">
               <span
                 class="badge {{
-                  (compra.Estado == 'Anulada') ? 'badge-danger' :
-                  (compra.Estado == 'Pendiente') ? 'badge-warning' :
-                  (compra.Estado == 'Aprobada') ? 'badge-success' :
-                  (compra.Estado == 'Rechazada') ? 'badge-danger' : ''
+                  compra.Estado == 'Anulada'
+                    ? 'badge-danger'
+                    : compra.Estado == 'Pendiente'
+                    ? 'badge-warning'
+                    : compra.Estado == 'Aprobada'
+                    ? 'badge-success'
+                    : compra.Estado == 'Rechazada'
+                    ? 'badge-danger'
+                    : ''
                 }}"
                 >{{ compra.Estado }}
               </span>
@@ -179,7 +193,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm  waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -191,7 +205,7 @@
                       compra.Estado != 'Recibida' &&
                       compra.Estado_Aprobacion == 'Rechazada'
                     "
-                    class="dropdown-item text-info waves-light  caja-botones"
+                    class="dropdown-item text-info   "
                     href=""
                     [routerLink]="[
                       '/comprasnacionaleseditar',
@@ -201,7 +215,7 @@
                     <i class="fas fa-edit"></i> Editar</a
                   > -->
                   <a
-                    class="dropdown-item text-primary waves-light caja-botones"
+                    class="dropdown-item text-primary"
                     role="button"
                     [routerLink]="[
                       '/compras/ver-nacional',
@@ -214,8 +228,8 @@
                   <!-- <a
                     class="
                       dropdown-item
-                      waves-light
-                      caja-botones
+
+
                     "
                     href="{{
                       environment.ruta
@@ -228,23 +242,33 @@
                   </a> -->
                   <a
                     *ngIf="compra.Estado == 'Anulada'"
-                    class="dropdown-item text-success waves-light caja-botones"
+                    class="dropdown-item text-success"
                     role="button"
-                    (click)="setEstadoCompra(compra.Id_Orden_Compra_Nacional, 'Pendiente')"
+                    (click)="
+                      setEstadoCompra(
+                        compra.Id_Orden_Compra_Nacional,
+                        'Pendiente'
+                      )
+                    "
                   >
                     <i class="fa fa-check"></i> Activar</a
                   >
                   <a
                     *ngIf="compra.Estado == 'Pendiente'"
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     role="button"
-                    (click)="setEstadoCompra(compra.Id_Orden_Compra_Nacional, 'Anulada')"
+                    (click)="
+                      setEstadoCompra(
+                        compra.Id_Orden_Compra_Nacional,
+                        'Anulada'
+                      )
+                    "
                   >
                     <i class="fa fa-ban"></i> Anular</a
                   >
                   <!-- <a
                     *ngIf="compra.Estado != 'Anulada'"
-                    class="dropdown-item text-danger waves-light  caja-botones"
+                    class="dropdown-item text-danger   "
                     href=""
                     [swal]="anulacion"
                     (confirm)="

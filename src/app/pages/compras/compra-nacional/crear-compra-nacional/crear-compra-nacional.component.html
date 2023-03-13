@@ -329,7 +329,7 @@
                       <span
                         >${{
                           formCompra.value.Productos[i].Costo
-                            | currency : "COP" : "symbol"
+                          | number : "1.2-2"
                         }}</span
                       >
                     </div>
@@ -409,7 +409,7 @@
                     type="text"
                     readonly
                     ><!-- (change)=" CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)" -->
-                    $ {{ item.Total | currency : "COP" : "symbol" }}
+                    $ {{ item.Total | number : "1.2-2" }}
                   </span>
                 </td>
                 <td class="align-middle text-center">
@@ -449,19 +449,19 @@
                 <tr>
                   <th>( = ) Subtotal :</th>
                   <td class="d-flex justify-content-end">
-                    $ {{ Subtotal_F | currency : "COP" }}
+                    $ {{ Subtotal_F | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>
                   <th>( + ) Iva :</th>
                   <td class="d-flex justify-content-end">
-                    $ {{ Iva_F | currency : "COP" }}
+                    $ {{ Iva_F | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>
                   <th>( = ) Total :</th>
                   <td class="d-flex justify-content-end">
-                    $ {{ Total_F | currency : "COP" }}
+                    $ {{ Total_F | number : "1.2-2" }}
                   </td>
                 </tr>
               </tbody>

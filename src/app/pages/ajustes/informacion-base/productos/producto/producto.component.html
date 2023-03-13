@@ -1,13 +1,9 @@
 <ng-container *ngIf="!cargando.valor(); else notProduct">
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-lg-4">
       <div class="card">
         <div class="card-body">
-          <div class="row card-title d-flex justify-content-between">
-            <div class="col px-0">
-              <h4 class="text-primary">Actividad</h4>
-            </div>
-          </div>
+          <h5 class="text-primary">Actividad</h5>
           <hr class="line" />
           <div class="text-center justify-content-center">
             <ng-container *ngIf="Actividades.length > 0; else notActividad">
@@ -20,7 +16,10 @@
                           <div class="d-flex justify-content-between text-left">
                             <h6>
                               <!-- <i [class]="item.icon"></i> {{ item.title }} <br /> -->
-                              <div class="text-muted" style="font-size: x-small">
+                              <div
+                                class="text-muted"
+                                style="font-size: x-small"
+                              >
                                 <i class="fas fa-clock me-1"></i>
                                 {{ item.Fecha | date : "MMM d, y, h:mm a" }}
                               </div>
@@ -49,24 +48,24 @@
         </div>
       </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-lg-8">
       <div class="row">
-        <div class="col-md-3">
-          <div class="card">
-            <div class="card-body">
-              <div class="text-center align-middle p-0">
-                <img
-                  onerror="this.src='../../../../assets/images/not-available.png'"
-                  [src]="productoPorVer.Foto"
-                  class="img-fluid img-product"
-                  alt="Vista previa del producto"
-                />
-              </div>
+        <div class="col-md-3 d-flex align-items-stretch">
+          <div class="card w-100">
+            <div
+              class="card-body d-flex align-items-center justify-content-center"
+            >
+              <img
+                onerror="this.src='../../../../assets/images/not-available.png'"
+                [src]="productoPorVer.Foto"
+                class="img-fluid img-product mx-auto"
+                alt="Vista previa del producto"
+              />
             </div>
           </div>
         </div>
-        <div class="col-md-9">
-          <div class="card">
+        <div class="col-md-9 d-flex align-items-stretch">
+          <div class="card w-100">
             <div class="card-body">
               <div class="row card-title d-flex justify-content-between">
                 <div class="col px-0">
@@ -86,11 +85,19 @@
                   <tbody>
                     <tr
                       class="text-center"
-                      [ngClass]="{ 'text-danger': productoPorVer.Estado == 'Inactivo' }"
+                      [ngClass]="{
+                        'text-danger': productoPorVer.Estado == 'Inactivo'
+                      }"
                     >
-                      <td class="align-middle">{{ productoPorVer.Nombre_Comercial }}</td>
-                      <td class="align-middle">{{ productoPorVer.Categoria }}</td>
-                      <td class="align-middle">{{ productoPorVer.Subcategoria }}</td>
+                      <td class="align-middle">
+                        {{ productoPorVer.Nombre_Comercial }}
+                      </td>
+                      <td class="align-middle">
+                        {{ productoPorVer.Categoria }}
+                      </td>
+                      <td class="align-middle">
+                        {{ productoPorVer.Subcategoria }}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -121,10 +128,18 @@
                   </thead>
                   <tbody>
                     <tr class="text-center">
-                      <td class="align-middle">{{ productoPorVer.Presentacion }}</td>
-                      <td class="align-middle">{{ productoPorVer.Nom_unidad_medida }}</td>
-                      <td class="align-middle">{{ productoPorVer.Codigo_Barras }}</td>
-                      <td class="align-middle">{{ productoPorVer.Embalaje }}</td>
+                      <td class="align-middle">
+                        {{ productoPorVer.Presentacion }}
+                      </td>
+                      <td class="align-middle">
+                        {{ productoPorVer.Nom_unidad_medida }}
+                      </td>
+                      <td class="align-middle">
+                        {{ productoPorVer.Codigo_Barras }}
+                      </td>
+                      <td class="align-middle">
+                        {{ productoPorVer.Embalaje }}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -143,19 +158,28 @@
                 </div>
               </div>
               <hr class="line" />
-              <ng-container *ngIf="VariablesProducto.categoria.nom.length > 0; else notVariablesCat">
+              <ng-container
+                *ngIf="
+                  VariablesProducto.categoria.nom.length > 0;
+                  else notVariablesCat
+                "
+              >
                 <div class="rounded-top table-responsive">
                   <table class="table table-bordered table-striped table-sm">
                     <thead class="bg-light">
                       <tr class="text-center text-uppercase">
-                        <ng-container *ngFor="let item of VariablesProducto.categoria.nom">
-                          <th>{{ item.replace("_"," ") }}</th>
+                        <ng-container
+                          *ngFor="let item of VariablesProducto.categoria.nom"
+                        >
+                          <th>{{ item.replace("_", " ") }}</th>
                         </ng-container>
                       </tr>
                     </thead>
                     <tbody>
                       <tr class="text-center">
-                        <ng-container *ngFor="let item of VariablesProducto.categoria.valor">
+                        <ng-container
+                          *ngFor="let item of VariablesProducto.categoria.valor"
+                        >
                           <td class="align-middle">{{ item }}</td>
                         </ng-container>
                       </tr>
@@ -177,19 +201,32 @@
                 </div>
               </div>
               <hr class="line" />
-              <ng-container *ngIf="VariablesProducto.subcategoria.nom.length > 0; else notVariablesSubcat">
+              <ng-container
+                *ngIf="
+                  VariablesProducto.subcategoria.nom.length > 0;
+                  else notVariablesSubcat
+                "
+              >
                 <div class="rounded-top table-responsive">
                   <table class="table table-bordered table-striped table-sm">
                     <thead class="bg-light">
                       <tr class="text-center text-uppercase">
-                        <ng-container *ngFor="let item of VariablesProducto.subcategoria.nom">
-                          <th>{{ item.replace("_"," ") }}</th>
+                        <ng-container
+                          *ngFor="
+                            let item of VariablesProducto.subcategoria.nom
+                          "
+                        >
+                          <th>{{ item.replace("_", " ") }}</th>
                         </ng-container>
                       </tr>
                     </thead>
                     <tbody>
                       <tr class="text-center">
-                        <ng-container *ngFor="let item of VariablesProducto.subcategoria.valor">
+                        <ng-container
+                          *ngFor="
+                            let item of VariablesProducto.subcategoria.valor
+                          "
+                        >
                           <td class="align-middle">{{ item }}</td>
                         </ng-container>
                       </tr>
@@ -208,11 +245,20 @@
   <app-not-data [loading]="cargando.valor()"></app-not-data>
 </ng-template>
 <ng-template #notActividad>
-  <app-not-data [loading]="cargando.actividad" text="Este producto no registra actividad!"></app-not-data>
+  <app-not-data
+    [loading]="cargando.actividad"
+    text="Este producto no registra actividad!"
+  ></app-not-data>
 </ng-template>
 <ng-template #notVariablesCat>
-  <app-not-data [loading]="cargando.actividad" text="La categoría no registra varaibles para este producto"></app-not-data>
+  <app-not-data
+    [loading]="cargando.actividad"
+    text="La categoría no registra varaibles para este producto"
+  ></app-not-data>
 </ng-template>
 <ng-template #notVariablesSubcat>
-  <app-not-data [loading]="cargando.actividad" text="La subcategoría no registra varaibles para este producto"></app-not-data>
+  <app-not-data
+    [loading]="cargando.actividad"
+    text="La subcategoría no registra varaibles para este producto"
+  ></app-not-data>
 </ng-template>

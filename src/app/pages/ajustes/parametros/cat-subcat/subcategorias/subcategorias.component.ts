@@ -29,10 +29,10 @@ export class SubcategoriasComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
 
   @Input()
-  set reloadSubcategories(param:{evento: Event,filtro?:string | ''}) {
+  set reloadSubcategories(param: { evento: Event, filtro?: string | '' }) {
     if (param.evento) {
-      this.restriccionDesdeCatalogo=true;
-      this.filters.nombre=param.filtro;
+      this.restriccionDesdeCatalogo = true;
+      this.filters.nombre = param.filtro;
       this.getSubcategories();
       this.listCategories();
     }
@@ -111,12 +111,12 @@ export class SubcategoriasComponent implements OnInit {
     this.createForm();
     this.getSubcategories();
     this.listCategories();
-   /*  this.http.get(environment.ruta + 'php/lista_generales.php', {
-      params: { modulo: 'Bodega_Nuevo' },
-    })
-      .subscribe((data: any) => {
-        this.Bodegas = data;
-      }); */
+    /*  this.http.get(environment.base_url + '/php/lista_generales.php', {
+       params: { modulo: 'Bodega_Nuevo' },
+     })
+       .subscribe((data: any) => {
+         this.Bodegas = data;
+       }); */
   }
 
   openClose() {
@@ -129,12 +129,12 @@ export class SubcategoriasComponent implements OnInit {
     }
   }
 
-  openModal(content,accion,data?) {
-    this.title = accion+' subcategoria';
+  openModal(content, accion, data?) {
+    this.title = accion + ' subcategoria';
     this.fieldDinamic.clear();
-    if(accion=="Agregar"){
+    if (accion == "Agregar") {
       this.createForm();
-    }else{
+    } else {
       this.EditSubcategory(data);
     }
     this._modalSubcat.open(content, 'lg');
@@ -145,23 +145,23 @@ export class SubcategoriasComponent implements OnInit {
       Id_Subcategoria: [''],
       Nombre: ['', Validators.required],
       Separable: ['', Validators.required],
-      Id_Categoria_Nueva: [null,Validators.required],
+      Id_Categoria_Nueva: [null, Validators.required],
       Fijo: [0],
       dynamic: this.fb.array([]),
     });
 
-    this.form.get("Nombre")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
-    this.form.get("Separable")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
-    this.form.get("Id_Categoria_Nueva")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
-    this.form.get("Fijo")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("Nombre")[(this.restriccionDesdeCatalogo) ? "disable" : "enable"]();
+    this.form.get("Separable")[(this.restriccionDesdeCatalogo) ? "disable" : "enable"]();
+    this.form.get("Id_Categoria_Nueva")[(this.restriccionDesdeCatalogo) ? "disable" : "enable"]();
+    this.form.get("Fijo")[(this.restriccionDesdeCatalogo) ? "disable" : "enable"]();
   }
 
   dinamicFields() {
     let field = this.fb.group({
       id: [''],
-      label: ['',Validators.required],
-      type: ['',Validators.required],
-      required: ['',Validators.required],
+      label: ['', Validators.required],
+      type: ['', Validators.required],
+      required: ['', Validators.required],
     });
     return field;
   }
@@ -183,7 +183,7 @@ export class SubcategoriasComponent implements OnInit {
       text: 'Vamos a eliminar este campo, esta acción no se puede revertir'
     }).then((result) => {
       if (result.isConfirmed) {
-        if(item.controls.id.value){
+        if (item.controls.id.value) {
           this._subcategory.deleteVariable(item.controls.id.value).subscribe((data: any) => { });
         }
         this.fieldDinamic.removeAt(i);
@@ -198,7 +198,7 @@ export class SubcategoriasComponent implements OnInit {
     });
   }
 
-  getSubcategories(page=1) {
+  getSubcategories(page = 1) {
     this.pagination.page = page;
     this.Cargando = true;
     /* this.http
@@ -239,7 +239,7 @@ export class SubcategoriasComponent implements OnInit {
   }
 
   SaveSubcategory() {
-    if(this.form.valid){
+    if (this.form.valid) {
       /* if (this.form.get('Id_Subcategoria').value) {
         this._subcategory
           .update(this.form.value, this.Subcategory.Id_Subcategoria)
@@ -301,21 +301,21 @@ export class SubcategoriasComponent implements OnInit {
     };
   })();
 
- /*  EliminarRetencion(id) {
-    let info = id;
-    let datos = new FormData();
-    datos.append('id', info);
-    datos.append('modulo', 'Subcategoria');
-    this.http
-      .post(environment.ruta + 'php/parametros/eliminar_caja.php', datos)
-      .subscribe((data: any) => {
-        this.confirmacionSwal.title = 'Operacion Exitosa';
-        this.confirmacionSwal.text = data.mensaje;
-        this.confirmacionSwal.type = data.tipo;
-        this.confirmacionSwal.show();
-        this.getSubcategories();
-      });
-  } */
+  /*  EliminarRetencion(id) {
+     let info = id;
+     let datos = new FormData();
+     datos.append('id', info);
+     datos.append('modulo', 'Subcategoria');
+     this.http
+       .post(environment.ruta + 'php/parametros/eliminar_caja.php', datos)
+       .subscribe((data: any) => {
+         this.confirmacionSwal.title = 'Operacion Exitosa';
+         this.confirmacionSwal.text = data.mensaje;
+         this.confirmacionSwal.type = data.tipo;
+         this.confirmacionSwal.show();
+         this.getSubcategories();
+       });
+   } */
 
   public GetDetallesCategoria(id_subcategoria: string) {
     /* this.http
@@ -325,9 +325,9 @@ export class SubcategoriasComponent implements OnInit {
       .subscribe((data: any) => {
         if (data.codigo == 'success') {
           this.Retencion = data.query_result; */
-    this._subcategory.getSubCategorias( { idSubcategoria: id_subcategoria })
+    this._subcategory.getSubCategorias({ idSubcategoria: id_subcategoria })
       .subscribe((res: any) => {
-        if(res.code == 200){
+        if (res.code == 200) {
           this.Retencion = res.data.data;
           this.EditFlag = true;
           this.modal.show();
@@ -344,15 +344,15 @@ export class SubcategoriasComponent implements OnInit {
       });
   }
 
-  activateSubcategory(id,state) {
+  activateSubcategory(id, state) {
     this._swalService.show({
       title: '¿Estás seguro(a)?',
-      text: '¡Esta subcategoría se '+((state==0)?'anulará!':'reactivará!'),
+      text: '¡Esta subcategoría se ' + ((state == 0) ? 'anulará!' : 'reactivará!'),
       icon: 'question',
       showCancel: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this._subcategory.changeActive(id,{activo: state})
+        this._subcategory.changeActive(id, { activo: state })
           .subscribe((res: any) => {
             this.getSubcategories();
             this._swalService.show({

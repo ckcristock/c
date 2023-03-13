@@ -47,7 +47,7 @@
             <th>Nombre</th>
             <th>Código</th>
             <th>NIT</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -65,14 +65,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       getData(pension);
@@ -83,7 +83,7 @@
                   <a
                     *ngIf="pension.status == 'Activo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     (click)="activateOrInactivate(pension, 'Inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -91,7 +91,7 @@
                   <a
                     *ngIf="pension.status == 'Inactivo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-success waves-light caja-botones"
+                    class="dropdown-item text-success"
                     (click)="activateOrInactivate(pension, 'Activo')"
                   >
                     <i class="fas fa-check"></i> Activar</a
@@ -146,7 +146,11 @@
             required
           />
         </mat-form-field>
-        <mat-form-field class="col-md-6" *ngIf="boolNuevoFondo" appearance="outline">
+        <mat-form-field
+          class="col-md-6"
+          *ngIf="boolNuevoFondo"
+          appearance="outline"
+        >
           <mat-label>Código</mat-label>
           <input
             matInput
@@ -157,7 +161,11 @@
             required
           />
         </mat-form-field>
-        <mat-form-field class="col-md-6" *ngIf="boolNuevoFondo" appearance="outline">
+        <mat-form-field
+          class="col-md-6"
+          *ngIf="boolNuevoFondo"
+          appearance="outline"
+        >
           <mat-label>NIT</mat-label>
           <input
             matInput

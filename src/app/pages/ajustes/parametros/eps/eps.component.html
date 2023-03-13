@@ -12,10 +12,7 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -56,7 +53,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-
         *ngIf="!loading && epss.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -64,7 +60,7 @@
             <th scope="col">Nombre</th>
             <th scope="col">Código EPS</th>
             <th scope="col">Nit EPS</th>
-            <th scope="col" ><i class="mdi mdi-chevron-down"></i></th>
+            <th scope="col"><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -82,14 +78,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="getEps(eps); openConfirm(add, 'Actualizar EPS')"
                   >
@@ -98,7 +94,7 @@
                   <a
                     *ngIf="eps.status === 'Activo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     (click)="anularOActivar(eps, 'Inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -106,7 +102,7 @@
                   <a
                     *ngIf="eps.status === 'Inactivo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-success waves-light caja-botones"
+                    class="dropdown-item text-success"
                     (click)="anularOActivar(eps, 'Activo')"
                   >
                     <i class="fas fa-check"></i> Activar</a

@@ -1,1 +1,10 @@
-<app-crear-apu-conjunto (obtenerDato)="getData()" [title]="'Editar conjunto'" [data]="data" [id]="id" *ngIf="data"></app-crear-apu-conjunto>
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<app-crear-apu-conjunto
+  (obtenerDato)="getData()"
+  [title]="'Editar conjunto'"
+  [data]="data"
+  [id]="id"
+  *ngIf="!loading && data; else placeholder"
+></app-crear-apu-conjunto>

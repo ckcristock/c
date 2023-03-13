@@ -23,7 +23,13 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Espesor</mat-label>
-            <input (input)="getThicknesses()" [(ngModel)]="filtro.thickness" type="text" matInput placeholder="Busca por espesor" />
+            <input
+              (input)="getThicknesses()"
+              [(ngModel)]="filtro.thickness"
+              type="text"
+              matInput
+              placeholder="Busca por espesor"
+            />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -32,32 +38,33 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && espesores.length > 0; else notData"
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Espesor</th>
             <th>Fecha Creación</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of espesores" class="text-center">
             <td class="align-middle">{{ item.thickness }}</td>
-            <td class="align-middle">{{ item.created_at | date: "longDate" }}</td>
+            <td class="align-middle">
+              {{ item.created_at | date : "longDate" }}
+            </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript:void(0)"
                     (click)="
                       getThickness(item); openConfirm(add, 'Actualizar espesor')

@@ -216,7 +216,7 @@ export class DotacionesComponent implements OnInit {
     });
   }///FINAL LISTAR EMPLEADOS
   Lista_Productos() {
-    /* this.http.get(this.globales.ruta + 'php/lista_generales.php', { params: { modulo: 'Inventario_Dotacion' } }).subscribe((data: any) => {
+    /* this.http.get(this.globales.base_url + '/php/lista_generales.php', { params: { modulo: 'Inventario_Dotacion' } }).subscribe((data: any) => {
     this.Productos = data;
     }); */
 

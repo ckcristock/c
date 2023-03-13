@@ -1,6 +1,9 @@
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
 <app-crear-apu-pieza
   [title]="'Copiar pieza'"
   [data]="data"
   [id]="id"
-  *ngIf="data"
+  *ngIf="!loading && data; else placeholder"
 ></app-crear-apu-pieza>

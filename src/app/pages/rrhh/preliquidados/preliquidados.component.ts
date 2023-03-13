@@ -27,14 +27,14 @@ export class PreliquidadosComponent implements OnInit {
   diffDays: any;
   pagination: any = {
     page: 1,
-    pageSize: 4,
+    pageSize: 10,
     collectionSize: 0
   }
 
 
   listPreliquidados: any = []; //countries: [];
   page = 1;
-	pageSize = 4;
+	pageSize = 10;
 	collectionSize = 0;
 
 

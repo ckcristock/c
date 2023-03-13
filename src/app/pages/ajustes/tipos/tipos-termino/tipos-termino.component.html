@@ -71,14 +71,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm "
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item  text-info "
                     href="javascript: void(0);"
                     (click)="
                       getData(term);
@@ -89,7 +89,7 @@
                   <a
                     *ngIf="term.status == 'activo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    class="dropdown-item text-danger "
                     (click)="activateOrInactivate(term, 'inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -97,7 +97,7 @@
                   <a
                     *ngIf="term.status == 'inactivo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-success waves-light caja-botones"
+                    class="dropdown-item text-success "
                     (click)="activateOrInactivate(term, 'activo')"
                   >
                     <i class="fas fa-check"></i> Activar</a

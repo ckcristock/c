@@ -51,7 +51,7 @@ export class CrearActaRecepcionComponent implements OnInit {
   };
   //TODO auth usuario
   public user: any = {
-    Identificacion_Funcionario : '1'
+    Identificacion_Funcionario: '1'
   };
   public Subcategoria: any = [];
   public Subtotal_Final = 0;
@@ -137,7 +137,7 @@ export class CrearActaRecepcionComponent implements OnInit {
     private swalService: SwalService,
     private retencionService: RetencionService
   ) {
-    // this.http.get(environment.ruta + 'php/contabilidad/lista_retenciones.php', { params: { modulo: 'Impuesto' } }).subscribe((data: any) => {
+    // this.http.get(environment.base_url+ '/php/contabilidad/lista_retenciones.php', { params: { modulo: 'Impuesto' } }).subscribe((data: any) => {
     //   this.ListaRetenciones = data;
     // });
     this.GetRetencionesCompras();
@@ -218,8 +218,8 @@ export class CrearActaRecepcionComponent implements OnInit {
       this.CalcularRetencionesProveedor();
     }, 1000);
   }
-  getRetencionesPorModalidad(p:any){
-    return this.http.get(environment.ruta+'php/GENERALES/retenciones/get_retenciones_modalidad.php', {params:p});
+  getRetencionesPorModalidad(p: any) {
+    return this.http.get(environment.ruta + 'php/GENERALES/retenciones/get_retenciones_modalidad.php', { params: p });
   }
   GetRetencionesCompras() {
     let p = { modalidad: 'compras' };
@@ -255,10 +255,10 @@ export class CrearActaRecepcionComponent implements OnInit {
         this.Total_Items == this.Lista_Productos.length
           ? 'Se dispone a Generar esta Acta'
           : ' En la orden de compra hay un total de ' +
-            this.Total_Items +
-            ' Productos y en el acta tiene ' +
-            this.Lista_Productos.length +
-            ' Productos. ¿Desea realmente guardar? ',
+          this.Total_Items +
+          ' Productos y en el acta tiene ' +
+          this.Lista_Productos.length +
+          ' Productos. ¿Desea realmente guardar? ',
       showCancelButton: true,
       cancelButtonText: 'No, Dejame Comprobar!',
       confirmButtonText: 'Si, Guardar',
@@ -289,9 +289,9 @@ export class CrearActaRecepcionComponent implements OnInit {
 
     if (
       this.Lista_Productos[pos].producto[pos2].Fecha_Vencimiento <
-        Fecha_Minima ||
+      Fecha_Minima ||
       this.Lista_Productos[pos].producto[pos2].Fecha_Vencimiento >
-        Fecha_Maxima ||
+      Fecha_Maxima ||
       fecha_select[0].length > 4
     ) {
       this.confirmacionSwal.title = 'Fecha Invalida';
@@ -775,8 +775,8 @@ export class CrearActaRecepcionComponent implements OnInit {
 
   ValidarCantidad(pos, pos2, pos3, cantidad) {
     let CantidadPedida = parseInt(
-        this.Lista_Productos[pos].producto[pos2].CantidadProducto
-      ),
+      this.Lista_Productos[pos].producto[pos2].CantidadProducto
+    ),
       Total_CantidadRecibida = this.Lista_Productos[pos].producto.reduce(
         this.reducer,
         0
@@ -894,13 +894,13 @@ export class CrearActaRecepcionComponent implements OnInit {
             text: 'No se pueden agregar retenciones duplicadas!!',
           });
           this.Facturas[this.PosicionFacturaSeleccionada].Retenciones[arrPos] =
-            {
-              Id_Retencion: '',
-              Nombre: '',
-              Valor: '',
-              Porcentaje: '',
-              Tipo: '',
-            };
+          {
+            Id_Retencion: '',
+            Nombre: '',
+            Valor: '',
+            Porcentaje: '',
+            Tipo: '',
+          };
         } else {
           this.Facturas[this.PosicionFacturaSeleccionada].Retenciones[
             arrPos
@@ -1305,14 +1305,14 @@ export class CrearActaRecepcionComponent implements OnInit {
 
   CalculoRetencionFacturas() {
     this.VaciarValoresRetenciones();
-    console.log(this.Facturas,this.ValorMinimoAplicaRetefuente);
+    console.log(this.Facturas, this.ValorMinimoAplicaRetefuente);
 
     this.Facturas.forEach((fac, i) => {
       if (fac.Factura != '') {
         let valores_factura = this.TotalesFacturas.find(
           (x) => x.Factura == fac.Factura
         );
-      console.log( valores_factura.total_factura);
+        console.log(valores_factura.total_factura);
 
         if (!functionsUtils.IsObjEmpty(valores_factura)) {
           if (this.Facturas[i].Retenciones.length > 0) {

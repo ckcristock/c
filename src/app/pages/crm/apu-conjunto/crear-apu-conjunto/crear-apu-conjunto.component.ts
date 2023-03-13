@@ -79,6 +79,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   searchFailedSet: boolean;
   calculationBase: any = {}
   user_id;
+  loading: boolean = true;
   masksMoney = consts
   @ViewChild('apus') apus: any
 
@@ -115,11 +116,12 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.collapses();
     this.loadPeople();
     this.getVariablesApu();
-    this.getConsecutivo();
+    await this.getConsecutivo();
+    this.loading = false
   }
 
-  getConsecutivo() {
-    this._consecutivos.getConsecutivo('apu_sets').subscribe((r: any) => {
+  async getConsecutivo() {
+    await this._consecutivos.getConsecutivo('apu_sets').toPromise().then((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
       this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
       if (this.title !== 'Editar conjunto') {
@@ -292,7 +294,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   formatter = (x: { name: string }) => x.name;
 
   select(group: FormGroup, key, toUpdate) {
-
+    console.log(toUpdate)
     let control = group.get(key).value
     if (typeof control == 'object') {
       group.patchValue({ [toUpdate]: control['id'] })
@@ -309,10 +311,13 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   getApus(e: any[]) {
+
     let item = this.form.get('list_pieces_sets') as FormArray
+    console.log(item, e)
     e.forEach(apu => {
-      const exist = item.value.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module)) //valida que no exista esa pieza en la lista, pero no funcioanria
-      !exist ? item.push(this.piecesSetsControl(apu)) : ''
+      const exist = item.value.some(x => (x.apu_part_id == apu.apu_id && x.apu_type == apu.type)) //valida que no exista esa pieza en la lista, pero no funcioanria
+      !exist ? item.push(this.piecesSetsControl(apu)) :
+        this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
     });
 
   }

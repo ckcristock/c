@@ -55,11 +55,8 @@ import { ActivoFijoCatalogoComponent } from './catalogo/components/activo-fijo-c
 import { ProductoComponent } from './productos/producto/producto.component';
 import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
 import { CrearProductoComponent } from './productos/crear-producto/crear-producto.component';
-import { ProductosComponent } from './productos/productos.component';
-import { MaterialesComponent } from './catalogo/components/materiales/materiales.component';
 import { DotacionCrearComponent } from './catalogo/components/dotacion-crear/dotacion-crear.component';
 import { BoardPermissionsComponent } from './funcionarios/detalle-funcionario/permissions/board-permissions/board-permissions.component';
-//import { MaterialesComponent } from '../parametros/apu/materiales/materiales.component';
 import { SedesComponent } from './sedes/sedes.component';
 import {
   MatExpansionModule,
@@ -141,8 +138,6 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
     ProductoComponent,
     EditarProductoComponent,
     CrearProductoComponent,
-    ProductosComponent,
-    MaterialesComponent,
     DotacionCrearComponent,
     BoardPermissionsComponent,
     SedesComponent,

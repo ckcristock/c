@@ -48,7 +48,9 @@
             <th>Cuenta Asociada</th>
             <th>Número Cuenta</th>
             <th>Saldo</th>
-            <th class="text-center col-1"><i class="mdi mdi-chevron-down"></i></th>
+            <th class="text-center col-1">
+              <i class="mdi mdi-chevron-down"></i>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -67,14 +69,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       getBankAccount(bankAccount);
@@ -85,7 +87,7 @@
                   <a
                     *ngIf="bankAccount.status == 'Activo'"
                     href="javascript: void(0);"
-                    class="text-danger dropdown-item waves-light caja-botones"
+                    class="text-danger dropdown-item"
                     (click)="activateOrInactivate(bankAccount, 'Inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -93,7 +95,7 @@
                   <a
                     *ngIf="bankAccount.status == 'Inactivo'"
                     href="javascript: void(0);"
-                    class="text-success dropdown-item waves-light caja-botones"
+                    class="text-success dropdown-item"
                     (click)="activateOrInactivate(bankAccount, 'Activo')"
                   >
                     <i class="fas fa-check"></i> Activar</a

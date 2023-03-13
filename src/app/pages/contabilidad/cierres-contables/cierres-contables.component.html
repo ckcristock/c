@@ -37,14 +37,10 @@
 
     <div class="row">
       <div class="col-lg-6">
-        <div class="card-title">
-          <h5 class="text-center">Cierre de mes</h5>
-        </div>
-        <hr />
+        <h6>Cierre de mes</h6>
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
-            
             *ngIf="!Cargando && Cierres.Mes.length > 0; else notData"
           >
             <thead class="bg-light">
@@ -54,7 +50,7 @@
                 <th>Mes</th>
                 <th>Año</th>
                 <th>Observaciones</th>
-                <th ><i class="mdi mdi-chevron-down"></i></th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -62,7 +58,7 @@
                 *ngFor="let item of Cierres.Mes; let i = index"
                 class="text-center"
               >
-                <td class="align-middle">
+                <td class="align-middle p-0">
                   <img
                     [src]="item.image"
                     onerror="this.src='../../../../assets/images/noprofile.png'"
@@ -70,36 +66,32 @@
                   />
                 </td>
                 <td class="align-middle">
-                  {{ item.Created_At | date: "dd/MM/yyyy" }}
+                  {{ item.Created_At | date : "dd/MM/yyyy" }}
                 </td>
                 <td class="align-middle">{{ nombreMes(item.Mes) }}</td>
                 <td class="align-middle">{{ item.Anio }}</td>
-                <td class="align-middle">
-                  <details>
-                    <summary>Ver observaciones</summary>
-                    <span>{{
-                      item.Observaciones == ""
-                        ? "No tiene Observaciones!"
-                        : item.Observaciones
-                    }}</span>
-                  </details>
+                <td class="align-middle text-success">
+                  <span
+                    role="button"
+                    [matTooltip]="item.Observaciones || 'Sin observaciones'"
+                    >Ver observaciones</span
+                  >
                 </td>
                 <td class="align-middle">
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
                       ngbDropdownToggle
-                      class="btn btn-primary btn-sm waves-light"
+                      class="btn btn-primary btn-sm"
                       type="button"
                     >
                       <i class="mdi mdi-chevron-down"></i>
                     </button>
                     <div ngbDropdownMenu>
-                      <a
-                        class="dropdown-item text-danger waves-light caja-botones"
-                        href="javascript:;"
-                      >
+                      <a class="dropdown-item text-danger" href="javascript:;">
                         <i class="fa fa-power-off"></i>
-                        {{ item.Estado == "Cerrado" ? "Habilitar" : "Cerrar" }}</a
+                        {{
+                          item.Estado == "Cerrado" ? "Habilitar" : "Cerrar"
+                        }}</a
                       >
                     </div>
                   </div>
@@ -110,14 +102,10 @@
         </div>
       </div>
       <div class="col-lg-6">
-        <div class="card-title">
-          <h5 class="text-center">Cierres de año</h5>
-        </div>
-        <hr />
+        <h6>Cierres de año</h6>
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
-            
             *ngIf="!Cargando && Cierres.Anio.length > 0; else notData"
           >
             <thead class="bg-light">
@@ -127,7 +115,7 @@
                 <th>Documento</th>
                 <th>Año</th>
                 <th>Observaciones</th>
-                <th ><i class="mdi mdi-chevron-down"></i></th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -138,7 +126,7 @@
                   'text-danger font-weight-bold': item.Estado == 'Anulado'
                 }"
               >
-                <td class="align-middle">
+                <td class="align-middle p-0">
                   <img
                     [src]="item.image"
                     onerror="this.src='../../../../assets/images/noprofile.png'"
@@ -146,25 +134,22 @@
                   />
                 </td>
                 <td class="align-middle">
-                  {{ item.Created_At | date: "dd/MM/yyyy" }}
+                  {{ item.Created_At | date : "dd/MM/yyyy" }}
                 </td>
                 <td class="align-middle">{{ item.Codigo }}</td>
                 <td class="align-middle">{{ item.Anio }}</td>
-                <td class="align-middle">
-                  <details>
-                    <summary>Ver observaciones</summary>
-                    <span>{{
-                      item.Observaciones == ""
-                        ? "No tiene Observaciones!"
-                        : item.Observaciones
-                    }}</span>
-                  </details>
+                <td class="align-middle text-success">
+                  <span
+                    role="button"
+                    [matTooltip]="item.Observaciones || 'Sin observaciones'"
+                    >Ver observaciones</span
+                  >
                 </td>
                 <td class="align-middle">
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
                       ngbDropdownToggle
-                      class="btn btn-primary btn-sm waves-light"
+                      class="btn btn-primary btn-sm"
                       type="button"
                     >
                       <i class="mdi mdi-chevron-down"></i>
@@ -172,60 +157,59 @@
                     <div ngbDropdownMenu>
                       <a
                         *ngIf="item.Estado != 'Anulado'"
-                        class="dropdown-item text-danger waves-light caja-botones"
-                        [swal]="{
-                          title: '¿Está Seguro?',
-                          text: 'Se dispone a Anular este Cierre de Año, esta acción no se puede revertir',
-                          type: 'warning',
-                          showCancelButton: true,
-                          confirmButtonText: 'Si, Anular',
-                          cancelButtonText: 'No, Dejame Comprobar!'
-                        }"
-                        (confirm)="anularCierreAnio(item.Id_Cierre_Contable)"
+                        class="dropdown-item text-danger"
+                        href="javascript: void(0);"
+                        (click)="anularCierreAnio(item.Id_Cierre_Contable)"
                       >
-                        <i class="fa fa-times"></i> Anular</a
+                        <i class="fa fa-trash"></i> Anular</a
                       >
                       <a
-                        class="dropdown-item text-info waves-light caja-botones"
+                        class="dropdown-item text-info"
+                        target="_blank"
                         href="{{
-                          envirom.ruta
-                        }}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{
+                          envirom.base_url
+                        }}/php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{
                           item.Id_Cierre_Contable
                         }}&id_funcionario_elabora={{ 1 }}"
                       >
                         <i class="fa fa-table"></i> Cont. PCGA</a
                       >
                       <a
-                        class="dropdown-item text-info waves-light caja-botones"
+                        class="dropdown-item text-info"
+                        target="_blank"
                         href="{{
-                          envirom.ruta
-                        }}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{
+                          envirom.base_url
+                        }}/php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{
                           item.Id_Cierre_Contable
                         }}&id_funcionario_elabora={{ 1 }}&tipo_valor=Niif"
                       >
                         <i class="fa fa-table"></i> Cont. NIIF</a
                       >
                       <a
-                        class="dropdown-item text-info waves-light caja-botones"
+                        class="dropdown-item text-info"
+                        target="_blank"
                         href="{{
-                          envirom.ruta
-                        }}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{
+                          envirom.base_url
+                        }}/php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{
                           item.Id_Cierre_Contable
                         }}&id_funcionario_elabora={{ 1 }}&tipo_rep=act-pas"
                       >
-                        <i class="fa fa-table"></i> Cont. PCGA Activos-Pasivos</a
+                        <i class="fa fa-table"></i> Cont. PCGA
+                        Activos-Pasivos</a
                       >
                       <a
-                        class="dropdown-item text-info waves-light caja-botones"
+                        class="dropdown-item text-info"
+                        target="_blank"
                         href="{{
-                          envirom.ruta
-                        }}php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{
+                          envirom.base_url
+                        }}/php/contabilidad/movimientoscontables/movimientos_cierreanio_excel.php?id_registro={{
                           item.Id_Cierre_Contable
                         }}&id_funcionario_elabora={{
                           1
                         }}&tipo_valor=Niif&tipo_rep=act-pas"
                       >
-                        <i class="fa fa-table"></i> Cont. NIIF Activos-Pasivos</a
+                        <i class="fa fa-table"></i> Cont. NIIF
+                        Activos-Pasivos</a
                       >
                     </div>
                   </div>

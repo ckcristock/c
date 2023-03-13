@@ -1,6 +1,8 @@
 <ng-template #ModalPlanes let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Cierre {{ tipoCierre }}</h4>
+    <h4 class="text-primary modal-title">
+      Cierre {{ tipoCierre == "Mensual" ? "mensual" : "anual" }}
+    </h4>
     <button
       type="button"
       class="close"
@@ -43,7 +45,7 @@
           (selectionChange)="buscarPlanes()"
         >
           <mat-option value="">Todos</mat-option>
-          <mat-option value="Sin Asignar">Sin Asignar</mat-option>
+          <mat-option value="Sin Asignar">Sin asignar</mat-option>
           <mat-option value="Costos">Costos</mat-option>
           <mat-option value="Gastos">Gastos</mat-option>
           <mat-option value="Ingresos">Ingresos</mat-option>
@@ -53,7 +55,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && Planes_Cuentas.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -82,15 +83,20 @@
               ></i>
             </td>
             <td class="align-middle">{{ Plan.Codigo }}</td>
-            <td class="align-middle">{{ Plan.Nombre }}</td>
+            <td
+              class="align-middle"
+              style="word-wrap: break-word; min-width: 160px; max-width: 160px"
+            >
+              {{ Plan.Nombre }}
+            </td>
             <td class="align-middle">
               <select
-                class="form-control input-sm"
+                class="form-control form-control-sm"
                 name="Tipo"
                 [(ngModel)]="Plan['Tipo_Cierre_' + tipoCierre]"
                 (ngModelChange)="setTipoPlan(Plan)"
               >
-                <option value="Sin Asignar">Sin Asignar</option>
+                <option value="Sin Asignar">Sin asignar</option>
                 <option value="Costos">Costos</option>
                 <option value="Gastos">Gastos</option>
                 <option value="Ingresos">Ingresos</option>

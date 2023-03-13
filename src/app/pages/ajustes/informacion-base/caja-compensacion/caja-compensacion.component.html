@@ -48,7 +48,7 @@
             <th>Nombre</th>
             <th>Código</th>
             <th>NIT</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -66,14 +66,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       getData(compensation);
@@ -84,7 +84,7 @@
                   <a
                     *ngIf="compensation.status == 'Activo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     (click)="activateOrInactivate(compensation, 'Inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -92,7 +92,7 @@
                   <a
                     *ngIf="compensation.status == 'Inactivo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-success waves-light caja-botones"
+                    class="dropdown-item text-success"
                     (click)="activateOrInactivate(compensation, 'Activo')"
                   >
                     <i class="fas fa-check"></i> Activar</a
@@ -137,8 +137,9 @@
     <form [formGroup]="form">
       <div class="row">
         <mat-form-field
-          [ngClass]="{ 'col-md-4':boolNuevaCaja , 'col-md-12':!boolNuevaCaja }"
-          appearance="outline">
+          [ngClass]="{ 'col-md-4': boolNuevaCaja, 'col-md-12': !boolNuevaCaja }"
+          appearance="outline"
+        >
           <mat-label>Nombre</mat-label>
           <input
             matInput
@@ -149,7 +150,11 @@
             required
           />
         </mat-form-field>
-        <mat-form-field class="col-md-4" *ngIf="boolNuevaCaja" appearance="outline">
+        <mat-form-field
+          class="col-md-4"
+          *ngIf="boolNuevaCaja"
+          appearance="outline"
+        >
           <mat-label>Código</mat-label>
           <input
             matInput
@@ -160,7 +165,11 @@
             required
           />
         </mat-form-field>
-        <mat-form-field class="col-md-4" *ngIf="boolNuevaCaja" appearance="outline">
+        <mat-form-field
+          class="col-md-4"
+          *ngIf="boolNuevaCaja"
+          appearance="outline"
+        >
           <mat-label>NIT</mat-label>
           <input
             matInput

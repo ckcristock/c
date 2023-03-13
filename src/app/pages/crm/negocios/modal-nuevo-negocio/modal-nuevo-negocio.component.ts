@@ -16,6 +16,7 @@ import { NegociosService } from '../negocios.service';
   styleUrls: ['./modal-nuevo-negocio.component.scss']
 })
 export class ModalNuevoNegocioComponent implements OnInit {
+  @ViewChild('apus') apus: any
   @ViewChild('newBusiness') newBusiness;
   @Output() updated = new EventEmitter<any>();
   datosCabecera = {
@@ -34,6 +35,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
   loadingQuotations: boolean;
   budgetsSelected: any[] = [];
   quotationSelected: any[] = [];
+  apuSelected: any[] = [];
   quotations: any[] = [];
   budgets: any[] = [];
   cities: any[] = [];
@@ -81,6 +83,32 @@ export class ModalNuevoNegocioComponent implements OnInit {
 
   }
 
+  getApus(e: any[]) {
+    e.forEach(apu => {
+      const exist = this.apuSelected.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
+      !exist ?
+        this.apuSelected.push(apu) :
+        this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
+    });
+    console.log(this.apuSelected)
+  }
+
+  findApus() {
+    this.apus.openConfirm()
+  }
+
+  openNewTab(route, id = '') {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([route + '/' + id])
+    );
+    window.open(url, '_blank');
+  }
+
+  deleteApu(item) {
+    let id = this.apuSelected.indexOf(item)
+    this.apuSelected.splice(id, 1)
+  }
+
   getConsecutivo() {
     this._consecutivos.getConsecutivo('businesses').subscribe((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
@@ -117,7 +145,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       name: ['', Validators.required],
-      description: ['', Validators.required],
+      description: [''],
       third_party_id: [null, Validators.required],
       third_party_person_id: [null, Validators.required],
       country_id: [null, Validators.required],
@@ -127,6 +155,13 @@ export class ModalNuevoNegocioComponent implements OnInit {
       format_code: [''],
       code: ['']
     });
+
+    this.form.get('third_party_id').valueChanges.subscribe(value => {
+      this.getContacts(value);
+      this.getBudgets(1, value);
+      this.getQuotations(1, value);
+      this.form.get('third_party_person_id').reset()
+    })
   }
 
   createFormFiltersQuotations() {
@@ -183,8 +218,8 @@ export class ModalNuevoNegocioComponent implements OnInit {
     );
   }
 
-  getContacts() {
-    this._negocios.getThirdPartyPersonForThird(this.form.value.third_party_id).subscribe((resp: any) => {
+  getContacts(id) {
+    this._negocios.getThirdPartyPersonForThird(id).subscribe((resp: any) => {
       this.contacts = resp.data;
     });
   }
@@ -202,14 +237,14 @@ export class ModalNuevoNegocioComponent implements OnInit {
       .pipe(debounceTime(500)).subscribe(r => this.getBudgets())
   }
 
-  getBudgets(page = 1) {
+  getBudgets(page = 1, id = '') {
     this.loadingBudgets = true
     this.budgetsSelected = []
     this.paginationBudgets.page = page;
     let params = {
       ...this.paginationBudgets,
       ...this.formFiltersBudgets.value,
-      third_party_id: this.form.value.third_party_id
+      third_party_id: id
     }
     this._negocios.getBudgets(params).subscribe((resp: any) => {
       this.budgets = resp.data.data;
@@ -218,14 +253,14 @@ export class ModalNuevoNegocioComponent implements OnInit {
     });
   }
 
-  getQuotations(page = 1) {
+  getQuotations(page = 1, id = '') {
     this.quotationSelected = []
     this.loadingQuotations = true
     this.paginationQuotations.page = page;
     let params = {
       ...this.paginationQuotations,
       ...this.form_filters_quotations.value,
-      third_party_id: this.form.value.third_party_id
+      third_party_id: id
     }
     this._quotation.getQuotations(params).subscribe((res: any) => {
       this.quotations = res.data.data;
@@ -268,6 +303,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
   }
 
   saveBusiness() {
+    console.log(this.form.value)
     if (this.form.valid) {
       this._swal.show({
         title: '¿Estás seguro(a)?',
@@ -278,6 +314,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
         if (r.isConfirmed) {
           this.form.addControl('budgets', this.fb.control(this.budgetsSelected));
           this.form.addControl('quotations', this.fb.control(this.quotationSelected));
+          this.form.addControl('apu', this.fb.control(this.apuSelected));
           this.budgetsSelected.reduce((a, b) => {
             return this.form.addControl('budget_value', this.fb.control(a + b.total_cop))
           }, 0)
@@ -297,6 +334,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
         }
       })
     } else {
+      this.form.markAllAsTouched()
       this._swal.show({
         icon: 'error',
         title: 'ERROR',

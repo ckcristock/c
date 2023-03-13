@@ -64,35 +64,35 @@
             <td class="align-middle">{{ "P" + item.id }}</td>
             <td class="align-middle">{{ item.profile }}</td>
             <td class="align-middle">
-              ${{ item.value_time_daytime_displacement | number : "1.2" }}
+              ${{ item.value_time_daytime_displacement | number : "1.2-2" }}
             </td>
             <td class="align-middle">
-              ${{ item.value_time_night_displacement | number : "1.2" }}
+              ${{ item.value_time_night_displacement | number : "1.2-2" }}
             </td>
             <td class="align-middle">
-              ${{ item.daytime_ordinary_hour_value | number : "1.2" }}
+              ${{ item.daytime_ordinary_hour_value | number : "1.2-2" }}
             </td>
             <td class="align-middle">
-              ${{ item.night_ordinary_hour_value | number : "1.2" }}
+              ${{ item.night_ordinary_hour_value | number : "1.2-2" }}
             </td>
             <td class="align-middle">
-              ${{ item.sunday_daytime_value | number : "1.2" }}
+              ${{ item.sunday_daytime_value | number : "1.2-2" }}
             </td>
             <td class="align-middle">
-              ${{ item.sunday_night_time_value | number : "1.2" }}
+              ${{ item.sunday_night_time_value | number : "1.2-2" }}
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript:void(0)"
                     (click)="
                       getProfile(item);
@@ -104,7 +104,7 @@
                   <a
                     *ngIf="item.state == 'Inactivo'"
                     href="javascript:void(0)"
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                     (click)="activateOrInactivate(item, 'Activo')"
                   >
                     <i class="far fa-thumbs-up"></i> Activar
@@ -112,7 +112,7 @@
                   <a
                     *ngIf="item.state == 'Activo'"
                     href="javascript:void(0)"
-                    class="dropdown-item waves-light text-danger caja-botones"
+                    class="dropdown-item text-danger"
                     (click)="activateOrInactivate(item, 'Inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular

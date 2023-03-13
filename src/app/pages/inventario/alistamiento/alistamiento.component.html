@@ -57,7 +57,6 @@
         <div class="rounded-top table-responsive">
           <table
             class="table table-sm"
-            
             *ngIf="!ValidaFase1 && FaseI.length > 0; else notData1"
           >
             <thead class="bg-light">
@@ -74,7 +73,7 @@
                 <td class="text-center align-middle">
                   <img
                     class="img-thumbnail rounded-circle header-profile-user img-fluid"
-                    [src]="item.Imagen | image: 'users'"
+                    [src]="item.Imagen | image : 'users'"
                     onerror="this.src='../../../../assets/images/noprofile.png'"
                     alt=""
                   />
@@ -89,7 +88,11 @@
                     <strong>Destino: </strong> {{ item.Nombre_Destino }}
                   </span>
                 </td>
-                <td *ngIf="item.Tipo_Bodega" #tipoBodega1 class="text-center align-middle">
+                <td
+                  *ngIf="item.Tipo_Bodega"
+                  #tipoBodega1
+                  class="text-center align-middle"
+                >
                   <i
                     *ngIf="item.Tipo_Bodega == 'MEDICAMENTOS'"
                     class="fa fa-medkit fa-2x"
@@ -188,7 +191,6 @@
         <div class="rounded-top table-responsive">
           <table
             class="table table-sm"
-            
             *ngIf="!ValidaFase2 && FaseII.length > 0; else notData2"
           >
             <thead class="bg-light">
@@ -205,7 +207,7 @@
                 <td class="text-center align-middle">
                   <img
                     class="img-thumbnail rounded-circle header-profile-user img-fluid"
-                    [src]="item.Imagen | image: 'users'"
+                    [src]="item.Imagen | image : 'users'"
                     onerror="this.src='../../../../assets/images/noprofile.png'"
                     alt=""
                   />
@@ -220,7 +222,11 @@
                     <strong>Destino: </strong> {{ item.Nombre_Destino }}
                   </span>
                 </td>
-                <td *ngIf="item.Tipo_Bodega" #tipoBodega class="text-center align-middle">
+                <td
+                  *ngIf="item.Tipo_Bodega"
+                  #tipoBodega
+                  class="text-center align-middle"
+                >
                   <i
                     *ngIf="item.Tipo_Bodega == 'MEDICAMENTOS'"
                     class="fa fa-medkit fa-2x"
@@ -360,7 +366,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && Alistamientos.length > 0; else notData3"
       >
         <thead class="bg-light">
@@ -382,7 +387,7 @@
             class="text-center"
           >
             <td class="align-middle">
-              {{ alistamiento.Fecha | date: "dd/MM/yyyy" }}
+              {{ alistamiento.Fecha | date : "dd/MM/yyyy" }}
             </td>
             <td class="align-middle">{{ alistamiento.Codigo }}</td>
             <td class="align-middle">
@@ -455,14 +460,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     *ngIf="alistamiento.Tipo != 'Devolucion'"
                     href=""
                     [routerLink]="[
@@ -473,7 +478,7 @@
                     <i class="fa fa-eye"></i> Ver</a
                   >
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     *ngIf="alistamiento.Tipo == 'Devolucion'"
                     href=""
                     [routerLink]="[
@@ -484,7 +489,7 @@
                     <i class="fa fa-eye"></i> Ver</a
                   >
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     href="{{
                       envi.ruta
                     }}/php/archivos/descarga_pdf.php?tipo=Remision&id={{
@@ -495,7 +500,7 @@
                     <i class="fa fa-print"></i> Imprimir Archivo</a
                   >
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     href="{{ envi.ruta }}/php/archivos/descarga_zebra.php?id={{
                       alistamiento.Id_Remision
                     }}"
@@ -508,7 +513,7 @@
                       alistamiento.Estado_Alistamiento == 2 &&
                       alistamiento.Estado == 'Alistada'
                     "
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     (click)="
                       CapturarId(
                         alistamiento.Id_Remision,
@@ -524,7 +529,7 @@
                       alistamiento.Estado != 'Recibida' &&
                       alistamiento.Estado != 'Anulada'
                     "
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     (click)="
                       EditarGuia(
                         alistamiento.Id_Remision,

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { ApuPiezaService } from '../../apu-pieza/apu-pieza.service';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap, catchError, map } from 'rxjs/operators';
 import { CalculationBasesService } from '../../../ajustes/configuracion/base-calculos/calculation-bases.service';
@@ -148,11 +148,11 @@ export class CrearPresupuestoComponent implements OnInit {
   createForm() {
     this.forma = this.fb.group({
       id: (this.dataEdit && this.path == 'editar' ? this.dataEdit.id : ''),
-      customer_id: (this.dataEdit ? this.dataEdit.customer_id : null),
-      destinity_id: (this.dataEdit ? this.dataEdit.destinity_id : null),
-      line: (this.dataEdit ? this.dataEdit.line : ''),
-      trm: this.calculationBase.trm.value,
-      project: (this.dataEdit ? this.dataEdit.project : ''),
+      customer_id: [(this.dataEdit ? this.dataEdit.customer_id : null), Validators.required],
+      destinity_id: [(this.dataEdit ? this.dataEdit.destinity_id : null), Validators.required],
+      line: [(this.dataEdit ? this.dataEdit.line : ''), Validators.required],
+      trm: [this.calculationBase.trm.value, Validators.required],
+      project: [(this.dataEdit ? this.dataEdit.project : ''), Validators.required],
       indirect_costs: this.fb.array([]),
       observation: '',
       items: this.fb.array([]),

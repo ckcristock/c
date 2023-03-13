@@ -59,16 +59,16 @@
               {{ item.travel_expense_estimation.description }}
             </td>
             <td class="align-middle">
-              {{ item.land_national_value | number : "1.2" }}
+              {{ item.land_national_value | number : "1.2-2" }}
             </td>
             <td class="align-middle">
-              {{ item.land_international_value | number : "1.2" }}
+              {{ item.land_international_value | number : "1.2-2" }}
             </td>
             <td class="align-middle">
-              {{ item.aerial_national_value | number : "1.2" }}
+              {{ item.aerial_national_value | number : "1.2-2" }}
             </td>
             <td class="align-middle">
-              {{ item.aerial_international_value | number : "1.2" }}
+              {{ item.aerial_international_value | number : "1.2-2" }}
             </td>
             <td class="align-middle">
               {{ item.created_at | date : "longDate" }}
@@ -77,14 +77,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       getEstimationValue(item);

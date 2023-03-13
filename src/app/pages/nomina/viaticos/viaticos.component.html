@@ -95,7 +95,7 @@
               <img
                 onerror="this.src='../../../../assets/images/noprofile.png'"
                 class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
-                src="{{ item.person.image | image: 'users' }}"
+                src="{{ item.person.image | image : 'users' }}"
               />
             </td>
             <td>
@@ -107,14 +107,14 @@
               {{ item.user.person.first_surname | titlecase }}
             </td>
             <td>
-              {{ item.created_at | date: "dd/MM/yyyy" }}
+              {{ item.created_at | date : "dd/MM/yyyy" }}
             </td>
             <td>
-              {{ item.departure_date | date: "dd/MM/yyyy" }}
+              {{ item.departure_date | date : "dd/MM/yyyy" }}
             </td>
             <td>{{ item.n_nights }}</td>
-            <td>{{ item.total_cop | currency: "":"" }}</td>
-            <td>{{ item.total_usd | currency: "":"" }}</td>
+            <td>{{ item.total_cop | currency : "" : "" }}</td>
+            <td>{{ item.total_usd | currency : "" : "" }}</td>
             <td>
               <span
                 class="badge"
@@ -130,7 +130,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -139,14 +139,14 @@
                   <a
                     [routerLink]="['/nomina/ver-viatico', item.id]"
                     href="javascript:void(0)"
-                    class="dropdown-item text-success waves-light caja-botones"
+                    class="dropdown-item text-success"
                   >
                     <i class="far fa-eye"></i> Ver</a
                   >
                   <a
                     [routerLink]="['/nomina/editar-viatico', item.id]"
                     href="javascript:void(0)"
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                   >
                     <i class="far fa-edit"></i> Editar</a
                   >
@@ -156,7 +156,7 @@
                     "
                     (click)="changeState(item, 'Aprobado')"
                     href="javascript:void(0)"
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                   >
                     <i class="far fa-thumbs-up"></i> Aprobar</a
                   >
@@ -167,7 +167,7 @@
                     [routerLink]="['legalizar', item.id]"
                     routerLinkActive="router-link-active"
                     href="javascript:void(0)"
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                   >
                     <i class="far fa-thumbs-up"></i> Legalizar</a
                   >
@@ -175,7 +175,7 @@
                     *ngIf="item.state != 'Inactivo'"
                     (click)="changeState(item, 'Dehabilidato')"
                     href="javascript:void(0)"
-                    class="dropdown-item waves-light text-danger caja-botones"
+                    class="dropdown-item text-danger"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
                   >

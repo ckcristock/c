@@ -65,14 +65,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       getIndirect(item);
@@ -85,7 +85,7 @@
                     *ngIf="item.state == 'Inactivo'"
                     href="javascript: void(0);"
                     (click)="activateOrInactivate(item, 'Activo')"
-                    class="dropdown-item waves-light text-success"
+                    class="dropdown-item text-success"
                   >
                     <i class="fas fa-check"></i> Activar
                   </a>
@@ -93,7 +93,7 @@
                     *ngIf="item.state == 'Activo'"
                     href="javascript: void(0);"
                     (click)="activateOrInactivate(item, 'Inactivo')"
-                    class="dropdown-item waves-light text-danger"
+                    class="dropdown-item text-danger"
                   >
                     <i class="fas fa-trash-alt"></i> Anular
                   </a>

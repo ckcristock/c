@@ -94,11 +94,10 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!Cargando && NotasCarteras.length > 0; else notData"
       >
-        <thead>
-          <tr>
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
             <th>Fecha</th>
             <th>Documento</th>
             <th>Beneficiario</th>
@@ -109,65 +108,66 @@
             <th>Total Credito NIIF</th>
             <th>Funcionario</th>
             <th class="col-1">Estado</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let item of NotasCarteras"
-            [ngClass]="{ 'text-danger': item.Estado == 'Anulada' }"
-          >
+          <tr *ngFor="let item of NotasCarteras" class="text-center">
             <td>{{ item.Fecha }}</td>
             <td>{{ item.Codigo }}</td>
             <td>{{ item.Beneficiario }} - {{ item.Tercero }}</td>
             <td>{{ item.Concepto }}</td>
-            <td>{{ item.Total_Debe_PCGA | currency: "":"" }}</td>
-            <td>{{ item.Total_Haber_PCGA | currency: "":"" }}</td>
-            <td>{{ item.Total_Debe_NIIF | currency: "":"" }}</td>
-            <td>{{ item.Total_Haber_NIIF | currency: "":"" }}</td>
+            <td>${{ item.Total_Debe_PCGA | number : "1.2-2" }}</td>
+            <td>${{ item.Total_Haber_PCGA | number : "1.2-2" }}</td>
+            <td>${{ item.Total_Debe_NIIF | number : "1.2-2" }}</td>
+            <td>${{ item.Total_Haber_NIIF | number : "1.2-2" }}</td>
             <td>{{ item.Funcionario }}</td>
             <td>
               <span
-                *ngIf="item.Estado != 'Anulada'"
-                class="badge badge-success"
-                >{{ item.Estado }}</span
+                [ngClass]="
+                  item.Estado == 'Anulada'
+                    ? 'badge badge-danger'
+                    : 'badge badge-success'
+                "
               >
+                {{ item.Estado }}
+              </span>
             </td>
             <td>
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-mini waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
-                  <a
-                    class="dropdown-item waves-light caja-botones"
+                  <!-- <a
+                    class="dropdown-item"
                     href="{{
-                      envirom.ruta
-                    }}php/contabilidad/notascontables/descarga_pdf.php?id={{
+                      envirom.base_url
+                    }}/php/contabilidad/notascontables/descarga_pdf.php?id={{
                       item.Id_Documento_Contable
                     }}"
                     target="_blank"
                   >
                     <i class="fa fa-print"></i> Ver PCGA</a
-                  >
+                  > -->
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     href="{{
-                      envirom.ruta
-                    }}php/contabilidad/notascontables/descarga_pdf.php?id={{
+                      envirom.base_url
+                    }}/php/contabilidad/notascontables/descarga_pdf.php?id={{
                       item.Id_Documento_Contable
                     }}&tipo=Niif"
                     target="_blank"
                   >
-                    <i class="fa fa-print"></i> Ver NIIF</a
+                    <i class="fas fa-file-pdf"></i> Ver NIIF</a
                   >
                   <a
                     *ngIf="item.Estado != 'Anulada' && perfilUsuario == '27'"
-                    class="dropdown-item waves-light caja-botones bg-danger"
+                    class="dropdown-item bg-danger"
                     href="javascript:;"
                     [swal]="confirmacionAnular"
                     (click)="IdDocumento = item.Id_Documento_Contable"

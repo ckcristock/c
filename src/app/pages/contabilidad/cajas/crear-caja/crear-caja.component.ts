@@ -6,21 +6,13 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-
-import {
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  filter,
-} from 'rxjs/operators';
-import { OperatorFunction, Observable } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/person.service';
 import { AccountPlanService } from 'src/app/core/services/account-plan.service';
 import { PrettyCashService } from 'src/app/core/services/pretty-cash.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from 'src/app/pages/ajustes/informacion-base/services/reactive-validation/validators.service';
+import { ModalService } from 'src/app/core/services/modal.service';
 type Person = { value: number; text: string };
 @Component({
   selector: 'app-crear-caja',
@@ -40,9 +32,9 @@ export class CrearCajaComponent implements OnInit {
     private _people: PersonService,
     private _prettyCash: PrettyCashService,
     private _account: AccountPlanService,
-    private modalService: NgbModal,
     private _swal: SwalService,
     private _reactiveValid: ValidatorsService,
+    private _modal: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -50,21 +42,29 @@ export class CrearCajaComponent implements OnInit {
     this.createForm();
     this.openModal.subscribe((r) => {
       this.getAccounts();
-      //this.modal.show();
-      this.openConfirm(this.add)
+      this._modal.open(this.add, 'sm')
     });
   }
 
-  closeResult = '';
-  public openConfirm(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  getPeople() {
+    this._people.getPeopleIndex().subscribe((res: any) => {
+      this.people = res.data;
     });
   }
-  private getDismissReason(reason: any) {
-    this.forma.reset()
+
+  createForm() {
+    this.forma = this.fb.group({
+      person_id: [null, this._reactiveValid.required],
+      account_plan_id: [null, this._reactiveValid.required],
+      initial_balance: [null, this._reactiveValid.required],
+      description: ['', this._reactiveValid.required],
+    });
+    this.forma.get('account_plan_id').valueChanges.subscribe((r) => {
+      let account = this.accounts.find(x => x.Id_Plan_Cuentas == r)
+      this.forma.patchValue({
+        initial_balance: account.balance?.balance || 0
+      });
+    });
   }
 
   getAccounts() {
@@ -72,91 +72,51 @@ export class CrearCajaComponent implements OnInit {
       this.accounts = r.data;
     });
   }
+
   save() {
-    this._swal
-      .show({
-        text: 'Se dispone a crear una nueva caja',
-        title: '¿Está seguro?',
-        icon: 'warning',
+    if (this.forma.valid) {
+      this._swal
+        .show({
+          icon: 'question',
+          title: '¿Estás seguro(a)?',
+          text: 'Vamos a crear una nueva caja',
+        })
+        .then((r) => {
+          if (r.isConfirmed) {
+            this._prettyCash.save(this.forma.value).subscribe(
+              (r: any) => {
+                this._swal.show({
+                  title: 'Operación exitosa',
+                  text: 'Se ha creado una nueva caja',
+                  icon: 'success',
+                  showCancel: false,
+                  timer: 1000
+
+                });
+                this.saved.emit(true);
+                this.forma.reset()
+                this._modal.close();
+              },
+              (er) => {
+                this._swal.show({
+                  title: 'Operación fallida ',
+                  text: 'Ha ocurrido un error',
+                  showCancel: false,
+                  icon: 'error',
+                });
+              }
+            );
+          }
+        });
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'Error',
+        text: 'Completa la información.',
+        showCancel: false,
+        timer: 1000
       })
-      .then((r) => {
-        if (r.isConfirmed) {
-          let values: any = {};
-          values.person_id = this.forma.get('person').value.value;
-          values.account_plan_id = this.forma.get('account_plan').value.id;
-          values.initial_balance = this.forma.get('initial_balance').value;
-          values.description = this.forma.get('description').value;
-
-          this._prettyCash.save(values).subscribe(
-            (r: any) => {
-              this._swal.show({
-                title: 'Operación Exitosa',
-                text: 'Se ha creado una caja',
-                icon: 'success',
-                showCancel: false
-
-              });
-              this.saved.emit(true);
-              //this.modal.hide();
-              this.modalService.dismissAll(); 
-            },
-            (er) => {
-              this._swal.show({
-                title: 'Operación fallida ',
-                text: 'Ha ocurrido un error',
-                showCancel: false,
-                icon: 'error',
-              });
-            }
-          );
-        }
-      });
+    }
   }
 
-  createForm() {
-    this.forma = this.fb.group({
-      person: ['', this._reactiveValid.required],
-      account_plan: ['', this._reactiveValid.required],
-      initial_balance: ['', this._reactiveValid.required],
-      description: ['', this._reactiveValid.required],
-    });
-    this.forma.get('account_plan').valueChanges.subscribe((r) => {
-      if (typeof r == 'object') {
-        this.forma.patchValue({ initial_balance: r.balance.balance });
-      }
-    });
-  }
-  formatter = (state: Person) => state.text;
-  searchPerson: OperatorFunction<string, readonly { value; text }[]> = (
-    text$: Observable<string>
-  ) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      filter((term) => term.length >= 3),
-      map((term) =>
-        this.people
-          .filter((state) => new RegExp(term, 'mi').test(state.text))
-          .slice(0, 10)
-      )
-    );
-
-  searchAccount: OperatorFunction<string, readonly { value; text }[]> = (
-    text$: Observable<string>
-  ) =>
-    text$.pipe(
-      debounceTime(200),
-      distinctUntilChanged(),
-      filter((term) => term.length >= 3),
-      map((term) =>
-        this.accounts
-          .filter((state) => new RegExp(term, 'mi').test(state.text))
-          .slice(0, 10)
-      )
-    );
-  getPeople() {
-    this._people.getPeopleIndex().subscribe((res: any) => {
-      this.people = res.data;
-    });
-  }
 }

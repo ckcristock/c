@@ -116,7 +116,21 @@
               {{ item.work_contract.position.dependency.name }}
             </td>
             <td class="align-middle">{{ item.work_contract.position.name }}</td>
-            <td class="align-middle">{{ item.status }}</td>
+            <td class="align-middle">
+              <span
+                class="badge position-relative"
+                [class]="
+                  item.status == 'Activo'
+                    ? 'badge-success'
+                    : item.status == 'PreLiquidado'
+                    ? 'badge-warning'
+                    : item.status == 'Liquidado'
+                    ? 'badge-dark'
+                    : 'badge-danger'
+                "
+                >{{ item.status }}</span
+              >
+            </td>
             <td class="align-middle">
               <button
                 type="button"

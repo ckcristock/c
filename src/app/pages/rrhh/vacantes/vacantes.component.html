@@ -178,7 +178,7 @@
             <th *ngIf="checkMunicipio">Municipio</th>
             <th *ngIf="checkEstado">Estado</th>
 
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -189,13 +189,13 @@
           >
             <td class="align-middle" *ngIf="checkCodigo">{{ job.code }}</td>
             <td class="align-middle" *ngIf="checkPublicacion">
-              {{ job.created_at | date: "dd/M/yyyy" }}
+              {{ job.created_at | date : "dd/M/yyyy" }}
             </td>
             <td class="align-middle" *ngIf="checkInicio">
-              {{ job.date_start | date: "dd/M/yyyy" }}
+              {{ job.date_start | date : "dd/M/yyyy" }}
             </td>
             <td class="align-middle" *ngIf="checkFin">
-              {{ job.date_end | date: "dd/M/yyyy" }}
+              {{ job.date_end | date : "dd/M/yyyy" }}
             </td>
             <td class="align-middle" *ngIf="checkTitulo">
               {{ job.title }}
@@ -226,18 +226,18 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <!--  <a *ngIf="job.state!='Cancelada'"
-                                              class="dropdown-item waves-light  caja-botones" href=""
+                                              class="dropdown-item   " href=""
                                               [routerLink]="['/vacanteseditar',job.id]">
                                               <i class="ti-pencil"></i> Editar</a> -->
                   <a
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript:void(0)"
                     [routerLink]="['/rrhh/vacantes-ver', job.id]"
                   >
@@ -245,7 +245,7 @@
                   >
                   <a
                     *ngIf="job.state != 'Cancelada'"
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     href="javascript:void(0)"
                     (click)="cancelar(job.id)"
                   >

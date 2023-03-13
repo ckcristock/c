@@ -14,9 +14,9 @@ import Swal from 'sweetalert2';
 export class CierresContablesComponent implements OnInit {
   public abrirPlanesCuenta: EventEmitter<string> = new EventEmitter();
   public modalCierre: Subject<any> = new Subject();
-  public Cargando: boolean=true;
+  public Cargando: boolean = true;
   envirom: any = {}
-  public Cierres:any = {
+  public Cierres: any = {
     Mes: [],
     Anio: []
   }
@@ -25,7 +25,7 @@ export class CierresContablesComponent implements OnInit {
     private cierresContableService: CierrecontableService,
     private swalService: SwalService,
     private http: HttpClient
-    ) { }
+  ) { }
 
   ngOnInit() {
     this.listaCierres();
@@ -33,7 +33,7 @@ export class CierresContablesComponent implements OnInit {
   }
 
   estadoFiltros = false;
-  mostrarFiltros(){
+  mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
 
@@ -47,7 +47,7 @@ export class CierresContablesComponent implements OnInit {
   }
 
   listaCierres() {
-    this.http.get(environment.ruta + 'php/contabilidad/cierres/lista_cierre.php').subscribe((data:any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/cierres/lista_cierre.php').subscribe((data: any) => {
       this.Cierres.Mes = data.Mes;
       this.Cierres.Anio = data.Anio;
       this.Cargando = false
@@ -55,19 +55,27 @@ export class CierresContablesComponent implements OnInit {
   }
 
   anularCierreAnio(id) {
-    let p:any = {id:id}
-    this.http.get(environment.ruta+'php/contabilidad/cierres/anular_cierre.php',{params: p}).subscribe((data:any) => {
-      // this.swalService.ShowMessage(data);
-      Swal.fire({
-        icon: data.codigo,
-        title: data.titulo,
-        text: data.mensaje
-      })
-      this.listaCierres();
+    this.swalService.show({
+      title: '¿Estás seguro(a)?',
+      text: 'Vamos a anular el cierre de año, esta acción no se puede revertir',
+      icon: 'question',
+    }).then(r => {
+      if (r.isConfirmed) {
+        let p: any = { id: id }
+        this.http.get(environment.base_url + '/php/contabilidad/cierres/anular_cierre.php', { params: p }).subscribe((data: any) => {
+          this.swalService.show({
+            icon: data.codigo,
+            title: data.titulo,
+            text: data.mensaje,
+            showCancel: false
+          })
+          this.listaCierres();
+        })
+      }
     })
   }
-  
-  OnDestroy(){
+
+  OnDestroy() {
     this.abrirPlanesCuenta.unsubscribe();
     this.modalCierre.unsubscribe();
   }

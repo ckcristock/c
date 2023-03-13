@@ -34,6 +34,7 @@
             required
             [appendTo]="'body'"
             placeholder="Cliente *"
+            [class.is-invalid]="form.get('customer_id').invalid"
             (change)="getContacts()"
             formControlName="customer_id"
           ></ng-select>
@@ -45,6 +46,7 @@
             placeholder="Contacto *"
             bindLabel="text"
             [appendTo]="'body'"
+            [class.is-invalid]="form.get('third_party_person_id').invalid"
             appearance="outline"
             bindValue="value"
             notFoundText="No hay registros"
@@ -59,11 +61,12 @@
             appearance="outline"
             [appendTo]="'body'"
             placeholder="Destino *"
+            [class.is-invalid]="form.get('destinity_id').invalid"
             required
             formControlName="destinity_id"
           ></ng-select>
         </div>
-        <mat-form-field class="col" appearance="outline">
+        <!-- <mat-form-field class="col" appearance="outline">
           <mat-label>TRM</mat-label>
           <input
             matInput
@@ -75,7 +78,7 @@
             required
           />
           <mat-hint>TRM del {{ today | date }}</mat-hint>
-        </mat-form-field>
+        </mat-form-field> -->
 
         <mat-form-field class="col" appearance="outline">
           <mat-label>¿Incluye presupuesto?</mat-label>

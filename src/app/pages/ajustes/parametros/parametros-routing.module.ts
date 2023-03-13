@@ -25,7 +25,7 @@ import { PerfilesApuComponent } from './apu/perfiles-apu/perfiles-apu.component'
 import { EstimacionViaticosComponent } from './apu/estimacion-viaticos/estimacion-viaticos.component';
 import { EstimacionViaticosValuesComponent } from './apu/estimacion-viaticos-values/estimacion-viaticos-values.component';
 import { ValorAlmuerzosComponent } from './valor-almuerzos/valor-almuerzos.component';
-import { MaterialesComponent } from "../informacion-base/catalogo/components/materiales/materiales.component";
+import { MaterialesComponent } from "./apu/materiales/materiales.component";
 import { NominaComponent } from "./nomina/nomina.component";
 import { ViaticosComponent } from "./viaticos/viaticos.component";
 import { VacantesComponent } from "./vacantes/vacantes.component";

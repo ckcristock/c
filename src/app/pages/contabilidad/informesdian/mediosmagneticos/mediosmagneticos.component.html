@@ -38,7 +38,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!Cargando && listaMediosMag.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -48,7 +47,7 @@
             <th>Tipo Exp</th>
             <th>Periodo</th>
             <th *ngIf="formatoEspecial">Columna</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -64,14 +63,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item text-success waves-light caja-botones"
+                    class="dropdown-item text-success"
                     href="{{
                       enviromen.ruta
                     }}php/contabilidad/mediosmagneticos/reporte.php?id={{
@@ -83,7 +82,7 @@
                   >
                   <a
                     *ngIf="!formatoEspecial"
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-info"
                     [routerLink]="[
                       '/contabilidad/informesdian/medios-magneticos/editar',
                       item.Id
@@ -93,7 +92,7 @@
                   >
                   <a
                     *ngIf="formatoEspecial"
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-info"
                     [routerLink]="[
                       '/contabilidad/informesdian/medios-magneticosespeciales/editar',
                       item.Id
@@ -102,7 +101,7 @@
                     <i class="fas fa-edit"></i> Editar</a
                   >
                   <a
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     [swal]="confirmacionEliminar"
                     (click)="IdMedioMag = item.Id"
                   >

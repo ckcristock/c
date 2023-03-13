@@ -196,17 +196,17 @@ export class CrearNotaContableComponent implements OnInit {
   formatter2 = (x: { Nombre: string }) => x.Nombre;
 
   ngOnInit() {
-    this.http.get(environment.ruta + 'php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
       this.Cliente = data;
       console.log(this.Cliente)
     });
-    this.http.get(environment.ruta + 'php/comprobantes/cuentas.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/cuentas.php').subscribe((data: any) => {
       this.Cuentas = data;
     });
-    this.http.get(environment.ruta + 'php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
       this.Cuenta = data.Activo;
     });
-    this.http.get(environment.ruta + 'php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
       this.Centros = data;
       console.log(this.Centros)
     });
@@ -377,9 +377,9 @@ export class CrearNotaContableComponent implements OnInit {
 
       if (data.tipo == 'success' && data.id != undefined) {
         if (tipo == 'Pcga') {
-          window.open(environment.ruta + 'php/contabilidad/notascontables/descarga_pdf.php?id=' + data.id, '_blank'); // SE IMPRIME EN FORMATO PCGA
+          window.open(environment.base_url + '/php/contabilidad/notascontables/descarga_pdf.php?id=' + data.id, '_blank'); // SE IMPRIME EN FORMATO PCGA
         } else {
-          window.open(environment.ruta + 'php/contabilidad/notascontables/descarga_pdf.php?id=' + data.id + '&tipo=Niif', '_blank'); // SE IMPRIME EN FORMATO NIIF
+          window.open(environment.base_url + '/php/contabilidad/notascontables/descarga_pdf.php?id=' + data.id + '&tipo=Niif', '_blank'); // SE IMPRIME EN FORMATO NIIF
         }
         setTimeout(() => {
 
@@ -414,7 +414,7 @@ export class CrearNotaContableComponent implements OnInit {
 
   ListarRetenciones() {
 
-    this.http.get(environment.ruta + 'php/contabilidad/lista_retenciones.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/lista_retenciones.php').subscribe((data: any) => {
       this.ListaRetenciones = data;
     })
 
@@ -449,7 +449,7 @@ export class CrearNotaContableComponent implements OnInit {
       datos.Fecha = fecha;
     }
 
-    this.http.get(environment.ruta + 'php/contabilidad/notascontables/get_codigo.php', { params: datos }).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/notascontables/get_codigo.php', { params: datos }).subscribe((data: any) => {
       this.datosCabecera.Codigo = data.consecutivo;
       this.Codigo = data.consecutivo;
     })
@@ -667,7 +667,7 @@ export class CrearNotaContableComponent implements OnInit {
     this.Cargando = true;
     let datos = new FormData();
     datos.append('archivo', this.Archivo);
-    this.http.post(environment.ruta + 'php/contabilidad/notascontables/subir_facturas.php', datos).subscribe((data: any) => {
+    this.http.post(environment.base_url + '/php/contabilidad/notascontables/subir_facturas.php', datos).subscribe((data: any) => {
       this.Cuentas_Contables = data.Facturas;
       this.Datos_Invalidos = this.Cuentas_Contables.some(data => data.Valido == false);
       console.log(this.Datos_Invalidos, 'INVALIDOS');
@@ -701,13 +701,13 @@ export class CrearNotaContableComponent implements OnInit {
   }
 
   reloadData() {
-    this.http.get(environment.ruta + 'php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
       this.Cliente = data;
     });
-    this.http.get(environment.ruta + 'php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
       this.Cuenta = data.Activo;
     });
-    this.http.get(environment.ruta + 'php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
       this.Centros = data;
     });
 
@@ -744,7 +744,7 @@ export class CrearNotaContableComponent implements OnInit {
       let datos = new FormData();
       datos.append('datos', info);
 
-      this.http.post(environment.ruta + 'php/contabilidad/guardar_borrador_contable.php', datos)
+      this.http.post(environment.base_url + '/php/contabilidad/guardar_borrador_contable.php', datos)
         .subscribe((data: any) => {
           if (data.status == 202) {
             if (this.idBorrador == '')

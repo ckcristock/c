@@ -11,18 +11,20 @@ import { ApuConjuntoService } from '../apu-conjunto.service';
 export class EditarApuConjuntoComponent implements OnInit {
   id: string;
   data: any;
+  loading: boolean = true
 
   constructor(
     private actRoute: ActivatedRoute, private _apuConjunto: ApuConjuntoService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.id = this.actRoute.snapshot.params.id;
-    this.getData();
+    await this.getData();
+    this.loading = false
   }
 
-  getData() {
-    this._apuConjunto.getApuSet(this.id).subscribe((r: any) => {
+  async getData() {
+    await this._apuConjunto.getApuSet(this.id).toPromise().then((r: any) => {
       this.data = r.data;
     })
   }

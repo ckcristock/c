@@ -14,15 +14,15 @@ import Swal from 'sweetalert2';
 })
 export class MediosmagneticosComponent implements OnInit {
 
-  public listaMediosMag:any = [];
+  public listaMediosMag: any = [];
   public alertOption: SweetAlertOptions;
   public IdMedioMag = '';
-  public url:string = this.router.url;
-  public Cargando: boolean=true;
-  public formatoEspecial:boolean = false;
-  enviromen:any;
+  public url: string = this.router.url;
+  public Cargando: boolean = true;
+  public formatoEspecial: boolean = false;
+  enviromen: any;
 
-  constructor(private http: HttpClient, private swalService: SwalService, private router: Router) { 
+  constructor(private http: HttpClient, private swalService: SwalService, private router: Router) {
     this.alertOption = {
       title: "¿Está Seguro?",
       text: "Se dispone a Eliminar este Formato",
@@ -49,28 +49,28 @@ export class MediosmagneticosComponent implements OnInit {
   }
 
   estadoFiltros = false;
-  mostrarFiltros(){
+  mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
 
 
   getListaMediosMag() {
-    let p:any = {};
+    let p: any = {};
 
     if (this.formatoEspecial) {
       p.Tipo = 'Especial';
     }
 
-    this.http.get(environment.ruta+'php/contabilidad/mediosmagneticos/lista_medios_magneticos.php',{params: p}).subscribe((data:any)=> {
+    this.http.get(environment.base_url + '/php/contabilidad/mediosmagneticos/lista_medios_magneticos.php', { params: p }).subscribe((data: any) => {
       this.Cargando = false
       this.listaMediosMag = data;
     })
   }
 
   eliminarMedioMag() {
-    let p = {id: this.IdMedioMag};
+    let p = { id: this.IdMedioMag };
 
-    this.http.get(environment.ruta+'php/contabilidad/mediosmagneticos/eliminar_mediomagnetico.php', {params: p}).subscribe((data:any)=> {
+    this.http.get(environment.ruta + 'php/contabilidad/mediosmagneticos/eliminar_mediomagnetico.php', { params: p }).subscribe((data: any) => {
       Swal.fire({
         icon: data.tipo,
         title: data.titulo,
@@ -89,7 +89,7 @@ export class MediosmagneticosComponent implements OnInit {
     })
   }
 
-  isFormatoEspecial():boolean {
+  isFormatoEspecial(): boolean {
     let str = this.url.indexOf('especiales');
 
     if (str >= 0) {

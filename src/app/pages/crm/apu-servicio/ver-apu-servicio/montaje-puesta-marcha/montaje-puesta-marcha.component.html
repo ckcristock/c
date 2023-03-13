@@ -59,10 +59,10 @@
             {{ item.hours_displacement }}
           </td>
           <td class="align-middle">
-            ${{ item.hours_value_displacement | currency : "" : "" }}
+            ${{ item.hours_value_displacement | number : "1.2-2" }}
           </td>
           <td class="align-middle">
-            ${{ item.total_value_displacement | currency : "" : "" }}
+            ${{ item.total_value_displacement | number : "1.2-2" }}
           </td>
           <td class="align-middle">
             {{ item.days_number_ordinary }}
@@ -74,10 +74,10 @@
             {{ item.hours_ordinary }}
           </td>
           <td class="align-middle">
-            ${{ item.hours_value_ordinary | currency : "" : "" }}
+            ${{ item.hours_value_ordinary | number : "1.2-2" }}
           </td>
           <td class="align-middle">
-            ${{ item.total_value_ordinary | currency : "" : "" }}
+            ${{ item.total_value_ordinary | number : "1.2-2" }}
           </td>
           <td class="align-middle">
             {{ item.days_number_festive }}
@@ -89,13 +89,13 @@
             {{ item.hours_festive }}
           </td>
           <td class="align-middle">
-            ${{ item.hours_value_festive | currency : "" : "" }}
+            ${{ item.hours_value_festive | number : "1.2-2" }}
           </td>
           <td class="align-middle">
-            ${{ item.total_value_festive | currency : "" : "" }}
+            ${{ item.total_value_festive | number : "1.2-2" }}
           </td>
           <td class="align-middle">
-            ${{ item.salary_value | currency : "" : "" }}
+            ${{ item.salary_value | number : "1.2-2" }}
           </td>
           <td class="align-middle">
             <button
@@ -111,11 +111,11 @@
             </button>
           </td>
         </tr>
-        <tr>
-          <td colspan="100%">
+        <tr *ngIf="collapsed[i]">
+          <td colspan="10">
             <div class="rounded-top table-responsive">
               <table
-                [ngbCollapse]="collapsed[i]"
+                [ngbCollapse]="!collapsed[i]"
                 class="w-100 table table-bordered table-striped table-sm"
               >
                 <thead>
@@ -151,8 +151,8 @@
                     <td>
                       {{ itemx.amount }}
                     </td>
-                    <td>${{ itemx.unit_value | currency : "" : "" }}</td>
-                    <td>${{ itemx.total_value | currency : "" : "" }}</td>
+                    <td>${{ itemx.unit_value | number : "1.2-2" }}</td>
+                    <td>${{ itemx.total_value | number : "1.2-2" }}</td>
                   </tr>
                 </tbody>
                 <tfoot>
@@ -161,7 +161,7 @@
                       Subtotal
                     </td>
                     <td colspan="6" class="text-center">
-                      ${{ item.subtotal | currency : "" : "" }}
+                      ${{ item.subtotal | number : "1.2-2" }}
                     </td>
                   </tr>
                 </tfoot>

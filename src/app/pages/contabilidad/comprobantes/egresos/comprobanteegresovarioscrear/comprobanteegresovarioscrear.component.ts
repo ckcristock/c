@@ -186,7 +186,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     text$.pipe(
       debounceTime(200),
       map(term => term.length < 4 ? []
-        : this.Cuenta.filter(v => v.Label.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
+        : this.Cuenta.filter(v => v.label.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 100))
     );
   formatter1 = (x: { label: string }) => x.label;
 
@@ -457,8 +457,8 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     if (nit != undefined && nit != '' && nit != null) {
       this.position_document = pos;
       let p: any = { nit: nit };
-      let id_plan_cuenta = this.Cuentas_Contables[pos].Id_Plan_Cuentas;
-
+      let id_plan_cuenta = this.Cuentas_Contables[pos].Cuenta.value;
+      console.log(id_plan_cuenta)
       if (id_plan_cuenta != '') {
         p.id_plan_cuenta = id_plan_cuenta;
       }
@@ -604,14 +604,14 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   isBank(banco, pos) {
     let existe = this.Bancos.findIndex(x => x.value == banco.Id_Plan_Cuentas);
 
-    if (existe >= 0) {
+    /* if (existe >= 0) {
       if (this.Forma_Pago == 'Cheque') {
         (document.getElementById('cheque' + pos) as HTMLInputElement).style.display = 'block';
       }
     } else {
       (document.getElementById('cheque' + pos) as HTMLInputElement).style.display = 'none';
       this.Cuentas_Contables[pos].Cheque = '';
-    }
+    } */
   }
 
   validarCampo(campo, event, tipo) { // Funcion que validará los campos de typeahead
@@ -706,7 +706,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
 
       let datos = new FormData();
       datos.append('datos', info);
-      this.http.post(environment.ruta + 'php/contabilidad/guardar_borrador_contable.php', datos)
+      this.http.post(environment.base_url + '/php/contabilidad/guardar_borrador_contable.php', datos)
         .subscribe((data: any) => {
           if (data.status == 202) {
             if (this.idBorrador == '')

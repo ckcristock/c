@@ -655,7 +655,7 @@ export class NotascarteracrearComponent implements OnInit {
 
       let datos = new FormData();
       datos.append('datos', info);
-      this.http.post(environment.ruta + 'php/contabilidad/guardar_borrador_contable.php', datos)
+      this.http.post(environment.base_url + '/php/contabilidad/guardar_borrador_contable.php', datos)
         .subscribe((data: any) => {
           if (data.status == 202) {
             if (this.idBorrador == '')

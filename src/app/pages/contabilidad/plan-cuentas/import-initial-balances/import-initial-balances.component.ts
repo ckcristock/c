@@ -1,23 +1,23 @@
-import { Component, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { PlanCuentasService } from '../plan-cuentas.service';
 
 @Component({
-  selector: 'app-import-puc',
-  templateUrl: './import-puc.component.html',
-  styleUrls: ['./import-puc.component.scss']
+  selector: 'app-import-initial-balances',
+  templateUrl: './import-initial-balances.component.html',
+  styleUrls: ['./import-initial-balances.component.scss']
 })
-export class ImportPucComponent implements OnInit {
+export class ImportInitialBalancesComponent implements OnInit {
   @ViewChild('modal') modal;
   @Output('reload') reload = new EventEmitter();
   fileString: any;
   file: any;
-  deletePlans: boolean = false;
   cargado: boolean;
   type: any;
   data: any;
+
   constructor(
     private _modal: ModalService,
     private _swal: SwalService,
@@ -31,7 +31,6 @@ export class ImportPucComponent implements OnInit {
     this._modal.open(this.modal, 'lg')
     this.fileString = undefined;
     this.file = undefined;
-    this.deletePlans = false;
     this.cargado = undefined;
     this.type = undefined;
     this.data = undefined;
@@ -84,17 +83,16 @@ export class ImportPucComponent implements OnInit {
   }
 
   validateImport(data) {
-    this._planCuentas.validateImport(data, this.deletePlans).subscribe((res: any) => {
+    this._planCuentas.importInitialBalances(data).subscribe((res: any) => {
       this._swal.show({
-        icon: res.data.original.icon,
-        title: res.data.original.title,
-        text: res.data.original.text,
+        icon: 'success',
+        title: 'Archivo cargado con éxito',
+        text: '',
         showCancel: false,
-        timer: res.data.original.timer
+        timer: 1000
       })
       this._modal.close();
       this.reload.emit()
-      console.log(res)
     })
   }
 

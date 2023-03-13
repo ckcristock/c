@@ -111,11 +111,11 @@ export class PlanCuentasComponent implements OnInit {
         return new Promise((resolve) => {
           this._planCuentas.importCommercialPuc().subscribe((res: any) => {
             this.swalService.show({
-              icon: 'success',
-              title: 'Actualizado con éxito',
-              text: '',
+              icon: res.data.original.icon,
+              title: res.data.original.title,
+              text: res.data.original.text,
               showCancel: false,
-              timer: 1000
+              timer: res.data.original.timer
             }, true)
             this.RecargarDatos();
           })

@@ -24,7 +24,10 @@
           >
             <i class="fas fa-file-upload"></i> Importar PUC comercial
           </button>
-          <button class="btn btn-warning btn-sm">
+          <button
+            class="btn btn-warning btn-sm"
+            (click)="imporInitialBalance.open()"
+          >
             <i class="fas fa-file-upload"></i> Importar saldos iniciales
           </button>
           <button
@@ -243,6 +246,10 @@
 </div>
 
 <app-import-puc #importPuc (reload)="RecargarDatos()"></app-import-puc>
+<app-import-initial-balances
+  #imporInitialBalance
+  (reload)="RecargarDatos()"
+></app-import-initial-balances>
 
 <ng-template #crearCuenta let-modal>
   <div class="modal-header">

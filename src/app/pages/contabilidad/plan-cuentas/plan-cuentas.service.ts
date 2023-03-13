@@ -61,4 +61,8 @@ export class PlanCuentasService {
     return this.http.post(`${environment.base_url}/import-validator-account-plans/${boolean}`, data)
   }
 
+  importInitialBalances(data) {
+    return this.http.post(`${environment.base_url}/import-initial-balances`, data)
+  }
+
 }

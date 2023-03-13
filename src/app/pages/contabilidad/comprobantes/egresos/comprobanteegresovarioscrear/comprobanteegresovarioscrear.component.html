@@ -253,10 +253,10 @@
             <th></th>
             <th>Concepto</th>
             <th>Base</th>
-            <th>Debito</th>
-            <th>Credito</th>
-            <th>Deb Niif</th>
-            <th>Cred Niif</th>
+            <!-- <th>Debito</th>
+            <th>Credito</th> -->
+            <th>Débito</th>
+            <th>Crédito</th>
             <th></th>
           </tr>
         </thead>
@@ -273,7 +273,7 @@
                 id="Cuenta{{ i }}"
                 class="form-control form-control-sm"
                 [ngbTypeahead]="search1"
-                [resultTemplate]="rt1"
+                [resultTemplate]="rt3"
                 [inputFormatter]="formatter1"
                 (keyup)="tab($event, 'Nit' + i)"
                 (ngModelChange)="BuscarCuenta(item.Cuenta, i)"
@@ -377,7 +377,7 @@
                 readonly
               />
             </td>
-            <td>
+            <!-- <td>
               <input
                 name="Debito{{ i }}"
                 id="Debito{{ i }}"
@@ -400,7 +400,7 @@
                 class="form-control form-control-sm text-right"
                 type="number"
               />
-            </td>
+            </td> -->
             <td>
               <input
                 name="Deb_Niif{{ i }}"
@@ -574,6 +574,9 @@
 
 <ng-template #rt2 let-r="result" let-t="term">
   <span class="f-9">{{ r.Nombre }} </span>
+</ng-template>
+<ng-template #rt3 let-r="result" let-t="term">
+  <span class="f-9">{{ r.label }} </span>
 </ng-template>
 <swal #confirmacionGuardarCheque [swalOptions]="alertOption2"></swal>
 <!-- <a

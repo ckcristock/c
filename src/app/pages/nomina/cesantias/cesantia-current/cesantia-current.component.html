@@ -3,18 +3,18 @@
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
         <h4 class="text-primary">
-          {{ empleados.status == "pagado" ? "Resumen" : "Pago" }} de prima
+          {{ empleados.status == "pagado" ? "Resumen" : "Pago" }} de cesantías
         </h4>
       </div>
 
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button
+          <!-- <button
             (click)="getReport(empleados.status)"
             class="btn btn-success btn-sm"
           >
             <i class="far fa-file-excel"></i> Reporte
-          </button>
+          </button> -->
           <button
             *ngIf="empleados.status == 'pagado'"
             (click)="getReportPdfs()"
@@ -23,9 +23,7 @@
             <span
               ><i
                 class="fas"
-                [class]="
-                  !donwloadingPdfs ? 'fa-file-pdf' : 'fa-spinner fa-spin'
-                "
+                [class]="!donwloadingPdfs ? 'fa-file-pdf' : 'fa-spinner fa-spin'"
               ></i>
               {{ !donwloadingPdfs ? "Descargar" : "Descargando" }}</span
             >
@@ -90,11 +88,11 @@
                 {{ empleado.first_surname }} {{ empleado.second_surname }}
               </td>
               <td class="text-right">
-                ${{ empleado.avg_salary | number : "1.2-2" }}
+                ${{ empleado.avg_salary | currency : "" : "" }}
               </td>
               <td class="text-center">{{ empleado.worked_days }}</td>
               <td class="text-right">
-                ${{ empleado.bonus | number : "1.2-2" }}
+                ${{ empleado.bonus | currency : "" : "" }}
               </td>
               <!-- <td class="align-middle" *ngIf="empleados.status=='pagado'">
                 <button
@@ -110,7 +108,7 @@
                 <div ngbDropdown container="body" class="dropdown-primary">
                   <button
                     ngbDropdownToggle
-                    class="btn btn-primary btn-sm"
+                    class="btn btn-primary btn-sm waves-light"
                     type="button"
                   >
                     <i class="mdi mdi-chevron-down"></i>
@@ -125,25 +123,8 @@
                     </ng-template>
                   </button>
                   <div ngbDropdownMenu>
-                    <!-- <button
-                      class="dropdown-item "
-                      [ngClass]="{
-                        'text-info': vacation.pay_vacations.length > 0,
-                        'text-success': vacation.pay_vacations.length == 0
-                      }"
-                      (click)="openConfirm(add); vacationData(vacation)"
-                    >
-                      <i
-                        class="fas"
-                        [ngClass]="{
-                          'fa-eye': vacation.pay_vacations.length > 0,
-                          'fa-money-bill': vacation.pay_vacations.length == 0
-                        }"
-                      ></i>
-                      {{ vacation.pay_vacations.length > 0 ? "Ver" : "Pagar" }}
-                    </button> -->
                     <button
-                      class="dropdown-item text-danger"
+                      class="dropdown-item text-danger waves-light caja-botones"
                       *ngIf="empleados.status == 'pagado'"
                       (click)="getOneReportPdfs(empleado.id, empleados.period)"
                     >
@@ -168,28 +149,29 @@
       ></mat-paginator>
 
       <div class="alert alert-info text-center" role="alert">
-        <b>TOTAL PRIMA: </b>$ {{ empleados.total_primas | number : "1.2-2" }}
-      </div> </ng-container
-    >.
+        <b>TOTAL CESANTÍAS: </b>$ {{ empleados.total_cesantias | currency : "" : "" }}
+      </div>
+    </ng-container>.
 
     <ng-container>
       <div *ngIf="!habilitarPagar && empleados.status != 'pagado'" >
         <div class="alert alert-danger m-0 text-center" role="alert">
-          Solo podrá pagar primas en los meses de Junio y en Diciembre
-
+          Solo podrá consignar cesantías en los meses de Enero y hasta el 14 de Febrero
         </div>
       </div>
       <button
         class="btn btn-primary btn-block"
-        *ngIf="empleados.status != 'pagado' && habilitarPagar"
-        (click)="pagar(empleados)"
+        *ngIf="empleados.status != 'pagado' && habilitarPagar && employees.length!=0 "
+        (click)="pagarCesantias(empleados)"
       >
         Pagar
       </button>
     </ng-container>
+
   </div>
 </div>
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
+

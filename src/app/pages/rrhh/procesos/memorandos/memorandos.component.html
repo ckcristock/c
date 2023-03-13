@@ -87,10 +87,7 @@
             <th scope="col">Detalles</th>
             <th scope="col">Fecha</th>
             <th scope="col">Estado</th>
-            <th
-              scope="col"
-              *ngIf="permission.permissions.approve"
-            >
+            <th scope="col" *ngIf="permission.permissions.approve">
               <i class="mdi mdi-chevron-down"></i>
             </th>
           </tr>
@@ -113,21 +110,29 @@
             <td class="align-middle">
               {{ memorandum.first_name }} {{ memorandum.first_surname }}
             </td>
-            <td class="align-middle">{{ memorandum.level ? memorandum.level : 'No aplica'  }}</td>
             <td class="align-middle">
-              {{ memorandum.memorandumType ? memorandum.memorandumType : 'No aplica'}}
+              {{ memorandum.level ? memorandum.level : "No aplica" }}
+            </td>
+            <td class="align-middle">
+              {{
+                memorandum.memorandumType
+                  ? memorandum.memorandumType
+                  : "No aplica"
+              }}
             </td>
             <td class="align-middle">{{ memorandum.type }}</td>
             <td class="align-middle">{{ memorandum.details }}</td>
             <td class="align-middle">
-              {{ memorandum.created_at | date: "longDate" }}
+              {{ memorandum.created_at | date : "longDate" }}
             </td>
-            <td class="align-middle">{{ memorandum.state ? memorandum.state : 'No aplica' }}</td>
+            <td class="align-middle">
+              {{ memorandum.state ? memorandum.state : "No aplica" }}
+            </td>
             <td class="align-middle" *ngIf="permission.permissions.approve">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -138,14 +143,14 @@
                       (click)="aprobarMemorando(memorandum, 'Aprobado')"
                       href="javascript:void(0)"
                       *ngIf="memorandum.state == 'Pendiente'"
-                      class="dropdown-item waves-light text-success caja-botones"
+                      class="dropdown-item text-success"
                     >
                       <i class="far fa-thumbs-up"></i> Aprobar
                     </a>
                     <a
                       *ngIf="memorandum.type == 'Memorando'"
                       href="javascript:void(0)"
-                      class="dropdown-item waves-light text-info caja-botones"
+                      class="dropdown-item text-info"
                       (click)="download(memorandum.file)"
                     >
                       <i class="fas fa-file-download"></i> Descargar
@@ -154,7 +159,7 @@
                   <ng-template #llamado>
                     <a
                       href="javascript:void(0)"
-                      class="dropdown-item waves-light text-dark caja-botones"
+                      class="dropdown-item text-dark"
                       (click)="download(memorandum.file)"
                     >
                       <i class="fas fa-ban"></i> Nada por hacer

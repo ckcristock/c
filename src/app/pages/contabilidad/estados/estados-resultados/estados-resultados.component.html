@@ -52,7 +52,7 @@
                 (selectionChange)="setQueryParams()"
                 required
               >
-                <mat-option value="Pcga">PCGA</mat-option>
+                <!-- <mat-option value="Pcga">PCGA</mat-option> -->
                 <mat-option value="Niif">NIIF</mat-option>
               </mat-select>
             </mat-form-field>
@@ -63,6 +63,9 @@
                 [(ngModel)]="EstResultadoModel.Centro_Costo"
                 placeholder="Centro de costo"
                 appearance="outline"
+                [clearable]="false"
+                bindLabel="label"
+                bindValue="value"
                 [appendTo]="'body'"
                 [items]="Centro_Costos"
                 (ngModelChange)="setQueryParams()"
@@ -77,25 +80,21 @@
           aria-label="Vertical button group"
         >
           <a
-            class="btn btn-danger btn-lg"
-            href="{{
-              envirom.ruta
-            }}php/contabilidad/estadoresultado/descarga_pdf.php?{{
-              queryParams
-            }}"
+            class="btn btn-danger"
+            (click)="
+              openNewTab('/php/contabilidad/estadoresultado/descarga_pdf.php?')
+            "
             role="button"
-            target="_blank"
             ><i class="fas fa-file-pdf"></i> PDF</a
           >
           <a
-            class="btn btn-primary btn-lg"
-            href="{{
-              envirom.ruta
-            }}php/contabilidad/estadoresultado/descarga_excel.php?{{
-              queryParams
-            }}"
+            class="btn btn-primary"
+            (click)="
+              openNewTab(
+                '/php/contabilidad/estadoresultado/descarga_excel.php?'
+              )
+            "
             role="button"
-            target="_blank"
             ><i class="fas fa-file-excel"></i> EXCEL</a
           >
         </div>

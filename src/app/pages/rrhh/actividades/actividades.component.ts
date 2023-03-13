@@ -148,7 +148,7 @@ export class ActividadesComponent {
   }
   ngOnInit(): void {
     this.getGroups();
-    /*  this.http.get(this.globales.ruta + 'php/lista_generales.php', { params: { modulo: 'Grupo' } }).subscribe((data: any) => {
+    /*  this.http.get(this.globales.base_url + '/php/lista_generales.php', { params: { modulo: 'Grupo' } }).subscribe((data: any) => {
        this.Grupos = data;
      }); */
     this.GetActividadesMes();

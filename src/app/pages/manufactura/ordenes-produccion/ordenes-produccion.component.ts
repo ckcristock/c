@@ -10,6 +10,7 @@ import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 import { PermissionService } from 'src/app/core/services/permission.service';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { OrdenesProduccionService } from '../services/ordenes-produccion.service';
+import { PaginatorService } from './../../../core/services/paginator.service';
 Object.defineProperty(TooltipComponent.prototype, 'message', {
   set(v: any) {
     const el = document.querySelectorAll('.mat-tooltip');
@@ -54,7 +55,8 @@ export class OrdenesProduccionComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private dateAdapter: DateAdapter<any>,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private _paginator: PaginatorService
   ) {
     this.permission = this._permission.validatePermissions(this.permission);
     this.dateAdapter.setLocale('es');
@@ -97,29 +99,18 @@ export class OrdenesProduccionComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    this.pagination.pageSize = event.pageSize
-    this.pagination.page = event.pageIndex + 1
+    this._paginator.handlePageEvent(event, this.pagination)
     this.getWorkOrders()
   }
 
   resetFiltros() {
-    for (const controlName in this.formFilters.controls) {
-      this.formFilters.get(controlName).setValue('');
-    }
+    this._paginator.resetFiltros(this.formFilters)
     this.active_filters = false
   }
 
   SetFiltros(paginacion) {
-    let params = new HttpParams;
-    params = params.set('pag', paginacion)
-    params = params.set('pageSize', this.pagination.pageSize)
-    for (const controlName in this.formFilters.controls) {
-      const control = this.formFilters.get(controlName);
-      if (control.value) {
-        params = params.set(controlName, control.value);
-      }
-    }
-    return params;
+    return this._paginator.SetFiltros(paginacion, this.pagination, this.formFilters)
+
   }
 
   createFormFilters() {
@@ -208,7 +199,7 @@ export class OrdenesProduccionComponent implements OnInit {
         this.getWorkOrders()
       }
     })
-    let param = {status: status}
+    let param = { status: status }
     this._work_orders.updateWorkOrder(id, param).subscribe();
   }
 }

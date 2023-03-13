@@ -37,7 +37,8 @@
             placeholder="Tercero *"
             [appendTo]="'body'"
             appearance="outline"
-            (change)="getContacts(); getBudgets(); getQuotations()"
+            [clearable]="false"
+            [class.is-invalid]="form.get('third_party_id').invalid"
             bindValue="value"
             bindLabel="text"
             required
@@ -51,6 +52,8 @@
             placeholder="Contacto *"
             bindLabel="text"
             [appendTo]="'body'"
+            [clearable]="false"
+            [class.is-invalid]="form.get('third_party_person_id').invalid"
             appearance="outline"
             bindValue="value"
             notFoundText="No hay registros"
@@ -63,6 +66,8 @@
             formControlName="country_id"
             placeholder="País *"
             (change)="filterDepartments($event.value)"
+            [clearable]="false"
+            [class.is-invalid]="form.get('country_id').invalid"
             bindLabel="text"
             [appendTo]="'body'"
             appearance="outline"
@@ -76,6 +81,8 @@
           <ng-select
             [items]="cities"
             formControlName="city_id"
+            [clearable]="false"
+            [class.is-invalid]="form.get('city_id').invalid"
             bindLabel="text"
             bindValue="value"
             ngDefaultControl
@@ -98,7 +105,6 @@
             formControlName="description"
             id="descripcion"
             name="description"
-            required
             [cdkTextareaAutosize]="true"
           ></textarea>
         </mat-form-field>
@@ -114,9 +120,9 @@
               <button
                 class="btn btn-primary btn-sm"
                 type="button"
-                [routerLink]="['/crm/presupuesto/crear']"
+                (click)="openNewTab('/crm/presupuesto/crear')"
               >
-                <i class="fa fa-plus"></i> Agregar
+                <i class="fa fa-plus"></i> Nuevo
               </button>
               <button
                 class="btn btn-info btn-sm"
@@ -203,7 +209,6 @@
                   <tr class="text-center text-uppercase">
                     <th>Código</th>
                     <th>Fecha</th>
-                    <th>Cliente</th>
                     <th>Destino</th>
                     <th>Linea</th>
                     <th>Quien elabora</th>
@@ -220,7 +225,7 @@
                       'text-danger font-weight-bold': item.state == 'Inactivo'
                     }"
                   >
-                    <td class="align-middle pb-0">
+                    <td class="align-middle pb-0 text-left">
                       <mat-checkbox
                         color="primary"
                         (change)="guardarPresupuesto($event, item)"
@@ -230,7 +235,6 @@
                     <td class="align-middle">
                       {{ item.created_at | date : "longDate" }}
                     </td>
-                    <td class="align-middle">{{ item.customer.name }}</td>
                     <td class="align-middle">{{ item.destiny.name }}</td>
                     <td class="align-middle">{{ item.line }}</td>
                     <td class="align-middle">
@@ -238,10 +242,10 @@
                       {{ item.user.person.first_surname }}
                     </td>
                     <td class="align-middle">
-                      ${{ item.total_cop | currency : "" : "" }}
+                      ${{ item.total_cop | number : "1.2-2" }}
                     </td>
                     <td class="align-middle">
-                      ${{ item.total_usd | currency : "" : "" }}
+                      ${{ item.total_usd | number : "1.2-2" }}
                     </td>
                     <td class="align-middle">
                       <div
@@ -259,16 +263,22 @@
                         </button>
                         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                           <a
-                            class="dropdown-item waves-light text-success caja-botones"
-                            [routerLink]="['/crm/presupuesto/ver', item.id]"
-                            (click)="_modal.close()"
+                            class="dropdown-item text-success"
+                            href="javascript: void(0);"
+                            (click)="
+                              openNewTab('/crm/presupuesto/ver', item.id);
+                              _modal.close()
+                            "
                           >
                             <i class="far fa-eye"></i> Ver
                           </a>
                           <a
-                            class="dropdown-item waves-light text-info caja-botones"
-                            [routerLink]="['/crm/presupuesto/editar', item.id]"
-                            (click)="_modal.close()"
+                            class="dropdown-item text-info"
+                            href="javascript: void(0);"
+                            (click)="
+                              openNewTab('/crm/presupuesto/editar', item.id);
+                              _modal.close()
+                            "
                           >
                             <i class="far fa-edit"></i> Editar
                           </a>
@@ -304,9 +314,9 @@
             <div class="btn-group rounded w-sm-100">
               <button
                 class="btn btn-primary btn-sm"
-                [routerLink]="['/crm/cotizacion/crear']"
+                (click)="openNewTab('/crm/cotizacion/crear')"
               >
-                <i class="fa fa-plus"></i> Agregar
+                <i class="fa fa-plus"></i> Nuevo
               </button>
               <button
                 class="btn btn-info btn-sm"
@@ -402,7 +412,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let item of quotations" class="text-center">
-                    <td class="align-middle pb-0">
+                    <td class="align-middle pb-0 text-left">
                       <mat-checkbox
                         color="primary"
                         (change)="guardarCotizacion($event, item)"
@@ -415,10 +425,10 @@
                     <td>{{ item.description }}</td>
                     <td>{{ item.municipality.name }}</td>
                     <td class="align-middle">
-                      ${{ item.total_cop | currency : "" : "" }}
+                      ${{ item.total_cop | number : "1.2-2" }}
                     </td>
                     <td class="align-middle">
-                      ${{ item.total_usd | currency : "" : "" }}
+                      ${{ item.total_usd | number : "1.2-2" }}
                     </td>
                     <td>
                       <div
@@ -428,32 +438,38 @@
                       >
                         <button
                           ngbDropdownToggle
-                          class="btn btn-primary btn-sm waves-light"
+                          class="btn btn-primary btn-sm"
                           type="button"
                         >
                           <i class="mdi mdi-chevron-down"></i>
                         </button>
                         <div ngbDropdownMenu>
                           <a
-                            class="dropdown-item waves-light text-success caja-botones"
+                            class="dropdown-item text-success"
                             href="javascript: void(0);"
-                            [routerLink]="['/crm/cotizacion/ver/', item.id]"
-                            (click)="_modal.close()"
+                            (click)="
+                              openNewTab('/crm/cotizacion/ver/', item.id);
+                              _modal.close()
+                            "
                           >
                             <i class="fas fa-eye"></i> Ver</a
                           >
                           <a
-                            class="dropdown-item waves-light text-primary caja-botones"
+                            class="dropdown-item text-primary"
                             href="javascript: void(0);"
-                            [routerLink]="['/crm/cotizacion/copiar/', item.id]"
-                            (click)="_modal.close()"
+                            (click)="
+                              openNewTab('/crm/cotizacion/copiar/', item.id);
+                              _modal.close()
+                            "
                             ><i class="fas fa-copy"></i> Copiar</a
                           >
                           <a
-                            class="dropdown-item waves-light text-info caja-botones"
+                            class="dropdown-item text-info"
                             href="javascript: void(0);"
-                            [routerLink]="['/crm/cotizacion/editar/', item.id]"
-                            (click)="_modal.close()"
+                            (click)="
+                              openNewTab('/crm/cotizacion/editar/', item.id);
+                              _modal.close()
+                            "
                             ><i class="fas fa-edit"></i> Editar</a
                           >
                         </div>
@@ -482,25 +498,177 @@
       <div class="mt-3">
         <div class="row">
           <div class="col-md mb-3">
-            <h6>APU disponibles</h6>
+            <h6>APU seleccionados</h6>
           </div>
           <div class="col-md mb-3 text-right">
             <div class="btn-group rounded w-sm-100">
               <button
                 class="btn btn-primary btn-sm"
-                [routerLink]="['/crm/apus']"
+                (click)="openNewTab('/crm/apus')"
               >
-                <i class="fa fa-plus"></i> Ver y agregar
+                <i class="fa fa-plus"></i> Nuevo
               </button>
-              <button
-                class="btn btn-info btn-sm"
-                (click)="openClose(matPanelAPU)"
-              >
-                <i class="fas fa-sliders-h"></i> Filtros
+              <button class="btn btn-warning btn-sm" (click)="findApus()">
+                <i class="fas fa-plus"></i> Agregar
               </button>
             </div>
           </div>
         </div>
+        <ng-container *ngIf="apuSelected.length > 0; else alertAPU">
+          <div class="rounded-top table-responsive">
+            <table
+              class="table table-bordered table-striped table-sm mt-2"
+              style="font-size: smaller"
+            >
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th scope="col">Código</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Línea</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Costo unitario</th>
+                  <th><i class="mdi mdi-chevron-down"></i></th>
+                  <th><i class="fas fa-trash"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of apuSelected" class="text-center">
+                  <td>{{ item.code }}</td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.line }}</td>
+                  <td>{{ item.type_name }}</td>
+                  <td>${{ item.unit_cost | number : "1.2-2" }}</td>
+                  <td class="align-middle">
+                    <div ngbDropdown container="body" class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm"
+                        type="button"
+                      >
+                        <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          *ngIf="item.type == 'S'"
+                          class="dropdown-item text-success"
+                          href="javascript: void(0);"
+                          (click)="
+                            openNewTab('/crm/apu/ver-apu-servicio', item.apu_id)
+                          "
+                        >
+                          <i class="far fa-eye"></i> Ver
+                        </a>
+                        <a
+                          *ngIf="item.type == 'P'"
+                          class="dropdown-item text-success"
+                          href="javascript: void(0);"
+                          (click)="
+                            openNewTab('/crm/apu/ver-apu-pieza', item.apu_id)
+                          "
+                        >
+                          <i class="far fa-eye"></i> Ver
+                        </a>
+                        <a
+                          *ngIf="item.type == 'C'"
+                          class="dropdown-item text-success"
+                          href="javascript: void(0);"
+                          (click)="
+                            openNewTab('/crm/apu/ver-apu-conjunto', item.apu_id)
+                          "
+                        >
+                          <i class="far fa-eye"></i> Ver
+                        </a>
+                        <a
+                          *ngIf="item.type == 'S'"
+                          class="dropdown-item text-info"
+                          href="javascript: void(0);"
+                          (click)="
+                            openNewTab(
+                              '/crm/apu/editar-apu-servicio',
+                              item.apu_id
+                            )
+                          "
+                        >
+                          <i class="far fa-edit"></i> Editar
+                        </a>
+                        <a
+                          *ngIf="item.type == 'P'"
+                          class="dropdown-item text-info"
+                          href="javascript: void(0);"
+                          (click)="
+                            openNewTab('/crm/apu/editar-apu-pieza', item.apu_id)
+                          "
+                        >
+                          <i class="far fa-edit"></i> Editar
+                        </a>
+                        <a
+                          *ngIf="item.type == 'C'"
+                          class="dropdown-item text-info"
+                          href="javascript: void(0);"
+                          (click)="
+                            openNewTab(
+                              '/crm/apu/editar-apu-conjunto',
+                              item.apu_id
+                            )
+                          "
+                        >
+                          <i class="far fa-edit"></i> Editar
+                        </a>
+                        <a
+                          *ngIf="item.type == 'P'"
+                          class="dropdown-item text-primary"
+                          href="javascript: void(0);"
+                          (click)="
+                            openNewTab('/crm/apu/copiar-apu-pieza', item.apu_id)
+                          "
+                          ><i class="fas fa-copy"></i> Copiar</a
+                        >
+                        <a
+                          *ngIf="item.type == 'C'"
+                          class="dropdown-item text-primary"
+                          href="javascript: void(0);"
+                          (click)="
+                            openNewTab(
+                              '/crm/apu/copiar-apu-conjunto',
+                              item.apu_id
+                            )
+                          "
+                          ><i class="fas fa-copy"></i> Copiar</a
+                        >
+                        <a
+                          *ngIf="item.type == 'S'"
+                          class="dropdown-item text-primary"
+                          href="javascript: void(0);"
+                          (click)="
+                            openNewTab(
+                              '/crm/apu/copiar-apu-servicio',
+                              item.apu_id
+                            )
+                          "
+                          ><i class="fas fa-copy"></i> Copiar</a
+                        >
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      (click)="deleteApu(item)"
+                      class="btn btn-danger btn-sm"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+        <ng-template #alertAPU>
+          <div class="alert alert-warning" role="alert">
+            Ningún APU agregado a este negocio
+          </div>
+        </ng-template>
         <mat-expansion-panel
           #matPanelAPU="matExpansionPanel"
           class="mat-elevation-z0"
@@ -530,9 +698,12 @@
   </div>
 </ng-template>
 
+<app-get-apus #apus (sendApus)="getApus($event)"> </app-get-apus>
+
 <ng-template #notDataBudgets>
   <app-not-data [loading]="loadingBudgets"></app-not-data>
 </ng-template>
+
 <ng-template #notDataQuotations>
   <app-not-data [loading]="loadingQuotations"></app-not-data>
 </ng-template>
@@ -632,10 +803,10 @@
                     <td>{{ item.municipality.name }}</td>
                     <td class="align-middle">{{ item.line }}</td>
                     <td class="align-middle">
-                      ${{ item.total_cop | currency : "" : "" }}
+                      ${{ item.total_cop | number : "1.2-2" }}
                     </td>
                     <td class="align-middle">
-                      ${{ item.total_usd | currency : "" : "" }}
+                      ${{ item.total_usd | number : "1.2-2" }}
                     </td>
                     <td>
                       <div
@@ -645,14 +816,14 @@
                       >
                         <button
                           ngbDropdownToggle
-                          class="btn btn-primary btn-sm waves-light"
+                          class="btn btn-primary btn-sm "
                           type="button"
                         >
                           <i class="mdi mdi-chevron-down"></i>
                         </button>
                         <div ngbDropdownMenu>
                           <a
-                            class="dropdown-item waves-light text-success caja-botones"
+                            class="dropdown-item  text-success "
                             href="javascript: void(0);"
                             [routerLink]="['/crm/cotizacion/ver/', item.id]"
                             (click)="_modal.close()"
@@ -660,14 +831,14 @@
                             <i class="fas fa-eye"></i> Ver</a
                           >
                           <a
-                            class="dropdown-item waves-light text-primary caja-botones"
+                            class="dropdown-item  text-primary "
                             href="javascript: void(0);"
                             [routerLink]="['/crm/cotizacion/copiar/', item.id]"
                             (click)="_modal.close()"
                             ><i class="fas fa-copy"></i> Copiar</a
                           >
                           <a
-                            class="dropdown-item waves-light text-info caja-botones"
+                            class="dropdown-item  text-info "
                             href="javascript: void(0);"
                             [routerLink]="['/crm/cotizacion/editar/', item.id]"
                             (click)="_modal.close()"

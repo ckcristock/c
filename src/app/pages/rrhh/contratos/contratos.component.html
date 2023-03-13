@@ -183,7 +183,7 @@
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
                       ngbDropdownToggle
-                      class="btn btn-primary btn-sm waves-light"
+                      class="btn btn-primary btn-sm"
                       type="button"
                     >
                       <i class="mdi mdi-chevron-down"></i>
@@ -193,22 +193,22 @@
                           [routerLink]="['/nomina/ver-viatico', item.id]"
                           class="
                             dropdown-item
-                            waves-light
-                            caja-botones
+
+
                           "
                         >
                           <i class="far fa-eye"></i> Ver</a
                         > -->
                       <a
                         type="button"
-                        class="dropdown-item text-success waves-light"
+                        class="dropdown-item text-success"
                         (click)="download(contract.id, contract)"
                       >
                         <i class="fas fa-download"></i> Descargar
                       </a>
                       <a
                         type="button"
-                        class="dropdown-item text-info waves-light"
+                        class="dropdown-item text-info"
                         [routerLink]="[
                           '/ajustes/informacion-base/funcionario/',
                           contract.id
@@ -250,27 +250,49 @@
             <a
               *ngFor="let contractToExpire of contractsToExpire"
               role="button"
-              (click)="makeChoice(contractToExpire,renovarContrato)"
+              (click)="makeChoice(contractToExpire, renovarContrato)"
               class="list-group-item list-group-item-action flex-column align-items-start"
             >
-              <div class="d-flex w-100 justify-content-between"
+              <div
+                class="d-flex w-100 justify-content-between"
                 matBadgeSize="small"
-                [matBadgeColor]="(contractToExpire.renewed)?'primary':(contractToExpire.cantidad>0)?'accent':'warn'"
-                [matBadge]="(contractToExpire.cantidad==0)?'!':contractToExpire.cantidad"
-                [matBadgeHidden]="contractToExpire.renewed===null && contractToExpire.cantidad==0"
+                [matBadgeColor]="
+                  contractToExpire.renewed
+                    ? 'primary'
+                    : contractToExpire.cantidad > 0
+                    ? 'accent'
+                    : 'warn'
+                "
+                [matBadge]="
+                  contractToExpire.cantidad == 0
+                    ? '!'
+                    : contractToExpire.cantidad
+                "
+                [matBadgeHidden]="
+                  contractToExpire.renewed === null &&
+                  contractToExpire.cantidad == 0
+                "
               >
                 <div class="mb-1">
                   {{ contractToExpire.first_name }}
                   {{ contractToExpire.first_surname }} <br />
                   <small class="text-muted">{{
-                    contractToExpire.date_end | date: "longDate"
+                    contractToExpire.date_end | date : "longDate"
                   }}</small>
                 </div>
-                <div #tooltip="matTooltip"
-                    matTooltipPosition="above"
-                    [matTooltip]="(contractToExpire.renewed)?'Ya presenta información para renovación':
-                                  (contractToExpire.cantidad>0)?'Ya ha sido renovado anteriormente':
-                                  (contractToExpire.renewed==null)?'':'Ya ha sido asignado a preliquidación'">
+                <div
+                  #tooltip="matTooltip"
+                  matTooltipPosition="above"
+                  [matTooltip]="
+                    contractToExpire.renewed
+                      ? 'Ya presenta información para renovación'
+                      : contractToExpire.cantidad > 0
+                      ? 'Ya ha sido renovado anteriormente'
+                      : contractToExpire.renewed == null
+                      ? ''
+                      : 'Ya ha sido asignado a preliquidación'
+                  "
+                >
                   <img
                     [src]="contractToExpire.image | image"
                     onerror="this.src='../../../../assets/images/noprofile.png'"
@@ -368,44 +390,39 @@
             <mat-option
               *ngFor="let contractType of contractTypes"
               [value]="contractType.id"
-            >{{ contractType.name }}</mat-option>
+              >{{ contractType.name }}</mat-option
+            >
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Término del contrato</mat-label>
           <mat-select
-          formControlName="contract_term_id"
-          placeholder="Tipo de contrato"
-          required
-        >
-          <mat-option
-            *ngFor="let term of terms"
-            [value]="term.id"
-          >{{ term.name }}</mat-option>
-        </mat-select>
+            formControlName="contract_term_id"
+            placeholder="Tipo de contrato"
+            required
+          >
+            <mat-option *ngFor="let term of terms" [value]="term.id">{{
+              term.name
+            }}</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
       <div class="row">
         <mat-form-field class="col" appearance="outline">
-          <mat-label for="Aplica_Separacion_Categorias"
-            >Grupo</mat-label
-          >
+          <mat-label for="Aplica_Separacion_Categorias">Grupo</mat-label>
           <mat-select
             formControlName="group_id"
             placeholder="Grupo"
             (selectionChange)="getDependenciesByGroup($event.value)"
             required
           >
-          <mat-option
-            *ngFor="let group of groups"
-            [value]="group.value"
-          >{{ group.text }}</mat-option>
+            <mat-option *ngFor="let group of groups" [value]="group.value">{{
+              group.text
+            }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
-          <mat-label for="Aplica_Separacion_Categorias"
-            >Dependencia</mat-label
-          >
+          <mat-label for="Aplica_Separacion_Categorias">Dependencia</mat-label>
           <mat-select
             formControlName="dependency_id"
             placeholder="Dependencia"
@@ -415,15 +432,14 @@
             <mat-option
               *ngFor="let dependency of dependencies"
               [value]="dependency.value"
-            >{{ dependency.text }}</mat-option>
+              >{{ dependency.text }}</mat-option
+            >
           </mat-select>
         </mat-form-field>
       </div>
       <div class="row">
         <mat-form-field class="col" appearance="outline">
-          <mat-label for="Aplica_Separacion_Categorias"
-            >Posición</mat-label
-          >
+          <mat-label for="Aplica_Separacion_Categorias">Posición</mat-label>
           <mat-select
             formControlName="position_id"
             placeholder="Posición"
@@ -432,8 +448,9 @@
             <mat-option
               *ngFor="let position of positions"
               [value]="position.value"
-            >{{ position.text }}</mat-option>
-        </mat-select>
+              >{{ position.text }}</mat-option
+            >
+          </mat-select>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Salario</mat-label>
@@ -461,23 +478,17 @@
             <mat-option
               *ngFor="let lista of listaTiposTurno"
               [value]="lista.tipoTurno"
-            >{{ lista.tipoTurno }}</mat-option>
-        </mat-select>
+              >{{ lista.tipoTurno }}</mat-option
+            >
+          </mat-select>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
-          <mat-label for="Aplica_Separacion_Categorias"
-            >Turno</mat-label
-          >
-          <mat-select
-            formControlName="turn_id"
-            placeholder="Turno"
-            required
-          >
-            <mat-option
-              *ngFor="let turno of listaTurnos"
-              [value]="turno.id"
-            >{{ turno.name }}</mat-option>
-        </mat-select>
+          <mat-label for="Aplica_Separacion_Categorias">Turno</mat-label>
+          <mat-select formControlName="turn_id" placeholder="Turno" required>
+            <mat-option *ngFor="let turno of listaTurnos" [value]="turno.id">{{
+              turno.name
+            }}</mat-option>
+          </mat-select>
         </mat-form-field>
       </div>
       <div class="row">
@@ -526,11 +537,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="_modal.close()"
-    >
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
       Cancelar
     </button>
     <button

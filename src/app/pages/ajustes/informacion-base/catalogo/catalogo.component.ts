@@ -202,9 +202,9 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       Nombre_Comercial: ['', Validators.required],
       Presentacion: ['', Validators.required],
       Unidad_Medida: ['', Validators.required],
-      Codigo_Barras: ['', Validators.required],
+      Codigo_Barras: [''],
       Embalaje: ['', Validators.required],
-      Foto: ['' , Validators.required],
+      Foto: [''],
       FormCamposCategoria: this.fb.array([]),
       FormCamposSubcategoria: this.fb.array([])
     });

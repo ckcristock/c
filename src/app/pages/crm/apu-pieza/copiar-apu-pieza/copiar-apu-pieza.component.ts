@@ -10,18 +10,20 @@ import { ApuPiezaService } from '../apu-pieza.service';
 export class CopiarApuPiezaComponent implements OnInit {
   id: string;
   data: any;
+  loading: boolean = true
   constructor(
     private actRoute: ActivatedRoute,
     private _apuPieza: ApuPiezaService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.id = this.actRoute.snapshot.params.id;
-    this.getData();
+    await this.getData();
+    this.loading = false
   }
 
-  getData(){
-    this._apuPieza.getApuPart(this.id).subscribe((r:any) => {
+  async getData(){
+    await this._apuPieza.getApuPart(this.id).toPromise().then((r:any) => {
       this.data = r.data;
     })
   }

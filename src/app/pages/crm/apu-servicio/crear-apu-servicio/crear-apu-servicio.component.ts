@@ -21,7 +21,7 @@ export class CrearApuServicioComponent implements OnInit {
   @Input('title') title = 'Crear servicio';
   form: FormGroup;
   date: Date = new Date();
-  loading: boolean = false;
+  loading: boolean = true;
   people: any[] = [];
   cities: any[] = [];
   clients: any[] = [];
@@ -62,7 +62,6 @@ export class CrearApuServicioComponent implements OnInit {
   async ngOnInit() {
     this.datosCabecera.Fecha = this.id ? this.data?.created_at : new Date();
     this.datosCabecera.Titulo = this.title;
-    this.loading = true;
     await this.getBases()
     this.createForm();
     this.getProfiles();
@@ -71,13 +70,14 @@ export class CrearApuServicioComponent implements OnInit {
     this.getTravelExpenseEstimation();
     await this.getCities();
     this.validateData();
-    this.getConsecutivo();
+    await this.getConsecutivo();
     this.loading = false;
   }
 
   async getBases() {
     await this._calculationBase.getAll().toPromise().then((r: any) => {
       this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
+      console.log(this.calculationBase)
       /* if (this.dataEdit) {
         this.calculationBase.trm.value = this.dataEdit.trm
       } */
@@ -220,8 +220,8 @@ export class CrearApuServicioComponent implements OnInit {
       text: err.code,
     });
   }
-  getConsecutivo() {
-    this._consecutivos.getConsecutivo('apu_services').subscribe((r: any) => {
+  async getConsecutivo() {
+    await this._consecutivos.getConsecutivo('apu_services').toPromise().then((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
       this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
       if (this.title !== 'Editar servicio') {

@@ -30,10 +30,10 @@ export class EditarProductoComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private router: Router
-  ) {}
+  ) { }
   @ViewChild('confirmacionSwal') confirmacionSwal: any;
   ngOnInit() {
-    // this.http.get(environment.ruta+ 'php/genericos/detalle.php', {params: { modulo: 'Producto', id: this.id }}).subscribe((data: any) => {
+    // this.http.get(environment.base_url+ '/php/genericos/detalle.php', {params: { modulo: 'Producto', id: this.id }}).subscribe((data: any) => {
     this.http
       .get(environment.ruta + 'php/productos/producto_detalle.php', {
         params: { modulo: 'Producto', id: this.id },
@@ -49,7 +49,7 @@ export class EditarProductoComponent implements OnInit {
       });
 
     this.http
-      .get(environment.ruta + 'php/lista_generales.php', {
+      .get(environment.base_url + '/php/lista_generales.php', {
         params: { modulo: 'Familia' },
       })
       .subscribe((data: any) => {
@@ -57,7 +57,7 @@ export class EditarProductoComponent implements OnInit {
       });
 
     this.http
-      .get(environment.ruta + 'php/lista_generales.php', {
+      .get(environment.base_url + '/php/lista_generales.php', {
         params: { modulo: 'Subcategoria' },
       })
       .subscribe((data: any) => {

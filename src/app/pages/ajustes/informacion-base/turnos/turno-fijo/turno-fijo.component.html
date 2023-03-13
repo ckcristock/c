@@ -19,13 +19,22 @@
     <div class="row">
       <mat-form-field class="col" appearance="outline">
         <mat-label>Nombre</mat-label>
-        <input (input)="getTurns()" [(ngModel)]="filtro.name" type="text" matInput placeholder="Busca por nombre" />
+        <input
+          (input)="getTurns()"
+          [(ngModel)]="filtro.name"
+          type="text"
+          matInput
+          placeholder="Busca por nombre"
+        />
       </mat-form-field>
     </div>
   </mat-expansion-panel>
 </mat-accordion>
 <div class="rounded-top table-responsive">
-  <table class="table table-bordered table-striped table-sm" *ngIf="turnosFijos.length && !loading; else notData">
+  <table
+    class="table table-bordered table-striped table-sm"
+    *ngIf="turnosFijos.length && !loading; else notData"
+  >
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
         <th class="align-middle">Nombre</th>
@@ -37,42 +46,66 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let turnoFijo of turnosFijos" class="text-center" [ngClass]="{
+      <tr
+        *ngFor="let turnoFijo of turnosFijos"
+        class="text-center"
+        [ngClass]="{
           'text-danger font-weight-bold': turnoFijo.state == 'Inactivo'
-        }">
+        }"
+      >
         <td class="align-middle">{{ turnoFijo.text }}</td>
         <td class="align-middle">
-          <span [ngClass]="
+          <span
+            [ngClass]="
               turnoFijo.state == 'Inactivo'
                 ? 'badge badge-danger'
                 : 'badge badge-primary'
-            ">
+            "
+          >
             {{ turnoFijo.state }}
           </span>
         </td>
         <td class="align-middle">
-          <button type="button " class="btn btn-info btn-sm" (click)="findHours(turnoFijo.value); openConfirm(add)">
+          <button
+            type="button "
+            class="btn btn-info btn-sm"
+            (click)="findHours(turnoFijo.value); openConfirm(add)"
+          >
             <i class="fa fa-eye"></i>
           </button>
         </td>
         <td class="align-middle">
           <div ngbDropdown container="body" class="dropdown-primary">
-            <button ngbDropdownToggle class="btn btn-primary btn-sm waves-light" type="button">
+            <button
+              ngbDropdownToggle
+              class="btn btn-primary btn-sm"
+              type="button"
+            >
               <i class="mdi mdi-chevron-down"></i>
             </button>
             <div ngbDropdownMenu>
-              <a [routerLink]="['crear', turnoFijo.value]" href="javascript: void(0);"
-                class="dropdown-item text-info waves-light caja-botones">
+              <a
+                [routerLink]="['crear', turnoFijo.value]"
+                href="javascript: void(0);"
+                class="dropdown-item text-info"
+              >
                 <i class="far fa-edit"></i> Editar
               </a>
-              <a class="dropdown-item waves-light caja-botones" href="javascript: void(0);" [ngClass]="{
+              <a
+                class="dropdown-item"
+                href="javascript: void(0);"
+                [ngClass]="{
                   'text-success': turnoFijo.state == 'Inactivo',
                   'text-danger': turnoFijo.state == 'Activo'
-                }" (click)="changeState(turnoFijo.value)">
-                <i [ngClass]="{
+                }"
+                (click)="changeState(turnoFijo.value)"
+              >
+                <i
+                  [ngClass]="{
                     'far fa-trash-alt': turnoFijo.state == 'Activo',
                     'fa fa-check': turnoFijo.state == 'Inactivo'
-                  }"></i>
+                  }"
+                ></i>
                 {{ turnoFijo.state == "Inactivo" ? "Activar" : "Anular" }}
               </a>
             </div>
@@ -82,10 +115,18 @@
     </tbody>
   </table>
 </div>
-<ngb-pagination class="d-flex justify-content-center pagination-rounded pagination-sm"
-  [collectionSize]="pagination.collectionSize" (pageChange)="getTurns($event)" maxSize="5" rotate="true"
-  ellipses="false" boundaryLinks="true" [pageSize]="pagination.pageSize" [(page)]="pagination.page"
-  aria-label="Default pagination">
+<ngb-pagination
+  class="d-flex justify-content-center pagination-rounded pagination-sm"
+  [collectionSize]="pagination.collectionSize"
+  (pageChange)="getTurns($event)"
+  maxSize="5"
+  rotate="true"
+  ellipses="false"
+  boundaryLinks="true"
+  [pageSize]="pagination.pageSize"
+  [(page)]="pagination.page"
+  aria-label="Default pagination"
+>
 </ngb-pagination>
 
 <!-- <div class="alert alert-secondary text-center " #notData>
@@ -102,13 +143,22 @@
 <ng-template #add let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">Información del turno</h4>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
     <div class="rounded-top table-responsive">
-      <table class="table table-sm" *ngIf="hours.length && !loadingHours; else notDataHours">
+      <table
+        class="table table-sm"
+        *ngIf="hours.length && !loadingHours; else notDataHours"
+      >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Día</th>
@@ -131,7 +181,11 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cross click')">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
       Cerrar
     </button>
   </div>

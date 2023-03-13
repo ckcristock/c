@@ -46,7 +46,7 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Paises</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -62,14 +62,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="getData(pais); openConfirm(add, 'Editar país')"
                   >
@@ -78,7 +78,7 @@
                   <a
                     *ngIf="pais.state == 'Inactivo'"
                     href="javascript: void(0);"
-                    class="dropdown-item waves-light text-success"
+                    class="dropdown-item text-success"
                     (click)="activateOrInactivate(pais, 'Activo')"
                   >
                     <i class="fas fa-check"></i> Activar
@@ -86,7 +86,7 @@
                   <a
                     *ngIf="pais.state == 'Activo'"
                     href="javascript: void(0);"
-                    class="dropdown-item waves-light text-danger"
+                    class="dropdown-item text-danger"
                     (click)="activateOrInactivate(pais, 'Inactivo')"
                   >
                     <i class="fas fa-trash-alt"></i> Anular
@@ -144,9 +144,7 @@
             required
             autocomplete="off"
           />
-          <mat-error *ngIf="name_invalid">
-            Campo obligatorio
-          </mat-error>
+          <mat-error *ngIf="name_invalid"> Campo obligatorio </mat-error>
         </mat-form-field>
       </div>
     </form>

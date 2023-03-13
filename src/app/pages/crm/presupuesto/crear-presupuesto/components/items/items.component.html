@@ -44,7 +44,7 @@
                   >
                     <i class="fas fa-chevron-right text-primary"></i>
                   </ng-container>
-                  Cost. Indirectos
+                  Costos Indirectos
                 </th>
                 <th
                   class="align-middle"
@@ -90,8 +90,7 @@
                   </ng-container>
                   Prorrateo de Valores
                 </th>
-                <th></th>
-                <th></th>
+                <th colspan="2"></th>
               </tr>
               <tr class="text-center text-uppercase bg-light">
                 <th></th>
@@ -102,9 +101,9 @@
                 <th></th>
                 <th class="align-middle">Unidad</th>
                 <th class="align-middle">Cantidad</th>
-                <th class="align-middle">C. Unitario</th>
+                <th class="align-middle">Costo unitario</th>
                 <th class="align-middle" title="Valor Total Costo">
-                  VT. Costo
+                  Valor total costo
                 </th>
                 <ng-container *ngIf="item.controls.shows.value.indirect_cost">
                   <th class="align-middle" *ngFor="let item of indirectCosts">
@@ -112,7 +111,7 @@
                   </th>
                 </ng-container>
                 <th class="align-middle" title="Subtotal Indirectos">
-                  SubT. Indirectos
+                  Subtotal indirectos
                 </th>
                 <ng-container *ngIf="item.controls.shows.value.sum_others">
                   <th class="align-middle">%</th>
@@ -137,8 +136,10 @@
                   <th class="align-middle">V/U Venta Prorr. COP</th>
                   <th class="align-middle">V/U Venta Prorr. USD</th>
                 </ng-container>
-                <th class="align-middle">Observ.</th>
-                <th class="align-middle"></th>
+                <th class="align-middle">Observaciones</th>
+                <th class="align-middle">
+                  <i class="mdi mdi-chevron-down"></i>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -160,9 +161,7 @@
                         (click)="findApus(item, true, subItem, y)"
                         class="btn_agregar_tr"
                       ></a>
-                      <td class="align-middle">
-                        {{ i + 1 }}.{{ y + 1 }}
-                      </td>
+                      <td class="align-middle">{{ i + 1 }}.{{ y + 1 }}</td>
                       <td class="align-middle">
                         <select
                           formControlName="type"
@@ -246,7 +245,6 @@
                       <td class="align-middle">
                         <input
                           type="text"
-                          style="width: 70px"
                           formControlName="unit"
                           class="form-control form-control-sm"
                         />
@@ -255,7 +253,6 @@
                         <input
                           currencyMask
                           [options]="masksMoney.maskNumbers"
-                          style="width: 80px"
                           formControlName="cuantity"
                           class="form-control form-control-sm"
                         />
@@ -264,16 +261,14 @@
                         <input
                           currencyMask
                           [options]="masksMoney.maskCOP"
-                          style="width: 90px"
                           formControlName="unit_cost"
                           class="form-control form-control-sm"
                         />
                       </td>
-                      <td class="align-middle">
-                        <div class="values" style="width: 90px">
-                          {{
-                            subItem.controls.total_cost.value
-                              | currency : "" : ""
+                      <td class="align-middle table-info">
+                        <div class="values">
+                          ${{
+                            subItem.controls.total_cost.value | number : "1.2-2"
                           }}
                         </div>
                       </td>
@@ -291,20 +286,19 @@
                           "
                         >
                           <td>
-                            <div class="values" style="width: 90px">
-                              {{
-                                indirect.controls.value.value
-                                  | currency : "" : ""
+                            <div class="values">
+                              ${{
+                                indirect.controls.value.value | number : "1.2-2"
                               }}
                             </div>
                           </td>
                         </ng-container>
                       </ng-container>
-                      <td class="align-middle">
-                        <div class="values" style="width: 90px">
-                          {{
+                      <td class="align-middle table-success">
+                        <div class="values">
+                          ${{
                             subItem.controls.subtotal_indirect_cost.value
-                              | currency : "" : ""
+                              | number : "1.2-2"
                           }}
                         </div>
                       </td>
@@ -316,57 +310,60 @@
                         <td class="align-middle">
                           <input
                             formControlName="percentage_amd"
-                            type="number"
-                            style="width: 50px"
+                            currencyMask
+                            style="width: 2.7rem"
+                            [options]="masksMoney.maskPorcentaje"
                             class="form-control form-control-sm"
                           />
                         </td>
                         <td class="align-middle">
-                          <div class="values" style="width: 90px">
-                            {{
+                          <div class="values">
+                            ${{
                               subItem.controls.value_amd.value
-                                | currency : "" : ""
+                                | number : "1.2-2"
                             }}
                           </div>
                         </td>
                         <td class="align-middle">
                           <input
                             formControlName="percentage_unforeseen"
-                            type="number"
-                            style="width: 50px"
+                            currencyMask
+                            style="width: 2.7rem"
+                            [options]="masksMoney.maskPorcentaje"
                             class="form-control form-control-sm"
                           />
                         </td>
                         <td class="align-middle">
-                          <div class="values" style="width: 90px">
-                            {{
+                          <div class="values">
+                            ${{
                               subItem.controls.value_unforeseen.value
-                                | currency : "" : ""
+                                | number : "1.2-2"
                             }}
                           </div>
                         </td>
                         <td class="align-middle">
                           <input
                             formControlName="percentage_utility"
-                            type="number"
-                            style="width: 50px"
+                            currencyMask
+                            style="width: 2.7rem"
+                            [options]="masksMoney.maskPorcentaje"
                             class="form-control form-control-sm"
                           />
                         </td>
                         <td class="align-middle">
-                          <div class="values" style="width: 90px">
-                            {{
+                          <div class="values">
+                            ${{
                               subItem.controls.value_utility.value
-                                | currency : "" : ""
+                                | number : "1.2-2"
                             }}
                           </div>
                         </td>
                       </ng-container>
-                      <td class="align-middle">
-                        <div class="values" style="width: 90px">
-                          {{
+                      <td class="align-middle table-danger">
+                        <div class="values">
+                          ${{
                             subItem.controls.total_amd_imp_uti.value
-                              | currency : "" : ""
+                              | number : "1.2-2"
                           }}
                         </div>
                       </td>
@@ -374,9 +371,9 @@
                       <!-- Variables TOTAl Venta -->
                       <td class="align-middle">
                         <input
-                          type="number"
+                          currencyMask
+                          [options]="masksMoney.maskCOP"
                           formControlName="another_values"
-                          style="width: 90px"
                           class="form-control form-control-sm"
                         />
                       </td>
@@ -384,74 +381,71 @@
                         *ngIf="item.controls.shows.value.total_sale"
                       >
                         <td class="align-middle">
-                          <div class="values" style="width: 90px">
-                            {{
-                              subItem.controls.subTotal.value
-                                | currency : "" : ""
+                          <div class="values">
+                            ${{
+                              subItem.controls.subTotal.value | number : "1.2-2"
                             }}
                           </div>
                         </td>
                         <td class="align-middle">
-                          <div class="values" style="width: 90px">
-                            {{
+                          <div class="values">
+                            ${{
                               subItem.controls.retention.value
-                                | currency : "" : ""
+                                | number : "1.2-2"
                             }}
                           </div>
                         </td>
                       </ng-container>
                       <td class="align-middle">
-                        <div class="values text-center" style="width: 50px">
-                          % {{ subItem.controls.percentage_sale.value }}
+                        <div class="values text-center">
+                          {{ subItem.controls.percentage_sale.value }}%
                         </div>
                       </td>
                       <td class="align-middle">
-                        <div class="values" style="width: 110px">
-                          {{
-                            subItem.controls.value_cop.value
-                              | currency : "" : ""
+                        <div class="values">
+                          ${{
+                            subItem.controls.value_cop.value | number : "1.2-2"
                           }}
                         </div>
                       </td>
                       <td class="align-middle">
-                        <div class="values" style="width: 110px">
-                          {{
-                            subItem.controls.value_usd.value
-                              | currency : "" : ""
+                        <div class="values">
+                          USD{{
+                            subItem.controls.value_usd.value | number : "1.2-2"
                           }}
                         </div>
                       </td>
                       <!-- END Variables TOTAl Venta -->
                       <ng-container *ngIf="item.controls.shows.value.prorrateo">
                         <td class="align-middle">
-                          <div class="values" style="width: 90px">
-                            {{
+                          <div class="values">
+                            ${{
                               subItem.controls.value_prorrota_cop.value
-                                | currency : "" : ""
+                                | number : "1.2-2"
                             }}
                           </div>
                         </td>
                         <td class="align-middle">
-                          <div class="values" style="width: 90px">
-                            {{
+                          <div class="values">
+                            USD{{
                               subItem.controls.value_prorrota_usd.value
-                                | currency : "" : ""
+                                | number : "1.2-2"
                             }}
                           </div>
                         </td>
                         <td class="align-middle">
-                          <div class="values" style="width: 90px">
-                            {{
+                          <div class="values">
+                            ${{
                               subItem.controls.unit_value_prorrateado_cop.value
-                                | currency : "" : ""
+                                | number : "1.2-2"
                             }}
                           </div>
                         </td>
                         <td class="align-middle">
-                          <div class="values" style="width: 90px">
-                            {{
+                          <div class="values">
+                            USD{{
                               subItem.controls.unit_value_prorrateado_usd.value
-                                | currency : "" : ""
+                                | number : "1.2-2"
                             }}
                           </div>
                         </td>
@@ -460,32 +454,31 @@
                       <td class="align-middle">
                         <input
                           type="text"
-                          style="width: 90px"
+                          style="width: 5rem"
+                          placeholder="Ingresa las observaciones"
                           class="form-control form-control-sm"
                         />
                       </td>
                       <td class="text-center align-middle">
-                        <div style="width: 50px">
-                          <i
-                            ngbTooltip="Prorrateo de valores"
-                            (click)="changeView(item, 'prorrateo')"
-                            class="text-primary fas fa-hand-holding-usd mr-2"
-                          ></i>
-                          <i
-                            ngbTooltip="Eliminar Sub Item"
-                            (click)="deleteSubItem(item, y)"
-                            class="text-danger far fa-trash-alt"
-                          ></i>
-                        </div>
+                        <i
+                          ngbTooltip="Prorrateo de valores"
+                          (click)="changeView(item, 'prorrateo')"
+                          class="text-primary fas fa-hand-holding-usd mr-2"
+                        ></i>
+                        <i
+                          ngbTooltip="Eliminar subitem"
+                          (click)="deleteSubItem(item, y)"
+                          class="text-danger far fa-trash-alt"
+                        ></i>
                       </td>
                     </tr>
                   </ng-container>
                 </ng-container>
-                <tr class="bg-gray">
-                  <td class="align-middle" colspan="6">SUBTOTAL</td>
+                <tr class="table-warning">
+                  <th class="align-middle text-center" colspan="9">SUBTOTAL</th>
                   <td class="align-middle">
                     <div class="values">
-                      {{ item.controls.total_cost.value | currency : "" : "" }}
+                      ${{ item.controls.total_cost.value | number : "1.2-2" }}
                     </div>
                   </td>
                   <!-- TOTALS COSTOS INDIRECTOS -->
@@ -504,9 +497,9 @@
                     >
                       <td class="align-middle">
                         <div class="values">
-                          {{
+                          ${{
                             subtIndirect.controls.sub_total.value
-                              | currency : "" : ""
+                            | number : "1.2-2"
                           }}
                         </div>
                       </td>
@@ -514,9 +507,9 @@
                   </ng-container>
                   <td class="align-middle">
                     <div class="values">
-                      {{
+                      ${{
                         item.controls.subtotal_indirect_cost.value
-                          | currency : "" : ""
+                        | number : "1.2-2"
                       }}
                     </div>
                   </td>
@@ -526,32 +519,32 @@
                     <td class="align-middle"></td>
                     <td class="align-middle">
                       <div class="values">
-                        {{ item.controls.value_amd.value | currency : "" : "" }}
+                        ${{ item.controls.value_amd.value | number : "1.2-2" }}
                       </div>
                     </td>
                     <td class="align-middle"></td>
                     <td class="align-middle">
                       <div class="values">
-                        {{
+                        ${{
                           item.controls.value_unforeseen.value
-                            | currency : "" : ""
+                            | number : "1.2-2"
                         }}
                       </div>
                     </td>
                     <td class="align-middle"></td>
                     <td class="align-middle">
                       <div class="values">
-                        {{
-                          item.controls.value_utility.value | currency : "" : ""
+                        ${{
+                          item.controls.value_utility.value | number : "1.2-2"
                         }}
                       </div>
                     </td>
                   </ng-container>
                   <td class="align-middle">
                     <div class="values">
-                      {{
+                      ${{
                         item.controls.total_amd_imp_uti.value
-                          | currency : "" : ""
+                          | number : "1.2-2"
                       }}
                     </div>
                   </td>
@@ -559,36 +552,36 @@
                   <!-- TOTAL VALOR VENTA -->
                   <td class="align-middle">
                     <div class="values">
-                      {{
-                        item.controls.another_values.value | currency : "" : ""
+                      ${{
+                        item.controls.another_values.value | number : "1.2-2"
                       }}
                     </div>
                   </td>
                   <ng-container *ngIf="item.controls.shows.value.total_sale">
                     <td class="align-middle">
                       <div class="values">
-                        {{ item.controls.subTotal.value | currency : "" : "" }}
+                        ${{ item.controls.subTotal.value | number : "1.2-2" }}
                       </div>
                     </td>
                     <td class="align-middle">
                       <div class="values">
-                        {{ item.controls.retention.value | currency : "" : "" }}
+                        ${{ item.controls.retention.value | number : "1.2-2" }}
                       </div>
                     </td>
                   </ng-container>
                   <td class="align-middle">
                     <div class="values text-center">
-                      % {{ item.controls.percentage_sale.value }}
+                      {{ item.controls.percentage_sale.value }}%
                     </div>
                   </td>
                   <td class="align-middle">
                     <div class="values">
-                      {{ item.controls.value_cop.value | currency : "" : "" }}
+                      ${{ item.controls.value_cop.value | number : "1.2-2" }}
                     </div>
                   </td>
                   <td class="align-middle">
                     <div class="values">
-                      {{ item.controls.value_usd.value | currency : "" : "" }}
+                      ${{ item.controls.value_usd.value | number : "1.2-2" }}
                     </div>
                   </td>
                   <!-- END TOTAL VALOR VENTA -->
@@ -596,33 +589,33 @@
                   <ng-container *ngIf="item.controls.shows.value.prorrateo">
                     <td class="align-middle">
                       <input
-                        type="number"
-                        style="width: 80px"
+                      currencyMask
+                      [options]="masksMoney.maskCOP"
                         formControlName="value_prorrota_cop"
                         class="form-control form-control-sm"
                       />
                     </td>
                     <td class="align-middle">
                       <input
-                        type="number"
-                        style="width: 80px"
+                      currencyMask
+                      [options]="masksMoney.maskUSD"
                         formControlName="value_prorrota_usd"
                         class="form-control form-control-sm"
                       />
                     </td>
                     <td class="align-middle">
                       <div class="values">
-                        {{
+                        ${{
                           item.controls.unit_value_prorrateado_cop.value
-                            | currency : "" : ""
+                            | number : "1.2-2"
                         }}
                       </div>
                     </td>
                     <td class="align-middle">
                       <div class="values">
-                        {{
+                        USD{{
                           item.controls.unit_value_prorrateado_usd.value
-                            | currency : "" : ""
+                            | number : "1.2-2"
                         }}
                       </div>
                     </td>

@@ -3,137 +3,127 @@
     <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
     <hr class="line" />
     <form #FormComprobante="ngForm">
-      <div
-        class="row invoive-info"
-        style="margin-bottom: 0; padding-bottom: 0px"
-      >
-        <div class="col-md-2">
-          <div class="form-group">
-            <label>Fecha</label>
-            <input
-              type="date"
-              name="Fecha_Comprobante"
-              id="Fecha_Comprobante"
-              [(ngModel)]="Fecha_Comprobante"
-              class="form-control form-control-sm"
-              (change)="getCodigoIngreso($event.target.value)"
-              required
-            />
-          </div>
-          <input type="hidden" name="Tipo" [ngModel]="'Ingreso'" />
-        </div>
-        <div class="col-md-2">
-          <div class="form-group">
-            <label>Cliente</label>
-            <input
-              *ngIf="Mostrar_Input_Cli"
-              [(ngModel)]="Nom_Cliente"
-              type="text"
-              name="Cliente"
-              id="Cliente"
-              class="form-control form-control-sm f-9"
-              [ngbTypeahead]="search"
-              [resultTemplate]="rt"
-              [inputFormatter]="formatter"
-              (ngModelChange)="BuscarDatosCliente(Nom_Cliente)"
-              (blur)="validarCampo(Nom_Cliente, $event, 'Cliente')"
-            />
-            <input
-              *ngIf="!Mostrar_Input_Cli"
-              type="text"
-              class="form-control form-control-sm"
-              [(ngModel)]="Nom_Cliente"
-              name="Nombre_Cliente"
-              readonly
-            />
-            <input
-              hidden
-              [(ngModel)]="Id_Cliente"
-              name="Id_Cliente"
-              id="Id_Cliente"
-              class="form-control form-control-sm"
-              required
-            />
-            <!-- <input hidden [(ngModel)]="Funcionario.Identificacion_Funcionario" name="Id_Funcionario" id="Id_Funcionario" class="form-control form-control-sm " required> -->
-          </div>
-        </div>
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Fecha</mat-label>
+          <input
+            matInput
+            type="date"
+            name="Fecha_Comprobante"
+            id="Fecha_Comprobante"
+            [(ngModel)]="Fecha_Comprobante"
+            (change)="getCodigoIngreso($event.target.value)"
+            required
+            autocomplete="off"
+          />
+          <input matInput hidden name="Tipo" [ngModel]="'Ingreso'" />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Cliente</mat-label>
+          <input
+            *ngIf="Mostrar_Input_Cli"
+            matInput
+            [(ngModel)]="Nom_Cliente"
+            type="text"
+            name="Cliente"
+            id="Cliente"
+            [ngbTypeahead]="search"
+            [resultTemplate]="rt"
+            [inputFormatter]="formatter"
+            (ngModelChange)="BuscarDatosCliente(Nom_Cliente)"
+            (blur)="validarCampo(Nom_Cliente, $event, 'Cliente')"
+          />
+          <input
+            *ngIf="!Mostrar_Input_Cli"
+            type="text"
+            matInput
+            [(ngModel)]="Nom_Cliente"
+            name="Nombre_Cliente"
+            readonly
+          />
+          <input
+            hidden
+            [(ngModel)]="Id_Cliente"
+            matInput
+            name="Id_Cliente"
+            id="Id_Cliente"
+            required
+          />
+          <!-- <input
+            hidden
+            [(ngModel)]="Funcionario.Identificacion_Funcionario"
+            name="Id_Funcionario"
+            id="Id_Funcionario"
+            class="form-control form-control-sm"
+            required
+          /> -->
+        </mat-form-field>
         <div class="col-md-3">
-          <div class="form-group">
-            <label>Banco</label>
-            <ng-select
-              id="Cuentas"
-              name="Id_Banco"
-              style="
-                margin-bottom: 5px;
-                font-size: 10px;
-                height: 23px;
-                max-height: 23px;
-                line-height: 21px;
-              "
-              placeholder="Seleccione el Banco"
-              [items]="Cuentas"
-              bindLabel="label"
-              bindValue="value"
-              [(ngModel)]="Cuenta_Banco"
-              required
+          <ng-select
+            id="Cuentas"
+            name="Id_Banco"
+            placeholder="Banco"
+            [appendTo]="'body'"
+            appearance="outline"
+            [clearable]="false"
+            [items]="Cuentas"
+            bindLabel="label"
+            bindValue="value"
+            [(ngModel)]="Cuenta_Banco"
+            required
+          >
+          </ng-select>
+        </div>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Valor banco</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el valor"
+            name="Valor_Banco"
+            id="Valor_Banco"
+            [(ngModel)]="Valor_Banco"
+            (change)="calcularTotalesDebitoCredito()"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-12" appearance="outline">
+          <mat-label>Forma de pago</mat-label>
+          <mat-select name="Id_Forma_Pago" required>
+            <mat-option *ngFor="let fp of FormaPago" [value]="fp.Id_Forma_Pago">
+              {{ fp.Nombre }}</mat-option
             >
-            </ng-select>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <label>Valor Banco</label>
-            <input
-              class="form-control form-control-sm"
-              type="number"
-              name="Valor_Banco"
-              id="Valor_Banco"
-              [(ngModel)]="Valor_Banco"
-              (change)="calcularTotalesDebitoCredito()"
-              required
-            />
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Forma de Pago</label>
-            <select
-              class="form-control form-control-sm"
-              ngModel
-              name="Id_Forma_Pago"
-              required
-            >
-              <option value="" selected>Seleccione forma de pago</option>
-              <option *ngFor="let fp of FormaPago" [value]="fp.Id_Forma_Pago">
-                {{ fp.Nombre }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Observaciones</label>
-            <textarea
-              name="Observaciones"
-              id="Observaciones"
-              class="form-control"
-              ngModel
-              rows="3"
-            ></textarea>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-group">
-            <label>Notas del Recibo</label>
-            <textarea
-              name="Notas"
-              id="Notas"
-              class="form-control"
-              ngModel
-              rows="3"
-            ></textarea>
-          </div>
-        </div>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-6 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Observaciones</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingresa las observaciones"
+            rows="5"
+            name="Observaciones"
+            id="Observaciones"
+            [cdkTextareaAutosize]="true"
+          ></textarea>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-6 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Notas</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingresa las notas"
+            rows="5"
+            name="Notas"
+            id="Notas"
+            [cdkTextareaAutosize]="true"
+          ></textarea>
+        </mat-form-field>
       </div>
     </form>
     <hr />
@@ -142,7 +132,7 @@
         *ngIf="Mostrar_Opciones && Facturas_Multiple"
         class="col-md-12 text-center"
       >
-        <strong> ¿Asociar este ingreso a algunas Facturas existentes ?</strong>
+        <strong> ¿Asociar este ingreso a algunas facturas existentes?</strong>
         <br />
         Recuerda que puedes registrar un ingreso sin necesidad de que esté
         asociado a una cuenta de cobro <br />
@@ -152,7 +142,7 @@
           value="Si"
           (click)="MostarContenido($event.target.value)"
         />
-        SI
+        Sí
         <input
           type="radio"
           name="Asociar"
@@ -166,7 +156,7 @@
           Value="Archivo"
           (click)="MostarContenido($event.target.value)"
         />
-        Cargar Archivo
+        Cargar archivo
       </div>
 
       <div *ngIf="Cargando" class="col-md-12 text-center m-t-10">
@@ -204,14 +194,14 @@
                 <table class="table  invoice-detail-table tabla">
                   <thead>
                     <tr class="thead-default">
-  
+
                       <th>Cuenta</th>
                       <th style="width:100px;">Valor</th>
                       <th style="width:30px">Impuesto</th>
                       <th style="width:50px;">Cantidad</th>
                       <th style="width:50px;">Observaciones</th>
                       <th style="width:50px;">Total</th>
-  
+
                     </tr>
                   </thead>
                   <tbody>
@@ -229,7 +219,7 @@
                       <td><input name="Cantidad{{i}}" [(ngModel)]="item.Cantidad" class="form-control form-control-sm text-right" type="number"
                           (change)="Calcular(i)"></td>
                       <td><input name="Observaciones{{i}}" [(ngModel)]="item.Observaciones" class="form-control form-control-sm"></td>
-  
+
                       <td><input name="Total{{i}}" [(ngModel)]="item.Subtotal" class="form-control form-control-sm text-right"
                           readonly></td>
                     </tr>
@@ -247,7 +237,7 @@
                         <td>Tipo de Retención </td>
                         <td style="width:70px;">Valor </td>
                         <td style="width:10px;"> </td>
-  
+
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of Rentenciones; let i = index" id="fila{{i}}">
@@ -262,15 +252,15 @@
                               </span>
                             </a>
                         </tr>
-  
+
                       </tbody>
-                     
+
                     </table>
                     <a href="javascript:;" (click)="AgregarRetencion()"><i class="fa fa-plus-square"></i> Agregar retención</a>
                   </div>
                 </div>
               </div>
-  
+
               </div>
             <div *ngIf="Mostrar" class="row">
               <div class="col-sm-12">
@@ -280,7 +270,7 @@
                       <th>Subtotal:</th>
                       <td>{{ Subtotal_Ingreso | currency }}</td>
                     </tr>
-  
+
                     <tr>
                       <th>Impuestos:</th>
                       <td>{{ Impuesto_Ingreso| currency }}</td>
@@ -295,7 +285,7 @@
                     </tr>
                   </tbody>
                 </table>
-  
+
               </div>
             </div> -->
 
@@ -553,53 +543,31 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="rounded-top table-responsive">
-          <table class="table invoice-table invoice-total">
-            <tbody>
-              <tr>
-                <th>Subtotal:</th>
-                <td>{{ Subtotal_Facturas | currency }}</td>
-              </tr>
-              <tr *ngIf="Retenciones_Totales > 0">
-                <th>Retenciones</th>
-                <td>-{{ Retenciones_Totales | currency }}</td>
-              </tr>
-              <tr>
-                <th>Precio Total:</th>
-                <td>{{ Total_Facturas | currency }}</td>
-              </tr>
-              <tr
-                style="
-                  border-top: 1px solid #000;
-                  border-right: 1px solid #000;
-                  border-left: 1px solid #000;
-                "
-              >
-                <th>Total Debito:</th>
-                <td>{{ Total_Debito | currency }}</td>
-              </tr>
-              <tr
-                style="border-right: 1px solid #000; border-left: 1px solid #000"
-              >
-                <th>Total Credito</th>
-                <td>{{ Total_Credito | currency }}</td>
-              </tr>
-              <tr
-                style="
-                  border-bottom: 1px solid #000;
-                  border-right: 1px solid #000;
-                  border-left: 1px solid #000;
-                "
-              >
-                <th>Diferencia:</th>
-                <td>{{ Total_Debito - Total_Credito | currency }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <div class="rounded-top table-responsive">
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Subtotal:</th>
+            <th *ngIf="Retenciones_Totales > 0">Retenciones</th>
+            <th>Precio Total:</th>
+            <th>Total Debito:</th>
+            <th>Total Credito</th>
+            <th>Diferencia:</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center">
+            <td>${{ Subtotal_Facturas | number : "1.2-2" }}</td>
+            <td *ngIf="Retenciones_Totales > 0">
+              -${{ Retenciones_Totales | number : "1.2-2" }}
+            </td>
+            <td>${{ Total_Facturas | number : "1.2-2" }}</td>
+            <td>${{ Total_Debito | number : "1.2-2" }}</td>
+            <td>${{ Total_Credito | number : "1.2-2" }}</td>
+            <td>${{ Total_Debito - Total_Credito | number : "1.2-2" }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <button
       type="button"

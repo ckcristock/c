@@ -67,6 +67,10 @@ export class NegociosService {
     return this.http.post(`${this.url}/new-business-quotation`, data);
   }
 
+  newBusinessApu(data) {
+    return this.http.post(`${this.url}/new-business-apu`, data);
+  }
+
   getTasks(id) {
     return this.http.get(`${this.url}/get-tasks-business/${id}`)
   }

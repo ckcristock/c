@@ -5,8 +5,14 @@
         <h5 class="text-primary">Subcategorías</h5>
       </div>
       <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded w-sm-100" *ngIf="!restriccionDesdeCatalogo">
-          <button class="btn btn-primary btn-sm" (click)="openModal(add,'Agregar')">
+        <div
+          class="btn-group rounded w-sm-100"
+          *ngIf="!restriccionDesdeCatalogo"
+        >
+          <button
+            class="btn btn-primary btn-sm"
+            (click)="openModal(add, 'Agregar')"
+          >
             <i class="fa fa-plus"></i>
             Agregar
           </button>
@@ -29,7 +35,9 @@
               <mat-option value="">Todos</mat-option>
               <mat-option
                 *ngFor="let categoria of categorias_filtro"
-                [value]="categoria.value">{{ categoria.text }}</mat-option>
+                [value]="categoria.value"
+                >{{ categoria.text }}</mat-option
+              >
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
@@ -72,13 +80,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of Sucategories" class="text-center"
+          <tr
+            *ngFor="let item of Sucategories"
+            class="text-center"
             [ngClass]="{
-              'text-danger': (item.Activo==0),
-              'font-weight-bold': (item.Fijo==1)
+              'text-danger': item.Activo == 0,
+              'font-weight-bold': item.Fijo == 1
             }"
           >
-            <td><span class="badge badge-dark" *ngIf="item.Fijo==1">Fija</span></td>
+            <td>
+              <span class="badge badge-dark" *ngIf="item.Fijo == 1">Fija</span>
+            </td>
             <td class="text-left">{{ item.Nombre }}</td>
             <td class="text-left">{{ item.categoria }}</td>
             <td>{{ item.Separable }}</td>
@@ -86,30 +98,40 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item text-info waves-light"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
-                    (click)="openModal(add,'Editar',item)"
+                    (click)="openModal(add, 'Editar', item)"
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>
-                  <a *ngIf="item.Activo==1 && item.Fijo == 0 && !restriccionDesdeCatalogo"
-                    class="dropdown-item text-danger waves-light"
+                  <a
+                    *ngIf="
+                      item.Activo == 1 &&
+                      item.Fijo == 0 &&
+                      !restriccionDesdeCatalogo
+                    "
+                    class="dropdown-item text-danger"
                     href="javascript: void(0);"
-                    (click)="activateSubcategory(item.Id_Subcategoria,0)"
+                    (click)="activateSubcategory(item.Id_Subcategoria, 0)"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
                   >
-                  <a *ngIf="item.Activo==0 && item.Fijo == 0 && !restriccionDesdeCatalogo"
-                    class="dropdown-item text-primary waves-light"
+                  <a
+                    *ngIf="
+                      item.Activo == 0 &&
+                      item.Fijo == 0 &&
+                      !restriccionDesdeCatalogo
+                    "
+                    class="dropdown-item text-primary"
                     href="javascript: void(0);"
-                    (click)="activateSubcategory(item.Id_Subcategoria,1)"
+                    (click)="activateSubcategory(item.Id_Subcategoria, 1)"
                   >
                     <i class="far fa-trash-alt"></i> Reactivar</a
                   >
@@ -180,8 +202,7 @@
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>¿Es separable?</mat-label>
-          <mat-select formControlName="Separable"
-            matInput required>
+          <mat-select formControlName="Separable" matInput required>
             <mat-option value="Si">Sí</mat-option>
             <mat-option value="No">No</mat-option>
           </mat-select>
@@ -203,11 +224,12 @@
           ></ng-select>
         </div>
       </div>
-      <div class="row justify-content-center" *ngIf="permission.permissions.approve_product_categories">
+      <div
+        class="row justify-content-center"
+        *ngIf="permission.permissions.approve_product_categories"
+      >
         <div class="col-auto">
-          <mat-slide-toggle
-            color="primary"
-            formControlName="Fijo">
+          <mat-slide-toggle color="primary" formControlName="Fijo">
             Categoría fija
           </mat-slide-toggle>
         </div>
@@ -218,7 +240,11 @@
         </div>
         <div class="col-md-6 text-right">
           <div class="btn-group rounded w-sm-100 mat-form-field-wrapper">
-            <button type="button" class="btn btn-primary btn-sm" (click)="newField()">
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              (click)="newField()"
+            >
               <i class="fa fa-plus"></i>
             </button>
           </div>
@@ -263,7 +289,8 @@
             </div>
             <div class="col-md-1 d-flex justify-content-end align-items-center">
               <div class="btn-group rounded w-sm-100 mat-form-field-wrapper">
-                <button type="button"
+                <button
+                  type="button"
                   class="btn btn-danger btn-sm"
                   (click)="deleteField(i, item)"
                 >
@@ -277,7 +304,11 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="modalSubategoria.close()">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modalSubategoria.close()"
+    >
       Cancelar
     </button>
     <button

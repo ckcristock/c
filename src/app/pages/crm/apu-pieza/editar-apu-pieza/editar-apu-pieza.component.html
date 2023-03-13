@@ -1,1 +1,10 @@
-<app-crear-apu-pieza (obtenerDato)="getData()" [title]="'Editar pieza'" [data]="data" [id]="id" *ngIf="data"></app-crear-apu-pieza>
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<app-crear-apu-pieza
+  (obtenerDato)="getData()"
+  [title]="'Editar pieza'"
+  [data]="data"
+  [id]="id"
+  *ngIf="!loading && data; else placeholder"
+></app-crear-apu-pieza>

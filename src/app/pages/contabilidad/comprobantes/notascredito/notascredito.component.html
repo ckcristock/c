@@ -102,46 +102,39 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!Cargando && Notas.length > 0; else notData"
       >
-        <thead>
-          <tr>
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
             <th>Código Nota</th>
             <th>Fecha</th>
             <th>Funcionario</th>
             <th>Cliente</th>
             <th>Código Factura</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let nota of Notas">
-            <td>
-              <strong>{{ nota.Codigo_Nota }}</strong>
-            </td>
+          <tr *ngFor="let nota of Notas" class="text-center">
+            <td>{{ nota.Codigo_Nota }}</td>
             <td class="text-center">
-              {{ nota.Fecha_Nota | date: "dd/MM/yyyy" }}
+              {{ nota.Fecha_Nota | date : "dd/MM/yyyy" }}
             </td>
-            <td>
-              {{ nota.Funcionario }}
-            </td>
+            <td>{{ nota.Funcionario }}</td>
             <td>{{ nota.Cliente }}</td>
-            <td>
-              {{ nota.Codigo_Factura }}
-            </td>
+            <td>{{ nota.Codigo_Factura }}</td>
             <td>
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-mini waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     href=""
                     [routerLink]="[
                       '/contabilidad/notas-credito/ver',
@@ -151,7 +144,7 @@
                     <i class="ti-eye"></i>Ver Nota</a
                   >
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     href="{{
                       enviromen.ruta
                     }}php/notas_credito_nuevo/descarga_pdf.php?tipo=Nota_Credito&id={{
@@ -163,7 +156,7 @@
                   >
                   <a
                     *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     href="{{
                       enviromen.ruta
                     }}php/contabilidad/movimientoscontables/movimientos_nota_credito_global_pdf.php?id_registro={{
@@ -175,7 +168,7 @@
                   </a>
                   <a
                     *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     href="{{
                       enviromen.ruta
                     }}php/contabilidad/movimientoscontables/movimientos_nota_credito_global_pdf.php?id_registro={{
@@ -185,8 +178,17 @@
                   >
                     <i class="fa fa-book"></i> Contab. NIIF
                   </a>
-                  <!--        <a class="dropdown-item waves-light  caja-botones" href="{{enviromen.ruta}}php/facturasventas/factura_dis_pdf.php?id={{factura.Id_Factura_Administrativa}}" target="_blank">
-                                                  <i class="ti-printer"></i>Imprimir Factura</a> -->
+                  <!-- <a
+                    class="dropdown-item"
+                    href="{{
+                      enviromen.ruta
+                    }}php/facturasventas/factura_dis_pdf.php?id={{
+                      factura.Id_Factura_Administrativa
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="ti-printer"></i>Imprimir Factura</a
+                  > -->
                 </div>
               </div>
             </td>
@@ -194,12 +196,6 @@
         </tbody>
       </table>
     </div>
-
-    <!-- <small *ngIf="TotalItems1 != 0" class="d-flex justify-content-center">
-      {{ page1 * maxSize - maxSize + 1 }} al
-      {{ page1 * maxSize > TotalItems1 ? TotalItems1 : page1 * maxSize }} de
-      {{ TotalItems1 }}
-    </small> -->
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="TotalItems1"

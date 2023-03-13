@@ -14,10 +14,7 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button
-            class="btn btn-info btn-sm"
-            (click)="openClose()"
-          >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -122,7 +119,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!Cargando && Lista_Remisiones.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -147,7 +143,7 @@
             class="{{ remision.Estado == 'Anulada' ? 'bg-danger' : '' }}"
           >
             <td class="align-middle">
-              {{ remision.Fecha_Remision | date: "longDate" }}
+              {{ remision.Fecha_Remision | date : "longDate" }}
             </td>
             <td class="align-middle">
               {{ remision.Codigo }}
@@ -217,17 +213,17 @@
               <div ngbDropdown container="body">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm  waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
-                  <!--<a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 &&remision.Fase_1==0" class="dropdown-item waves-light  caja-botones"
+                  <!--<a *ngIf="perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 &&remision.Fase_1==0" class="dropdown-item   "
                                 href="" [routerLink]="['/remisioneditar',remision.Id_Remision]">
                                 <i class="ti-pencil"></i> Editar</a>-->
                   <a
-                    class="dropdown-item text-success waves-light  caja-botones"
+                    class="dropdown-item text-success"
                     href=""
                     [routerLink]="[
                       '/inventario/remisiones/remision',
@@ -238,7 +234,7 @@
                   >
                   <a
                     *ngIf="remision.Estado != 'Anulada'"
-                    class="dropdown-item text-info waves-light  caja-botones"
+                    class="dropdown-item text-info"
                     href="{{
                       env.ruta
                     }}/php/archivos/descarga_pdf.php?tipo=Remision&id={{
@@ -252,7 +248,7 @@
                     *ngIf="
                       remision.Estado != 'Anulada' && remision.Tipo == 'Cliente'
                     "
-                    class="dropdown-item text-info waves-light  caja-botones"
+                    class="dropdown-item text-info"
                     href="{{
                       env.ruta
                     }}/php/archivos/descarga_pdf_price.php?tipo=Remision&id={{
@@ -264,7 +260,7 @@
                   >
                   <a
                     *ngIf="remision.Estado != 'Anulada'"
-                    class="dropdown-item text-danger waves-light  caja-botones"
+                    class="dropdown-item text-danger"
                     href="{{ env.ruta }}/php/archivos/descarga_zebra.php?id={{
                       remision.Id_Remision
                     }}"
@@ -274,7 +270,7 @@
                   >
                   <a
                     *ngIf="remision.Estado != 'Anulada'"
-                    class="dropdown-item text-primary waves-light  caja-botones"
+                    class="dropdown-item text-primary"
                     href="{{ env.ruta }}/php/archivos/descarga_excel.php?id={{
                       remision.Id_Remision
                     }}"
@@ -282,7 +278,7 @@
                   >
                     <i class="fas fa-file-excel"></i> Descargar plano</a
                   >
-                  <!--   <a *ngIf="!perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 && remision.Fase_1==0" class="dropdown-item waves-light  caja-botones" (click)="SuspenderRemision(remision.Id_Remision)">
+                  <!--   <a *ngIf="!perfilAdministrador() && remision.Estado!='Anulada' && remision.Estado_Alistamiento==0 && remision.Fase_1==0" class="dropdown-item   " (click)="SuspenderRemision(remision.Id_Remision)">
                                                           <i class="fa fa-times"></i> Anular</a> -->
                   <a
                     *ngIf="
@@ -292,7 +288,7 @@
                       remision.Estado != 'Facturada' &&
                       remision.Estado != 'Enviada'
                     "
-                    class="dropdown-item text-danger waves-light  caja-botones"
+                    class="dropdown-item text-danger"
                     (click)="
                       SuspenderRemision(
                         remision.Id_Remision,
@@ -309,7 +305,7 @@
                       remision.Estado != 'Recibida' &&
                       remision.Estado != 'Enviada'
                     "
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item"
                     href=""
                     [routerLink]="['/cambiarlote', remision.Id_Remision]"
                   >
@@ -320,7 +316,7 @@
                       remision.Estado != 'Anulada' &&
                       remision.Entrega_Pendientes == 'Si'
                     "
-                    class="dropdown-item waves-light  caja-botones"
+                    class="dropdown-item"
                     href="{{
                       env.ruta
                     }}/php/remision/entrega_pendientes_pdf.php?id={{

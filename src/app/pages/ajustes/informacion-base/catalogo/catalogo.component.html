@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="row card-title d-flex justify-content-between">
           <div class="col px-0">
-            <h4 class="text-primary">Categorías</h4>
+            <h6 class="text-primary">Categorías</h6>
           </div>
         </div>
         <hr class="line" />
@@ -16,13 +16,15 @@
             class="mat-elevation-z0 my-0"
             *ngFor="let categoria of Categorias"
             [disabled]="categoria.subcategory.length == 0"
-            [expanded]="selectedCategory.categoria.id == categoria.Id_Categoria_Nueva"
+            [expanded]="
+              selectedCategory.categoria.id == categoria.Id_Categoria_Nueva
+            "
           >
-            <mat-expansion-panel-header>
+            <mat-expansion-panel-header class="px-1">
               {{ categoria.Nombre }}
             </mat-expansion-panel-header>
             <ng-container *ngIf="categoria.subcategory.length > 0; else noSub">
-              <mat-action-list dense class="small ml-4 my-0">
+              <mat-action-list dense class="small ml-1 my-0 rounded">
                 <button
                   mat-list-item
                   *ngFor="let subcategoria of categoria.subcategory"
@@ -60,7 +62,7 @@
       <div class="card-body">
         <div class="row card-title d-flex justify-content-between">
           <div class="col-md-6 px-0">
-            <h4 class="text-primary">Productos</h4>
+            <h6 class="text-primary">Productos</h6>
           </div>
           <div class="col-md-6 px-0 text-right">
             <div
@@ -108,7 +110,7 @@
                   formControlName="estado"
                   matInput
                   placeholder="Estado del producto"
-                ><!--
+                  ><!--
                   (selectionChange)="getProducts()" -->
                   <mat-option value="">Todos</mat-option>
                   <mat-option
@@ -124,7 +126,7 @@
                   formControlName="imagen"
                   matInput
                   placeholder="Mostrar registros con imagen?"
-                ><!--
+                  ><!--
                   (selectionChange)="getProducts()" -->
                   <mat-option value="">Todos</mat-option>
                   <mat-option value="con">Mostrar con foto</mat-option>
@@ -134,14 +136,18 @@
             </div>
           </form>
         </mat-expansion-panel>
-        <h5 class="text-dark" *ngIf="selectedCategory.categoria.id !== null">
-          Categoría:
-          {{
-            selectedCategory.categoria.nombre +
-              " > " +
-              selectedCategory.subcategoria.nombre | lowercase
-          }}
-        </h5>
+        <ng-container class="text-dark" *ngIf="selectedCategory.categoria.id">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                {{ selectedCategory.categoria.nombre }}
+              </li>
+              <li class="breadcrumb-item">
+                {{ selectedCategory.subcategoria.nombre }}
+              </li>
+            </ol>
+          </nav>
+        </ng-container>
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
@@ -177,67 +183,59 @@
                 <td class="align-middle">{{ producto.Nombre_Comercial }}</td>
                 <td class="align-middle">{{ producto.Embalaje }}</td>
                 <td class="align-middle">
-                  <div class="text-center">
-                    <div ngbDropdown container="body" class="dropdown-primary">
-                      <button
-                        ngbDropdownToggle
-                        class="btn btn-primary btn-sm waves-light"
-                        type="button"
+                  <div ngbDropdown container="body" class="dropdown-primary">
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm"
+                      type="button"
+                    >
+                      <!-- [ngClass]="{ 'bg-white text-primary': grupo.selected }" -->
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <a
+                        role="button"
+                        class="dropdown-item text-info"
+                        (click)="openConfirm(add, 'Editar', producto)"
                       >
-                        <!-- [ngClass]="{ 'bg-white text-primary': grupo.selected }" -->
-                        <i class="mdi mdi-chevron-down"></i>
-                      </button>
-                      <div ngbDropdownMenu>
-                        <a
-                          role="button"
-                          class="dropdown-item waves-light caja-botones text-info"
-                          (click)="openConfirm(add, 'Editar', producto)"
-                        >
-                          <i class="far fa-edit"></i> Editar
-                        </a>
-                        <a
-                          role="button"
-                          class="dropdown-item waves-light caja-botones"
-
-                          [routerLink]="[
-                            'ver',
-                            producto.Id_Producto
-                          ]"
+                        <i class="far fa-edit"></i> Editar
+                      </a>
+                      <a
+                        role="button"
+                        class="dropdown-item"
+                        [routerLink]="['ver', producto.Id_Producto]"
                         ><!-- (click)="openConfirm(detalleCatalogo, 'Detalle del', producto)" -->
-                          <i class="fa fa-file-invoice"></i> Ver detalle
-                        </a>
-                        <a
-                          role="button"
-                          class="dropdown-item waves-light caja-botones"
-                          [ngClass]="{
-                            'text-danger': producto.Estado == 'Activo',
-                            'text-success': producto.Estado == 'Inactivo'
-                          }"
-                          (click)="
-                            cambiarEstado(
-                              producto,
-                              producto.Estado == 'Activo'
-                                ? 'Inactivo'
-                                : 'Activo'
-                            )
+                        <i class="fa fa-file-invoice"></i> Ver detalle
+                      </a>
+                      <a
+                        role="button"
+                        class="dropdown-item"
+                        [ngClass]="{
+                          'text-danger': producto.Estado == 'Activo',
+                          'text-success': producto.Estado == 'Inactivo'
+                        }"
+                        (click)="
+                          cambiarEstado(
+                            producto,
+                            producto.Estado == 'Activo' ? 'Inactivo' : 'Activo'
+                          )
+                        "
+                      >
+                        <i
+                          class="fas"
+                          [ngClass]="
+                            {
+                              Activo: 'fa-ban',
+                              Inactivo: 'fa-check'
+                            }[producto.Estado]
                           "
-                        >
-                          <i
-                            class="fas"
-                            [ngClass]="
-                              {
-                                Activo: 'fa-ban',
-                                Inactivo: 'fa-check'
-                              }[producto.Estado]
-                            "
-                          ></i>
-                          {{
-                            producto.Estado == "Activo"
-                              ? " Inactivar"
-                              : " Activar"
-                          }}
-                        </a>
-                      </div>
+                        ></i>
+                        {{
+                          producto.Estado == "Activo"
+                            ? " Inactivar"
+                            : " Activar"
+                        }}
+                      </a>
                     </div>
                   </div>
                 </td>
@@ -269,7 +267,7 @@
 
 <ng-template #add let-modalCatalogo>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">{{ title }} Producto</h4>
+    <h4 class="text-primary modal-title">{{ title }} producto</h4>
     <button
       type="button"
       class="close"
@@ -324,7 +322,6 @@
             matInput
             placeholder="Codigo de barras"
             autocomplete="off"
-            required
           />
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
@@ -350,7 +347,6 @@
             type="file"
             id="file"
             accept=".png, .jpg, .jpeg"
-            required
           /><!--
             formControlName="Foto" -->
           <button
@@ -468,11 +464,12 @@
   <div class="modal-body">
     <div class="row">
       <div class="col-md-3">
-        <img class="img-rounded d-block rounded img-fluid"
+        <img
+          class="img-rounded d-block rounded img-fluid"
           onerror="this.src='../../../../assets/images/not-available.png'"
           [src]="productoDetalle.Foto"
           alt="Vista previa del producto"
-        >
+        />
       </div>
     </div>
   </div>

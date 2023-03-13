@@ -7,7 +7,10 @@
     <app-filtrosgeneralesauditor
       MostrarFiltrosAdicionales="true"
     ></app-filtrosgeneralesauditor>
-    <div class="m-t-10" [ngStyle]="{'display': resoluciones > 0 ? 'initial' : 'none'}">
+    <div
+      class="m-t-10"
+      [ngStyle]="{ display: resoluciones > 0 ? 'initial' : 'none' }"
+    >
       <div class="">
         <div class="card-header">
           <p style="font-weight: bold" class="text-center">
@@ -124,7 +127,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && Facturas.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -136,7 +138,7 @@
             <th>Tipo</th>
             <th>Modalidad</th>
             <th>Estado</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -148,7 +150,7 @@
             }"
           >
             <td>{{ factura.Codigo }}</td>
-            <td>{{ factura.Fecha_Documento | date: "dd/MM/yyyy" }}</td>
+            <td>{{ factura.Fecha_Documento | date : "dd/MM/yyyy" }}</td>
             <td>{{ factura.Funcionario }}</td>
             <td>{{ factura.Cliente }}</td>
             <td>
@@ -186,7 +188,7 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -194,7 +196,7 @@
                 <div ngbDropdownMenu>
                   <a
                     *ngIf="factura.Tipo == 'Evento' || factura.Tipo == 'NoPos'"
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     href="javascript:;"
                     (click)="
                       Id_Factura = factura.Id_Factura; modalInfoExtra.show()
@@ -204,7 +206,7 @@
                   >
                   <a
                     *ngIf="factura.Tipo != 'Pos-Capita'"
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     href=""
                     [routerLink]="[
                       '/cmfacturaver',
@@ -217,7 +219,7 @@
                   >
                   <a
                     *ngIf="factura.Tipo == 'Pos-Capita'"
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     href=""
                     [routerLink]="['/cmfacturacapitaver', factura.Id_Factura]"
                   >
@@ -226,7 +228,7 @@
                   <!-- Ver de Factura Capita -->
                   <a
                     *ngIf="factura.Tipo != 'Pos-Capita'"
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     href="{{
                       globales.ruta
                     }}php/facturasventas/factura_dis_pdf.php?id={{
@@ -238,7 +240,7 @@
                   >
                   <a
                     *ngIf="factura.Tipo == 'Pos-Capita'"
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     href="{{
                       globales.ruta
                     }}php/factura_capita/factura_capita_pdf.php?id={{

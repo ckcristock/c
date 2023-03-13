@@ -24,14 +24,13 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!Cargando && listaMediosMag.length > 0; else notData"
       >
         <thead>
           <tr>
             <th>Codigo</th>
             <th>Agrupación</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -42,14 +41,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-mini waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     href="{{
                       enviromen.ruta
                     }}php/contabilidad/mediosmagneticos/reporte_formatos_agrupados.php?id={{
@@ -60,7 +59,7 @@
                     <i class="fa fa-table"></i> Reporte</a
                   >
                   <a
-                    class="dropdown-item waves-light caja-botones"
+                    class="dropdown-item"
                     [routerLink]="[
                       '/contabilidad/informesdian/agruparmediosmagneticos/editar',
                       item.Id
@@ -69,7 +68,7 @@
                     <i class="fa fa-pencil"></i> Editar</a
                   >
                   <a
-                    class="dropdown-item waves-light caja-botones bg-danger"
+                    class="dropdown-item bg-danger"
                     [swal]="confirmacionEliminar"
                     (click)="IdMedioMag = item.Id"
                   >

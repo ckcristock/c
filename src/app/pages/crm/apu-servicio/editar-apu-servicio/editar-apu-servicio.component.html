@@ -1,1 +1,9 @@
-<app-crear-apu-servicio [title]="'Editar servicio'" [data]="data" [id]="id" *ngIf="data"></app-crear-apu-servicio>
+<app-crear-apu-servicio
+  [title]="'Editar servicio'"
+  [data]="data"
+  [id]="id"
+  *ngIf="!loading && data; else placeholder"
+></app-crear-apu-servicio>
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>

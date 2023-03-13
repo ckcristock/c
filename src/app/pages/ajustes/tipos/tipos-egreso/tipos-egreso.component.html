@@ -29,7 +29,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && egresss.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -37,7 +36,7 @@
             <th>Nombre</th>
             <th>Cuenta Asociada</th>
             <th>Tipo</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -55,14 +54,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       getEgress(egress);
@@ -73,7 +72,7 @@
                   <a
                     *ngIf="egress.status == 'Activo'"
                     href="javascript: void(0);"
-                    class="dropdown-item waves-light text-danger caja-botones"
+                    class="dropdown-item text-danger"
                     (click)="activateOrInactivate(egress, 'Inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -81,7 +80,7 @@
                   <a
                     *ngIf="egress.status == 'Inactivo'"
                     href="javascript: void(0);"
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                     (click)="activateOrInactivate(egress, 'Activo')"
                   >
                     <i class="fas fa-check"></i> Activar</a

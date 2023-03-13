@@ -56,7 +56,7 @@
           <div ngbDropdown container="body" class="dropdown-primary">
             <button
               ngbDropdownToggle
-              class="btn btn-secondary btn-sm  waves-light"
+              class="btn btn-secondary btn-sm  "
               type="button"
               [disabled]="DeshabilitarBoton"
             >
@@ -64,13 +64,13 @@
             </button>
             <div ngbDropdownMenu class="dropdown-menu-2">
               <a
-                class="dropdown-item waves-light "
+                class="dropdown-item  "
                 (click)="GetRotativo('Pos')"
               >
                 Rotativo</a
               >
               <a
-                class="dropdown-item waves-light "
+                class="dropdown-item  "
                 (click)="GetRotativo('NoPos')"
               >
                 Solo Pendientes
@@ -92,7 +92,7 @@
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
-            
+
             *ngIf="!Cargando && Lista_Productos.length > 0; else notData"
           >
             <thead class="bg-light">

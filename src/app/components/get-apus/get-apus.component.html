@@ -99,6 +99,7 @@
               <td class="align-middle">
                 <mat-checkbox
                   [(ngModel)]="apu.selected"
+                  color="primary"
                   (change)="setState(apu, $event)"
                 ></mat-checkbox>
               </td>
@@ -110,13 +111,13 @@
               <td class="align-middle">{{ apu.line }}</td>
               <td class="align-middle">{{ apu.type_name }}</td>
               <td class="align-middle">
-                {{ apu.unit_cost | currency : "COP" }}
+                {{ apu.unit_cost | number : "1.2-2" }}
               </td>
               <td class="align-middle">
                 <div ngbDropdown container="body" class="dropdown-primary">
                   <button
                     ngbDropdownToggle
-                    class="btn btn-primary btn-sm waves-light"
+                    class="btn btn-primary btn-sm"
                     type="button"
                   >
                     <i class="mdi mdi-chevron-down"></i>
@@ -124,7 +125,7 @@
                   <div ngbDropdownMenu>
                     <a
                       role="button"
-                      class="dropdown-item waves-light text-success caja-botones"
+                      class="dropdown-item text-success"
                       (click)="openNewTab(apu.type, apu.apu_id)"
                     >
                       <i class="far fa-eye"></i> Ver

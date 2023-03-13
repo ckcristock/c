@@ -48,6 +48,9 @@ import {
   MomentDateAdapter,
 } from '@angular/material-moment-adapter';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { MatButtonModule, MatCheckboxModule, MatIconModule, MatTooltip, MatTooltipModule } from '@angular/material';
+import { ImportPucComponent } from './plan-cuentas/import-puc/import-puc.component';
+import { ImportInitialBalancesComponent } from './plan-cuentas/import-initial-balances/import-initial-balances.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -82,6 +85,8 @@ export const MY_FORMATS = {
     ModalcierrecontableComponent,
     ModalplancuentasComponent,
     InventariosValorizadosComponent,
+    ImportPucComponent,
+    ImportInitialBalancesComponent,
   ],
   imports: [
     CommonModule,
@@ -110,6 +115,11 @@ export const MY_FORMATS = {
     MatNativeDateModule,
     SatDatepickerModule,
     SatNativeDateModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    NgbTooltipModule,
+    MatCheckboxModule
   ],
   providers: [
     Globales,

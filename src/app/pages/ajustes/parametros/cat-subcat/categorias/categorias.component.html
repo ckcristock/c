@@ -5,7 +5,10 @@
         <h5 class="text-primary">Categorías</h5>
       </div>
       <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded w-sm-100" *ngIf="!restriccionDesdeCatalogo">
+        <div
+          class="btn-group rounded w-sm-100"
+          *ngIf="!restriccionDesdeCatalogo"
+        >
           <button
             class="btn btn-primary btn-sm"
             (click)="openModal(add, 'Agregar')"
@@ -83,12 +86,16 @@
           <tr
             class="text-center"
             [ngClass]="{
-              'text-danger': (categoria.Activo==0),
-              'font-weight-bold': (categoria.Fijo==1)
+              'text-danger': categoria.Activo == 0,
+              'font-weight-bold': categoria.Fijo == 1
             }"
             *ngFor="let categoria of categorias"
           >
-            <td><span class="badge badge-dark" *ngIf="categoria.Fijo==1">Fija</span></td>
+            <td>
+              <span class="badge badge-dark" *ngIf="categoria.Fijo == 1"
+                >Fija</span
+              >
+            </td>
             <td>{{ categoria.Nombre }}</td>
             <td>{{ categoria.Compra_Internacional }}</td>
             <td>{{ categoria.Aplica_Separacion_Categorias }}</td>
@@ -96,30 +103,38 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item text-info waves-light caja-botones"
+                    class="dropdown-item text-info"
                     role="button"
                     (click)="openModal(add, 'Editar', categoria)"
                   >
                     <i class="far fa-edit"></i> Editar</a
                   >
                   <a
-                    *ngIf="categoria.Activo == 1 && categoria.Fijo == 0 && !restriccionDesdeCatalogo"
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    *ngIf="
+                      categoria.Activo == 1 &&
+                      categoria.Fijo == 0 &&
+                      !restriccionDesdeCatalogo
+                    "
+                    class="dropdown-item text-danger"
                     role="button"
                     (click)="inOff(categoria.Id_Categoria_Nueva, 0, $event)"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
                   >
                   <a
-                    *ngIf="categoria.Activo == 0 && categoria.Fijo == 0 && !restriccionDesdeCatalogo"
-                    class="dropdown-item text-primary waves-light caja-botones"
+                    *ngIf="
+                      categoria.Activo == 0 &&
+                      categoria.Fijo == 0 &&
+                      !restriccionDesdeCatalogo
+                    "
+                    class="dropdown-item text-primary"
                     role="button"
                     (click)="inOff(categoria.Id_Categoria_Nueva, 1, $event)"
                   >
@@ -188,9 +203,7 @@
         </ng-container>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Compra internacional</mat-label>
-          <mat-select
-          formControlName="Compra_Internacional"
-          matInput required>
+          <mat-select formControlName="Compra_Internacional" matInput required>
             <mat-option value="Si">Sí</mat-option>
             <mat-option value="No">No</mat-option>
           </mat-select>
@@ -198,8 +211,10 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Separación de categorias</mat-label>
           <mat-select
-          formControlName="Aplica_Separacion_Categorias"
-          matInput required>
+            formControlName="Aplica_Separacion_Categorias"
+            matInput
+            required
+          >
             <mat-option value="Si">Sí</mat-option>
             <mat-option value="No">No</mat-option>
           </mat-select>
@@ -219,11 +234,12 @@
           ></ng-select>
         </div> -->
       </div>
-      <div class="row justify-content-center" *ngIf="permission.permissions.approve_product_categories">
+      <div
+        class="row justify-content-center"
+        *ngIf="permission.permissions.approve_product_categories"
+      >
         <div class="col-auto">
-          <mat-slide-toggle
-            color="primary"
-            formControlName="Fijo">
+          <mat-slide-toggle color="primary" formControlName="Fijo">
             Categoría fija
           </mat-slide-toggle>
         </div>
@@ -298,7 +314,11 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="modalCategoria.close()">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modalCategoria.close()"
+    >
       Cancelar
     </button>
     <button

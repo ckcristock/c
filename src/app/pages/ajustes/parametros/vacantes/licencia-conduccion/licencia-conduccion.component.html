@@ -23,7 +23,13 @@
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Tipo</mat-label>
-            <input (input)="getDrivingLicenses()" [(ngModel)]="filtro.tipo" type="text" matInput placeholder="Busca por tipo" />
+            <input
+              (input)="getDrivingLicenses()"
+              [(ngModel)]="filtro.tipo"
+              type="text"
+              matInput
+              placeholder="Busca por tipo"
+            />
           </mat-form-field>
         </div>
       </mat-expansion-panel>
@@ -32,14 +38,13 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!loading && licenses.length > 0; else notData"
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Tipo</th>
             <th>Descripción</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -56,14 +61,14 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
                     (click)="
                       getDrivingLicense(license);
@@ -76,7 +81,7 @@
                     *ngIf="license.state == 'Inactivo'"
                     (click)="activateOrInactivate(license, 'Activo')"
                     href="javascript: void(0);"
-                    class="dropdown-item waves-light text-success"
+                    class="dropdown-item text-success"
                   >
                     <i class="fas fa-check"></i> Activar
                   </a>
@@ -84,7 +89,7 @@
                     *ngIf="license.state == 'Activo'"
                     href="javascript: void(0);"
                     (click)="activateOrInactivate(license, 'Inactivo')"
-                    class="dropdown-item waves-light text-danger"
+                    class="dropdown-item text-danger"
                   >
                     <i class="fas fa-trash-alt"></i> Anular
                   </a>

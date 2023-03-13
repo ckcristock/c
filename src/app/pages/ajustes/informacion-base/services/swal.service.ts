@@ -13,7 +13,7 @@ export class SwalService {
   };
   public buttonColor = {
     confirm: '#A3BD30',
-    cancel:'#d33'
+    cancel: '#d33'
   }
 
   constructor() { }
@@ -59,7 +59,7 @@ export class SwalService {
     if (preConfirm) {
       swal = {
         ...swal,
-        preConfirm,
+        ...preConfirm,
         allowOutsideClick: () => !Swal.isLoading(),
         showLoaderOnConfirm: true
       }

@@ -41,7 +41,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-
         *ngIf="!loading && arls.length > 0; else notData"
       >
         <thead class="bg-light">
@@ -49,7 +48,7 @@
             <th>Nombre</th>
             <th>Código</th>
             <th>NIT</th>
-            <th ><i class="mdi mdi-chevron-down"></i></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -67,22 +66,24 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     href="javascript: void(0);"
-                    (click)="getData(arl); openConfirm(add, 'Actualizar ARL', false)"
+                    (click)="
+                      getData(arl); openConfirm(add, 'Actualizar ARL', false)
+                    "
                     ><i class="far fa-edit"></i> Editar</a
                   >
                   <a
                     *ngIf="arl.status == 'Activo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-danger waves-light caja-botones"
+                    class="dropdown-item text-danger"
                     (click)="activateOrInactivate(arl, 'Inactivo')"
                   >
                     <i class="far fa-trash-alt"></i> Anular</a
@@ -90,7 +91,7 @@
                   <a
                     *ngIf="arl.status == 'Inactivo'"
                     href="javascript: void(0);"
-                    class="dropdown-item text-success waves-light caja-botones"
+                    class="dropdown-item text-success"
                     (click)="activateOrInactivate(arl, 'Activo')"
                   >
                     <i class="far fa-trash-alt"></i> Activar</a
@@ -135,8 +136,9 @@
     <form [formGroup]="form">
       <div class="row">
         <mat-form-field
-          [ngClass]="{ 'col-md-6':boolNuevaArl , 'col-md-12':!boolNuevaArl }"
-          appearance="outline">
+          [ngClass]="{ 'col-md-6': boolNuevaArl, 'col-md-12': !boolNuevaArl }"
+          appearance="outline"
+        >
           <mat-label>Nombre</mat-label>
           <input
             matInput
@@ -145,9 +147,13 @@
             formControlName="name"
             required
           />
-          <mat-error *ngIf="name_invalid ">Campo obligatorio</mat-error>
+          <mat-error *ngIf="name_invalid">Campo obligatorio</mat-error>
         </mat-form-field>
-        <mat-form-field class="col-md-3" *ngIf="boolNuevaArl" appearance="outline">
+        <mat-form-field
+          class="col-md-3"
+          *ngIf="boolNuevaArl"
+          appearance="outline"
+        >
           <mat-label>Código</mat-label>
           <input
             matInput
@@ -160,7 +166,11 @@
             >Campo obligatorio</mat-error
           >
         </mat-form-field>
-        <mat-form-field class="col-md-3"  *ngIf="boolNuevaArl" appearance="outline">
+        <mat-form-field
+          class="col-md-3"
+          *ngIf="boolNuevaArl"
+          appearance="outline"
+        >
           <mat-label>NIT</mat-label>
           <input
             matInput

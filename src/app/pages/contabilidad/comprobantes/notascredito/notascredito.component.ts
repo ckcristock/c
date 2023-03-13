@@ -81,7 +81,7 @@ export class NotascreditoComponent implements OnInit {
       queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     }
 
-    this.http.get(environment.ruta + '/php/notas_credito_nuevo/get_notas_creditos.php?' + queryString).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/notas_credito_nuevo/get_notas_creditos.php?' + queryString).subscribe((data: any) => {
       this.Cargando = false;
       this.Notas = data.Notas_Credito;
       this.TotalItems1 = data.numReg;
@@ -123,7 +123,7 @@ export class NotascreditoComponent implements OnInit {
     this.Cargando = true;
     this.location.replaceState('/notascreditonuevo', queryString);
 
-    this.http.get(environment.ruta + '/php/notas_credito_nuevo/get_notas_creditos.php?' + queryString).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/notas_credito_nuevo/get_notas_creditos.php?' + queryString).subscribe((data: any) => {
       this.Notas = data.Notas_Credito;
       this.TotalItems1 = data.numReg;
       this.Cargando = false;
@@ -165,7 +165,7 @@ export class NotascreditoComponent implements OnInit {
 
       this.location.replaceState('/notascreditonuevo', queryString);
       this.Cargando = true;
-      this.http.get(environment.ruta + '/php/notas_credito_nuevo/get_notas_creditos.php?' + queryString).subscribe((data: any) => {
+      this.http.get(environment.base_url + '/php/notas_credito_nuevo/get_notas_creditos.php?' + queryString).subscribe((data: any) => {
         this.Notas = data.Notas_Credito;
         this.TotalItems1 = data.numReg;
         this.Cargando = false;
@@ -181,7 +181,7 @@ export class NotascreditoComponent implements OnInit {
       this.filtro_cliente = '';
       this.filtro_tipo_fact = '';
       this.Cargando = true;
-      this.http.get(environment.ruta + '/php/notas_credito_nuevo/get_notas_creditos.php?').subscribe((data: any) => {
+      this.http.get(environment.base_url + '/php/notas_credito_nuevo/get_notas_creditos.php?').subscribe((data: any) => {
         this.Notas = data.Notas_Credito;
         this.TotalItems1 = data.numReg;
         this.Cargando = false;

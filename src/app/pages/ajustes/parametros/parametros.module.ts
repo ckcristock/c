@@ -52,6 +52,8 @@ import { TiposModule } from "../tipos/tipos.module";
 import { AccommodationsComponent } from './viaticos/hoteles/accommodations/accommodations.component';
 import { MatCard, MatRadioGroup, MatSlideToggleModule } from "@angular/material";
 import { CurrencyMaskModule } from "ng2-currency-mask";
+import { MaterialesComponent } from "./apu/materiales/materiales.component";
+import { MaterialesMateriaPrimaComponent } from "./apu/materiales-materia-prima/materiales-materia-prima.component";
 
 
 
@@ -70,7 +72,7 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
         GeometriasComponent,
         CrearGeometriaComponent,
         VerGeometriaComponent,
-        //MaterialesComponent,
+        MaterialesComponent,
         UnidadesMedidasComponent,
         MaquinasHerramientasComponent,
         ProcesosInternosComponent,
@@ -89,8 +91,7 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
         TercerosComponent,
         ParametrosNominaComponent,
         AccommodationsComponent,
-
-
+        MaterialesMateriaPrimaComponent,
     ],
     imports: [
         ParametrosRoutingModule,
@@ -121,7 +122,8 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
     ],
     exports: [
         CuentasBancariasComponent,
-        ValorAlmuerzosComponent
+        ValorAlmuerzosComponent,
+        CorteLaserMaterialComponent
     ]
 })
 

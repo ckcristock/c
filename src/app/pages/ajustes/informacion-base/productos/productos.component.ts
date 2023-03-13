@@ -147,14 +147,14 @@ export class ProductosComponent implements OnInit {
   ) {
     this.isLoading = true;
     this.http
-      .get(environment.ruta + 'php/lista_generales.php', {
+      .get(environment.base_url + '/php/lista_generales.php', {
         params: { modulo: 'Subcategoria' },
       })
       .subscribe((data: any) => {
         this.Subcategorias = data;
       });
     this.http
-      .get(environment.ruta + 'php/lista_generales.php', {
+      .get(environment.base_url + '/php/lista_generales.php', {
         params: { modulo: 'Lista_Ganancia' },
       })
       .subscribe((data: any) => {
@@ -165,7 +165,7 @@ export class ProductosComponent implements OnInit {
   }
 
   ngOnInit() {
-  //  this.company_id = this.user.person.company_worked.id;
+    //  this.company_id = this.user.person.company_worked.id;
     this.tipo = this.type;
     this.filtro();
 
@@ -211,7 +211,7 @@ export class ProductosComponent implements OnInit {
       // Si algunos de los campos para filtrar no está vacío, se ejecuta el proceso de filtraje.
       this.page = 1; // Volver a la página 1 al filtrar
       params.pag = this.page;
-     // params.company_id = this.user.person.company_worked.id;
+      // params.company_id = this.user.person.company_worked.id;
 
       if (this.tipo != '') {
         params.tip = this.tipo;
@@ -498,7 +498,7 @@ export class ProductosComponent implements OnInit {
 
   onPage(event) {
     clearTimeout(this.timeout);
-    this.timeout = setTimeout(() => {}, 100);
+    this.timeout = setTimeout(() => { }, 100);
   }
 
   GuardarProducto(formulario: NgForm, modal) {
@@ -526,7 +526,7 @@ export class ProductosComponent implements OnInit {
         this.ListarProductos();
 
         this.http
-          .get(environment.ruta + 'php/lista_generales.php', {
+          .get(environment.base_url + '/php/lista_generales.php', {
             params: { modulo: 'Lista_Ganancia' },
           })
           .subscribe((data: any) => {
@@ -733,9 +733,9 @@ export class ProductosComponent implements OnInit {
       this.http
         .get(
           'https://www.datos.gov.co/resource/wqeu-3uhz.json?expediente=' +
-            cum[0] +
-            '&consecutivocum=' +
-            cum[1],
+          cum[0] +
+          '&consecutivocum=' +
+          cum[1],
           {}
         )
         .subscribe((data: any) => {

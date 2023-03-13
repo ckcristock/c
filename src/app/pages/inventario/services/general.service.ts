@@ -26,7 +26,7 @@ export class GeneralService {
   }
 
   public GetConfiguracion(): Observable<any> {
-    return this.client.get(environment.ruta + 'php/genericos/detalle.php', {
+    return this.client.get(environment.base_url + '/php/genericos/detalle.php', {
       params: { modulo: 'Configuracion', id: '1' }
     });
   }
@@ -37,7 +37,7 @@ export class GeneralService {
 
   // public GetCausalNoPago(): Observable<any> {
   //   let p = { modulo: 'Causal_No_Pago' };
-  //   return this.client.get(environment.ruta + 'php/lista_generales.php', { params: p });
+  //   return this.client.get(environment.base_url + '/php/lista_generales.php', { params: p });
   // }
 
   // public GetMunicipiosDepartamento(idDepartamento: string): Observable<any> {
@@ -47,7 +47,7 @@ export class GeneralService {
 
   // public GetTiposDocumentos(): Observable<any> {
   //   let p = { modulo: 'Tipo_Documento' };
-  //   return this.client.get(environment.ruta + 'php/lista_generales.php', { params: p });
+  //   return this.client.get(environment.base_url + '/php/lista_generales.php', { params: p });
   // }
 
   // public GetListaEps(): Observable<any> {
@@ -56,7 +56,7 @@ export class GeneralService {
 
   // public GetGeneralData(modulo: string): Observable<any> {
   //   let p = { modulo: modulo };
-  //   return this.client.get(environment.ruta + 'php/lista_generales.php', { params: p });
+  //   return this.client.get(environment.base_url + '/php/lista_generales.php', { params: p });
   // }
 
   // public ThousandRound(value: number): number {

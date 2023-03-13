@@ -45,7 +45,7 @@ export const functionsApuService = {
       person_id: [user_id],
       third_party_id:[null, Validators.required],
       line: ['', Validators.required],
-      observation: ['', Validators.required],
+      observation: [''],
       subtotal_labor: [0],
       subtotal_labor_mpm: [0],
       subtotal_travel_expense: [0],

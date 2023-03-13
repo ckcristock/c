@@ -9,10 +9,11 @@
             <ng-select
               bindLabel="text"
               [items]="clients"
-              placeholder="Cliente"
+              placeholder="Cliente *"
               appearance="outline"
               bindValue="value"
-              loadingText="loading "
+              loadingText="loading"
+              [class.is-invalid]="forma.get('customer_id').invalid"
               ngDefaultControl
               formControlName="customer_id"
               [appendTo]="'body'"
@@ -21,7 +22,8 @@
           <div class="col-md-2 mb-4">
             <ng-select
               [items]="cities"
-              placeholder="Destino"
+              placeholder="Destino *"
+              [class.is-invalid]="forma.get('destinity_id').invalid"
               appearance="outline"
               bindLabel="text"
               bindValue="value"
@@ -36,6 +38,7 @@
               type="text"
               placeholder="Ingresa la línea"
               formControlName="line"
+              required
               autocomplete="off"
             />
           </mat-form-field>
@@ -47,6 +50,7 @@
               type="text"
               placeholder="Ingresa proyecto"
               formControlName="project"
+              required
               autocomplete="off"
             />
           </mat-form-field>
@@ -57,6 +61,7 @@
               currencyMask
               [options]="masksMoney.maskCOP"
               placeholder="Ingresa TRM"
+              required
               formControlName="trm"
               autocomplete="off"
             />
@@ -85,6 +90,7 @@
           [dataEdit]="dataEdit"
           [indirectCosts]="indirectCosts"
           [calculationBase]="calculationBase"
+          [cities]="cities"
         >
         </app-items>
         <!-- Configuracion presupuestal -->
@@ -121,25 +127,25 @@
                 <tr>
                   <td class="col-10">TOTAL COP</td>
                   <td class="col-2 text-right">
-                    ${{ total_cop | currency : "" : "" }}
+                    ${{ total_cop | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>
                   <td class="col-10">TOTAL USD</td>
                   <td class="text-right col-2">
-                    ${{ total_usd | currency : "" : "" }}
+                    ${{ total_usd | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>
                   <td class="col-10">V/U VENTA PRORRATEADO COP</td>
                   <td class="text-right">
-                    ${{ unit_value_prorrateado_cop | currency : "" : "" }}
+                    ${{ unit_value_prorrateado_cop | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>
                   <td class="col-10">V/U VENTA PRORRATEADO USD</td>
                   <td class="col-2 text-right">
-                    ${{ unit_value_prorrateado_usd | currency : "" : "" }}
+                    ${{ unit_value_prorrateado_usd | number : "1.2-2" }}
                   </td>
                 </tr>
               </tbody>

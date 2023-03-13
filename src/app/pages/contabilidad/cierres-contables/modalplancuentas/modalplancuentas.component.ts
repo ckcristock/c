@@ -45,13 +45,13 @@ export class ModalplancuentasComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.ocultar()
-    
+
   }
 
   buscarPlanes() {
     this.loading = true;
     let filtros = JSON.stringify(this.filtros);
-    this.http.get(environment.ruta + '/php/plancuentas/get_planes_cuentas.php?filtros=' + filtros + '&tipoCierre=' + this.tipoCierre).subscribe(planes => {
+    this.http.get(environment.base_url + '/php/plancuentas/get_planes_cuentas.php?filtros=' + filtros + '&tipoCierre=' + this.tipoCierre).subscribe(planes => {
       this.Planes_Cuentas = planes['query_result'];
       this.loading = false;
 
@@ -67,7 +67,7 @@ export class ModalplancuentasComponent implements OnInit {
     data.append('id_plan_cuenta', plan.Id_Plan_Cuentas);
     data.append('valor_actualizar', plan['Tipo_Cierre_' + this.tipoCierre]);
 
-    this.http.post(environment.ruta + '/php/plancuentas/set_plan_cuentas_tipo_cierre.php', data)
+    this.http.post(environment.base_url + '/php/plancuentas/set_plan_cuentas_tipo_cierre.php', data)
       .toPromise().catch(err => {
         console.error(err);
       })
@@ -82,6 +82,6 @@ export class ModalplancuentasComponent implements OnInit {
   ocultar() {
     this.Planes_Cuentas = [];
     //this.ModalPlanes.hide();
-    this.modalService.dismissAll(); 
+    this.modalService.dismissAll();
   }
 }

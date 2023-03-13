@@ -8,19 +8,14 @@ import { environment } from 'src/environments/environment';
 })
 export class ActivosFijosService {
 
-  constructor( private http: HttpClient ) { }
+  constructor(private http: HttpClient) { }
 
   getPeople() {
     return this.http.get(`${environment.base_url}/people`);
-  } 
-
-  getFixedAssetType(){
-    return this.http.get(`${environment.base_url}/fixed_asset_type`);
   }
 
-  FiltrarTerceros(match:string):Observable<any>{
-    let p = {coincidencia:match};
-    return this.http.get(environment.ruta+'filtrar_terceros.php', {params:p});
+  getFixedAssetType() {
+    return this.http.get(`${environment.base_url}/fixed_asset_type`);
   }
 
   normalize = (function () {
@@ -29,21 +24,21 @@ export class ActivosFijosService {
       mapping = {};
 
 
-    for (var i = 0, j = from.length; i < j; i++){
-      
+    for (var i = 0, j = from.length; i < j; i++) {
+
       mapping[from.charAt(i)] = to.charAt(i);
     }
-      
-      
-      
-    
+
+
+
+
     return function (str) {
       var ret = [];
       for (var i = 0, j = str.length; i < j; i++) {
-   
+
         var c = str.charAt(i);
         if (mapping.hasOwnProperty(str.charAt(i)))
-          ret.push(mapping[c]);           
+          ret.push(mapping[c]);
         else
           ret.push(c);
       }

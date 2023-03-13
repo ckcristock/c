@@ -52,20 +52,20 @@
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
                   <a
-                    class="dropdown-item waves-light text-dark caja-botones"
+                    class="dropdown-item text-dark"
                     [routerLink]="['/crm/apu/ver-apu-servicio', item.id]"
                   >
                     <i class="far fa-eye"></i> Ver
                   </a>
                   <a
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                     [routerLink]="['/crm/apu/editar-apu-servicio', item.id]"
                   >
                     <i class="far fa-edit"></i> editar
@@ -73,14 +73,14 @@
                   <a
                     *ngIf="item.state == 'Activo'"
                     (click)="activateOrInactive('Inactivo', item.id)"
-                    class="dropdown-item waves-light text-danger caja-botones"
+                    class="dropdown-item text-danger"
                   >
                     <i class="far fa-trash-alt"></i> Anular
                   </a>
                   <a
                     *ngIf="item.state == 'Inactivo'"
                     (click)="activateOrInactive('Activo', item.id)"
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                   >
                     <i class="fas fa-check"></i> Activar
                   </a>

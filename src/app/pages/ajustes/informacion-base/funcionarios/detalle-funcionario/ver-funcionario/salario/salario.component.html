@@ -46,7 +46,12 @@
   </div>
   <hr />
   <app-bono *ngIf="salary_info.id" [id]="salary_info.id"></app-bono>
-  <h6>Historial de contratos</h6>
+  <div class="d-flex justify-content-between">
+    <h6>Historial de contratos</h6>
+    <button class="btn btn-link btn-sm">
+      <i class="fas fa-plus"></i>
+    </button>
+  </div>
   <div class="rounded-top table-responsive">
     <table
       class="table table-bordered table-striped table-sm"
@@ -82,7 +87,6 @@
   <app-not-data [loading]="loadingHistory"></app-not-data>
 </ng-template>
 
-
 <ng-template #add let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">Editar salario</h4>
@@ -115,14 +119,13 @@
               {{ contract_type.name }}</mat-option
             >
           </mat-select>
-          <mat-error *ngIf="work_contract_type_id_valid"> Campo obligatorio </mat-error>
+          <mat-error *ngIf="work_contract_type_id_valid">
+            Campo obligatorio
+          </mat-error>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de contrato</mat-label>
-          <mat-select
-            formControlName="contract_term_id"
-            required
-          >
+          <mat-select formControlName="contract_term_id" required>
             <mat-option *ngFor="let item of contractTerms" [value]="item.id">{{
               item.name
             }}</mat-option>

@@ -109,13 +109,13 @@
               <td class="align-middle">{{ lunch.apply }}</td>
             </ng-template>
             <td class="align-middle">
-              {{ lunch.created_at | date: "longDate" }}
+              {{ lunch.created_at | date : "longDate" }}
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
-                  class="btn btn-primary btn-sm waves-light"
+                  class="btn btn-primary btn-sm"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -124,7 +124,7 @@
                   <a
                     (click)="getLunchValu(lunch); openConfirm(edit, 'sm')"
                     href="javascript:void(0)"
-                    class="dropdown-item waves-light text-info caja-botones"
+                    class="dropdown-item text-info"
                   >
                     <i class="far fa-edit"></i> Editar
                   </a>
@@ -132,7 +132,7 @@
                     *ngIf="lunch.state == 'Activo'"
                     (click)="activateOrInactivate(lunch.id, 'Inactivo')"
                     href="javascript:void(0)"
-                    class="dropdown-item waves-light text-danger caja-botones"
+                    class="dropdown-item text-danger"
                   >
                     <i class="far fa-trash-alt"></i> Anular
                   </a>
@@ -140,7 +140,7 @@
                     *ngIf="lunch.state == 'Inactivo'"
                     (click)="activateOrInactivate(lunch.id, 'Activo')"
                     href="javascript:void(0)"
-                    class="dropdown-item waves-light text-success caja-botones"
+                    class="dropdown-item text-success"
                   >
                     <i class="fas fa-check"></i> Activar
                   </a>
@@ -233,7 +233,6 @@
             <mat-option *ngFor="let item of dependencies" [value]="item.value"
               >{{ item.text }}
             </mat-option>
-
           </mat-select>
           <mat-hint>Selecciona un grupo</mat-hint>
         </mat-form-field>
@@ -258,7 +257,7 @@
           <mat-label>Valor del almuerzo</mat-label>
           <mat-select formControlName="value" required>
             <mat-option *ngFor="let item of lunchvalues" [value]="item.value"
-              >${{ item.value | currency: "":"" }}
+              >${{ item.value | currency : "" : "" }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -313,7 +312,7 @@
           [(ngModel)]="value"
         >
           <ng-option *ngFor="let item of lunchvalues" [value]="item.value">
-            {{ item.value | currency: "COP" }}
+            {{ item.value | currency : "COP" }}
           </ng-option>
         </ng-select>
       </div>

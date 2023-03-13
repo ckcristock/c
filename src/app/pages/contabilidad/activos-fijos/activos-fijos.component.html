@@ -24,10 +24,14 @@
               <button class="btn btn-info btn-sm" (click)="openClose()">
                 <i class="fas fa-sliders-h"></i> Filtros
               </button>
-              <!-- <button type="button" class="pull-left btn btn-primary btn-sm" (click)="CrearActivoFijo()"><i
-                          class="fa fa-plus"></i>
-                        Agregar Nuevo Activo Fijo
-                      </button> -->
+              <!-- <button
+                type="button"
+                class="pull-left btn btn-primary btn-sm"
+                (click)="CrearActivoFijo()"
+              >
+                <i class="fa fa-plus"></i>
+                Agregar Nuevo Activo Fijo
+              </button> -->
             </div>
           </div>
         </div>
@@ -85,102 +89,96 @@
             </div>
           </mat-expansion-panel>
         </mat-accordion>
-        <table
-          class="table table-bordered table-striped table-sm table-responsive-sm"
-          style="font-size: small"
-          *ngIf="!Cargando && ActivosFijos.length > 0; else notData"
-        >
-          <thead class="bg-light">
-            <tr class="text-center text-uppercase">
-              <th class="align-middle">Documento</th>
-              <th class="align-middle">Nombre</th>
-              <th class="align-middle">Tipo de Activo</th>
-              <th class="align-middle">Centro Costo</th>
-              <th class="align-middle">Costo</th>
-              <th class="col-md-1 align-middle">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let af of ActivosFijos"
-              [ngClass]="{ 'bg-danger': af.Estado == 'Anulada' }"
-              class="text-center"
-            >
-              <td class="align-middle text-left">{{ af.Codigo }}</td>
-              <td class="align-middle text-left">{{ af.Nombre }}</td>
-              <td class="align-middle">{{ af.Tipo_Activo }}</td>
-              <td class="align-middle">{{ af.Centro_Costo }}</td>
-              <td class="align-middle text-right" style="width: 100px">
-                $ {{ af.Costo_NIIF | number | puntos }}
-              </td>
-              <td class="align-middle">
-                <div class="text-center">
-                  <div ngbDropdown class="dropdown-primary">
-                    <button
-                      ngbDropdownToggle
-                      class="btn btn-primary btn-sm waves-effect waves-light"
-                      type="button"
-                    >
-                      <i class="mdi mdi-chevron-down"></i>
-                    </button>
-                    <div ngbDropdownMenu>
-                      <a
-                        class="dropdown-item waves-light waves-effect caja-botones"
-                        href="{{
-                          env.ruta
-                        }}php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{
-                          af.Id_Activo_Fijo
-                        }}&id_funcionario_elabora={{
-                          Identificacion_Funcionario
-                        }}&tipo=Niif&company={{ company_id }}"
-                        target="_blank"
+        <div class="rounded-top table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm"
+            *ngIf="!Cargando && ActivosFijos.length > 0; else notData"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Tipo de Activo</th>
+                <th>Centro Costo</th>
+                <th>Costo</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let af of ActivosFijos"
+                [ngClass]="{ 'text-danger': af.Estado == 'Anulada' }"
+                class="text-center"
+              >
+                <td class="text-left">{{ af.Codigo }}</td>
+                <td class="text-left">{{ af.Nombre }}</td>
+                <td>{{ af.Tipo_Activo }}</td>
+                <td>{{ af.Centro_Costo }}</td>
+                <td class="text-right">
+                  ${{ af.Costo_NIIF | number : "1.2-2" }}
+                </td>
+                <td class="align-middle">
+                  <div class="text-center">
+                    <div ngbDropdown container="body" class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm"
+                        type="button"
                       >
-                        <i class="fa fa-list-alt"></i> Ver Contabilización</a
-                      >
-                      <a
-                        class="dropdown-item waves-light waves-effect caja-botones"
-                        [routerLink]="['/contabilidad/activos-fijos-crear']"
-                        [queryParams]="{
-                          Tipo: 'Adicion',
-                          AF: af.Id_Activo_Fijo
-                        }"
-                      >
-                        <i class="fa fa-plus"></i> Adición</a
-                      >
-                      <a
-                        class="dropdown-item waves-light waves-effect caja-botones"
-                        [routerLink]="[
-                          '/contabilidad/activo-fijo-ver',
-                          af.Id_Activo_Fijo
-                        ]"
-                      >
-                        <i class="fa fa-eye"></i> Ver</a
-                      >
-                      <a
-                        *ngIf="af.Estado != 'Anulada'"
-                        class="dropdown-item text-danger waves-light waves-effect caja-botones"
-                        [swal]="{
-                          title: 'Cambio de estado',
-                          text: 'Se dispone a cambiar el estado de este Activo Fijo.',
-                          icon: 'warning',
-                          showCancelButton: true,
-                          confirmButtonText: 'Confirmar',
-                          cancelButtonText: 'Cancelar',
-                          reverseButtons: true
-                        }"
-                        (confirm)="CambiarEstado(af.Id_Activo_Fijo)"
-                      >
-                        <span *ngIf="af.Estado == 'Activo'">
-                          <i class="fas fa-times"> </i> Anular
-                        </span>
-                      </a>
+                        <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          class="dropdown-item text-info"
+                          [routerLink]="[
+                            '/contabilidad/activo-fijo-ver',
+                            af.Id_Activo_Fijo
+                          ]"
+                        >
+                          <i class="fa fa-eye"></i> Ver</a
+                        >
+                        <a
+                          class="dropdown-item text-success"
+                          [routerLink]="['/contabilidad/activos-fijos-crear']"
+                          [queryParams]="{
+                            Tipo: 'Adicion',
+                            AF: af.Id_Activo_Fijo
+                          }"
+                        >
+                          <i class="fa fa-plus"></i> Adición</a
+                        >
+                        <a
+                          class="dropdown-item text-danger"
+                          href="{{
+                            env.base_url
+                          }}/php/contabilidad/movimientoscontables/movimientos_activo_fijo_pdf.php?id_registro={{
+                            af.Id_Activo_Fijo
+                          }}&id_funcionario_elabora={{
+                            Identificacion_Funcionario
+                          }}&tipo=Niif&company={{ company_id }}"
+                          target="_blank"
+                        >
+                          <i class="fas fa-file-pdf"></i> Contabilización</a
+                        >
+
+                        <a
+                          *ngIf="af.Estado != 'Anulada'"
+                          class="dropdown-item text-warning"
+                          href="javascript: void(0)"
+                          (click)="CambiarEstado(af.Id_Activo_Fijo)"
+                        >
+                          <span *ngIf="af.Estado == 'Activo'">
+                            <i class="fas fa-times"> </i> Anular
+                          </span>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <ngb-pagination
           class="d-flex justify-content-center pagination-rounded pagination-sm"
           [collectionSize]="TotalItems"
@@ -192,17 +190,6 @@
           [boundaryLinks]="true"
         >
         </ngb-pagination>
-        <!-- <div
-          id="paginacion-container"
-          class="d-flex justify-content-center"
-          *ngIf="ActivosFijos.length > 0"
-        >
-          <small>
-            {{ InformacionPaginacion.desde }} -
-            {{ InformacionPaginacion.hasta }} de
-            {{ InformacionPaginacion.total }}
-          </small>
-        </div> -->
       </div>
     </div>
   </div>
@@ -221,12 +208,12 @@
             id="tipo_reporte"
             [(ngModel)]="ReporteModel.Tipo_Reporte"
           >
-            <mat-option value="Compras">Compras de un Periodo</mat-option>
+            <mat-option value="Compras">Compras de un periodo</mat-option>
             <mat-option value="Movimientos"
-              >Movimientos de un Periodo</mat-option
+              >Movimientos de un periodo</mat-option
             >
-            <mat-option value="Relacion">Relación de Activos</mat-option>
-            <mat-option value="Adiciones">Adiciones de Activos</mat-option>
+            <mat-option value="Relacion">Relación de activos</mat-option>
+            <mat-option value="Adiciones">Adiciones de activos</mat-option>
           </mat-select>
         </mat-form-field>
 

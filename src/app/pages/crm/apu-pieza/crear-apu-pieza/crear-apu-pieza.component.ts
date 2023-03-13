@@ -25,6 +25,8 @@ import {
   ViewportScroller
 } from '@angular/common';
 import { UserService } from 'src/app/core/services/user.service';
+import { MaterialesService } from 'src/app/pages/ajustes/parametros/apu/materiales/materiales.service';
+import { MaterialesMateriaPrimaService } from 'src/app/pages/ajustes/parametros/apu/materiales-materia-prima/materiales-materia-prima.service';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -64,10 +66,12 @@ export class CrearApuPiezaComponent implements OnInit {
   file = '';
   fileArr: any[] = [];
   cutLaserMaterials: any[] = [];
+  commercialMaterials: any[] = [];
+  materialsIndex: any[] = [];
   otherCollapsed: boolean;
   indirectCollapsed: boolean;
   auiCollapsed: boolean;
-  loading: boolean;
+  loading: boolean = true;
   user_id;
   calculationBase: any = {}
   masksMoney = consts
@@ -82,7 +86,9 @@ export class CrearApuPiezaComponent implements OnInit {
     private _externos: ProcesosExternosService,
     private _internos: ProcesosInternosService,
     public _consecutivos: ConsecutivosService,
+    private _rawMaterialMaterials: MaterialesMateriaPrimaService,
     private _maquinas: MaquinasHerramientasService,
+    private _materials: MaterialesService,
     private scroll: ViewportScroller,
     private _user: UserService
   ) {
@@ -90,10 +96,8 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log(this.data)
     this.datosCabecera.Fecha = this.id ? this.data?.created_at : new Date();
     this.datosCabecera.Titulo = this.title;
-    this.loading = false
     await this.getBases()
     this.createForm();
     this.getClients();
@@ -105,11 +109,25 @@ export class CrearApuPiezaComponent implements OnInit {
     await this.getCities();
     this.collapses();
     this.getThicknesses();
+    this.getCommercialMaterials();
+    this.getMaterialsFull();
     await this.getCutLaserMaterial();
     this.validateData();
     this.getConsecutivo();
-    this.loading = true;
-    this.getVariablesApu();
+    await this.getVariablesApu();
+    this.loading = false;
+  }
+
+  getMaterialsFull(){
+    this._materials.getMaterialsIndex().subscribe((res:any) => {
+      this.materialsIndex = res.data
+    })
+  }
+
+  getCommercialMaterials(){
+    this._rawMaterialMaterials.getRawMaterialMaterialsIndex().subscribe((res:any) => {
+      this.commercialMaterials = res.data
+    })
   }
 
   collapses() {
@@ -146,14 +164,14 @@ export class CrearApuPiezaComponent implements OnInit {
     })
   }
 
-  getVariablesApu() {
-    this._externos.getExternos().subscribe((res: any) => {
+  async getVariablesApu() {
+    await this._externos.getExternos().toPromise().then((res: any) => {
       this.procesos_externos = res.data
     })
-    this._maquinas.getMaquinas().subscribe((res: any) => {
+    await this._maquinas.getMaquinas().toPromise().then((res: any) => {
       this.maquinas_herramientas = res.data
     })
-    this._internos.getExternos().subscribe((res: any) => {
+    await this._internos.getExternos().toPromise().then((res: any) => {
       this.procesos_internos = res.data
     })
   }
@@ -161,6 +179,7 @@ export class CrearApuPiezaComponent implements OnInit {
   async getBases() {
     await this._calculationBase.getAll().toPromise().then((r: any) => {
       this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
+      console.log(this.calculationBase)
       /* if (this.dataEdit) {
         this.calculationBase.trm.value = this.dataEdit.trm
       } */
@@ -264,7 +283,7 @@ export class CrearApuPiezaComponent implements OnInit {
   }
   /************** Materia Prima Inicio ****************/
   basicControl(): FormGroup {
-    let group = help.materiaHelper.createMateriaGroup(this.form, this.fb, this.geometries, this.materials);
+    let group = help.materiaHelper.createMateriaGroup(this.form, this.fb, this.geometries, this.commercialMaterials);
     return group;
   }
 

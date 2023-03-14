@@ -52,6 +52,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
     collectionSize: 0
   }
   form_filters_quotations: FormGroup;
+  reload: boolean;
   constructor(
     private _modal: ModalService,
     private fb: FormBuilder,
@@ -76,6 +77,14 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this.getCountries();
     this.getPeople();
     this.getConsecutivo();
+  }
+
+  async reloadData() {
+    this.reload = true;
+    this.getCompanies();
+    this.getCountries();
+    await this.getPeople();
+    this.reload = false
   }
 
   openModal() {
@@ -135,8 +144,8 @@ export class ModalNuevoNegocioComponent implements OnInit {
     }
   }
 
-  getPeople() {
-    this._person.getPeopleIndex().subscribe((res: any) => {
+  async getPeople() {
+    await this._person.getPeopleIndex().toPromise().then((res: any) => {
       this.people = res.data
       this.people.unshift({ text: 'Todos ', value: '' });
     })

@@ -44,6 +44,7 @@ export class CrearCotizacionComponent implements OnInit {
   loading: boolean;
   masksMoney = consts
   thirdParties: any[] = [];
+  reload: boolean;
   constructor(
     private _apuPieza: ApuPiezaService,
     private fb: FormBuilder,
@@ -78,6 +79,19 @@ export class CrearCotizacionComponent implements OnInit {
     await this.getCities();
     this.getContacts();
     this.getConsecutivo();
+  }
+
+  async reloadData() {
+    this.reload = true;
+    this.getTexts();
+    this.getThirdParties();
+    this.getBudgets();
+    if (this.path != 'crear') {
+      this.getQuotation(this.id)
+    }
+    await this.getCities();
+    this.getContacts();
+    this.reload = false
   }
 
   getConsecutivo() {

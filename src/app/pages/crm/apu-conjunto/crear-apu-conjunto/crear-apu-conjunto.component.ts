@@ -81,6 +81,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   user_id;
   loading: boolean = true;
   masksMoney = consts
+  reload: boolean;
   @ViewChild('apus') apus: any
 
   constructor(
@@ -118,6 +119,21 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.getVariablesApu();
     await this.getConsecutivo();
     this.loading = false
+  }
+
+  async reloadData() {
+    this.reload = true;
+    await this.getBases()
+    this.getPeople();
+    this.getClients();
+    this.getApuSets();
+    this.getApuPart();
+    this.getUnits();
+    this.getIndirectCosts();
+    this.loadPeople();
+    this.getVariablesApu();
+    await this.getCities();
+    this.reload = false
   }
 
   async getConsecutivo() {

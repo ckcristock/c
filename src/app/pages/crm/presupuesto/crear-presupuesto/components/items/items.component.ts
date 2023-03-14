@@ -644,10 +644,12 @@ export class ItemsComponent implements OnInit {
 
   calculateSutIndirectos(indirect: FormArray, setValue: number) {
     let subTotal = 0
+    console.log(setValue)
+    console.log(indirect)
     indirect.controls.forEach((x, pos) => {
       if (setValue) {
         const indirectOriginal = this.forma.get('indirect_costs').value[pos];
-        const value = (indirectOriginal.percentage * setValue)
+        const value = ((indirectOriginal.percentage / 100) * setValue)
         subTotal += value;
         x.patchValue({ value })
       } else {

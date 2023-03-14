@@ -16,13 +16,9 @@ import { DomSanitizer } from '@angular/platform-browser';
   templateUrl: './crear-terceros.component.html',
   styleUrls: ['./crear-terceros.component.scss'],
 })
-export class CrearTercerosComponent implements OnInit, AfterViewInit {
+export class CrearTercerosComponent implements OnInit {
   loading: boolean = true
   @ViewChild('stepper') stepper: MatHorizontalStepper;
-  ngAfterViewInit() {
-    this.stepper._getIndicatorType = () => 'number';
-
-  }
   goBack() {
     this.stepper.previous();
   }
@@ -76,6 +72,11 @@ export class CrearTercerosComponent implements OnInit, AfterViewInit {
   typeImage: any = '';
   field: any;
   searchActividad: any
+  filteredCountries: any;
+  filteredDepartment: any;
+  filteredMunicipality: any;
+  filteredDianDirection: any;
+  reload: boolean;
   constructor(
     private location: Location,
     private fb: FormBuilder,
@@ -109,18 +110,35 @@ export class CrearTercerosComponent implements OnInit, AfterViewInit {
 
   }
 
+  async reloadData() {
+    this.reload = true;
+    this.getZones();
+    this.getCountriesWith();
+    this.getWinningLists();
+    this.getCiiuCodeLists();
+    this.getDianAddress();
+    this.getAccountPlan();
+    this.getTypeDocuments();
+    this.getFields();
+    this.getRegimeType();
+    await this.getFiscalResponsibility();
+    this.reload = false
+  }
+
+
   getCountriesWith() {
     this._terceros.getCountriesWith().subscribe((res: any) => {
       this.countries = res.data
+      this.filteredCountries = res.data.slice()
     })
   }
-
   createForm() {
     this.form = this.fb.group({
       /* Inicia Datos Básicos */
       id: [''],
       document_type: ['', this._validators.required],
       nit: ['', this._validators.required],
+      dv: [''],
       person_type: ['', this._validators.required],
       third_party_type: ['', this._validators.required],
       first_name: ['', this._validators.required],
@@ -194,8 +212,8 @@ export class CrearTercerosComponent implements OnInit, AfterViewInit {
     })
   }
 
-  getFiscalResponsibility() {
-    this._terceros.getFiscalResponsibility().subscribe((r: any) => {
+  async getFiscalResponsibility() {
+    await this._terceros.getFiscalResponsibility().toPromise().then((r: any) => {
       this.fiscalResponsibility = r.data;
     })
   }
@@ -246,6 +264,7 @@ export class CrearTercerosComponent implements OnInit, AfterViewInit {
     this.countries.forEach(country => {
       if (country.id == id) {
         this.departments = country.departments
+        this.filteredDepartment = country.departments.slice()
       }
     });
     if (this.id) {
@@ -258,6 +277,7 @@ export class CrearTercerosComponent implements OnInit, AfterViewInit {
     this.departments.forEach(department => {
       if (department.id == id) {
         this.municipalities = department.municipalities
+        this.filterMunicipalities = department.municipalities.slice()
       }
     });
   }
@@ -354,6 +374,7 @@ export class CrearTercerosComponent implements OnInit, AfterViewInit {
   getDianAddress() {
     this._terceros.getDianAddress().subscribe((r: any) => {
       this.address = r.data;
+      this.filteredDianDirection = r.data
     })
   }
 
@@ -375,7 +396,7 @@ export class CrearTercerosComponent implements OnInit, AfterViewInit {
   }
   dv: any;
   validarDV(myNit) {
-    if (this.nitSelected == this.form.get('document_type').value) {
+    if (this.nitSelected == this.form.get('document_type').value && this.form.get('country_id').value == 1) {
       var vpri, x, y, z;
       myNit = myNit.replace(/\s/g, "");
       myNit = myNit.replace(/,/g, "");
@@ -407,7 +428,7 @@ export class CrearTercerosComponent implements OnInit, AfterViewInit {
       y = x % 11;
       this.dv = (y > 1) ? 11 - y : y;
       this.form.patchValue({
-        nit: this.form.get('nit').value + '-' + this.dv
+        dv: this.dv
       })
     }
   }
@@ -480,6 +501,7 @@ export class CrearTercerosComponent implements OnInit, AfterViewInit {
         id: this.third.id,
         document_type: this.third.document_type,
         nit: this.third.nit,
+        dv: this.third.dv,
         person_type: this.third.person_type,
         first_name: this.third.first_name,
         second_name: this.third.second_name,

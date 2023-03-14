@@ -1,6 +1,23 @@
 <div class="card">
   <div class="card-body">
-    <div class="row card-title d-flex justify-content-between">
+    <div class="d-flex justify-content-end">
+      <div class="btn-group rounded w-sm-100 mb-2">
+        <button
+          class="btn btn-primary btn-sm"
+          type="button"
+          (click)="reloadData()"
+          title="Recargar datos iniciales"
+        >
+          <span
+            ><i
+              [class]="!reload ? 'fa fa-refresh' : 'fa fa-refresh fa-spin'"
+            ></i>
+            {{ !reload ? "Recargar" : "Recargando" }}</span
+          >
+        </button>
+      </div>
+    </div>
+    <!-- <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
         <img src="../../../../../assets/images/logo2.png" class="img-fluid" />
       </div>
@@ -9,7 +26,7 @@
         <strong> {{ date | date : "longDate" }} </strong>
       </div>
     </div>
-    <hr class="line" />
+    <hr class="line" />-->
     <ng-container *ngIf="!loading; else notDataLoading">
       <form [formGroup]="form">
         <mat-horizontal-stepper #stepper [linear]="false">
@@ -49,10 +66,20 @@
                 <mat-label>Pais</mat-label>
                 <mat-select
                   formControlName="country_id"
+                  [disableOptionCentering]="true"
+                  #selectCountries
                   (selectionChange)="filterDepartments($event.value)"
                 >
+                  <mat-select-filter
+                    *ngIf="selectCountries.focused"
+                    [placeholder]="'Buscar'"
+                    [array]="countries"
+                    [displayMember]="'text'"
+                    (filteredReturn)="filteredCountries = $event"
+                  ></mat-select-filter>
+
                   <mat-option
-                    *ngFor="let item of countries"
+                    *ngFor="let item of filteredCountries"
                     [value]="item.value"
                     >{{ item.text }}</mat-option
                   >
@@ -64,10 +91,19 @@
                 <mat-label>Departamento</mat-label>
                 <mat-select
                   formControlName="department_id"
+                  [disableOptionCentering]="true"
+                  #selectDepartments
                   (selectionChange)="filterMunicipalities($event.value)"
                 >
+                  <mat-select-filter
+                    *ngIf="selectDepartments.focused"
+                    [placeholder]="'Buscar'"
+                    [array]="departments"
+                    [displayMember]="'text'"
+                    (filteredReturn)="filteredDepartment = $event"
+                  ></mat-select-filter>
                   <mat-option
-                    *ngFor="let department of departments"
+                    *ngFor="let department of filteredDepartment"
                     [value]="department.value"
                     >{{ department.text }}</mat-option
                   >
@@ -75,9 +111,20 @@
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
                 <mat-label>Municipio</mat-label>
-                <mat-select formControlName="municipality_id">
+                <mat-select
+                  [disableOptionCentering]="true"
+                  #selectMunicipalities
+                  formControlName="municipality_id"
+                >
+                  <mat-select-filter
+                    *ngIf="selectMunicipalities.focused"
+                    [placeholder]="'Buscar'"
+                    [array]="municipalities"
+                    [displayMember]="'text'"
+                    (filteredReturn)="filterMunicipalities = $event"
+                  ></mat-select-filter>
                   <mat-option
-                    *ngFor="let municipality of municipalities"
+                    *ngFor="let municipality of filterMunicipalities"
                     [value]="municipality.value"
                     >{{ municipality.text }}</mat-option
                   >
@@ -125,6 +172,24 @@
                   placeholder="Ingresa el número de identificación"
                 />
                 <mat-icon matSuffix>badge</mat-icon>
+                <mat-error> Campo <strong>obligatorio</strong> </mat-error>
+              </mat-form-field>
+              <mat-form-field
+                class="col"
+                appearance="outline"
+                *ngIf="
+                  this.nitSelected == this.form.get('document_type').value &&
+                  this.form.get('country_id').value == 1
+                "
+              >
+                <mat-label>Dígito de verificación</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  formControlName="dv"
+                  autocomplete="off"
+                />
+                <mat-icon matSuffix>123</mat-icon>
                 <mat-error> Campo <strong>obligatorio</strong> </mat-error>
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
@@ -262,8 +327,21 @@
               </mat-form-field>
               <mat-form-field class="col-lg-2" appearance="outline">
                 <mat-label>Dirección</mat-label>
-                <mat-select formControlName="dian_address">
-                  <mat-option *ngFor="let addre of address" [value]="addre.code"
+                <mat-select
+                  [disableOptionCentering]="true"
+                  #selectDirection1
+                  formControlName="dian_address"
+                >
+                  <mat-select-filter
+                    *ngIf="selectDirection1.focused"
+                    [placeholder]="'Buscar'"
+                    [array]="address"
+                    [displayMember]="'description'"
+                    (filteredReturn)="filteredDianDirection = $event"
+                  ></mat-select-filter>
+                  <mat-option
+                    *ngFor="let addre of filteredDianDirection"
+                    [value]="addre.code"
                     >{{ addre.description }}
                   </mat-option>
                 </mat-select>
@@ -293,9 +371,20 @@
               </mat-form-field>
               <mat-form-field class="col-lg-2" appearance="outline">
                 <mat-label>Dirección</mat-label>
-                <mat-select formControlName="address_three">
+                <mat-select
+                  [disableOptionCentering]="true"
+                  #selectDirection2
+                  formControlName="address_three"
+                >
+                  <mat-select-filter
+                    *ngIf="selectDirection2.focused"
+                    [placeholder]="'Buscar'"
+                    [array]="address"
+                    [displayMember]="'description'"
+                    (filteredReturn)="filteredDianDirection = $event"
+                  ></mat-select-filter>
                   <mat-option
-                    *ngFor="let item of address"
+                    *ngFor="let item of filteredDianDirection"
                     [value]="item.description"
                     >{{ item.description }}</mat-option
                   >
@@ -767,7 +856,11 @@
               </ng-container>
             </ng-container>
             <div class="d-flex justify-content-end">
-              <button type="button" class="btn btn-sm btn-primary" (click)="createPerson()">
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                (click)="createPerson()"
+              >
                 <i class="fa fa-plus"></i> Agregar persona
               </button>
             </div>

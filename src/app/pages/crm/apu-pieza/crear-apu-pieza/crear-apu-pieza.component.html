@@ -6,6 +6,23 @@
     <div class="card-body">
       <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
       <hr class="line" />
+      <div class="d-flex justify-content-end">
+        <div class="btn-group rounded w-sm-100 mb-2">
+          <button
+            class="btn btn-primary btn-sm"
+            type="button"
+            (click)="reloadData()"
+            title="Recargar datos iniciales"
+          >
+            <span
+              ><i
+                [class]="!reload ? 'fa fa-refresh' : 'fa fa-refresh fa-spin'"
+              ></i>
+              {{ !reload ? "Recargar" : "Recargando" }}</span
+            >
+          </button>
+        </div>
+      </div>
       <div class="row">
         <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Nombre</mat-label>

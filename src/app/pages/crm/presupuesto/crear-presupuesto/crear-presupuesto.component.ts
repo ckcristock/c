@@ -39,6 +39,7 @@ export class CrearPresupuestoComponent implements OnInit {
     CodigoFormato: ''
   }
   masksMoney = consts
+  reload: boolean;
   constructor(
     private _apuPieza: ApuPiezaService,
     private fb: FormBuilder,
@@ -63,6 +64,15 @@ export class CrearPresupuestoComponent implements OnInit {
     await this.getCities();
     this.getConsecutivo();
     this.loading = false;
+  }
+
+  async reloadData() {
+    this.reload = true;
+    this.getClients();
+    await this.getBases();
+    await this.getIndirectCosts();
+    await this.getCities();
+    this.reload = false
   }
 
   getConsecutivo() {

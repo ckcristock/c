@@ -5,6 +5,23 @@
   <div class="card-body">
     <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
     <hr class="line" />
+    <div class="d-flex justify-content-end">
+      <div class="btn-group rounded w-sm-100 mb-2">
+        <button
+          class="btn btn-primary btn-sm"
+          type="button"
+          (click)="reloadData()"
+          title="Recargar datos iniciales"
+        >
+          <span
+            ><i
+              [class]="!reload ? 'fa fa-refresh' : 'fa fa-refresh fa-spin'"
+            ></i>
+            {{ !reload ? "Recargar" : "Recargando" }}</span
+          >
+        </button>
+      </div>
+    </div>
     <form [formGroup]="form">
       <div class="row">
         <mat-form-field class="col-md-3" appearance="outline">
@@ -870,7 +887,10 @@
                       Costos Indirectos
                     </th>
                     <td class="text-right">
-                      ${{ form.controls.indirect_cost_total.value | number : "1.2-2" }}
+                      ${{
+                        form.controls.indirect_cost_total.value
+                          | number : "1.2-2"
+                      }}
                     </td>
                   </tr>
                 </tbody>
@@ -885,7 +905,10 @@
                       Costos directos + costos indirectos totales
                     </td>
                     <td class="col-3 text-right">
-                      ${{ form.controls.direct_costs_indirect_costs_total.value | number : "1.2-2" }}
+                      ${{
+                        form.controls.direct_costs_indirect_costs_total.value
+                          | number : "1.2-2"
+                      }}
                     </td>
                   </tr>
                 </tbody>
@@ -926,7 +949,10 @@
                       />
                     </td>
                     <td class="col-3 text-right">
-                      ${{ form.controls.administrative_value.value | number : "1.2-2" }}
+                      ${{
+                        form.controls.administrative_value.value
+                          | number : "1.2-2"
+                      }}
                     </td>
                   </tr>
                   <tr>
@@ -940,7 +966,9 @@
                       />
                     </td>
                     <td class="col-3 text-right">
-                      ${{ form.controls.unforeseen_value.value | number : "1.2-2" }}
+                      ${{
+                        form.controls.unforeseen_value.value | number : "1.2-2"
+                      }}
                     </td>
                   </tr>
                   <tr>
@@ -948,7 +976,10 @@
                       SubTotal + Administrativos + Imprevistos
                     </td>
                     <td class="col-3 text-right">
-                      ${{ form.controls.administrative_unforeseen_subtotal.value | number : "1.2-2" }}
+                      ${{
+                        form.controls.administrative_unforeseen_subtotal.value
+                          | number : "1.2-2"
+                      }}
                     </td>
                   </tr>
                 </tbody>
@@ -975,7 +1006,10 @@
                       SubTotal + Admin + Imprevisto + Utilidad
                     </td>
                     <td class="col-3 text-right">
-                      ${{ form.controls.admin_unforeseen_utility_subtotal.value | number : "1.2-2" }}
+                      ${{
+                        form.controls.admin_unforeseen_utility_subtotal.value
+                          | number : "1.2-2"
+                      }}
                     </td>
                   </tr>
                 </tbody>

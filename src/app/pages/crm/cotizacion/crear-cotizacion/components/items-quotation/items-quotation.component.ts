@@ -19,6 +19,7 @@ export class ItemsQuotationComponent implements OnInit {
   masksMoney = consts
   apuSelected: any[] = [];
   calculationBases: any;
+  subItemActive;
   constructor(
     private fb: FormBuilder,
     private _swal: SwalService,
@@ -36,11 +37,13 @@ export class ItemsQuotationComponent implements OnInit {
   }
 
   getApus(e: any[]) {
-    console.log(e)
+    const subItems = this.subItemActive.get('subItems') as FormArray
+    console.log(this.subItemActive)
     e.forEach(apu => {
       const exist = this.apuSelected.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
       !exist ?
-        this.addItems(apu, 'withSub', 'apu') :
+        /* this.addItems(apu, 'withSub', 'apu') */
+        subItems.push(this.makeSubItem(apu, false, 'withSub', this.subItemActive, 'apu')) :
         this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
     });
   }
@@ -96,7 +99,7 @@ export class ItemsQuotationComponent implements OnInit {
         (category == 'apu' && item_to_add && !noCreate)
           ? type_model
           : (category == 'budget' && item_to_add && !noCreate)
-            ? 'App\\Models\\Budget'
+            ? 'App\\Models\\BudgetItem'
             : noCreate
               ? item_to_add.quotationitemable_type
               : '',
@@ -260,12 +263,12 @@ export class ItemsQuotationComponent implements OnInit {
 
       if (item_to_add.subitems) {
         item_to_add.subitems.forEach(subi => {
-          subItems.push(this.makeSubItem(subi, true, type, item))
+          subItems.push(this.makeSubItem(subi, true, type, item, category, noCreate))
         });
       }
       if (item_to_add.sub_items) {
         item_to_add.sub_items.forEach(subi => {
-          subItems.push(this.makeSubItem(subi, true, type, item))
+          subItems.push(this.makeSubItem(subi, true, type, item, category, noCreate))
         });
       }
     }
@@ -352,8 +355,9 @@ export class ItemsQuotationComponent implements OnInit {
 
   }
 
-  makeSubItem(pre = null, edit = false, type = '', group = null) {
-    const subItemGroup = this.makeSubItemGroup(pre, edit, type)
+  makeSubItem(pre = null, edit = false, type = '', group = null, category = '', noCreate = false) {
+    console.log('llegando a makesubitem', pre)
+    const subItemGroup = this.makeSubItemGroup(pre, edit, type, category, noCreate)
     const cuantity_aux = subItemGroup.get('cuantity_aux')
     const value_cop_aux = subItemGroup.get('value_cop_aux')
     const value_usd_aux = subItemGroup.get('value_usd_aux')
@@ -407,22 +411,63 @@ export class ItemsQuotationComponent implements OnInit {
     this.tempItem = item;
   }
 
-  getBudgets(e: any[]) {
+  /* getBudgets(e: any[]) {
     let subItems = this.tempItem.get('subItems') as FormArray;
     e.forEach(budget => {
       const exist = subItems.value.some(x => (x.id == budget.id && x.type_module == budget.type_module))
-      !exist ? subItems.push(this.makeSubItem(budget, null, '', this.tempItem)) : ''
+      !exist ? subItems.push(this.makeSubItem(budget, null, '', this.tempItem, 'budget')) : ''
     });
-  }
+  } */
 
 
 
-  makeSubItemGroup(pre, edit = null, type) {
-    console.log(pre)
+  makeSubItemGroup(pre, edit = null, type, category = '', noCreate = false) {
+    console.log(pre, category, noCreate)
+    let type_model;
+    if (pre && category == 'apu' && !noCreate) {
+      switch (pre.type_module) {
+        case 'apu_part':
+          type_model = 'App\\Models\\ApuPart';
+          break;
+        case 'apu_set':
+          type_model = 'App\\Models\\ApuSet';
+          break;
+        case 'apu_service':
+          type_model = 'App\\Models\\ApuService';
+          break;
+        default:
+          break;
+      }
+    }
     return this.fb.group({
       id: ((edit && pre?.id) ? pre.id : ''),
       budget_item_subitem_id: ((edit && pre?.id) ? pre.id : ''),
-      description: [((edit && pre?.description) ? pre.description : ''), Validators.required],
+      quotationitemsubitemable_id:
+        (category == 'budget' && pre && !noCreate)
+          ? pre.id
+          : (category == 'apu' && pre && !noCreate)
+            ? pre.apu_id
+            : noCreate
+              ? pre.quotationitemsubitemable_id
+              : '',
+      quotationitemsubitemable_type:
+        (category == 'apu' && pre && !noCreate)
+          ? type_model
+          : (category == 'budget' && pre && !noCreate)
+            ? 'App\\Models\\BudgetItemSubitem'
+            : noCreate
+              ? pre.quotationitemsubitemable_type
+              : '',
+      description: [
+        (category == 'apu' && pre && !noCreate)
+          ? pre.name
+          : (category == 'budget' && pre && !noCreate)
+            ? pre.description
+            : noCreate
+              ? pre.description
+              : ''
+        ,
+        Validators.required],
       cuantity_aux: ((edit && pre?.cuantity) ? pre.cuantity : 1),
       cuantity: ((edit && pre?.cuantity) ? pre.cuantity : 1),
       value_cop_aux: ((edit && pre?.value_cop) ? pre.value_cop / pre.cuantity : 0),

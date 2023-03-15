@@ -130,7 +130,9 @@
                               formControlName="description"
                             />
                             <button
-                              (click)="apus.openConfirm()"
+                              (click)="
+                                apus.openConfirm(false); subItemActive = item
+                              "
                               class="btn btn-info btn-sm"
                               type="button"
                             >

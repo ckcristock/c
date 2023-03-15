@@ -48,6 +48,7 @@
                       <input
                         type="text"
                         class="text-left"
+                        placeholder="Ingresa la descripción"
                         formControlName="name"
                       />
                       <button
@@ -121,11 +122,21 @@
                       >
                         <td class="align-middle">{{ i + 1 }}.{{ y + 1 }}</td>
                         <td>
-                          <input
-                            type="text"
-                            class="text-left"
-                            formControlName="description"
-                          />
+                          <div class="d-flex justify-content-between">
+                            <input
+                              type="text"
+                              class="text-left"
+                              placeholder="Ingresa la descripción"
+                              formControlName="description"
+                            />
+                            <button
+                              (click)="apus.openConfirm()"
+                              class="btn btn-info btn-sm"
+                              type="button"
+                            >
+                              <i class="fas fa-search"></i>
+                            </button>
+                          </div>
                         </td>
                         <td>
                           <input
@@ -182,13 +193,23 @@
       </ng-container>
     </ng-container>
     <div class="d-flex justify-content-end">
-      <button
-        (click)="addItems(null, 'subitem')"
-        class="btn btn-primary btn-sm"
-        type="button"
-      >
-        <i class="fas fa-plus"></i> Agregar subtítulo
-      </button>
+      <div class="btn-group" role="group" aria-label="Button group">
+        <button
+          (click)="addItems(null, 'subitem')"
+          class="btn btn-primary btn-sm"
+          type="button"
+        >
+          <i class="fas fa-plus"></i> Agregar subtítulo
+        </button>
+        <button
+          *ngIf="form.controls.included.value == 'apu'"
+          type="button"
+          (click)="apus.openConfirm()"
+          class="btn btn-info btn-sm"
+        >
+          <i class="fas fa-search"></i> Buscar APU
+        </button>
+      </div>
     </div>
   </div>
   <div class="row d-flex justify-content-end mt-3">
@@ -233,3 +254,5 @@
     </td>
   </tr>
 </ng-template>
+
+<app-get-apus #apus (sendApus)="getApus($event)"></app-get-apus>

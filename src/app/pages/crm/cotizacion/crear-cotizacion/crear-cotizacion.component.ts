@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { of, Observable, Subject, concat, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap, map, catchError, filter } from 'rxjs/operators';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
@@ -160,7 +160,7 @@ export class CrearCotizacionComponent implements OnInit {
         destinity_id: res.data.destinity_id,
         trm: res.data.trm,
         description: res.data.description,
-        budget_included: res.data.budget_included,
+        included: res.data.included,
         budget: res.data.budget,
         budget_id: res.data.budget_id,
         observation: res.data.observation,
@@ -171,13 +171,14 @@ export class CrearCotizacionComponent implements OnInit {
         legal_requirements: res.data.legal_requirements,
         technical_requirements: res.data.technical_requirements
       })
-      if (res.data.budget_included == 'si') {
-        this.form.get('budget_included').disable()
+      if (res.data.included == 'budget') {
+        this.form.get('included').disable()
         this.form.get('budget').disable()
       }
       res.data.items.forEach(element => {
         const action = element.sub_items.length > 0 ? 'subitems' : 'withSub';
-        this.itemsQuotation.addItems(element, action);
+        let cat = element.quotationitemable_type == 'App\\Models\\ApuPart' || element.quotationitemable_type == 'App\\Models\\ApuSet' || element.quotationitemable_type == 'App\\Models\\ApuService' ? 'apu' : element.quotationitemable_type == 'App\\Models\\Budget' ? 'budget' : '';
+        this.itemsQuotation.addItems(element, action, cat, true);
       });
     })
   }
@@ -191,7 +192,7 @@ export class CrearCotizacionComponent implements OnInit {
       destinity_id: [null, Validators.required],
       trm: [this.trm, Validators.required],
       description: [''],
-      budget_included: ['', Validators.required],
+      included: ['', Validators.required],
       budget: [''],
       budget_id: [''],
       //indirect_costs: this.fb.array([]),
@@ -208,6 +209,12 @@ export class CrearCotizacionComponent implements OnInit {
       code: [''],
       third_party_person_id: [null, Validators.required]
     });
+    this.form.get('included').valueChanges.subscribe(r => {
+      const items = this.form.get('items') as FormArray;
+      for (let i = items.length - 1; i >= 0; i--) {
+        items.removeAt(i);
+      }
+    })
   }
 
   getTRM() {
@@ -259,9 +266,9 @@ export class CrearCotizacionComponent implements OnInit {
           const action = choice === 'si' ? 'subitems' : 'withSub';
           this.form.patchValue({ budget_id: this.form.controls.budget.value.id });
           this.form.controls.budget.disable();
-          this.form.controls.budget_included.disable();
+          this.form.controls.included.disable();
           item.items.forEach(element => {
-            this.itemsQuotation.addItems(element, action);
+            this.itemsQuotation.addItems(element, action, 'budget');
           });
         } else {
           this.form.controls.budget.reset();

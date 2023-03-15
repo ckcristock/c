@@ -18,6 +18,8 @@ import { QuotationService } from './quotation.service';
   styleUrls: ['./cotizacion.component.scss']
 })
 
+
+
 export class CotizacionComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
@@ -100,6 +102,11 @@ export class CotizacionComponent implements OnInit {
       this.router.navigate(['/notauthorized'])
     }
 
+  }
+
+  stop(event) {
+    event.preventDefault();
+    event.stopPropagation();
   }
 
   selectedDate(fecha) {

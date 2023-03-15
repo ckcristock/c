@@ -210,7 +210,7 @@
                 <th>Ciudad</th>
                 <th>Código</th>
                 <th>Cliente</th>
-                <th>Presupuesto</th>
+                <th>Incluye</th>
                 <th>Estado</th>
                 <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
@@ -220,43 +220,33 @@
                 *ngFor="let item of quotations"
                 role="button"
                 class="text-center"
+                (click)="openList(item.id)"
                 [ngClass]="{
                   'text-danger font-weight-bold': item.status === 'Inactivo',
                   'text-info': item.selected
                 }"
               >
-                <td (click)="openList(item.id)">
-                  {{ item.created_at | date : "MMM d, y, h:mm a" }}
-                </td>
-                <td (click)="openList(item.id)">{{ item.description }}</td>
-                <td (click)="openList(item.id)">
-                  {{ item.municipality.name }}
-                </td>
-                <td (click)="openList(item.id)">{{ item.code }}</td>
-                <td (click)="openList(item.id)">
+                <td>{{ item.created_at | date : "MMM d, y, h:mm a" }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.municipality.name }}</td>
+                <td>{{ item.code }}</td>
+                <td>
                   {{
                     item.client.social_reason
                       ? item.client.social_reason
                       : item.client.full_name
                   }}
                 </td>
-
-                <td
-                  [role]="item.budget_included == 'si' ? 'button' : ''"
-                  [class]="item.budget_included == 'si' ? 'text-primary' : ''"
-                  [routerLink]="
-                    item.budget_included == 'si'
-                      ? ['/crm/presupuesto/ver/' + item.budgets.id]
-                      : null
-                  "
-                >
+                <td>
                   {{
-                    item.budget_included == "si"
-                      ? item.budgets.code
-                      : "No incluye"
+                    item.included == "apu"
+                      ? "APU"
+                      : item.included == "budget"
+                      ? "Presupuesto"
+                      : ""
                   }}
                 </td>
-                <td (click)="openList(item.id)">
+                <td>
                   <span
                     class="badge"
                     [class]="
@@ -277,6 +267,7 @@
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
                       ngbDropdownToggle
+                      (click)="stop($event)"
                       class="btn btn-primary btn-sm"
                       type="button"
                     >

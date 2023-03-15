@@ -99,7 +99,6 @@ export class ModalNuevoNegocioComponent implements OnInit {
         this.apuSelected.push(apu) :
         this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
     });
-    console.log(this.apuSelected)
   }
 
   findApus() {

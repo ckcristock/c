@@ -2,23 +2,7 @@
   <div class="card-body">
     <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
     <hr class="line" />
-    <div class="d-flex justify-content-end">
-      <div class="btn-group rounded w-sm-100 mb-2">
-        <button
-          class="btn btn-primary btn-sm"
-          type="button"
-          (click)="reloadData()"
-          title="Recargar datos iniciales"
-        >
-          <span
-            ><i
-              [class]="!reload ? 'fa fa-refresh' : 'fa fa-refresh fa-spin'"
-            ></i>
-            {{ !reload ? "Recargar" : "Recargando" }}</span
-          >
-        </button>
-      </div>
-    </div>
+
     <ng-container [formGroup]="form">
       <div class="row">
         <mat-form-field class="col" appearance="outline">
@@ -724,6 +708,11 @@
 <ng-template #notDataQuotations>
   <app-not-data [loading]="loadingQuotations"></app-not-data>
 </ng-template>
+
+<app-reload-button
+  [reload]="reload"
+  (reloadData)="reloadData()"
+></app-reload-button>
 
 <!-- <div class="row">
           <ng-container [formGroup]="form_filters_quotations">

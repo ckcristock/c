@@ -8,21 +8,31 @@ import { DatosBasicosService } from '../datos-basicos/datos-basicos.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalService } from '../../../../services/swal.service';
 import { WorkContractTypesService } from '../../../../services/workContractTypes.service';
+import { ModalService } from 'src/app/core/services/modal.service';
+import { PositionService } from '../../../../services/positions.service';
+import { WorkContractService } from '../../../../services/work-contract.service';
+
 
 @Component({
   selector: 'app-salario',
   templateUrl: './salario.component.html',
   styleUrls: ['./salario.component.scss']
 })
+
+
 export class SalarioComponent implements OnInit {
   @ViewChild('modal') modal: any;
   form: FormGroup;
+  formHistoryContract: FormGroup;
   data: any;
   id: any;
   contract_types: any;
-  salary_history: any [] = []
+  salary_history: any[] = []
   contractTerms: any[] = [];
+  workContractsTypesList: any[] = [];
+  positions: any[] = [];
   loading: boolean;
+  contracts: any[] = [];
   salary_info: any = {
     salary: '',
     contract_type: '',
@@ -30,6 +40,7 @@ export class SalarioComponent implements OnInit {
     date_end: '',
     contract_term_id: ''
   };
+
   constructor(
     private fb: FormBuilder,
     private salaryService: SalarioService,
@@ -37,7 +48,10 @@ export class SalarioComponent implements OnInit {
     private basicDataService: DatosBasicosService,
     private _workContractTypes: WorkContractTypesService,
     private modalService: NgbModal,
+    private _modal: ModalService,
     private _swal: SwalService,
+    private _position: PositionService,
+    private _workContract: WorkContractService
   ) { }
 
   ngOnInit(): void {
@@ -50,7 +64,68 @@ export class SalarioComponent implements OnInit {
     this.getSalaryHistory();
   }
 
+  openModalContracts(content) {
+    this.createFormHistoryContract()
+    this._modal.open(content, 'lg')
+    this._workContractTypes.getWorkContractTypeList().subscribe((r: any) => {
+      this.workContractsTypesList = r.data
+    })
+    this._position.getPositions().subscribe((r: any) => {
+      this.positions = r.data
+    })
+    this._workContract.getWorkContractList(this.id).subscribe((r: any) => {
+      this.contracts = r.data
+    })
+    /**aqui llamo fn que obtiene contratos */
+  }
+
+  printForm() {
+    console.log(this.formHistoryContract.value)
+  }
+
+  createFormHistoryContract() {
+    this.formHistoryContract = this.fb.group({
+      salary: ['', Validators.required],
+      work_contract_type_id: ['', Validators.required],
+      date_of_admission: ['', Validators.required],
+      date_end: ['', Validators.required],
+      position_id: ['', Validators.required],
+      company_id: [1, Validators.required],
+      liquidated: [1],
+    })
+    this.formHistoryContract.get('date_end').valueChanges.subscribe(value => {
+      //this.contracts.find(x => x.date_end )
+      /* validar con fechas de los contratos del funcionario */
+      /* esta fecha es mayor a fecha de inicio */
+
+      this.contracts.forEach(contract => {
+
+        let date_end_ms = new Date(contract.date_end).getTime();
+        let current_date = new Date(value).getTime();
+
+        if(date_end_ms>=current_date){
+          console.log("fecha invalida")
+        }
+        // if (contract.date_end >= value) {
+        //   if (value) {
+
+        //   } else {
+
+        //   }
+        // } else {
+
+        // }
+      });
+
+    })
+    this.formHistoryContract.get('date_of_admission').valueChanges.subscribe(value => {
+      //this.contracts.find(x => x.date_end )
+      /* validar con fechas de los contratos del funcionario */
+      /* esta fecha es menor a fecha de inicio */
+    })
+  }
   closeResult = '';
+
   public openConfirm(confirm) {
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -77,11 +152,12 @@ export class SalarioComponent implements OnInit {
     });
   }
 
+
   getContractTerms(value) {
     this._workContractTypes.getContractTerms().subscribe((r: any) => {
       this.contractTerms = []
       r.data.forEach(
-        (contract_term:any) => contract_term.work_contract_types.forEach(
+        (contract_term: any) => contract_term.work_contract_types.forEach(
           (work_contract_type: any) => {
             if (work_contract_type.id == value) {
               this.contractTerms.push(contract_term)
@@ -114,7 +190,7 @@ export class SalarioComponent implements OnInit {
   loadingHistory: boolean;
   getSalaryHistory() {
     this.loadingHistory = true
-    this.salaryService.getSalaryHistory(this.id).subscribe((res:any) => {
+    this.salaryService.getSalaryHistory(this.id).subscribe((res: any) => {
       this.salary_history = res.data
       this.loadingHistory = false
     })

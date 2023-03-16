@@ -22,7 +22,14 @@ import { PagesModule } from 'src/app/pages/pages.module';
 
 @NgModule({
   // tslint:disable-next-line: max-line-length
-  declarations: [FooterComponent, RightsidebarComponent, HorizontaltopbarComponent, HorizontalnavbarComponent, NavItemsDynamicComponent, ModalAlertComponent],
+  declarations: [
+    FooterComponent,
+    RightsidebarComponent,
+    HorizontaltopbarComponent,
+    HorizontalnavbarComponent,
+    NavItemsDynamicComponent,
+    ModalAlertComponent
+  ],
   imports: [
     CommonModule,
     TranslateModule,
@@ -38,7 +45,7 @@ import { PagesModule } from 'src/app/pages/pages.module';
     NgSelectModule,
     PagesModule
   ],
-  exports: [ FooterComponent,  RightsidebarComponent, HorizontaltopbarComponent, HorizontalnavbarComponent],
+  exports: [FooterComponent, RightsidebarComponent, HorizontaltopbarComponent, HorizontalnavbarComponent],
   providers: []
 })
 export class SharedModule { }

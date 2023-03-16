@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { consts } from 'src/app/core/utils/consts';
 import { CalculationBasesService } from 'src/app/pages/ajustes/configuracion/base-calculos/calculation-bases.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
@@ -11,6 +12,7 @@ import { BudgetService } from 'src/app/pages/crm/presupuesto/budget.service';
   styleUrls: ['./items-quotation.component.scss']
 })
 export class ItemsQuotationComponent implements OnInit {
+  @ViewChild('apus') apus: any;
   @Input('form') form: FormGroup;
   itemsTodelete: Array<number> = [];
   subItemsToDelete: Array<number> = [];
@@ -20,10 +22,12 @@ export class ItemsQuotationComponent implements OnInit {
   apuSelected: any[] = [];
   calculationBases: any;
   subItemActive;
+  indexAdd;
   constructor(
     private fb: FormBuilder,
     private _swal: SwalService,
-    private _calculationBases: CalculationBasesService
+    private _calculationBases: CalculationBasesService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -36,16 +40,24 @@ export class ItemsQuotationComponent implements OnInit {
     })
   }
 
+  insert: boolean = false;
+
   getApus(e: any[]) {
     const subItems = this.subItemActive.get('subItems') as FormArray
-    console.log(this.subItemActive)
     e.forEach(apu => {
       const exist = this.apuSelected.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
-      !exist ?
-        /* this.addItems(apu, 'withSub', 'apu') */
-        subItems.push(this.makeSubItem(apu, false, 'withSub', this.subItemActive, 'apu')) :
-        this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
+      if (!this.insert) {
+        if (!exist) {
+          subItems.setControl(this.indexAdd, this.makeSubItem(apu, false, 'withSub', this.subItemActive, 'apu'))
+        } else {
+          this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
+        }
+      } else {
+        !exist ? subItems.insert(this.indexAdd, this.makeSubItem(apu, false, 'withSub', this.subItemActive, 'apu')) : this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
+      }
+
     });
+    this.recalculate(subItems, this.subItemActive)
   }
 
   addSubItem(group: FormGroup, type) {
@@ -65,6 +77,7 @@ export class ItemsQuotationComponent implements OnInit {
     group.get('value_cop_aux').disable()
     group.get('value_usd_aux').disable()
     subItems.push(this.makeSubItem(null, false, type, group))
+
   }
 
   addItems(item_to_add = null, type, category = '', noCreate = false) {
@@ -341,6 +354,7 @@ export class ItemsQuotationComponent implements OnInit {
   value_usd_temp: number
 
   recalculate(subItemGroup, item_pre) {
+    console.log('recalculando')
     this.value_cop_temp = 0
     this.value_usd_temp = 0
     item_pre.getRawValue().subItems.forEach(subItem => {
@@ -356,8 +370,9 @@ export class ItemsQuotationComponent implements OnInit {
   }
 
   makeSubItem(pre = null, edit = false, type = '', group = null, category = '', noCreate = false) {
-    console.log('llegando a makesubitem', pre)
     const subItemGroup = this.makeSubItemGroup(pre, edit, type, category, noCreate)
+    console.log(subItemGroup)
+
     const cuantity_aux = subItemGroup.get('cuantity_aux')
     const value_cop_aux = subItemGroup.get('value_cop_aux')
     const value_usd_aux = subItemGroup.get('value_usd_aux')
@@ -407,10 +422,6 @@ export class ItemsQuotationComponent implements OnInit {
     return subItemGroup;
   }
 
-  findApus(item: FormGroup) {
-    this.tempItem = item;
-  }
-
   /* getBudgets(e: any[]) {
     let subItems = this.tempItem.get('subItems') as FormArray;
     e.forEach(budget => {
@@ -419,10 +430,32 @@ export class ItemsQuotationComponent implements OnInit {
     });
   } */
 
+  openNewTab(type, id) {
+    let uri = ''
+    switch (type) {
+      case 'App\\Models\\ApuPart':
+        uri = '/crm/apu/ver-apu-pieza';
+        break;
+      case 'App\\Models\\ApuSet':
+        uri = '/crm/apu/ver-apu-conjunto';
+        break;
+      case 'App\\Models\\ApuService':
+        uri = '/crm/apu/ver-apu-servicio';
+        break;
+      case 'App\\Models\\BudgetItemSubitem':
+        uri = '/crm/presupuesto/ver';
+        break;
+      default:
+        break;
+    }
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([uri + '/' + id])
+    );
+    window.open(url, '_blank');
+  }
 
 
   makeSubItemGroup(pre, edit = null, type, category = '', noCreate = false) {
-    console.log(pre, category, noCreate)
     let type_model;
     if (pre && category == 'apu' && !noCreate) {
       switch (pre.type_module) {
@@ -468,16 +501,90 @@ export class ItemsQuotationComponent implements OnInit {
               : ''
         ,
         Validators.required],
-      cuantity_aux: ((edit && pre?.cuantity) ? pre.cuantity : 1),
-      cuantity: ((edit && pre?.cuantity) ? pre.cuantity : 1),
-      value_cop_aux: ((edit && pre?.value_cop) ? pre.value_cop / pre.cuantity : 0),
-      value_cop: ((edit && pre?.value_cop) ? pre.value_cop / pre.cuantity : 0),
-      value_usd_aux: ((edit && pre?.value_usd) ? pre.value_usd / pre.cuantity : 0),
-      value_usd: ((edit && pre?.value_usd) ? pre.value_usd / pre.cuantity : 0),
-      total_cop_aux: { value: ((edit && pre?.value_cop) ? pre.value_cop : 0), disabled: true },
-      total_cop: { value: ((edit && pre?.value_cop) ? pre.value_cop : 0), disabled: true },
-      total_usd_aux: { value: ((edit && pre?.value_usd) ? pre.value_usd : 0), disabled: true },
-      total_usd: { value: ((edit && pre?.value_usd) ? pre.value_usd : 0), disabled: true },
+      cuantity_aux:
+        (edit && pre?.cuantity)
+          ? pre.cuantity
+          : 1,
+      cuantity:
+        (edit && pre?.cuantity)
+          ? pre.cuantity
+          : 1,
+      value_cop_aux:
+        (category == 'apu' && pre && !noCreate)
+          ? pre.unit_cost
+          : (category == 'budget' && pre && !noCreate)
+            ? pre.value_cop / pre.cuantity
+            : noCreate
+              ? pre.value_cop / pre.cuantity
+              : 0,
+      value_cop:
+        (category == 'apu' && pre && !noCreate)
+          ? pre.unit_cost
+          : (category == 'budget' && pre && !noCreate)
+            ? pre.value_cop / pre.cuantity
+            : noCreate
+              ? pre.value_cop / pre.cuantity
+              : 0,
+      value_usd_aux:
+        (category == 'apu' && pre && !noCreate)
+          ? (pre.unit_cost / this.calculationBases[0].value)
+          : (category == 'budget' && pre && !noCreate)
+            ? pre.value_usd / pre.cuantity
+            : noCreate
+              ? pre.value_usd / pre.cuantity
+              : 0,
+      value_usd:
+        (category == 'apu' && pre && !noCreate)
+          ? (pre.unit_cost / this.calculationBases[0].value)
+          : (category == 'budget' && pre && !noCreate)
+            ? pre.value_usd / pre.cuantity
+            : noCreate
+              ? pre.value_usd / pre.cuantity
+              : 0,
+      total_cop_aux: {
+        value:
+          (category == 'apu' && pre && !noCreate)
+            ? pre.unit_cost
+            : (category == 'budget' && pre && !noCreate)
+              ? pre.value_cop
+              : noCreate
+                ? pre.value_cop
+                : 0,
+        disabled: true
+      },
+      total_cop: {
+        value:
+          (category == 'apu' && pre && !noCreate)
+            ? pre.unit_cost
+            : (category == 'budget' && pre && !noCreate)
+              ? pre.value_cop
+              : noCreate
+                ? pre.value_cop
+                : 0,
+        disabled: true
+      },
+      total_usd_aux: {
+        value:
+          (category == 'apu' && pre && !noCreate)
+            ? (pre.unit_cost / this.calculationBases[0].value)
+            : (category == 'budget' && pre && !noCreate)
+              ? pre.value_usd
+              : noCreate
+                ? pre.value_usd
+                : 0,
+        disabled: true
+      },
+      total_usd: {
+        value:
+          (category == 'apu' && pre && !noCreate)
+            ? (pre.unit_cost / this.calculationBases[0].value)
+            : (category == 'budget' && pre && !noCreate)
+              ? pre.value_usd
+              : noCreate
+                ? pre.value_usd
+                : 0,
+        disabled: true
+      },
       type: type == 'only_item' ? true : false,
     })
   }

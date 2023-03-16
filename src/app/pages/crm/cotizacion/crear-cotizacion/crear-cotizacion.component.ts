@@ -42,6 +42,7 @@ export class CrearCotizacionComponent implements OnInit {
   id: number;
   quotation: any;
   loading: boolean;
+  loadingView: boolean;
   masksMoney = consts
   thirdParties: any[] = [];
   reload: boolean;
@@ -65,6 +66,7 @@ export class CrearCotizacionComponent implements OnInit {
 
 
   async ngOnInit() {
+    this.loadingView = true;
     this.route.params.subscribe(params => {
       this.id = params['id'];
     })
@@ -78,7 +80,8 @@ export class CrearCotizacionComponent implements OnInit {
     }
     await this.getCities();
     this.getContacts();
-    this.getConsecutivo();
+    await this.getConsecutivo();
+    this.loadingView = false
   }
 
   async reloadData() {
@@ -94,8 +97,8 @@ export class CrearCotizacionComponent implements OnInit {
     this.reload = false
   }
 
-  getConsecutivo() {
-    this._consecutivos.getConsecutivo('quotations').subscribe((r: any) => {
+  async getConsecutivo() {
+    await this._consecutivos.getConsecutivo('quotations').toPromise().then((r: any) => {
       this.datos.CodigoFormato = r.data.format_code
       this.form.patchValue({ format_code: this.datos.CodigoFormato })
       if (this.path !== 'editar') {

@@ -12,4 +12,9 @@ export class WorkContractService {
   getWorkContractList(id){
     return this.http.get(`${ environment.base_url}/get-work-contracts-list/${id}`)
   }
+
+  addContract(data){
+    return this.http.post(`${environment.base_url}/work_contracts`, data);
+  }
+
 }

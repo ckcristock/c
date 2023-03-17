@@ -11,6 +11,8 @@ import { WorkContractTypesService } from '../../../../services/workContractTypes
 import { ModalService } from 'src/app/core/services/modal.service';
 import { PositionService } from '../../../../services/positions.service';
 import { WorkContractService } from '../../../../services/work-contract.service';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { addDays } from '@fullcalendar/core';
 
 
 @Component({
@@ -64,6 +66,7 @@ export class SalarioComponent implements OnInit {
     this.getSalaryHistory();
   }
 
+  //Secccion Historial de contratos
   openModalContracts(content) {
     this.createFormHistoryContract()
     this._modal.open(content, 'lg')
@@ -76,11 +79,31 @@ export class SalarioComponent implements OnInit {
     this._workContract.getWorkContractList(this.id).subscribe((r: any) => {
       this.contracts = r.data
     })
-    /**aqui llamo fn que obtiene contratos */
+
   }
 
   printForm() {
-    console.log(this.formHistoryContract.value)
+    console.log(this.formHistoryContract)
+  }
+
+
+  dateFilter = (date: Date) => {
+
+    for (const contract of this.contracts) {
+      let date_end_aux = new Date(contract.date_end)
+      let date_end = addDays(date_end_aux, 1)
+      let date_of_admission = new Date(contract.date_of_admission)
+      if (contract.date_end) {
+        if (date >= date_of_admission && date <= date_end) {
+          return false;
+        }
+      } else {
+        if (date >= date_of_admission) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   createFormHistoryContract() {
@@ -92,40 +115,88 @@ export class SalarioComponent implements OnInit {
       position_id: ['', Validators.required],
       company_id: [1, Validators.required],
       liquidated: [1],
-    })
+      person_id: [this.id],
+    });
+
     this.formHistoryContract.get('date_end').valueChanges.subscribe(value => {
-      //this.contracts.find(x => x.date_end )
-      /* validar con fechas de los contratos del funcionario */
-      /* esta fecha es mayor a fecha de inicio */
-
-      this.contracts.forEach(contract => {
-
-        let date_end_ms = new Date(contract.date_end).getTime();
-        let current_date = new Date(value).getTime();
-
-        if(date_end_ms>=current_date){
-          console.log("fecha invalida")
+      if (value) {
+        let date_of_admission = this.formHistoryContract.get('date_of_admission').value
+        if (value && date_of_admission) {
+          this.validateContractDates(date_of_admission, value)
         }
-        // if (contract.date_end >= value) {
-        //   if (value) {
-
-        //   } else {
-
-        //   }
-        // } else {
-
-        // }
-      });
-
-    })
+      }
+    });
     this.formHistoryContract.get('date_of_admission').valueChanges.subscribe(value => {
-      //this.contracts.find(x => x.date_end )
-      /* validar con fechas de los contratos del funcionario */
-      /* esta fecha es menor a fecha de inicio */
-    })
+      if (value) {
+        let date_end = this.formHistoryContract.get('date_end').value
+        if (value && date_end) {
+          this.validateContractDates(value, date_end)
+        }
+      }
+    });
   }
+
+  validateContractDates(admission: Date, end: Date) {
+    let start_ = new Date(admission).getTime()
+    let end_ = new Date(end).getTime()
+    if (start_ > end_) {
+      this._swal.show({
+        icon: 'error', title: "ERROR", text: "El rango de fechas es invalido", showCancel: false
+      })
+      this.formHistoryContract.patchValue({
+        date_of_admission: null,
+        date_end: null
+      })
+    }
+    for (const contract of this.contracts) {
+      let date_end = new Date(contract.date_end).getTime()
+      let date_of_admission = new Date(contract.date_of_admission).getTime()
+      if (contract.date_end != null && contract.date_end != undefined && contract.date != '') {
+        if (date_of_admission >= start_ && date_end <= end_) {
+          this._swal.show({
+            icon: 'error', title: "ERROR", text: "El rango de fechas es invalido", showCancel: false
+          })
+          this.formHistoryContract.patchValue({
+            date_of_admission: null,
+            date_end: null
+          })
+        }
+      }
+    }
+  }
+
+  addHistoryContract() {
+    if (this.formHistoryContract.valid) {
+      this._swal.show({
+        title: '¿Estás seguro(a)?',
+        text: 'Vamos a guardar el contrato',
+        icon: 'question',
+      }).then(r => {
+        if (r.isConfirmed) {
+          this._workContract.addContract(this.formHistoryContract.value).subscribe((response:any) =>{
+            this._modal.close();
+            this.getSalaryHistory();
+            this._swal.show({
+              title: response.data,
+              icon: 'success',
+              text: '',
+              timer: 1000,
+              showCancel: false
+            })
+          })
+        }
+      })
+      //peticion
+    } else {
+      this._swal.show({
+        title:"ERROR", icon:'error', text:"Porfavor llena todos los campos del formulario"
+      })
+    }
+  }
+
   closeResult = '';
 
+  //Fin secccion Historial de contratos
   public openConfirm(confirm) {
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -187,6 +258,8 @@ export class SalarioComponent implements OnInit {
         this.getContractTerms(this.salary_info.work_contract_type_id)
       });
   }
+
+
   loadingHistory: boolean;
   getSalaryHistory() {
     this.loadingHistory = true

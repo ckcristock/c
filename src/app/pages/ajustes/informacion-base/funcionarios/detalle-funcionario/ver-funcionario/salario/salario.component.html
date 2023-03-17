@@ -133,9 +133,11 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de contrato</mat-label>
           <mat-select formControlName="contract_term_id" required>
-            <mat-option *ngFor="let item of workContractsTypesList" [value]="item.value">{{
-              item.text
-            }}</mat-option>
+            <mat-option
+              *ngFor="let item of workContractsTypesList"
+              [value]="item.value"
+              >{{ item.text }}</mat-option
+            >
           </mat-select>
           <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
@@ -227,7 +229,11 @@
   </div>
 
   <div class="modal-body">
-    <button type="button" class="btn btn-primary" (click)="printForm()"></button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="printForm()"
+    ></button>
     <form [formGroup]="formHistoryContract">
       <div class="row">
         <!-- Selector termino de contrato -->
@@ -265,34 +271,48 @@
           />
           <mat-error *ngIf="salary_valid"> Campo obligatorio </mat-error>
         </mat-form-field>
+
+
         <!-- /*Selector de fecha de ingreso*/ -->
+        <!-- picker2 -->
         <mat-form-field class="col" appearance="outline">
           <mat-label>Fecha de ingreso</mat-label>
           <input
+          formControlName="date_of_admission"
             matInput
-            type="date"
-            formControlName="date_of_admission"
-            id="fecha_ingreso"
-            required
+            [matDatepickerFilter]="dateFilter"
+            [matDatepicker]="picker1"
+            disabled
           />
-          <mat-error *ngIf="date_of_admission_valid">
-            Campo obligatorio
-          </mat-error>
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker1"
+          ></mat-datepicker-toggle>
+          <mat-datepicker disabled="false" #picker1></mat-datepicker>
         </mat-form-field>
-        <!-- /*Selector de fecha de fecha de retiro*/ -->
+        <!-- fin picker2 -->
+
+        <!-- /*Selector de fecha de retiro*/ -->
+        <!-- pícker -->
         <mat-form-field class="col" appearance="outline">
           <mat-label>Fecha de retiro</mat-label>
           <input
-            matInput
-            type="date"
             formControlName="date_end"
-            id="fecha_retiro"
-            required
+            matInput
+            [matDatepickerFilter]="dateFilter"
+            [matDatepicker]="picker2"
+            disabled
           />
-          <mat-error *ngIf="retirement_date_valid">
-            Campo obligatorio
-          </mat-error>
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker2"
+          ></mat-datepicker-toggle>
+          <mat-datepicker disabled="false" #picker2></mat-datepicker>
         </mat-form-field>
+        <!--fin pícker -->
+
+
+        <!-- /*Selector de cargo de empleado*/ -->
         <mat-form-field class="col" appearance="outline">
           <mat-label>Cargo</mat-label>
           <mat-select
@@ -308,12 +328,10 @@
               {{ position.text }}</mat-option
             >
           </mat-select>
-          <mat-error>
-            Campo obligatorio
-          </mat-error>
+          <mat-error> Campo obligatorio </mat-error>
         </mat-form-field>
       </div>
-      <!-- /*Selector de cargo de empleado*/ -->
+
       <!-- //aqui voy -->
     </form>
   </div>
@@ -321,6 +339,6 @@
     <button type="button" class="btn btn-danger" (click)="_modal.close()">
       Cancelar
     </button>
-    <button type="button" class="btn btn-primary">Guardar</button>
+    <button type="button" class="btn btn-primary" (click)="addHistoryContract()">Guardar</button>
   </div>
 </ng-template>

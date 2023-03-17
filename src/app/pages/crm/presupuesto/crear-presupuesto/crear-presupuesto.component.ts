@@ -9,6 +9,7 @@ import { SwalService } from '../../../ajustes/informacion-base/services/swal.ser
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 import { consts } from 'src/app/core/utils/consts';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-crear-presupuesto',
@@ -128,6 +129,7 @@ export class CrearPresupuestoComponent implements OnInit {
     this.indirectCostPush(this.indirecCostList);
   }
 
+
   getClients() {
     this._apuPieza.getClient().subscribe((r: any) => {
       this.clients = r.data;
@@ -166,18 +168,52 @@ export class CrearPresupuestoComponent implements OnInit {
       indirect_costs: this.fb.array([]),
       observation: '',
       items: this.fb.array([]),
-      total_cop: (this.dataEdit ? this.dataEdit.total_cop : ''),
-      total_usd: (this.dataEdit ? this.dataEdit.total_usd : ''),
-      unit_value_prorrateado_cop: (this.dataEdit ? this.dataEdit.unit_value_prorrateado_cop : ''),
-      unit_value_prorrateado_usd: (this.dataEdit ? this.dataEdit.unit_value_prorrateado_usd : ''),
+      total_cop: (this.dataEdit ? this.dataEdit.total_cop : 0),
+      total_usd: (this.dataEdit ? this.dataEdit.total_usd : 0),
+      unit_value_prorrateado_cop: (this.dataEdit ? this.dataEdit.unit_value_prorrateado_cop : 0),
+      unit_value_prorrateado_usd: (this.dataEdit ? this.dataEdit.unit_value_prorrateado_usd : 0),
       subItemsToDelete: [[]],
       itemsTodelete: [[]],
       format_code: [''],
-      code: ['']
+      code: [''],
+      administrative_percentage: [this.calculationBase.administration_percentage.value],
+      unforeseen_percentage: [this.calculationBase.unforeseen_percentage.value],
+      utility_percentage: [this.calculationBase.utility_percentage.value],
     });
+    this.forma.get('administrative_percentage').valueChanges.subscribe(value => {
+      const items = this.forma.get('items') as FormArray
+      items.controls.forEach((i: FormGroup) => {
+        const subItems = i.controls.subItems as FormArray
+        subItems.controls.forEach((sub: FormGroup) => {
+          sub.patchValue({
+            percentage_amd: value
+          })
+        })
+      })
+    })
+    this.forma.get('unforeseen_percentage').valueChanges.subscribe(value => {
+      const items = this.forma.get('items') as FormArray
+      items.controls.forEach((i: FormGroup) => {
+        const subItems = i.controls.subItems as FormArray
+        subItems.controls.forEach((sub: FormGroup) => {
+          sub.patchValue({
+            percentage_unforeseen: value
+          })
+        })
+      })
+    })
+    this.forma.get('utility_percentage').valueChanges.subscribe(value => {
+      const items = this.forma.get('items') as FormArray
+      items.controls.forEach((i: FormGroup) => {
+        const subItems = i.controls.subItems as FormArray
+        subItems.controls.forEach((sub: FormGroup) => {
+          sub.patchValue({
+            percentage_utility: value
+          })
+        })
+      })
+    })
   }
-
-
 
   indirectCostPush(indirect, all = true) {
     indirect.clear();

@@ -203,19 +203,25 @@ export class ItemsComponent implements OnInit {
 
   deleteSubItem(group: FormGroup, pos: number) {
     const subItems = group.get('subItems') as FormArray
-
-    const id = subItems.at(pos).get('id').value;
-    id ? this.subItemsToDelete.push(id) : ''
-
-    this.forma.patchValue({ subItemsToDelete: this.subItemsToDelete })
-    subItems.removeAt(pos)
-    this.updateSubTotals(subItems,
-      ['total_cost', 'subtotal_indirect_cost', 'total_amd_imp_uti',
-        'value_amd', 'value_unforeseen', 'value_utility',
-        'subTotal', 'another_values', 'retention',
-        'value_cop', 'value_usd'])
-
-    this.recalculateTotals()
+    if (subItems.controls.length > 1) {
+      const id = subItems.at(pos).get('id').value;
+      id ? this.subItemsToDelete.push(id) : ''
+      this.forma.patchValue({ subItemsToDelete: this.subItemsToDelete })
+      subItems.removeAt(pos)
+      this.updateSubTotals(subItems,
+        ['total_cost', 'subtotal_indirect_cost', 'total_amd_imp_uti',
+          'value_amd', 'value_unforeseen', 'value_utility',
+          'subTotal', 'another_values', 'retention',
+          'value_cop', 'value_usd'])
+      this.recalculateTotals()
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'Error',
+        text: 'El item debe contener al menos un elemento.',
+        showCancel: false
+      })
+    }
   }
   deleteItem(pos) {
     const id = this.items.at(pos).get('id').value;

@@ -75,13 +75,13 @@ export class CrearCotizacionComponent implements OnInit {
     this.createForm();
     this.getThirdParties();
     this.getBudgets();
+    await this.getCities();
+    this.getContacts();
+    this.loadingView = false
     if (this.path != 'crear') {
       this.getQuotation(this.id)
     }
-    await this.getCities();
-    this.getContacts();
     await this.getConsecutivo();
-    this.loadingView = false
   }
 
   async reloadData() {
@@ -180,7 +180,8 @@ export class CrearCotizacionComponent implements OnInit {
       }
       res.data.items.forEach(element => {
         const action = element.sub_items.length > 0 ? 'subitems' : 'withSub';
-        let cat = element.quotationitemable_type == 'App\\Models\\ApuPart' || element.quotationitemable_type == 'App\\Models\\ApuSet' || element.quotationitemable_type == 'App\\Models\\ApuService' ? 'apu' : element.quotationitemable_type == 'App\\Models\\Budget' ? 'budget' : '';
+        let cat = element.quotationitemable_type == 'App\\Models\\Budget' ? 'budget' : 'apu';
+        console.log(this.itemsQuotation)
         this.itemsQuotation.addItems(element, action, cat, true);
       });
     })

@@ -11,6 +11,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import { MatAccordion } from '@angular/material';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { OrdenesProduccionService } from '../../manufactura/services/ordenes-produccion.service';
 
 @Component({
   selector: 'app-centro-costos',
@@ -115,7 +116,8 @@ export class CentroCostosComponent implements OnInit {
     private _centroCosto: CentroCostosService,
     private _user: UserService,
     private _modal: ModalService,
-    private _swal: SwalService
+    private _swal: SwalService,
+    private _workOrders: OrdenesProduccionService
   ) { }
 
   ngOnInit() {
@@ -289,6 +291,18 @@ export class CentroCostosComponent implements OnInit {
         });
         break;
 
+      case 3:
+        this.CentroCostoModel.ValorTipo = 'Órdenes de producción';
+        this.ValorTipo = 'Órdenes de producción';
+        this._workOrders.getWorkOrdersIndex().subscribe((res: any) => {
+          this.ValoresTipoCentro = res.data;
+
+        })
+
+        /*  this.http.get(environment.base_url + '/php/centroscostos/listar_valores_tipo_centro.php', { params: { id_tipo: value, tipo: 'Zonas', company: this.company_id } }).subscribe((data: any) => {
+
+         }); */
+        break;
       case 4:
         this.CentroCostoModel.ValorTipo = 'Municipio';
         this.ValorTipo = 'Municipio';
@@ -299,15 +313,6 @@ export class CentroCostosComponent implements OnInit {
         });
         break;
 
-      case 5:
-        this.CentroCostoModel.ValorTipo = 'Zona';
-        this.ValorTipo = 'Zona';
-
-        this.http.get(environment.base_url + '/php/centroscostos/listar_valores_tipo_centro.php', { params: { id_tipo: value, tipo: 'Zonas', company: this.company_id } }).subscribe((data: any) => {
-
-          this.ValoresTipoCentro = data;
-        });
-        break;
 
       default:
         this.CentroCostoModel.ValorTipo = 'Tipo';

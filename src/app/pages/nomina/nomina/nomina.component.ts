@@ -6,6 +6,7 @@ import { SwalService } from '../../ajustes/informacion-base/services/swal.servic
 import { PayrollFactorService } from '../../rrhh/novedades/payroll-factor.service';
 import { PayRollService } from './pay-roll.service';
 
+
 @Component({
   selector: 'app-nomina',
   templateUrl: './nomina.component.html',
@@ -40,7 +41,8 @@ export class NominaComponent implements OnInit {
     private _payrollFactor: PayrollFactorService,
     private _swal: SwalService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+
   ) {
   }
 
@@ -183,8 +185,8 @@ export class NominaComponent implements OnInit {
   getColillasPago(datos: any) {
     this.donwloadingPdfNom = true;
     this._payroll.dowloadPdfColillas(datos)
-      .subscribe((res:BlobPart)=>{
-        let blob = new Blob([res], {type: ' application/pdf'});
+      .subscribe((res: BlobPart) => {
+        let blob = new Blob([res], { type: ' application/pdf' });
         let link = document.createElement("a");
         const filename = 'colillas-nomina'; //se podría poner período
         link.href = window.URL.createObjectURL(blob);
@@ -192,7 +194,7 @@ export class NominaComponent implements OnInit {
         link.click();
         this.donwloadingPdfNom = false;
       }),
-      (err: any) =>{
+      (err: any) => {
         console.log('Error downloading the file');
       },
       () => {
@@ -264,6 +266,16 @@ export class NominaComponent implements OnInit {
       console.log(err);
     })
 
+  }
+
+  sendPayrollEmail() {
+    const params =
+      this.inicioParemeter && this.finParemeter
+        ? { start: this.inicioParemeter, end: this.finParemeter }
+        : {}
+        this._payroll.sendPayrollEmail(params).subscribe((res: any) => {
+          console.log(res)
+        })
   }
 
 }

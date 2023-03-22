@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { rightArithShift } from 'mathjs';
 import { HistorialDatosService } from './historial-datos.service';
 
-import {variables} from './variables'
+import { variables } from './variables'
+import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-historial-datos',
@@ -12,25 +13,31 @@ import {variables} from './variables'
 export class HistorialDatosComponent implements OnInit {
   historialdatos: any[];
   loading: boolean;
+  pagination = {
+    pageSize: 10,
+    page: 1,
+    collectionSize: 0,
+  }
   constructor(
-    private _historialdatos: HistorialDatosService
+    private _historialdatos: HistorialDatosService,
+    private paginator: MatPaginatorIntl
   ) { }
 
   ngOnInit(): void {
     this.getHistoryDataCompany();
   }
 
-  getHistoryDataCompany(){
+  getHistoryDataCompany(page = 1) {
+    this.pagination.page = page;
     this.loading = true;
-    this._historialdatos.getHistoryDataCompany().subscribe((res:any)=>{
+    this._historialdatos.getHistoryDataCompany(this.pagination).subscribe((res: any) => {
       this.loading = false;
-      this.historialdatos = res.data;
+      this.historialdatos = res.data.data;
       this.historialdatos.forEach(history => {
-        console.log(history);
-        let item = variables.find(x=> x.campo == history.data_name)
-        console.log(item);
-        history.data_name_for_user = item.nombre
+        let item = variables.find(x => x.campo == history.data_name)
+        history.data_name_for_user = item?.nombre
       });
+      this.pagination.collectionSize = res.data.total;
 
     });
   }

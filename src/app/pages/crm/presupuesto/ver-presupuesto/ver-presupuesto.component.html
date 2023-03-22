@@ -65,9 +65,7 @@
           <ng-container *ngFor="let item of data.indirect_costs; let i = index">
             <tr>
               <td>{{ item.indirect_cost.name }}</td>
-              <td class="text-right">
-                {{ item.percentage }}
-              </td>
+              <td class="text-right">{{ item.percentage }}%</td>
             </tr>
           </ng-container>
         </tbody>
@@ -83,7 +81,7 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{ data.observation }}</td>
+            <td>{{ data.observation || "No existen observaciones" }}</td>
           </tr>
         </tbody>
       </table>
@@ -95,28 +93,28 @@
       <table class="table table-sm table-hover">
         <tbody>
           <tr>
-            <td class="col-10">TOTAL COP</td>
-            <td class="col-2 text-right">
+            <th class="col-10">TOTAL COP</th>
+            <th class="col-2 text-right">
               ${{ data.total_cop | number : "1.2-2" }}
-            </td>
+            </th>
           </tr>
           <tr>
-            <td class="col-10">TOTAL USD</td>
-            <td class="col-2 text-right">
-              ${{ data.total_usd | number : "1.2-2" }}
-            </td>
+            <th class="col-10">TOTAL USD</th>
+            <th class="col-2 text-right">
+              USD {{ data.total_usd | number : "1.2-2" }}
+            </th>
           </tr>
           <tr>
-            <td class="col-10">V/U VENTA PRORRATEADO COP</td>
-            <td class="col-2 text-right">
+            <th class="col-10">V/U VENTA PRORRATEADO COP</th>
+            <th class="col-2 text-right">
               ${{ data.unit_value_prorrateado_cop | number : "1.2-2" }}
-            </td>
+            </th>
           </tr>
           <tr>
-            <td class="col-10">V/U VENTA PRORRATEADO USD</td>
-            <td class="col-2 text-right">
-              ${{ data.unit_value_prorrateado_usd | number : "1.2-2" }}
-            </td>
+            <th class="col-10">V/U VENTA PRORRATEADO USD</th>
+            <th class="col-2 text-right">
+              USD {{ data.unit_value_prorrateado_usd | number : "1.2-2" }}
+            </th>
           </tr>
         </tbody>
       </table>

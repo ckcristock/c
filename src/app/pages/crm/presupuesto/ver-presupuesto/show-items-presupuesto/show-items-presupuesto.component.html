@@ -6,13 +6,11 @@
         <span class="badge badge-primary">{{ i + 1 }}</span>
       </h4>
       <span class="text-center">
-        <strong>{{item.name}}</strong></span
+        <strong>{{ item.name }}</strong></span
       >
     </div>
     <div class="rounded-top table-responsive">
-      <table
-        class="table table-bordered table-striped table-sm text-nowrap"
-      >
+      <table class="table table-bordered table-striped table-sm text-nowrap">
         <thead>
           <tr class="text-center text-uppercase table-primary">
             <th class="align-middle" colspan="6">Costos Directos</th>
@@ -71,7 +69,7 @@
 
             <th class="align-middle"></th>
           </tr>
-          <tr class="text-center text-uppercase">
+          <tr class="text-center text-uppercase bg-light">
             <th class="align-middle">#</th>
             <th class="align-middle">Tipo</th>
             <th class="align-middle">Descripción</th>
@@ -118,7 +116,7 @@
             </ng-container>
 
             <th class="align-middle">Observ.</th>
-            <th class="align-middle"></th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -126,7 +124,13 @@
             <tr>
               <td class="align-middle">{{ i + 1 }}.{{ y + 1 }}</td>
               <td class="align-middle">
-                {{ subItem.type }}
+                {{
+                  subItem.type == "P"
+                    ? "Producto"
+                    : subItem.type == "S"
+                    ? "Servicio"
+                    : ""
+                }}
               </td>
               <td class="align-middle">
                 <div style="position: relative">
@@ -146,13 +150,13 @@
               </td>
 
               <td class="align-middle text-right">
-                {{ subItem.cuantity | currency: "":"" }}
+                {{ subItem.cuantity | number }}
               </td>
               <td class="align-middle text-right">
-                {{ subItem.unit_cost | currency: "":"" }}
+                ${{ subItem.unit_cost | number : "1.2-2" }}
               </td>
-              <td class="align-middle text-right">
-                {{ subItem.total_cost | currency: "":"" }}
+              <td class="align-middle text-right table-info">
+                ${{ subItem.total_cost | number : "1.2-2" }}
               </td>
 
               <ng-container *ngIf="item.shows.indirect_cost">
@@ -163,159 +167,170 @@
                   "
                 >
                   <td class="align-middle text-right" style="width: 90px">
-                    {{ indirect.value | currency: "":"" }}
+                    ${{ indirect.value | number : "1.2-2" }}
                   </td>
                 </ng-container>
               </ng-container>
-              <td class="align-middle text-right" style="width: 90px">
-                {{ subItem.subtotal_indirect_cost | currency: "":"" }}
+              <td
+                class="align-middle text-right table-success"
+                style="width: 90px"
+              >
+                ${{ subItem.subtotal_indirect_cost | number : "1.2-2" }}
               </td>
               <ng-container *ngIf="item.shows.sum_others">
                 <td class="align-middle text-right" style="width: 70px">
-                  {{ subItem.percentage_amd }}
+                  {{ subItem.percentage_amd | number }}%
                 </td>
                 <td class="align-middle text-right" style="width: 90px">
-                  {{ subItem.value_amd | currency: "":"" }}
+                  ${{ subItem.value_amd | number : "1.2-2" }}
                 </td>
                 <td class="align-middle text-right" style="width: 70px">
-                  {{ subItem.percentage_unforeseen }}
+                  {{ subItem.percentage_unforeseen | number }}%
                 </td>
                 <td class="align-middle text-right" style="width: 90px">
-                  {{ subItem.value_unforeseen | currency: "":"" }}
+                  ${{ subItem.value_unforeseen | number : "1.2-2" }}
                 </td>
                 <td class="align-middle text-right" style="width: 70px">
-                  {{ subItem.percentage_utility }}
+                  {{ subItem.percentage_utility | number }}%
                 </td>
                 <td class="align-middle text-right" style="width: 90px">
-                  {{ subItem.value_utility | currency: "":"" }}
+                  ${{ subItem.value_utility | number : "1.2-2" }}
                 </td>
               </ng-container>
 
-              <td class="align-middle text-right" style="width: 90px">
-                {{ subItem.total_amd_imp_uti | currency: "":"" }}
+              <td
+                class="align-middle text-right table-danger"
+                style="width: 90px"
+              >
+                ${{ subItem.total_amd_imp_uti | number : "1.2-2" }}
               </td>
 
               <td class="align-middle text-right">
-                {{ subItem.another_values | currency: "":"" }}
+                ${{ subItem.another_values | number : "1.2-2" }}
               </td>
               <ng-container *ngIf="item.shows.total_sale">
                 <td class="align-middle text-right" style="width: 90px">
-                  {{ subItem.subTotal | currency: "":"" }}
+                  ${{ subItem.subTotal | number : "1.2-2" }}
                 </td>
 
                 <td class="align-middle text-right" style="width: 90px">
-                  {{ subItem.retention | currency: "":"" }}
+                  ${{ subItem.retention | number : "1.2-2" }}
                 </td>
               </ng-container>
-              <td class="align-middle text-center" style="width: 50px">
-                % {{ subItem.percentage_sale }}
+              <td class="align-middle text-right" style="width: 50px">
+                {{ subItem.percentage_sale | number }}%
               </td>
               <td class="align-middle text-right" style="width: 110px">
-                {{ subItem.value_cop | currency: "":"" }}
+                ${{ subItem.value_cop | number : "1.2-2" }}
               </td>
               <td class="align-middle text-right" style="width: 110px">
-                {{ subItem.value_usd | currency: "":"" }}
+                ${{ subItem.value_usd | number : "1.2-2" }}
               </td>
               <ng-container *ngIf="item.shows.prorrateo">
                 <td class="align-middle text-right" style="width: 90px">
-                  {{ subItem.value_prorrota_cop | currency: "":"" }}
+                  ${{ subItem.value_prorrota_cop | number : "1.2-2" }}
                 </td>
                 <td class="align-middle text-right" style="width: 90px">
-                  {{ subItem.value_prorrota_usd | currency: "":"" }}
+                  ${{ subItem.value_prorrota_usd | number : "1.2-2" }}
                 </td>
                 <td class="align-middle text-right" style="width: 90px">
-                  {{ subItem.unit_value_prorrateado_cop | currency: "":"" }}
+                  ${{ subItem.unit_value_prorrateado_cop | number : "1.2-2" }}
                 </td>
                 <td class="align-middle text-right" style="width: 90px">
-                  {{ subItem.unit_value_prorrateado_usd | currency: "":"" }}
+                  ${{ subItem.unit_value_prorrateado_usd | number : "1.2-2" }}
                 </td>
               </ng-container>
               <td class="align-middle" style="width: 100px">
-                {{ subItem.observation }}
+                {{ subItem.observation || "No tiene" }}
               </td>
               <td class="align-middle text-center" style="width: 20px">
                 <i
                   ngbTooltip="Prorrateo de valores"
                   (click)="item.shows.prorrateo = !item.shows.prorrateo"
-                  class="text-primary fas fa-hand-holding-usd mr-2"
+                  class="text-primary fas fa-hand-holding-usd"
                 ></i>
               </td>
             </tr>
           </ng-container>
 
-          <tr class="bg-gray">
-            <td class="align-middle" colspan="5">SUBTOTAL ITEM {{ i + 1 }}</td>
-            <td class="align-middle text-right">
-              {{ item.total_cost | currency: "":"" }}
-            </td>
-            <ng-container *ngIf="item.shows.indirect_cost">
+          <tr class="table-warning">
+            <th class="align-middle" colspan="5">SUBTOTAL</th>
+            <th class="align-middle text-right">
+              ${{ item.total_cost | number : "1.2-2" }}
+            </th>
+            <!-- <ng-container *ngIf="item.shows.indirect_cost">
               <ng-container
                 *ngFor="
                   let subtIndirect of item.subtotal_indirect_cost_dynamic;
                   let indirecTotalIndex = index
                 "
               >
-                <td class="align-middle text-right">
-                  {{ subtIndirect.controls.sub_total.value | currency: "":"" }}
-                </td>
+                <th class="align-middle text-right">
+                  ${{
+                    subtIndirect.controls.sub_total.value | number : "1.2-2"
+                  }}
+                </th>
               </ng-container>
-            </ng-container>
-            <td class="align-middle text-right">
-              {{ item.subtotal_indirect_cost | currency: "":"" }}
-            </td>
+            </ng-container> -->
+            <th
+              class="align-middle text-right"
+              [colSpan]="item.shows.indirect_cost ? 7 : 1"
+            >
+              ${{ item.subtotal_indirect_cost | number : "1.2-2" }}
+            </th>
 
             <ng-container *ngIf="item.shows.sum_others">
-              <td class="align-middle"></td>
-              <td class="align-middle text-right">
-                {{ item.value_amd | currency: "":"" }}
-              </td>
-              <td class="align-middle"></td>
-              <td class="align-middle text-right">
-                {{ item.value_unforeseen | currency: "":"" }}
-              </td>
-              <td class="align-middle"></td>
-              <td class="align-middle text-right">
-                {{ item.value_utility | currency: "":"" }}
-              </td>
+              <th class="align-middle"></th>
+              <th class="align-middle text-right">
+                ${{ item.value_amd | number : "1.2-2" }}
+              </th>
+              <th class="align-middle"></th>
+              <th class="align-middle text-right">
+                ${{ item.value_unforeseen | number : "1.2-2" }}
+              </th>
+              <th class="align-middle"></th>
+              <th class="align-middle text-right">
+                ${{ item.value_utility | number : "1.2-2" }}
+              </th>
             </ng-container>
-            <td class="align-middle text-right">
-              {{ item.total_amd_imp_uti | currency: "":"" }}
-            </td>
-            <td class="align-middle text-right">
-              {{ item.another_values | currency: "":"" }}
-            </td>
+            <th class="align-middle text-right">
+              ${{ item.total_amd_imp_uti | number : "1.2-2" }}
+            </th>
+            <th class="align-middle text-right">
+              ${{ item.another_values | number : "1.2-2" }}
+            </th>
 
             <ng-container *ngIf="item.shows.total_sale">
-              <td class="align-middle text-right">
-                {{ item.subTotal | currency: "":"" }}
-              </td>
-              <td class="align-middle text-right">
-                {{ item.retention | currency: "":"" }}
-              </td>
+              <th class="align-middle text-right">
+                ${{ item.subTotal | number : "1.2-2" }}
+              </th>
+              <th class="align-middle text-right">
+                ${{ item.retention | number : "1.2-2" }}
+              </th>
             </ng-container>
-            <td class="align-middle text-center">
-              % {{ item.percentage_sale }}
-            </td>
-            <td class="align-middle text-right">
-              {{ item.value_cop | currency: "":"" }}
-            </td>
-            <td class="align-middle text-right">
-              {{ item.value_usd | currency: "":"" }}
-            </td>
+            <th class="align-middle text-right">
+              {{ item.percentage_sale | number }}%
+            </th>
+            <th class="align-middle text-right">
+              ${{ item.value_cop | number : "1.2-2" }}
+            </th>
+            <th class="align-middle text-right">
+              ${{ item.value_usd | number : "1.2-2" }}
+            </th>
 
             <ng-container *ngIf="item.shows.prorrateo">
-              <td class="align-middle text-right" style="width: 80px">
-                {{ item.value_prorrota_cop | currency: "":"" }}
-              </td>
-              <td class="align-middle text-right" style="width: 80px">
-                {{ item.value_prorrota_usd | currency: "":"" }}
-              </td>
-              <td class="align-middle text-right">
-                {{ item.unit_value_prorrateado_cop | currency: "":"" }}
-              </td>
-              <td class="align-middle text-right">
-                {{ item.unit_value_prorrateado_usd | currency: "":"" }}
-              </td>
+              <th class="align-middle text-right" style="width: 80px">
+                ${{ item.value_prorrota_cop | number : "1.2-2" }}
+              </th>
+              <th class="align-middle text-right" style="width: 80px">
+                ${{ item.value_prorrota_usd | number : "1.2-2" }}
+              </th>
+              <th class="align-middle text-right">
+                ${{ item.unit_value_prorrateado_cop | number : "1.2-2" }}
+              </th>
+              <th class="align-middle text-right">
+                ${{ item.unit_value_prorrateado_usd | number : "1.2-2" }}
+              </th>
             </ng-container>
             <td class="align-middle" colspan="2"></td>
           </tr>

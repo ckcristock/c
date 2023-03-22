@@ -5,7 +5,7 @@
       <hr class="line" />
       <form [formGroup]="forma" (submit)="save()">
         <div class="row">
-          <div class="col-md-3 mb-4">
+          <div class="col-md-4 mb-4">
             <ng-select
               bindLabel="text"
               [items]="clients"
@@ -15,11 +15,12 @@
               loadingText="loading"
               [class.is-invalid]="forma.get('customer_id').invalid"
               ngDefaultControl
+              [clearable]="false"
               formControlName="customer_id"
               [appendTo]="'body'"
             ></ng-select>
           </div>
-          <div class="col-md-2 mb-4">
+          <div class="col-md-4 mb-4">
             <ng-select
               [items]="cities"
               placeholder="Destino *"
@@ -28,10 +29,23 @@
               bindLabel="text"
               bindValue="value"
               [appendTo]="'body'"
+              [clearable]="false"
               formControlName="destinity_id"
             ></ng-select>
           </div>
-          <mat-form-field class="col-md-3" appearance="outline">
+          <mat-form-field class="col-md-4" appearance="outline">
+            <mat-label>TRM</mat-label>
+            <input
+              matInput
+              currencyMask
+              [options]="masksMoney.maskCOP"
+              placeholder="Ingresa TRM"
+              required
+              formControlName="trm"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
             <mat-label>Línea</mat-label>
             <input
               matInput
@@ -43,7 +57,7 @@
             />
           </mat-form-field>
 
-          <mat-form-field class="col-md-3" appearance="outline">
+          <mat-form-field class="col-md-6" appearance="outline">
             <mat-label>Proyecto</mat-label>
             <input
               matInput
@@ -51,18 +65,6 @@
               placeholder="Ingresa proyecto"
               formControlName="project"
               required
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col-md-1 pl-0" appearance="outline">
-            <mat-label>TRM</mat-label>
-            <input
-              matInput
-              currencyMask
-              [options]="masksMoney.maskCOP"
-              placeholder="Ingresa TRM"
-              required
-              formControlName="trm"
               autocomplete="off"
             />
           </mat-form-field>

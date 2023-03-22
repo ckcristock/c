@@ -322,8 +322,14 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   findApus() {
+    if (this.form.valid) {
+      this.apus.openConfirm()
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
     // this.formGroup = item;
-    this.apus.openConfirm()
+
   }
 
   getApus(e: any[]) {
@@ -427,8 +433,14 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   newPiecesSets() {
-    let machine = this.piecesSetsList;
-    machine.push(this.piecesSetsControl(''))
+    if (this.form.valid) {
+      let machine = this.piecesSetsList;
+      machine.push(this.piecesSetsControl(''))
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    }
+
   }
 
   deletePiecesSets(i) {
@@ -605,8 +617,6 @@ export class CrearApuConjuntoComponent implements OnInit {
       this.form.patchValue({
         files: this.fileArr
       });
-      console.log(this.form.value);
-
       this._swal
         .show({
           text: `Vamos a ${this.id && this.title == 'Editar conjunto' ? 'editar' : 'crear'} un conjunto`,
@@ -617,12 +627,24 @@ export class CrearApuConjuntoComponent implements OnInit {
           if (r.isConfirmed) {
             if (this.id && this.title == 'Editar conjunto') {
               this._apuConjunto.update(this.form.value, this.id).subscribe(
-                (res: any) => this.showSuccess(),
+                (res: any) => {
+                  if (!res.status) {
+                    this.showError(res)
+                  } else {
+                    this.showSuccess()
+                  }
+                },
                 (err) => this.showError(err)
               );
             } else {
               this._apuConjunto.save(this.form.value).subscribe(
-                (res: any) => this.showSuccess(),
+                (res: any) => {
+                  if (!res.status) {
+                    this.showError(res)
+                  } else {
+                    this.showSuccess()
+                  }
+                },
                 (err) => this.showError(err)
               );
             }

@@ -98,6 +98,9 @@
         </ngx-dropzone-preview>
       </ngx-dropzone>
       <h6 class="mt-3">Listado de piezas</h6>
+      <div class="alert alert-warning" role="alert">
+        Todas las piezas deben estar ligadas a un APU existente
+      </div>
       <ng-container *ngIf="piecesSetsList.controls.length; else notData">
         <div class="rounded-top">
           <table class="table table-bordered table-striped table-sm">
@@ -161,7 +164,7 @@
                         [ngbTypeahead]="search"
                         [resultTemplate]="rt"
                         [inputFormatter]="formatter"
-                        placeholder="Piezas"
+                        placeholder="Escribe para buscar pieza"
                         formControlName="description"
                         (change)="select(item, 'description', 'apu_part_id')"
                       />
@@ -177,7 +180,7 @@
                         [ngbTypeahead]="searchSet"
                         [resultTemplate]="rt"
                         [inputFormatter]="formatterSet"
-                        placeholder="Conjuntos"
+                        placeholder="Escribe para buscar conjunto"
                         formControlName="description"
                         (change)="
                           select(item, 'description', 'apu_set_child_id')

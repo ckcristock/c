@@ -263,10 +263,9 @@ export class CrearPresupuestoComponent implements OnInit {
       title: '¿Está seguro?',
       text: 'Se dispone a guardar un presupuesto',
       icon: 'question'
-    },
-      this.dataEdit && this.path != 'copiar' ? this.updateData : this.saveData
-    ).then(r => {
+    }).then(async r => {
       if (r.isConfirmed) {
+        await this.dataEdit && this.path != 'copiar' ? this.updateData() : this.saveData()
         this._swal.show({
           title: 'Se ha guardado con éxito',
           text: '',

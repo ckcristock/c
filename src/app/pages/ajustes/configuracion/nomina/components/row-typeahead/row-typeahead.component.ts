@@ -24,7 +24,7 @@ export class RowTypeaheadComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  formatter = (cuentas: { Nombre_Niif: string, Codigo_Niif: string }) => cuentas.Codigo_Niif + ' || ' + cuentas.Nombre_Niif;
+  formatter = (cuentas: { Nombre_Niif: string, Codigo_Niif: string }) => cuentas.Codigo_Niif + ' - ' + cuentas.Nombre_Niif;
 
   search_cuenta_niif = (text$: Observable<string>) =>
     text$.pipe(

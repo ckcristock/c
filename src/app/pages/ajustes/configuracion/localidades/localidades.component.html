@@ -27,7 +27,7 @@
               <input
                 matInput
                 type="text"
-                name="name"
+                name="name_country"
                 autocomplete="off"
                 [(ngModel)]="filtro_pais.name"
                 (input)="getCountries()"
@@ -55,6 +55,7 @@
                   ngbDropdownToggle
                   class="btn btn-primary btn-sm"
                   type="button"
+                  (click)="stop($event)"
                 >
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
@@ -108,7 +109,7 @@
               <input
                 matInput
                 type="text"
-                name="name"
+                name="name_country"
                 autocomplete="off"
                 [(ngModel)]="filtro_depto.name"
                 (input)="getStates(countrySelected)"
@@ -132,6 +133,7 @@
                 <button
                   ngbDropdownToggle
                   class="btn btn-primary btn-sm"
+                  (click)="stop($event)"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>
@@ -185,7 +187,7 @@
               <input
                 matInput
                 type="text"
-                name="name"
+                name="name_country"
                 autocomplete="off"
                 [(ngModel)]="filtro_muni.name"
                 (input)="getMunicipalities(stateSelected)"
@@ -212,6 +214,7 @@
                 <button
                   ngbDropdownToggle
                   class="btn btn-primary btn-sm"
+                  (click)="stop($event)"
                   type="button"
                 >
                   <i class="mdi mdi-chevron-down"></i>

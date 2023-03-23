@@ -239,8 +239,11 @@
           <mat-option value="" selected disabled
             >Selecciona {{ ValorTipo | lowercase }}</mat-option
           >
-          <mat-option *ngFor="let vtc of ValoresTipoCentro" [value]="vtc.Id">
-            {{ vtc.Nombre }}
+          <mat-option
+            *ngFor="let vtc of ValoresTipoCentro"
+            [value]="CentroCostoModel.Id_Tipo_Centro != 3 ? vtc.Id : vtc.value"
+          >
+            {{ CentroCostoModel.Id_Tipo_Centro != 3 ? vtc.Nombre : vtc.text }}
           </mat-option>
         </mat-select>
       </mat-form-field>

@@ -76,8 +76,8 @@ export class MaterialesComponent implements OnInit {
     }
   }
 
-  getMaterialsIndex(){
-    this._materials.getMaterialsIndex().subscribe((res:any) => {
+  getMaterialsIndex() {
+    this._materials.getMaterialsIndex().subscribe((res: any) => {
       this.materialsIndex = res.data.filter(material => {
         const exists = this.materials.some(m => m.material_id === material.id);
         return !exists;
@@ -313,7 +313,7 @@ export class MaterialesComponent implements OnInit {
         this.form.reset();
         this.modalService.dismissAll();
         this.thicknessList.clear();
-        this.fieldList.clear();
+        //this.fieldList.clear();
         await this.getMaterials();
         this.getMaterialsIndex();
         this._swal.show({
@@ -329,7 +329,7 @@ export class MaterialesComponent implements OnInit {
         this.form.reset();
         this.modalService.dismissAll();
         this.thicknessList.clear();
-        this.fieldList.clear();
+        //this.fieldList.clear();
         await this.getMaterials();
         this.getMaterialsIndex();
         this._swal.show({

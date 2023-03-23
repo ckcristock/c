@@ -45,7 +45,7 @@ export class VerApuServicioComponent implements OnInit {
     this._apuServicio.download(this.id).subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/pdf' });
       let link = document.createElement('a');
-      const filename = 'apu_servicio_' + this.id + '.pdf';
+      const filename = 'apu_servicio_' + this.id;
       link.href = window.URL.createObjectURL(blob);
       link.download = `${filename}.pdf`;
       link.click();

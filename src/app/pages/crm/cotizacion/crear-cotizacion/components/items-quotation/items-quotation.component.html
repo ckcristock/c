@@ -13,7 +13,7 @@
     <h5 class="text-center">Elementos</h5>
     <ng-container *ngIf="items.controls.length; else notData">
       <ng-container>
-        <div class="rounded-top table-responsive">
+        <div class="rounded-top">
           <table
             class="table table-bordered table-sm text-nowrap table-custom-quotation"
           >
@@ -48,11 +48,13 @@
                       <input
                         type="text"
                         class="text-left"
+                        placeholder="Ingresa la descripción"
                         formControlName="name"
                       />
                       <button
                         (click)="addSubItem(item, 'subitem')"
                         class="btn btn-warning btn-sm"
+                        ngbTooltip="Agregar subitem"
                         type="button"
                       >
                         <i class="fas fa-plus"></i>
@@ -96,7 +98,7 @@
                   </td>
                   <td>
                     <i
-                      ngbTooltip="Eliminar elemento {{ i + 1 }}"
+                      ngbTooltip="Eliminar item {{ i + 1 }}"
                       (click)="deleteItem(i)"
                       role="button"
                       class="text-danger fas fa-trash-alt bg-white"
@@ -118,14 +120,73 @@
                         [class]="
                           subItem.value.type ? 'table-primary' : 'bg-white'
                         "
+                        class="position-relative"
                       >
-                        <td class="align-middle">{{ i + 1 }}.{{ y + 1 }}</td>
+                        <td class="align-middle">
+                          <a
+                            nohref=""
+                            container="body"
+                            ngbTooltip="Asignar APU"
+                            (click)="findApus(item, false, subItem, y)"
+                            (click)="
+                              apus.openConfirm(false);
+                              subItemActive = item;
+                              indexAdd = y;
+                              insert = true
+                            "
+                            class="btn_agregar_tr"
+                          ></a>
+                          {{ i + 1 }}.{{ y + 1 }}
+                        </td>
                         <td>
-                          <input
-                            type="text"
-                            class="text-left"
-                            formControlName="description"
-                          />
+                          <div class="d-flex justify-content-between">
+                            <input
+                              type="text"
+                              class="text-left"
+                              placeholder="Ingresa la descripción"
+                              formControlName="description"
+                            />
+                            <div class="btn-group btn-group-sm" role="group">
+                              <button
+                                (click)="
+                                  apus.openConfirm(false);
+                                  subItemActive = item;
+                                  indexAdd = y;
+                                  insert = false
+                                "
+                                ngbTooltip="Asignar APU"
+                                *ngIf="
+                                  !subItem.get('quotationitemsubitemable_id')
+                                    .value
+                                "
+                                class="btn btn-info btn-sm"
+                                type="button"
+                              >
+                                <i class="fas fa-search"></i>
+                              </button>
+                              <button
+                                type="button"
+                                *ngIf="
+                                  subItem.get('quotationitemsubitemable_id')
+                                    .value &&
+                                  subItem.get('quotationitemsubitemable_type')
+                                    .value != 'App\\Models\\BudgetItemSubitem'
+                                "
+                                ngbTooltip="Ver APU"
+                                (click)="
+                                  openNewTab(
+                                    subItem.get('quotationitemsubitemable_type')
+                                      .value,
+                                    subItem.get('quotationitemsubitemable_id')
+                                      .value
+                                  )
+                                "
+                                class="btn btn-primary btn-sm"
+                              >
+                                <i class="fas fa-eye"></i>
+                              </button>
+                            </div>
+                          </div>
                         </td>
                         <td>
                           <input
@@ -182,13 +243,15 @@
       </ng-container>
     </ng-container>
     <div class="d-flex justify-content-end">
-      <button
-        (click)="addItems(null, 'subitem')"
-        class="btn btn-primary btn-sm"
-        type="button"
-      >
-        <i class="fas fa-plus"></i> Agregar subtítulo
-      </button>
+      <div class="btn-group" role="group" aria-label="Button group">
+        <button
+          (click)="addItems(null, 'subitem')"
+          class="btn btn-primary btn-sm"
+          type="button"
+        >
+          <i class="fas fa-plus"></i> Agregar item
+        </button>
+      </div>
     </div>
   </div>
   <div class="row d-flex justify-content-end mt-3">
@@ -233,3 +296,5 @@
     </td>
   </tr>
 </ng-template>
+
+<app-get-apus #apus (sendApus)="getApus($event)"></app-get-apus>

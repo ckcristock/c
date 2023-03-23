@@ -13,7 +13,7 @@ import { ModalService } from 'src/app/core/services/modal.service';
   templateUrl: './datos-basicos-empresa.component.html',
   styleUrls: ['./datos-basicos-empresa.component.scss']
 })
-export class DatosBasicosEmpresaComponent implements OnInit, DoCheck  {
+export class DatosBasicosEmpresaComponent implements OnInit, DoCheck {
   @ViewChild('modal') modal: any;
   company: any = [];
   form: FormGroup;
@@ -46,7 +46,7 @@ export class DatosBasicosEmpresaComponent implements OnInit, DoCheck  {
   }
 
   getDocumentsTypes() {
-    this._data.getTypeDocuments().subscribe((res:any) => {
+    this._data.getTypeDocuments().subscribe((res: any) => {
       this.documents_types = res.data
     })
   }
@@ -60,7 +60,7 @@ export class DatosBasicosEmpresaComponent implements OnInit, DoCheck  {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
   openModal() {
     this.modal.show();
@@ -98,7 +98,7 @@ export class DatosBasicosEmpresaComponent implements OnInit, DoCheck  {
           phone: this.company.phone
         })
       })
-      this.fileString = this.company.logo
+    this.fileString = this.company.logo
   }
 
   onImageChanged(event) {
@@ -119,18 +119,31 @@ export class DatosBasicosEmpresaComponent implements OnInit, DoCheck  {
   }
 
   saveBasicData() {
-    let logo = this.imageString;
-    let typeImage = this.typeImage;
-    this.form.patchValue({ logo, typeImage })
-    this._configuracionEmpresaService.saveCompanyData(this.form.value)
-      .subscribe((res: any) => {
-        this.modalService.dismissAll(); 
-        this.getBasicData();
-        Swal.fire({
-          icon: 'success',
-          title: 'Actualizado Correctamente'
+    if (this.form.valid) {
+      let logo = this.imageString;
+      let typeImage = this.typeImage;
+      this.form.patchValue({ logo, typeImage })
+      this._configuracionEmpresaService.saveCompanyData(this.form.value)
+        .subscribe((res: any) => {
+          this.modalService.dismissAll();
+          this.getBasicData();
+          this._swal.show({
+            icon: 'success',
+            title: 'Actualizado correctamente',
+            text: '',
+            showCancel: false,
+            timer: 1000
+          });
         });
-      });
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'Error',
+        text: 'Completa la información.',
+        showCancel: false,
+        timer: 1000
+      })
+    }
   }
 
 }

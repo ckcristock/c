@@ -75,6 +75,7 @@ export class CrearApuPiezaComponent implements OnInit {
   user_id;
   calculationBase: any = {}
   masksMoney = consts
+  reload: boolean;
   constructor(
     private _apuPieza: ApuPiezaService,
     private _units: UnidadesMedidasService,
@@ -118,14 +119,34 @@ export class CrearApuPiezaComponent implements OnInit {
     this.loading = false;
   }
 
-  getMaterialsFull(){
-    this._materials.getMaterialsIndex().subscribe((res:any) => {
+  async reloadData() {
+    this.reload = true;
+    await this.getBases()
+    this.getClients();
+    this.getUnits();
+    this.getGeometries();
+    this.getMaterials();
+    this.getIndirectCosts();
+    this.getPeople();
+    await this.getCities();
+    this.getThicknesses();
+    this.getCommercialMaterials();
+    this.getMaterialsFull();
+    await this.getCutLaserMaterial();
+    this.validateData();
+    this.getConsecutivo();
+    await this.getVariablesApu();
+    this.reload = false
+  }
+
+  getMaterialsFull() {
+    this._materials.getMaterialsIndex().subscribe((res: any) => {
       this.materialsIndex = res.data
     })
   }
 
-  getCommercialMaterials(){
-    this._rawMaterialMaterials.getRawMaterialMaterialsIndex().subscribe((res:any) => {
+  getCommercialMaterials() {
+    this._rawMaterialMaterials.getRawMaterialMaterialsIndex().subscribe((res: any) => {
       this.commercialMaterials = res.data
     })
   }

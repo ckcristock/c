@@ -398,7 +398,7 @@
                       </ng-container>
                       <td class="align-middle">
                         <div class="values text-center">
-                          {{ subItem.controls.percentage_sale.value }}%
+                          {{ subItem.controls.percentage_sale.value | number }}%
                         </div>
                       </td>
                       <td class="align-middle">
@@ -499,7 +499,7 @@
                         <div class="values">
                           ${{
                             subtIndirect.controls.sub_total.value
-                            | number : "1.2-2"
+                              | number : "1.2-2"
                           }}
                         </div>
                       </td>
@@ -509,7 +509,7 @@
                     <div class="values">
                       ${{
                         item.controls.subtotal_indirect_cost.value
-                        | number : "1.2-2"
+                          | number : "1.2-2"
                       }}
                     </div>
                   </td>
@@ -543,8 +543,7 @@
                   <td class="align-middle">
                     <div class="values">
                       ${{
-                        item.controls.total_amd_imp_uti.value
-                          | number : "1.2-2"
+                        item.controls.total_amd_imp_uti.value | number : "1.2-2"
                       }}
                     </div>
                   </td>
@@ -589,16 +588,16 @@
                   <ng-container *ngIf="item.controls.shows.value.prorrateo">
                     <td class="align-middle">
                       <input
-                      currencyMask
-                      [options]="masksMoney.maskCOP"
+                        currencyMask
+                        [options]="masksMoney.maskCOP"
                         formControlName="value_prorrota_cop"
                         class="form-control form-control-sm"
                       />
                     </td>
                     <td class="align-middle">
                       <input
-                      currencyMask
-                      [options]="masksMoney.maskUSD"
+                        currencyMask
+                        [options]="masksMoney.maskUSD"
                         formControlName="value_prorrota_usd"
                         class="form-control form-control-sm"
                       />

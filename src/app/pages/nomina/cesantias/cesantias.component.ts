@@ -22,16 +22,17 @@ import { DatePipe } from '@angular/common';
 export class CesantiasComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   datePipe = new DatePipe('es-CO');
-  matPanel: boolean;
+  pay: boolean = false;
+  severancePaymentValid: boolean = false;
+  severanceInterestPaymentValid: boolean = false;
   permission: Permissions = {
-    menu: 'Cesatía',
+    menu: 'Cesatías',
     permissions: {
       show: true,
       add: true
     }
   };
   year = new Date().getFullYear();
-  habilitarPagar: boolean = false;
   pagination = {
     pageSize: 5,
     page: 1,
@@ -44,11 +45,11 @@ export class CesantiasComponent implements OnInit {
   orderObj: any;
   cesantiasList: any = [];
 
-/*   @ViewChild('modal') modal: any;
-  @ViewChild('modalFuncionario') modalFuncionario: any;
-  @Input('empleados') empleados;
-  form: FormGroup;
-  years: any[] = []; */
+  /*   @ViewChild('modal') modal: any;
+    @ViewChild('modalFuncionario') modalFuncionario: any;
+    @Input('empleados') empleados;
+    form: FormGroup;
+    years: any[] = []; */
 
   /**Cambiar los servicios a cesantías */
 
@@ -70,7 +71,7 @@ export class CesantiasComponent implements OnInit {
   ngOnInit(): void {
     if (this.permission.permissions.show) {
       this.createFormFilters();
-      this.route.queryParamMap.subscribe((params: any) =>{
+      this.route.queryParamMap.subscribe((params: any) => {
         if (params.params.pageSize) {
           this.pagination.pageSize = params.params.pageSize
         } else {
@@ -94,22 +95,26 @@ export class CesantiasComponent implements OnInit {
       });
       /**acá van los get de las cesantías */
       //this.createForm();
-      this.habilitarBotonPagar();
-    } else { //sino, no está autorizado
-      this.router.navigate(['/notautorized']);
+      this.validPay();
+    } else {
+      this.router.navigate(['/notauthorized']);
     }
   }
 
-    /***
-     * La primera consulta es el historial de las cesantías
-     * la segunda es el individual,
-     * y el generar el actual
-     */
-
-  openClose(){ //para los filtros
-    this.matPanel = !this.matPanel;
-    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
+  validPay() {
+    const today = new Date();
+    const startJanuary = new Date(today.getFullYear(), 0, 1).getTime();
+    const endJanuary = new Date(today.getFullYear(), 0, 31).getTime();
+    const endFebruary = new Date(today.getFullYear(), 1, 14).getTime();
+    this.severancePaymentValid = startJanuary <= today.getTime() && today.getTime() <= endJanuary;
+    this.severanceInterestPaymentValid = startJanuary <= today.getTime() && today.getTime() <= endFebruary;
   }
+
+  /***
+   * La primera consulta es el historial de las cesantías
+   * la segunda es el individual,
+   * y el generar el actual
+   */
 
   handlePageEvent(event: PageEvent) {
     this.pagination.pageSize = event.pageSize
@@ -169,7 +174,7 @@ export class CesantiasComponent implements OnInit {
     this.getCesantiasList()
   }
 
-  getCesantiasList(page = 1){
+  getCesantiasList(page = 1) {
     this.loading = true
     this.pagination.page = page;
     let params = {
@@ -183,13 +188,13 @@ export class CesantiasComponent implements OnInit {
       })
   }
 
-  openConfirm() {
-    //chequear que no exista cesantía paga en ese añó
+  redirect(type) {
+    this.router.navigate(['/nomina/cesantias/', type, this.year])
+    /* //chequear que no exista cesantía paga en ese añó
     let params = {
       yearSelected: this.year,
     }
-    //console.log(params)
-     this._cesantias.getCheckLayoffs(params.yearSelected).subscribe(res => {
+    this._cesantias.getCheckLayoffs(params.yearSelected).subscribe(res => {
       //chequea en la DB si existe prima de este periodo
       console.log(res);
       //console.log(this.router.navigate(['/nomina/cesantias/', params.yearSelected, 0]));
@@ -208,8 +213,8 @@ export class CesantiasComponent implements OnInit {
             cancelButtonText: 'Cancelar',
             reverseButtons: true,
             confirmButtonText: 'Sí, confirmar'
-          }).then((res)=>{
-            if(res.isConfirmed){
+          }).then((res) => {
+            if (res.isConfirmed) {
               console.log('redirigir a la cesantía del anio mencionado');
               this.router.navigate(['/nomina/cesantia/', params.yearSelected, true]) //modificar esta ruta
             }
@@ -231,42 +236,30 @@ export class CesantiasComponent implements OnInit {
           })
         }
       }
-    });
+    }); */
   }
 
-////////////////////////////////
-/*
-  openModal() {
-    this.modal.show();
-  }
+  ////////////////////////////////
+  /*
+    openModal() {
+      this.modal.show();
+    }
 
-  createForm() {
-    this.form = this.fb.group({
-      year: ['', Validators.required],
-      periodo: ['', Validators.required]
-    })
-  }
+    createForm() {
+      this.form = this.fb.group({
+        year: ['', Validators.required],
+        periodo: ['', Validators.required]
+      })
+    }
 
-  openModalFuncionario() {
-    this.modalFuncionario.show();
-  } */
+    openModalFuncionario() {
+      this.modalFuncionario.show();
+    } */
 
   //////////
 
 
-  habilitarBotonPagar (){
-    const hoy = new Date;
-    //const hoy = new Date(2022,11,10);
-    const hoyMes = hoy.getMonth();
-    // 0: Enero, 1: Febrere, 2: Marzo, 3: Abril,
-    // 4: Mayo, 5: Junio, 6: Julio, 7: Agosto,
-    // 8: Septiembre, 9: Octubre, 10: Noviembre, 11: Diciembre
-    if (hoyMes == 0 || hoyMes == 1 )  {
-      this.habilitarPagar = true;
-    } else {
-      this.habilitarPagar = false;
-    }
-  }
+
 
   VerPrimaFuncionarios(period) {
     /***consulta al servicio que trae los calculos,

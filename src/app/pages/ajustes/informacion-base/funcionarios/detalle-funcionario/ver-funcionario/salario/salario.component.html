@@ -229,11 +229,11 @@
   </div>
 
   <div class="modal-body">
-    <button
+    <!-- <button
       type="button"
       class="btn btn-primary"
       (click)="printForm()"
-    ></button>
+    ></button> -->
     <form [formGroup]="formHistoryContract">
       <div class="row">
         <!-- Selector termino de contrato -->
@@ -272,13 +272,12 @@
           <mat-error *ngIf="salary_valid"> Campo obligatorio </mat-error>
         </mat-form-field>
 
-
         <!-- /*Selector de fecha de ingreso*/ -->
         <!-- picker2 -->
         <mat-form-field class="col" appearance="outline">
           <mat-label>Fecha de ingreso</mat-label>
           <input
-          formControlName="date_of_admission"
+            formControlName="date_of_admission"
             matInput
             [matDatepickerFilter]="dateFilter"
             [matDatepicker]="picker1"
@@ -311,7 +310,6 @@
         </mat-form-field>
         <!--fin pícker -->
 
-
         <!-- /*Selector de cargo de empleado*/ -->
         <mat-form-field class="col" appearance="outline">
           <mat-label>Cargo</mat-label>
@@ -339,6 +337,12 @@
     <button type="button" class="btn btn-danger" (click)="_modal.close()">
       Cancelar
     </button>
-    <button type="button" class="btn btn-primary" (click)="addHistoryContract()">Guardar</button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="addHistoryContract()"
+    >
+      Guardar
+    </button>
   </div>
 </ng-template>

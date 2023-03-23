@@ -98,6 +98,9 @@
         </ngx-dropzone-preview>
       </ngx-dropzone>
       <h6 class="mt-3">Listado de piezas</h6>
+      <div class="alert alert-warning" role="alert">
+        Todas las piezas deben estar ligadas a un APU existente
+      </div>
       <ng-container *ngIf="piecesSetsList.controls.length; else notData">
         <div class="rounded-top">
           <table class="table table-bordered table-striped table-sm">
@@ -161,7 +164,7 @@
                         [ngbTypeahead]="search"
                         [resultTemplate]="rt"
                         [inputFormatter]="formatter"
-                        placeholder="Piezas"
+                        placeholder="Escribe para buscar pieza"
                         formControlName="description"
                         (change)="select(item, 'description', 'apu_part_id')"
                       />
@@ -177,7 +180,7 @@
                         [ngbTypeahead]="searchSet"
                         [resultTemplate]="rt"
                         [inputFormatter]="formatterSet"
-                        placeholder="Conjuntos"
+                        placeholder="Escribe para buscar conjunto"
                         formControlName="description"
                         (change)="
                           select(item, 'description', 'apu_set_child_id')
@@ -870,7 +873,10 @@
                       Costos Indirectos
                     </th>
                     <td class="text-right">
-                      ${{ form.controls.indirect_cost_total.value | number : "1.2-2" }}
+                      ${{
+                        form.controls.indirect_cost_total.value
+                          | number : "1.2-2"
+                      }}
                     </td>
                   </tr>
                 </tbody>
@@ -885,7 +891,10 @@
                       Costos directos + costos indirectos totales
                     </td>
                     <td class="col-3 text-right">
-                      ${{ form.controls.direct_costs_indirect_costs_total.value | number : "1.2-2" }}
+                      ${{
+                        form.controls.direct_costs_indirect_costs_total.value
+                          | number : "1.2-2"
+                      }}
                     </td>
                   </tr>
                 </tbody>
@@ -926,7 +935,10 @@
                       />
                     </td>
                     <td class="col-3 text-right">
-                      ${{ form.controls.administrative_value.value | number : "1.2-2" }}
+                      ${{
+                        form.controls.administrative_value.value
+                          | number : "1.2-2"
+                      }}
                     </td>
                   </tr>
                   <tr>
@@ -940,7 +952,9 @@
                       />
                     </td>
                     <td class="col-3 text-right">
-                      ${{ form.controls.unforeseen_value.value | number : "1.2-2" }}
+                      ${{
+                        form.controls.unforeseen_value.value | number : "1.2-2"
+                      }}
                     </td>
                   </tr>
                   <tr>
@@ -948,7 +962,10 @@
                       SubTotal + Administrativos + Imprevistos
                     </td>
                     <td class="col-3 text-right">
-                      ${{ form.controls.administrative_unforeseen_subtotal.value | number : "1.2-2" }}
+                      ${{
+                        form.controls.administrative_unforeseen_subtotal.value
+                          | number : "1.2-2"
+                      }}
                     </td>
                   </tr>
                 </tbody>
@@ -975,7 +992,10 @@
                       SubTotal + Admin + Imprevisto + Utilidad
                     </td>
                     <td class="col-3 text-right">
-                      ${{ form.controls.admin_unforeseen_utility_subtotal.value | number : "1.2-2" }}
+                      ${{
+                        form.controls.admin_unforeseen_utility_subtotal.value
+                          | number : "1.2-2"
+                      }}
                     </td>
                   </tr>
                 </tbody>
@@ -1074,3 +1094,8 @@
     </div>
   </div>
 </ng-template>
+
+<app-reload-button
+  [reload]="reload"
+  (reloadData)="reloadData()"
+></app-reload-button>

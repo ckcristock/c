@@ -1,97 +1,106 @@
-<div class="card">
-  <div class="card-body">
-    <app-cabecera [datosCabecera]="datos"></app-cabecera>
-    <hr class="line" />
-    <ng-container *ngIf="path != 'crear' && form.controls.budget_included.value == 'si'">
-      <div class="alert alert-warning" role="alert">
-        Esta cotización está ligada a un
-        <a
-          [routerLink]="['/crm/presupuesto/ver', form.controls.budget_id.value]"
-          >presupuesto</a
-        >
-        y no podrá ser cambiada
-      </div>
-    </ng-container>
-    <form [formGroup]="form" novalidate>
-      <div class="row">
-        <mat-form-field class="col-md-6" appearance="outline">
-          <mat-label>Descripción</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="description"
-            autocomplete="off"
-            placeholder="Ingresa la descripción"
-            required
-          />
-        </mat-form-field>
-        <div class="col-md-3">
-          <ng-select
-            [items]="thirdParties"
-            bindLabel="text"
-            bindValue="value"
-            appearance="outline"
-            required
-            [appendTo]="'body'"
-            placeholder="Cliente *"
-            [class.is-invalid]="form.get('customer_id').invalid"
-            (change)="getContacts()"
-            formControlName="customer_id"
-          ></ng-select>
-        </div>
-        <div class="col-md-3 mb-4">
-          <ng-select
-            [items]="contacts"
-            formControlName="third_party_person_id"
-            placeholder="Contacto *"
-            bindLabel="text"
-            [appendTo]="'body'"
-            [class.is-invalid]="form.get('third_party_person_id').invalid"
-            appearance="outline"
-            bindValue="value"
-            notFoundText="No hay registros"
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<ng-container *ngIf="!loadingView; else placeholder">
+  <div class="card">
+    <div class="card-body">
+      <app-cabecera [datosCabecera]="datos"></app-cabecera>
+      <hr class="line" />
+      <ng-container
+        *ngIf="path != 'crear' && form.controls.included.value == 'budget'"
+      >
+        <div class="alert alert-warning" role="alert">
+          Esta cotización está ligada a un
+          <a
+            [routerLink]="[
+              '/crm/presupuesto/ver',
+              form.controls.budget_id.value
+            ]"
+            >presupuesto</a
           >
-          </ng-select>
+          y no podrá ser cambiada
         </div>
-        <div class="col-md-3">
-          <ng-select
-            [items]="cities"
-            bindLabel="text"
-            bindValue="value"
-            appearance="outline"
-            [appendTo]="'body'"
-            placeholder="Destino *"
-            [class.is-invalid]="form.get('destinity_id').invalid"
-            required
-            formControlName="destinity_id"
-          ></ng-select>
-        </div>
-        <!-- <mat-form-field class="col" appearance="outline">
-          <mat-label>TRM</mat-label>
-          <input
-            matInput
-            currencyMask
-            [options]="masksMoney.maskCOP"
-            formControlName="trm"
-            autocomplete="off"
-            placeholder="Ingresa TRM"
-            required
-          />
-          <mat-hint>TRM del {{ today | date }}</mat-hint>
-        </mat-form-field> -->
+      </ng-container>
+      <form [formGroup]="form" novalidate>
+        <div class="row">
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Descripción</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="description"
+              autocomplete="off"
+              placeholder="Ingresa la descripción"
+              required
+            />
+          </mat-form-field>
+          <div class="col-md-3">
+            <ng-select
+              [items]="thirdParties"
+              bindLabel="text"
+              bindValue="value"
+              appearance="outline"
+              required
+              [appendTo]="'body'"
+              placeholder="Cliente *"
+              [class.is-invalid]="form.get('customer_id').invalid"
+              (change)="getContacts()"
+              formControlName="customer_id"
+            ></ng-select>
+          </div>
+          <div class="col-md-3 mb-4">
+            <ng-select
+              [items]="contacts"
+              formControlName="third_party_person_id"
+              placeholder="Contacto *"
+              bindLabel="text"
+              [appendTo]="'body'"
+              [class.is-invalid]="form.get('third_party_person_id').invalid"
+              appearance="outline"
+              bindValue="value"
+              notFoundText="No hay registros"
+            >
+            </ng-select>
+          </div>
+          <div class="col-md-3">
+            <ng-select
+              [items]="cities"
+              bindLabel="text"
+              bindValue="value"
+              appearance="outline"
+              [appendTo]="'body'"
+              placeholder="Destino *"
+              [class.is-invalid]="form.get('destinity_id').invalid"
+              required
+              formControlName="destinity_id"
+            ></ng-select>
+          </div>
+          <!-- <mat-form-field class="col" appearance="outline">
+            <mat-label>TRM</mat-label>
+            <input
+              matInput
+              currencyMask
+              [options]="masksMoney.maskCOP"
+              formControlName="trm"
+              autocomplete="off"
+              placeholder="Ingresa TRM"
+              required
+            />
+            <mat-hint>TRM del {{ today | date }}</mat-hint>
+          </mat-form-field> -->
 
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>¿Incluye presupuesto?</mat-label>
-          <mat-select required formControlName="budget_included">
-            <mat-option value="si">Sí</mat-option>
-            <mat-option value="no">No</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <!-- <ng-container *ngIf="path == 'crear'"> -->
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Incluye</mat-label>
+            <mat-select required formControlName="included">
+              <mat-option value="nothing">Ninguno</mat-option>
+              <mat-option value="budget">Presupuesto</mat-option>
+              <mat-option value="apu">APU</mat-option>
+            </mat-select>
+          </mat-form-field>
           <mat-form-field
             class="col"
             appearance="outline"
-            *ngIf="form.controls.budget_included.value == 'si'"
+            *ngIf="form.controls.included.value == 'budget'"
           >
             <mat-label>Presupuesto</mat-label>
             <input
@@ -107,56 +116,63 @@
             />
             <mat-hint>Escribe para obtener resultados</mat-hint>
           </mat-form-field>
-        <!-- </ng-container> -->
-        <mat-form-field
-          class="col-md-12 mat-form-field-no-padding textarea"
-          appearance="outline"
-        >
-          <mat-label>Observaciones</mat-label>
-          <textarea
-            matInput
-            placeholder="Ingresa las observaciones"
-            rows="5"
-            required
-            formControlName="observation"
-            [cdkTextareaAutosize]="true"
-          ></textarea>
-        </mat-form-field>
-      </div>
-      <hr />
-      <app-items-quotation #itemsQuotation [form]="form"></app-items-quotation>
-      <h6>Condiciones comerciales</h6>
-      <ckeditor
-        [editor]="_texteditor.Editor"
-        (ready)="_texteditor.onReady($event)"
-        [config]="_texteditor.configEditor"
-        formControlName="commercial_terms"
-      ></ckeditor>
-      <h6 class="mt-4">Requisitos técnicos, funcionales y desempeño</h6>
-      <ckeditor
-        [editor]="_texteditor.Editor"
-        (ready)="_texteditor.onReady($event)"
-        [config]="_texteditor.configEditor"
-        formControlName="technical_requirements"
-      ></ckeditor>
-      <h6 class="mt-4">Requisitos legales o reglamentos aplicables</h6>
-      <ckeditor
-        [editor]="_texteditor.Editor"
-        (ready)="_texteditor.onReady($event)"
-        [config]="_texteditor.configEditor"
-        formControlName="legal_requirements"
-      ></ckeditor>
-    </form>
-    <button type="button" class="btn btn-primary btn-block" (click)="save()">
-      Guardar
-    </button>
+          <mat-form-field
+            class="col-md-12 mat-form-field-no-padding textarea"
+            appearance="outline"
+          >
+            <mat-label>Observaciones</mat-label>
+            <textarea
+              matInput
+              placeholder="Ingresa las observaciones"
+              rows="5"
+              formControlName="observation"
+              [cdkTextareaAutosize]="true"
+            ></textarea>
+          </mat-form-field>
+        </div>
+        <hr />
+        <app-items-quotation
+          #itemsQuotation
+          [form]="form"
+        ></app-items-quotation>
+        <h6>Condiciones comerciales</h6>
+        <ckeditor
+          [editor]="_texteditor.Editor"
+          (ready)="_texteditor.onReady($event)"
+          [config]="_texteditor.configEditor"
+          formControlName="commercial_terms"
+        ></ckeditor>
+        <h6 class="mt-4">Requisitos técnicos, funcionales y desempeño</h6>
+        <ckeditor
+          [editor]="_texteditor.Editor"
+          (ready)="_texteditor.onReady($event)"
+          [config]="_texteditor.configEditor"
+          formControlName="technical_requirements"
+        ></ckeditor>
+        <h6 class="mt-4">Requisitos legales o reglamentos aplicables</h6>
+        <ckeditor
+          [editor]="_texteditor.Editor"
+          (ready)="_texteditor.onReady($event)"
+          [config]="_texteditor.configEditor"
+          formControlName="legal_requirements"
+        ></ckeditor>
+      </form>
+      <button type="button" class="btn btn-primary btn-block" (click)="save()">
+        Guardar
+      </button>
+    </div>
   </div>
-</div>
+</ng-container>
 
 <ng-template #notDataElements>
   <div class="alert alert-warning text-center" role="alert">Eli</div>
 </ng-template>
 
 <ng-template #rt let-r="result" let-t="term">
-  <span>{{ r?.line +  ' - ' + r?.project}}</span>
+  <span>{{ r?.line + " - " + r?.project }}</span>
 </ng-template>
+
+<app-reload-button
+  [reload]="reload"
+  (reloadData)="reloadData()"
+></app-reload-button>

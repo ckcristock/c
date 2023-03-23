@@ -86,6 +86,7 @@ import { PlanosConjuntoComponent } from './apu-conjunto/ver-apu-conjunto/planos-
 import { CopiarApuPiezaComponent } from './apu-pieza/copiar-apu-pieza/copiar-apu-pieza.component';
 import { CopiarApuConjuntoComponent } from './apu-conjunto/copiar-apu-conjunto/copiar-apu-conjunto.component';
 import { CopiarApuServicioComponent } from './apu-servicio/copiar-apu-servicio/copiar-apu-servicio.component';
+import { MatSelectFilterModule } from 'mat-select-filter';
 
 export const MY_FORMATS = {
   parse: {
@@ -200,6 +201,7 @@ export const MY_FORMATS = {
     NgbPopoverModule,
     MatTooltipModule,
     MatBottomSheetModule,
+    MatSelectFilterModule
   ]
 })
 export class CrmModule { }

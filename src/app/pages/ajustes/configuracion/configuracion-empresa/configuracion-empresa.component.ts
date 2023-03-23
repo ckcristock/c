@@ -15,6 +15,7 @@ import { ModalService } from 'src/app/core/services/modal.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { SwalService } from '../../informacion-base/services/swal.service';
 import { Texteditor2Service } from '../../informacion-base/services/texteditor2.service';
+import { HistorialDatosComponent } from './historial-datos/historial-datos.component';
 @Component({
   selector: 'app-configuracion-empresa',
   templateUrl: './configuracion-empresa.component.html',

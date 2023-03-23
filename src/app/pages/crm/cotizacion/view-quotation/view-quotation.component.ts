@@ -12,7 +12,7 @@ export class ViewQuotationComponent implements OnInit {
   id: number;
   quotation: any;
   loading: boolean;
-  public headerData:any = {
+  public headerData: any = {
     Titulo: 'Cotización',
     Codigo: '',
     Fecha: '',
@@ -30,9 +30,9 @@ export class ViewQuotationComponent implements OnInit {
     })
   }
 
-  getQuotation(id){
+  getQuotation(id) {
     this.loading = true;
-    this._quotation.getQuotation(id).subscribe((res:any) => {
+    this._quotation.getQuotation(id).subscribe((res: any) => {
       this.quotation = res.data;
       this.headerData.Codigo = res.data.code;
       this.headerData.Fecha = res.data.created_at;
@@ -47,7 +47,7 @@ export class ViewQuotationComponent implements OnInit {
     this._quotation.download(this.id).subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/pdf' });
       let link = document.createElement('a');
-      const filename = 'quotation' + this.id + '.pdf';
+      const filename = 'cotización' + this.id;
       link.href = window.URL.createObjectURL(blob);
       link.download = `${filename}.pdf`;
       link.click();

@@ -3,18 +3,52 @@
     <div class="card-body" #printPDF>
       <app-cabecera [datosCabecera]="headerData"></app-cabecera>
       <hr class="line" />
+      <div class="d-flex justify-content-end mb-2">
+        <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-info btn-sm"
+            type="button"
+            [routerLink]="['/crm/cotizacion/editar', quotation.id]"
+          >
+            <i class="fas fa-edit"></i> Editar
+          </button>
+          <button
+            class="btn btn-primary btn-sm"
+            type="button"
+            [routerLink]="['/crm/cotizacion/copiar', quotation.id]"
+          >
+            <i class="fas fa-copy"></i> Copiar
+          </button>
+          <button
+            type="button"
+            (click)="download()"
+            class="btn btn-danger btn-sm"
+          >
+            <span
+              ><i
+                class="fas"
+                [class]="
+                  !donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'
+                "
+              ></i>
+              {{ !donwloading ? "Descargar" : "Descargando" }}</span
+            >
+          </button>
+        </div>
+      </div>
       <h5 class="card-title">Señores:</h5>
       <p class="card-text">
-        {{quotation.third_person.name}} - {{
+        {{ quotation.third_person.name }} -
+        {{
           quotation.client.social_reason
             ? quotation.client.social_reason
             : quotation.client.full_name
         }}
         <br />
-        {{ quotation.municipality.name }}
+        <small>{{ quotation.municipality.name }}</small>
       </p>
       <div class="alert alert-primary" role="alert">
-        <i class="fas fa-cogs"></i>{{ quotation.description }}
+        <i class="fas fa-cogs"></i> {{ quotation.description | uppercase }}
       </div>
       <div class="rounded-top table-responsive">
         <table class="table table-bordered table-striped table-sm">
@@ -35,17 +69,19 @@
               <td>{{ i + 1 }}</td>
               <td class="text-left">
                 <b>{{ item.name }}</b>
-                <p>Comprende:</p>
-                <ul class="mb-0">
-                  <ng-container *ngFor="let sub_item of item.sub_items">
-                    <li>{{ sub_item.description }}</li>
-                  </ng-container>
-                </ul>
+                <ng-container *ngIf="item.sub_items.length > 0">
+                  <p>Comprende:</p>
+                  <ul class="mb-0">
+                    <ng-container *ngFor="let sub_item of item.sub_items">
+                      <li>{{ sub_item.description }}</li>
+                    </ng-container>
+                  </ul>
+                </ng-container>
               </td>
               <td>{{ item.cuantity }}</td>
               <ng-container *ngIf="quotation.money_type == 'cop'; else usd">
-                <td>${{ item.value_cop | number : "1.2-2" }} sin IVA</td>
-                <td>${{ item.total_cop | number : "1.2-2" }} sin IVA</td>
+                <td>${{ item.value_cop | number : "1.2-2" }} (SIN IVA)</td>
+                <td>${{ item.total_cop | number : "1.2-2" }} (SIN IVA)</td>
               </ng-container>
               <ng-template #usd>
                 <td>USD {{ item.value_usd | number : "1.2-2" }}</td>
@@ -57,39 +93,30 @@
       </div>
       <div class="d-flex justify-content-end">
         <ng-container *ngIf="quotation.money_type == 'cop'; else usd_total">
-          <h5>TOTAL SIN IVA: ${{ quotation.total_cop | number : "1.2-2" }}</h5>
+          <h6>TOTAL SIN IVA: ${{ quotation.total_cop | number : "1.2-2" }}</h6>
         </ng-container>
         <ng-template #usd_total>
-          <h5>TOTAL: USD{{ quotation.total_usd | number : "1.2-2" }}</h5>
+          <h6>TOTAL: USD {{ quotation.total_usd | number : "1.2-2" }}</h6>
         </ng-template>
       </div>
       <div
-        class="alert alert-light alert-custom-quotation pb-0"
+        class="alert alert-secondary alert-custom-quotation pb-0"
         [innerHTML]="quotation.commercial_terms"
         role="alert"
         [ngClass]="'alert-p-0'"
       ></div>
       <div
-        class="alert alert-light alert-custom-quotation pb-0"
+        class="alert alert-secondary alert-custom-quotation pb-0"
         [innerHTML]="quotation.legal_requirements"
         role="alert"
         [ngClass]="'alert-p-0'"
       ></div>
       <div
-        class="alert alert-light alert-custom-quotation pb-0"
+        class="alert alert-secondary alert-custom-quotation pb-0"
         [innerHTML]="quotation.technical_requirements"
         role="alert"
         [ngClass]="'alert-p-0'"
       ></div>
-      <button (click)="download()" class="btn btn-primary btn-block">
-        <span
-          ><i
-            class="fas"
-            [class]="!donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'"
-          ></i>
-          {{ !donwloading ? "Descargar" : "Descargando" }}</span
-        >
-      </button>
     </div>
   </ng-container>
 </div>

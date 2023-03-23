@@ -200,7 +200,7 @@ export class CrearCotizacionComponent implements OnInit {
       budget: [''],
       budget_id: [''],
       //indirect_costs: this.fb.array([]),
-      observation: ['', Validators.required],
+      observation: [''],
       items: this.fb.array([]),
       total_cop: 0,
       total_usd: 0,

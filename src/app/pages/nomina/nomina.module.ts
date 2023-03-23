@@ -36,6 +36,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
 import {
   DateAdapter,
@@ -84,7 +85,8 @@ export const MY_FORMATS = {
     MatNativeDateModule,
     SatDatepickerModule,
     SatNativeDateModule,
-    CurrencyMaskModule
+    CurrencyMaskModule,
+    MatTooltipModule
   ],
   declarations: [
     PrestamosLibranzasComponent,
@@ -116,4 +118,4 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
 })
-export class NominaModule {}
+export class NominaModule { }

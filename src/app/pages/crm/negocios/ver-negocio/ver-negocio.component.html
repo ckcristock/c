@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-body">
         <div class="row">
-          <div class="col-md-2 d-flex justify-content-center">
+          <div class="col-md-2 d-flex justify-content-center align-self-center">
             <img
               [src]="negocio?.third_party.image | image"
               id="imageOutput"
@@ -45,13 +45,15 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="col-md-5">
+          <div class="col-md-5 mt-3">
             <h6>Detalles:</h6>
             <p>
-              <small>{{ negocio?.description }}</small>
+              <small>{{
+                negocio?.description || "No existen detalles para mostrar"
+              }}</small>
             </p>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-2 align-self-center">
             <img
               class="img-fluid"
               [src]="qr.changingThisBreaksApplicationSecurity"
@@ -446,7 +448,7 @@
         >
           <ul class="list-group list-group-flush">
             <li
-              class="list-group-item flex-column align-items-start"
+              class="list-group-item flex-column align-items-start px-0"
               *ngFor="let item of negocio?.notes"
             >
               <div class="d-flex w-100 justify-content-between">
@@ -646,7 +648,7 @@
               'text-danger font-weight-bold': item.state == 'Inactivo'
             }"
           >
-            <td class="align-middle pb-0">
+            <td class="align-middle pb-0 text-left">
               <mat-checkbox
                 color="primary"
                 (change)="guardarPresupuesto(item.id, item.total_cop)"
@@ -837,7 +839,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of quotations" class="text-center">
-            <td class="pb-0">
+            <td class="pb-0 text-left">
               <mat-checkbox
                 color="primary"
                 (change)="guardarCotizacion(item.id, item.total_cop)"

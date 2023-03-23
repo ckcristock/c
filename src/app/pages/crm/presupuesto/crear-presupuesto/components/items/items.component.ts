@@ -114,7 +114,9 @@ export class ItemsComponent implements OnInit {
     )
     const value_cop = item.get('value_cop')
     const subItems = item.get('subItems') as FormArray
-    this.addSubItem(item);
+    if (!this.dataEdit) {
+      this.addSubItem(item);
+    }
     value_cop.valueChanges.subscribe(r => {
       let total = 0;
       subItems.controls.forEach((subItem: FormControl) => {

@@ -18,4 +18,8 @@ export class WorkContractTypesService {
     return this.http.get(`${ environment.base_url }/contract-terms`)
   }
 
+  getWorkContractTypeList(){
+    return this.http.get(`${ environment.base_url}/work-contract-type-list`)
+  }
+
 }

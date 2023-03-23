@@ -24,3 +24,5 @@ export class SalarioService {
     return this.http.get(`${environment.base_url}/work-contract-type`);
   }
 }
+
+

@@ -75,7 +75,7 @@ export class BonoComponent implements OnInit {
               icon: 'success',
               showCancel: false,
               timer: 1000
-            }) 
+            })
           })
       }
     })

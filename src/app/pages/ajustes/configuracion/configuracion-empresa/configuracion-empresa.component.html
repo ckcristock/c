@@ -125,6 +125,21 @@
       </div>
     </ng-template>
   </li>
+  <li [ngbNavItem]="5" class="nav-item flex-sm-fill">
+    <a
+      ngbNavLink
+      data-toggle="tab"
+      role="tab"
+      aria-controls="home"
+      aria-selected="true"
+      [routerLink]="['../history-data-company']"
+      class="nav-link border-0 text-uppercase font-weight-bold"
+      >Historial de cambios</a
+    >
+    <ng-template ngbNavContent>
+      <app-historial-datos></app-historial-datos>
+    </ng-template>
+  </li>
   <!-- <li [ngbNavItem]="5" class="nav-item flex-sm-fill">
     <a
       ngbNavLink

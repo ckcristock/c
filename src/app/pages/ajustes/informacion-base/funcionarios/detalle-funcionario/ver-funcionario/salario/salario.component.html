@@ -31,27 +31,29 @@
     <div class="col-lg-6 text-lg-left text-center">
       {{ salary_info.date_of_admission }}
     </div>
-    <div
-      class="col-lg-6 text-lg-right text-center text-primary"
-      *ngIf="salary_info.work_contract_type_id == 2"
-    >
-      Fecha de retiro
-    </div>
-    <div
-      class="col-lg-6 text-lg-left text-center"
-      *ngIf="salary_info.work_contract_type_id == 2"
-    >
-      {{ salary_info.date_end }}
-    </div>
+
+    <ng-container *ngIf="salary_info.work_contract_type_id == 2">
+      <div class="col-lg-6 text-lg-right text-center text-primary">
+        Fecha de retiro
+      </div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ salary_info.date_end }}
+      </div>
+    </ng-container>
   </div>
   <hr />
   <app-bono *ngIf="salary_info.id" [id]="salary_info.id"></app-bono>
   <div class="d-flex justify-content-between">
     <h6>Historial de contratos</h6>
-    <button class="btn btn-link btn-sm">
+    <button
+      type="button"
+      (click)="openModalContracts(addContract)"
+      class="btn btn-link btn-sm"
+    >
       <i class="fas fa-plus"></i>
     </button>
   </div>
+
   <div class="rounded-top table-responsive">
     <table
       class="table table-bordered table-striped table-sm"
@@ -88,6 +90,7 @@
 </ng-template>
 
 <ng-template #add let-modal>
+  /*Header*/
   <div class="modal-header">
     <h4 class="text-primary modal-title">Editar salario</h4>
     <button
@@ -100,9 +103,12 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
+
+  <!-- /*Body*/ -->
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
+        <!-- /*Selector de termino de contrato*/ -->
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Término</mat-label>
           <mat-select
@@ -123,15 +129,20 @@
             Campo obligatorio
           </mat-error>
         </mat-form-field>
+        <!-- /*Selector de tipo de contrato*/ -->
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de contrato</mat-label>
           <mat-select formControlName="contract_term_id" required>
-            <mat-option *ngFor="let item of contractTerms" [value]="item.id">{{
-              item.name
-            }}</mat-option>
+            <mat-option
+              *ngFor="let item of workContractsTypesList"
+              [value]="item.value"
+              >{{ item.text }}</mat-option
+            >
           </mat-select>
           <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
+
+        <!-- /*Selector de valor del salario*/ -->
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Salario</mat-label>
           <input
@@ -144,6 +155,7 @@
           />
           <mat-error *ngIf="salary_valid"> Campo obligatorio </mat-error>
         </mat-form-field>
+        <!-- /*Selector de fecha de ingreso*/ -->
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Fecha de ingreso</mat-label>
           <input
@@ -157,6 +169,7 @@
             Campo obligatorio
           </mat-error>
         </mat-form-field>
+        <!-- /*Selector de fecha de fecha de retiro*/ -->
         <mat-form-field
           class="col-md-6"
           appearance="outline"
@@ -180,6 +193,8 @@
       </div>
     </form>
   </div>
+
+  <!-- /*Footer*/ -->
   <div class="modal-footer">
     <button
       type="button"
@@ -196,5 +211,134 @@
     >
       Actualizar
     </button>
+  </div>
+</ng-template>
+
+<ng-template #addContract let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Nuevo contrato</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="printForm()"
+    ></button>
+    <form [formGroup]="formHistoryContract">
+      <div class="row">
+        <!-- Selector termino de contrato -->
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Término</mat-label>
+          <mat-select
+            formControlName="work_contract_type_id"
+            id="work_contract_type_id"
+            (selectionChange)="getContractTerms($event.value)"
+            required
+          >
+            <mat-option
+              *ngFor="let contract_type of contract_types"
+              (click)="changeType(contract_type.conclude)"
+              [value]="contract_type.id"
+            >
+              {{ contract_type.name }}</mat-option
+            >
+          </mat-select>
+          <mat-error *ngIf="work_contract_type_id_valid">
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
+
+        <!-- /*Selector de valor del salario*/ -->
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Salario</mat-label>
+          <input
+            matInput
+            type="number"
+            placeholder="Ingresa el salario"
+            formControlName="salary"
+            required
+            autocomplete="off"
+          />
+          <mat-error *ngIf="salary_valid"> Campo obligatorio </mat-error>
+        </mat-form-field>
+
+
+        <!-- /*Selector de fecha de ingreso*/ -->
+        <!-- picker2 -->
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Fecha de ingreso</mat-label>
+          <input
+          formControlName="date_of_admission"
+            matInput
+            [matDatepickerFilter]="dateFilter"
+            [matDatepicker]="picker1"
+            disabled
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker1"
+          ></mat-datepicker-toggle>
+          <mat-datepicker disabled="false" #picker1></mat-datepicker>
+        </mat-form-field>
+        <!-- fin picker2 -->
+
+        <!-- /*Selector de fecha de retiro*/ -->
+        <!-- pícker -->
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Fecha de retiro</mat-label>
+          <input
+            formControlName="date_end"
+            matInput
+            [matDatepickerFilter]="dateFilter"
+            [matDatepicker]="picker2"
+            disabled
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker2"
+          ></mat-datepicker-toggle>
+          <mat-datepicker disabled="false" #picker2></mat-datepicker>
+        </mat-form-field>
+        <!--fin pícker -->
+
+
+        <!-- /*Selector de cargo de empleado*/ -->
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Cargo</mat-label>
+          <mat-select
+            formControlName="position_id"
+            id="work_contract_type_id"
+            (selectionChange)="getContractTerms($event.value)"
+            required
+          >
+            <mat-option
+              *ngFor="let position of positions"
+              [value]="position.value"
+            >
+              {{ position.text }}</mat-option
+            >
+          </mat-select>
+          <mat-error> Campo obligatorio </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- //aqui voy -->
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button type="button" class="btn btn-primary" (click)="addHistoryContract()">Guardar</button>
   </div>
 </ng-template>

@@ -43,6 +43,7 @@ import { TypeaheadPersonComponent } from './nomina/components/responsables-nomin
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { CatSubcatModule } from '../parametros/cat-subcat/cat-subcat.module';
 import { ConsecutivosComponent } from './consecutivos/consecutivos.component';
+import { HistorialDatosComponent } from './configuracion-empresa/historial-datos/historial-datos.component';
 
 
 @NgModule({
@@ -77,6 +78,7 @@ import { ConsecutivosComponent } from './consecutivos/consecutivos.component';
     SalariosConfigComponent,
     TypeaheadPersonComponent,
     ConsecutivosComponent,
+    HistorialDatosComponent,
   ],
   imports: [
     CommonModule,

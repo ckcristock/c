@@ -5,7 +5,7 @@
       <hr class="line" />
       <form [formGroup]="forma" (submit)="save()">
         <div class="row">
-          <div class="col-md-3 mb-4">
+          <div class="col-md-4 mb-4">
             <ng-select
               bindLabel="text"
               [items]="clients"
@@ -15,11 +15,12 @@
               loadingText="loading"
               [class.is-invalid]="forma.get('customer_id').invalid"
               ngDefaultControl
+              [clearable]="false"
               formControlName="customer_id"
               [appendTo]="'body'"
             ></ng-select>
           </div>
-          <div class="col-md-2 mb-4">
+          <div class="col-md-4 mb-4">
             <ng-select
               [items]="cities"
               placeholder="Destino *"
@@ -28,10 +29,23 @@
               bindLabel="text"
               bindValue="value"
               [appendTo]="'body'"
+              [clearable]="false"
               formControlName="destinity_id"
             ></ng-select>
           </div>
-          <mat-form-field class="col-md-3" appearance="outline">
+          <mat-form-field class="col-md-4" appearance="outline">
+            <mat-label>TRM</mat-label>
+            <input
+              matInput
+              currencyMask
+              [options]="masksMoney.maskCOP"
+              placeholder="Ingresa TRM"
+              required
+              formControlName="trm"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
             <mat-label>Línea</mat-label>
             <input
               matInput
@@ -43,7 +57,7 @@
             />
           </mat-form-field>
 
-          <mat-form-field class="col-md-3" appearance="outline">
+          <mat-form-field class="col-md-6" appearance="outline">
             <mat-label>Proyecto</mat-label>
             <input
               matInput
@@ -51,18 +65,6 @@
               placeholder="Ingresa proyecto"
               formControlName="project"
               required
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col-md-1 pl-0" appearance="outline">
-            <mat-label>TRM</mat-label>
-            <input
-              matInput
-              currencyMask
-              [options]="masksMoney.maskCOP"
-              placeholder="Ingresa TRM"
-              required
-              formControlName="trm"
               autocomplete="off"
             />
           </mat-form-field>
@@ -94,30 +96,65 @@
         >
         </app-items>
         <!-- Configuracion presupuestal -->
-        <h6 class="text-center">Porcentaje de configuración presupuestal</h6>
-        <div class="rounded-top table-responsive">
-          <table class="table table-striped table-sm">
-            <tbody>
-              <ng-container formArrayName="indirect_costs">
-                <ng-container
-                  *ngFor="let item of indirecCostList.controls; let i = index"
-                >
-                  <tr [formGroupName]="i">
-                    <td class="col-10">{{ item.controls.name.value }}</td>
-                    <td class="col-2">
-                      <input
-                        currencyMask
-                        [options]="masksMoney.maskPorcentaje"
-                        class="form-control form-control-sm"
-                        formControlName="percentage"
-                      />
-                    </td>
-                  </tr>
+        <ng-container *ngIf="hasItems">
+          <h6 class="text-center">Porcentaje de configuración presupuestal</h6>
+          <div class="rounded-top table-responsive">
+            <table class="table table-striped table-sm">
+              <tbody>
+                <ng-container formArrayName="indirect_costs">
+                  <ng-container
+                    *ngFor="let item of indirecCostList.controls; let i = index"
+                  >
+                    <tr [formGroupName]="i">
+                      <td class="col-10">{{ item.controls.name.value }}</td>
+                      <td class="col-2">
+                        <input
+                          currencyMask
+                          [options]="masksMoney.maskPorcentaje"
+                          class="form-control form-control-sm"
+                          formControlName="percentage"
+                        />
+                      </td>
+                    </tr>
+                  </ng-container>
                 </ng-container>
-              </ng-container>
-            </tbody>
-          </table>
-        </div>
+                <tr>
+                  <td class="col-10">ADMINISTRATIVOS</td>
+                  <td class="col-2">
+                    <input
+                      currencyMask
+                      [options]="masksMoney.maskPorcentaje"
+                      class="form-control form-control-sm"
+                      formControlName="administrative_percentage"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="col-10">IMPREVISTOS</td>
+                  <td class="col-2">
+                    <input
+                      currencyMask
+                      [options]="masksMoney.maskPorcentaje"
+                      class="form-control form-control-sm"
+                      formControlName="unforeseen_percentage"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="col-10">UTILIDAD</td>
+                  <td class="col-2">
+                    <input
+                      currencyMask
+                      [options]="masksMoney.maskPorcentaje"
+                      class="form-control form-control-sm"
+                      formControlName="utility_percentage"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
         <!--  END  Configuracion presupuestal -->
         <div *ngIf="hasItems">
           <h5 class="text-center">PRESUPUESTO TOTAL</h5>
@@ -168,6 +205,10 @@
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
+<app-reload-button
+  [reload]="reload"
+  (reloadData)="reloadData()"
+></app-reload-button>
 <!-- <div class="col-sm-10">
   <ng-select
     [items]="custumer$ | async"

@@ -19,7 +19,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { AutoFocusDirectiveDirective } from './crear-presupuesto/components/items/auto-focus-directive.directive';
 import { CopiarPresupuestoComponent } from './copiar-presupuesto/copiar-presupuesto.component';
@@ -27,29 +27,29 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
 
 
 @NgModule({
-    declarations: [PresupuestosComponent, CrearPresupuestoComponent, SubItemsComponent, ItemsComponent, EditarPresupuestoComponent, VerPresupuestoComponent, ShowItemsPresupuestoComponent, AutoFocusDirectiveDirective, CopiarPresupuestoComponent],
-    imports: [
-        PresupuestoRoutingModule,
-        CommonModule,
-        NgbPaginationModule,
-        NgbDropdownModule,
-        ComponentsModule,
-        FormsModule,
-        NgSelectModule,
-        HttpClientModule,
-        ReactiveFormsModule,
-        NgbTooltipModule,
-        DirectivesModule,
-        NgbTypeaheadModule,
-        MatExpansionModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatCheckboxModule,
-        CurrencyMaskModule,
-        MatPaginatorModule
-    ],
-    exports: [AutoFocusDirectiveDirective],
+  declarations: [PresupuestosComponent, CrearPresupuestoComponent, SubItemsComponent, ItemsComponent, EditarPresupuestoComponent, VerPresupuestoComponent, ShowItemsPresupuestoComponent, AutoFocusDirectiveDirective, CopiarPresupuestoComponent],
+  imports: [
+    PresupuestoRoutingModule,
+    CommonModule,
+    NgbPaginationModule,
+    NgbDropdownModule,
+    ComponentsModule,
+    FormsModule,
+    NgSelectModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    NgbTooltipModule,
+    DirectivesModule,
+    NgbTypeaheadModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    CurrencyMaskModule,
+    MatPaginatorModule
+  ],
+  exports: [AutoFocusDirectiveDirective],
 })
 
 export class PresupuestoModule { }

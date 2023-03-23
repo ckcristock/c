@@ -48,5 +48,34 @@ input[type="radio"] {
   transition: all 0.2s;
 }
 
+.btn_agregar_tr {
+  position: absolute;
+  width: 100%;
+  top: 0px;
+  left: -2px;
+  height: 1px;
+  border: 1px solid transparent;
+  border-width: thin;
+  z-index: 2;
+}
 
+.btn_agregar_tr:after {
+  position: absolute;
+  left: -15px;
+  top: -8px;
+  width: 20px;
+  height: 20px;
+  content: '\f055';
+  font: var(--fa-font-solid);
+  color: transparent;
+  font-size: 1rem;
+}
 
+.btn_agregar_tr:hover {
+  border-color: #4AA3FF;
+}
+
+.btn_agregar_tr:hover:after {
+  color: #4AA3FF;
+  /* Mostrar el contenido al aplicar :hover */
+}

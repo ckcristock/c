@@ -24,9 +24,13 @@
       <div class="col-lg-6 text-lg-right text-center text-primary">
         Razón social
       </div>
-      <div class="col-lg-6 text-lg-left text-center">{{ company.social_reason }}</div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ company.social_reason }}
+      </div>
       <div class="col-lg-6 text-lg-right text-center text-primary">NIT</div>
-      <div class="col-lg-6 text-lg-left text-center">{{ company.document_number }}</div>
+      <div class="col-lg-6 text-lg-left text-center">
+        {{ company.document_number }}
+      </div>
       <div class="col-lg-6 text-lg-right text-center text-primary">
         Fecha de constitución
       </div>
@@ -175,19 +179,8 @@
     <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
       Cancelar
     </button>
-    <button
-      type="button"
-      [disabled]="!form.valid"
-      (click)="saveBasicData()"
-      class="btn btn-primary"
-    >
+    <button type="button" (click)="saveBasicData()" class="btn btn-primary">
       Guardar
     </button>
   </div>
 </ng-template>
-
-
-
-
-
-

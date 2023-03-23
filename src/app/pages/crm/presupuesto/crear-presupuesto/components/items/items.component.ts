@@ -114,7 +114,9 @@ export class ItemsComponent implements OnInit {
     )
     const value_cop = item.get('value_cop')
     const subItems = item.get('subItems') as FormArray
-    this.addSubItem(item);
+    if (!this.dataEdit) {
+      this.addSubItem(item);
+    }
     value_cop.valueChanges.subscribe(r => {
       let total = 0;
       subItems.controls.forEach((subItem: FormControl) => {
@@ -203,19 +205,25 @@ export class ItemsComponent implements OnInit {
 
   deleteSubItem(group: FormGroup, pos: number) {
     const subItems = group.get('subItems') as FormArray
-
-    const id = subItems.at(pos).get('id').value;
-    id ? this.subItemsToDelete.push(id) : ''
-
-    this.forma.patchValue({ subItemsToDelete: this.subItemsToDelete })
-    subItems.removeAt(pos)
-    this.updateSubTotals(subItems,
-      ['total_cost', 'subtotal_indirect_cost', 'total_amd_imp_uti',
-        'value_amd', 'value_unforeseen', 'value_utility',
-        'subTotal', 'another_values', 'retention',
-        'value_cop', 'value_usd'])
-
-    this.recalculateTotals()
+    if (subItems.controls.length > 1) {
+      const id = subItems.at(pos).get('id').value;
+      id ? this.subItemsToDelete.push(id) : ''
+      this.forma.patchValue({ subItemsToDelete: this.subItemsToDelete })
+      subItems.removeAt(pos)
+      this.updateSubTotals(subItems,
+        ['total_cost', 'subtotal_indirect_cost', 'total_amd_imp_uti',
+          'value_amd', 'value_unforeseen', 'value_utility',
+          'subTotal', 'another_values', 'retention',
+          'value_cop', 'value_usd'])
+      this.recalculateTotals()
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'Error',
+        text: 'El item debe contener al menos un elemento.',
+        showCancel: false
+      })
+    }
   }
   deleteItem(pos) {
     const id = this.items.at(pos).get('id').value;
@@ -644,10 +652,12 @@ export class ItemsComponent implements OnInit {
 
   calculateSutIndirectos(indirect: FormArray, setValue: number) {
     let subTotal = 0
+    console.log(setValue)
+    console.log(indirect)
     indirect.controls.forEach((x, pos) => {
       if (setValue) {
         const indirectOriginal = this.forma.get('indirect_costs').value[pos];
-        const value = (indirectOriginal.percentage * setValue)
+        const value = ((indirectOriginal.percentage / 100) * setValue)
         subTotal += value;
         x.patchValue({ value })
       } else {

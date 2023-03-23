@@ -30,6 +30,7 @@ export class CrearApuServicioComponent implements OnInit {
   profiles: any[] = [];
   tEestimations: any = [];
   calculationBase: any = {}
+  reload: boolean;
   desplazamientos = [
     { text: 'Aero', value: 1 },
     { text: 'Terrestre', value: 2 },
@@ -72,6 +73,18 @@ export class CrearApuServicioComponent implements OnInit {
     this.validateData();
     await this.getConsecutivo();
     this.loading = false;
+  }
+
+  async reloadData() {
+    this.reload = true;
+    await this.getBases()
+    this.getProfiles();
+    this.getClients();
+    this.getPeople();
+    this.getTravelExpenseEstimation();
+    await this.getCities();
+    this.validateData();
+    this.reload = false
   }
 
   async getBases() {
@@ -178,27 +191,27 @@ export class CrearApuServicioComponent implements OnInit {
       })
       this.form.markAllAsTouched()
     } else {
-    this._swal
-      .show({
-        text: `Vamos a ${this.id && this.title == 'Editar servicio' ? 'editar' : 'crear'} un servicio`,
-        title: '¿Estás seguro(a)?',
-        icon: 'warning',
-      })
-      .then((r) => {
-        if (r.isConfirmed) {
-          if (this.id && this.title == 'Editar servicio') {
-            this._apuService.update(this.form.value, this.id).subscribe(
-              (res: any) => this.showSuccess(),
-              (err) => this.showError(err)
-            );
-          } else {
-            this._apuService.save(this.form.value).subscribe(
-              (res: any) => this.showSuccess(),
-              (err) => this.showError(err)
-            );
+      this._swal
+        .show({
+          text: `Vamos a ${this.id && this.title == 'Editar servicio' ? 'editar' : 'crear'} un servicio`,
+          title: '¿Estás seguro(a)?',
+          icon: 'warning',
+        })
+        .then((r) => {
+          if (r.isConfirmed) {
+            if (this.id && this.title == 'Editar servicio') {
+              this._apuService.update(this.form.value, this.id).subscribe(
+                (res: any) => this.showSuccess(),
+                (err) => this.showError(err)
+              );
+            } else {
+              this._apuService.save(this.form.value).subscribe(
+                (res: any) => this.showSuccess(),
+                (err) => this.showError(err)
+              );
+            }
           }
-        }
-      });
+        });
     }
   }
 

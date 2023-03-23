@@ -52,6 +52,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
     collectionSize: 0
   }
   form_filters_quotations: FormGroup;
+  reload: boolean;
   constructor(
     private _modal: ModalService,
     private fb: FormBuilder,
@@ -78,6 +79,14 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this.getConsecutivo();
   }
 
+  async reloadData() {
+    this.reload = true;
+    this.getCompanies();
+    this.getCountries();
+    await this.getPeople();
+    this.reload = false
+  }
+
   openModal() {
     //this._modal.open(this.newBusiness, 'xl')
 
@@ -90,7 +99,6 @@ export class ModalNuevoNegocioComponent implements OnInit {
         this.apuSelected.push(apu) :
         this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
     });
-    console.log(this.apuSelected)
   }
 
   findApus() {
@@ -135,8 +143,8 @@ export class ModalNuevoNegocioComponent implements OnInit {
     }
   }
 
-  getPeople() {
-    this._person.getPeopleIndex().subscribe((res: any) => {
+  async getPeople() {
+    await this._person.getPeopleIndex().toPromise().then((res: any) => {
       this.people = res.data
       this.people.unshift({ text: 'Todos ', value: '' });
     })

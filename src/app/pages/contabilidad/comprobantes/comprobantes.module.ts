@@ -29,6 +29,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
+import { NotasDebitoComponent } from './notas-debito/notas-debito.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import {MatNativeDateModule} from '@angular/material/core';
     NotascarteracrearComponent,
     NotascreditoComponent,
     NotascreditocrearComponent,
-    NotascreditoverComponent
+    NotascreditoverComponent,
+    NotasDebitoComponent
   ],
   imports: [
     CommonModule,

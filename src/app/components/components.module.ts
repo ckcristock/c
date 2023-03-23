@@ -19,6 +19,7 @@ import { CabeceraComponent } from './cabecera/cabecera.component';
 import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule } from '@angular/material';
 import { NoPermissionsComponent } from './no-permissions/no-permissions.component';
 import { PlaceholderFormComponent } from './placeholder-form/placeholder-form.component';
+import { ReloadButtonComponent } from './reload-button/reload-button.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { PlaceholderFormComponent } from './placeholder-form/placeholder-form.co
     CabeceraComponent,
     NoPermissionsComponent,
     PlaceholderFormComponent,
+    ReloadButtonComponent,
   ],
   exports: [
     ModalBasicComponent,
@@ -46,7 +48,8 @@ import { PlaceholderFormComponent } from './placeholder-form/placeholder-form.co
     CabeceraComponent,
     PipesModule,
     NoPermissionsComponent,
-    PlaceholderFormComponent
+    PlaceholderFormComponent,
+    ReloadButtonComponent
   ],
   imports: [
     NgbAccordionModule,

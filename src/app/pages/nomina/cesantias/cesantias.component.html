@@ -7,18 +7,43 @@
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
           <button
-           class="btn btn-sm btn-primary"
-           *ngIf="habilitarPagar"
-           (click)="openConfirm()"
-           ><i class="fas fa-money-bill"></i> Generar Cesantías
+            class="btn btn-sm btn-primary"
+            [disabled]="!severancePaymentValid"
+            ngbTooltip="Holi"
+            ngbTooltipDisabled="false"
+            (click)="redirect('pago')"
+          >
+            <i class="fas fa-money-bill"></i> Pagar cesantías
+          </button>
+          <button
+            class="btn btn-sm btn-warning"
+            [disabled]="!severanceInterestPaymentValid"
+            (click)="redirect('pago-intereses')"
+          >
+            <i class="fas fa-money-bill"></i> Pagar intereses
+          </button>
+          <button class="btn btn-info btn-sm" (click)="mepFilters.toggle()">
+            <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
       </div>
     </div>
     <hr class="line" />
-    <ng-container *ngIf="!habilitarPagar" >
+    <mat-accordion multi>
+      <mat-expansion-panel #mepFilters class="mat-elevation-z0">
+        No hay
+      </mat-expansion-panel>
+    </mat-accordion>
+    <ng-container *ngIf="!severancePaymentValid">
       <div class="alert alert-danger text-center" role="alert">
-        Solo podrá consignar cesantías en los meses de Enero y hasta el 14 de Febrero
+        El pago de cesantías solo podrá ser realizado entre el 1 de enero y el
+        14 de febrero del presente año.
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!severanceInterestPaymentValid">
+      <div class="alert alert-danger text-center" role="alert">
+        El pago de intereses de cesantías solo podrá ser realizado entre el 1 y
+        31 de enero.
       </div>
     </ng-container>
     <div class="rounded-top table-responsive">
@@ -43,7 +68,7 @@
             <td>{{ item.payment_date }}</td>
             <td>{{ item.payer_fullname }}</td>
             <td class="text-capitalize">{{ item.status }}</td>
-            <td>$ {{ item.total_bonuses | currency: "":"" }}</td>
+            <td>$ {{ item.total_bonuses | currency : "" : "" }}</td>
             <td>{{ item.total_employees }}</td>
             <td>
               <button
@@ -73,7 +98,6 @@
       [(page)]="pagination.page"
       aria-label="Default pagination"
     >
-
     </ngb-pagination>
   </div>
 </div>

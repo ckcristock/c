@@ -34,7 +34,7 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
   public Productos: any[] = [];
   public tipos_catalogo: any[] = [];
   public estados: any[] = [];
-  public campos: any = {cat: [], subcat: []};
+  public campos: any = { cat: [], subcat: [] };
   public unidades_medida: any[] = [];
   public selectedCategory: any = {
     categoria: {
@@ -70,12 +70,11 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
   active = 1;
   loadingCategorias: boolean = false;
   loadingProductos: boolean = false;
-  title:string = "";
+  title: string = "";
   permission: Permissions = {
-    menu: 'Órdenes de producción',
+    menu: 'Catálogo',
     permissions: {
-      show: true,
-      add: true
+      show: true
     }
   };
   foto: any = {
@@ -106,16 +105,16 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       this.createForms();
       this.getCategorias();
       this.route.queryParamMap.subscribe((params: any) => {
-        this.pagination.pageSize = (params.params.pageSize)?parseInt(params.params.pageSize):10;
-        this.pagination.page = (params.params.page)?parseInt(params.params.page):1;
-        this.selectedCategory.categoria.id = (params.params.categoria)?parseInt(params.params.categoria):null;
-        this.selectedCategory.subcategoria.id = (params.params.subcategoria)?parseInt(params.params.subcategoria):null;
-        this.selectedCategory.categoria.nombre = (params.params.nom_categoria)?params.params.nom_categoria:'';
-        this.selectedCategory.subcategoria.nombre = (params.params.nom_subcategoria)?params.params.nom_subcategoria:'';
-        Object.keys(this.formFiltros.value).forEach(campo => this.formFiltros.get(campo).setValue(params.params[campo] || this.filtroDefault[campo],{emitEvent: false}));
+        this.pagination.pageSize = (params.params.pageSize) ? parseInt(params.params.pageSize) : 10;
+        this.pagination.page = (params.params.page) ? parseInt(params.params.page) : 1;
+        this.selectedCategory.categoria.id = (params.params.categoria) ? parseInt(params.params.categoria) : null;
+        this.selectedCategory.subcategoria.id = (params.params.subcategoria) ? parseInt(params.params.subcategoria) : null;
+        this.selectedCategory.categoria.nombre = (params.params.nom_categoria) ? params.params.nom_categoria : '';
+        this.selectedCategory.subcategoria.nombre = (params.params.nom_subcategoria) ? params.params.nom_subcategoria : '';
+        Object.keys(this.formFiltros.value).forEach(campo => this.formFiltros.get(campo).setValue(params.params[campo] || this.filtroDefault[campo], { emitEvent: false }));
         this.filtroActivado = this.verificarFiltros();
-        if(this.selectedCategory.categoria.id!==null){
-          this.getProductosBySubcategoria(this.selectedCategory,false);
+        if (this.selectedCategory.categoria.id !== null) {
+          this.getProductosBySubcategoria(this.selectedCategory, false);
         }
       })
 
@@ -130,31 +129,31 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void{
+  ngAfterViewInit(): void {
   }
 
-  verificarFiltros():boolean {
-    let filtroFlag = (JSON.stringify(this.formFiltros.value)!==JSON.stringify(this.filtroDefault));
-    let panelFlag = (this.matPanel)?this.matPanel.expanded:false;
-    this.alerta=(!panelFlag && filtroFlag)? {
+  verificarFiltros(): boolean {
+    let filtroFlag = (JSON.stringify(this.formFiltros.value) !== JSON.stringify(this.filtroDefault));
+    let panelFlag = (this.matPanel) ? this.matPanel.expanded : false;
+    this.alerta = (!panelFlag && filtroFlag) ? {
       senyal: "!",
       texto: "¡Hay filtros aplicados!"
-    }: {
+    } : {
       senyal: "",
       texto: ""
     }
     return filtroFlag;
   }
 
-  openClose(){
+  openClose() {
     this.matPanel.toggle();
     this.filtroActivado = this.verificarFiltros();
   }
 
   resetFiltros() {
-    this.formFiltros.reset(this.filtroDefault,{emitEvent: false});
+    this.formFiltros.reset(this.filtroDefault, { emitEvent: false });
     this.filtroActivado = false
-    this.alerta =  {
+    this.alerta = {
       senyal: "",
       texto: ""
     };
@@ -162,12 +161,12 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
 
   SetFiltros(data) {
     let params = new HttpParams;
-    data.categoria=(this.selectedCategory.categoria.id!==null)?data.categoria:'';
-    data.subcategoria=(this.selectedCategory.subcategoria.id!==null)?data.subcategoria:'';
-    data.nom_categoria=(this.selectedCategory.categoria.id!==null)?this.selectedCategory.categoria.nombre:'';
-    data.nom_subcategoria=(this.selectedCategory.subcategoria.id!==null)?this.selectedCategory.subcategoria.nombre:'';
+    data.categoria = (this.selectedCategory.categoria.id !== null) ? data.categoria : '';
+    data.subcategoria = (this.selectedCategory.subcategoria.id !== null) ? data.subcategoria : '';
+    data.nom_categoria = (this.selectedCategory.categoria.id !== null) ? this.selectedCategory.categoria.nombre : '';
+    data.nom_subcategoria = (this.selectedCategory.subcategoria.id !== null) ? this.selectedCategory.subcategoria.nombre : '';
     this.Object.keys(data).forEach(control => {
-      if (data[control]) {params = params.set(control,data[control]);}
+      if (data[control]) { params = params.set(control, data[control]); }
     })
     return params;
   }
@@ -178,7 +177,7 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       top: 0,
       left: 0,
       behavior: 'smooth'
-     });
+    });
   }
 
   createForms() {
@@ -219,41 +218,41 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
     return this.formProductos.get('FormCamposSubcategoria') as FormArray;
   }
 
-  catSubcatCampos(tipo:string) {
+  catSubcatCampos(tipo: string) {
     const formCampos = {};
     this.campos[tipo].forEach(campo => {
-      formCampos[campo.label] = campo.required=="Si" ?
-        new FormControl(campo.valor || '',Validators.required):
+      formCampos[campo.label] = campo.required == "Si" ?
+        new FormControl(campo.valor || '', Validators.required) :
         new FormControl(campo.valor || '')
     });
 
     return this.fb.group(formCampos);
   }
 
-  newCampoCatSubcat(tipo:string) {
-    let field = (tipo=="cat")?this.arrayCamposCat:this.arrayCamposSubcat;
+  newCampoCatSubcat(tipo: string) {
+    let field = (tipo == "cat") ? this.arrayCamposCat : this.arrayCamposSubcat;
     field.push(this.catSubcatCampos(tipo));
   }
 
-  mostrarCampos(param,tipos:string[],template?:any){
-      this._catalogo.getCampos(param).subscribe((res: any) => {
-        this.campos = res.data;
-        tipos.forEach(tipo =>{
-          if(tipo=="cat"){
-            this.arrayCamposCat.removeAt(0);
-          }else{
-            this.arrayCamposSubcat.removeAt(0);
-          }
-          this.newCampoCatSubcat(tipo);
-        });
-        if(template != undefined){
-          this.camposFlag={cat:this.campos.cat.length, subcat:this.campos.subcat.length }
-          this._modalCatalogo.open(template, 'lg');
+  mostrarCampos(param, tipos: string[], template?: any) {
+    this._catalogo.getCampos(param).subscribe((res: any) => {
+      this.campos = res.data;
+      tipos.forEach(tipo => {
+        if (tipo == "cat") {
+          this.arrayCamposCat.removeAt(0);
+        } else {
+          this.arrayCamposSubcat.removeAt(0);
         }
+        this.newCampoCatSubcat(tipo);
+      });
+      if (template != undefined) {
+        this.camposFlag = { cat: this.campos.cat.length, subcat: this.campos.subcat.length }
+        this._modalCatalogo.open(template, 'lg');
+      }
     });
   }
 
-  openConfirm(confirm: any, titulo: string, data?: any ) {
+  openConfirm(confirm: any, titulo: string, data?: any) {
     this.title = titulo;
     this.formProductos.reset();
     this.foto = {
@@ -262,17 +261,17 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       type: '',
       file: ''
     }
-    let params={};
-    if(titulo == "Agregar"){
+    let params = {};
+    if (titulo == "Agregar") {
       this.formProductos.patchValue({
         Id_Categoria: this.selectedCategory.categoria.id,
         Id_Subcategoria: this.selectedCategory.subcategoria.id
       });
-      params={
-        categoria:this.selectedCategory.categoria.id ,
-        subcategoria:this.selectedCategory.subcategoria.id
+      params = {
+        categoria: this.selectedCategory.categoria.id,
+        subcategoria: this.selectedCategory.subcategoria.id
       };
-    }else if(titulo == "Editar"){
+    } else if (titulo == "Editar") {
       this.formProductos.patchValue({
         Id_Producto: data.Id_Producto,
         Id_Categoria: data.Id_Categoria,
@@ -284,29 +283,29 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
         Embalaje: data.Embalaje,
         Foto: data.Foto
       });
-      params={ producto:data.Id_Producto };
+      params = { producto: data.Id_Producto };
     }/* else if(titulo == "Detalle del"){
       this.productoDetalle = data;
     } */
 
-    this.mostrarCampos(params,["cat","subcat"],confirm);
+    this.mostrarCampos(params, ["cat", "subcat"], confirm);
   }
 
-  openCatSubcatModal(template: any,tipo:string){
-    let params=(this.title == "Agregar")?
+  openCatSubcatModal(template: any, tipo: string) {
+    let params = (this.title == "Agregar") ?
       {
-        categoria:this.selectedCategory.categoria.id ,
-        subcategoria:this.selectedCategory.subcategoria.id
+        categoria: this.selectedCategory.categoria.id,
+        subcategoria: this.selectedCategory.subcategoria.id
       }
-    :
-      { producto:this.formProductos.value.Id_Producto };
+      :
+      { producto: this.formProductos.value.Id_Producto };
 
     this._modalCatalogo.open(template, 'md');
-    this.modalRef=this._modalCatalogo.modalRef;
+    this.modalRef = this._modalCatalogo.modalRef;
     this.modalRef.result.then((res: any) => {
-      this.mostrarCampos(params,[tipo]);
+      this.mostrarCampos(params, [tipo]);
     }, (reason) => {
-      this.mostrarCampos(params,[tipo]);
+      this.mostrarCampos(params, [tipo]);
     });
   }
 
@@ -337,8 +336,8 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
     })/* this.pagination.collectionSize = res.data.total; */
   }
 
-  getProductosBySubcategoria(categoria, clickedFlag = true){
-    if(clickedFlag){
+  getProductosBySubcategoria(categoria, clickedFlag = true) {
+    if (clickedFlag) {
       this.moveToTop();
       this.resetFiltros();
       this.matPanel.close();
@@ -402,16 +401,16 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       })
   }
 
-  saveProductos(modal: any){
-    if(this.formProductos.valid){
-      ["cat","subcat"].forEach(tipo => {
-        let campos = this.campos[tipo].map((campo) => campo={
-          id:campo.vp_id || "",
-          subcategory_variables_id:campo.sv_id,
-          category_variables_id:campo.cv_id,
-          valor:((tipo=="cat")?this.arrayCamposCat:this.arrayCamposSubcat).value[0][campo.label]
+  saveProductos(modal: any) {
+    if (this.formProductos.valid) {
+      ["cat", "subcat"].forEach(tipo => {
+        let campos = this.campos[tipo].map((campo) => campo = {
+          id: campo.vp_id || "",
+          subcategory_variables_id: campo.sv_id,
+          category_variables_id: campo.cv_id,
+          valor: ((tipo == "cat") ? this.arrayCamposCat : this.arrayCamposSubcat).value[0][campo.label]
         });
-        this.formProductos.value[(tipo=="cat")?"camposCategoria":"camposSubcategoria"] = campos;
+        this.formProductos.value[(tipo == "cat") ? "camposCategoria" : "camposSubcategoria"] = campos;
       });
       delete this.formProductos.value.FormCamposCategoria;
       delete this.formProductos.value.FormCamposSubcategoria;
@@ -419,9 +418,9 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       let formData = {
         ...this.formProductos.value,
         user_id: this._user.user.id,
-        camposFlag:{
-          cat:(this.campos.cat.length>this.camposFlag.cat),
-          subcat:(this.campos.subcat.length>this.camposFlag.subcat)
+        camposFlag: {
+          cat: (this.campos.cat.length > this.camposFlag.cat),
+          subcat: (this.campos.subcat.length > this.camposFlag.subcat)
         }
       };
 
@@ -445,7 +444,7 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
               timer: 1000,
               showCancel: false
             });
-          },(error) => {
+          }, (error) => {
             this._swal.show({
               icon: 'error',
               title: 'Se presentó un error!',
@@ -456,7 +455,7 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
           });
         }
       })
-    }else{
+    } else {
       this._swal.show({
         icon: 'error',
         title: 'Validación no superada!',

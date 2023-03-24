@@ -271,8 +271,9 @@ export class NominaComponent implements OnInit {
   sendPayrollEmail() {
     const params =
       this.inicioParemeter && this.finParemeter
-        ? { start: this.inicioParemeter, end: this.finParemeter }
+        ? { start: this.inicioParemeter, end: this.finParemeter, ...this.nomina }
         : {}
+        console.log(params)
         this._payroll.sendPayrollEmail(params).subscribe((res: any) => {
           console.log(res)
         })

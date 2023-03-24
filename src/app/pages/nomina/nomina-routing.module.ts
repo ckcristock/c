@@ -13,6 +13,7 @@ import { LegalizarComponent } from './viaticos/legalizar/legalizar.component';
 import { HistorialPagosComponent } from './historial-pagos/historial-pagos.component';
 import { CesantiasComponent } from './cesantias/cesantias.component';
 import { CesantiaCurrentComponent } from './cesantias/cesantia-current/cesantia-current.component';
+import { CesantiasVerComponent } from './cesantias/cesantias-ver/cesantias-ver.component';
 
 const routes: Routes = [
   { path: 'prestamos', component: PrestamosLibranzasComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'prima/:anio/:periodo/:pagado', component: PrimaFuncionarioComponent },
   { path: 'historial-pagos', component: HistorialPagosComponent },
   { path: 'cesantias', component: CesantiasComponent },
+  { path: 'cesantias/ver/:type/:id', component: CesantiasVerComponent },
   { path: 'cesantias/:type/:year', component: CesantiaCurrentComponent }
 
 ]

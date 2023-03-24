@@ -8,16 +8,14 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-sm btn-primary"
-            [disabled]="!severancePaymentValid"
-            ngbTooltip="Holi"
-            ngbTooltipDisabled="false"
+            [disabled]="severancePaymentValid"
             (click)="redirect('pago')"
           >
             <i class="fas fa-money-bill"></i> Pagar cesantías
           </button>
           <button
             class="btn btn-sm btn-warning"
-            [disabled]="!severanceInterestPaymentValid"
+            [disabled]="severanceInterestPaymentValid"
             (click)="redirect('pago-intereses')"
           >
             <i class="fas fa-money-bill"></i> Pagar intereses
@@ -31,7 +29,32 @@
     <hr class="line" />
     <mat-accordion multi>
       <mat-expansion-panel #mepFilters class="mat-elevation-z0">
-        No hay
+        <ng-container [formGroup]="formFilters">
+          <div class="row">
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Año</mat-label>
+              <input
+                matInput
+                type="text"
+                formControlName="year"
+                autocomplete="off"
+                placeholder="Busca por año"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Tipo</mat-label>
+              <mat-select formControlName="type">
+                <mat-option value="">Todos</mat-option>
+                <mat-option value="Pago a fondo de cesantías"
+                  >Pago a fondo de cesantías</mat-option
+                >
+                <mat-option value="Pago de intereses"
+                  >Pago de intereses</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </ng-container>
       </mat-expansion-panel>
     </mat-accordion>
     <ng-container *ngIf="!severancePaymentValid">
@@ -49,55 +72,49 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        *ngIf="!loading && cesantiasList.length > 0; else notData"
+        *ngIf="!loading && severancePayments.length > 0; else notData"
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Año</th>
             <th>Responsable</th>
-            <th>Estatus</th>
-            <th>Total Prima</th>
-            <th>Total Empleados</th>
+            <th>Total pagado</th>
+            <th>Total de empleados</th>
+            <th>Tipo</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of premiums" class="text-center">
-            <td>Periodo {{ item.period }}</td>
-            <td>{{ item.payment_date }}</td>
-            <td>{{ item.payer_fullname }}</td>
-            <td class="text-capitalize">{{ item.status }}</td>
-            <td>$ {{ item.total_bonuses | currency : "" : "" }}</td>
+          <tr *ngFor="let item of severancePayments" class="text-center">
+            <td>{{ item.year }}</td>
+            <td>{{ item.user.person_name.complete_name }}</td>
+            <td>${{ item.total | number : "1.2-2" }}</td>
             <td>{{ item.total_employees }}</td>
+            <td>{{ item.type }}</td>
             <td>
               <button
                 class="btn btn-primary btn-sm"
-                (click)="VerPrimaFuncionarios(item.period)"
+                (click)="severanceView(item)"
                 placement="right"
                 ngbTooltip="Ver"
               >
-                <span aria-hidden="true">
-                  <i class="far fa-eye fa-sm"></i>
-                </span>
+                <i class="far fa-eye fa-sm"></i>
               </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize"
-      (pageChange)="getCesantiasList($event)"
-      [pageSize]="pagination.pageSize"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-      [(page)]="pagination.page"
-      aria-label="Default pagination"
+    <mat-paginator
+      *ngIf="paginationMaterial"
+      [length]="paginationMaterial.total"
+      [pageSize]="paginationMaterial.per_page"
+      [pageIndex]="paginationMaterial.current_page - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
     >
-    </ngb-pagination>
+    </mat-paginator>
   </div>
 </div>
 

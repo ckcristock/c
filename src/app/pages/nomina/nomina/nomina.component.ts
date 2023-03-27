@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
@@ -21,6 +22,8 @@ export class NominaComponent implements OnInit {
   donwloadingExcNov: boolean = false;
   donwloadingExcCol: boolean = false;
   donwloadingPdfNom: boolean = false;
+  sendingPayrollEmail: boolean = false;
+  emailSent: boolean;
   pago: any = {};
   renderizar = false;
   funcionarios = [];
@@ -42,6 +45,7 @@ export class NominaComponent implements OnInit {
     private _swal: SwalService,
     private route: ActivatedRoute,
     private router: Router,
+    private datePipe: DatePipe
 
   ) {
   }
@@ -193,15 +197,15 @@ export class NominaComponent implements OnInit {
         link.download = `${filename}.pdf`;
         link.click();
         this.donwloadingPdfNom = false;
-      }),
-      (err: any) => {
-        console.log('Error downloading the file');
       },
-      () => {
-        console.info('File downloaded successfully');
-        this.donwloadingPdfNom = false
-      }
-
+        (err: any) => {
+          console.log('Error downloading the file');
+          this.donwloadingPdfNom = false
+        },
+        () => {
+          console.info('File downloaded successfully');
+          this.donwloadingPdfNom = false
+        });
   }
 
   //Resumen de nómina
@@ -237,9 +241,9 @@ export class NominaComponent implements OnInit {
 
     this._swal
       .show({
-        title: "¿Está seguro?",
+        title: "¿Estás seguro(a)?",
         text:
-          "Se dispone a generar una nómina, revise que todo coincida antes de continuar.",
+          "Vamos a generar una nómina, revisa que todo coincida antes de continuar.",
         icon: "warning",
 
       }, this.savePayroll)
@@ -269,14 +273,62 @@ export class NominaComponent implements OnInit {
   }
 
   sendPayrollEmail() {
-    const params =
-      this.inicioParemeter && this.finParemeter
-        ? { start: this.inicioParemeter, end: this.finParemeter, ...this.nomina }
-        : {}
-        console.log(params)
-        this._payroll.sendPayrollEmail(params).subscribe((res: any) => {
-          console.log(res)
-        })
-  }
+    if (!this.nomina.email_reported && this.nomina.email_reported == 0) {
+      this._swal.show({
+        title: "¿Estás seguro(a)?",
+        text:
+          "Vamos a enviar las colillas de pago via email, esta operación solo se puede realizar una vez.",
+        icon: "question",
+      }).then(r => {
+        if (r.isConfirmed) {
+          this.sendingPayrollEmail = true;
+          const params =
+            this.inicioParemeter && this.finParemeter
+              ? { start: this.inicioParemeter, end: this.finParemeter, ...this.nomina }
+              : {
+                start: this.datePipe.transform(this.nomina.inicio_periodo, 'yyyy-MM-dd'),
+                end: this.datePipe.transform(this.nomina.fin_periodo, 'yyyy-MM-dd'),
+                ...this.nomina
+              }
 
+          //console.log(params)
+          this._payroll.sendPayrollEmail(params).subscribe((res: any) => {
+            //console.log(res)
+
+            this.sendingPayrollEmail = false;
+          },
+            (err: any) => {
+              this.sendingPayrollEmail = false;
+              this._swal
+                .show({
+                  title: "ERROR",
+                  text: "Intenta nuevamente.",
+                  icon: "error",
+                  showCancel: false
+                })
+            },
+            () => {
+              this.sendingPayrollEmail = false;
+              this._swal
+                .show({
+                  title: "Operación exitosa",
+                  text: "Emails enviados correctamente",
+                  icon: "success",
+                  showCancel: false
+                })
+              this.ngOnInit();
+            })
+        }
+      })
+    } else {
+      this._swal
+        .show({
+          title: "ERROR",
+          text: "Las colillas de pago ya fueron enviadas. ",
+          icon: "error",
+          showCancel: false
+        })
+    }
+  }
 }
+

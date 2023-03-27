@@ -102,7 +102,7 @@ export class PlanCuentasComponent implements OnInit {
   }
 
   importCommercialPuc() {
-    this.swalService.show({
+    this.swalService.show2({
       icon: 'question',
       title: '¿Estás seguro(a)?',
       text: 'Vamos a eliminar todo y remplazar por el PUC comercial existente'

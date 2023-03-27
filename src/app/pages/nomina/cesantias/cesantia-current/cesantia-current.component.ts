@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { CesantiasService } from '../cesantias.service';
 
 @Component({
   selector: 'app-cesantia-current',
@@ -6,61 +9,95 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cesantia-current.component.scss']
 })
 export class CesantiaCurrentComponent implements OnInit {
-
+  type: any;
+  year: any;
+  total_severance: any = 0;
+  total_severance_interest: any = 0;
   loading: boolean = false;
-  empleados = {
-    status: 'pendiente',
-    empleados: [],
-    person_payer: {
-      first_name: '',
-      second_name: '',
-      first_surname: '',
-      second_surname: '',
-    }
-  };
-  employees: any[] = [];
-  pagination = {
-    pageSize: 10,
-    page: 1,
-    collectionSize: 0,
-  }
-  habilitarPagar: boolean;
+  loadingValid: boolean = false;
+  payValid: boolean = false;
+  severanceList: any[] = []
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private _cesantias: CesantiasService,
+    private _swal: SwalService
+  ) { }
 
   ngOnInit(): void {
-    this.habilitarBotonPagar();
+    this.route.params.subscribe((params: any) => {
+      this.type = params.type;
+      this.year = params.year;
+      this.validate()
+    })
   }
 
-  //listo
-  habilitarBotonPagar (){
-    const hoy = new Date;
-    const hoyMes = hoy.getMonth()
-    // 0: Enero, 1: Febrere, 2: Marzo, 3: Abril,
-    // 4: Mayo, 5: Junio, 6: Julio, 7: Agosto,
-    // 8: Septiembre, 9: Octubre, 10: Noviembre, 11: Diciembre
-
-    if (hoyMes == 0 || hoyMes == 1)  {
-      this.habilitarPagar = true;
-    } else {
-      this.habilitarPagar = false;
+  validate() {
+    this.loadingValid = true;
+    let params = {
+      year: this.year,
+      type: this.type
     }
+    this._cesantias.validateYear(params).subscribe((res: any) => {
+      this.loadingValid = false;
+      if (!res.data) {
+        this.payValid = true
+        this.getSeverancePayments();
+      } else {
+        this.payValid = false
+      }
+    })
   }
 
-  changePage($event) {
-
+  getSeverancePayments() {
+    this.loading = true;
+    this._cesantias.getSeverancePayments().subscribe((res: any) => {
+      this.severanceList = res.data
+      res.data.forEach(item => {
+        this.total_severance += item.total_cesantias.total_severance
+        this.total_severance_interest += item.total_cesantias.total_severance_interest
+      });
+      this.loading = false;
+    })
   }
 
-  pagarCesantias(empleados:any) {
-
+  pay() {
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      text: this.type == 'pago' ? 'Vamos a pagar las cesantías.' : 'Vamos a pagar los intereses de las cesantías.'
+    }).then(r => {
+      if (r.isConfirmed) {
+        let data = {
+          type: this.type,
+          year: this.year,
+          people: this.severanceList,
+          total_severance: this.total_severance,
+          total_severance_interest: this.total_severance_interest
+        }
+        this._cesantias.pay(data).subscribe((res: any) => {
+          if (res.err) {
+            this._swal.show({
+              icon: 'error',
+              title: 'ERROR',
+              text: 'Intenta nuevamente',
+              showCancel: false,
+            })
+          } else {
+            this._swal.show({
+              icon: 'success',
+              title: res.data,
+              text: '',
+              showCancel: false,
+              timer: 1000
+            })
+            this.router.navigateByUrl('nomina/cesantias')
+          }
+        })
+      }
+    })
   }
 
-  getReportPdfs(){
-
-  }
-
-  getOneReportPdfs(id:any, period:any) {
-
-  }
 
 }

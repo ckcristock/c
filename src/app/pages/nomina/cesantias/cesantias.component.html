@@ -8,14 +8,14 @@
         <div class="btn-group rounded w-sm-100">
           <button
             class="btn btn-sm btn-primary"
-            [disabled]="severancePaymentValid"
+            [disabled]="!severancePaymentValid"
             (click)="redirect('pago')"
           >
             <i class="fas fa-money-bill"></i> Pagar cesantías
           </button>
           <button
             class="btn btn-sm btn-warning"
-            [disabled]="severanceInterestPaymentValid"
+            [disabled]="!severanceInterestPaymentValid"
             (click)="redirect('pago-intereses')"
           >
             <i class="fas fa-money-bill"></i> Pagar intereses
@@ -77,6 +77,7 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Año</th>
+            <th>Fecha de pago</th>
             <th>Responsable</th>
             <th>Total pagado</th>
             <th>Total de empleados</th>
@@ -87,6 +88,7 @@
         <tbody>
           <tr *ngFor="let item of severancePayments" class="text-center">
             <td>{{ item.year }}</td>
+            <td>{{ item.created_at | date }}</td>
             <td>{{ item.user.person_name.complete_name }}</td>
             <td>${{ item.total | number : "1.2-2" }}</td>
             <td>{{ item.total_employees }}</td>

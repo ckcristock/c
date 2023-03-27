@@ -1,7 +1,77 @@
 <div class="card">
-  <div class="card-body">H</div>
+  <div class="card-body">
+    <h4 class="text-primary">
+      {{
+        type == "pago"
+          ? "Pago de cesantías año " + year
+          : "Pago de interes de cesantías " + year
+      }}
+    </h4>
+    <hr class="line" />
+    <ng-container *ngIf="!loadingValid && payValid; else notValid">
+      <ng-container *ngIf="!loading && severanceList.length > 0; else notData">
+        <div class="rounded-top table-responsive">
+          <table class="table table-bordered table-striped table-sm">
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <td>Foto</td>
+                <td>Nombre</td>
+                <td>Salario</td>
+                <td>Monto a pagar</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let item of severanceList; let i = index"
+                class="text-center text-uppercase"
+              >
+                <td class="p-0">
+                  <img
+                    [src]="item.image | image"
+                    onerror="this.src='../../../../assets/images/noprofile.png'"
+                    class="rounded-circle mx-auto img-fluid header-profile-user"
+                  />
+                </td>
+                <td>{{ item.full_names }}</td>
+                <td>${{ item.contractultimate.salary | number : "1.2-2" }}</td>
+                <td class="text-right">
+                  ${{
+                    (type == "pago"
+                      ? item.total_cesantias.total_severance
+                      : item.total_cesantias.total_severance_interest
+                    ) | number : "1.2-2"
+                  }}
+                </td>
+              </tr>
+              <tr>
+                <th class="text-right" colspan="3">TOTAL A PAGAR</th>
+                <th class="text-right">
+                  ${{
+                    (type == "pago"
+                      ? total_severance
+                      : total_severance_interest
+                    ) | number : "1.2-2"
+                  }}
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" (click)="pay()" class="btn btn-primary btn-block">
+          Pagar
+        </button>
+      </ng-container>
+    </ng-container>
+  </div>
 </div>
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #notValid>
+  <app-not-data
+    [loading]="loadingValid"
+    [text]="'Ya se ha pagado este periodo'"
+  ></app-not-data>
 </ng-template>

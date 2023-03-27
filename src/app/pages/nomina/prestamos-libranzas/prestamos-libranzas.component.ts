@@ -33,7 +33,7 @@ export class PrestamosLibranzasComponent implements OnInit {
   date: { year: number; month: number };
   constructor(
     private _loan: LoanService,
-    private _people:PersonService,
+    private _people: PersonService,
     private dateAdapter: DateAdapter<any>
   ) {
     this.dateAdapter.setLocale('es');
@@ -45,22 +45,20 @@ export class PrestamosLibranzasComponent implements OnInit {
   }
 
   selectedDate(fecha) {
-    if (fecha.value){
+    if (fecha.value) {
       this.filters.date =
-      this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd') +
-      ' - ' +
-      this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
+        this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd') +
+        ' - ' +
+        this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
     } else {
       this.filters.date = ''
     }
     this.listaPrestamo();
   }
 
-  getPeople(){
-    this._people.getPeopleIndex().subscribe((res:any) => {
+  getPeople() {
+    this._people.getPeopleIndex().subscribe((res: any) => {
       this.people = res.data
-      console.log(res.data);
-
       this.people.unshift({ text: 'Todos', value: '' });
     })
   }
@@ -88,8 +86,6 @@ export class PrestamosLibranzasComponent implements OnInit {
     }
     this._loan.getAll(params).subscribe((r: any) => {
       this.Prestamos = r.data.data;
-      console.log(r.data.data);
-
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
@@ -100,7 +96,7 @@ export class PrestamosLibranzasComponent implements OnInit {
       .subscribe((response: BlobPart) => {
         let blob = new Blob([response], { type: "application/pdf" });
         let link = document.createElement("a");
-        const filename = 'proyeccion_pdf';
+        const filename = 'proyeccion';
         link.href = window.URL.createObjectURL(blob);
         link.download = `${filename}.pdf`;
         link.click();

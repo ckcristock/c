@@ -33,7 +33,7 @@ export class CesantiasComponent implements OnInit {
     pageSize: '',
   }
   permission: Permissions = {
-    menu: 'Cesatías',
+    menu: 'Cesantías',
     permissions: {
       show: true,
       add: true
@@ -107,7 +107,7 @@ export class CesantiasComponent implements OnInit {
     const paramsUrl = this.setFiltros(this.pagination.page);
     let routePath = this.router.url.split('?')[0];
     this.location.replaceState(routePath, paramsUrl.toString());
-    this._cesantias.getSeverancePayments(params).subscribe((res: any) => {
+    this._cesantias.getSeverancePaymentsPaginate(params).subscribe((res: any) => {
       this.severancePayments = res.data.data
       this.loading = false;
       this.paginationMaterial = res.data

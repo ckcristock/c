@@ -164,9 +164,7 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      console.log(this.modelo.type)
       this.modelo.type = ''
-      console.log(this.modelo.type)
       this._swal.show({
         title: 'Selecciona un funcionario',
         icon: 'error',

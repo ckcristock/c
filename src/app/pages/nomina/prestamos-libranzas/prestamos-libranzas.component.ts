@@ -91,12 +91,42 @@ export class PrestamosLibranzasComponent implements OnInit {
     })
   }
 
-  download(id) {
+  downloadPDF(id) {
     this._loan.download(id)
       .subscribe((response: BlobPart) => {
         let blob = new Blob([response], { type: "application/pdf" });
         let link = document.createElement("a");
         const filename = 'proyeccion';
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.pdf`;
+        link.click();
+        this.loading = false
+      }),
+      error => { console.log('Error downloading the file'); this.loading = false },
+      () => { console.info('File downloaded successfully'); this.loading = false };
+  }
+
+  downloadExcel(id) {
+    this._loan.downloadExcel(id)
+      .subscribe((response: BlobPart) => {
+        let blob = new Blob([response], { type: "application/excel" });
+        let link = document.createElement("a");
+        const filename = 'proyeccion';
+        link.href = window.URL.createObjectURL(blob);
+        link.download = `${filename}.xlsx`;
+        link.click();
+        this.loading = false
+      }),
+      error => { console.log('Error downloading the file'); this.loading = false },
+      () => { console.info('File downloaded successfully'); this.loading = false };
+  }
+
+  downloadPaz(id) {
+    this._loan.downloadPaz(id)
+      .subscribe((response: BlobPart) => {
+        let blob = new Blob([response], { type: "application/pdf" });
+        let link = document.createElement("a");
+        const filename = 'pazysalvo';
         link.href = window.URL.createObjectURL(blob);
         link.download = `${filename}.pdf`;
         link.click();

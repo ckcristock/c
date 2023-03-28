@@ -68,8 +68,8 @@ export class DotacionTallasComponent implements OnInit {
   }
 
   save(){
-    this.formDotation.markAllAsTouched();
-    if(this.formDotation.invalid){return false}
+    //this.formDotation.markAllAsTouched();
+    // if(this.formDotation.invalid){return false}
     this._swal.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',

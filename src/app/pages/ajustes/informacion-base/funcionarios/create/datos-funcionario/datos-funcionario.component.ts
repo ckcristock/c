@@ -190,8 +190,8 @@ export class DatosFuncionarioComponent implements OnInit {
   }
 
   save() {
-    this.form.markAllAsTouched();
-    if (this.form.invalid) { return false; }
+    //this.form.markAllAsTouched();
+    /* if (this.form.invalid) { return false; } */
 
     this.person = { ...this.person, ...this.form.value };
     this.person.image = this.file;

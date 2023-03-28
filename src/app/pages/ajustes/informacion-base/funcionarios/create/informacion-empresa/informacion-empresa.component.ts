@@ -122,6 +122,7 @@ export class InformacionEmpresaComponent implements OnInit {
       turn_type: ['Fijo', Validators.required],
       fixed_turn_id: ['', Validators.required],
       date_end: ['', Validators.required],
+      transport_assistance: ['']
     });
     /* this.formCompany.get('fixed_turn_id').disable(); */
     this.formCompany.get('date_end').disable();
@@ -148,8 +149,8 @@ export class InformacionEmpresaComponent implements OnInit {
     }
   }
   save() {
-    this.formCompany.markAllAsTouched()
-    if (this.formCompany.invalid) { return false; }
+    //this.formCompany.markAllAsTouched()
+    /* if (this.formCompany.invalid) { return false; } */
     this.person.workContract = { ...this.formCompany.value };
     this._person.person.next(this.person)
     this.siguiente.emit({})

@@ -40,7 +40,8 @@ export class SalarioComponent implements OnInit {
     contract_type: '',
     date_of_admission: '',
     date_end: '',
-    contract_term_id: ''
+    contract_term_id: '',
+    transport_assistance: ''
   };
 
   constructor(
@@ -219,13 +220,19 @@ export class SalarioComponent implements OnInit {
       work_contract_type_id: ['', Validators.required],
       contract_term_id: ['', Validators.required],
       date_of_admission: ['', Validators.required],
-      date_end: ['', Validators.required]
+      date_end: ['', Validators.required],
+      transport_assistance: ['']
     });
+    this.form.get('work_contract_type_id').valueChanges.subscribe(r => {
+      this.getContractTerms(r);
+      console.log('hgfg')
+    })
   }
 
 
   getContractTerms(value) {
     this._workContractTypes.getContractTerms().subscribe((r: any) => {
+      console.log("Respuesta de getContractTerms:", r);
       this.contractTerms = []
       r.data.forEach(
         (contract_term: any) => contract_term.work_contract_types.forEach(
@@ -239,6 +246,7 @@ export class SalarioComponent implements OnInit {
   }
 
   getSalaryInfo() {
+
     this.loading = true;
     this.salaryService.getSalaryInfo(this.id)
       .subscribe((res: any) => {
@@ -250,7 +258,8 @@ export class SalarioComponent implements OnInit {
           work_contract_type_id: this.salary_info.work_contract_type_id,
           contract_term_id: this.salary_info.contract_term_id,
           date_of_admission: this.salary_info.date_of_admission,
-          date_end: this.salary_info.date_end
+          date_end: this.salary_info.date_end,
+          transport_assistance: this.salary_info.transport_assistance
         })
         if (!this.salary_info.conclude) {
           this.form.get('date_end').disable();

@@ -12,14 +12,13 @@
     <div class="col-lg-6 text-lg-right text-center text-primary">
       Término de contrato
     </div>
-
     <div class="col-lg-6 text-lg-left text-center">
       {{ salary_info.contract_type }}
     </div>
+
     <div class="col-lg-6 text-lg-right text-center text-primary">
       Tipo de contrato
     </div>
-
     <div class="col-lg-6 text-lg-left text-center">
       {{ salary_info.contract_term }}
     </div>
@@ -27,7 +26,6 @@
     <div class="col-lg-6 text-lg-right text-center text-primary">
       Fecha de ingreso
     </div>
-
     <div class="col-lg-6 text-lg-left text-center">
       {{ salary_info.date_of_admission }}
     </div>
@@ -40,9 +38,21 @@
         {{ salary_info.date_end }}
       </div>
     </ng-container>
+
+    <div class="col-lg-6 text-lg-right text-center text-primary">
+      Auxilio de transporte
+    </div>
+
+    <div class="col-lg-6 text-lg-left text-center">
+      {{ salary_info.transport_assistance ? "Sí" : "No" }}
+    </div>
   </div>
   <hr />
+
+  <!-- Bonificaciones  -->
   <app-bono *ngIf="salary_info.id" [id]="salary_info.id"></app-bono>
+
+  <!-- Historial de contratos -->
   <div class="d-flex justify-content-between">
     <h6>Historial de contratos</h6>
     <button
@@ -89,8 +99,8 @@
   <app-not-data [loading]="loadingHistory"></app-not-data>
 </ng-template>
 
+<!--INICIO MODAL SALARIO -->
 <ng-template #add let-modal>
-  /*Header*/
   <div class="modal-header">
     <h4 class="text-primary modal-title">Editar salario</h4>
     <button
@@ -111,12 +121,7 @@
         <!-- /*Selector de termino de contrato*/ -->
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Término</mat-label>
-          <mat-select
-            formControlName="work_contract_type_id"
-            id="work_contract_type_id"
-            (selectionChange)="getContractTerms($event.value)"
-            required
-          >
+          <mat-select formControlName="work_contract_type_id" required>
             <mat-option
               *ngFor="let contract_type of contract_types"
               (click)="changeType(contract_type.conclude)"
@@ -129,14 +134,15 @@
             Campo obligatorio
           </mat-error>
         </mat-form-field>
+
         <!-- /*Selector de tipo de contrato*/ -->
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de contrato</mat-label>
           <mat-select formControlName="contract_term_id" required>
             <mat-option
-              *ngFor="let item of workContractsTypesList"
-              [value]="item.value"
-              >{{ item.text }}</mat-option
+              *ngFor="let contract_term of contractTerms"
+              [value]="contract_term.id"
+              >{{ contract_term.name }}</mat-option
             >
           </mat-select>
           <mat-error>Campo obligatorio</mat-error>
@@ -187,8 +193,13 @@
             Campo obligatorio
           </mat-error>
         </mat-form-field>
-        <mat-checkbox class="col-md-12" id="flexCheckDefault" color="primary"
-          >¿Pagar auxilio?</mat-checkbox
+
+        <!-- /*Selector de Auxilio de transporte*/ -->
+        <mat-checkbox
+          class="col-md-12"
+          color="primary"
+          formControlName="transport_assistance"
+          >¿Pagar auxilio de transporte?</mat-checkbox
         >
       </div>
     </form>
@@ -213,7 +224,9 @@
     </button>
   </div>
 </ng-template>
+<!--  FIN MODAL SALARIO -->
 
+<!--INICIO MODAL HISTORIAL DE CONTRATOS -->
 <ng-template #addContract let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">Nuevo contrato</h4>
@@ -315,7 +328,7 @@
           <mat-label>Cargo</mat-label>
           <mat-select
             formControlName="position_id"
-            id="work_contract_type_id"
+            id="position_id"
             (selectionChange)="getContractTerms($event.value)"
             required
           >

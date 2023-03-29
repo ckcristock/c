@@ -28,6 +28,7 @@ export class DatosFuncionarioComponent implements OnInit {
   file: any = '';
   fileString: any =
     'https://ui-avatars.com/api/?background=505D69&color=fff&size=1000&name=F';
+  reload: boolean;
 
   constructor(
     private _person: PersonDataService,
@@ -46,9 +47,15 @@ export class DatosFuncionarioComponent implements OnInit {
     });
   }
 
-  getDocumentType() {
-    this._documenttypes.getDocumentTypes().subscribe((r: any) => {
-      this.documenttypes = r.data
+  async reloadData() {
+    this.reload = true;
+    await this.getDocumentType();
+    this.reload = false;
+  }
+
+  async getDocumentType() {
+    await this._documenttypes.getDocumentTypes().toPromise().then((r: any) => {
+      this.documenttypes = r.data;
     })
   }
 
@@ -191,7 +198,7 @@ export class DatosFuncionarioComponent implements OnInit {
 
   save() {
     //this.form.markAllAsTouched();
-    /* if (this.form.invalid) { return false; } */
+    if (this.form.invalid) { return false; }
 
     this.person = { ...this.person, ...this.form.value };
     this.person.image = this.file;

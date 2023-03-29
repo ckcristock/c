@@ -1,11 +1,11 @@
 <div class="card-title d-flex justify-content-between">
   <h6><i class="fas fa-money-bill"></i> Salario</h6>
-  <button class="btn btn-link" (click)="openConfirm(add)">
+  <button class="btn btn-link" *ngIf="salary_info" (click)="openConfirm(add)">
     <i class="fas fa-pencil-alt"></i>
   </button>
 </div>
 
-<div *ngIf="!loading && salary_info; else notData">
+<ng-container *ngIf="!loading && salary_info; else notData">
   <h5 class="text-center text-success">${{ salary_info.salary | number }}</h5>
 
   <div class="row">
@@ -51,44 +51,43 @@
 
   <!-- Bonificaciones  -->
   <app-bono *ngIf="salary_info.id" [id]="salary_info.id"></app-bono>
+</ng-container>
+<!-- Historial de contratos -->
+<div class="d-flex justify-content-between">
+  <h6>Historial de contratos</h6>
+  <button
+    type="button"
+    (click)="openModalContracts(addContract)"
+    class="btn btn-link btn-sm"
+  >
+    <i class="fas fa-plus"></i>
+  </button>
+</div>
 
-  <!-- Historial de contratos -->
-  <div class="d-flex justify-content-between">
-    <h6>Historial de contratos</h6>
-    <button
-      type="button"
-      (click)="openModalContracts(addContract)"
-      class="btn btn-link btn-sm"
-    >
-      <i class="fas fa-plus"></i>
-    </button>
-  </div>
-
-  <div class="rounded-top table-responsive">
-    <table
-      class="table table-bordered table-striped table-sm"
-      *ngIf="!loadingHistory && salary_history.length > 0; else notDataHistory"
-    >
-      <thead class="bg-light">
-        <tr class="text-center text-uppercase">
-          <th>Salario</th>
-          <th>Tipo</th>
-          <th>Ingreso</th>
-          <th>Finalización</th>
-          <th>Cargo</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of salary_history" class="text-center">
-          <td>${{ item.salary | number }}</td>
-          <td>{{ item.work_contract_type.name }}</td>
-          <td>{{ item.date_of_admission | date }}</td>
-          <td>{{ item.date_end | date }}</td>
-          <td>{{ item.position.name }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<div class="rounded-top table-responsive">
+  <table
+    class="table table-bordered table-striped table-sm"
+    *ngIf="!loadingHistory && salary_history.length > 0; else notDataHistory"
+  >
+    <thead class="bg-light">
+      <tr class="text-center text-uppercase">
+        <th>Salario</th>
+        <th>Tipo</th>
+        <th>Ingreso</th>
+        <th>Finalización</th>
+        <th>Cargo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of salary_history" class="text-center">
+        <td>${{ item.salary | number }}</td>
+        <td>{{ item.work_contract_type.name }}</td>
+        <td>{{ item.date_of_admission | date }}</td>
+        <td>{{ item.date_end | date }}</td>
+        <td>{{ item.position.name }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <ng-template #notData>

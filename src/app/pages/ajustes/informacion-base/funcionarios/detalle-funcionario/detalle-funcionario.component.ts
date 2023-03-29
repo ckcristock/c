@@ -36,9 +36,6 @@ export class DetalleFuncionarioComponent implements OnInit {
   user: any = {};
   responsable: any = {};
   form: FormGroup;
-  datePipe = new DatePipe('es-CO');
-  date = moment().format('YYYY-MM-DD');
-  maxDate = moment().format('YYYY-MM-DD');
   public ruta = environment.url_assets
   public url: string;
 
@@ -49,9 +46,6 @@ export class DetalleFuncionarioComponent implements OnInit {
     private _user: UserService,
     private location: Location,
     private _swal: SwalService,
-    private _modal: ModalService,
-    private fb: FormBuilder,
-    private router: Router,
     private dateAdapter: DateAdapter<any>
   ) {
     dateAdapter.setLocale('es')
@@ -59,38 +53,13 @@ export class DetalleFuncionarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.activateRoute.snapshot.params.id;
+    console.log(this.id)
     this.getBasicData();
     this.data$ = this.basicDataService.datos$.subscribe(data => {
       this.getBasicData();
     });
     this.getUser();
-    this.createForm();
     this.responsable = this._user.user;
-  }
-
-  openConfirm(content) {
-    this._modal.open(content)
-  }
-
-  createForm() {
-    this.form = this.fb.group({
-      date_from: [moment().format('YYYY-MM-DD'), Validators.required],
-    })
-  }
-  selectedDate(fecha:any) {
-    if (fecha.valor > moment()){
-      this._swal.show({
-        icon: 'error',
-        title: 'Fecha incorrecta',
-        text: 'No puede escoger una fecha luego de hoy',
-        showCancel: false,
-        timer: 2000
-      });
-    }else {
-      this.form.patchValue({
-        date_from: this.datePipe.transform(fecha.value, 'yyyy-MM-dd')
-      })
-    }
   }
 
   regresar(): void {
@@ -101,64 +70,11 @@ export class DetalleFuncionarioComponent implements OnInit {
     this.components = componente;
   }
 
-  liquidar(status: any) {
-    console.log(this.funcionario);
-    let dataForm = {
-      status,
-    }
-    let info = {
-      id: this.funcionario.id,
-      identifier: this.funcionario.identifier,
-      full_name: this.funcionario.first_name+' '+this.funcionario.first_surname,
-      contract_work: this.funcionario.work_contract_id ?? 0,
-      liquidated_at: this.form.controls.date_from.value,
-      reponsible: {
-          person_id: this.responsable.id,
-          usuario: this.responsable.usuario
-      },
-      status: "PreLiquidado"
-    }
-    let data = {
-      state: 'Inactivo',
-    }
-    console.log(dataForm);
-    this._swal.show({
-      icon: 'question',
-      title: '¿Estás seguro(a)?',
-      text: 'El funcionario '+ this.funcionario.first_name+' no tendrá más acceso al sistema'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.detalleService.setPreliquidadoLog(info).subscribe((r:any)=>{
-          if (r.status) {
-            this.detalleService.blockUser(data, this.id).subscribe((r: any) => {
-              console.log(r.status);
-            })
-            this.detalleService.liquidar(dataForm, this.id).subscribe((r: any) => {
-              this._swal.show({
-                icon: 'success',
-                title: 'Proceso finalizado',
-                text: r.data,
-                showCancel: false,
-                timer: 1000
-              });
-              this.getUser();
-              this.getBasicData();
-            });
-          } else {
-            this._swal.show({
-              icon: 'error',
-              title: 'Ha ocurrido un error inesperado',
-              //text: 'El funcionario ha sido preliquidado con éxito.',
-              //text: r.err.data,
-              text: r.err.message,
-              showCancel: false,
-              timer: 2000
-            });
-          }
-        })
 
-      }
-    });
+
+  recargarDatos() {
+    this.getUser();
+    this.getBasicData();
   }
 
   getUser() {

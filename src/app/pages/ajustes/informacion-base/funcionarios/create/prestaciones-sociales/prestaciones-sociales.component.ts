@@ -27,6 +27,9 @@ export class PrestacionesSocialesComponent implements OnInit {
   person: any;
   $person: Subscription;
   formPrestation: FormGroup
+  reload: boolean;
+
+
   constructor(
     private _person: PersonDataService,
     private fb: FormBuilder,
@@ -38,15 +41,21 @@ export class PrestacionesSocialesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.crearForm()
+    this.crearForm();
+    this.reloadData();
+  }
+
+  async reloadData(){
+    this.reload = true;
     this.$person = this._person.person.subscribe(r => {
       this.person = r
     })
     this.getEpss();
-    this.getCompensationFounds();
     this.getPensionFounds();
     this.getSeveranceFounds();
-    this.getArl();
+    this.getCompensationFounds();
+    await this.getArl();
+    this.reload = false
   }
 
   getCompensationFounds() {
@@ -56,8 +65,8 @@ export class PrestacionesSocialesComponent implements OnInit {
     })
   }
 
-  getArl() {
-    this._arl.getArl().subscribe((r: any) => {
+  async getArl() {
+    await this._arl.getArl().toPromise().then((r: any) => {
       this.arl = r.data
       this.arl.unshift({ text: 'Seleccione', value: '' })
     })
@@ -84,7 +93,7 @@ export class PrestacionesSocialesComponent implements OnInit {
   }
   save() {
     //this.formPrestation.markAllAsTouched()
-    // if (this.formPrestation.invalid) {return false;}
+    if (this.formPrestation.invalid) {return false;}
     this.person = { ...this.person, ...this.formPrestation.value }
     this._person.person.next(this.person)
     this.siguiente.emit({})

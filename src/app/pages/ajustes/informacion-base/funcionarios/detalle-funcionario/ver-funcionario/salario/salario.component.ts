@@ -253,18 +253,18 @@ export class SalarioComponent implements OnInit {
         this.loading = false;
         this.salary_info = res.data;
         this.form.patchValue({
-          id: this.salary_info.id,
-          salary: this.salary_info.salary,
-          work_contract_type_id: this.salary_info.work_contract_type_id,
-          contract_term_id: this.salary_info.contract_term_id,
-          date_of_admission: this.salary_info.date_of_admission,
-          date_end: this.salary_info.date_end,
-          transport_assistance: this.salary_info.transport_assistance
+          id: this.salary_info?.id,
+          salary: this.salary_info?.salary,
+          work_contract_type_id: this.salary_info?.work_contract_type_id,
+          contract_term_id: this.salary_info?.contract_term_id,
+          date_of_admission: this.salary_info?.date_of_admission,
+          date_end: this.salary_info?.date_end,
+          transport_assistance: this.salary_info?.transport_assistance
         })
-        if (!this.salary_info.conclude) {
+        if (!this.salary_info?.conclude) {
           this.form.get('date_end').disable();
         }
-        this.getContractTerms(this.salary_info.work_contract_type_id)
+        this.getContractTerms(this.salary_info?.work_contract_type_id)
       });
   }
 

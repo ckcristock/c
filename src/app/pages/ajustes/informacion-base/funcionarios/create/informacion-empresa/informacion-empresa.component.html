@@ -131,18 +131,17 @@
 
     <div class="col-12">
       <div class="d-flex justify-content-between">
-        <button
-          type="button"
-          class="btn btn-sm btn-primary"
-          (click)="previus()"
-        >
-          Anterior
-        </button>
+        <button type="button" class="btn btn-sm btn-primary" (click)="previus()">Anterior</button>
         <button type="submit" class="btn btn-sm btn-primary">Siguiente</button>
       </div>
     </div>
   </div>
 </form>
+
+<app-reload-button
+  [reload]="reload"
+  (reloadData)="reloadData()"
+></app-reload-button>
 <!--
       <div class="form-group row">
         <label

@@ -6,6 +6,7 @@ import { SwalService } from '../../../informacion-base/services/swal.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
 import { MaterialesService } from '../materiales/materiales.service';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-corte-laser-material',
@@ -21,6 +22,7 @@ export class CorteLaserMaterialComponent implements OnInit {
   title: any = 'Nuevo material';
   materials: any[] = [];
   materialsIndex: any[] = [];
+  allMaterialsIndex: any[] = [];
   thicknesses: any[] = [];
   material: any = {};
   pagination = {
@@ -32,8 +34,8 @@ export class CorteLaserMaterialComponent implements OnInit {
     name: ''
   }
 
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
@@ -64,7 +66,7 @@ export class CorteLaserMaterialComponent implements OnInit {
     private _swal: SwalService,
     private _materials: MaterialesService,
     private modalService: NgbModal,
-
+    private _modal: ModalService,
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -72,30 +74,24 @@ export class CorteLaserMaterialComponent implements OnInit {
     await this.getMaterials();
     this.getMaterialsIndex();
   }
-  closeResult = '';
 
-  public openConfirm(confirm, titulo) {
+  openConfirm(confirm, titulo) {
     this.title = titulo;
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this._modal.open(confirm, 'xl')
+    if (titulo != 'Editar material') {
+      this.form.reset();
+      this.getMaterialsIndex();
+    }
   }
-  public openConfirm2(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  openConfirm2(confirm) {
+    this._modal.open(confirm, 'md')
   }
-  private getDismissReason(reason: any) {
-    this.form.reset();
-    this.materialsList.clear();
-  }
+  /* this.form.reset();
+  this.materialsList.clear(); */
 
-  getMaterialsIndex(){
-    this._materials.getMaterialsIndex().subscribe((res:any) => {
+  async getMaterialsIndex() {
+    await this._materials.getMaterialsIndex().toPromise().then((res: any) => {
+      this.allMaterialsIndex = res.data;
       this.materialsIndex = res.data.filter(material => {
         const exists = this.materials.some(m => m.material_id === material.id);
         return !exists;
@@ -103,10 +99,6 @@ export class CorteLaserMaterialComponent implements OnInit {
     })
   }
 
-  openModal() {
-    this.modal.show();
-
-  }
 
   closeModalVer() {
     this.modalService.dismissAll();
@@ -123,9 +115,12 @@ export class CorteLaserMaterialComponent implements OnInit {
     });
   }
 
-  getMaterial(material) {
+  async getMaterial(material) {
     this.material = material;
     //this.title = 'Editar Material';
+    await this.getMaterialsIndex();
+    let temp = this.allMaterialsIndex.filter(mat => mat.id == material.material_id);
+    this.materialsIndex.push(temp[0])
     this.form.patchValue({
       id: this.material.id,
       material_id: this.material.material_id,

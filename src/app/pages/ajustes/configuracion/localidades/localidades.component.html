@@ -112,7 +112,7 @@
                 name="name_country"
                 autocomplete="off"
                 [(ngModel)]="filtro_depto.name"
-                (input)="getStates(countrySelected)"
+                (input)="getStates(form.get('country').value)"
                 placeholder="Busca por país"
               />
             </mat-form-field>
@@ -155,7 +155,7 @@
             [collectionSize]="pagination_depto.collectionSize"
             [pageSize]="pagination_depto.pageSize"
             [(page)]="pagination_depto.page"
-            (pageChange)="getStates(countrySelected, $event)"
+            (pageChange)="getStates(form.get('country').value, $event)"
             aria-label="Default pagination"
             maxSize="5"
             rotate="true"
@@ -190,7 +190,7 @@
                 name="name_country"
                 autocomplete="off"
                 [(ngModel)]="filtro_muni.name"
-                (input)="getMunicipalities(stateSelected)"
+                (input)="getMunicipalities(form.get('state').value)"
                 placeholder="Busca por municipios"
               />
             </mat-form-field>
@@ -236,7 +236,7 @@
             [collectionSize]="pagination_muni.collectionSize"
             [pageSize]="pagination_muni.pageSize"
             [(page)]="pagination_muni.page"
-            (pageChange)="getMunicipalities(stateSelected, $event)"
+            (pageChange)="getMunicipalities(form.get('state').value, $event)"
             aria-label="Default pagination"
             maxSize="5"
             rotate="true"
@@ -252,7 +252,9 @@
 
 <ng-template #add let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Lista de {{ tipo }}</h4>
+    <h4 class="text-primary modal-title">
+      {{ operation | titlecase }} {{ tipo }}
+    </h4>
     <button
       type="button"
       class="close"
@@ -264,37 +266,32 @@
     </button>
   </div>
   <div class="modal-body">
-    <form changeForm="ngForm">
+    <ng-container [formGroup]="form">
       <div class="row">
         <ng-container *ngIf="tipo != 'paises'">
-          <mat-form-field appearance="outline" class="col">
-            <mat-label>Paises</mat-label>
-            <mat-select
-              (selectionChange)="getStates($event.value)"
-              [(value)]="countrySelected"
-              required
-            >
-              <mat-option
-                *ngFor="let item of countries"
-                [value]="item.id"
-                (click)="selected(countries, item.id)"
-                >{{ item.name }}</mat-option
+          <ng-container *ngIf="tipo == 'departamentos'">
+            <mat-form-field appearance="outline" class="col">
+              <mat-label>Pais</mat-label>
+              <mat-select
+                (selectionChange)="getStates($event.value)"
+                formControlName="country_id"
+                required
               >
-            </mat-select>
-          </mat-form-field>
+                <mat-option
+                  *ngFor="let item of countries"
+                  [value]="item.id"
+                  (click)="selected(countries, item.id)"
+                  >{{ item.name }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
 
           <ng-container *ngIf="tipo == 'municipios'">
             <mat-form-field appearance="outline" class="col">
               <mat-label>Departamentos</mat-label>
-              <mat-select
-                (selectionChange)="getStates($event.value)"
-                [(value)]="stateSelected"
-                required
-              >
-                <mat-option
-                  *ngFor="let item of states"
-                  [(value)]="item.id"
-                  (click)="selected(states, item.id); stateSelected = item.id"
+              <mat-select formControlName="department_id" required>
+                <mat-option *ngFor="let item of states" [(value)]="item.id"
                   >{{ item.name }}
                 </mat-option>
               </mat-select>
@@ -305,9 +302,9 @@
                 matInput
                 type="number"
                 placeholder="Ingresa el porcentaje"
-                [(ngModel)]="percentage_product"
-                name="percentage_product"
+                formControlName="percentage_product"
                 autocomplete="off"
+                required
               />
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
@@ -316,9 +313,9 @@
                 matInput
                 type="number"
                 placeholder="Ingresa el porcentaje"
-                [(ngModel)]="percentage_service"
-                name="percentage_service"
+                formControlName="percentage_service"
                 autocomplete="off"
+                required
               />
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
@@ -327,21 +324,19 @@
                 matInput
                 type="text"
                 placeholder="Ingresa la abreviatura"
-                [(ngModel)]="abbreviation"
-                name="abbreviation"
+                formControlName="abbreviation"
                 autocomplete="off"
+                required
               />
             </mat-form-field>
           </ng-container>
-
           <mat-form-field class="col" appearance="outline">
             <mat-label>Codigo DANE</mat-label>
             <input
               matInput
               type="text"
-              name="dane_code"
               autocomplete="off"
-              [(ngModel)]="dane_code"
+              formControlName="dane_code"
               placeholder="Ingrese el codigo DANE"
               required
             />
@@ -353,9 +348,8 @@
           <input
             matInput
             type="text"
-            name="dian_code"
             autocomplete="off"
-            [(ngModel)]="dian_code"
+            formControlName="dian_code"
             placeholder="Ingrese el codigo DIAN"
             required
           />
@@ -365,45 +359,20 @@
           <input
             matInput
             type="text"
-            name="name"
             autocomplete="off"
-            [(ngModel)]="name"
+            formControlName="name"
             placeholder="Ingrese el nombre"
             required
           />
         </mat-form-field>
       </div>
-    </form>
+    </ng-container>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="_modal.close()">
       Cancelar
     </button>
-    <button
-      *ngIf="tipo == 'paises'"
-      [disabled]="name == ''"
-      type="button"
-      (click)="save()"
-      class="btn btn-primary"
-    >
-      Guardar
-    </button>
-    <button
-      *ngIf="tipo == 'departamentos'"
-      [disabled]="name == '' || countries.length == 0"
-      type="button"
-      (click)="save()"
-      class="btn btn-primary"
-    >
-      Guardar
-    </button>
-    <button
-      *ngIf="tipo == 'municipios'"
-      [disabled]="name == '' || states.length == 0 || countries.length == 0"
-      type="button"
-      (click)="save()"
-      class="btn btn-primary"
-    >
+    <button type="button" (click)="save()" class="btn btn-primary">
       Guardar
     </button>
   </div>

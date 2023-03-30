@@ -497,6 +497,100 @@
             </div>
           </div>
         </ng-container>
+        <ng-container *ngIf="cmoList.controls.length">
+          <ng-container formArrayName="calculate_labor">
+            <div class="row">
+              <ng-container
+                *ngFor="let item of cmoList.controls; let i = index"
+              >
+                <ng-container [formGroupName]="i">
+                  <div class="col-md-4">
+                    <div class="rounded-top table-responsive">
+                      <table
+                        class="table table-borderless table-striped table-sm table-text-small"
+                      >
+                        <thead>
+                          <tr class="table-primary">
+                            <th class="text-center">Perfil {{ i + 1 }}</th>
+                            <th colspan="4" class="text-center">Viáticos</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <thead class="bg-light">
+                          <tr class="text-center text-uppercase">
+                            <th colspan="2">Descripción</th>
+                            <th>Unidad</th>
+                            <th>Cantidad</th>
+                            <th>Valor Unitario</th>
+                            <th>Valor Total</th>
+                          </tr>
+                        </thead>
+                        <tbody formArrayName="viatic_estimation">
+                          <ng-container
+                            *ngFor="
+                              let item of item['controls']['viatic_estimation'][
+                                'controls'
+                              ];
+                              let j = index
+                            "
+                          >
+                            <tr [formGroupName]="j">
+                              <td colspan="2">
+                                <input
+                                  type="text"
+                                  class="form-control form-control-sm form-control-edit"
+                                  formControlName="description"
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  class="form-control form-control-sm form-control-edit"
+                                  formControlName="unit"
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  currencyMask
+                                  [options]="masksMoney.maskNumbers"
+                                  style="width: 3.5rem"
+                                  class="form-control form-control-sm form-control-edit"
+                                  formControlName="amount"
+                                />
+                              </td>
+                              <td class="p-2 text-right">
+                                ${{
+                                  item.controls.unit_value.value
+                                    | number : "1.2-2"
+                                }}
+                              </td>
+                              <td class="p-2 text-right">
+                                ${{
+                                  item.controls.total_value.value
+                                    | number : "1.2-2"
+                                }}
+                              </td>
+                            </tr>
+                          </ng-container>
+                        </tbody>
+                        <tr>
+                          <td colspan="5" class="text-right font-weight-bolder">
+                            SUBTOTAL
+                          </td>
+                          <td colspan="1" class="text-right">
+                            ${{
+                              item.controls.subtotal.value | number : "1.2-2"
+                            }}
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </ng-container>
+        </ng-container>
       </div>
     </div>
     <div class="card">

@@ -75,8 +75,8 @@ export class NominaComponent implements OnInit {
 
     this._payroll.getPayrollPays(params).subscribe((r: any) => {
       this.nomina = r.data;
-      this.pago.id = this.nomina.nomina_paga_id
-        ? this.nomina.nomina_paga_id
+      this.pago.id = this.nomina?.nomina_paga_id
+        ? this.nomina?.nomina_paga_id
         : '';
 
       this.getFuncionarios(r.data.funcionarios);
@@ -122,13 +122,13 @@ export class NominaComponent implements OnInit {
   }
 
   get inicioPeriodo() {
-    return this.nomina.inicio_periodo
-      ? moment(this.nomina.inicio_periodo).format('DD/MM/YYYY')
+    return this.nomina?.inicio_periodo
+      ? moment(this.nomina?.inicio_periodo).format('DD/MM/YYYY')
       : '';
   }
   get finPeriodo() {
-    return this.nomina.fin_periodo
-      ? moment(this.nomina.fin_periodo).format('DD/MM/YYYY')
+    return this.nomina?.fin_periodo
+      ? moment(this.nomina?.fin_periodo).format('DD/MM/YYYY')
       : '';
   }
 
@@ -188,6 +188,14 @@ export class NominaComponent implements OnInit {
   //Colillas de pago
   getColillasPago(datos: any) {
     this.donwloadingPdfNom = true;
+
+    this._swal.show({
+        title: "",
+        text:
+          "Estamos descargando las colillas de pago, este proceso puede tardar algunos minutos.",
+        icon: "info",
+        showCancel: false,
+      })
     this._payroll.dowloadPdfColillas(datos)
       .subscribe((res: BlobPart) => {
         let blob = new Blob([res], { type: ' application/pdf' });
@@ -199,12 +207,24 @@ export class NominaComponent implements OnInit {
         this.donwloadingPdfNom = false;
       },
         (err: any) => {
-          console.log('Error downloading the file');
           this.donwloadingPdfNom = false
+          this._swal
+                .show({
+                  title: "ERROR",
+                  text: "Intenta nuevamente.",
+                  icon: "error",
+                  showCancel: false
+                })
         },
         () => {
-          console.info('File downloaded successfully');
           this.donwloadingPdfNom = false
+           this._swal
+                .show({
+                  title: "Operación exitosa",
+                  text: "Colillas de pago descargadas correctamente",
+                  icon: "success",
+                  showCancel: false
+                })
         });
   }
 
@@ -277,49 +297,9 @@ export class NominaComponent implements OnInit {
       this._swal.show({
         title: "¿Estás seguro(a)?",
         text:
-          "Vamos a enviar las colillas de pago via email, esta operación solo se puede realizar una vez.",
+          "Vamos a enviar las colillas de pago via email, esta operación solo se puede realizar una vez y puede tardar varios.",
         icon: "question",
-      }).then(r => {
-        if (r.isConfirmed) {
-          this.sendingPayrollEmail = true;
-          const params =
-            this.inicioParemeter && this.finParemeter
-              ? { start: this.inicioParemeter, end: this.finParemeter, ...this.nomina }
-              : {
-                start: this.datePipe.transform(this.nomina.inicio_periodo, 'yyyy-MM-dd'),
-                end: this.datePipe.transform(this.nomina.fin_periodo, 'yyyy-MM-dd'),
-                ...this.nomina
-              }
-
-          //console.log(params)
-          this._payroll.sendPayrollEmail(params).subscribe((res: any) => {
-            //console.log(res)
-
-            this.sendingPayrollEmail = false;
-          },
-            (err: any) => {
-              this.sendingPayrollEmail = false;
-              this._swal
-                .show({
-                  title: "ERROR",
-                  text: "Intenta nuevamente.",
-                  icon: "error",
-                  showCancel: false
-                })
-            },
-            () => {
-              this.sendingPayrollEmail = false;
-              this._swal
-                .show({
-                  title: "Operación exitosa",
-                  text: "Emails enviados correctamente",
-                  icon: "success",
-                  showCancel: false
-                })
-              this.ngOnInit();
-            })
-        }
-      })
+      }, this.serviceSend)
     } else {
       this._swal
         .show({
@@ -329,6 +309,31 @@ export class NominaComponent implements OnInit {
           showCancel: false
         })
     }
+  }
+
+  serviceSend = async () => {
+    this.sendingPayrollEmail = true;
+    const params =
+      this.inicioParemeter && this.finParemeter
+        ? { start: this.inicioParemeter, end: this.finParemeter, ...this.nomina }
+        : {
+          start: this.datePipe.transform(this.nomina.inicio_periodo, 'yyyy-MM-dd'),
+          end: this.datePipe.transform(this.nomina.fin_periodo, 'yyyy-MM-dd'),
+          ...this.nomina
+        }
+
+    //console.log(params)
+    await this._payroll.sendPayrollEmail(params).toPromise().then((res: any) => {
+      this.sendingPayrollEmail = false;
+      this._swal
+        .show({
+          title: "Operación exitosa",
+          text: "Emails enviados correctamente",
+          icon: "success",
+          showCancel: false
+        })
+        this.ngOnInit();
+    })
   }
 }
 

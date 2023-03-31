@@ -55,10 +55,11 @@
                   type="date"
                   formControlName="fecha_terminacion"
                   (change)="changeParams($event.target.value)"
+                  readonly
                   required
                 />
               </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
+              <!-- <mat-form-field class="col" appearance="outline">
                 <mat-label>Días a liquidar</mat-label>
                 <input
                   matInput
@@ -78,7 +79,7 @@
                   formControlName="dias_vacaciones"
                   required
                 />
-              </mat-form-field>
+              </mat-form-field> -->
               <!-- <mat-form-field class="col" appearance="outline">
                 <mat-label>Vacaciones acumuladas</mat-label>
                 <input
@@ -238,7 +239,15 @@
               <div class="col-lg-6">
                 <ul class="list-group list-group-flush">
                   <li [class]="classList">
-                    Dias de vacaciones pendientes
+                    Días líquidados
+                    <span>{{ info.dias_liquidacion | number }} días</span>
+                  </li>
+                  <li [class]="classList">
+                    Días de vacaciones pendientes
+                    <span>{{ info.vacaciones_actuales | number }} días</span>
+                  </li>
+                  <li [class]="classList">
+                    Vacaciones pendientes
                     <span>${{ info.total_vacaciones | number }}</span>
                   </li>
                   <li [class]="classList">

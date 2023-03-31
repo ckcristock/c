@@ -116,6 +116,10 @@ export class CrearApuServicioComponent implements OnInit {
     })
   }
 
+  getProfileName(item) {
+    return this.profiles.find(x => x.id == item.value.apu_profile_id)?.profile
+  }
+
   getProfiles() {
     this._apuService.getProfiles().subscribe((r: any) => {
       this.profiles = r.data;
@@ -181,6 +185,29 @@ export class CrearApuServicioComponent implements OnInit {
   deletempMCalculateLaborList(i) {
     this.mpMCalculateLaborList.removeAt(i);
   }
+
+  //!Nuevas
+
+  apMCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
+    let group = help.apmCalculateLaborHelper.createApmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+      this.cities);
+    return group;
+  }
+
+  get apMCalculateLaborList() {
+    return this.form.get('apm_calculate_labor') as FormArray
+  }
+
+  newapMCalculateLaborList() {
+    this.apMCalculateLaborList.push(this.apMCalculateLaborControl());
+  }
+
+  deleteapMCalculateLaborList(i) {
+    this.apMCalculateLaborList.removeAt(i);
+  }
+
+  //! Fin nuevas
+
 
   save() {
     if (this.form.invalid) {

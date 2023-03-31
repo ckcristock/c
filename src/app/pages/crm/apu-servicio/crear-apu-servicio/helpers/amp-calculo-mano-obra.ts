@@ -1,16 +1,11 @@
-import {
-  FormGroup,
-  FormBuilder,
-  FormArray
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { debounceTime } from 'rxjs/operators';
 
-export const mpmCalculateLaborHelper = {
-
-  createFillInMpm(form: FormGroup, fb: FormBuilder, data, profiles, cities) {
+export const apmCalculateLaborHelper = {
+  createFillInApm(form: FormGroup, fb: FormBuilder, data, profiles, cities) {
     if (data.assemblies_start_up) {
       data.assemblies_start_up.forEach((r) => {
-        let list = form.get('mpm_calculate_labor') as FormArray;
+        let list = form.get('apm_calculate_labor') as FormArray;
         let group = fb.group({
           apu_profile_id: [r.apu_profile_id],
           displacement_type: [r.displacement_type],
@@ -70,7 +65,7 @@ export const mpmCalculateLaborHelper = {
     }
   },
 
-  createMpmCalculateLaborGroup(
+  createApmCalculateLaborGroup(
     form: FormGroup,
     fb: FormBuilder,
     profiles: Array<any>,
@@ -99,9 +94,9 @@ export const mpmCalculateLaborHelper = {
       subtotal: [0],
       viatic_estimation: fb.array([])
     });
-    let list = form.get('mpm_calculate_labor') as FormArray;
+    let list = form.get('apm_calculate_labor') as FormArray;
     let viact = group.get('viatic_estimation') as FormArray;
-    this.subscribeMpm(group, form, list, profiles);
+    this.subscribeApm(group, form, list, profiles);
     tEestimation.forEach(r => {
       let est = fb.group({
         description: [r.description],
@@ -133,7 +128,6 @@ export const mpmCalculateLaborHelper = {
     });
     return group;
   },
-
   operationAmount(group: FormGroup) {
     let formu = group.controls.formula_amount.value;
     let formula = formu;
@@ -261,7 +255,7 @@ export const mpmCalculateLaborHelper = {
     })
   },
 
-  subscribeMpm(group: FormGroup, form: FormGroup, list: FormArray, profiles: Array<any>) {
+  subscribeApm(group: FormGroup, form: FormGroup, list: FormArray, profiles: Array<any>) {
     group.get('people_number').valueChanges.subscribe(value => {
       let hours_value_displacement = group.get('hours_value_displacement');
       let hours_displacement = group.get('hours_displacement')
@@ -415,14 +409,14 @@ export const mpmCalculateLaborHelper = {
   subtotalTravelExpense(list: FormArray, form: FormGroup) {
     setTimeout(() => {
       let total = list.value.reduce((a, b) => { return a + b.subtotal }, 0);
-      form.patchValue({ subtotal_travel_expense_mpm: total })
+      form.patchValue({ subtotal_travel_expense_apm: total })
     }, 100);
   },
 
   subtotalLabor(list: FormArray, form: FormGroup) {
     setTimeout(() => {
       let total = list.value.reduce((a, b) => { return a + b.salary_value }, 0);
-      form.patchValue({ subtotal_labor_mpm: total })
+      form.patchValue({ subtotal_labor_apm: total })
     }, 100);
   }
 };

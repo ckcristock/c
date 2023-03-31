@@ -1,6 +1,7 @@
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { cmoHelper } from './calculo-mano-obra';
 import { mpmCalculateLaborHelper } from './mp-calculo-mano-obra';
+import { apmCalculateLaborHelper } from './amp-calculo-mano-obra';
 
 export const functionsApuService = {
   consts: {
@@ -23,11 +24,14 @@ export const functionsApuService = {
       subtotal_administrative_unforeseen: data.subtotal_administrative_unforeseen,
       subtotal_administrative_unforeseen_utility: data.subtotal_administrative_unforeseen_utility,
       subtotal_assembly_commissioning: data.subtotal_assembly_commissioning,
+      subtotal_accompaniment: data.subtotal_accompaniment,
       subtotal_dimensional_validation: data.subtotal_dimensional_validation,
       subtotal_labor: data.subtotal_labor,
       subtotal_labor_mpm: data.subtotal_labor_mpm,
+      subtotal_labor_apm: data.subtotal_labor_apm,
       subtotal_travel_expense: data.subtotal_travel_expense,
       subtotal_travel_expense_mpm: data.subtotal_travel_expense_mpm,
+      subtotal_travel_expense_apm: data.subtotal_travel_expense_apm,
       unforeseen_percentage: data.unforeseen_percentage,
       unforeseen_value: data.unforeseen_value,
       utility_percentage: data.utility_percentage,
@@ -35,23 +39,27 @@ export const functionsApuService = {
     });
     cmoHelper.createFillIncmo(form, fb, data, profiles, cities);
     mpmCalculateLaborHelper.createFillInMpm(form, fb, data, profiles, cities)
+    apmCalculateLaborHelper.createFillInApm(form, fb, data, profiles, cities)
     this.subscribes(form)
   },
 
-  createForm(fb: FormBuilder, clients:Array<any>, user_id, calculationBase) {
+  createForm(fb: FormBuilder, clients: Array<any>, user_id, calculationBase) {
     let group = fb.group({
       name: ['', Validators.required],
       city_id: [null, Validators.required],
       person_id: [user_id],
-      third_party_id:[null, Validators.required],
+      third_party_id: [null, Validators.required],
       line: ['', Validators.required],
       observation: [''],
       subtotal_labor: [0],
       subtotal_labor_mpm: [0],
+      subtotal_labor_apm: [0],
       subtotal_travel_expense: [0],
       subtotal_travel_expense_mpm: [0],
+      subtotal_travel_expense_apm: [0],
       subtotal_dimensional_validation: [0],
       subtotal_assembly_commissioning: [0],
+      subtotal_accompaniment: [0],
       general_subtotal_travel_expense_labor: [0],
       administrative_percentage: [calculationBase.administration_percentage.value],
       administrative_value: [0],
@@ -66,6 +74,7 @@ export const functionsApuService = {
       sale_price_cop_withholding_total: [0],
       calculate_labor: fb.array([]),
       mpm_calculate_labor: fb.array([]),
+      apm_calculate_labor: fb.array([]),
       format_code: [''],
       code: ['']
     });
@@ -73,12 +82,12 @@ export const functionsApuService = {
     return group;
   },
 
-  cityRetention(group: FormGroup, cities:Array<any>){
+  cityRetention(group: FormGroup, cities: Array<any>) {
     group.get('city_id').valueChanges.subscribe(value => {
       let data = cities.find(c => c.value == value);
       if (data) {
         let subtotal_administrative_unforeseen_utility = group.get('subtotal_administrative_unforeseen_utility');
-        let result = subtotal_administrative_unforeseen_utility.value / ( 1 - (data.percentage_product / 100));
+        let result = subtotal_administrative_unforeseen_utility.value / (1 - (data.percentage_product / 100));
         group.patchValue({
           sale_price_cop_withholding_total: Math.round(result)
         })
@@ -88,7 +97,7 @@ export const functionsApuService = {
       let city = group.get('city_id');
       let data = cities.find(c => c.value == city.value);
       if (data) {
-        let result = value / ( 1 - (data.percentage_product / 100));
+        let result = value / (1 - (data.percentage_product / 100));
         group.patchValue({
           sale_price_cop_withholding_total: Math.round(result)
         });
@@ -96,7 +105,7 @@ export const functionsApuService = {
     });
   },
 
-  subscribes(form: FormGroup, ){
+  subscribes(form: FormGroup,) {
     form.get('subtotal_labor').valueChanges.subscribe(value => {
       let subtotal_travel_expense = form.get('subtotal_travel_expense')
       let result = (value + subtotal_travel_expense.value);
@@ -117,6 +126,17 @@ export const functionsApuService = {
       let result = (subtotal_labor_mpm.value + value);
       form.patchValue({ subtotal_assembly_commissioning: Math.round(result) })
     });
+    form.get('subtotal_labor_apm').valueChanges.subscribe(value => {
+      let subtotal_travel_expense_apm = form.get('subtotal_travel_expense_apm')
+      let result = (value + subtotal_travel_expense_apm.value);
+      form.patchValue({ subtotal_accompaniment: Math.round(result) })
+    });
+    form.get('subtotal_travel_expense_apm').valueChanges.subscribe(value => {
+      let subtotal_labor_apm = form.get('subtotal_labor_apm')
+      let result = (subtotal_labor_apm.value + value);
+      form.patchValue({ subtotal_accompaniment: Math.round(result) })
+    });
+    //!sumar subtotal_accompaniment
     form.get('subtotal_assembly_commissioning').valueChanges.subscribe(value => {
       let subtotal_dimensional_validation = form.get('subtotal_dimensional_validation')
       let result = (value + subtotal_dimensional_validation.value);

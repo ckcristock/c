@@ -12,7 +12,8 @@ import {
   NgbNavModule,
   NgbTooltipModule,
   NgbTypeaheadModule,
-  NgbPopoverModule
+  NgbPopoverModule,
+  NgbCarouselModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -201,7 +202,8 @@ export const MY_FORMATS = {
     NgbPopoverModule,
     MatTooltipModule,
     MatBottomSheetModule,
-    MatSelectFilterModule
+    MatSelectFilterModule,
+    NgbCarouselModule,
   ]
 })
 export class CrmModule { }

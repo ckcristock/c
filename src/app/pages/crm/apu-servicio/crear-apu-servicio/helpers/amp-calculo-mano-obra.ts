@@ -3,8 +3,8 @@ import { debounceTime } from 'rxjs/operators';
 
 export const apmCalculateLaborHelper = {
   createFillInApm(form: FormGroup, fb: FormBuilder, data, profiles, cities) {
-    if (data.assemblies_start_up) {
-      data.assemblies_start_up.forEach((r) => {
+    if (data.accompaniments) {
+      data.accompaniments.forEach((r) => {
         let list = form.get('apm_calculate_labor') as FormArray;
         let group = fb.group({
           apu_profile_id: [r.apu_profile_id],
@@ -31,8 +31,8 @@ export const apmCalculateLaborHelper = {
         });
         let viact = group.get('viatic_estimation') as FormArray;
         list.push(group);
-        this.subscribeMpm(group, form, list, profiles);
-        r.travel_estimation_assemblies_start_up.forEach(v => {
+        this.subscribeApm(group, form, list, profiles);
+        r.travel_estimation_accompaniment.forEach(v => {
           let travel = fb.group({
             description: [v.description],
             amount: [v.amount],
@@ -199,7 +199,7 @@ export const apmCalculateLaborHelper = {
     group.get('unit_value').valueChanges.pipe(debounceTime(500)).subscribe(value => {
       this.operationValue(group)
     })
-    if (estimation.formula_amount === '{people_number}') {
+    if (estimation?.formula_amount === '{people_number}') {
       form.get('people_number').valueChanges.subscribe(value => {
         group.patchValue({ amount: value })
       })
@@ -256,6 +256,10 @@ export const apmCalculateLaborHelper = {
   },
 
   subscribeApm(group: FormGroup, form: FormGroup, list: FormArray, profiles: Array<any>) {
+    list.valueChanges.subscribe(value => {
+      this.subtotalLabor(list, form);
+      this.subtotalTravelExpense(list, form);
+    })
     group.get('people_number').valueChanges.subscribe(value => {
       let hours_value_displacement = group.get('hours_value_displacement');
       let hours_displacement = group.get('hours_displacement')

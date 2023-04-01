@@ -155,7 +155,6 @@ export const cmoHelper = {
     let formu = group.controls.formula_total_value.value;
     let formula = formu;
     let el = group.value;
-    console.log(el)
     for (const key in el) {
       if (formula?.includes(key)) {
         formula = formula.replaceAll('{' + key + '}', el[key]);
@@ -208,7 +207,7 @@ export const cmoHelper = {
     group.get('unit_value').valueChanges.pipe(debounceTime(500)).subscribe(value => {
       this.operationValue(group)
     })
-    if (estimation.formula_amount === '{people_number}') {
+    if (estimation?.formula_amount === '{people_number}') {
       form.get('people_number').valueChanges.subscribe(value => {
         group.patchValue({ amount: value })
       })
@@ -265,6 +264,10 @@ export const cmoHelper = {
   },
 
   subscribecmo(group: FormGroup, form: FormGroup, list: FormArray, profiles: Array<any>) {
+    list.valueChanges.subscribe(value => {
+      this.subtotalLabor(list, form);
+      this.subtotalTravelExpense(list, form);
+    })
     group.get('people_number').valueChanges.subscribe(value => {
       let hours_value_displacement = group.get('hours_value_displacement');
       let hours_displacement = group.get('hours_displacement')

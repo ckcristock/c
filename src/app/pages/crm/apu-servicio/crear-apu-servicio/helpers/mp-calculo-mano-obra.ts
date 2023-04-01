@@ -205,7 +205,7 @@ export const mpmCalculateLaborHelper = {
     group.get('unit_value').valueChanges.pipe(debounceTime(500)).subscribe(value => {
       this.operationValue(group)
     })
-    if (estimation.formula_amount === '{people_number}') {
+    if (estimation?.formula_amount === '{people_number}') {
       form.get('people_number').valueChanges.subscribe(value => {
         group.patchValue({ amount: value })
       })
@@ -262,6 +262,10 @@ export const mpmCalculateLaborHelper = {
   },
 
   subscribeMpm(group: FormGroup, form: FormGroup, list: FormArray, profiles: Array<any>) {
+    list.valueChanges.subscribe(value => {
+      this.subtotalLabor(list, form);
+      this.subtotalTravelExpense(list, form);
+    })
     group.get('people_number').valueChanges.subscribe(value => {
       let hours_value_displacement = group.get('hours_value_displacement');
       let hours_displacement = group.get('hours_displacement')

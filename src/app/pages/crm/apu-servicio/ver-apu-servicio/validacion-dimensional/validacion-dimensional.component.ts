@@ -7,7 +7,9 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ValidacionDimensionalComponent implements OnInit {
   @Input('data') dimensional_validation;
-  collapsed:boolean[] = [];
+  @Input('subtotal_labor') subtotal_labor;
+  @Input('subtotal_travel_expense') subtotal_travel_expense;
+  @Input('subtotal_dimensional_validation') subtotal_dimensional_validation;
 
   constructor() { }
 

@@ -87,7 +87,7 @@ export const functionsApuService = {
       let data = cities.find(c => c.value == value);
       if (data) {
         let subtotal_administrative_unforeseen_utility = group.get('subtotal_administrative_unforeseen_utility');
-        let result = subtotal_administrative_unforeseen_utility.value / (1 - (data.percentage_product / 100));
+        let result = subtotal_administrative_unforeseen_utility.value / (1 - (data.percentage_service / 100));
         group.patchValue({
           sale_price_cop_withholding_total: Math.round(result)
         })
@@ -97,7 +97,7 @@ export const functionsApuService = {
       let city = group.get('city_id');
       let data = cities.find(c => c.value == city.value);
       if (data) {
-        let result = value / (1 - (data.percentage_product / 100));
+        let result = value / (1 - (data.percentage_service / 100));
         group.patchValue({
           sale_price_cop_withholding_total: Math.round(result)
         });
@@ -139,12 +139,20 @@ export const functionsApuService = {
     //!sumar subtotal_accompaniment
     form.get('subtotal_assembly_commissioning').valueChanges.subscribe(value => {
       let subtotal_dimensional_validation = form.get('subtotal_dimensional_validation')
-      let result = (value + subtotal_dimensional_validation.value);
+      let subtotal_accompaniment = form.get('subtotal_accompaniment')
+      let result = (value + subtotal_dimensional_validation.value + subtotal_accompaniment.value);
       form.patchValue({ general_subtotal_travel_expense_labor: Math.round(result) })
     })
     form.get('subtotal_dimensional_validation').valueChanges.subscribe(value => {
       let subtotal_assembly_commissioning = form.get('subtotal_assembly_commissioning')
-      let result = (subtotal_assembly_commissioning.value + value);
+      let subtotal_accompaniment = form.get('subtotal_accompaniment')
+      let result = (subtotal_assembly_commissioning.value + subtotal_accompaniment.value + value);
+      form.patchValue({ general_subtotal_travel_expense_labor: Math.round(result) })
+    })
+    form.get('subtotal_accompaniment').valueChanges.subscribe(value => {
+      let subtotal_assembly_commissioning = form.get('subtotal_assembly_commissioning')
+      let subtotal_dimensional_validation = form.get('subtotal_dimensional_validation')
+      let result = (subtotal_assembly_commissioning.value + subtotal_dimensional_validation.value + value);
       form.patchValue({ general_subtotal_travel_expense_labor: Math.round(result) })
     })
     /********* AUI **********/

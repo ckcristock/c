@@ -88,6 +88,7 @@ import { CopiarApuPiezaComponent } from './apu-pieza/copiar-apu-pieza/copiar-apu
 import { CopiarApuConjuntoComponent } from './apu-conjunto/copiar-apu-conjunto/copiar-apu-conjunto.component';
 import { CopiarApuServicioComponent } from './apu-servicio/copiar-apu-servicio/copiar-apu-servicio.component';
 import { MatSelectFilterModule } from 'mat-select-filter';
+import { AcompanamientoComponent } from './apu-servicio/ver-apu-servicio/acompanamiento/acompanamiento.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -145,6 +146,7 @@ export const MY_FORMATS = {
     CopiarApuPiezaComponent,
     CopiarApuConjuntoComponent,
     CopiarApuServicioComponent,
+    AcompanamientoComponent,
   ],
   providers: [
     {

@@ -90,7 +90,6 @@ export class CrearApuServicioComponent implements OnInit {
   async getBases() {
     await this._calculationBase.getAll().toPromise().then((r: any) => {
       this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
-      console.log(this.calculationBase)
       /* if (this.dataEdit) {
         this.calculationBase.trm.value = this.dataEdit.trm
       } */
@@ -168,7 +167,6 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   mpMCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
-    console.log(this.cities)
     let group = help.mpmCalculateLaborHelper.createMpmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
       this.cities);
     return group;

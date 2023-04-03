@@ -34,6 +34,7 @@
                   <mat-option value="si">Sí</mat-option>
                   <mat-option value="no">No</mat-option>
                 </mat-select>
+                <mat-icon matSuffix>balance</mat-icon>
               </mat-form-field>
             </div>
             <h6>2. Fecha</h6>
@@ -93,10 +94,14 @@
             </div>
 
             <div class="col-12 d-flex justify-content-end">
-              <button type="button" class="btn btn-sm btn-primary" (click)="goForward()">Siguiente</button>
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                (click)="goForward()"
+              >
+                Siguiente
+              </button>
             </div>
-
-
           </mat-step>
           <mat-step>
             <ng-template matStepLabel>Bases de cálculo</ng-template>
@@ -106,8 +111,9 @@
                 <mat-label>Salario base</mat-label>
                 <input
                   matInput
-                  type="number"
                   placeholder="Ingresa el salario base"
+                  currencyMask
+                  [options]="mask.maskCOP"
                   formControlName="salario_base"
                   required
                   autocomplete="off"
@@ -117,8 +123,9 @@
                 <mat-label>Vacaciones base</mat-label>
                 <input
                   matInput
-                  type="text"
                   placeholder="Ingresa el valor"
+                  currencyMask
+                  [options]="mask.maskCOP"
                   formControlName="vacaciones_base"
                   required
                   autocomplete="off"
@@ -128,8 +135,9 @@
                 <mat-label>Cesantías base</mat-label>
                 <input
                   matInput
-                  type="text"
                   placeholder="Ingresa el valor"
+                  currencyMask
+                  [options]="mask.maskCOP"
                   formControlName="cesantias_base"
                   required
                   autocomplete="off"
@@ -145,14 +153,14 @@
                   <mat-option value="No">No</mat-option>
                 </mat-select>
               </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
+              <!-- <mat-form-field class="col" appearance="outline">
                 <mat-label>Cesantías año anterior incluidas</mat-label>
                 <mat-select formControlName="cesantias_anterior" required>
                   <mat-option value="Si">Sí</mat-option>
                   <mat-option value="No">No</mat-option>
                 </mat-select>
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
+              </mat-form-field> -->
+              <!-- <mat-form-field class="col" appearance="outline">
                 <mat-label>Intereses de cesantías incluidos</mat-label>
                 <mat-select
                   formControlName="intereses_cesantias"
@@ -162,7 +170,7 @@
                   <mat-option value="Si" selected>Sí</mat-option>
                   <mat-option value="No">No</mat-option>
                 </mat-select>
-              </mat-form-field>
+              </mat-form-field> -->
             </div>
             <h6>5. Otros</h6>
             <div class="row">
@@ -170,14 +178,15 @@
                 <mat-label>Otros ingresos</mat-label>
                 <input
                   matInput
-                  type="number"
+                  currencyMask
+                  [options]="mask.maskCOP"
                   placeholder="Ingresa el valor"
-                  formControlName="otros_ingresos"
+                  formControlName="ingresos_adicionales"
                   required
                   autocomplete="off"
                 />
               </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
+              <!-- <mat-form-field class="col" appearance="outline">
                 <mat-label>Préstamos</mat-label>
                 <input
                   matInput
@@ -187,14 +196,15 @@
                   required
                   autocomplete="off"
                 />
-              </mat-form-field>
+              </mat-form-field>  ya esta incluido el valor en la formula del back end de total_liquidacion-->
               <mat-form-field class="col" appearance="outline">
                 <mat-label>Otras deducciones</mat-label>
                 <input
                   matInput
-                  type="number"
+                  currencyMask
+                  [options]="mask.maskCOP"
                   placeholder="Ingresa el valor"
-                  formControlName="otras_deducciones"
+                  formControlName="deducciones_adicionales"
                   required
                   autocomplete="off"
                 />
@@ -248,27 +258,43 @@
                   </li>
                   <li [class]="classList">
                     Vacaciones pendientes
-                    <span>${{ info.total_vacaciones | number }}</span>
+                    <span>${{ info.total_vacaciones | number : "1.2-2" }}</span>
                   </li>
                   <li [class]="classList">
                     Cesantías
-                    <span>${{ info.total_cesantias | number }}</span>
+                    <span>${{ info.total_cesantias | number : "1.2-2" }}</span>
                   </li>
                   <li [class]="classList">
                     Interes de cesantías
-                    <span>${{ info.total_intereses_cesantias | number }}</span>
+                    <span>${{ info.total_intereses_cesantias | number : "1.2-2" }}</span>
                   </li>
                   <li [class]="classList">
                     <strong>Prima de servicios</strong>
-                    <strong>${{ info.total_prima | number }}</strong>
+                    <strong>${{ info.total_prima | number : "1.2-2" }}</strong>
+                  </li>
+                  <li [class]="classList">
+                    <strong>Ingresos adicionales</strong>
+                    <strong
+                      >${{
+                        this.form.get("ingresos_adicionales").value
+                          | number : "1.2-2"
+                      }}</strong
+                    >
+                  </li>
+                  <li [class]="classList">
+                    <strong>Deducciones adicionales</strong>
+                    <strong>${{
+                      this.form.get("deducciones_adicionales").value
+                        | number : "1.2-2"
+                    }} </strong>
                   </li>
                   <li [class]="classList">
                     <strong>Total liquidación</strong>
-                    <strong>${{ info.total_liquidacion | number }}</strong>
+                    <strong>${{ info.total_liquidacion | number : "1.2-2" }}</strong>
                   </li>
                   <li *ngIf="indemnizacion" [class]="classList">
                     Indemnización por despido
-                    <span>${{ info.total_indemnizacion | number }}</span>
+                    <span>${{ info.total_indemnizacion | number : "1.2-2" }}</span>
                   </li>
                 </ul>
               </div>
@@ -276,7 +302,9 @@
                 <ul class="list-group list-group-flush">
                   <li [class]="classList">
                     <strong>Sueldo pendiente por cancelar</strong>
-                    <strong>${{valorDiasTrabajados.salario_neto | number}}</strong>
+                    <strong
+                      >${{ valorDiasTrabajados.salario_neto | number : "1.2-2" }}</strong
+                    >
                   </li>
                   <!-- <li [class]="classList">
                     Auxilio de transporte pendiente por cancelar
@@ -288,7 +316,11 @@
                   </li> -->
                   <li [class]="classList">
                     <strong>Seguridad social</strong>
-                    <strong>${{valorDiasTrabajados.seguridad_social | number}}</strong>
+                    <strong
+                      >${{
+                        valorDiasTrabajados.seguridad_social | number : "1.2-2"
+                      }}</strong
+                    >
                   </li>
                   <!-- <li [class]="classList">
                     <strong>Pensión</strong>
@@ -303,9 +335,10 @@
                 <ul class="list-group list-group-flush">
                   <li [class]="classList">
                     <strong>TOTAL</strong>
-                    <strong>${{ total_liquidacion | number }}</strong>
+                    <strong>${{ total_liquidacion | number : "1.2-2" }}</strong>
                   </li>
                 </ul>
+                <strong>${{ form.get("total").value | number : "1.2-2" }}</strong>
                 <div class="alert alert-danger text-center" role="alert">
                   Al confirmar la liquidación, el empleado no volverá a aparecer
                   en la lista de empleados activos, ni en el siguiente pago de

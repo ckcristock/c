@@ -89,6 +89,9 @@ import { CopiarApuConjuntoComponent } from './apu-conjunto/copiar-apu-conjunto/c
 import { CopiarApuServicioComponent } from './apu-servicio/copiar-apu-servicio/copiar-apu-servicio.component';
 import { MatSelectFilterModule } from 'mat-select-filter';
 import { AcompanamientoComponent } from './apu-servicio/ver-apu-servicio/acompanamiento/acompanamiento.component';
+import { AcompanamientoContratistaComponent } from './apu-servicio/ver-apu-servicio/acompanamiento-contratista/acompanamiento-contratista.component';
+import { MontajeEquiposContratistaComponent } from './apu-servicio/ver-apu-servicio/montaje-equipos-contratista/montaje-equipos-contratista.component';
+import { ValidacionDimensionalContratistaComponent } from './apu-servicio/ver-apu-servicio/validacion-dimensional-contratista/validacion-dimensional-contratista.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -147,6 +150,9 @@ export const MY_FORMATS = {
     CopiarApuConjuntoComponent,
     CopiarApuServicioComponent,
     AcompanamientoComponent,
+    AcompanamientoContratistaComponent,
+    MontajeEquiposContratistaComponent,
+    ValidacionDimensionalContratistaComponent,
   ],
   providers: [
     {

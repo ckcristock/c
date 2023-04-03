@@ -204,10 +204,66 @@ export class CrearApuServicioComponent implements OnInit {
     this.apMCalculateLaborList.removeAt(i);
   }
 
+  //?Contratistas
+  cApMCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
+    let group = help.cApmCalculateLaborHelper.createCApmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+      this.cities);
+    return group;
+  }
+
+  get cApMCalculateLaborList() {
+    return this.form.get('c_apm_calculate_labor') as FormArray
+  }
+
+  newCApMCalculateLaborList() {
+    this.cApMCalculateLaborList.push(this.cApMCalculateLaborControl());
+  }
+
+  deleteCApMCalculateLaborList(i) {
+    this.cApMCalculateLaborList.removeAt(i);
+  }
+
+  cVdCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
+    let group = help.cVdCalculateLaborHelper.createCVdCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+      this.cities);
+    return group;
+  }
+
+  get cVdCalculateLaborList() {
+    return this.form.get('c_vd_calculate_labor') as FormArray
+  }
+
+  newCVdMCalculateLaborList() {
+    this.cVdCalculateLaborList.push(this.cVdCalculateLaborControl());
+  }
+
+  deleteCVdCalculateLaborList(i) {
+    this.cVdCalculateLaborList.removeAt(i);
+  }
+
+  cMeCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
+    let group = help.cMeCalculateLaborHelper.createCMeCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+      this.cities);
+    return group;
+  }
+
+  get cMeCalculateLaborList() {
+    return this.form.get('c_me_calculate_labor') as FormArray
+  }
+
+  newCMeCalculateLaborList() {
+    this.cMeCalculateLaborList.push(this.cMeCalculateLaborControl());
+  }
+
+  deleteCMeCalculateLaborList(i) {
+    this.cMeCalculateLaborList.removeAt(i);
+  }
+
   //! Fin nuevas
 
 
   save() {
+    console.log(this.form.value)
     if (this.form.invalid) {
       this._swal.show({
         icon: 'error',

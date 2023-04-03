@@ -2,6 +2,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { cmoHelper } from './calculo-mano-obra';
 import { mpmCalculateLaborHelper } from './mp-calculo-mano-obra';
 import { apmCalculateLaborHelper } from './amp-calculo-mano-obra';
+import { cApmCalculateLaborHelper } from './c-apm-cmo';
+import { cVdCalculateLaborHelper } from './c-vd-cmo';
+import { cMeCalculateLaborHelper } from './c-me-cmo';
 
 export const functionsApuService = {
   consts: {
@@ -19,6 +22,7 @@ export const functionsApuService = {
       administrative_percentage: data.administrative_percentage,
       administrative_value: data.administrative_value,
       general_subtotal_travel_expense_labor: data.general_subtotal_travel_expense_labor,
+      general_subtotal_travel_expense_labor_c: data.general_subtotal_travel_expense_labor_c,
       sale_price_cop_withholding_total: data.sale_price_cop_withholding_total,
       sale_price_usd_withholding_total: data.sale_price_usd_withholding_total,
       subtotal_administrative_unforeseen: data.subtotal_administrative_unforeseen,
@@ -32,6 +36,14 @@ export const functionsApuService = {
       subtotal_travel_expense: data.subtotal_travel_expense,
       subtotal_travel_expense_mpm: data.subtotal_travel_expense_mpm,
       subtotal_travel_expense_apm: data.subtotal_travel_expense_apm,
+      //! Contratistas
+      subtotal_travel_expense_vd_c: data.subtotal_travel_expense_vd_c,
+      subtotal_travel_expense_me_c: data.subtotal_travel_expense_me_c,
+      subtotal_travel_expense_apm_c: data.subtotal_travel_expense_apm_c,
+      subtotal_dimensional_validation_c: data.subtotal_dimensional_validation_c,
+      subtotal_assembly_c: data.subtotal_assembly_c,
+      subtotal_accompaniment_c: data.subtotal_accompaniment_c,
+      //! Fin contratistas
       unforeseen_percentage: data.unforeseen_percentage,
       unforeseen_value: data.unforeseen_value,
       utility_percentage: data.utility_percentage,
@@ -40,6 +52,9 @@ export const functionsApuService = {
     cmoHelper.createFillIncmo(form, fb, data, profiles, cities);
     mpmCalculateLaborHelper.createFillInMpm(form, fb, data, profiles, cities)
     apmCalculateLaborHelper.createFillInApm(form, fb, data, profiles, cities)
+    cApmCalculateLaborHelper.createFillInCApm(form, fb, data, profiles, cities)
+    cVdCalculateLaborHelper.createFillInCVd(form, fb, data, profiles, cities)
+    cMeCalculateLaborHelper.createFillInCMe(form, fb, data, profiles, cities)
     this.subscribes(form)
   },
 
@@ -57,10 +72,19 @@ export const functionsApuService = {
       subtotal_travel_expense: [0],
       subtotal_travel_expense_mpm: [0],
       subtotal_travel_expense_apm: [0],
+      //! Contratistas
+      subtotal_travel_expense_vd_c: [0],
+      subtotal_travel_expense_me_c: [0],
+      subtotal_travel_expense_apm_c: [0],
+      subtotal_dimensional_validation_c: [0],
+      subtotal_assembly_c: [0],
+      subtotal_accompaniment_c: [0],
+      //! Fin contratistas
       subtotal_dimensional_validation: [0],
       subtotal_assembly_commissioning: [0],
       subtotal_accompaniment: [0],
       general_subtotal_travel_expense_labor: [0],
+      general_subtotal_travel_expense_labor_c: [0],
       administrative_percentage: [calculationBase.administration_percentage.value],
       administrative_value: [0],
       unforeseen_percentage: [calculationBase.unforeseen_percentage.value],
@@ -75,6 +99,9 @@ export const functionsApuService = {
       calculate_labor: fb.array([]),
       mpm_calculate_labor: fb.array([]),
       apm_calculate_labor: fb.array([]),
+      c_apm_calculate_labor: fb.array([]),
+      c_vd_calculate_labor: fb.array([]),
+      c_me_calculate_labor: fb.array([]),
       format_code: [''],
       code: ['']
     });
@@ -136,6 +163,22 @@ export const functionsApuService = {
       let result = (subtotal_labor_apm.value + value);
       form.patchValue({ subtotal_accompaniment: Math.round(result) })
     });
+    //! Inicio contratistas
+    form.get('subtotal_travel_expense_apm_c').valueChanges.subscribe(value => {
+      let result = (value);
+      form.patchValue({ subtotal_accompaniment_c: Math.round(result) })
+    });
+    //!
+    form.get('subtotal_travel_expense_vd_c').valueChanges.subscribe(value => {
+      let result = (value);
+      form.patchValue({ subtotal_dimensional_validation_c: Math.round(result) })
+    });
+    //!
+    form.get('subtotal_travel_expense_me_c').valueChanges.subscribe(value => {
+      let result = (value);
+      form.patchValue({ subtotal_assembly_c: Math.round(result) })
+    });
+    //! Fin contratistas
     //!sumar subtotal_accompaniment
     form.get('subtotal_assembly_commissioning').valueChanges.subscribe(value => {
       let subtotal_dimensional_validation = form.get('subtotal_dimensional_validation')
@@ -155,6 +198,28 @@ export const functionsApuService = {
       let result = (subtotal_assembly_commissioning.value + subtotal_dimensional_validation.value + value);
       form.patchValue({ general_subtotal_travel_expense_labor: Math.round(result) })
     })
+
+    //!contratistas subtotal_accompaniment_c subtotal_assembly_c subtotal_dimensional_validation_c
+    form.get('subtotal_assembly_c').valueChanges.subscribe(value => {
+      let subtotal_dimensional_validation_c = form.get('subtotal_dimensional_validation_c')
+      let subtotal_accompaniment_c = form.get('subtotal_accompaniment_c')
+      let result = (value + subtotal_dimensional_validation_c.value + subtotal_accompaniment_c.value);
+      form.patchValue({ general_subtotal_travel_expense_labor_c: Math.round(result) })
+    })
+    form.get('subtotal_dimensional_validation_c').valueChanges.subscribe(value => {
+      let subtotal_assembly_c = form.get('subtotal_assembly_c')
+      let subtotal_accompaniment_c = form.get('subtotal_accompaniment_c')
+      let result = (subtotal_assembly_c.value + subtotal_accompaniment_c.value + value);
+      form.patchValue({ general_subtotal_travel_expense_labor_c: Math.round(result) })
+    })
+    form.get('subtotal_accompaniment_c').valueChanges.subscribe(value => {
+      let subtotal_assembly_c = form.get('subtotal_assembly_c')
+      let subtotal_dimensional_validation_c = form.get('subtotal_dimensional_validation_c')
+      let result = (subtotal_assembly_c.value + subtotal_dimensional_validation_c.value + value);
+      form.patchValue({ general_subtotal_travel_expense_labor_c: Math.round(result) })
+    })
+
+
     /********* AUI **********/
     form.get('administrative_percentage').valueChanges.subscribe(value => {
       let general_subtotal_travel_expense_labor = form.get('general_subtotal_travel_expense_labor')

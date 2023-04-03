@@ -411,6 +411,7 @@ export const apmCalculateLaborHelper = {
   },
 
   subtotalTravelExpense(list: FormArray, form: FormGroup) {
+    console.log(list)
     setTimeout(() => {
       let total = list.value.reduce((a, b) => { return a + b.subtotal }, 0);
       form.patchValue({ subtotal_travel_expense_apm: total })

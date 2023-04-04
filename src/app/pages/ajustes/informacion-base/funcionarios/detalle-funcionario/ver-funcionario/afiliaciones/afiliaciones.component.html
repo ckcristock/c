@@ -1,6 +1,6 @@
 <div class="card-title d-flex justify-content-between">
   <h6><i class="fa fa-user-times" aria-hidden="true"></i> Afiliaciones</h6>
-  <button class="btn btn-link" (click)="openModal()">
+  <button class="btn btn-link" *ngIf="afiliations" (click)="openModal()">
     <i class="fas fa-pencil-alt"></i>
   </button>
 </div>
@@ -11,24 +11,24 @@
       {{ afiliations.eps_name }}
     </div>
     <div class="col-lg-6 text-lg-right text-center text-primary">Fondo de pensiones</div>
-    
+
     <div class="col-lg-6 text-lg-left text-center">
       {{ afiliations.pension_fund_name }}
     </div>
     <div class="col-lg-6 text-lg-right text-center text-primary">Fondo de cesantias</div>
-    
+
     <div class="col-lg-6 text-lg-left text-center">
       {{ afiliations.severance_fund_name }}
     </div>
     <div class="col-lg-6 text-lg-right text-center text-primary">
       Caja de compensación
     </div>
-    
+
     <div class="col-lg-6 text-lg-left text-center">
       {{ afiliations.compensation_fund_name }}
     </div>
     <div class="col-lg-6 text-lg-right text-center text-primary">ARL</div>
-    
+
     <div class="col-lg-6 text-lg-left text-center">
       {{ afiliations.arl_name }}
     </div>

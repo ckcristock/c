@@ -87,24 +87,24 @@ export class DatosBasicosComponent implements OnInit {
         this.funcionario = res.data;
         this.loading = false;
         this.form.patchValue({
-          address: this.funcionario.address,
-          cell_phone: this.funcionario.cell_phone,
-          birth_date: this.funcionario.birth_date,
-          degree: this.funcionario.degree,
-          email: this.funcionario.email,
-          first_name: this.funcionario.first_name,
-          second_name: this.funcionario.second_name,
-          first_surname: this.funcionario.first_surname,
-          second_surname: this.funcionario.second_surname,
-          identifier: this.funcionario.identifier,
-          marital_status: this.funcionario.marital_status,
-          gener: this.funcionario.gener,
-          visa: this.funcionario.visa,
-          passport_number: this.funcionario.passport_number,
-          title: this.funcionario.title,
+          address: this.funcionario?.address,
+          cell_phone: this.funcionario?.cell_phone,
+          birth_date: this.funcionario?.birth_date,
+          degree: this.funcionario?.degree,
+          email: this.funcionario?.email,
+          first_name: this.funcionario?.first_name,
+          second_name: this.funcionario?.second_name,
+          first_surname: this.funcionario?.first_surname,
+          second_surname: this.funcionario?.second_surname,
+          identifier: this.funcionario?.identifier,
+          marital_status: this.funcionario?.marital_status,
+          gener: this.funcionario?.gener,
+          visa: this.funcionario?.visa,
+          passport_number: this.funcionario?.passport_number,
+          title: this.funcionario?.title,
         })
-        this.file = this.funcionario.image
-        this.fileString = this.funcionario.image
+        this.file = this.funcionario?.image
+        this.fileString = this.funcionario?.image
       })
   }
 

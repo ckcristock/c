@@ -216,6 +216,15 @@
                       >
                         <i class="fas fa-address-card"></i> Ver perfil
                       </a>
+                      <!-- (click)="download(contract.id, contract)" -->
+                      <a
+                        type="button"
+                        class="dropdown-item text-warning"
+                        *ngIf="contract.status == 'Activo'"
+                        (click)="modalPreliquidar.openModal(); funcionario = contract"
+                      >
+                      <i class="fas fa-money-bill"></i> Preliquidar
+                      </a>
                     </div>
                   </div>
                 </td>
@@ -563,3 +572,8 @@
 <ng-template #notConlcude>
   <span>No aplica</span>
 </ng-template>
+<app-modal-preliquidar
+  #modalPreliquidar
+  [funcionario]="funcionario"
+  (reload)="getAllContracts()"
+></app-modal-preliquidar>

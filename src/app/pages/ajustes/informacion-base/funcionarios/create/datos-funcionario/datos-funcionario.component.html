@@ -32,7 +32,7 @@
   <div class="row">
     <mat-form-field appearance="outline" class="col">
       <mat-label>Tipo de documento</mat-label>
-      <mat-select formControlName="type_document_id">
+      <mat-select formControlName="type_document_id" required>
         <mat-option *ngFor="let item of documenttypes" [value]="item.value">
           {{ item.text }}
         </mat-option>
@@ -50,7 +50,7 @@
         (change)="validarCedula($event)"
         name="document"
         class="numberInput"
-        autocomplete="off"
+        autocomplete="off" required
       />
       <mat-icon matSuffix>badge</mat-icon>
       <mat-error *ngIf="identifier_valid"
@@ -71,7 +71,7 @@
         formControlName="first_name"
         [class.is-invalid]="first_name_valid"
         name="first-name"
-        autocomplete="off"
+        autocomplete="off" required
       />
       <mat-icon matSuffix>looks_one</mat-icon>
       <mat-error *ngIf="first_name_valid"
@@ -96,7 +96,7 @@
       />
       <mat-icon matSuffix>looks_two</mat-icon>
       <mat-error *ngIf="second_name_valid">
-        <small>Es nesario el segundo nombre</small>
+        <small> Es necesario el segundo nombre</small>
       </mat-error>
     </mat-form-field>
   </div>
@@ -111,7 +111,7 @@
         formControlName="first_surname"
         [class.is-invalid]="first_surname_valid"
         name="first_surname"
-        autocomplete="off"
+        autocomplete="off" required
       />
       <mat-icon matSuffix>looks_one</mat-icon>
       <mat-error *ngIf="first_surname_valid">
@@ -145,7 +145,7 @@
         formControlName="email"
         [class.is-invalid]="email_valid"
         name="email"
-        autocomplete="off"
+        autocomplete="off" required
       />
       <mat-icon matSuffix>email</mat-icon>
       <mat-error *ngIf="first_surname_valid">
@@ -163,7 +163,7 @@
         matInput
         type="date"
         placeholder="Selecciona la fecha de nacimiento"
-        formControlName="birth_date"
+        formControlName="birth_date" required
       />
       <!-- <mat-icon matSuffix>event</mat-icon> -->
       <mat-error *ngIf="birth_date_valid">
@@ -184,7 +184,7 @@
         formControlName="place_of_birth"
         [class.is-invalid]="place_of_birth_valid"
         name="city"
-        autocomplete="off"
+        autocomplete="off" required
       />
       <mat-icon matSuffix>location_city</mat-icon>
       <mat-error *ngIf="place_of_birth_valid">
@@ -207,12 +207,12 @@
         formControlName="address"
         [class.is-invalid]="direction_valid"
         name="direction"
-        autocomplete="off"
+        autocomplete="off" required
       />
       <mat-icon matSuffix>home_filled</mat-icon>
       <mat-error *ngIf="direction_valid">
         <small
-          *ngFor="let item of form.get('direction').errors | ObjToArrayPipe"
+          *ngFor="let item of form.get('address').errors | ObjToArrayPipe"
           class="text-danger"
         >
           {{ item?.msj }}
@@ -221,7 +221,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="col">
       <mat-label>Género</mat-label>
-      <mat-select [class.is-invalid]="gener_valid" formControlName="gener">
+      <mat-select [class.is-invalid]="gener_valid" formControlName="gener" required>
         <mat-option value="Masculino">Masculino</mat-option>
         <mat-option value="Femenino">Femenino</mat-option>
       </mat-select>
@@ -259,7 +259,7 @@
         formControlName="phone"
         [class.is-invalid]="phone_valid"
         name="phone"
-        autocomplete="off"
+        autocomplete="off" required
       />
       <mat-icon matSuffix>phone</mat-icon>
       <mat-error *ngIf="phone_valid">
@@ -280,7 +280,7 @@
         formControlName="cell_phone"
         [class.is-invalid]="cell_phone_valid"
         name="cell-phone"
-        autocomplete="off"
+        autocomplete="off" required
       />
       <mat-icon matSuffix>phone_iphone</mat-icon>
       <mat-error *ngIf="cell_phone_valid">
@@ -297,6 +297,7 @@
       <mat-select
         [class.is-invalid]="blood_type_valid"
         formControlName="blood_type"
+        required
       >
         <mat-option *ngFor="let tipo of tipoSangre" [value]="tipo.valor">
           {{ tipo.clave }}
@@ -316,7 +317,7 @@
       <mat-label>Estado civil</mat-label>
       <mat-select
         [class.is-invalid]="marital_status_valid"
-        formControlName="marital_status"
+        formControlName="marital_status" required
       >
         <mat-option *ngFor="let estado of estados" [value]="estado.valor">
           {{ estado.clave }}
@@ -344,7 +345,7 @@
         formControlName="number_of_children"
         [class.is-invalid]="number_of_children_valid"
         name="children"
-        autocomplete="off"
+        autocomplete="off" required
       />
       <mat-icon matSuffix>escalator_warning</mat-icon>
       <mat-error *ngIf="number_of_children_valid">
@@ -360,7 +361,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="col">
       <mat-label>Nivel académico</mat-label>
-      <mat-select [class.is-invalid]="degree_valid" formControlName="degree">
+      <mat-select [class.is-invalid]="degree_valid" formControlName="degree" required>
         <mat-option *ngFor="let grado of instruccion" [value]="grado.valor">
           {{ grado.clave }}
         </mat-option>
@@ -384,7 +385,7 @@
         formControlName="title"
         [class.is-invalid]="title_valid"
         name="children"
-        autocomplete="off"
+        autocomplete="off" required
       />
       <mat-icon matSuffix>verified</mat-icon>
       <mat-error *ngIf="title_valid">
@@ -404,10 +405,13 @@
       </mat-select>
       <mat-icon matSuffix>flight</mat-icon>
     </mat-form-field>
-    <div class="col-12">
-      <div class="d-flex justify-content-end">
+    <div class="col-12 d-flex justify-content-end">
         <button type="submit" class="btn btn-sm btn-primary">Siguiente</button>
-      </div>
     </div>
   </div>
 </form>
+
+<app-reload-button
+  [reload]="reload"
+  (reloadData)="reloadData()"
+></app-reload-button>

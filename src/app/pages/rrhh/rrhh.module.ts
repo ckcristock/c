@@ -89,6 +89,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from 'saturn-datepicker';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -189,6 +190,7 @@ export const MY_FORMATS = {
     SatDatepickerModule,
     SatNativeDateModule,
     MatExpansionModule,
+    CurrencyMaskModule
   ],
   providers: [
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' },

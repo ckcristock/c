@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbDropdownModule, NgbNavModule, NgbPaginationModule, NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
@@ -95,5 +95,6 @@ import { MatFormFieldModule, MatSelectModule } from '@angular/material';
     NgbPaginationModule
   ],
   exports: [],
+
 })
 export class PagoNominaModule {}

@@ -16,10 +16,24 @@ import { NotDataComponent } from './not-data/not-data.component';
 import { ApplicantComponent } from './applicant/applicant.component';
 import { GetApusComponent } from './get-apus/get-apus.component';
 import { CabeceraComponent } from './cabecera/cabecera.component';
-import { MatButtonModule, MatCheckboxModule, MatFormFieldModule, MatIconModule, MatInputModule, MatSelectModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatNativeDateModule, MatSelectModule } from '@angular/material';
 import { NoPermissionsComponent } from './no-permissions/no-permissions.component';
 import { PlaceholderFormComponent } from './placeholder-form/placeholder-form.component';
 import { ReloadButtonComponent } from './reload-button/reload-button.component';
+import { ModalPreliquidarComponent } from './modal-preliquidar/modal-preliquidar.component';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY'
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  }
+};
 
 @NgModule({
   declarations: [
@@ -35,6 +49,7 @@ import { ReloadButtonComponent } from './reload-button/reload-button.component';
     NoPermissionsComponent,
     PlaceholderFormComponent,
     ReloadButtonComponent,
+    ModalPreliquidarComponent
   ],
   exports: [
     ModalBasicComponent,
@@ -49,7 +64,8 @@ import { ReloadButtonComponent } from './reload-button/reload-button.component';
     PipesModule,
     NoPermissionsComponent,
     PlaceholderFormComponent,
-    ReloadButtonComponent
+    ReloadButtonComponent,
+    ModalPreliquidarComponent
   ],
   imports: [
     NgbAccordionModule,
@@ -66,7 +82,19 @@ import { ReloadButtonComponent } from './reload-button/reload-button.component';
     NgbDropdownModule,
     NgbPaginationModule,
     MatSelectModule,
-    MatCheckboxModule
-  ]
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    SatDatepickerModule,
+    SatNativeDateModule,
+  ],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
 })
 export class ComponentsModule { }

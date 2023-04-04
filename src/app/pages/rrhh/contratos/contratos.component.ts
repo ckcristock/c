@@ -50,6 +50,7 @@ export class ContratosComponent implements OnInit {
   companies: any[] = [];
   terms: any[] = [];
   contractTypes: any[] = [];
+  funcionario: any;
   orderObj: any
   filtrosActivos: boolean = false
   paginacion: any
@@ -210,6 +211,7 @@ export class ContratosComponent implements OnInit {
     this.contractService.getAllContracts(params)
       .subscribe((res: any) => {
         this.contracts = res.data.data;
+        console.log(this.contracts)
         this.paginacion = res.data
         this.pagination.collectionSize = res.data.total;
         this.loading = false;

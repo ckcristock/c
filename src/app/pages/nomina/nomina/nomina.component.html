@@ -37,62 +37,56 @@
       </div>
       <hr *ngIf="nomina?.nomina_paga" />
       <!-- Conceptos CARDS -->
-      <div class="row d-flex align-items-stretch">
-        <div class="col-2 info-cards">
-          <app-card-concepto
-            [concepto]="nomina?.salarios"
-            [icon]="'fas fa-money-bill-wave '"
-            [label]="'Salarios (neto)'"
-          ></app-card-concepto>
-        </div>
-        <div class="col-2 info-cards">
-          <app-card-concepto
-            [concepto]="nomina?.extras"
-            [icon]="'fas fa-user-clock'"
-            [label]="'Hor. Extras'"
-          >
-          </app-card-concepto>
-        </div>
-        <div class="col-2 info-cards">
-          <app-card-concepto
-            [concepto]="nomina?.ingresos"
-            [icon]="'fas fa-wallet'"
-            [label]="'Ing. Adicionales'"
-          >
-          </app-card-concepto>
-        </div>
-        <div class="col-2 info-cards">
-          <app-card-concepto
-            [concepto]="nomina?.seguridad_social"
-            [icon]="'fa fa-ambulance'"
-            [label]="'Seg. Social'"
-          >
-          </app-card-concepto>
-        </div>
+      <div class="row d-flex flex-wrap">
+        <app-card-concepto
+          [concepto]="nomina?.salarios"
+          [icon]="'fas fa-money-bill-wave '"
+          [label]="'Salarios (neto)'"
+          class="col"
+        ></app-card-concepto>
+        <app-card-concepto
+          [concepto]="nomina?.extras"
+          [icon]="'fas fa-user-clock'"
+          [label]="'Hor. Extras'"
+          class="col"
+        >
+        </app-card-concepto>
+        <app-card-concepto
+          [concepto]="nomina?.ingresos"
+          [icon]="'fas fa-wallet'"
+          [label]="'Ing. Adicionales'"
+          class="col"
+        >
+        </app-card-concepto>
+        <app-card-concepto
+          [concepto]="nomina?.seguridad_social"
+          [icon]="'fa fa-ambulance'"
+          [label]="'Seg. Social'"
+          class="col"
+        >
+        </app-card-concepto>
+        <app-card-concepto
+          [concepto]="nomina?.parafiscales"
+          [icon]="'fa fa-users'"
+          [label]="'Parafiscales'"
+          class="col"
+        >
+        </app-card-concepto>
+        <app-card-concepto
+          [concepto]="nomina?.provisiones"
+          [icon]="'fas fa-coins'"
+          [label]="'Provisiones'"
+          class="col"
+        >
+        </app-card-concepto>
         <!--<div class="col info-cards">
-          <app-card-concepto
-            [concepto]="nomina?.retenciones"
-            [icon]="'fa fa-ambulance'"
-            [label]="'Retenciones'"
-          >
-          </app-card-concepto>
-        </div>-->
-        <div class="col-2 info-cards">
-          <app-card-concepto
-            [concepto]="nomina?.parafiscales"
-            [icon]="'fa fa-users'"
-            [label]="'Parafiscales'"
-          >
-          </app-card-concepto>
-        </div>
-        <div class="col-2 info-cards">
-          <app-card-concepto
-            [concepto]="nomina?.provisiones"
-            [icon]="'fas fa-coins'"
-            [label]="'Provisiones'"
-          >
-          </app-card-concepto>
-        </div>
+        <app-card-concepto
+          [concepto]="nomina?.retenciones"
+          [icon]="'fa fa-ambulance'"
+          [label]="'Retenciones'"
+        >
+        </app-card-concepto>
+      </div>-->
       </div>
       <hr />
       <h5 class="text-center">
@@ -104,52 +98,66 @@
       <!-- Eventos Nomina paga  -->
       <div class="row" *ngIf="nomina?.nomina_paga">
         <!-- Resumen de nómina -->
-        <div class="col">
+        <div class="col d-flex align-items-stretch">
           <button
             class="btn btn-primary btn-sm btn-block"
             (click)="getColilla(nomina)"
           >
-            <span
+            <span class="d-none d-xl-inline d-lg-inline d-md-inline"
               ><i
                 class="fas"
                 [class]="
-                  !donwloadingExNom ? 'fas fa-download' : 'fa-spinner fa-spin'
+                  !donwloadingExNom ? 'fas fa-table' : 'fa-spinner fa-spin'
                 "
               ></i>
-              {{
-                !donwloadingExNom ? "Resumen de nómina" : "Descargando"
-              }}</span
-            >
+               {{ !donwloadingExNom ? "Resumen de nómina" : "Descargando" }}
+            </span>
+            <span class="d-inline d-xl-none d-lg-none d-md-none">
+              <i
+                class="fas"
+                [class]="
+                  !donwloadingExNom ? 'fas fa-table' : 'fa-spinner fa-spin'
+                "
+              ></i>
+            </span>
           </button>
         </div>
 
         <!-- Resumen de novedades -->
-        <div class="col">
+        <div class="col d-flex align-items-stretch">
           <button
             class="btn btn-primary btn-sm btn-block"
             (click)="mostrarNovedades()"
           >
-            <span
+            <span class="d-none d-xl-inline d-lg-inline d-md-inline"
               ><i
                 class="fas fa-bell"
                 [class]="
-                  !donwloadingExcNov ? 'fas fa-download' : 'fa-spinner fa-spin'
+                  !donwloadingExcNov ? 'fas fa-file-excel' : 'fa-spinner fa-spin'
                 "
               ></i
-              >{{
+              > {{
                 !donwloadingExNom ? "Resumen de novedades" : "Descargando"
               }}</span
             >
+            <span class="d-inline d-xl-none d-lg-none d-md-none">
+              <i
+              class="fas fa-bell"
+              [class]="
+                !donwloadingExcNov ? 'fas fa-file-excel' : 'fa-spinner fa-spin'
+              "
+              ></i>
+            </span>
           </button>
         </div>
 
         <!-- Colillas de pago -->
-        <div class="col">
+        <div class="col d-flex align-items-stretch">
           <button
             class="btn btn-primary btn-sm btn-block"
             (click)="getColillasPago(nomina)"
           >
-            <span
+            <span class="d-none d-xl-inline d-lg-inline d-md-inline"
               ><i
                 class="fas"
                 [class]="
@@ -160,24 +168,71 @@
                 !donwloadingPdfNom ? "Colillas de pago" : "Descargando"
               }}</span
             >
+            <span class="d-inline d-xl-none d-lg-none d-md-none">
+              <i
+              class="fas"
+              [class]="
+                !donwloadingPdfNom ? 'fas fa-download' : 'fa-spinner fa-spin'
+              "
+              ></i>
+            </span>
+          </button>
+        </div>
+        <!-- Enviar emails -->
+        <div class="col d-flex align-items-stretch">
+          <button
+            class="btn btn-primary btn-sm btn-block"
+            (click)="sendPayrollEmail()"
+          >
+            <span class="d-none d-xl-inline d-lg-inline d-md-inline">
+              <i
+                class="fas"
+                [class]="
+                  !sendingPayrollEmail
+                    ? 'fas fa-mail-bulk'
+                    : 'fa-spinner fa-spin'
+                "
+              ></i>
+              {{
+                !sendingPayrollEmail ? "Notificar vía email" : "Enviando"
+              }}
+            </span>
+            <span class="d-inline d-xl-none d-lg-none d-md-none">
+              <i
+              class="fas"
+              [class]="
+                !sendingPayrollEmail
+                  ? 'fas fa-mail-bulk'
+                  : 'fa-spinner fa-spin'
+              "
+              ></i>
+            </span>
           </button>
         </div>
 
-        <div class="col">
-          <button class="btn btn-primary btn-sm btn-block" (click)="sendPayrollEmail()">
-            <i class="fas fa-mail-bulk"></i> Notificar vía email y SMS
-          </button>
-        </div>
-
-        <div class="col">
+        <!-- Seguridad social -->
+        <div class="col d-flex align-items-stretch">
           <button class="btn btn-primary btn-sm btn-block">
+            <span class="d-none d-xl-inline d-lg-inline d-md-inline">
             <i class="fas fa-umbrella"></i> Archivo seguridad social
+          </span>
+          <span class="d-inline d-xl-none d-lg-none d-md-none">
+            <i class="fas fa-umbrella"
+            ></i>
+          </span>
           </button>
         </div>
 
-        <div class="col">
+        <!-- Archivo de pago bancos -->
+        <div class="col d-flex align-items-stretch">
           <button class="btn btn-primary btn-sm btn-block">
+            <span class="d-none d-xl-inline d-lg-inline d-md-inline">
             <i class="fas fa-piggy-bank"></i> Archivo pago bancos
+          </span>
+          <span class="d-inline d-xl-none d-lg-none d-md-none">
+            <i class="fas fa-piggy-bank"
+            ></i>
+          </span>
           </button>
         </div>
         <!-- <div class="col">
@@ -397,7 +452,7 @@
   #modalIngPrest
   (updated)="getPagoNomina()"
   [nominaPaga]="nomina?.nomina_paga"
-  [periodo]="nomina.frecuencia_pago"
+  [periodo]="nomina?.frecuencia_pago"
 >
 </app-modal-ingresos-prestacionales>
 
@@ -405,7 +460,7 @@
   #modalIngNoPrest
   (updated)="getPagoNomina()"
   [nominaPaga]="nomina?.nomina_paga"
-  [periodo]="nomina.frecuencia_pago"
+  [periodo]="nomina?.frecuencia_pago"
 >
 </app-modal-ingresos-no-prestacionales>
 
@@ -413,6 +468,6 @@
   #modalDeducciones
   (updated)="getPagoNomina()"
   [nominaPaga]="nomina?.nomina_paga"
-  [periodo]="nomina.frecuencia_pago"
+  [periodo]="nomina?.frecuencia_pago"
 >
 </app-modal-deducciones>

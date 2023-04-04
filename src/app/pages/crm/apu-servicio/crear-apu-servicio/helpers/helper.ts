@@ -223,19 +223,33 @@ export const functionsApuService = {
     /********* AUI **********/
     form.get('administrative_percentage').valueChanges.subscribe(value => {
       let general_subtotal_travel_expense_labor = form.get('general_subtotal_travel_expense_labor')
-      let result = (general_subtotal_travel_expense_labor.value * (value / 100));
+      let general_subtotal_travel_expense_labor_c = form.get('general_subtotal_travel_expense_labor_c')
+      let result = ((general_subtotal_travel_expense_labor.value + general_subtotal_travel_expense_labor_c.value) * (value / 100));
       form.patchValue({ administrative_value: Math.round(result) })
     });
     form.get('unforeseen_percentage').valueChanges.subscribe(value => {
       let general_subtotal_travel_expense_labor = form.get('general_subtotal_travel_expense_labor')
-      let result = (general_subtotal_travel_expense_labor.value * (value / 100));
+      let general_subtotal_travel_expense_labor_c = form.get('general_subtotal_travel_expense_labor_c')
+      let result = ((general_subtotal_travel_expense_labor.value + general_subtotal_travel_expense_labor_c.value) * (value / 100));
       form.patchValue({ unforeseen_value: Math.round(result) })
     });
     form.get('general_subtotal_travel_expense_labor').valueChanges.subscribe(value => {
       let administrative_percentage = form.get('administrative_percentage')
       let unforeseen_percentage = form.get('unforeseen_percentage')
-      let resultAdministrative = (value * (administrative_percentage.value / 100));
-      let resultUnforeseen = (value * (unforeseen_percentage.value / 100));
+      let general_subtotal_travel_expense_labor_c = form.get('general_subtotal_travel_expense_labor_c')
+      let resultAdministrative = ((value + general_subtotal_travel_expense_labor_c.value) * (administrative_percentage.value / 100));
+      let resultUnforeseen = ((value + general_subtotal_travel_expense_labor_c.value) * (unforeseen_percentage.value / 100));
+      form.patchValue({
+        administrative_value: Math.round(resultAdministrative),
+        unforeseen_value: Math.round(resultUnforeseen)
+      })
+    });
+    form.get('general_subtotal_travel_expense_labor_c').valueChanges.subscribe(value => {
+      let administrative_percentage = form.get('administrative_percentage')
+      let unforeseen_percentage = form.get('unforeseen_percentage')
+      let general_subtotal_travel_expense_labor = form.get('general_subtotal_travel_expense_labor')
+      let resultAdministrative = ((value + general_subtotal_travel_expense_labor.value) * (administrative_percentage.value / 100));
+      let resultUnforeseen = ((value + general_subtotal_travel_expense_labor.value) * (unforeseen_percentage.value / 100));
       form.patchValue({
         administrative_value: Math.round(resultAdministrative),
         unforeseen_value: Math.round(resultUnforeseen)
@@ -243,14 +257,16 @@ export const functionsApuService = {
     });
     form.get('administrative_value').valueChanges.subscribe(value => {
       let general_subtotal_travel_expense_labor = form.get('general_subtotal_travel_expense_labor')
+      let general_subtotal_travel_expense_labor_c = form.get('general_subtotal_travel_expense_labor_c')
       let unforeseen_value = form.get('unforeseen_value')
-      let result = (general_subtotal_travel_expense_labor.value + value + unforeseen_value.value)
+      let result = (general_subtotal_travel_expense_labor.value + general_subtotal_travel_expense_labor_c.value + value + unforeseen_value.value)
       form.patchValue({ subtotal_administrative_unforeseen: Math.round(result) })
     })
     form.get('unforeseen_value').valueChanges.subscribe(value => {
       let general_subtotal_travel_expense_labor = form.get('general_subtotal_travel_expense_labor')
+      let general_subtotal_travel_expense_labor_c = form.get('general_subtotal_travel_expense_labor_c')
       let administrative_value = form.get('administrative_value')
-      let result = (general_subtotal_travel_expense_labor.value + administrative_value.value + value)
+      let result = (general_subtotal_travel_expense_labor.value + general_subtotal_travel_expense_labor_c.value + administrative_value.value + value)
       form.patchValue({ subtotal_administrative_unforeseen: Math.round(result) })
     })
     form.get('subtotal_administrative_unforeseen').valueChanges.subscribe(value => {

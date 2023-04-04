@@ -17,7 +17,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { consts } from 'src/app/core/utils/consts';
 
 @Component({
@@ -27,6 +27,7 @@ import { consts } from 'src/app/core/utils/consts';
 })
 export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
   @ViewChild('addPrestamoylibranza') addPrestamoylibranza: any;
+  @ViewChild('FormPrestamo') FormPrestamoTs: any;
   @Input() abrirModal: Observable<any> = new Observable();
   @Output() recargarLista: EventEmitter<any> = new EventEmitter();
 
@@ -146,15 +147,15 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
       }
       let empleado = this.modelo.person.id;
       let Tipo = tipo;
-      this.http.get(environment.ruta + 'php/prestamoylibranza/comprobar_prestamo.php', { params: { empleado: empleado, tipo: Tipo } }).subscribe((data: any) => {
+      this.http.get(environment.base_url + '/php/prestamoylibranza/comprobar_prestamo.php', { params: { empleado: empleado, tipo: Tipo } }).subscribe((data: any) => {
         this.Comprobar = data;
         if (this.Comprobar.length > 0) {
           this.Comprobar.forEach(lista => {
             if (lista.state == 'Pendiente') {
               this._swal.show({
                 icon: 'warning',
-                title: 'Empleado con ' + lista.type + ' vigente',
-                text: 'El empleado tiene un(a) ' + lista.type + ' activo(a)',
+                title: 'Funcionario con ' + lista.type.toLowerCase() + ' vigente',
+                text: 'El funcionario tiene un(a) ' + lista.type.toLowerCase() + ' activo(a)',
                 showCancel: false
               })
               this.modelo.person = '';
@@ -164,9 +165,7 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      console.log(this.modelo.type)
       this.modelo.type = ''
-      console.log(this.modelo.type)
       this._swal.show({
         title: 'Selecciona un funcionario',
         icon: 'error',
@@ -200,29 +199,41 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
       this.Quincenas = r.data;
     });
   }
-  save() {
-    this.modelo.person_id = this.modelo.person.id;
-    this.modelo.account_plain_id = this.modelo.account_plain_id.id;
-    // let info = JSON.stringify(this.modelo);
+  save(form: NgForm) {
+    console.log(form)
+    if (form.valid) {
+      this.modelo.person_id = this.modelo.person.id;
+      this.modelo.account_plain_id = this.modelo.account_plain_id.id;
+      // let info = JSON.stringify(this.modelo);
 
-    this._loan.save(this.modelo).subscribe((r: any) => {
+      this._loan.save(this.modelo).subscribe((r: any) => {
 
-      this._swal.show(
-        {
-          title: 'Operación exitosa',
-          text: 'Prestamo/Libranza Creado con éxito',
-          icon: 'success', showCancel: false
-        })
-      this.modalService.dismissAll();
-      this.recargarLista.next()
-    }, err => {
-      this._swal.show(
-        {
-          title: 'Ha ocurrido un error',
-          text: 'Comuniquese con el Dpt. de Sistemas',
-          icon: 'error', showCancel: false
-        })
-    });
+        this._swal.show(
+          {
+            title: 'Operación exitosa',
+            text: 'Préstamo/Libranza creado con éxito',
+            icon: 'success',
+            showCancel: false,
+            timer: 1000
+          })
+        this.modalService.dismissAll();
+        this.recargarLista.next()
+      }, err => {
+        this._swal.show(
+          {
+            title: 'Ha ocurrido un error',
+            text: 'Comuniquese con el departamento de sistemas',
+            icon: 'error', showCancel: false
+          })
+      });
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'ERROR',
+        text: 'Llena todos los campos requeridos y vuelve a intentarlo.',
+        showCancel: false
+      })
+    }
 
   }
 

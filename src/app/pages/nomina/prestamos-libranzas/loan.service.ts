@@ -33,4 +33,14 @@ export class LoanService {
     return this.http.get(`${environment.base_url}/proyeccion_pdf/${id}`, { params, headers, responseType: 'blob' as 'json' });
   }
 
+  downloadExcel(id, params = {}) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/proyeccion_excel/${id}`, { params, headers, responseType: 'blob' as 'json' });
+  }
+
+  downloadPaz(id, params = {}) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/php/prestamoylibranza/pazysalvo.php/${id}`, { params, headers, responseType: 'blob' as 'json' });
+  }
+
 }

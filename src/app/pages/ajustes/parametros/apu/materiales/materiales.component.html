@@ -82,7 +82,7 @@
                       <a
                         href="javascript:void(0)"
                         class="dropdown-item text-success"
-                        (click)="openConfirm(view, ''); getMaterial(item)"
+                        (click)="openConfirm(view, '', 'md'); getMaterial(item)"
                       >
                         <i class="far fa-eye"></i> Ver
                       </a>
@@ -383,7 +383,7 @@
   </div>
   <div class="modal-body">
     <div class="row">
-      <div class="col-6">
+      <!-- <div class="col-6">
         <strong class="text-title">
           PROPIEDADES ({{ material.name | titlecase }})
         </strong>
@@ -405,15 +405,15 @@
             </tbody>
           </table>
         </perfect-scrollbar>
-      </div>
-      <div class="col-6">
+      </div> -->
+      <div class="col-12">
         <strong class="text-title">
-          ESPESORES ({{ material.name | titlecase }})
+          ESPESORES ({{ material.product.name | titlecase }})
         </strong>
-        <perfect-scrollbar style="height: 400px">
+        <div class="table-responsive rounded-top">
           <table class="table table-sm table-striped">
             <thead>
-              <tr class="bg-light stay">
+              <tr class="bg-light">
                 <th>Espesor</th>
                 <th>Valor</th>
               </tr>
@@ -425,7 +425,7 @@
               </tr>
             </tbody>
           </table>
-        </perfect-scrollbar>
+        </div>
       </div>
     </div>
   </div>

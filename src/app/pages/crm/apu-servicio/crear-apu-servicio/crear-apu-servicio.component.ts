@@ -90,7 +90,6 @@ export class CrearApuServicioComponent implements OnInit {
   async getBases() {
     await this._calculationBase.getAll().toPromise().then((r: any) => {
       this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
-      console.log(this.calculationBase)
       /* if (this.dataEdit) {
         this.calculationBase.trm.value = this.dataEdit.trm
       } */
@@ -114,6 +113,10 @@ export class CrearApuServicioComponent implements OnInit {
     this._apuService.getPeopleXSelect().subscribe((r: any) => {
       this.people = r.data;
     })
+  }
+
+  getProfileName(item) {
+    return this.profiles.find(x => x.id == item.value.apu_profile_id)?.profile
   }
 
   getProfiles() {
@@ -181,7 +184,86 @@ export class CrearApuServicioComponent implements OnInit {
     this.mpMCalculateLaborList.removeAt(i);
   }
 
+  //!Nuevas
+
+  apMCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
+    let group = help.apmCalculateLaborHelper.createApmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+      this.cities);
+    return group;
+  }
+
+  get apMCalculateLaborList() {
+    return this.form.get('apm_calculate_labor') as FormArray
+  }
+
+  newapMCalculateLaborList() {
+    this.apMCalculateLaborList.push(this.apMCalculateLaborControl());
+  }
+
+  deleteapMCalculateLaborList(i) {
+    this.apMCalculateLaborList.removeAt(i);
+  }
+
+  //?Contratistas
+  cApMCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
+    let group = help.cApmCalculateLaborHelper.createCApmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+      this.cities);
+    return group;
+  }
+
+  get cApMCalculateLaborList() {
+    return this.form.get('c_apm_calculate_labor') as FormArray
+  }
+
+  newCApMCalculateLaborList() {
+    this.cApMCalculateLaborList.push(this.cApMCalculateLaborControl());
+  }
+
+  deleteCApMCalculateLaborList(i) {
+    this.cApMCalculateLaborList.removeAt(i);
+  }
+
+  cVdCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
+    let group = help.cVdCalculateLaborHelper.createCVdCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+      this.cities);
+    return group;
+  }
+
+  get cVdCalculateLaborList() {
+    return this.form.get('c_vd_calculate_labor') as FormArray
+  }
+
+  newCVdMCalculateLaborList() {
+    this.cVdCalculateLaborList.push(this.cVdCalculateLaborControl());
+  }
+
+  deleteCVdCalculateLaborList(i) {
+    this.cVdCalculateLaborList.removeAt(i);
+  }
+
+  cMeCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
+    let group = help.cMeCalculateLaborHelper.createCMeCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+      this.cities);
+    return group;
+  }
+
+  get cMeCalculateLaborList() {
+    return this.form.get('c_me_calculate_labor') as FormArray
+  }
+
+  newCMeCalculateLaborList() {
+    this.cMeCalculateLaborList.push(this.cMeCalculateLaborControl());
+  }
+
+  deleteCMeCalculateLaborList(i) {
+    this.cMeCalculateLaborList.removeAt(i);
+  }
+
+  //! Fin nuevas
+
+
   save() {
+    console.log(this.form.value)
     if (this.form.invalid) {
       this._swal.show({
         icon: 'error',

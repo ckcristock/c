@@ -194,7 +194,7 @@ export const consts = {
     thousands: '.',
     decimal: ',',
     allowNegative: false,
-    precision: 2
+    precision: 3
   },
 
   maskNumbersFiveDecimal: {

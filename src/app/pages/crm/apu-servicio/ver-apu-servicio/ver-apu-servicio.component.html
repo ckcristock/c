@@ -185,41 +185,45 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
-  <div class="card mt-4">
+  <div class="card mt-4 col-md-6 mx-auto">
     <div class="card-body">
       <h4 class="text-center">AIU</h4>
-      <hr />
+      <hr class="line" />
       <div class="d-flex justify-content-center">
         <div class="rounded-top table-responsive">
-          <table
-            class="table table-bordered table-striped table-sm text-center"
-          >
+          <table class="table table-bordered text-uppercase table-sm">
             <tbody>
               <tr>
-                <td class="text-left">Administrativos</td>
-                <td>{{ data.administrative_percentage }}%</td>
-                <td>${{ data.administrative_value | number : "1.2-2" }}</td>
+                <th class="text-left">Administrativos</th>
+                <td class="text-right">
+                  {{ data.administrative_percentage }}%
+                </td>
+                <td class="text-right">
+                  ${{ data.administrative_value | number : "1.2-2" }}
+                </td>
               </tr>
               <tr>
-                <td class="text-left">Imprevistos</td>
-                <td>{{ data.unforeseen_percentage }}%</td>
-                <td>${{ data.unforeseen_value | number : "1.2-2" }}</td>
+                <th class="text-left">Imprevistos</th>
+                <td class="text-right">{{ data.unforeseen_percentage }}%</td>
+                <td class="text-right">
+                  ${{ data.unforeseen_value | number : "1.2-2" }}
+                </td>
               </tr>
               <tr>
-                <td class="text-left" colspan="2">Subtotal A + I</td>
-                <td>
+                <th class="text-left" colspan="2">Subtotal A + I</th>
+                <td class="text-right">
                   ${{
                     data.subtotal_administrative_unforeseen | number : "1.2-2"
                   }}
                 </td>
               </tr>
               <tr>
-                <td class="text-left" colspan="2">Utilidad</td>
-                <td>{{ data.utility_percentage }}%</td>
+                <th class="text-left" colspan="2">Utilidad</th>
+                <td class="text-right">{{ data.utility_percentage }}%</td>
               </tr>
               <tr>
-                <td class="text-left" colspan="2">SubTotal A + I + U</td>
-                <td>
+                <th class="text-left" colspan="2">SubTotal A + I + U</th>
+                <td class="text-right">
                   ${{
                     data.subtotal_administrative_unforeseen_utility
                       | number : "1.2-2"
@@ -227,24 +231,27 @@
                 </td>
               </tr>
               <tr>
-                <td class="text-left" colspan="2">
+                <th class="text-left" colspan="2">
                   Precio venta COP incluye retención
-                </td>
-                <td>
+                </th>
+                <td class="text-right">
                   ${{
                     data.sale_price_cop_withholding_total | number : "1.2-2"
                   }}
                 </td>
               </tr>
               <tr>
-                <td class="text-left" colspan="2">TRM</td>
-                <td>${{ data.trm | number : "1.2-2" }}</td>
+                <th class="text-left" colspan="2">TRM</th>
+                <td class="text-right">${{ data.trm | number : "1.2-2" }}</td>
               </tr>
               <tr>
-                <td class="text-left" colspan="2">
+                <th class="text-left" colspan="2">
                   Precio venta USD incluye retención
+                </th>
+                <td class="text-right">
+                  USD
+                  {{ data.sale_price_usd_withholding_total | number : "1.2-2" }}
                 </td>
-                <td>${{ data.sale_price_usd_withholding_total | currency }}</td>
               </tr>
             </tbody>
           </table>

@@ -233,87 +233,98 @@
                     Cesantías
                     <span>${{ info.total_cesantias | number : "1.2-2" }}</span>
                   </li>
-                  <li [class]="classList">
-                    Interes de cesantías
-                    <span>${{ info.total_intereses_cesantias | number : "1.2-2" }}</span>
-                  </li>
-                  <li [class]="classList">
-                    <strong>Prima de servicios</strong>
-                    <strong>${{ info.total_prima | number : "1.2-2" }}</strong>
-                  </li>
-                  <li [class]="classList">
-                    <strong>Ingresos adicionales</strong>
-                    <strong
-                      >${{
-                        this.form.get("ingresos_adicionales").value
-                          | number : "1.2-2"
-                      }}</strong
-                    >
-                  </li>
-                  <li [class]="classList">
-                    <strong>Deducciones adicionales</strong>
-                    <strong>${{
-                      this.form.get("deducciones_adicionales").value
-                        | number : "1.2-2"
-                    }} </strong>
-                  </li>
-                  <li [class]="classList">
-                    <strong>Total liquidación</strong>
-                    <strong>${{ info.total_liquidacion | number : "1.2-2" }}</strong>
-                  </li>
-                  <li *ngIf="indemnizacion" [class]="classList">
-                    Indemnización por despido
-                    <span>${{ info.total_indemnizacion | number : "1.2-2" }}</span>
-                  </li>
+                           
+                 
+                  
                 </ul>
               </div>
+              <hr />
               <div class="col-lg-6">
                 <ul class="list-group list-group-flush">
-                  <li [class]="classList">
-                    <strong>Sueldo pendiente por cancelar</strong>
-                    <strong
-                      >${{ valorDiasTrabajados.salario_neto | number : "1.2-2" }}</strong
-                    >
-                  </li>
-                  <!-- <li [class]="classList">
-                    Auxilio de transporte pendiente por cancelar
-                    <span>$-en desarrollo-</span>
-                  </li> -->
-                  <!-- <li [class]="classList">
-                    <strong>Otros</strong>
-                    <strong>$-en desarrollo-</strong>
-                  </li> -->
-                  <li [class]="classList">
-                    <strong>Seguridad social</strong>
-                    <strong
-                      >${{
-                        valorDiasTrabajados.seguridad_social | number : "1.2-2"
-                      }}</strong
-                    >
-                  </li>
-                  <!-- <li [class]="classList">
-                    <strong>Pensión</strong>
-                    <strong>$-en desarrollo-</strong>
-                  </li> -->
-                </ul>
+                <li [class]="classList">
+                  Interes de cesantías
+                  <span>${{ info.total_intereses_cesantias | number : "1.2-2" }}</span>
+                </li>
+                <li [class]="classList">
+                  <span>Prima de servicios</span>
+                  <span>${{ info.total_prima | number : "1.2-2" }}</span>
+                </li>
+                <li [class]="classList">
+                  <span>Ingresos adicionales</span>
+                  <span>
+                    ${{(this.form.get("ingresos_adicionales").value || 0) | number : "1.2-2"}}
+                  </span>
+                </li>
+                <li [class]="classList">
+                  <span>Deducciones adicionales</span>
+                  <span>
+                    ${{(this.form.get("deducciones_adicionales").value || 0) | number : "1.2-2"}}
+                  </span>
+                </li>
+              </ul>      
               </div>
+              <hr />
+              <div class="col-lg-12">
+              <ul class="list-group list-group-flush">
+              <li [class]="classList">
+                <strong>Total liquidación</strong>
+                <strong>${{ totalLiquidacion | number : "1.2-2" }}</strong>
+              </li>
+              
+              <li *ngIf="indemnizacion" [class]="classList">
+                <strong> Indemnización por despido </strong>
+             <strong>${{ info.total_indemnizacion | number : "1.2-2" }}</strong>
+              </li>
+             
+                <li [class]="classList">
+                  <strong>Total salario por pagar</strong>
+                  <strong
+                    >${{ salarioPendiente | number : "1.2-2" }}</strong
+                  >
+                </li>
+                <!-- <li [class]="classList">
+                  Auxilio de transporte pendiente por cancelar
+                  <span>$-en desarrollo-</span>
+                </li> -->
+                <!-- <li [class]="classList">
+                  <strong>Otros</strong>
+                  <strong>$-en desarrollo-</strong>
+                </li> -->
+                <li [class]="classList">
+                  <span>Salario</span>
+                  <span
+                    >${{
+                      valorDiasTrabajados.salario_neto | number : "1.2-2"
+                    }}</span
+                  >
+                </li>
+                <li [class]="classList">
+                  <span>Seguridad social</span>
+                  <span
+                    >${{
+                      valorDiasTrabajados.seguridad_social | number : "1.2-2"
+                    }}</span
+                  >
+                </li>
+                <!-- <li [class]="classList">
+                  <strong>Pensión</strong>
+                  <strong>$-en desarrollo-</strong>
+                </li> -->
+                <li [class]="classList">
+                  <strong>TOTAL</strong>
+                  <strong>${{ total | number : "1.2-2" }}</strong>
+                </li>
+              </ul>
+              <div class="alert alert-danger text-center" role="alert">
+                Al confirmar la liquidación, el empleado no volverá a aparecer
+                en la lista de empleados activos, ni en el siguiente pago de
+                nómina.
+              </div>
+            
             </div>
             <hr />
-            <div class="row">
-              <div class="col-12">
-                <ul class="list-group list-group-flush">
-                  <li [class]="classList">
-                    <strong>TOTAL</strong>
-                    <strong>${{ total_liquidacion | number : "1.2-2" }}</strong>
-                  </li>
-                </ul>
-                <strong>${{ form.get("total").value | number : "1.2-2" }}</strong>
-                <div class="alert alert-danger text-center" role="alert">
-                  Al confirmar la liquidación, el empleado no volverá a aparecer
-                  en la lista de empleados activos, ni en el siguiente pago de
-                  nómina.
-                </div>
-              </div>
+          
+                
             </div>
             <div class="row d-flex justify-content-between">
               <div class="col text-right">

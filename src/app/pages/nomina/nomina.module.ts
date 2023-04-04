@@ -50,6 +50,7 @@ import {
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CesantiasComponent } from './cesantias/cesantias.component';
 import { CesantiaCurrentComponent } from './cesantias/cesantia-current/cesantia-current.component';
+import { CesantiasVerComponent } from './cesantias/cesantias-ver/cesantias-ver.component';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -108,6 +109,7 @@ export const MY_FORMATS = {
     HistorialPagosComponent,
     CesantiasComponent,
     CesantiaCurrentComponent,
+    CesantiasVerComponent
   ],
   providers: [
     {

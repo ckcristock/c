@@ -9,17 +9,28 @@ export class CesantiasService {
 
   constructor(private http: HttpClient) { }
 
-  getCheckLayoffs(params: any){
-    return this.http.get(`${environment.base_url}/layoff-list/check-layoffs-list/${params}`);
+  getSeverancePaymentsPaginate(params: any = {}) {
+    return this.http.get(`${environment.base_url}/severance-payment-paginate`, { params });
   }
 
-  /**devuelve la del año actual */
-  getLayoffsList(params:any){
-    return this.http.get(`${environment.base_url}/layoff-list/${params}`);
+  getSeverancePayments(params: any = {}) {
+    return this.http.get(`${environment.base_url}/get-severance-payment`, { params });
   }
-  
-  getLayoffsListPaginated(params:any){
-    return this.http.get(`${environment.base_url}/layoff-list/check-layoffs-list-paginated/${params}`);
+
+  pay(data) {
+    return this.http.post(`${environment.base_url}/severance-payments`, data);
   }
+
+  validateYear(params = {}) {
+    return this.http.get(`${environment.base_url}/severance-payments-validate`, { params });
+  }
+
+  getSeverance(id) {
+    return this.http.get(`${environment.base_url}/severance-payments/${id}`);
+  }
+  getSeveranceInterest(id) {
+    return this.http.get(`${environment.base_url}/severance-interest-payments/${id}`);
+  }
+
 
 }

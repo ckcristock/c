@@ -3,9 +3,9 @@
     <thead>
       <tr class="table-primary text-uppercase">
         <th colspan="4"></th>
-        <th colspan="5" class="text-center">Desplazamiento</th>
-        <th colspan="5" class="text-center">Ordinarias</th>
-        <th colspan="6" class="text-center">Festivas</th>
+        <th colspan="3" class="text-center">Desplazamiento</th>
+        <th colspan="3" class="text-center">Ordinarias</th>
+        <th colspan="3" class="text-center">Festivas</th>
       </tr>
     </thead>
     <thead class="bg-light">
@@ -17,22 +17,15 @@
         <th>N. Días</th>
         <th>Jornada</th>
         <th>Horas</th>
-        <th>Valor Horas</th>
-        <th>Valor Total</th>
         <th>N. Días</th>
         <th>Jornada</th>
         <th>Horas</th>
-        <th>Valor Hora</th>
-        <th>Valor Total</th>
         <th>N. Días</th>
         <th>Jornada</th>
         <th>Horas</th>
-        <th>Valor Hora</th>
-        <th>Valor Total</th>
-        <th>Valor Salarial</th>
       </tr>
     </thead>
-    <ng-container *ngFor="let item of dimensional_validation; let i = index">
+    <ng-container *ngFor="let item of assemblies_start_up_c; let i = index">
       <tbody>
         <tr class="text-center">
           <td>{{ i + 1 }}</td>
@@ -42,51 +35,20 @@
           <td>{{ item.days_number_displacement }}</td>
           <td>{{ item.workind_day_displacement }}</td>
           <td>{{ item.hours_displacement }}</td>
-          <td class="text-right">
-            ${{ item.hours_value_displacement | number : "1.2-2" }}
-          </td>
-          <td class="text-right">
-            ${{ item.total_value_displacement | number : "1.2-2" }}
-          </td>
           <td>{{ item.days_number_ordinary }}</td>
           <td>{{ item.working_day_ordinary }}</td>
           <td>{{ item.hours_ordinary }}</td>
-          <td class="text-right">
-            ${{ item.hours_value_ordinary | number : "1.2-2" }}
-          </td>
-          <td class="text-right">
-            ${{ item.total_value_ordinary | number : "1.2-2" }}
-          </td>
           <td>{{ item.days_number_festive }}</td>
           <td>{{ item.working_day_festive }}</td>
           <td>{{ item.hours_festive }}</td>
-          <td class="text-right">
-            ${{ item.hours_value_festive | number : "1.2-2" }}
-          </td>
-          <td class="text-right">
-            ${{ item.total_value_festive | number : "1.2-2" }}
-          </td>
-          <td class="text-right">
-            ${{ item.salary_value | number : "1.2-2" }}
-          </td>
         </tr>
       </tbody>
     </ng-container>
   </table>
 </div>
-<div class="row d-flex justify-content-start mt-3">
-  <div class="col-md-6">
-    <h6 class="d-flex justify-content-between">
-      SUBTOTAL MANO DE OBRA
-      <span class="badge badge-success badge-pill"
-        >${{ subtotal_labor | number : "1.2-2" }}</span
-      >
-    </h6>
-  </div>
-</div>
 <h6>Viáticos</h6>
 <div class="row">
-  <ng-container *ngFor="let item of dimensional_validation; let i = index">
+  <ng-container *ngFor="let item of assemblies_start_up_c; let i = index">
     <div class="col-md-4">
       <div class="rounded-top table-responsive">
         <table class="table table-bordered table-striped table-sm small-text">
@@ -110,7 +72,7 @@
             <tr
               class="text-center"
               *ngFor="
-                let itemx of item.travel_estimation_dimensional_validations;
+                let itemx of item.travel_estimation_assemblies_start_up_c;
                 let j = index
               "
             >
@@ -143,13 +105,13 @@
     <h6 class="d-flex justify-content-between">
       SUBTOTAL VIÁTICOS
       <span class="badge badge-success badge-pill">
-        ${{ subtotal_travel_expense | number : "1.2-2" }}</span
+        ${{ subtotal_travel_expense_me_c | number : "1.2-2" }}</span
       >
     </h6>
     <h6 class="d-flex justify-content-between">
-      SUBTOTAL VALIDACIÓN DIMENSIONAL
+      SUBTOTAL MONTAJE DE EQUIPOS
       <span class="badge badge-success badge-pill"
-        >${{ subtotal_dimensional_validation | number : "1.2-2" }}</span
+        >${{ subtotal_assembly_c | number : "1.2-2" }}</span
       >
     </h6>
   </div>

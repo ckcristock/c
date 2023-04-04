@@ -22,6 +22,7 @@ export class MaterialesMateriaPrimaComponent implements OnInit {
   material: any = {};
   materials: any[] = [];
   materialsIndex: any[] = [];
+  allMaterialsIndex: any[] = [];
   paginacion: any
   title: any = '';
   pagination = {
@@ -72,8 +73,9 @@ export class MaterialesMateriaPrimaComponent implements OnInit {
     })
   }
 
-  getMaterialsIndex() {
-    this._materials.getMaterialsIndex().subscribe((res: any) => {
+  async getMaterialsIndex() {
+    await this._materials.getMaterialsIndex().toPromise().then((res: any) => {
+      this.allMaterialsIndex = res.data;
       this.materialsIndex = res.data.filter(material => {
         const exists = this.materials.some(m => m.material_id === material.id);
         return !exists;
@@ -81,8 +83,11 @@ export class MaterialesMateriaPrimaComponent implements OnInit {
     })
   }
 
-  getMaterial(material) {
+  async getMaterial(material) {
     this.material = { ...material };
+    await this.getMaterialsIndex();
+    let temp = this.allMaterialsIndex.filter(mat => mat.id == material.material_id);
+    this.materialsIndex.push(temp[0])
     this.form.patchValue({
       id: this.material.id,
       material_id: this.material.material_id,
@@ -106,6 +111,7 @@ export class MaterialesMateriaPrimaComponent implements OnInit {
     this._modal.open(confirm, 'lg')
     if (titulo != 'Editar material') {
       this.form.reset();
+      this.getMaterialsIndex();
     }
   }
 

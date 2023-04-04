@@ -55,113 +55,137 @@
               <th colspan="100%">Observaciones</th>
             </tr>
             <tr class="text-left">
-              <td colspan="100%">{{ data.observation }}</td>
+              <td colspan="100%">
+                {{ data.observation || "No hay observaciones para mostrar." }}
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-body">
-      <ng-container *ngIf="data.dimensional_validation.length > 0">
-        <h5 class="mt-2 text-center">Validación dimensional</h5>
-        <h6>Cálculo de mano de obra</h6>
-        <app-validacion-dimensional
-          [data]="data.dimensional_validation"
-        ></app-validacion-dimensional>
-        <div class="row d-flex justify-content-end">
-          <div class="col-md-6">
-            <div class="d-flex justify-content-between">
-              <div class="rounded-top table-responsive">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <td>SUBTOTAL MANO DE OBRA</td>
-                      <td class="text-right">
-                        ${{ data.subtotal_labor | number : "1.2-2" }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>SUBTOTAL VIÁTICOS</td>
-                      <td class="text-right">
-                        ${{ data.subtotal_travel_expense | number : "1.2-2" }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>SUBTOTAL VALID DIMENSIONAL</td>
-                      <td class="text-right">
-                        ${{
-                          data.subtotal_dimensional_validation
-                            | number : "1.2-2"
-                        }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-body">
-      <ng-container *ngIf="data.assemblies_start_up.length > 0">
-        <h5 class="text-center">Montaje y puesta en marcha</h5>
-        <h6>Cálculo de mano de obra</h6>
-        <app-montaje-puesta-marcha
-          [data]="data.assemblies_start_up"
-        ></app-montaje-puesta-marcha>
-        <div class="row d-flex justify-content-end">
-          <div class="col-md-6">
-            <div class="d-flex justify-content-between">
-              <div class="rounded-top table-responsive">
-                <table class="table table-hover">
-                  <tbody>
-                    <tr>
-                      <td>SUBTOTAL MANO DE OBRA</td>
-                      <td class="text-right">
-                        ${{ data.subtotal_labor_mpm | number : "1.2-2" }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>SUBTOTAL VIÁTICOS</td>
-                      <td class="text-right">
-                        ${{
-                          data.subtotal_travel_expense_mpm | number : "1.2-2"
-                        }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>SUBTOTAL MONTAJE Y PUESTA EN MARCHA</td>
-                      <td class="text-right">
-                        ${{
-                          data.subtotal_assembly_commissioning
-                            | number : "1.2-2"
-                        }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA</td>
-                      <td class="text-right">
-                        ${{
-                          data.general_subtotal_travel_expense_labor
-                            | number : "1.2-2"
-                        }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-    </div>
-  </div>
-  <div class="card">
+  <mat-accordion multi>
+    <mat-expansion-panel
+      [expanded]="
+        data.dimensional_validation.length > 0 ||
+        data.assemblies_start_up.length > 0 ||
+        data.accompaniments.length > 0
+      "
+      class="mat-elevation-z0 border-radius-panel"
+    >
+      <mat-expansion-panel-header class="custom-panel-header">
+        <mat-panel-title> MAQMO </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="card-body">
+        <ng-container *ngIf="data.dimensional_validation.length > 0">
+          <h5 class="mt-2 text-center">Validación dimensional</h5>
+          <hr class="line" />
+          <h6>Cálculo de mano de obra</h6>
+          <app-validacion-dimensional
+            [data]="data.dimensional_validation"
+            [subtotal_labor]="data.subtotal_labor"
+            [subtotal_travel_expense]="data.subtotal_travel_expense"
+            [subtotal_dimensional_validation]="
+              data.subtotal_dimensional_validation
+            "
+          ></app-validacion-dimensional>
+          <hr />
+        </ng-container>
+        <ng-container *ngIf="data.assemblies_start_up.length > 0">
+          <h5 class="text-center">Montaje de equipos</h5>
+          <hr class="line" />
+          <h6>Cálculo de mano de obra</h6>
+          <app-montaje-puesta-marcha
+            [data]="data.assemblies_start_up"
+            [subtotal_labor_mpm]="data.subtotal_labor_mpm"
+            [subtotal_travel_expense_mpm]="data.subtotal_travel_expense_mpm"
+            [subtotal_assembly_commissioning]="
+              data.subtotal_assembly_commissioning
+            "
+          ></app-montaje-puesta-marcha>
+          <hr />
+        </ng-container>
+        <ng-container *ngIf="data.accompaniments.length > 0">
+          <h5 class="text-center">Acompañamiento y puesta en marcha</h5>
+          <hr class="line" />
+          <h6>Cálculo de mano de obra</h6>
+          <app-acompanamiento
+            [data]="data.accompaniments"
+            [subtotal_labor_apm]="data.subtotal_labor_apm"
+            [subtotal_travel_expense_apm]="data.subtotal_travel_expense_apm"
+            [subtotal_accompaniment]="data.subtotal_accompaniment"
+          ></app-acompanamiento>
+          <hr />
+        </ng-container>
+        <h6 class="d-flex justify-content-between">
+          SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA
+          <span class="badge badge-success badge-pill"
+            >${{
+              data.general_subtotal_travel_expense_labor | number : "1.2-2"
+            }}</span
+          >
+        </h6>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel
+      [expanded]="
+        data.dimensional_validation_c.length > 0 ||
+        data.assemblies_start_up_c.length > 0 ||
+        data.accompaniments_c.length > 0
+      "
+      class="mat-elevation-z0 border-radius-panel"
+    >
+      <mat-expansion-panel-header class="custom-panel-header">
+        <mat-panel-title> CONTRATISTAS </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="card-body">
+        <ng-container *ngIf="data.dimensional_validation_c.length > 0">
+          <h5 class="mt-2 text-center">Validación dimensional</h5>
+          <hr class="line" />
+          <h6>Cálculo de mano de obra</h6>
+          <app-validacion-dimensional-contratista
+            [data]="data.dimensional_validation_c"
+            [subtotal_travel_expense_vd_c]="data.subtotal_travel_expense_vd_c"
+            [subtotal_dimensional_validation_c]="
+              data.subtotal_dimensional_validation_c
+            "
+          ></app-validacion-dimensional-contratista>
+          <hr />
+        </ng-container>
+        <ng-container *ngIf="data.assemblies_start_up_c.length > 0">
+          <h5 class="text-center">Montaje de equipos</h5>
+          <hr class="line" />
+          <h6>Cálculo de mano de obra</h6>
+          <app-montaje-equipos-contratista
+            [data]="data.assemblies_start_up_c"
+            [subtotal_travel_expense_me_c]="data.subtotal_travel_expense_me_c"
+            [subtotal_assembly_c]="data.subtotal_assembly_c"
+          ></app-montaje-equipos-contratista>
+          <hr />
+        </ng-container>
+        <ng-container *ngIf="data.accompaniments_c.length > 0">
+          <h5 class="text-center">Acompañamiento y puesta en marcha</h5>
+          <hr class="line" />
+          <h6>Cálculo de mano de obra</h6>
+          <app-acompanamiento-contratista
+            [data]="data.accompaniments_c"
+            [subtotal_travel_expense_apm_c]="data.subtotal_travel_expense_apm_c"
+            [subtotal_accompaniment_c]="data.subtotal_accompaniment_c"
+          ></app-acompanamiento-contratista>
+          <hr />
+        </ng-container>
+        <h6 class="d-flex justify-content-between">
+          SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA
+          <span class="badge badge-success badge-pill"
+            >${{
+              data.general_subtotal_travel_expense_labor_c | number : "1.2-2"
+            }}</span
+          >
+        </h6>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <div class="card mt-4">
     <div class="card-body">
       <h4 class="text-center">AIU</h4>
       <hr />

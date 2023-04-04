@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ValidatorsService } from '../../../informacion-base/services/reactive-validation/validators.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { EstimacionViaticosService } from './estimacion-viaticos.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { consts } from 'src/app/core/utils/consts';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-estimacion-viaticos',
@@ -13,15 +14,12 @@ import { consts } from 'src/app/core/utils/consts';
   styleUrls: ['./estimacion-viaticos.component.scss']
 })
 export class EstimacionViaticosComponent implements OnInit {
-
-  @ViewChild('modal') modal: any;
-  @ViewChild(MatAccordion) accordion: MatAccordion;
-  matPanel = false;
   form: FormGroup;
   loading: boolean = false;
   title: any = 'Nueva Estimación Viáticos';
   estimations: any[] = [];
   estimation: any = {};
+  estimation_view: any = {};
   pagination = {
     page: 1,
     pageSize: 10,
@@ -32,33 +30,22 @@ export class EstimacionViaticosComponent implements OnInit {
   }
 
   masksMoney = consts
-
-  openClose(){
-    if (this.matPanel == false){
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
-  }
-
   variables = [
     { label: 'Cantidad', var: 'amount' },
     { label: 'Valor unitario', var: 'unit_value' },
-    { label: 'N. Personas', var: 'people_number' },
-    { label: 'N. Días Desplazamiento', var: 'days_number_displacement' },
+    { label: '# personas', var: 'people_number' },
+    { label: '# días de desplazamiento', var: 'days_number_displacement' },
     { label: 'Horas desplamiento', var: 'hours_displacement' },
-    { label: 'Valor Hora dezplazamiento', var: 'hours_value_displacement' },
-    { label: 'Valor Total desplazamiento', var: 'total_value_displacement' },
-    { label: 'N. Días Ordinarias', var: 'days_number_ordinary' },
-    { label: 'Horas Ordinarias', var: 'hours_ordinary' },
-    { label: 'Valor Hora Ordinarias', var: 'hours_value_ordinary' },
-    { label: 'Valor total Ordinarias', var: 'total_value_ordinary' },
-    { label: 'N. Días Festivas', var: 'days_number_festive' },
-    { label: 'Horas Festivas', var: 'hours_festive' },
-    { label: 'Valor Hora Festiva', var: 'hours_value_festive' },
-    { label: 'Valor Total festiva', var: 'total_value_festive' }
+    { label: 'Valor hora dezplazamiento', var: 'hours_value_displacement' },
+    { label: 'Valor total desplazamiento', var: 'total_value_displacement' },
+    { label: '# días ordinarias', var: 'days_number_ordinary' },
+    { label: 'Horas ordinarias', var: 'hours_ordinary' },
+    { label: 'Valor hora ordinaria', var: 'hours_value_ordinary' },
+    { label: 'Valor total ordinaria', var: 'total_value_ordinary' },
+    { label: '# días festivos', var: 'days_number_festive' },
+    { label: 'Horas festivas', var: 'hours_festive' },
+    { label: 'Valor hora festiva', var: 'hours_value_festive' },
+    { label: 'Valor total festiva', var: 'total_value_festive' }
   ]
 
   constructor(
@@ -67,6 +54,7 @@ export class EstimacionViaticosComponent implements OnInit {
     private _swal: SwalService,
     private modalService: NgbModal,
     private _validators: ValidatorsService,
+    private _modal: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -74,15 +62,145 @@ export class EstimacionViaticosComponent implements OnInit {
     this.getEstimations();
   }
 
+  destination_required: boolean;
+
   createform() {
     this.form = this.fb.group({
       id: [this.estimation.id],
       description: ['', this._validators.required],
       unit: ['', this._validators.required],
-      amount: [0, this._validators.required],
+      displacement: [''],
+      destination: [''],
+      land_national_value: [{ value: 0, disabled: true }, Validators.required],
+      land_international_value: [{ value: 0, disabled: true }, Validators.required],
+      aerial_national_value: [{ value: 0, disabled: true }, Validators.required],
+      aerial_international_value: [{ value: 0, disabled: true }, Validators.required],
+      international_value: [{ value: 0, disabled: true }, Validators.required],
+      national_value: [{ value: 0, disabled: true }, Validators.required],
+      /* amount: [0], */
       unit_value: [0, this._validators.required],
       formula_amount: ['', this._validators.required],
       formula_total_value: ['', this._validators.required]
+    })
+    let displacement = this.form.get('displacement');
+    let destination = this.form.get('destination');
+    let unit_value = this.form.get('unit_value');
+    let international_value = this.form.get('international_value');
+    let national_value = this.form.get('national_value');
+    let aerial_national_value = this.form.get('aerial_national_value');
+    let aerial_international_value = this.form.get('aerial_international_value');
+    let land_national_value = this.form.get('land_national_value');
+    let land_international_value = this.form.get('land_international_value');
+    displacement.valueChanges.subscribe(r => {
+      console.log(r)
+      if (r?.length > 0 || destination.value?.length > 0) {
+        unit_value.disable();
+        national_value.disable();
+        international_value.disable();
+        destination.setValidators(Validators.required);
+        this.destination_required = true;
+      } else {
+        unit_value.enable();
+        aerial_national_value.disable();
+        aerial_international_value.disable();
+        land_national_value.disable();
+        land_international_value.disable();
+        destination.clearValidators();
+        this.destination_required = false;
+      }
+      if (r?.length == 0) {
+        destination.clearValidators();
+        this.destination_required = false;
+      }
+      if (r?.length == 0 && destination.value?.length > 0) {
+        aerial_national_value.disable();
+        aerial_international_value.disable();
+        land_national_value.disable();
+        land_international_value.disable();
+        if (destination.value.some(x => x == 'national')) {
+          national_value.enable()
+        }
+        if (destination.value.some(x => x == 'international')) {
+          international_value.enable()
+        }
+      }
+      if (r?.length > 0 && destination.value?.length > 0) {
+        if (r.some(x => x == 'aerial') && destination.value.some(x => x == 'national')) {
+          aerial_national_value.enable()
+        } else {
+          aerial_national_value.disable()
+        }
+        if (r.some(x => x == 'land') && destination.value.some(x => x == 'national')) {
+          land_national_value.enable()
+        } else {
+          land_national_value.disable()
+        }
+        if (r.some(x => x == 'land') && destination.value.some(x => x == 'international')) {
+          land_international_value.enable()
+        } else {
+          land_international_value.disable()
+        }
+        if (r.some(x => x == 'aerial') && destination.value.some(x => x == 'international')) {
+          aerial_international_value.enable()
+        } else {
+          aerial_international_value.disable()
+        }
+      }
+    })
+    destination.valueChanges.subscribe(r => {
+      console.log(r)
+      if (displacement.value?.length == 0) {
+
+      }
+      if (r?.length > 0 || displacement.value?.length > 0) {
+        unit_value.disable()
+      } else {
+        unit_value.enable()
+      }
+      if (r?.length == 0) {
+        aerial_national_value.disable();
+        aerial_international_value.disable();
+        land_national_value.disable();
+        land_international_value.disable();
+      }
+      if (r?.length > 0 && displacement.value?.length == 0) {
+        if (r.some(x => x == 'national')) {
+          national_value.enable()
+        } else {
+          national_value.disable()
+        }
+        if (r.some(x => x == 'international')) {
+          international_value.enable()
+        } else {
+          international_value.disable()
+        }
+      } else {
+        national_value.disable()
+        international_value.disable()
+      }
+      if (r?.length > 0 && displacement.value?.length > 0) {
+        if (r.some(x => x == 'national') && displacement.value.some(x => x == 'aerial')) {
+          aerial_national_value.enable()
+        } else {
+          aerial_national_value.disable()
+        }
+        if (r.some(x => x == 'national') && displacement.value.some(x => x == 'land')) {
+          land_national_value.enable()
+        } else {
+          land_national_value.disable()
+        }
+        if (r.some(x => x == 'international') && displacement.value.some(x => x == 'land')) {
+          land_international_value.enable()
+        } else {
+          land_international_value.disable()
+        }
+        if (r.some(x => x == 'international') && displacement.value.some(x => x == 'aerial')) {
+          aerial_international_value.enable()
+        } else {
+          aerial_international_value.disable()
+        }
+      }
+
     })
   }
   closeResult = '';
@@ -99,21 +217,31 @@ export class EstimacionViaticosComponent implements OnInit {
 
   }
 
-  openModal() {
-    this.modal.show();
-
+  openModal(content) {
+    this._modal.open(content);
   }
 
+  verForm() {
+    console.log(this.form.value)
+  }
   getEstimation(measure) {
     this.estimation = { ...measure };
     this.form.patchValue({
       id: this.estimation.id,
       unit: this.estimation.unit,
-      amount: this.estimation.amount,
+      displacement: this.estimation.displacement,
+      destination: this.estimation.destination,
+      land_national_value: this.estimation.land_national_value,
+      land_international_value: this.estimation.land_international_value,
+      aerial_national_value: this.estimation.aerial_national_value,
+      aerial_international_value: this.estimation.aerial_international_value,
+      international_value: this.estimation.international_value,
+      national_value: this.estimation.national_value,
       unit_value: this.estimation.unit_value,
       description: this.estimation.description,
       formula_amount: this.estimation.formula_amount,
       formula_total_value: this.estimation.formula_total_value
+      /* amount: this.estimation.amount, */
     })
   }
 

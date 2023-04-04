@@ -13,7 +13,7 @@
             <i class="fa fa-plus"></i>
             Agregar
           </button>
-          <button class="btn btn-info btn-sm" (click)="openClose()">
+          <button class="btn btn-info btn-sm" (click)="accordion.toggle()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -21,9 +21,9 @@
     </div>
     <hr class="line" />
     <mat-accordion multi>
-      <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel #accordion class="mat-elevation-z0">
         <div class="row">
-          <div class="col">
+          <div class="col mat-form-field-wrapper">
             <ng-select
               [items]="people"
               (change)="getAll()"
@@ -32,6 +32,7 @@
               bindValue="value"
               loadingText="loading"
               appearance="outline"
+              [clearable]="false"
               [appendTo]="'body'"
               placeholder="Funcionario"
               ngDefaultControl
@@ -113,8 +114,10 @@
               {{ item.departure_date | date : "dd/MM/yyyy" }}
             </td>
             <td>{{ item.n_nights }}</td>
-            <td>{{ item.total_cop | currency : "" : "" }}</td>
-            <td>{{ item.total_usd | currency : "" : "" }}</td>
+            <td class="text-right">${{ item.total_cop | number : "1.2-2" }}</td>
+            <td class="text-right">
+              USD {{ item.total_usd | number : "1.2-2" }}
+            </td>
             <td>
               <span
                 class="badge"

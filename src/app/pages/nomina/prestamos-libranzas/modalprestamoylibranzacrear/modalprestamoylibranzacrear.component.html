@@ -15,11 +15,11 @@
     <form #FormPrestamo="ngForm" (ngSubmit)="save()">
       <div class="row">
         <mat-form-field class="col" appearance="outline">
-          <mat-label>Empleado</mat-label>
+          <mat-label>Funcionario</mat-label>
           <input
             matInput
             type="text"
-            placeholder="Ingresa el empleado"
+            placeholder="Busca por nombre del empleado"
             name="Funcionario"
             [ngbTypeahead]="search4"
             [resultTemplate]="rt3"
@@ -92,7 +92,7 @@
             type="text"
             placeholder="Ingresa el plan de cuenta"
             name="PlanCuenta"
-            requied
+            required
             [(ngModel)]="modelo.account_plain_id"
             [ngbTypeahead]="search_cuenta_niif"
             [resultTemplate]="rt2"
@@ -209,12 +209,7 @@
     >
       Cancelar
     </button>
-    <button
-      class="btn btn-primary"
-      (click)="save()"
-      [disabled]="!FormPrestamo.valid"
-    >
-      <i class="fa fa-save"></i>
+    <button class="btn btn-primary" (click)="save(FormPrestamo)">
       Guardar
     </button>
   </div>

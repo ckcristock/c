@@ -1,17 +1,11 @@
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  FormArray
-} from '@angular/forms';
-import { debounceTime, distinctUntilChanged, startWith } from 'rxjs/operators';
+import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
+import { debounceTime } from 'rxjs/operators';
 
-export const cmoHelper = {
-
-  createFillIncmo(form: FormGroup, fb: FormBuilder, data, profiles, cities) {
-    if (data.dimensional_validation) {
-      data.dimensional_validation.forEach((r) => {
-        let list = form.get('calculate_labor') as FormArray;
+export const apmCalculateLaborHelper = {
+  createFillInApm(form: FormGroup, fb: FormBuilder, data, profiles, cities) {
+    if (data.accompaniments) {
+      data.accompaniments.forEach((r) => {
+        let list = form.get('apm_calculate_labor') as FormArray;
         let group = fb.group({
           apu_profile_id: [r.apu_profile_id],
           displacement_type: [r.displacement_type],
@@ -37,8 +31,8 @@ export const cmoHelper = {
         });
         let viact = group.get('viatic_estimation') as FormArray;
         list.push(group);
-        this.subscribecmo(group, form, list, profiles);
-        r.travel_estimation_dimensional_validations.forEach(v => {
+        this.subscribeApm(group, form, list, profiles);
+        r.travel_estimation_accompaniment.forEach(v => {
           let travel = fb.group({
             description: [v.description],
             amount: [v.amount],
@@ -71,7 +65,7 @@ export const cmoHelper = {
     }
   },
 
-  createcmoGroup(
+  createApmCalculateLaborGroup(
     form: FormGroup,
     fb: FormBuilder,
     profiles: Array<any>,
@@ -100,9 +94,9 @@ export const cmoHelper = {
       subtotal: [0],
       viatic_estimation: fb.array([])
     });
-    let list = form.get('calculate_labor') as FormArray;
+    let list = form.get('apm_calculate_labor') as FormArray;
     let viact = group.get('viatic_estimation') as FormArray;
-    this.subscribecmo(group, form, list, profiles);
+    this.subscribeApm(group, form, list, profiles);
     tEestimation.forEach(r => {
       let est = fb.group({
         description: [r.description],
@@ -134,8 +128,6 @@ export const cmoHelper = {
     });
     return group;
   },
-
-
   operationAmount(group: FormGroup) {
     let formu = group.controls.formula_amount.value;
     let formula = formu;
@@ -172,8 +164,8 @@ export const cmoHelper = {
     group: FormGroup,
     estimation,
     cities,
-    viact: FormArray,
-    list: FormArray
+    viact,
+    list
   ) {
     form.get('displacement_type').valueChanges.subscribe(value => {
       let city_id = forma.get('city_id');
@@ -196,7 +188,7 @@ export const cmoHelper = {
     forma.get('city_id').valueChanges.subscribe(value => {
       let city = cities.find(c => c.id == value);
       if (city?.department_?.country_id != 1) {
-        group.patchValue({ unit_value: estimation.aerial_international_value || estimation?.international_value || estimation.unit_value })
+        group.patchValue({ unit_value: estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
       } else {
         group.patchValue({ unit_value: estimation.land_national_value || estimation?.national_value || estimation.unit_value })
       }
@@ -263,7 +255,7 @@ export const cmoHelper = {
     })
   },
 
-  subscribecmo(group: FormGroup, form: FormGroup, list: FormArray, profiles: Array<any>) {
+  subscribeApm(group: FormGroup, form: FormGroup, list: FormArray, profiles: Array<any>) {
     list.valueChanges.subscribe(value => {
       this.subtotalLabor(list, form);
       this.subtotalTravelExpense(list, form);
@@ -406,10 +398,9 @@ export const cmoHelper = {
         group.patchValue({ hours_value_festive: data.sunday_night_time_value });
       }
     });
-
     group.get('salary_value').valueChanges.subscribe(value => {
       this.subtotalLabor(list, form);
-    })
+    });
   },
 
   subtotalTravelExpenseEstimation(viact: FormArray, form: FormGroup) {
@@ -420,16 +411,17 @@ export const cmoHelper = {
   },
 
   subtotalTravelExpense(list: FormArray, form: FormGroup) {
+    console.log(list)
     setTimeout(() => {
       let total = list.value.reduce((a, b) => { return a + b.subtotal }, 0);
-      form.patchValue({ subtotal_travel_expense: total })
+      form.patchValue({ subtotal_travel_expense_apm: total })
     }, 100);
   },
 
   subtotalLabor(list: FormArray, form: FormGroup) {
     setTimeout(() => {
       let total = list.value.reduce((a, b) => { return a + b.salary_value }, 0);
-      form.patchValue({ subtotal_labor: total })
+      form.patchValue({ subtotal_labor_apm: total })
     }, 100);
   }
 };

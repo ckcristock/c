@@ -1,0 +1,53 @@
+<div class="card">
+  <div class="card-body">
+    <ng-container *ngIf="!loading && data; else notData">
+      <h4 class="text-primary">
+        {{
+          params.type == "pago"
+            ? "Ver pago de cesantías del año " + data.year
+            : "Ver pago de intereses de cesantías del año " + data.year
+        }}
+      </h4>
+      <hr class="line" />
+      <div class="alert alert-info" role="alert">
+        <b>RESPONSABLE DE PAGO: </b>
+        {{ data.user.person_name.complete_name | uppercase }}
+      </div>
+      <div class="rounded-top table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <td>Foto</td>
+              <td>Nombre</td>
+              <td>Monto pagado</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of data.people; let i = index"
+              class="text-center text-uppercase"
+            >
+              <td class="p-0">
+                <img
+                  [src]="item.person.image | image"
+                  onerror="this.src='../../../../assets/images/noprofile.png'"
+                  class="rounded-circle mx-auto img-fluid header-profile-user"
+                />
+              </td>
+              <td>{{ item.person.person }}</td>
+              <td class="text-right">${{ item.total | number : "1.2-2" }}</td>
+            </tr>
+            <tr>
+              <th class="text-right" colspan="2">TOTAL PAGADO</th>
+              <th class="text-right">${{ data.total | number : "1.2-2" }}</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

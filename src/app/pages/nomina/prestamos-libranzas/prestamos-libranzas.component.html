@@ -19,7 +19,7 @@
     <mat-accordion multi>
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
-          <div class="col-md-3 mb-4">
+          <div class="col mat-form-field-wrapper">
             <ng-select
               [(ngModel)]="filters.person"
               (change)="listaPrestamo()"
@@ -28,13 +28,14 @@
               bindValue="value"
               appearance="outline"
               [appendTo]="'body'"
+              [clearable]="false"
               placeholder="Funcionario"
               loadingText="loading "
               ngDefaultControl
             >
             </ng-select>
           </div>
-          <mat-form-field appearance="outline" class="col-md-3">
+          <mat-form-field appearance="outline" class="col">
             <mat-label>Rango de fechas</mat-label>
             <input
               matInput
@@ -88,15 +89,15 @@
               {{ item.person.first_name }} {{ item.person.first_surname }}
             </td>
             <td>{{ item.date | date : "dd/MM/yyyy" }}</td>
-            <td>{{ item.value | currency : "COP" }}</td>
+            <td class="text-right">${{ item.value | number : "1.2-2" }}</td>
             <td>{{ item.payment_type }}</td>
             <td>{{ item.fees.length }}</td>
             <td>0</td>
-            <td>
-              {{ item.monthly_fee | currency : "COP" }}
+            <td class="text-right">
+              ${{ item.monthly_fee | number : "1.2-2" }}
             </td>
             <td>{{ item.interest }}%</td>
-            <td>{{ item.value | currency : "COP" }}</td>
+            <td class="text-right">${{ item.value | number : "1.2-2" }}</td>
             <td>
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -109,28 +110,25 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item text-danger"
-                    (click)="download(item.id)"
+                    (click)="downloadPDF(item.id)"
                     href="javascript:void(0)"
                   >
-                    <i class="fa fa-file-pdf"></i> Descargar proyeccion PDF</a
+                    <i class="fa fa-file-pdf"></i> Descargar PDF</a
                   >
                   <a
                     class="dropdown-item text-success"
+                    (click)="downloadExcel(item.id)"
                     href="javascript:void(0)"
                   >
-                    <i class="fa fa-table"></i> Descargar proyeccion EXCEL</a
+                    <i class="fas fa-file-excel"></i> Descargar EXCEL</a
                   >
                   <a
                     *ngIf="item.value == 0"
-                    class="dropdown-item"
-                    href="{{
-                      globales.ruta
-                    }}/php/prestamoylibranza/pazysalvo.php?id={{
-                      item.Id_Prestamo
-                    }}"
+                    class="dropdown-item text-danger"
+                    (click)="downloadPaz(item.id)"
                     href="javascript:void(0)"
                   >
-                    <i class="fa fa-file-pdf-o text-success"></i>
+                    <i class="fa fa-file-pdf"></i>
                     Descargar paz y salvo
                   </a>
                 </div>

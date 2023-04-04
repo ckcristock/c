@@ -60,16 +60,16 @@ export class DatosEmpresaComponent implements OnInit {
       .subscribe((res: any) => {
         this.loading = false
         this.empresa = res.data;
-        this.getDependencies(this.empresa.group_id);
-        this.getPositions(this.empresa.dependency_id)
+        this.getDependencies(this.empresa?.group_id);
+        this.getPositions(this.empresa?.dependency_id)
         this.form.patchValue({
-          fixed_turn_id: this.empresa.fixed_turn_id,
-          position_id: this.empresa.position_id,
-          group_id: this.empresa.group_id,
-          dependency_id: this.empresa.dependency_id,
-          company_id: this.empresa.company_id,
-          id: this.empresa.id,
-          turn_type: this.empresa.turn_type
+          fixed_turn_id: this.empresa?.fixed_turn_id,
+          position_id: this.empresa?.position_id,
+          group_id: this.empresa?.group_id,
+          dependency_id: this.empresa?.dependency_id,
+          company_id: this.empresa?.company_id,
+          id: this.empresa?.id,
+          turn_type: this.empresa?.turn_type
         });
         if (this.form.get('turn_type').value == 'Rotativo') {
           this.form.patchValue({ fixed_turn_id: null });

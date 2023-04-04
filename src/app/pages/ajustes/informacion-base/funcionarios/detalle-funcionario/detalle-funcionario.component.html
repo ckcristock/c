@@ -8,11 +8,12 @@
   </div>
   <div class="col-md-2 px-0 text-right">
     <div class="btn-group rounded w-sm-100">
+
       <button
         *ngIf="funcionario.status == 'Activo'"
         type="button"
         class="btn btn-warning btn-sm"
-        (click)="openConfirm(add, 'PreLiquidado')"
+        (click)="modalPreliquidar.openModal()"
       >
         <i class="fas fa-money-bill"></i>
         Preliquidar
@@ -189,7 +190,10 @@
       </div>
       <div class="row">
         <div class="col">
-          <p>Seleccione la fecha desde la cuál desea sea preliquidado el funcionario: </p>
+          <p>
+            Seleccione la fecha desde la cuál desea sea preliquidado el
+            funcionario:
+          </p>
         </div>
         <mat-form-field appearance="outline" class="col mt-2">
           <mat-label>Fecha de preliquidación</mat-label>
@@ -230,3 +234,11 @@
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
+
+<app-modal-preliquidar
+  [funcionario]="funcionario"
+  (reload)="recargarDatos()"
+  #modalPreliquidar
+></app-modal-preliquidar>
+
+

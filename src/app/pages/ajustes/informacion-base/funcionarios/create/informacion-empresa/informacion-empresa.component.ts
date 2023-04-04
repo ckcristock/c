@@ -26,6 +26,8 @@ export class InformacionEmpresaComponent implements OnInit {
   contractTerms: any[] = [];
   fixedTurns: any[];
   groups: any[];
+  reload: boolean;
+
 
   $person: Subscription;
   formCompany: FormGroup;
@@ -47,17 +49,23 @@ export class InformacionEmpresaComponent implements OnInit {
   person: any;
   ngOnInit(): void {
     this.crearForm();
+    this.reloadData()
+  }
+
+  async reloadData() {
     this.getCompanies();
+    this.reload = true;
     this.getworkContractTypes();
     this.getRotatingTurns();
-    this.getGroups();
     this.$person = this._person.person.subscribe((r) => {
       this.person = r
     });
+    await this.getGroups();
+    this.reload = false
   }
 
-  getGroups() {
-    this._group.getGroup().subscribe((r: any) => {
+  async getGroups() {
+    await this._group.getGroup().toPromise().then((r: any) => {
       this.groups = r.data
     })
   }
@@ -122,6 +130,7 @@ export class InformacionEmpresaComponent implements OnInit {
       turn_type: ['Fijo', Validators.required],
       fixed_turn_id: ['', Validators.required],
       date_end: ['', Validators.required],
+      transport_assistance: ['']
     });
     /* this.formCompany.get('fixed_turn_id').disable(); */
     this.formCompany.get('date_end').disable();
@@ -148,7 +157,7 @@ export class InformacionEmpresaComponent implements OnInit {
     }
   }
   save() {
-    this.formCompany.markAllAsTouched()
+    //this.formCompany.markAllAsTouched()
     if (this.formCompany.invalid) { return false; }
     this.person.workContract = { ...this.formCompany.value };
     this._person.person.next(this.person)

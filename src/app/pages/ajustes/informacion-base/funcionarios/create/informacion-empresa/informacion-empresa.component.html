@@ -40,10 +40,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="col">
       <mat-label>Cargo</mat-label>
-      <mat-select
-        formControlName="position_id"
-        required
-      >
+      <mat-select formControlName="position_id" required>
         <mat-option *ngFor="let item of positions" [value]="item.value">{{
           item.text
         }}</mat-option>
@@ -91,10 +88,7 @@
     </mat-form-field>
     <mat-form-field class="col" appearance="outline">
       <mat-label>Tipo de contrato</mat-label>
-      <mat-select
-        formControlName="contract_term_id"
-        required
-      >
+      <mat-select formControlName="contract_term_id" required>
         <mat-option *ngFor="let item of contractTerms" [value]="item.id">{{
           item.name
         }}</mat-option>
@@ -106,7 +100,7 @@
       <input matInput type="date" formControlName="date_end" required />
       <mat-error>Campo obligatorio</mat-error>
     </mat-form-field>
-    <mat-form-field class="col" appearance="outline">
+    <mat-form-field class="col-4" appearance="outline">
       <mat-label>Tipo de turno</mat-label>
       <mat-select
         formControlName="turn_type"
@@ -119,32 +113,35 @@
       </mat-select>
       <mat-error>Campo obligatorio</mat-error>
     </mat-form-field>
-    <mat-form-field class="col" appearance="outline">
+    <mat-form-field class="col-5" appearance="outline">
       <mat-label>Turno asignado</mat-label>
-      <mat-select
-        formControlName="fixed_turn_id"
-        required
-      >
+      <mat-select formControlName="fixed_turn_id" required>
         <mat-option [value]="turn.value" *ngFor="let turn of fixedTurns">
           {{ turn.text }}
         </mat-option>
       </mat-select>
       <mat-error>Campo obligatorio</mat-error>
     </mat-form-field>
+    <mat-checkbox
+      class="col-3 mt-2"
+      color="primary"
+      formControlName="transport_assistance"
+      ><small> ¿Pagar auxilio de transporte?</small></mat-checkbox
+    >
+
     <div class="col-12">
       <div class="d-flex justify-content-between">
-        <button
-          type="button"
-          class="btn btn-sm btn-primary"
-          (click)="previus()"
-        >
-          Anterior
-        </button>
+        <button type="button" class="btn btn-sm btn-primary" (click)="previus()">Anterior</button>
         <button type="submit" class="btn btn-sm btn-primary">Siguiente</button>
       </div>
     </div>
   </div>
 </form>
+
+<app-reload-button
+  [reload]="reload"
+  (reloadData)="reloadData()"
+></app-reload-button>
 <!--
       <div class="form-group row">
         <label

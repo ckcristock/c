@@ -30,10 +30,10 @@
               />
             </td>
             <td>
-              {{ vacation.person.full_name | titlecase }}
+              {{ vacation.person.full_names | titlecase }}
             </td>
             <td>
-              {{ vacation.person.contractultimate.position.dependency.name }}
+              {{ vacation.person.contractultimate?.position.dependency.name || 'No aplica' }}
             </td>
             <td>
               {{ vacation.date_start | date : "longDate" }}

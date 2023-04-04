@@ -11,8 +11,8 @@
         <table class="table table-bordered table-striped table-sm mb-0">
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
-              <th>Dato</th>
               <th>Fecha de cambio</th>
+              <th>Dato</th>
               <th>Valor hasta fecha de cambio</th>
               <th>Usuario</th>
             </tr>
@@ -22,12 +22,12 @@
               *ngFor="let item of historialdatos"
               class="text-center"
             >
+              <td class="align-middle">{{ item.date_end | date: 'dd-MMM-yyyy h:mm a' }}</td>
               <td class="align-middle">
                 {{ item.data_name_for_user }}
               </td>
-              <td class="align-middle">{{ item.date_end | date }}</td>
               <td class="align-middle">
-                {{ item.value }}
+                {{ item.value || 'Vacío' }}
               </td>
               <td class="align-middle">{{ item.person.complete_name }}</td>
             </tr>

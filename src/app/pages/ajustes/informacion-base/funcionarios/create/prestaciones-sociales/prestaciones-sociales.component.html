@@ -5,8 +5,10 @@
         formControlName="eps_id"
         appearance="outline"
         placeholder="EPS"
+        [class.is-invalid]="eps_id_invalid"
         [appendTo]="'body'"
         [items]="epss"
+        [clearable]="false"
         bindLabel="text"
         bindValue="value"
         loadingText="loading"
@@ -22,8 +24,10 @@
         formControlName="compensation_fund_id"
         appearance="outline"
         [appendTo]="'body'"
+        [class.is-invalid]="compensation_fund_id_invalid"
         placeholder="Caja de compensación"
         [items]="compensationFunds"
+        [clearable]="false"
         bindLabel="text"
         bindValue="value"
         loadingText="loading"
@@ -41,8 +45,10 @@
         formControlName="severance_fund_id"
         appearance="outline"
         [appendTo]="'body'"
+        [class.is-invalid]="severance_fund_id_invalid"
         placeholder="Fondo de cesantías"
         [items]="severanceFunds"
+        [clearable]="false"
         bindLabel="text"
         bindValue="value"
         loadingText="loading"
@@ -61,8 +67,10 @@
         formControlName="pension_fund_id"
         appearance="outline"
         [appendTo]="'body'"
+        [class.is-invalid]="pension_fund_id_invalid"
         placeholder="Fondo de pensiones"
         [items]="pensionFunds"
+        [clearable]="false"
         bindLabel="text"
         bindValue="value"
         loadingText="loading"
@@ -83,6 +91,8 @@
         [appendTo]="'body'"
         placeholder="ARL"
         [items]="arl"
+        [class.is-invalid]="arl_id_invalid"
+        [clearable]="false"
         bindLabel="text"
         bindValue="value"
         loadingText="loading"
@@ -104,5 +114,11 @@
         <button type="submit" class="btn btn-sm btn-primary">Siguiente</button>
       </div>
     </div>
+
   </div>
 </form>
+
+<app-reload-button
+  [reload]="reload"
+  (reloadData)="reloadData()"
+></app-reload-button>

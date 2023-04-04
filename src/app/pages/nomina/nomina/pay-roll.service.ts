@@ -35,12 +35,13 @@ export class PayRollService {
   }
 
   dowloadPdfColillas(params: any) {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json')
-    return this.http.post(`${environment.base_url}/nomina/get-colillas`, params, { headers, responseType: 'blob' as 'json' });
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const options = { headers, responseType: 'blob' as 'json', timeout: 10000000 };
+    return this.http.post(`${environment.base_url}/nomina/get-colillas`, params, options);
   }
 
-  sendPayrollEmail(params = {}) {
-    return this.http.get(`${environment.base_url}/nomina/enviar-colillas`, { params })
+  sendPayrollEmail(data) {
+    return this.http.post(`${environment.base_url}/nomina/enviar-colillas`, data )
   }
 
 }

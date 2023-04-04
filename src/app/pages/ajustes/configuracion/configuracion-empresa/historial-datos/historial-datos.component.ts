@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { rightArithShift } from 'mathjs';
 import { HistorialDatosService } from './historial-datos.service';
-
 import { variables } from './variables'
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
+import { filter, map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-historial-datos',
   templateUrl: './historial-datos.component.html',
   styleUrls: ['./historial-datos.component.scss']
 })
+
+
 export class HistorialDatosComponent implements OnInit {
   historialdatos: any[];
   loading: boolean;

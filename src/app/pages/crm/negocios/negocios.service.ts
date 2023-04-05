@@ -51,6 +51,10 @@ export class NegociosService {
     return this.http.get(`${this.url}/cities`, { params })
   }
 
+  getMunicipalities() {
+    return this.http.get(`${environment.base_url}/municipalities`);
+  }
+
   getBudgets(params = {}) {
     return this.http.get(`${this.url}/budgets-paginate`, { params })
   }

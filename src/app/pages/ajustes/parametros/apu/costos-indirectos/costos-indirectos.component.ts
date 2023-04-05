@@ -23,7 +23,7 @@ export class CostosIndirectosComponent implements OnInit {
   indirect: any = {};
   pagination = {
     page: 1,
-    pageSize: 10,
+    pageSize: 50,
     collectionSize: 0
   }
   filtro: any = {
@@ -32,8 +32,8 @@ export class CostosIndirectosComponent implements OnInit {
 
   masksMoney = consts
 
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {

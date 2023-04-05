@@ -23,15 +23,15 @@ export class PerfilesApuComponent implements OnInit {
   profile: any = {};
   pagination = {
     page: 1,
-    pageSize: 10,
+    pageSize: 50,
     collectionSize: 0
   }
   filtro: any = {
     name: ''
   }
   masksMoney = consts
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {

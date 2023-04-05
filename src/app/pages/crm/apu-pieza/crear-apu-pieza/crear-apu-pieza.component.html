@@ -89,7 +89,7 @@
   </div>
   <div class="card">
     <div class="card-body">
-      <h5 class="mt-2 text-center">Costos directos</h5>
+      <h6 class="mt-2 text-center">Costos directos</h6>
       <hr class="line" />
       <app-planos
         *ngIf="planos.length > 0 && title == 'Editar pieza'"
@@ -245,10 +245,10 @@
           </div>
         </ng-container>
         <div class="row d-flex justify-content-end">
-          <div class="col-md-4">
+          <div class="col-md-5">
             <h6 class="d-flex justify-content-between">
-              Subtotal
-              <span class="badge badge-success badge-pill"
+              SUBTOTAL
+              <span
                 >${{
                   this.form.get("subtotal_raw_material").value
                     | number : "1.2-2"
@@ -371,10 +371,10 @@
           </table>
         </div>
         <div class="row d-flex justify-content-end">
-          <div class="col-md-4">
+          <div class="col-md-5">
             <h6 class="d-flex justify-content-between">
-              Subtotal
-              <span class="badge badge-success badge-pill"
+              SUBTOTAL
+              <span
                 >${{
                   this.form.get("commercial_materials_subtotal").value
                     | number : "1.2-2"
@@ -554,8 +554,8 @@
             </tbody>
           </table>
         </div>
-        <div class="row d-flex justify-content-end">
-          <div class="col-md-4">
+        <div class="row d-flex justify-content-end text-uppercase">
+          <div class="col-md-5">
             <ul class="list-group list-group-flush">
               <li
                 class="list-group-item d-flex justify-content-between align-items-center p-1"
@@ -570,7 +570,7 @@
               >
                 <h6>Subtotal unitario</h6>
                 <h6>
-                  <span class="badge badge-success badge-pill"
+                  <span
                     >${{
                       this.form.get("cut_water_unit_subtotal").value
                         | number : "1.2-2"
@@ -583,7 +583,7 @@
               >
                 <h6>Subtotal</h6>
                 <h6>
-                  <span class="badge badge-success badge-pill"
+                  <span
                     >${{
                       this.form.get("cut_water_subtotal").value
                         | number : "1.2-2"
@@ -769,8 +769,8 @@
           </table>
         </div>
 
-        <div class="row d-flex justify-content-end">
-          <div class="col-md-4">
+        <div class="row d-flex justify-content-end text-uppercase">
+          <div class="col-md-5">
             <ul class="list-group list-group-flush">
               <li
                 class="list-group-item d-flex justify-content-between align-items-center p-1"
@@ -785,7 +785,7 @@
               >
                 <h6>Subtotal unitario</h6>
                 <h6>
-                  <span class="badge badge-success badge-pill"
+                  <span
                     >${{
                       this.form.get("cut_laser_unit_subtotal").value
                         | number : "1.2-2"
@@ -798,7 +798,7 @@
               >
                 <h6>Subtotal</h6>
                 <h6>
-                  <span class="badge badge-success badge-pill"
+                  <span
                     >${{
                       this.form.get("cut_laser_subtotal").value
                         | number : "1.2-2"
@@ -890,10 +890,10 @@
           </table>
         </div>
         <div class="row d-flex justify-content-end">
-          <div class="col-md-4">
+          <div class="col-md-5">
             <h6 class="d-flex justify-content-between">
-              Subtotal
-              <span class="badge badge-success badge-pill"
+              SUBTOTAL
+              <span
                 >${{
                   this.form.get("machine_tools_subtotal").value
                     | number : "1.2-2"
@@ -983,10 +983,10 @@
           </table>
         </div>
         <div class="row d-flex justify-content-end">
-          <div class="col-md-4">
+          <div class="col-md-5">
             <h6 class="d-flex justify-content-between">
-              Subtotal
-              <span class="badge badge-success badge-pill"
+              SUBTOTAL
+              <span
                 >${{
                   this.form.get("internal_proccesses_subtotal").value
                     | number : "1.2-2"
@@ -1079,10 +1079,10 @@
           </table>
         </div>
         <div class="row d-flex justify-content-end">
-          <div class="col-md-4">
+          <div class="col-md-5">
             <h6 class="d-flex justify-content-between">
-              Subtotal
-              <span class="badge badge-success badge-pill"
+              SUBTOTAL
+              <span
                 >${{
                   this.form.get("external_proccesses_subtotal").value
                     | number : "1.2-2"
@@ -1196,10 +1196,10 @@
           </table>
         </div>
         <div class="row d-flex justify-content-end">
-          <div class="col-md-4">
+          <div class="col-md-5">
             <h6 class="d-flex justify-content-between">
-              Subtotal
-              <span class="badge badge-success badge-pill"
+              SUBTOTAL
+              <span
                 >${{
                   this.form.get("others_subtotal").value | number : "1.2-2"
                 }}</span
@@ -1221,14 +1221,14 @@
       </div>
       <hr />
       <div class="row d-flex justify-content-end">
-        <div class="col-md-4">
+        <div class="col-md-5">
           <ul class="list-group list-group-flush">
             <li
               class="list-group-item d-flex justify-content-between align-items-center p-1"
             >
               <h6>COSTO DIRECTO TOTAL</h6>
               <h6>
-                <span class="badge badge-success badge-pill"
+                <span
                   >${{
                     this.form.get("total_direct_cost").value | number : "1.2-2"
                   }}</span
@@ -1240,7 +1240,7 @@
             >
               <h6>COSTO DIRECTO UNITARIO</h6>
               <h6>
-                <span class="badge badge-success badge-pill"
+                <span
                   >${{
                     this.form.get("unit_direct_cost").value | number : "1.2-2"
                   }}</span
@@ -1472,33 +1472,33 @@
           <div class="rounded-top table-responsive">
             <table class="table table-borderless">
               <tbody class="text-uppercase">
-                <tr>
-                  <td class="col-9">Precio Venta Total COP + Retención</td>
-                  <td class="col-3 text-right">
-                    <h5>
-                      <span class="badge badge-success">
+                <tr class="table-primary">
+                  <th class="col-9">Precio Venta Total COP + Retención</th>
+                  <th class="col-3 text-right">
+                    <h6>
+                      <span>
                         $
                         {{
                           form.get("sale_price_cop_withholding_total").value
                             | number : "1.2-2"
                         }}
                       </span>
-                    </h5>
-                  </td>
+                    </h6>
+                  </th>
                 </tr>
-                <tr>
-                  <td class="col-9">Valor de Venta Unitario COP</td>
-                  <td class="col-3 text-right">
-                    <h5>
-                      <span class="badge badge-success">
+                <tr class="table-primary">
+                  <th class="col-9">Valor de Venta Unitario COP</th>
+                  <th class="col-3 text-right">
+                    <h6>
+                      <span>
                         $
                         {{
                           form.get("sale_value_cop_unit").value
                             | number : "1.2-2"
                         }}
                       </span>
-                    </h5>
-                  </td>
+                    </h6>
+                  </th>
                 </tr>
               </tbody>
             </table>
@@ -1525,33 +1525,33 @@
           <div class="rounded-top table-responsive">
             <table class="table table-borderless">
               <tbody class="text-uppercase">
-                <tr>
-                  <td class="col-9">Precio Venta Total USD + Retención</td>
-                  <td class="col-3 text-right">
-                    <h5>
-                      <span class="badge badge-success">
+                <tr class="table-primary">
+                  <th class="col-9">Precio Venta Total USD + Retención</th>
+                  <th class="col-3 text-right">
+                    <h6>
+                      <span>
                         USD
                         {{
                           form.get("sale_price_usd_withholding_total").value
                             | number : "1.2-2"
                         }}
                       </span>
-                    </h5>
-                  </td>
+                    </h6>
+                  </th>
                 </tr>
-                <tr>
-                  <td class="col-9">Valor de Venta Unitario USD</td>
-                  <td class="col-3 text-right">
-                    <h5>
-                      <span class="badge badge-success">
+                <tr class="table-primary">
+                  <th class="col-9">Valor de Venta Unitario USD</th>
+                  <th class="col-3 text-right">
+                    <h6>
+                      <span>
                         USD
                         {{
                           form.get("sale_value_usd_unit").value
                             | number : "1.2-2"
                         }}
                       </span>
-                    </h5>
-                  </td>
+                    </h6>
+                  </th>
                 </tr>
               </tbody>
             </table>

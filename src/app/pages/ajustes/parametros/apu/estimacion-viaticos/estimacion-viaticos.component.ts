@@ -22,7 +22,7 @@ export class EstimacionViaticosComponent implements OnInit {
   estimation_view: any = {};
   pagination = {
     page: 1,
-    pageSize: 10,
+    pageSize: 50,
     collectionSize: 0
   }
   filtro: any = {

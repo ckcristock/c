@@ -197,6 +197,15 @@ export const consts = {
     precision: 3
   },
 
+  maskNumbers2Decimal: {
+    prefix: ' ',
+    suffix: "",
+    thousands: '.',
+    decimal: ',',
+    allowNegative: false,
+    precision: 2
+  },
+
   maskNumbersFiveDecimal: {
     prefix: ' ',
     suffix: "",

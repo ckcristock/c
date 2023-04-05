@@ -21,21 +21,21 @@ export class MedidasComponent implements OnInit {
   measure: any = {};
   pagination = {
     page: 1,
-    pageSize: 10,
+    pageSize: 50,
     collectionSize: 0
   }
   filtro: any = {
     name: ''
   }
 
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
 
   constructor(
@@ -68,7 +68,7 @@ export class MedidasComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
 
@@ -100,7 +100,7 @@ export class MedidasComponent implements OnInit {
     })
   }
 
-  changeState(measure, state){
+  changeState(measure, state) {
     let data = {
       id: measure.id,
       state
@@ -108,18 +108,18 @@ export class MedidasComponent implements OnInit {
     this._swal.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
-      text: (data.state == 'Inactivo' ? '¡La medida se anulará!': '¡La medida se activará!')
-    }).then((r) =>{
+      text: (data.state == 'Inactivo' ? '¡La medida se anulará!' : '¡La medida se activará!')
+    }).then((r) => {
       if (r.isConfirmed) {
-        this._medidas.changeState(data).subscribe((r:any) =>{
-        this.getMeasures();
-        this._swal.show({
+        this._medidas.changeState(data).subscribe((r: any) => {
+          this.getMeasures();
+          this._swal.show({
             icon: 'success',
             title: 'Proceso satisfactio',
             text: (data.state == 'Inactivo' ? 'La medida ha sido anulada.' : 'La medida ha sido activada.'),
             showCancel: false,
             timer: 1000,
-        }); 
+          });
         });
       }
     });

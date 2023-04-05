@@ -139,7 +139,6 @@
               <thead class="bg-light">
                 <tr class="text-center text-uppercase">
                   <th class="align-middle">Espesor</th>
-                  <th class="align-middle">Valor Unitario</th>
                   <th class="align-middle">Velocidad Real</th>
                   <th class="align-middle">Seg. Percing</th>
                   <th class="align-middle"><i class="fas fa-trash-alt"></i></th>
@@ -155,30 +154,26 @@
                     <tr [formGroupName]="i">
                       <td>
                         <input
-                          type="number"
                           class="form-control form-control-sm"
                           formControlName="thickness"
+                          currencyMask
+                          [options]="masksMoney.maskNumbers2Decimal"
                         />
                       </td>
                       <td>
                         <input
-                          type="number"
-                          class="form-control form-control-sm"
-                          formControlName="unit_value"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="number"
                           class="form-control form-control-sm"
                           formControlName="actual_speed"
+                          currencyMask
+                          [options]="masksMoney.maskNumbersFiveDecimal"
                         />
                       </td>
                       <td>
                         <input
-                          type="number"
                           class="form-control form-control-sm"
                           formControlName="seconds_percing"
+                          currencyMask
+                          [options]="masksMoney.maskNumbers2Decimal"
                         />
                       </td>
                       <td>
@@ -275,7 +270,6 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Espesor</th>
-            <th>Valor Unitario</th>
             <th>Velocidad Real</th>
             <th>Seg. Percing</th>
           </tr>
@@ -285,10 +279,9 @@
             *ngFor="let item of material.cut_laser_material_value"
             class="text-center"
           >
-            <td>{{ item.thickness }}</td>
-            <td>{{ item.unit_value }}</td>
-            <td>{{ item.actual_speed }}</td>
-            <td>{{ item.seconds_percing }}</td>
+            <td>{{ item.thickness | number }}</td>
+            <td>{{ item.actual_speed | number }}</td>
+            <td>{{ item.seconds_percing | number }}</td>
           </tr>
         </tbody>
       </table>

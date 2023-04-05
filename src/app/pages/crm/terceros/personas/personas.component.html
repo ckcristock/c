@@ -146,24 +146,25 @@
           <tbody>
             <tr *ngFor="let person of people" class="text-center">
               <td class="align-middle" *ngIf="checkPersona">
-                {{ person.name }}
+                {{ person.name | titlecase }}
               </td>
-              <td class="align-middle">{{ person.n_document }}</td>
+              <td class="align-middle">{{ person.n_document | number }}</td>
               <td class="align-middle" *ngIf="checkTercero">
                 {{
-                  person.third_party
+                  (person.third_party
                     ? person.third_party.full_name
                     : "Sin tercero"
+                  ) | titlecase
                 }}
               </td>
               <td class="align-middle" *ngIf="checkTelefono">
                 {{ person.cell_phone }}
               </td>
               <td class="align-middle" *ngIf="checkEmail">
-                {{ person.email }}
+                {{ person.email | lowercase }}
               </td>
               <td class="align-middle" *ngIf="checkCargo">
-                {{ person.position }}
+                {{ person.position | capitalLetter }}
               </td>
               <td class="p-0 align-middle">
                 <div ngbDropdown container="body" class="dropdown-primary">

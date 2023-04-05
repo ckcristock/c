@@ -8,6 +8,7 @@ import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecu
 import { UserService } from 'src/app/core/services/user.service';
 import { consts } from 'src/app/core/utils/consts';
 import { CalculationBasesService } from 'src/app/pages/ajustes/configuracion/base-calculos/calculation-bases.service';
+import { ViewportScroller } from '@angular/common';
 
 
 @Component({
@@ -55,7 +56,8 @@ export class CrearApuServicioComponent implements OnInit {
     private router: Router,
     private _calculationBase: CalculationBasesService,
     public _consecutivos: ConsecutivosService,
-    private _user: UserService
+    private _user: UserService,
+    private scroll: ViewportScroller,
   ) {
     this.user_id = _user.user.person.id
   }
@@ -159,6 +161,11 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   newCmoList() {
+    if (this.form.get('city_id').invalid) {
+      this.form.get('city_id').markAsTouched()
+      this.scroll.scrollToPosition([0, 0]);
+      return null
+    }
     this.cmoList.push(this.cmoControl());
   }
 
@@ -177,6 +184,11 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   newmpMCalculateLaborList() {
+    if (this.form.get('city_id').invalid) {
+      this.form.get('city_id').markAsTouched()
+      this.scroll.scrollToPosition([0, 0]);
+      return null
+    }
     this.mpMCalculateLaborList.push(this.mpMCalculateLaborControl());
   }
 
@@ -197,6 +209,11 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   newapMCalculateLaborList() {
+    if (this.form.get('city_id').invalid) {
+      this.form.get('city_id').markAsTouched()
+      this.scroll.scrollToPosition([0, 0]);
+      return null
+    }
     this.apMCalculateLaborList.push(this.apMCalculateLaborControl());
   }
 
@@ -216,6 +233,11 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   newCApMCalculateLaborList() {
+    if (this.form.get('city_id').invalid) {
+      this.form.get('city_id').markAsTouched()
+      this.scroll.scrollToPosition([0, 0]);
+      return null
+    }
     this.cApMCalculateLaborList.push(this.cApMCalculateLaborControl());
   }
 
@@ -234,6 +256,11 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   newCVdMCalculateLaborList() {
+    if (this.form.get('city_id').invalid) {
+      this.form.get('city_id').markAsTouched()
+      this.scroll.scrollToPosition([0, 0]);
+      return null
+    }
     this.cVdCalculateLaborList.push(this.cVdCalculateLaborControl());
   }
 
@@ -252,6 +279,11 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   newCMeCalculateLaborList() {
+    if (this.form.get('city_id').invalid) {
+      this.form.get('city_id').markAsTouched()
+      this.scroll.scrollToPosition([0, 0]);
+      return null
+    }
     this.cMeCalculateLaborList.push(this.cMeCalculateLaborControl());
   }
 

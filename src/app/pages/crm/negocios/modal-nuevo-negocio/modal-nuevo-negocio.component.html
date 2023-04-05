@@ -201,13 +201,14 @@
           *ngIf="!loadingBudgets && budgets.length > 0; else notDataBudgets"
         >
           <ng-container *ngIf="budgets.length > 0; else notDataAd">
-            <div class="rounded-top table-responsive">
+            <div class="rounded-top table-responsive mt-2">
               <table
-                class="table table-bordered table-striped table-sm mt-2"
+                class="table table-bordered table-striped table-sm"
                 style="font-size: smaller"
               >
                 <thead class="bg-light">
                   <tr class="text-center text-uppercase">
+                    <td></td>
                     <th>Código</th>
                     <th>Fecha</th>
                     <th>Destino</th>
@@ -226,27 +227,31 @@
                       'text-danger font-weight-bold': item.state == 'Inactivo'
                     }"
                   >
-                    <td class="align-middle pb-0 text-left">
+                    <td class="pb-0">
                       <mat-checkbox
                         color="primary"
                         (change)="guardarPresupuesto($event, item)"
-                        >{{ item.code }}</mat-checkbox
-                      >
+                      ></mat-checkbox>
+                    </td>
+                    <td class="align-middle">{{ item.code | uppercase }}</td>
+                    <td class="align-middle">
+                      {{ item.created_at | date : "MMM d, y" }}
                     </td>
                     <td class="align-middle">
-                      {{ item.created_at | date : "longDate" }}
+                      {{ item.destiny.name | capitalLetter }}
                     </td>
-                    <td class="align-middle">{{ item.destiny.name }}</td>
-                    <td class="align-middle">{{ item.line }}</td>
                     <td class="align-middle">
-                      {{ item.user.person.first_name }}
-                      {{ item.user.person.first_surname }}
+                      {{ item.line | capitalLetter }}
+                    </td>
+                    <td class="align-middle">
+                      {{ item.user.person.first_name | titlecase }}
+                      {{ item.user.person.first_surname | titlecase }}
                     </td>
                     <td class="align-middle">
                       ${{ item.total_cop | number : "1.2-2" }}
                     </td>
                     <td class="align-middle">
-                      ${{ item.total_usd | number : "1.2-2" }}
+                      USD {{ item.total_usd | number : "1.2-2" }}
                     </td>
                     <td class="align-middle">
                       <div
@@ -395,13 +400,14 @@
           "
         >
           <ng-container *ngIf="quotations.length > 0; else notDataAd">
-            <div class="rounded-top table-responsive">
+            <div class="rounded-top table-responsive mt-2">
               <table
-                class="table table-bordered table-striped table-sm mt-2"
+                class="table table-bordered table-striped table-sm"
                 style="font-size: smaller"
               >
                 <thead class="bg-light">
                   <tr class="text-center text-uppercase">
+                    <th></th>
                     <th>Código</th>
                     <th>Fecha</th>
                     <th>Descripción</th>
@@ -413,23 +419,25 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let item of quotations" class="text-center">
-                    <td class="align-middle pb-0 text-left">
+                    <td class="pb-0">
                       <mat-checkbox
                         color="primary"
                         (change)="guardarCotizacion($event, item)"
-                        >{{ item.code }}</mat-checkbox
-                      >
+                      ></mat-checkbox>
                     </td>
                     <td class="align-middle">
-                      {{ item.created_at | date : "longDate" }}
+                      {{ item.code | uppercase }}
                     </td>
-                    <td>{{ item.description }}</td>
-                    <td>{{ item.municipality.name }}</td>
+                    <td class="align-middle">
+                      {{ item.created_at | date : "MMM d, y" }}
+                    </td>
+                    <td>{{ item.description | capitalLetter }}</td>
+                    <td>{{ item.municipality.name | capitalLetter }}</td>
                     <td class="align-middle">
                       ${{ item.total_cop | number : "1.2-2" }}
                     </td>
                     <td class="align-middle">
-                      ${{ item.total_usd | number : "1.2-2" }}
+                      USD {{ item.total_usd | number : "1.2-2" }}
                     </td>
                     <td>
                       <div
@@ -534,10 +542,10 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of apuSelected" class="text-center">
-                  <td>{{ item.code }}</td>
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.line }}</td>
-                  <td>{{ item.type_name }}</td>
+                  <td>{{ item.code | uppercase }}</td>
+                  <td>{{ item.name | capitalLetter }}</td>
+                  <td>{{ item.line | capitalLetter }}</td>
+                  <td>{{ item.type_name | capitalLetter }}</td>
                   <td>${{ item.unit_cost | number : "1.2-2" }}</td>
                   <td class="align-middle">
                     <div ngbDropdown container="body" class="dropdown-primary">

@@ -202,11 +202,11 @@
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
-                <th>Fecha</th>
-                <th>Descripción</th>
-                <th>Ciudad</th>
                 <th>Código</th>
+                <th>Fecha</th>
                 <th>Cliente</th>
+                <th>Ciudad</th>
+                <th>Descripción</th>
                 <th>Incluye</th>
                 <th>Estado</th>
                 <th><i class="mdi mdi-chevron-down"></i></th>
@@ -223,17 +223,18 @@
                   'text-info': item.selected
                 }"
               >
-                <td>{{ item.created_at | date : "MMM d, y, h:mm a" }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.municipality.name }}</td>
-                <td>{{ item.code }}</td>
+                <td>{{ item.code | uppercase }}</td>
+                <td>{{ item.created_at | date : "MMM d, y" }}</td>
                 <td>
                   {{
-                    item.client.social_reason
+                    (item.client.social_reason
                       ? item.client.social_reason
                       : item.client.full_name
+                    ) | titlecase
                   }}
                 </td>
+                <td>{{ item.municipality.name | capitalLetter }}</td>
+                <td>{{ item.description | capitalLetter }}</td>
                 <td>
                   {{
                     item.included == "apu"
@@ -257,7 +258,7 @@
                         ? 'badge-danger'
                         : 'badge-dark'
                     "
-                    >{{ item.status }}</span
+                    >{{ item.status | uppercase }}</span
                   >
                 </td>
                 <td>

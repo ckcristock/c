@@ -181,7 +181,7 @@ export const cmoHelper = {
       if (value == 1 && city?.department_?.country_id != 1) {
         group.patchValue({ unit_value: estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
       } else if (value == 2 && city?.department_?.country_id != 1) {
-        group.patchValue({ unit_value: estimation?.land_international_value || estimation?.international_value || estimation.unit_value })
+        group.patchValue({ unit_value: estimation?.land_international_value || estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
       } else if (value == 3) {
         group.patchValue({ unit_value: estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
       }
@@ -195,10 +195,20 @@ export const cmoHelper = {
     });
     forma.get('city_id').valueChanges.subscribe(value => {
       let city = cities.find(c => c.id == value);
-      if (city?.department_?.country_id != 1) {
-        group.patchValue({ unit_value: estimation.aerial_international_value || estimation?.international_value || estimation.unit_value })
-      } else {
-        group.patchValue({ unit_value: estimation.land_national_value || estimation?.national_value || estimation.unit_value })
+      let displacement_type = form.get('displacement_type').value
+      if (displacement_type == 1 && city?.department_?.country_id != 1) {
+        group.patchValue({ unit_value: estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
+      } else if (displacement_type == 2 && city?.department_?.country_id != 1) {
+        group.patchValue({ unit_value: estimation?.land_international_value || estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
+      } else if (displacement_type == 3) {
+        group.patchValue({ unit_value: estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
+      }
+      if (displacement_type == 1 && city?.department_?.country_id == 1) {
+        group.patchValue({ unit_value: estimation?.aerial_national_value || estimation?.national_value || estimation.unit_value })
+      } else if (displacement_type == 2 && city?.department_?.country_id == 1) {
+        group.patchValue({ unit_value: estimation?.land_national_value || estimation?.national_value || estimation.unit_value })
+      } else if (displacement_type == 3) {
+        group.patchValue({ unit_value: estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
       }
     });
     group.get('amount').valueChanges.pipe(debounceTime(500)).subscribe(value => {

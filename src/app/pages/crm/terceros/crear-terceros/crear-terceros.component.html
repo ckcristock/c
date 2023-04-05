@@ -51,6 +51,7 @@
                   formControlName="country_id"
                   [disableOptionCentering]="true"
                   #selectCountries
+                  required
                   (selectionChange)="filterDepartments($event.value)"
                 >
                   <mat-select-filter
@@ -76,6 +77,7 @@
                   formControlName="department_id"
                   [disableOptionCentering]="true"
                   #selectDepartments
+                  required
                   (selectionChange)="filterMunicipalities($event.value)"
                 >
                   <mat-select-filter
@@ -97,6 +99,7 @@
                 <mat-select
                   [disableOptionCentering]="true"
                   #selectMunicipalities
+                  required
                   formControlName="municipality_id"
                 >
                   <mat-select-filter
@@ -104,10 +107,10 @@
                     [placeholder]="'Buscar'"
                     [array]="municipalities"
                     [displayMember]="'text'"
-                    (filteredReturn)="filterMunicipalities = $event"
+                    (filteredReturn)="filteredMunicipality = $event"
                   ></mat-select-filter>
                   <mat-option
-                    *ngFor="let municipality of filterMunicipalities"
+                    *ngFor="let municipality of filteredMunicipality"
                     [value]="municipality.value"
                     >{{ municipality.text }}</mat-option
                   >
@@ -120,6 +123,7 @@
                 <mat-label>Tipo de persona</mat-label>
                 <mat-select
                   formControlName="person_type"
+                  required
                   (selectionChange)="personType()"
                 >
                   <mat-option value="natural">Natural</mat-option>
@@ -133,6 +137,7 @@
                 <mat-select
                   [disabled]="form.get('person_type').value == 'juridico'"
                   formControlName="document_type"
+                  required
                   (selectionChange)="personType()"
                 >
                   <mat-option
@@ -150,6 +155,7 @@
                   type="text"
                   matInput
                   formControlName="nit"
+                  required
                   autocomplete="off"
                   (change)="validarDV($event.target.value)"
                   placeholder="Ingresa el número de identificación"
@@ -158,14 +164,14 @@
                 <mat-error> Campo <strong>obligatorio</strong> </mat-error>
               </mat-form-field>
               <mat-form-field
-                class="col"
+                class="col-md-1"
                 appearance="outline"
                 *ngIf="
                   this.nitSelected == this.form.get('document_type').value &&
                   this.form.get('country_id').value == 1
                 "
               >
-                <mat-label>Dígito de verificación</mat-label>
+                <mat-label>DV</mat-label>
                 <input
                   type="text"
                   matInput
@@ -180,6 +186,7 @@
                 <mat-select
                   formControlName="third_party_type"
                   (selectionChange)="personType()"
+                  required
                 >
                   <mat-option value="Cliente">Cliente</mat-option>
                   <mat-option value="Proveedor">Proveedor</mat-option>
@@ -187,19 +194,28 @@
                 <mat-icon matSuffix>title</mat-icon>
                 <mat-error> Campo <strong>obligatorio</strong> </mat-error>
               </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
+              <mat-form-field
+                class="col"
+                appearance="outline"
+                *ngIf="form.get('first_name').enabled"
+              >
                 <mat-label>Primer nombre</mat-label>
                 <input
                   type="text"
                   matInput
                   formControlName="first_name"
+                  required
                   autocomplete="off"
                   placeholder="Ingrese el primer nombre"
                 />
                 <mat-icon matSuffix>looks_one</mat-icon>
                 <mat-error> Campo <strong>obligatorio</strong> </mat-error>
               </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
+              <mat-form-field
+                class="col"
+                appearance="outline"
+                *ngIf="form.get('second_name').enabled"
+              >
                 <mat-label>Segundo nombre</mat-label>
                 <input
                   type="text"
@@ -210,19 +226,28 @@
                 />
                 <mat-icon matSuffix>looks_two</mat-icon>
               </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
+              <mat-form-field
+                class="col"
+                appearance="outline"
+                *ngIf="form.get('first_surname').enabled"
+              >
                 <mat-label>Primer apellido</mat-label>
                 <input
                   type="text"
                   matInput
                   formControlName="first_surname"
                   autocomplete="off"
+                  required
                   placeholder="Ingrese el primer apellido"
                 />
                 <mat-icon matSuffix>looks_one</mat-icon>
                 <mat-error> Campo <strong>obligatorio</strong> </mat-error>
               </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
+              <mat-form-field
+                class="col"
+                appearance="outline"
+                *ngIf="form.get('second_surname').enabled"
+              >
                 <mat-label>Segundo apellido</mat-label>
                 <input
                   type="text"
@@ -233,13 +258,18 @@
                 />
                 <mat-icon matSuffix>looks_two</mat-icon>
               </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
+              <mat-form-field
+                class="col"
+                appearance="outline"
+                *ngIf="form.get('social_reason').enabled"
+              >
                 <mat-label>Razón social</mat-label>
                 <input
                   type="text"
                   matInput
                   formControlName="social_reason"
                   autocomplete="off"
+                  required
                   placeholder="Ingrese la razón social"
                 />
                 <mat-icon matSuffix>diversity_3</mat-icon>
@@ -263,6 +293,7 @@
                   matInput
                   formControlName="landline"
                   autocomplete="off"
+                  required
                   placeholder="Ingrese el teléfono fijo"
                 />
                 <mat-icon matSuffix>phone</mat-icon>
@@ -278,9 +309,6 @@
                   placeholder="Ingrese el teléfono celular"
                 />
                 <mat-icon matSuffix>phone_iphone</mat-icon>
-                <!-- <mat-error *ngIf="cell_phone_valid">
-                                            Celular es <strong>obligatorio</strong>
-                                        </mat-error> -->
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
                 <mat-label>Correo electrónico</mat-label>
@@ -289,12 +317,10 @@
                   matInput
                   formControlName="email"
                   autocomplete="off"
+                  required
                   placeholder="Ingrese el correo"
                 />
                 <mat-icon matSuffix>email</mat-icon>
-                <!-- <mat-error *ngIf="email_valid">
-                          Campo <strong>obligatorio</strong>
-                        </mat-error> -->
                 <mat-error *ngIf="form.get('email').errors?.email">
                   El correo es incorrecto
                 </mat-error>
@@ -313,6 +339,7 @@
                 <mat-select
                   [disableOptionCentering]="true"
                   #selectDirection1
+                  required
                   formControlName="dian_address"
                 >
                   <mat-select-filter
@@ -322,6 +349,7 @@
                     [displayMember]="'description'"
                     (filteredReturn)="filteredDianDirection = $event"
                   ></mat-select-filter>
+
                   <mat-option
                     *ngFor="let addre of filteredDianDirection"
                     [value]="addre.code"
@@ -366,6 +394,7 @@
                     [displayMember]="'description'"
                     (filteredReturn)="filteredDianDirection = $event"
                   ></mat-select-filter>
+                  <mat-option value="">Ninguna</mat-option>
                   <mat-option
                     *ngFor="let item of filteredDianDirection"
                     [value]="item.description"
@@ -390,6 +419,7 @@
                   matInput
                   formControlName="cod_dian_address"
                   autocomplete="off"
+                  required
                   placeholder="Ingrese el número"
                 />
                 <mat-icon matSuffix>home_filled</mat-icon>

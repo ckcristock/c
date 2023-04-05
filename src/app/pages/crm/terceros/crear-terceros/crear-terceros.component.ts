@@ -72,10 +72,10 @@ export class CrearTercerosComponent implements OnInit {
   typeImage: any = '';
   field: any;
   searchActividad: any
-  filteredCountries: any;
-  filteredDepartment: any;
-  filteredMunicipality: any;
-  filteredDianDirection: any;
+  filteredCountries: any[] = [];
+  filteredDepartment: any[] = [];
+  filteredMunicipality: any[] = [];
+  filteredDianDirection: any[] = [];
   reload: boolean;
   constructor(
     private location: Location,
@@ -86,21 +86,22 @@ export class CrearTercerosComponent implements OnInit {
     private actRoute: ActivatedRoute,
     private _validators: ValidatorsService,
     private sanitizer: DomSanitizer
-  ) { }
+  ) {
+    this.id = this.actRoute.snapshot.params.id;
+  }
 
   ciiu: any[] = [];
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.createForm();
     this.getZones();
-    this.getCountriesWith();
-    this.id = this.actRoute.snapshot.params.id;
+    await this.getFields();
+    await this.getCountriesWith();
     this.getWinningLists();
     this.getCiiuCodeLists();
     this.getDianAddress();
     this.getAccountPlan();
     this.getTypeDocuments();
     this.getTitle();
-    this.getFields();
     this.getRegimeType();
     this.getFiscalResponsibility();
     //this.getCiiu();
@@ -126,12 +127,7 @@ export class CrearTercerosComponent implements OnInit {
   }
 
 
-  getCountriesWith() {
-    this._terceros.getCountriesWith().subscribe((res: any) => {
-      this.countries = res.data
-      this.filteredCountries = res.data.slice()
-    })
-  }
+
   createForm() {
     this.form = this.fb.group({
       /* Inicia Datos Básicos */
@@ -157,7 +153,7 @@ export class CrearTercerosComponent implements OnInit {
       cell_phone: [''],
       email: ['', [this._validators.required, Validators.email]],
       zone_id: [''],
-      department_id: [''],
+      department_id: ['', Validators.required],
       municipality_id: ['', this._validators.required],
       country_id: ['', this._validators.required],
       image: [''],
@@ -186,7 +182,7 @@ export class CrearTercerosComponent implements OnInit {
       fiscal_responsibility: [''],
       discount_prompt_payment: [''],
       discount_days: [''],
-      state: ['', this._validators.required],
+      state: ['Activo', this._validators.required],
       rut: [''],
       typeRut: [''],
       typeImage: [''],
@@ -259,6 +255,16 @@ export class CrearTercerosComponent implements OnInit {
     person.removeAt(i);
   }
 
+  async getCountriesWith() {
+    await this._terceros.getCountriesWith().toPromise().then((res: any) => {
+      this.countries = res.data
+      this.filteredCountries = res.data.slice()
+    })
+    if (this.id) {
+      this.filterDepartments(this.third.country_id)
+    }
+  }
+
   filterDepartments(id) {
     this.departments = []
     this.countries.forEach(country => {
@@ -273,11 +279,12 @@ export class CrearTercerosComponent implements OnInit {
   }
 
   filterMunicipalities(id) {
+    console.log('llegando', this.departments, id)
     this.municipalities = []
     this.departments.forEach(department => {
       if (department.id == id) {
         this.municipalities = department.municipalities
-        this.filterMunicipalities = department.municipalities.slice()
+        this.filteredMunicipality = department.municipalities.slice()
       }
     });
   }
@@ -302,8 +309,8 @@ export class CrearTercerosComponent implements OnInit {
     }
   }
 
-  getFields() {
-    this._terceros.getFields().subscribe((r: any) => {
+  async getFields() {
+    await this._terceros.getFields().toPromise().then((r: any) => {
       this.fields = r.data;
       this.fields.forEach((field: any) => {
         let field_name = field.name;
@@ -481,11 +488,11 @@ export class CrearTercerosComponent implements OnInit {
     setTimeout(() => {
       let forma = this.form.value;
       let cod_dian_address =
-        forma.dian_address + ' ' +
-        forma.address_one + ' ' +
-        forma.address_two + ' ' +
-        forma.address_three + ' ' +
-        forma.address_four;
+        (forma.dian_address ? (forma.dian_address + ' ') : '') +
+        (forma.address_one ? (forma.address_one + ' ') : '') +
+        (forma.address_two ? (forma.address_two + ' ') : '') +
+        (forma.address_three ? (forma.address_three + ' ') : '') +
+        (forma.address_four ? (forma.address_four + ' ') : '');
       this.form.patchValue({
         cod_dian_address
       });

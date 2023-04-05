@@ -176,7 +176,7 @@
                           </option>
                         </select>
                         <ng-template #type>
-                          {{ subItem.controls.type.value }}
+                          {{ subItem.controls.type.value | capitalLetter }}
                         </ng-template>
                       </td>
                       <td>
@@ -198,7 +198,7 @@
                         <input
                           style="width: 11rem"
                           type="text"
-                          class="form-control form-control-sm"
+                          class="form-control form-control-sm text-uppercase"
                           placeholder="Ingresa la descripción"
                           [readonly]="subItem.get('type_module').value"
                           [ngClass]="{
@@ -410,7 +410,8 @@
                       </td>
                       <td class="align-middle">
                         <div class="values">
-                          USD{{
+                          USD
+                          {{
                             subItem.controls.value_usd.value | number : "1.2-2"
                           }}
                         </div>
@@ -427,7 +428,8 @@
                         </td>
                         <td class="align-middle">
                           <div class="values">
-                            USD{{
+                            USD
+                            {{
                               subItem.controls.value_prorrota_usd.value
                                 | number : "1.2-2"
                             }}
@@ -443,7 +445,8 @@
                         </td>
                         <td class="align-middle">
                           <div class="values">
-                            USD{{
+                            USD
+                            {{
                               subItem.controls.unit_value_prorrateado_usd.value
                                 | number : "1.2-2"
                             }}
@@ -456,6 +459,7 @@
                           type="text"
                           style="width: 5rem"
                           placeholder="Ingresa las observaciones"
+                          formControlName="observation"
                           class="form-control form-control-sm"
                         />
                       </td>
@@ -612,7 +616,8 @@
                     </td>
                     <td class="align-middle">
                       <div class="values">
-                        USD{{
+                        USD
+                        {{
                           item.controls.unit_value_prorrateado_usd.value
                             | number : "1.2-2"
                         }}

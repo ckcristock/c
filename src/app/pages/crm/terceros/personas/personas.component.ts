@@ -160,7 +160,7 @@ export class PersonasComponent implements OnInit {
   }
 
   getThirdsForCreate() {
-    this._terceros.getThirds({get_full: true}).subscribe((r: any) => {
+    this._terceros.getThirds({ get_full: true }).subscribe((r: any) => {
       this.thirds_aux = r.data;
       this.thirds_aux.unshift({ text: 'Sin tercero', value: null });
     })
@@ -187,7 +187,7 @@ export class PersonasComponent implements OnInit {
       email: ['', Validators.email],
       position: [''],
       observation: [''],
-      third_party_id: [''],
+      third_party_id: [null],
     });
   }
 

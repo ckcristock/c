@@ -357,7 +357,7 @@ export class ItemsComponent implements OnInit {
       value_prorrota_usd: edit ? apu.value_prorrota_usd : 0,
       unit_value_prorrateado_cop: edit ? apu.unit_value_prorrateado_cop : 0,
       unit_value_prorrateado_usd: edit ? apu.unit_value_prorrateado_usd : 0,
-      observation: '',
+      observation: edit ? apu.observation : '',
       type_module: (apu ? apu.type_module : '')
     })
   }

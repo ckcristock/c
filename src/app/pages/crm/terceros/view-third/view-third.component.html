@@ -39,7 +39,7 @@
                       <mat-icon class="mat-icon-font d-flex align-items-center"
                         >location_on</mat-icon
                       >
-                      {{ third_data.country.name }}
+                      {{ third_data.country.name | capitalLetter }}
                     </div>
                     <div class="d-flex align-items-center text-truncate">
                       <mat-icon
@@ -47,7 +47,7 @@
                         class="mat-icon-font d-flex align-items-center"
                         >mail</mat-icon
                       >
-                      {{ third_data.email }}
+                      {{ third_data.email | lowercase }}
                     </div>
                     <div class="d-flex align-items-center text-truncate">
                       <mat-icon
@@ -55,7 +55,11 @@
                         class="mat-icon-font d-flex align-items-center"
                         >call</mat-icon
                       >
-                      {{ third_data.landline }} / {{ third_data.cell_phone }}
+                      {{ third_data.landline }}
+                      {{
+                        third_data.landline && third_data.cell_phone ? "-" : ""
+                      }}
+                      {{ third_data.cell_phone }}
                     </div>
                     <div class="d-flex align-items-center text-truncate">
                       <mat-icon
@@ -67,7 +71,7 @@
                             : "manage_accounts"
                         }}</mat-icon
                       >
-                      {{ third_data.third_party_type }}
+                      {{ third_data.third_party_type | capitalLetter }}
                     </div>
                   </div>
                   <div class="row mt-3">
@@ -76,12 +80,17 @@
                         <table class="table table-borderless">
                           <tbody>
                             <tr>
-                              <th>Documento:</th>
-                              <td>{{ third_data.document_type_.code }}</td>
+                              <th>Tipo doc.:</th>
+                              <td>
+                                {{ third_data.document_type_.code | uppercase }}
+                              </td>
                             </tr>
                             <tr>
                               <th>Número:</th>
-                              <td>{{ third_data.nit }}-{{ third_data.dv }}</td>
+                              <td>
+                                {{ third_data.nit | number }}
+                                {{ third_data.dv ? "-" + third_data.dv : "" }}
+                              </td>
                             </tr>
                             <tr>
                               <th>Persona:</th>
@@ -103,11 +112,15 @@
                           <tbody>
                             <tr>
                               <th>Departamento:</th>
-                              <td>{{ third_data.department.name }}</td>
+                              <td>
+                                {{ third_data.department.name | uppercase }}
+                              </td>
                             </tr>
                             <tr>
                               <th>Municipio:</th>
-                              <td>{{ third_data.municipality.name }}</td>
+                              <td>
+                                {{ third_data.municipality.name | uppercase }}
+                              </td>
                             </tr>
                             <tr>
                               <th>Teléfono pagos:</th>
@@ -118,7 +131,10 @@
                             <tr>
                               <th>Correo pagos:</th>
                               <td>
-                                {{ third_data.email_payments | uppercase }}
+                                {{
+                                  third_data.email_payments || "No disponible"
+                                    | uppercase
+                                }}
                               </td>
                             </tr>
                           </tbody>
@@ -205,20 +221,25 @@
                   <tbody>
                     <tr *ngFor="let person of people" class="text-center">
                       <td class="align-middle">
-                        {{ person.name }}
-                      </td>
-                      <td class="align-middle">{{ person.n_document }}</td>
-                      <td class="align-middle">
-                        {{ person.cell_phone }}
+                        {{ person.name | titlecase }}
                       </td>
                       <td class="align-middle">
-                        {{ person.email }}
+                        {{ person.n_document || "Sin informacion" | number }}
                       </td>
                       <td class="align-middle">
-                        {{ person.position }}
+                        {{ person.cell_phone || "Sin información" }}
                       </td>
                       <td class="align-middle">
-                        {{ person.observation }}
+                        {{ person.email | lowercase }}
+                      </td>
+                      <td class="align-middle">
+                        {{ person.position | capitalLetter }}
+                      </td>
+                      <td class="align-middle">
+                        {{
+                          person.observation || "Sin información"
+                            | capitalLetter
+                        }}
                       </td>
                     </tr>
                   </tbody>
@@ -324,9 +345,9 @@
             >
               <thead class="bg-light">
                 <tr class="text-center text-uppercase">
+                  <th>Código</th>
                   <th>Fecha</th>
                   <th>Ciudad</th>
-                  <th>Código</th>
                   <th class="col-4">Descripción</th>
                   <th>Estado</th>
                   <th><i class="mdi mdi-chevron-down"></i></th>
@@ -340,10 +361,10 @@
                     'text-danger font-weight-bold': item.status === 'Inactivo'
                   }"
                 >
-                  <td>{{ item.created_at | date : "MMM d, y, h:mm a" }}</td>
-                  <td>{{ item.municipality.name }}</td>
-                  <td>COT{{ item.id }}</td>
-                  <td>{{ item.observation }}</td>
+                  <td>{{ item.code }}</td>
+                  <td>{{ item.created_at | date : "MMM d, y" }}</td>
+                  <td>{{ item.municipality.name | capitalLetter }}</td>
+                  <td>{{ item.description | capitalLetter }}</td>
                   <td>
                     <span
                       class="badge"
@@ -358,7 +379,7 @@
                           ? 'badge-danger'
                           : 'badge-dark'
                       "
-                      >{{ item.status }}</span
+                      >{{ item.status | uppercase }}</span
                     >
                   </td>
                   <td>
@@ -437,7 +458,7 @@
             >
               <thead class="bg-light">
                 <tr class="text-center text-uppercase">
-                  <th>Item</th>
+                  <th>Código</th>
                   <th>Fecha</th>
                   <th>Destino</th>
                   <th>Linea</th>
@@ -449,23 +470,23 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of budgets" class="text-center">
-                  <td class="align-middle">PRES {{ item.id }}</td>
+                  <td class="align-middle">{{ item.code | uppercase }}</td>
                   <td class="align-middle">
-                    {{ item.created_at | date : "longDate" }}
+                    {{ item.created_at | date : "MMM d, y" }}
                   </td>
                   <td class="align-middle">
-                    {{ item.destiny.name }}
+                    {{ item.destiny.name | capitalLetter }}
                   </td>
-                  <td class="align-middle">{{ item.line }}</td>
+                  <td class="align-middle">{{ item.line | capitalLetter }}</td>
                   <td class="align-middle">
-                    {{ item.user.person.first_name }}
-                    {{ item.user.person.first_surname }}
+                    {{ item.user.person.first_name | titlecase }}
+                    {{ item.user.person.first_surname | titlecase }}
                   </td>
                   <td class="align-middle">
                     ${{ item.total_cop | number : "1.2-2" }}
                   </td>
                   <td class="align-middle">
-                    ${{ item.total_usd | number : "1.2-2" }}
+                    USD {{ item.total_usd | number : "1.2-2" }}
                   </td>
                   <td class="align-middle">
                     <div
@@ -547,31 +568,31 @@
             >
               <thead class="bg-light">
                 <tr class="text-center text-uppercase">
-                  <th>Foto</th>
                   <th>Código</th>
                   <th>Nombre</th>
                   <th>Presupuesto</th>
-                  <th>Fecha</th>
+                  <th>Fecha entrega</th>
                   <th>Etapa</th>
                   <th><i class="mdi mdi-chevron-down"></i></th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let item of business" class="text-center">
-                  <td class="p-0">
-                    <img
-                      [src]="item.third_party.image | image"
-                      onerror="this.src='../../../../assets/images/noprofile.png'"
-                      class="rounded-circle mx-auto img-fluid header-profile-user"
-                    />
+                  <td class="align-middle" scope="row">
+                    {{ item.code | uppercase }}
                   </td>
-                  <td class="align-middle" scope="row">{{ item.code }}</td>
-                  <td class="align-middle" scope="row">{{ item.name }}</td>
+                  <td class="align-middle" scope="row">
+                    {{ item.name | capitalLetter }}
+                  </td>
                   <td class="align-middle">
-                    $ {{ item.budget_value | number }}
+                    $ {{ item.budget_value | number : "1.2-2" }}
                   </td>
-                  <td class="align-middle">{{ item.date | date }}</td>
-                  <td class="align-middle">{{ item.status }}</td>
+                  <td class="align-middle">
+                    {{ item.date | date : "MMM d, y" }}
+                  </td>
+                  <td class="align-middle">
+                    {{ item.status | capitalLetter }}
+                  </td>
                   <td>
                     <div ngbDropdown container="body" class="dropdown-primary">
                       <button
@@ -625,18 +646,23 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="table-responsive">
-      <table class="table table-borderless">
-        <tbody>
-          <tr *ngFor="let item of third_party_fields">
-            <ng-container *ngIf="third_data[item.name]">
-              <th>{{ item.name | uppercase }}</th>
-              <td>{{ third_data[item.name] }}</td>
-            </ng-container>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <ng-container *ngIf="third_party_fields.length > 0; else noFields">
+      <div class="table-responsive">
+        <table class="table table-borderless">
+          <tbody>
+            <tr *ngFor="let item of third_party_fields">
+              <ng-container *ngIf="third_data[item.name]">
+                <th>{{ item.name | uppercase }}</th>
+                <td>{{ third_data[item.name] }}</td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+    <ng-template #noFields>
+      <div class="alert alert-warning" role="alert">Sin información</div>
+    </ng-template>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="_modal.close()">

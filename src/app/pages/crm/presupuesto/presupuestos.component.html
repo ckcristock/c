@@ -172,26 +172,30 @@
                 'text-danger font-weight-bold': item.state == 'Inactivo'
               }"
             >
-              <td *ngIf="checkItem" class="align-middle">{{ item.code }}</td>
+              <td *ngIf="checkItem" class="align-middle">
+                {{ item.code | uppercase }}
+              </td>
               <td *ngIf="checkFecha" class="align-middle">
-                {{ item.created_at | date : "longDate" }}
+                {{ item.created_at | date : "MMM d, y" }}
               </td>
               <td *ngIf="checkCliente" class="align-middle">
-                {{ item.customer.name }}
+                {{ item.customer.name | titlecase }}
               </td>
               <td *ngIf="checkDestino" class="align-middle">
-                {{ item.destiny.name }}
+                {{ item.destiny.name | capitalLetter }}
               </td>
-              <td *ngIf="checkLinea" class="align-middle">{{ item.line }}</td>
+              <td *ngIf="checkLinea" class="align-middle">
+                {{ item.line | capitalLetter }}
+              </td>
               <td *ngIf="checkQuien" class="align-middle">
-                {{ item.user.person.first_name }}
-                {{ item.user.person.first_surname }}
+                {{ item.user.person.first_name | titlecase }}
+                {{ item.user.person.first_surname | titlecase }}
               </td>
               <td *ngIf="checkTCop" class="align-middle">
                 ${{ item.total_cop | number : "1.2-2" }}
               </td>
               <td *ngIf="checkTUsd" class="align-middle">
-                ${{ item.total_usd | number : "1.2-2" }}
+                USD {{ item.total_usd | number : "1.2-2" }}
               </td>
               <td>
                 <span
@@ -200,7 +204,7 @@
                     item.state == 'Activo' ? 'badge-success' : 'badge-danger'
                   "
                 >
-                  {{ item.state }}
+                  {{ item.state | uppercase }}
                 </span>
               </td>
               <td class="align-middle">

@@ -40,13 +40,13 @@ export class LiquidadosComponent implements OnInit {
   classList = 'list-group-item d-flex list-group-item-action justify-content-between align-items-center'
   form: FormGroup;
   indemnizacion: boolean;
-  
+
   valorDiasTrabajados: any[] = [];
-  
+
   totalLiquidacion: number = 0;
   total: number = 0;
   salarioPendiente: number = 0;
-  
+
 
   constructor(
     private router: Router,
@@ -65,7 +65,7 @@ export class LiquidadosComponent implements OnInit {
     this.createForm();
   }
 
-  
+
   liquidar() {
     this.liquidadosService.liquidar(this.form.value).subscribe((res:any) => {
       this.router.navigate(['/rrhh/liquidados'])
@@ -114,7 +114,7 @@ export class LiquidadosComponent implements OnInit {
       total: [''],
 
     })
-    
+
   }
 
   getLiquidado() {
@@ -134,11 +134,13 @@ export class LiquidadosComponent implements OnInit {
       })
   }
 
+
+
   changeParams (fechaFin) {
     this.liquidadosService.mostrar(this.id, fechaFin).subscribe((res: any) => {
       this.info = res
       this.totalLiquidacion = this.info.total_liquidacion
-      
+
 
       this.form.get('ingresos_adicionales').valueChanges.subscribe(value => {
         console.log(value)
@@ -152,7 +154,7 @@ export class LiquidadosComponent implements OnInit {
         console.log(value)
         this.calcularTotalLiquidacion();
       })
-    
+
       this.form.patchValue({
         fecha_contratacion: res.fecha_ingreso,
         dias_vacaciones: res.vacaciones_actuales,
@@ -173,20 +175,13 @@ export class LiquidadosComponent implements OnInit {
     })
   }
 
-  calcularTotalLiquidacion(){
-    let IngresosAdicionales = this.form.get('ingresos_adicionales').value || 0;
-    let DeduccionesAdicionales = this.form.get('deducciones_adicionales').value || 0;
-    this.totalLiquidacion = this.info.total_liquidacion + IngresosAdicionales - DeduccionesAdicionales; 
-    this.total = this.totalLiquidacion 
-    
-  }
-
   getDiasTrabajados(fechaFin) {
     this.liquidadosService.getDiasTrabajados(this.id, fechaFin).subscribe((res: any) => {
       this.valorDiasTrabajados = res.data
-      
-      this.salarioPendiente = res.data.salario_neto + res.data.seguridad_social
-      
+
+      this.salarioPendiente = res.data.salario_neto
+      this.total =  this.salarioPendiente + this.totalLiquidacion
+
 
       this.form.patchValue({
         sueldo_pendiente: res.data.salario_neto,
@@ -198,21 +193,32 @@ export class LiquidadosComponent implements OnInit {
   }
 
 
+
+  calcularTotalLiquidacion(){
+    let IngresosAdicionales = this.form.get('ingresos_adicionales').value || 0;
+    let DeduccionesAdicionales = this.form.get('deducciones_adicionales').value || 0;
+    this.totalLiquidacion = this.info.total_liquidacion + IngresosAdicionales - DeduccionesAdicionales;
+    this.total = this.totalLiquidacion + this.salarioPendiente
+
+  }
+
+
+
   justaCausaValidate(event) {
     if (event.value == 'si') {
       this.indemnizacion = false;
-      
-      this.total = this.totalLiquidacion + this.salarioPendiente 
-      
+
+      this.total = this.totalLiquidacion + this.salarioPendiente
+
     } else if (event.value == 'no') {
       this.indemnizacion = true;
-      this.total = this.info.total_indemnizacion + this.totalLiquidacion + this.salarioPendiente 
+      this.total = this.info.total_indemnizacion + this.totalLiquidacion + this.salarioPendiente
     }
-    
+
   }
 
-  
-  
+
+
 
   cancelButton() {
     this._swal.show({

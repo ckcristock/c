@@ -1,3 +1,4 @@
+
 <div class="card">
   <div class="card-body">
     <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
@@ -233,9 +234,9 @@
                     Cesantías
                     <span>${{ info.total_cesantias | number : "1.2-2" }}</span>
                   </li>
-                           
-                 
-                  
+
+
+
                 </ul>
               </div>
               <hr />
@@ -261,7 +262,7 @@
                     ${{(this.form.get("deducciones_adicionales").value || 0) | number : "1.2-2"}}
                   </span>
                 </li>
-              </ul>      
+              </ul>
               </div>
               <hr />
               <div class="col-lg-12">
@@ -270,16 +271,16 @@
                 <strong>Total liquidación</strong>
                 <strong>${{ totalLiquidacion | number : "1.2-2" }}</strong>
               </li>
-              
+
               <li *ngIf="indemnizacion" [class]="classList">
                 <strong> Indemnización por despido </strong>
              <strong>${{ info.total_indemnizacion | number : "1.2-2" }}</strong>
               </li>
-             
+
                 <li [class]="classList">
                   <strong>Total salario por pagar</strong>
                   <strong
-                    >${{ salarioPendiente | number : "1.2-2" }}</strong
+                    >${{ salarioPendiente| number : "1.2-2" }}</strong
                   >
                 </li>
                 <!-- <li [class]="classList">
@@ -290,11 +291,11 @@
                   <strong>Otros</strong>
                   <strong>$-en desarrollo-</strong>
                 </li> -->
-                <li [class]="classList">
+                <!-- <li [class]="classList">
                   <span>Salario</span>
                   <span
                     >${{
-                      valorDiasTrabajados.salario_neto | number : "1.2-2"
+                       | number : "1.2-2"
                     }}</span
                   >
                 </li>
@@ -305,7 +306,7 @@
                       valorDiasTrabajados.seguridad_social | number : "1.2-2"
                     }}</span
                   >
-                </li>
+                </li> -->
                 <!-- <li [class]="classList">
                   <strong>Pensión</strong>
                   <strong>$-en desarrollo-</strong>
@@ -320,11 +321,11 @@
                 en la lista de empleados activos, ni en el siguiente pago de
                 nómina.
               </div>
-            
+
             </div>
             <hr />
-          
-                
+
+
             </div>
             <div class="row d-flex justify-content-between">
               <div class="col text-right">

@@ -156,7 +156,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
       description: [''],
       third_party_id: [null, Validators.required],
       third_party_person_id: [null, Validators.required],
-      country_id: [null, Validators.required],
+      /* country_id: [null, Validators.required], */
       city_id: [null, Validators.required],
       date: ['', Validators.required],
       person_id: [this.id],
@@ -323,12 +323,12 @@ export class ModalNuevoNegocioComponent implements OnInit {
           this.form.addControl('budgets', this.fb.control(this.budgetsSelected));
           this.form.addControl('quotations', this.fb.control(this.quotationSelected));
           this.form.addControl('apu', this.fb.control(this.apuSelected));
-          this.budgetsSelected.reduce((a, b) => {
+          /* this.budgetsSelected.reduce((a, b) => {
             return this.form.addControl('budget_value', this.fb.control(a + b.total_cop))
           }, 0)
           this.quotationSelected.reduce((a, b) => {
             return this.form.addControl('quotation_value', this.fb.control(a + b.total_cop))
-          }, 0)
+          }, 0) */
           this._negocios.saveNeg(this.form.value).subscribe(r => {
             this.form.reset();
             this.budgetsSelected = [];

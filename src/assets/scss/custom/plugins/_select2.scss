@@ -3,7 +3,9 @@ $ng-select-highlight: #95C15E !default;
 @import "~@ng-select/ng-select/scss/material.theme";
 
 .ng-select.ng-select-single .ng-select-container {
-  height: 40px !important;
+  height: 42px !important;
+  position: relative;
+  top: -2px;
   font-size: 0.8em;
 }
 
@@ -29,23 +31,41 @@ $ng-select-highlight: #95C15E !default;
     .ng-placeholder {
       color: red;
       font-family: 'Roboto', sans-serif;
-      letter-spacing: 0.5pt;
     }
   }
 }
 
 .ng-select .ng-select-container.ng-appearance-outline .ng-placeholder {
   padding-top: 0rem !important;
+  font-size: 12px;
+  letter-spacing: 0.3px;
 }
 
-.ng-select.ng-select-opened .ng-select-container.ng-appearance-outline .ng-placeholder {
+/* .ng-select.ng-select-opened .ng-select-container.ng-appearance-outline .ng-placeholder {
   padding-top: 0.3rem !important;
-}
+} */
 
 .ng-select .ng-select-container.ng-appearance-outline {
   padding: 0 0.5em;
   min-height: 40px;
+  min-width: 200px;
 }
+
+//!nuevo
+/* .ng-select .ng-select-container .ng-value-container {
+  padding: 0.7em 0;
+} */
+
+.ng-select.ng-select-single .ng-select-container.ng-appearance-outline .ng-value-container .ng-value-label.ng-star-inserted {
+  position: absolute;
+  bottom: 3px;
+}
+
+/*
+.ng-select.ng-select-single .ng-select-container.ng-appearance-outline .ng-value-container .ng-input {
+  padding-left: 6px;
+} */
+
 
 .ng-select.ng-select-single .ng-select-container.ng-appearance-outline .ng-arrow-wrapper {
   bottom: 9px;

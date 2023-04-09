@@ -234,6 +234,7 @@
                   <td class="align-middle">
                     <input
                       currencyMask
+                      appInputPositionInitial
                       [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="costo_unitario_maquinas_herra"
@@ -248,7 +249,6 @@
                   </td>
                   <td class="align-middle">
                     <button
-                      style="float: right"
                       class="btn btn-danger btn-sm"
                       placement="bottom"
                       type="button"
@@ -263,42 +263,37 @@
             </tbody>
           </table>
         </div>
-        <div class="row d-flex justify-content-end text-uppercase">
-          <div class="col-md-5">
-            <h6 class="d-flex justify-content-between">
-              Subtotal
-              <span
-                >${{
-                  this.form.get("list_pieces_sets_subtotal").value
-                    | number : "1.2-2"
-                }}</span
-              >
-            </h6>
-          </div>
-        </div>
       </ng-container>
-      <div class="d-flex justify-content-end">
-        <div class="btn-group">
-          <button
-            class="btn btn-primary btn-sm"
-            placement="bottom"
-            type="button"
-            ngbTooltip="Agregar"
-            (click)="newPiecesSets()"
-          >
-            <i class="fas fa-plus"></i>
-          </button>
-          <button
-            class="btn btn-info btn-sm"
-            placement="bottom"
-            type="button"
-            ngbTooltip="Agregar item"
-            (click)="findApus()"
-          >
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
+      <div class="btn-group btn-block">
+        <button
+          class="btn btn-primary btn-sm"
+          placement="bottom"
+          type="button"
+          ngbTooltip="Agregar"
+          (click)="newPiecesSets()"
+        >
+          <i class="fas fa-plus"></i>
+          Agregar item
+        </button>
+        <button
+          class="btn btn-info btn-sm"
+          placement="bottom"
+          type="button"
+          ngbTooltip="Buscar"
+          (click)="findApus()"
+        >
+          <i class="fas fa-search"></i>
+          Asignar APU
+        </button>
       </div>
+      <ng-container *ngIf="piecesSetsList.controls.length">
+        <app-list-items
+          title1="SUBTOTAL"
+          [var1]="this.form.get('list_pieces_sets_subtotal').value"
+          type1="cop"
+          mt="mt-2"
+        ></app-list-items>
+      </ng-container>
       <hr />
       <h6 class="mt-3">Máquinas herramientas</h6>
       <ng-container *ngIf="machineToolList.controls.length; else notData">
@@ -360,6 +355,7 @@
                   <td class="align-middle">
                     <input
                       currencyMask
+                      appInputPositionInitial
                       [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="costo_unitario_maquinas_herra"
@@ -370,6 +366,7 @@
                     ${{ item.value.unit_cost | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
+                      appInputPosition
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_maquinas_herra"
@@ -380,6 +377,7 @@
                     ${{ item.value.total | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
+                      appInputPosition
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="total_maquinas_herra"
@@ -402,31 +400,25 @@
             </tbody>
           </table>
         </div>
-        <div class="row d-flex justify-content-end text-uppercase">
-          <div class="col-md-5">
-            <h6 class="d-flex justify-content-between">
-              Subtotal
-              <span
-                >${{
-                  this.form.get("machine_tools_subtotal").value
-                    | number : "1.2-2"
-                }}</span
-              >
-            </h6>
-          </div>
-        </div>
       </ng-container>
-      <div class="d-flex justify-content-end">
-        <button
-          class="btn btn-primary btn-sm"
-          placement="bottom"
-          type="button"
-          ngbTooltip="Agregar"
-          (click)="newMachineTool()"
-        >
-          <i class="fas fa-plus"></i>
-        </button>
-      </div>
+      <button
+        class="btn btn-primary btn-block btn-sm"
+        placement="bottom"
+        type="button"
+        ngbTooltip="Agregar"
+        (click)="newMachineTool()"
+      >
+        <i class="fas fa-plus"></i>
+        Agregar máquinas herramientas
+      </button>
+      <ng-container *ngIf="machineToolList.controls.length">
+        <app-list-items
+          title1="SUBTOTAL"
+          [var1]="this.form.get('machine_tools_subtotal').value"
+          type1="cop"
+          mt="mt-2"
+        ></app-list-items>
+      </ng-container>
       <hr />
       <h6 class="mt-3">Procesos internos</h6>
       <ng-container *ngIf="internalProcessList.controls.length; else notData">
@@ -486,6 +478,7 @@
                   <td class="align-middle">
                     <input
                       currencyMask
+                      appInputPositionInitial
                       [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_interno"
@@ -496,6 +489,7 @@
                     ${{ item.value.unit_cost | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
+                      appInputPosition
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_interno"
@@ -506,6 +500,7 @@
                     ${{ item.value.total | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
+                      appInputPosition
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="total_proceso_interno"
@@ -528,31 +523,25 @@
             </tbody>
           </table>
         </div>
-        <div class="row d-flex justify-content-end text-uppercase">
-          <div class="col-md-5">
-            <h6 class="d-flex justify-content-between">
-              Subtotal
-              <span
-                >${{
-                  this.form.get("internal_processes_subtotal").value
-                    | number : "1.2-2"
-                }}</span
-              >
-            </h6>
-          </div>
-        </div>
       </ng-container>
-      <div class="d-flex justify-content-end">
-        <button
-          class="btn btn-primary btn-sm"
-          placement="bottom"
-          type="button"
-          ngbTooltip="Agregar"
-          (click)="newInternalProccesses()"
-        >
-          <i class="fas fa-plus"></i>
-        </button>
-      </div>
+      <button
+        class="btn btn-primary btn-block btn-sm"
+        placement="bottom"
+        type="button"
+        ngbTooltip="Agregar"
+        (click)="newInternalProccesses()"
+      >
+        <i class="fas fa-plus"></i>
+        Agregar procesos internos
+      </button>
+      <ng-container *ngIf="internalProcessList.controls.length">
+        <app-list-items
+          title1="SUBTOTAL"
+          [var1]="this.form.get('internal_processes_subtotal').value"
+          type1="cop"
+          mt="mt-2"
+        ></app-list-items>
+      </ng-container>
       <hr />
       <h6 class="mt-3">Procesos externos</h6>
       <ng-container *ngIf="externalProcessList.controls.length; else notData">
@@ -614,6 +603,7 @@
                   <td class="align-middle">
                     <input
                       currencyMask
+                      appInputPositionInitial
                       [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="q_unitaria_proceso_externo"
@@ -624,6 +614,7 @@
                     ${{ item.value.unit_cost | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
+                      appInputPosition
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_externo"
@@ -634,6 +625,7 @@
                     ${{ item.value.total | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
+                      appInputPosition
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="total_proceso_externo"
@@ -656,31 +648,25 @@
             </tbody>
           </table>
         </div>
-        <div class="row d-flex justify-content-end text-uppercase">
-          <div class="col-md-5">
-            <h6 class="d-flex justify-content-between">
-              Subtotal
-              <span
-                >${{
-                  this.form.get("external_processes_subtotal").value
-                    | number : "1.2-2"
-                }}</span
-              >
-            </h6>
-          </div>
-        </div>
       </ng-container>
-      <div class="d-flex justify-content-end">
-        <button
-          class="btn btn-primary btn-sm"
-          placement="bottom"
-          type="button"
-          ngbTooltip="Agregar"
-          (click)="newExternalProccesses()"
-        >
-          <i class="fas fa-plus"></i>
-        </button>
-      </div>
+      <button
+        class="btn btn-primary btn-block btn-sm"
+        placement="bottom"
+        type="button"
+        ngbTooltip="Agregar"
+        (click)="newExternalProccesses()"
+      >
+        <i class="fas fa-plus"></i>
+        Agregar procesos externos
+      </button>
+      <ng-container *ngIf="externalProcessList.controls.length">
+        <app-list-items
+          title1="SUBTOTAL"
+          [var1]="this.form.get('external_processes_subtotal').value"
+          type1="cop"
+          mt="mt-2"
+        ></app-list-items>
+      </ng-container>
       <hr />
       <h6>Otros</h6>
       <ng-container *ngIf="othersList.controls.length; else notData">
@@ -732,6 +718,7 @@
                   <td class="align-middle">
                     <input
                       currencyMask
+                      appInputPositionInitial
                       [options]="masksMoney.maskNumbers"
                       class="form-control form-control-sm"
                       id="q_unitaria_otros"
@@ -741,6 +728,7 @@
                   <td class="align-middle">
                     <input
                       currencyMask
+                      appInputPosition
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_otros"
@@ -767,43 +755,31 @@
             </tbody>
           </table>
         </div>
-        <div class="row d-flex justify-content-end text-uppercase">
-          <div class="col-md-5">
-            <h6 class="d-flex justify-content-between">
-              Subtotal
-              <span
-                >${{
-                  this.form.get("others_subtotal").value | number : "1.2-2"
-                }}</span
-              >
-            </h6>
-          </div>
-        </div>
       </ng-container>
-      <div class="d-flex justify-content-end">
-        <button
-          class="btn btn-primary btn-sm"
-          placement="bottom"
-          type="button"
-          ngbTooltip="Agregar"
-          (click)="newOthersList()"
-        >
-          <i class="fas fa-plus"></i>
-        </button>
-      </div>
+      <button
+        class="btn btn-primary btn-block btn-sm"
+        placement="bottom"
+        type="button"
+        ngbTooltip="Agregar"
+        (click)="newOthersList()"
+      >
+        <i class="fas fa-plus"></i>
+        Agregar otro
+      </button>
+      <ng-container *ngIf="othersList.controls.length">
+        <app-list-items
+          title1="SUBTOTAL"
+          [var1]="this.form.get('others_subtotal').value"
+          type1="cop"
+          mt="mt-2"
+        ></app-list-items>
+      </ng-container>
       <hr />
-      <div class="row d-flex justify-content-end">
-        <div class="col-md-4">
-          <h6 class="d-flex justify-content-between">
-            COSTO DIRECTO TOTAL
-            <span class="badge badge-success badge-pill"
-              >${{
-                this.form.get("total_direct_cost").value | number : "1.2-2"
-              }}</span
-            >
-          </h6>
-        </div>
-      </div>
+      <app-list-items
+        title1="COSTO DIRECTO TOTAL"
+        [var1]="this.form.get('total_direct_cost').value"
+        type1="cop"
+      ></app-list-items>
       <div class="row mt-3">
         <div class="col-md-6">
           <a
@@ -836,50 +812,46 @@
                       "
                     >
                       <tr [formGroupName]="i">
-                        <td class="col-7">{{ item.controls.name.value }}</td>
-                        <td class="col-2">
+                        <td class="col-7 align-middle">
+                          {{ item.controls.name.value }}
+                        </td>
+                        <td class="col-2 align-middle">
                           <input
                             currencyMask
+                            appInputPositionInitial
                             [options]="masksMoney.maskPorcentaje"
                             step=".1"
                             class="form-control form-control-sm"
                             formControlName="percentage"
                           />
                         </td>
-                        <td class="col-3 text-right">
+                        <td class="col-3 text-right align-middle">
                           ${{ item.controls.value.value | number : "1.2-2" }}
                         </td>
                       </tr>
                     </ng-container>
                   </ng-container>
                   <tr>
-                    <th colspan="2" class="text-uppercase col-10">
+                    <th colspan="2" class="text-uppercase align-middle col-10">
                       Costos Indirectos
                     </th>
-                    <td class="text-right">
+                    <th class="text-right align-middle">
                       ${{
                         form.controls.indirect_cost_total.value
                           | number : "1.2-2"
                       }}
-                    </td>
+                    </th>
                   </tr>
-                </tbody>
-              </table>
-            </div>
-            <!-- <hr class="bg-dark"> -->
-            <div class="rounded-top table-responsive">
-              <table class="table table-borderless">
-                <tbody class="text-uppercase">
                   <tr>
-                    <td class="col-9">
+                    <th colspan="2" class="col-10 align-middle">
                       Costos directos + costos indirectos totales
-                    </td>
-                    <td class="col-3 text-right">
+                    </th>
+                    <th class="text-right align-middle">
                       ${{
                         form.controls.direct_costs_indirect_costs_total.value
                           | number : "1.2-2"
                       }}
-                    </td>
+                    </th>
                   </tr>
                 </tbody>
               </table>
@@ -908,17 +880,18 @@
               <table class="table table-borderless">
                 <tbody class="text-uppercase">
                   <tr>
-                    <td class="col-7">Administrativos</td>
-                    <td class="col-2">
+                    <td class="col-7 align-middle">Administrativos</td>
+                    <td class="col-2 align-middle">
                       <input
                         currencyMask
+                        appInputPositionInitial
                         [options]="masksMoney.maskPorcentaje"
                         step=".1"
                         class="form-control form-control-sm"
                         formControlName="administrative_percentage"
                       />
                     </td>
-                    <td class="col-3 text-right">
+                    <td class="col-3 text-right align-middle">
                       ${{
                         form.controls.administrative_value.value
                           | number : "1.2-2"
@@ -930,6 +903,7 @@
                     <td class="col-2">
                       <input
                         currencyMask
+                        appInputPositionInitial
                         [options]="masksMoney.maskPorcentaje"
                         class="form-control form-control-sm"
                         formControlName="unforeseen_percentage"
@@ -952,19 +926,12 @@
                       }}
                     </td>
                   </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- <hr class="bg-dark"> -->
-            <div class="rounded-top table-responsive">
-              <table class="table table-borderless">
-                <tbody class="text-uppercase">
                   <tr>
-                    <td class="col-9">Utilidad</td>
+                    <td colspan="2" class="col-9">Utilidad</td>
                     <td class="col-3">
                       <input
                         currencyMask
+                        appInputPositionInitial
                         [options]="masksMoney.maskPorcentaje"
                         class="form-control form-control-sm"
                         formControlName="utility_percentage"
@@ -972,7 +939,7 @@
                     </td>
                   </tr>
                   <tr>
-                    <td class="col-9">
+                    <td colspan="2" class="col-9">
                       SubTotal + Admin + Imprevisto + Utilidad
                     </td>
                     <td class="col-3 text-right">
@@ -986,61 +953,52 @@
               </table>
             </div>
           </div>
-          <div class="rounded-top table-responsive">
+          <div class="table-responsive">
             <table class="table table-borderless">
               <tbody>
-                <tr class="text-uppercase">
-                  <td class="col-9">Precio venta total COP + Retención</td>
-                  <td class="col-3 text-right">
-                    <h5>
-                      <span class="badge badge-success">
+                <tr class="text-uppercase table-primary">
+                  <th class="col-9 align-middle">
+                    Precio venta total COP + Retención
+                  </th>
+                  <th class="col-3 align-middle text-right">
+                    <h6>
+                      <span>
                         $
                         {{
                           form.get("sale_price_cop_withholding_total").value
                             | number : "1.2-2"
                         }}
                       </span>
-                    </h5>
-                  </td>
+                    </h6>
+                  </th>
                 </tr>
-              </tbody>
-            </table>
-          </div>
-          <!-- <hr class="bg-dark"> -->
-          <div class="rounded-top table-responsive">
-            <table class="table table-borderless">
-              <tbody>
                 <tr class="text-uppercase">
                   <td class="col-9">TRM</td>
                   <td class="col-3">
                     <input
                       currencyMask
+                      appInputPosition
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       formControlName="trm"
                     />
                   </td>
                 </tr>
-              </tbody>
-            </table>
-          </div>
-          <!-- <hr class="bg-dark"> -->
-          <div class="rounded-top table-responsive">
-            <table class="table table-borderless">
-              <tbody>
-                <tr class="text-uppercase">
-                  <td class="col-9">Precio venta total USD + Retención</td>
-                  <td class="col-3 text-right">
-                    <h5>
-                      <span class="badge badge-success">
+                <tr class="text-uppercase table-primary">
+                  <th class="col-9 align-middle">
+                    Precio venta total USD + Retención
+                  </th>
+                  <th class="col-3 align-middle text-right">
+                    <h6>
+                      <span>
                         USD
                         {{
                           form.get("sale_price_usd_withholding_total").value
                             | number : "1.2-2"
                         }}
                       </span>
-                    </h5>
-                  </td>
+                    </h6>
+                  </th>
                 </tr>
               </tbody>
             </table>

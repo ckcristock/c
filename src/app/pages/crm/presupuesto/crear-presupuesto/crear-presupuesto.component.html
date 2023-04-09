@@ -1,11 +1,14 @@
-<div class="card">
-  <div class="card-body">
-    <ng-container *ngIf="!loading; else notDataLoading">
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<ng-container *ngIf="!loading; else placeholder">
+  <div class="card">
+    <div class="card-body">
       <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
       <hr class="line" />
       <form [formGroup]="forma" (submit)="save()">
         <div class="row">
-          <div class="col-md-4 mb-4">
+          <div class="col mat-form-field-wrapper">
             <ng-select
               bindLabel="text"
               [items]="clients"
@@ -20,7 +23,7 @@
               [appendTo]="'body'"
             ></ng-select>
           </div>
-          <div class="col-md-4 mb-4">
+          <div class="col mat-form-field-wrapper">
             <ng-select
               [items]="cities"
               placeholder="Destino *"
@@ -33,10 +36,11 @@
               formControlName="destinity_id"
             ></ng-select>
           </div>
-          <mat-form-field class="col-md-4" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>TRM</mat-label>
             <input
               matInput
+              appInputPosition
               currencyMask
               [options]="masksMoney.maskCOP"
               placeholder="Ingresa TRM"
@@ -45,7 +49,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col-md-6" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Línea</mat-label>
             <input
               matInput
@@ -57,7 +61,7 @@
             />
           </mat-form-field>
 
-          <mat-form-field class="col-md-6" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Proyecto</mat-label>
             <input
               matInput
@@ -85,6 +89,63 @@
             ></textarea>
           </mat-form-field>
         </div>
+        <!-- Configuracion presupuestal -->
+        <ng-container *ngIf="hasItems">
+          <h6 class="text-center">Porcentaje de configuración presupuestal</h6>
+          <div class="row">
+            <ng-container formArrayName="indirect_costs">
+              <ng-container
+                *ngFor="let item of indirecCostList.controls; let i = index"
+              >
+                <ng-container [formGroupName]="i">
+                  <mat-form-field class="col-md-4" appearance="outline">
+                    <mat-label>{{
+                      item.controls.name.value | uppercase
+                    }}</mat-label>
+                    <input
+                      matInput
+                      appInputPositionInitial
+                      currencyMask
+                      [options]="masksMoney.maskPorcentaje"
+                      formControlName="percentage"
+                    />
+                  </mat-form-field>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            <mat-form-field class="col-md-4" appearance="outline">
+              <mat-label>ADMINISTRATIVOS</mat-label>
+              <input
+                matInput
+                currencyMask
+                appInputPositionInitial
+                [options]="masksMoney.maskPorcentaje"
+                formControlName="administrative_percentage"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-4" appearance="outline">
+              <mat-label>IMPREVISTOS</mat-label>
+              <input
+                matInput
+                currencyMask
+                appInputPositionInitial
+                [options]="masksMoney.maskPorcentaje"
+                formControlName="unforeseen_percentage"
+              />
+            </mat-form-field>
+            <mat-form-field class="col-md-4" appearance="outline">
+              <mat-label>UTILIDAD</mat-label>
+              <input
+                matInput
+                currencyMask
+                appInputPositionInitial
+                [options]="masksMoney.maskPorcentaje"
+                formControlName="utility_percentage"
+              />
+            </mat-form-field>
+          </div>
+        </ng-container>
+        <!--  END  Configuracion presupuestal -->
         <!-- ITEMS -->
         <hr />
         <app-items
@@ -95,109 +156,32 @@
           [cities]="cities"
         >
         </app-items>
-        <!-- Configuracion presupuestal -->
-        <ng-container *ngIf="hasItems">
-          <h6 class="text-center">Porcentaje de configuración presupuestal</h6>
-          <div class="rounded-top table-responsive">
-            <table class="table table-striped table-sm">
-              <tbody>
-                <ng-container formArrayName="indirect_costs">
-                  <ng-container
-                    *ngFor="let item of indirecCostList.controls; let i = index"
-                  >
-                    <tr [formGroupName]="i">
-                      <td class="col-10">
-                        {{ item.controls.name.value | uppercase }}
-                      </td>
-                      <td class="col-2">
-                        <input
-                          currencyMask
-                          [options]="masksMoney.maskPorcentaje"
-                          class="form-control form-control-sm"
-                          formControlName="percentage"
-                        />
-                      </td>
-                    </tr>
-                  </ng-container>
-                </ng-container>
-                <tr>
-                  <td class="col-10">ADMINISTRATIVOS</td>
-                  <td class="col-2">
-                    <input
-                      currencyMask
-                      [options]="masksMoney.maskPorcentaje"
-                      class="form-control form-control-sm"
-                      formControlName="administrative_percentage"
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td class="col-10">IMPREVISTOS</td>
-                  <td class="col-2">
-                    <input
-                      currencyMask
-                      [options]="masksMoney.maskPorcentaje"
-                      class="form-control form-control-sm"
-                      formControlName="unforeseen_percentage"
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td class="col-10">UTILIDAD</td>
-                  <td class="col-2">
-                    <input
-                      currencyMask
-                      [options]="masksMoney.maskPorcentaje"
-                      class="form-control form-control-sm"
-                      formControlName="utility_percentage"
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </ng-container>
-        <!--  END  Configuracion presupuestal -->
         <div *ngIf="hasItems">
-          <h5 class="text-center">PRESUPUESTO TOTAL</h5>
-          <div class="rounded-top table-responsive">
-            <table class="table table-sm table-hover">
-              <tbody>
-                <tr>
-                  <td class="col-10">TOTAL COP</td>
-                  <td class="col-2 text-right">
-                    ${{ total_cop | number : "1.2-2" }}
-                  </td>
-                </tr>
-                <tr>
-                  <td class="col-10">TOTAL USD</td>
-                  <td class="text-right col-2">
-                    ${{ total_usd | number : "1.2-2" }}
-                  </td>
-                </tr>
-                <tr>
-                  <td class="col-10">V/U VENTA PRORRATEADO COP</td>
-                  <td class="text-right">
-                    ${{ unit_value_prorrateado_cop | number : "1.2-2" }}
-                  </td>
-                </tr>
-                <tr>
-                  <td class="col-10">V/U VENTA PRORRATEADO USD</td>
-                  <td class="col-2 text-right">
-                    ${{ unit_value_prorrateado_usd | number : "1.2-2" }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <app-list-items
+            title1="TOTAL COP"
+            [var1]="total_cop"
+            type1="cop"
+            title2="TOTAL USD"
+            [var2]="total_usd"
+            type2="usd"
+            title3="V/U VENTA PRORRATEADO COP"
+            [var3]="unit_value_prorrateado_cop"
+            type3="cop"
+            title4="V/U VENTA PRORRATEADO USD"
+            [var4]="unit_value_prorrateado_usd"
+            type4="usd"
+          >
+          </app-list-items>
         </div>
         <!-- END ITEMS -->
         <!--  -->
-        <button class="btn btn-block btn-primary" type="submit">Guardar</button>
+        <button class="btn btn-block btn-primary mt-3" type="submit">
+          Guardar
+        </button>
       </form>
-    </ng-container>
+    </div>
   </div>
-</div>
+</ng-container>
 
 <ng-template #notData>
   <div class="alert alert-warning" role="alert">¡Aquí no hay datos!</div>

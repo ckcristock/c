@@ -77,7 +77,8 @@ export class CostosIndirectosComponent implements OnInit {
     this.form = this.fb.group({
       id: [this.indirect.id],
       name: ['', this._validators.required],
-      percentage: ['', this._validators.required]
+      percentage: ['', this._validators.required],
+      apply_service: [0]
     })
   }
 
@@ -86,7 +87,8 @@ export class CostosIndirectosComponent implements OnInit {
     this.form.patchValue({
       id: this.indirect.id,
       name: this.indirect.name,
-      percentage: this.indirect.percentage
+      percentage: this.indirect.percentage,
+      apply_service: this.indirect.apply_service
     })
   }
 

@@ -50,8 +50,8 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of measures" class="text-center">
-            <td class="align-middle">{{ item.name }}</td>
-            <td class="align-middle">{{ item.measure }}</td>
+            <td class="align-middle">{{ item.name | uppercase }}</td>
+            <td class="align-middle">{{ item.measure | lowercase }}</td>
             <td class="align-middle">
               <span
                 [ngClass]="
@@ -60,7 +60,7 @@
                     : 'badge badge-success'
                 "
               >
-                {{ item.state }}
+                {{ item.state | uppercase }}
               </span>
             </td>
             <td class="align-middle">
@@ -129,10 +129,13 @@
     <h4 class="text-primary modal-title">{{ title }}</h4>
     <button
       type="button"
-      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      class="close"
+      data-dismiss="modal"
       aria-label="Close"
       (click)="modal.dismiss('Cross click'); form.reset()"
-    ></button>
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body">
     <form [formGroup]="form">

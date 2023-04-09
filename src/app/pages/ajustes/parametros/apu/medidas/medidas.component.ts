@@ -126,18 +126,20 @@ export class MedidasComponent implements OnInit {
   }
 
   save() {
-    this._medidas.save(this.form.value).subscribe((r: any) => {
-      this.modalService.dismissAll();
-      this.form.reset();
-      this.getMeasures();
-      this._swal.show({
-        icon: 'success',
-        title: r.data.title,
-        text: r.data.text,
-        showCancel: false,
-        timer: 1000,
+    if (this.form.valid) {
+      this._medidas.save(this.form.value).subscribe((r: any) => {
+        this.modalService.dismissAll();
+        this.form.reset();
+        this.getMeasures();
+        this._swal.show({
+          icon: 'success',
+          title: r.data.title,
+          text: r.data.text,
+          showCancel: false,
+          timer: 1000,
+        })
       })
-    })
+    }
   }
 
 }

@@ -60,11 +60,8 @@
     </div>
   </ng-container>
 </ng-container>
-<div class="row d-flex justify-content-end">
-  <div class="col-md-5">
-    <h6 class="d-flex justify-content-between">
-      SUBTOTAL
-      <span>${{ subtotal_raw_material | number : "1.2-2" }}</span>
-    </h6>
-  </div>
-</div>
+<app-list-items
+  title1="SUBTOTAL"
+  [var1]="subtotal_raw_material"
+  type1="cop"
+></app-list-items>

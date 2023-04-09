@@ -1,3 +1,5 @@
+import { CurrencyMaskInputMode } from "ngx-currency";
+
 export const consts = {
   maxSizeFile: 500000,
   degree: [
@@ -161,13 +163,20 @@ export const consts = {
     { clave: 'Si', valor: 0 },
     { clave: 'No', valor: 1 }
   ],
+
   maskUSD: {
     prefix: 'USD ',
     suffix: "",
     thousands: '.',
     decimal: ',',
     allowNegative: false,
-    precision: 2
+    precision: 2,
+    align: "right",
+    nullable: false,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+    decimalPlaces: 2,
+    decimalSeparator: '.',
+    thousandsSeparator: ','
   },
 
   maskCOP: {
@@ -176,53 +185,103 @@ export const consts = {
     thousands: '.',
     decimal: ',',
     allowNegative: false,
-    precision: 2
+    precision: 2,
+    align: "right",
+    nullable: false,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+    decimalPlaces: 2,
+    decimalSeparator: '.',
+    thousandsSeparator: ','
   },
 
   maskNumbers: {
-    prefix: ' ',
+    prefix: '',
     suffix: "",
     thousands: '.',
     decimal: ',',
     allowNegative: false,
-    precision: 0
-  },
-
-  maskNumbersDecimal: {
-    prefix: ' ',
-    suffix: "",
-    thousands: '.',
-    decimal: ',',
-    allowNegative: false,
-    precision: 3
+    precision: 0,
+    align: "right",
+    nullable: false,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+    decimalPlaces: 2,
+    decimalSeparator: '.',
+    thousandsSeparator: ','
   },
 
   maskNumbers2Decimal: {
-    prefix: ' ',
+    prefix: '',
     suffix: "",
     thousands: '.',
     decimal: ',',
     allowNegative: false,
-    precision: 2
+    precision: 2,
+    align: "right",
+    nullable: false,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+    decimalPlaces: 2,
+    decimalSeparator: '.',
+    thousandsSeparator: ','
   },
 
-  maskNumbersFiveDecimal: {
-    prefix: ' ',
+  maskNumbers3Decimal: {
+    prefix: '',
     suffix: "",
     thousands: '.',
     decimal: ',',
     allowNegative: false,
-    precision: 5
+    precision: 3,
+    align: "right",
+    nullable: false,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+    decimalPlaces: 2,
+    decimalSeparator: '.',
+    thousandsSeparator: ','
+  },
+
+  maskNumbers4Decimal: {
+    prefix: '',
+    suffix: "",
+    thousands: '.',
+    decimal: ',',
+    allowNegative: false,
+    precision: 4,
+    align: "right",
+    nullable: false,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+    decimalPlaces: 2,
+    decimalSeparator: '.',
+    thousandsSeparator: ','
+  },
+
+  maskNumbers5Decimal: {
+    prefix: '',
+    suffix: "",
+    thousands: '.',
+    decimal: ',',
+    allowNegative: false,
+    precision: 5,
+    align: "right",
+    nullable: false,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+    decimalPlaces: 2,
+    decimalSeparator: '.',
+    thousandsSeparator: ','
   },
 
   maskPorcentaje: {
-    prefix: ' ',
+    prefix: '',
     suffix: "%",
     thousands: '.',
     decimal: ',',
     allowNegative: false,
-    precision: 2
-  }
-
+    precision: 2,
+    align: "right",
+    nullable: false,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+    decimalPlaces: 2,
+    decimalSeparator: '.',
+    thousandsSeparator: ','
+  },
 
 };

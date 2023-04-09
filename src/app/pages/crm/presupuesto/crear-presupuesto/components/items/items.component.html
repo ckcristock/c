@@ -7,15 +7,19 @@
           <h4 class="h4-custom">
             <span class="badge badge-primary badge-custom">{{ i + 1 }}</span>
           </h4>
-          <div class="text-center w-100" [formGroupName]="i">
+          <div
+            class="text-center w-100"
+            style="height: 24px"
+            [formGroupName]="i"
+          >
             <input
               appAutoFocusDirective
               type="text"
-              class="input-custom w-100"
+              class="input-custom w-100 h-100"
               formControlName="name"
             />
           </div>
-          <div class="text-center span-custom">
+          <div class="text-center span-custom" style="height: 24px">
             <i
               ngbTooltip="Eliminar Item"
               (click)="deleteItem(i)"
@@ -93,7 +97,7 @@
                 <th colspan="2"></th>
               </tr>
               <tr class="text-center text-uppercase bg-light">
-                <th></th>
+                <th class="p-0"></th>
                 <th class="align-middle">#</th>
                 <th class="align-middle">Tipo</th>
                 <th></th>
@@ -194,7 +198,11 @@
                           "
                         ></i>
                       </td>
-                      <td class="align-middle">
+                      <td class="align-middle position-relative">
+                        <div
+                          *ngIf="!subItem.get('type_module').value"
+                          class="table-input-bar"
+                        ></div>
                         <input
                           style="width: 11rem"
                           type="text"
@@ -242,24 +250,29 @@
                           <!-- llega aqui -->
                         </div>
                       </td>
-                      <td class="align-middle">
+                      <td class="align-middle position-relative">
+                        <div class="table-input-bar"></div>
                         <input
                           type="text"
                           formControlName="unit"
                           class="form-control form-control-sm"
                         />
                       </td>
-                      <td class="align-middle">
+                      <td class="align-middle position-relative">
+                        <div class="table-input-bar"></div>
                         <input
                           currencyMask
+                          appInputPositionInitial
                           [options]="masksMoney.maskNumbers"
                           formControlName="cuantity"
                           class="form-control form-control-sm"
                         />
                       </td>
-                      <td class="align-middle">
+                      <td class="align-middle position-relative">
+                        <div class="table-input-bar"></div>
                         <input
                           currencyMask
+                          appInputPosition
                           [options]="masksMoney.maskCOP"
                           formControlName="unit_cost"
                           class="form-control form-control-sm"
@@ -307,14 +320,20 @@
                       <ng-container
                         *ngIf="item.controls.shows.value.sum_others"
                       >
-                        <td class="align-middle">
+                        <td class="align-middle position-relative">
+                          {{
+                            subItem.controls.percentage_amd.value
+                              | number : "1.2-2"
+                          }}%
+                          <!-- <div class="table-input-bar"></div>
                           <input
                             formControlName="percentage_amd"
                             currencyMask
+                            appInputPositionInitial
                             style="width: 2.7rem"
                             [options]="masksMoney.maskPorcentaje"
                             class="form-control form-control-sm"
-                          />
+                          /> -->
                         </td>
                         <td class="align-middle">
                           <div class="values">
@@ -324,14 +343,20 @@
                             }}
                           </div>
                         </td>
-                        <td class="align-middle">
+                        <td class="align-middle position-relative">
+                          {{
+                            subItem.controls.percentage_unforeseen.value
+                              | number : "1.2-2"
+                          }}%
+                          <!-- <div class="table-input-bar"></div>
                           <input
                             formControlName="percentage_unforeseen"
                             currencyMask
+                            appInputPositionInitial
                             style="width: 2.7rem"
                             [options]="masksMoney.maskPorcentaje"
                             class="form-control form-control-sm"
-                          />
+                          /> -->
                         </td>
                         <td class="align-middle">
                           <div class="values">
@@ -341,14 +366,20 @@
                             }}
                           </div>
                         </td>
-                        <td class="align-middle">
+                        <td class="align-middle position-relative">
+                          {{
+                            subItem.controls.percentage_utility.value
+                              | number : "1.2-2"
+                          }}%
+                          <!-- <div class="table-input-bar"></div>
                           <input
                             formControlName="percentage_utility"
                             currencyMask
+                            appInputPositionInitial
                             style="width: 2.7rem"
                             [options]="masksMoney.maskPorcentaje"
                             class="form-control form-control-sm"
-                          />
+                          /> -->
                         </td>
                         <td class="align-middle">
                           <div class="values">
@@ -369,9 +400,11 @@
                       </td>
                       <!-- END Variables AMD IMPREVISTOS UTILIDAD -->
                       <!-- Variables TOTAl Venta -->
-                      <td class="align-middle">
+                      <td class="align-middle position-relative">
+                        <div class="table-input-bar"></div>
                         <input
                           currencyMask
+                          appInputPosition
                           [options]="masksMoney.maskCOP"
                           formControlName="another_values"
                           class="form-control form-control-sm"
@@ -454,7 +487,8 @@
                         </td>
                       </ng-container>
                       <!-- VARIABLES -->
-                      <td class="align-middle">
+                      <td class="align-middle position-relative">
+                        <div class="table-input-bar"></div>
                         <input
                           type="text"
                           style="width: 5rem"
@@ -590,17 +624,21 @@
                   <!-- END TOTAL VALOR VENTA -->
                   <!-- TOTAL PRORRATEO -->
                   <ng-container *ngIf="item.controls.shows.value.prorrateo">
-                    <td class="align-middle">
+                    <td class="align-middle position-relative">
+                      <div class="table-input-bar"></div>
                       <input
                         currencyMask
+                        appInputPosition
                         [options]="masksMoney.maskCOP"
                         formControlName="value_prorrota_cop"
                         class="form-control form-control-sm"
                       />
                     </td>
-                    <td class="align-middle">
+                    <td class="align-middle position-relative">
+                      <div class="table-input-bar"></div>
                       <input
                         currencyMask
+                        appInputPositionUsd
                         [options]="masksMoney.maskUSD"
                         formControlName="value_prorrota_usd"
                         class="form-control form-control-sm"
@@ -634,14 +672,15 @@
       </div>
     </ng-container>
 
-    <div class="my-3 text-right">
+    <div class="my-3">
       <button
         (click)="addItems()"
-        class="btn btn-primary btn-sm"
+        class="btn btn-block btn-primary btn-sm"
         type="button"
         ngbTooltip="Agregar item"
       >
         <i class="fas fa-plus"></i>
+        Agregar item
       </button>
     </div>
   </div>

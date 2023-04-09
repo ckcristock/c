@@ -39,11 +39,8 @@
     </tbody>
   </table>
 </div>
-<div class="row d-flex justify-content-end text-uppercase">
-  <div class="col-md-5">
-    <h6 class="d-flex justify-content-between">
-      Subtotal
-      <span>${{ external_proccesses_subtotal | number : "1.2-2" }}</span>
-    </h6>
-  </div>
-</div>
+<app-list-items
+  title1="SUBTOTAL"
+  [var1]="external_proccesses_subtotal"
+  type1="cop"
+></app-list-items>

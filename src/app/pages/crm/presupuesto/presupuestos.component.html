@@ -59,14 +59,20 @@
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
-                <mat-label>Fecha</mat-label>
                 <input
-                  type="text"
                   matInput
+                  (dateChange)="dateChange($event)"
+                  (dateInput)="dateChange($event)"
+                  [(ngModel)]="dateMat"
+                  [ngModelOptions]="{ standalone: true }"
+                  [matDatepicker]="picker"
                   placeholder="Busca por fecha"
-                  formControlName="date"
-                  autocomplete="off"
                 />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
                 <mat-label>Cliente</mat-label>

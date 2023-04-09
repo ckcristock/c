@@ -28,7 +28,24 @@
               class="fas"
               [class]="!donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'"
             ></i>
-            {{ !donwloading ? "Descargar" : "Descargando" }}</span
+            {{ !donwloading ? "Descargar cliente" : "Descargando" }}</span
+          >
+        </button>
+        <button
+          type="button"
+          (click)="downloadInterno()"
+          class="btn btn-danger btn-sm"
+        >
+          <span
+            ><i
+              class="fas"
+              [class]="
+                !donwloadingInterno ? 'fa-file-download' : 'fa-spinner fa-spin'
+              "
+            ></i>
+            {{
+              !donwloadingInterno ? "Descargar interno" : "Descargando"
+            }}</span
           >
         </button>
       </div>
@@ -87,38 +104,22 @@
       </table>
     </div>
     <app-show-items-presupuesto [data]="data"></app-show-items-presupuesto>
-    <hr />
-    <h5 class="text-center">PRESUPUESTO TOTAL</h5>
-    <div class="rounded-top table-responsive">
-      <table class="table table-sm table-hover">
-        <tbody>
-          <tr>
-            <th class="col-10">TOTAL COP</th>
-            <th class="col-2 text-right">
-              ${{ data.total_cop | number : "1.2-2" }}
-            </th>
-          </tr>
-          <tr>
-            <th class="col-10">TOTAL USD</th>
-            <th class="col-2 text-right">
-              USD {{ data.total_usd | number : "1.2-2" }}
-            </th>
-          </tr>
-          <tr>
-            <th class="col-10">V/U VENTA PRORRATEADO COP</th>
-            <th class="col-2 text-right">
-              ${{ data.unit_value_prorrateado_cop | number : "1.2-2" }}
-            </th>
-          </tr>
-          <tr>
-            <th class="col-10">V/U VENTA PRORRATEADO USD</th>
-            <th class="col-2 text-right">
-              USD {{ data.unit_value_prorrateado_usd | number : "1.2-2" }}
-            </th>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <app-list-items
+      title1="TOTAL COP"
+      [var1]="data.total_cop"
+      type1="cop"
+      title2="TOTAL USD"
+      [var2]="data.total_usd"
+      type2="usd"
+      title3="V/U VENTA PRORRATEADO COP"
+      [var3]="data.unit_value_prorrateado_cop"
+      type3="cop"
+      title4="V/U VENTA PRORRATEADO USD"
+      [var4]="data.unit_value_prorrateado_usd"
+      type4="usd"
+      mt="mt-2"
+    >
+    </app-list-items>
   </div>
 </div>
 

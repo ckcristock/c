@@ -44,6 +44,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { CatSubcatModule } from '../parametros/cat-subcat/cat-subcat.module';
 import { ConsecutivosComponent } from './consecutivos/consecutivos.component';
 import { HistorialDatosComponent } from './configuracion-empresa/historial-datos/historial-datos.component';
+import { NgxCurrencyModule } from 'ngx-currency';
+import { DirectivesModule } from 'src/app/core/directives/directives.module';
 
 
 @NgModule({
@@ -103,7 +105,9 @@ import { HistorialDatosComponent } from './configuracion-empresa/historial-datos
     MatSlideToggleModule,
     CKEditorModule,
     CatSubcatModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    NgxCurrencyModule,
+    DirectivesModule
   ],
   exports: [
     CamposTercerosComponent

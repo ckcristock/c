@@ -35,13 +35,9 @@
     </tbody>
   </table>
 </div>
-<div class="row d-flex justify-content-end text-uppercase">
-  <div class="col-md-4">
-    <h6 class="d-flex justify-content-between">
-      Subtotal
-      <span class="badge badge-success badge-pill"
-        >${{ others_subtotal | number : "1.2-2" }}</span
-      >
-    </h6>
-  </div>
-</div>
+<app-list-items
+  title1="SUBTOTAL"
+  [var1]="others_subtotal"
+  type1="cop"
+  mt="mt-2"
+></app-list-items>

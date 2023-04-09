@@ -92,6 +92,8 @@ import { AcompanamientoComponent } from './apu-servicio/ver-apu-servicio/acompan
 import { AcompanamientoContratistaComponent } from './apu-servicio/ver-apu-servicio/acompanamiento-contratista/acompanamiento-contratista.component';
 import { MontajeEquiposContratistaComponent } from './apu-servicio/ver-apu-servicio/montaje-equipos-contratista/montaje-equipos-contratista.component';
 import { ValidacionDimensionalContratistaComponent } from './apu-servicio/ver-apu-servicio/validacion-dimensional-contratista/validacion-dimensional-contratista.component';
+import { NgxCurrencyModule } from "ngx-currency";
+import { DirectivesModule } from 'src/app/core/directives/directives.module';
 
 export const MY_FORMATS = {
   parse: {
@@ -168,6 +170,7 @@ export const MY_FORMATS = {
     NgbPaginationModule,
     ConfiguracionModule,
     NgbDropdownModule,
+    DirectivesModule,
     ComponentsModule,
     FormsModule,
     NgSelectModule,
@@ -205,13 +208,13 @@ export const MY_FORMATS = {
     SatNativeDateModule,
     ChartModule,
     ChartsModule,
-    CurrencyMaskModule,
     MatSnackBarModule,
     NgbPopoverModule,
     MatTooltipModule,
     MatBottomSheetModule,
     MatSelectFilterModule,
     NgbCarouselModule,
+    NgxCurrencyModule
   ]
 })
 export class CrmModule { }

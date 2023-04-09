@@ -74,16 +74,12 @@
     </ng-container>
   </table>
 </div>
-<div class="row d-flex justify-content-start mt-3">
-  <div class="col-md-6">
-    <h6 class="d-flex justify-content-between">
-      SUBTOTAL MANO DE OBRA
-      <span class="badge badge-success badge-pill"
-        >${{ subtotal_labor_apm | number : "1.2-2" }}</span
-      >
-    </h6>
-  </div>
-</div>
+<app-list-items
+  title1="SUBTOTAL MANO DE OBRA"
+  [var1]="subtotal_labor_apm"
+  type1="cop"
+  mt="mt-2"
+></app-list-items>
 <h6>Viáticos</h6>
 <div class="row">
   <ng-container *ngFor="let item of accompaniments; let i = index">
@@ -138,19 +134,12 @@
     </div>
   </ng-container>
 </div>
-<div class="row d-flex justify-content-start mt-3">
-  <div class="col-md-6">
-    <h6 class="d-flex justify-content-between">
-      SUBTOTAL VIÁTICOS
-      <span class="badge badge-success badge-pill">
-        ${{ subtotal_travel_expense_apm | number : "1.2-2" }}</span
-      >
-    </h6>
-    <h6 class="d-flex justify-content-between">
-      SUBTOTAL ACOMPAÑAMIENTO Y PUESTA EN MARCHA
-      <span class="badge badge-success badge-pill"
-        >${{ subtotal_accompaniment | number : "1.2-2" }}</span
-      >
-    </h6>
-  </div>
-</div>
+<app-list-items
+  title1="SUBTOTAL VIÁTICOS"
+  [var1]="subtotal_travel_expense_apm"
+  type1="cop"
+  title2="SUBTOTAL ACOMPAÑAMIENTO"
+  [var2]="subtotal_accompaniment"
+  type2="cop"
+  mt="mt-2"
+></app-list-items>

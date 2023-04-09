@@ -100,19 +100,12 @@
     </div>
   </ng-container>
 </div>
-<div class="row d-flex justify-content-start mt-3">
-  <div class="col-md-6">
-    <h6 class="d-flex justify-content-between">
-      SUBTOTAL VIÁTICOS
-      <span class="badge badge-success badge-pill">
-        ${{ subtotal_travel_expense_vd_c | number : "1.2-2" }}</span
-      >
-    </h6>
-    <h6 class="d-flex justify-content-between">
-      SUBTOTAL VALIDACIÓN DIMENSIONAL
-      <span class="badge badge-success badge-pill"
-        >${{ subtotal_dimensional_validation_c | number : "1.2-2" }}</span
-      >
-    </h6>
-  </div>
-</div>
+<app-list-items
+  title1="SUBTOTAL VIÁTICOS"
+  [var1]="subtotal_travel_expense_vd_c"
+  type1="cop"
+  title2="SUBTOTAL VALIDACIÓN DIMENSIONAL"
+  [var2]="subtotal_dimensional_validation_c"
+  type2="cop"
+  mt="mt-2"
+></app-list-items>

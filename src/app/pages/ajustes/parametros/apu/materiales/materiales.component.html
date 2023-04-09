@@ -82,7 +82,7 @@
                       <a
                         href="javascript:void(0)"
                         class="dropdown-item text-success"
-                        (click)="openConfirm(view, '', 'md'); getMaterial(item)"
+                        (click)="openConfirm(view, '', 'sm'); getMaterial(item)"
                       >
                         <i class="far fa-eye"></i> Ver
                       </a>
@@ -124,19 +124,17 @@
     <h4 class="text-primary modal-title">{{ title }}</h4>
     <button
       type="button"
-      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      class="close"
+      data-dismiss="modal"
       aria-label="Close"
       (click)="_modal.close()"
-    ></button>
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
       <div class="row">
-        <!-- <input
-          type="hidden"
-          class="form-control form-control-sm"
-          formControlName="product_id"
-        /> -->
         <div class="col-md-12 mat-form-field-wrapper">
           <ng-select
             [items]="materialsIndex"
@@ -151,117 +149,6 @@
           >
           </ng-select>
         </div>
-        <!-- <mat-form-field class="col-md-2" appearance="outline">
-          <mat-label>Unidad</mat-label>
-          <mat-select name="color" formControlName="unit" required>
-            <mat-option value="milimetros">Milimetros</mat-option>
-            <mat-option value="unidad">Unidad</mat-option>
-          </mat-select>
-        </mat-form-field> -->
-        <!-- <mat-form-field class="col" appearance="outline">
-          <mat-label>Tipo</mat-label>
-          <mat-select name="color" formControlName="type" required>
-            <mat-option value="Interno">Interno</mat-option>
-            <mat-option value="Comercial">Comercial</mat-option>
-          </mat-select>
-        </mat-form-field> -->
-        <!-- <mat-form-field class="col-md-3" appearance="outline">
-          <mat-label>Valor (kg)</mat-label>
-          <input
-            matInput
-            currencyMask
-            [options]="masksMoney.maskCOP"
-            placeholder="Ingresa el valor"
-            formControlName="kg_value"
-            autocomplete="off"
-            required
-          />
-        </mat-form-field>
-        <mat-form-field class="col-md-3" appearance="outline">
-          <mat-label>Densidad</mat-label>
-          <input
-            matInput
-            currencyMask
-            [options]="masksMoney.maskNumbersDecimal"
-            placeholder="Ingresa el valor"
-            formControlName="value_aux"
-            autocomplete="off"
-            required
-          />
-        </mat-form-field> -->
-        <!-- <mat-form-field class="col" appearance="outline">
-          <mat-label>Código de barras</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="Ingresa el código de barras"
-            formControlName="Codigo_Barras"
-            autocomplete="off"
-            required
-          />
-        </mat-form-field> -->
-        <!-- <mat-form-field class="col" appearance="outline">
-          <mat-label>Tipo de catálogo</mat-label>
-          <mat-select name="color" formControlName="Tipo_Catalogo" required>
-            <mat-option value="Material">Material</mat-option>
-            <mat-option value="Epp">EPP</mat-option>
-          </mat-select>
-        </mat-form-field> -->
-        <!-- <div class="col-md-6 mb-4">
-          <ng-select
-            formControlName="Id_Categoria"
-            [items]="Categorias"
-            bindLabel="Nombre"
-            bindValue="Id_Categoria_Nueva"
-            appearance="outline"
-            [appendTo]="'body'"
-            placeholder="Categoría"
-            (change)="getSubCategories($event.Id_Categoria_Nueva)"
-            loadingText="loading"
-            ngDefaultControl
-          >
-          </ng-select>
-        </div>
-        <div class="col-md-6 mb-4">
-          <ng-select
-            formControlName="Id_Subcategoria"
-            [items]="SubCategorias"
-            bindLabel="text"
-            appearance="outline"
-            [appendTo]="'body'"
-            placeholder="Subcategoría"
-            (change)="getDinamicField($event.value)"
-            bindValue="value"
-            loadingText="loading"
-            ngDefaultControl
-          >
-          </ng-select>
-        </div> -->
-        <!-- <ng-container formArrayName="dynamic">
-          <ng-container
-            *ngFor="let item of fieldDinamic.controls; let i = index"
-          >
-            <mat-form-field
-              class="col"
-              appearance="outline"
-              [formGroupName]="i"
-            >
-              <mat-label>{{
-                item["controls"]["label"]["value"] | titlecase
-              }}</mat-label>
-              <input
-                matInput
-                [type]="item['controls']['type']['value']"
-                [placeholder]="
-                  'Ingresa el ' + item['controls']['label']['value']
-                "
-                formControlName="valor"
-                autocomplete="off"
-                required
-              />
-            </mat-form-field>
-          </ng-container>
-        </ng-container> -->
       </div>
       <h6 class="text-center">Espesores</h6>
       <div class="row">
@@ -276,7 +163,8 @@
                 <input
                   matInput
                   currencyMask
-                  [options]="masksMoney.maskNumbersDecimal"
+                  appInputPositionInitial
+                  [options]="masksMoney.maskNumbers3Decimal"
                   formControlName="value"
                   autocomplete="off"
                 />
@@ -284,75 +172,6 @@
             </ng-container>
           </div>
         </ng-container>
-        <!-- <ng-container>
-          <div class="rounded-top table-responsive">
-            <table class="table table-bordered table-striped table-sm">
-              <thead class="bg-light">
-                <tr class="text-center text-uppercase">
-                  <th>Propiedad</th>
-                  <th>Característica</th>
-                  <th>Valor</th>
-                  <th><i class="fas fa-trash-alt"></i></th>
-                </tr>
-              </thead>
-              <tbody formArrayName="fields">
-                <ng-container *ngIf="fieldList.controls.length; else sinDatos">
-                  <ng-container
-                    *ngFor="let item of fieldList.controls; let i = index"
-                  >
-                    <tr [formGroupName]="i" class="text-center">
-                      <td>
-                        <input
-                          type="text"
-                          class="form-control form-control-sm"
-                          formControlName="property"
-                        />
-                      </td>
-                      <td>
-                        <select
-                          class="form-control form-control-sm"
-                          name="color"
-                          formControlName="type"
-                        >
-                          <option value="number">Number</option>
-                          <option value="text">Text</option>
-                          <option value="date">Date</option>
-                          <option value="text">Color</option>
-                        </select>
-                      </td>
-                      <td>
-                        <input
-                          [type]="item['controls']['type']['value']"
-                          class="form-control form-control-sm"
-                          formControlName="value"
-                        />
-                      </td>
-                      <td>
-                        <button
-                          class="btn btn-danger btn-sm"
-                          placement="bottom"
-                          type="button"
-                          (click)="deleteField(i)"
-                        >
-                          <i class="fas fa-trash-alt"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </ng-container>
-                </ng-container>
-              </tbody>
-            </table>
-            <div class="d-flex justify-content-end">
-              <button
-                class="btn btn-primary btn-sm"
-                type="button"
-                (click)="newField()"
-              >
-                <i class="fas fa-plus"></i> Agregar
-              </button>
-            </div>
-          </div>
-        </ng-container> -->
       </div>
     </form>
   </div>
@@ -376,42 +195,22 @@
     <h4 class="text-primary modal-title">Ver material</h4>
     <button
       type="button"
-      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      class="close"
+      data-dismiss="modal"
       aria-label="Close"
       (click)="_modal.close()"
-    ></button>
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body">
     <div class="row">
-      <!-- <div class="col-6">
-        <strong class="text-title">
-          PROPIEDADES ({{ material.name | titlecase }})
-        </strong>
-        <perfect-scrollbar style="height: 300px">
-          <table class="table table-sm table-striped">
-            <thead>
-              <tr class="bg-light stay">
-                <th>Propiedad</th>
-                <th>Tipo</th>
-                <th>Valor</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of material.material_field">
-                <td>{{ item.property }}</td>
-                <td>{{ item.type }}</td>
-                <td>{{ item.value }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </perfect-scrollbar>
-      </div> -->
       <div class="col-12">
         <strong class="text-title">
-          ESPESORES ({{ material.product.name | titlecase }})
+          ESPESORES ({{ material.product.name | uppercase }})
         </strong>
         <div class="table-responsive rounded-top">
-          <table class="table table-sm table-striped">
+          <table class="table table-sm table-striped text-center">
             <thead>
               <tr class="bg-light">
                 <th>Espesor</th>
@@ -452,3 +251,201 @@
     </td>
   </tr>
 </ng-template>
+
+<!-- <input
+  type="hidden"
+  class="form-control form-control-sm"
+  formControlName="product_id"
+/> -->
+<!-- <mat-form-field class="col-md-2" appearance="outline">
+  <mat-label>Unidad</mat-label>
+  <mat-select name="color" formControlName="unit" required>
+    <mat-option value="milimetros">Milimetros</mat-option>
+    <mat-option value="unidad">Unidad</mat-option>
+  </mat-select>
+</mat-form-field> -->
+<!-- <mat-form-field class="col" appearance="outline">
+  <mat-label>Tipo</mat-label>
+  <mat-select name="color" formControlName="type" required>
+    <mat-option value="Interno">Interno</mat-option>
+    <mat-option value="Comercial">Comercial</mat-option>
+  </mat-select>
+</mat-form-field> -->
+<!-- <mat-form-field class="col-md-3" appearance="outline">
+  <mat-label>Valor (kg)</mat-label>
+  <input
+    matInput
+    currencyMask
+    [options]="masksMoney.maskCOP"
+    placeholder="Ingresa el valor"
+    formControlName="kg_value"
+    autocomplete="off"
+    required
+  />
+</mat-form-field>
+<mat-form-field class="col-md-3" appearance="outline">
+  <mat-label>Densidad</mat-label>
+  <input
+    matInput
+    currencyMask
+    [options]="masksMoney.maskNumbers3Decimal"
+    placeholder="Ingresa el valor"
+    formControlName="value_aux"
+    autocomplete="off"
+    required
+  />
+</mat-form-field> -->
+<!-- <mat-form-field class="col" appearance="outline">
+  <mat-label>Código de barras</mat-label>
+  <input
+    matInput
+    type="text"
+    placeholder="Ingresa el código de barras"
+    formControlName="Codigo_Barras"
+    autocomplete="off"
+    required
+  />
+</mat-form-field> -->
+<!-- <mat-form-field class="col" appearance="outline">
+  <mat-label>Tipo de catálogo</mat-label>
+  <mat-select name="color" formControlName="Tipo_Catalogo" required>
+    <mat-option value="Material">Material</mat-option>
+    <mat-option value="Epp">EPP</mat-option>
+  </mat-select>
+</mat-form-field> -->
+<!-- <div class="col-md-6 mb-4">
+  <ng-select
+    formControlName="Id_Categoria"
+    [items]="Categorias"
+    bindLabel="Nombre"
+    bindValue="Id_Categoria_Nueva"
+    appearance="outline"
+    [appendTo]="'body'"
+    placeholder="Categoría"
+    (change)="getSubCategories($event.Id_Categoria_Nueva)"
+    loadingText="loading"
+    ngDefaultControl
+  >
+  </ng-select>
+</div>
+<div class="col-md-6 mb-4">
+  <ng-select
+    formControlName="Id_Subcategoria"
+    [items]="SubCategorias"
+    bindLabel="text"
+    appearance="outline"
+    [appendTo]="'body'"
+    placeholder="Subcategoría"
+    (change)="getDinamicField($event.value)"
+    bindValue="value"
+    loadingText="loading"
+    ngDefaultControl
+  >
+  </ng-select>
+</div> -->
+<!-- <ng-container formArrayName="dynamic">
+  <ng-container *ngFor="let item of fieldDinamic.controls; let i = index">
+    <mat-form-field class="col" appearance="outline" [formGroupName]="i">
+      <mat-label>{{
+        item["controls"]["label"]["value"] | titlecase
+      }}</mat-label>
+      <input
+        matInput
+        [type]="item['controls']['type']['value']"
+        [placeholder]="'Ingresa el ' + item['controls']['label']['value']"
+        formControlName="valor"
+        autocomplete="off"
+        required
+      />
+    </mat-form-field>
+  </ng-container>
+</ng-container> -->
+
+<!-- <ng-container>
+  <div class="rounded-top table-responsive">
+    <table class="table table-bordered table-striped table-sm">
+      <thead class="bg-light">
+        <tr class="text-center text-uppercase">
+          <th>Propiedad</th>
+          <th>Característica</th>
+          <th>Valor</th>
+          <th><i class="fas fa-trash-alt"></i></th>
+        </tr>
+      </thead>
+      <tbody formArrayName="fields">
+        <ng-container *ngIf="fieldList.controls.length; else sinDatos">
+          <ng-container *ngFor="let item of fieldList.controls; let i = index">
+            <tr [formGroupName]="i" class="text-center">
+              <td>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  formControlName="property"
+                />
+              </td>
+              <td>
+                <select
+                  class="form-control form-control-sm"
+                  name="color"
+                  formControlName="type"
+                >
+                  <option value="number">Number</option>
+                  <option value="text">Text</option>
+                  <option value="date">Date</option>
+                  <option value="text">Color</option>
+                </select>
+              </td>
+              <td>
+                <input
+                  [type]="item['controls']['type']['value']"
+                  class="form-control form-control-sm"
+                  formControlName="value"
+                />
+              </td>
+              <td>
+                <button
+                  class="btn btn-danger btn-sm"
+                  placement="bottom"
+                  type="button"
+                  (click)="deleteField(i)"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-primary btn-sm" type="button" (click)="newField()">
+        <i class="fas fa-plus"></i> Agregar
+      </button>
+    </div>
+  </div>
+</ng-container> -->
+
+<!-- <div class="col-6">
+  <strong class="text-title">
+    PROPIEDADES ({{ material.name | titlecase }})
+  </strong>
+  <perfect-scrollbar style="height: 300px">
+    <table class="table table-sm table-striped">
+      <thead>
+        <tr class="bg-light stay">
+          <th>Propiedad</th>
+          <th>Tipo</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of material.material_field">
+          <td>{{ item.property }}</td>
+          <td>{{ item.type }}</td>
+          <td>{{ item.value }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </perfect-scrollbar>
+</div>
+ -->

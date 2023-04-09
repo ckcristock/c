@@ -207,7 +207,6 @@
                 <th>Cliente</th>
                 <th>Ciudad</th>
                 <th>Descripción</th>
-                <th>Incluye</th>
                 <th>Estado</th>
                 <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
@@ -235,15 +234,6 @@
                 </td>
                 <td>{{ item.municipality.name | capitalLetter }}</td>
                 <td>{{ item.description | capitalLetter }}</td>
-                <td>
-                  {{
-                    item.included == "apu"
-                      ? "APU"
-                      : item.included == "budget"
-                      ? "Presupuesto"
-                      : ""
-                  }}
-                </td>
                 <td>
                   <span
                     class="badge"
@@ -291,12 +281,12 @@
                         [routerLink]="['editar', item.id]"
                         ><i class="fas fa-edit"></i> Editar</a
                       >
-                      <a
+                      <!-- <a
                         class="dropdown-item text-secondary"
                         href="javascript: void(0);"
                         (click)="comments_quotation(comments, item.id)"
                         ><i class="fas fa-comment"></i> Comentarios</a
-                      >
+                      > -->
                       <a
                         class="dropdown-item text-success"
                         href="javascript: void(0);"
@@ -379,12 +369,10 @@
           </button>
         </div>
         <ng-container *ngFor="let item of quotation.items">
-          <h6 class="text-center">{{ item.name }}</h6>
-          <ol class="pl-3">
-            <ng-container *ngFor="let subitem of item.sub_items">
-              <li>{{ subitem.description }}</li>
-            </ng-container>
-          </ol>
+          <div [innerHTML]="item.name"></div>
+          <!-- <ng-container *ngFor="let subitem of item.sub_items">
+            <div [innerHTML]="subitem.description"></div>
+          </ng-container> -->
         </ng-container>
       </div>
     </div>

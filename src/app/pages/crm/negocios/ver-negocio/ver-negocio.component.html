@@ -1,4 +1,7 @@
-<div class="row" *ngIf="!loading && negocio; else notData">
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<div class="row" *ngIf="!loading && negocio; else placeholder">
   <div class="col-12">
     <div class="card">
       <div class="card-body">
@@ -29,7 +32,8 @@
                 {{ negocio?.third_party_person.name | titlecase }} <br />
                 {{ negocio?.date | date | uppercase }} <br />
                 {{ negocio?.name | uppercase }} <br />
-                {{ negocio?.country.name | uppercase }} <br />
+                <!-- {{ negocio?.country.name | uppercase }} -->
+                <br />
               </p>
             </small>
             <mat-form-field class="pb-0" appearance="outline">
@@ -382,7 +386,7 @@
                       : item.apuable.typeapu_name == "Conjunto"
                       ? item.apuable.total_direct_cost
                       : item.apuable.typeapu_name == "Servicio"
-                      ? item.apuable.general_subtotal_travel_expense_labor
+                      ? item.apuable.total_unit_cost
                       : ""
                     ) | number : "1.2-2"
                   }}

@@ -60,7 +60,7 @@
               'text-danger font-weight-bold': item.state == 'Inactivo'
             }"
           >
-            <td class="align-middle">{{ item.profile }}</td>
+            <td class="align-middle">{{ item.profile | uppercase }}</td>
             <td class="align-middle">
               ${{ item.value_time_daytime_displacement | number : "1.2-2" }}
             </td>
@@ -146,10 +146,13 @@
     <h4 class="text-primary modal-title">{{ title }}</h4>
     <button
       type="button"
-      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      class="close"
+      data-dismiss="modal"
       aria-label="Close"
       (click)="modal.dismiss('Cross click'); form.reset()"
-    ></button>
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
@@ -169,6 +172,7 @@
           <input
             matInput
             currencyMask
+            appInputPosition
             [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor por hora"
             formControlName="value_time_daytime_displacement"
@@ -180,6 +184,7 @@
           <input
             matInput
             currencyMask
+            appInputPosition
             [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor por hora"
             formControlName="value_time_night_displacement"
@@ -191,6 +196,7 @@
           <input
             matInput
             currencyMask
+            appInputPosition
             [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor por hora"
             formControlName="daytime_ordinary_hour_value"
@@ -202,6 +208,7 @@
           <input
             matInput
             currencyMask
+            appInputPosition
             [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor por hora"
             formControlName="night_ordinary_hour_value"
@@ -213,6 +220,7 @@
           <input
             matInput
             currencyMask
+            appInputPosition
             [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor por hora"
             formControlName="sunday_daytime_value"
@@ -224,6 +232,7 @@
           <input
             matInput
             currencyMask
+            appInputPosition
             [options]="masksMoney.maskCOP"
             placeholder="Ingresa el valor por hora"
             formControlName="sunday_night_time_value"

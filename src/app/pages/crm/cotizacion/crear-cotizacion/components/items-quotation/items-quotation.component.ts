@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { consts } from 'src/app/core/utils/consts';
 import { CalculationBasesService } from 'src/app/pages/ajustes/configuracion/base-calculos/calculation-bases.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { TexteditorService } from 'src/app/pages/ajustes/informacion-base/services/texteditor.service';
+import { Texteditor2Service } from 'src/app/pages/ajustes/informacion-base/services/texteditor2.service';
 import { BudgetService } from 'src/app/pages/crm/presupuesto/budget.service';
 
 @Component({
@@ -27,7 +29,8 @@ export class ItemsQuotationComponent implements OnInit {
     private fb: FormBuilder,
     private _swal: SwalService,
     private _calculationBases: CalculationBasesService,
-    private router: Router
+    private router: Router,
+    public _texteditor: TexteditorService,
   ) { }
 
   ngOnInit(): void {
@@ -354,7 +357,6 @@ export class ItemsQuotationComponent implements OnInit {
   value_usd_temp: number
 
   recalculate(subItemGroup, item_pre) {
-    console.log('recalculando')
     this.value_cop_temp = 0
     this.value_usd_temp = 0
     item_pre.getRawValue().subItems.forEach(subItem => {
@@ -371,8 +373,6 @@ export class ItemsQuotationComponent implements OnInit {
 
   makeSubItem(pre = null, edit = false, type = '', group = null, category = '', noCreate = false) {
     const subItemGroup = this.makeSubItemGroup(pre, edit, type, category, noCreate)
-    console.log(subItemGroup)
-
     const cuantity_aux = subItemGroup.get('cuantity_aux')
     const value_cop_aux = subItemGroup.get('value_cop_aux')
     const value_usd_aux = subItemGroup.get('value_usd_aux')
@@ -456,6 +456,11 @@ export class ItemsQuotationComponent implements OnInit {
 
 
   makeSubItemGroup(pre, edit = null, type, category = '', noCreate = false) {
+    console.log(pre)
+    console.log(edit)
+    console.log(type)
+    console.log(category)
+    console.log(noCreate)
     let type_model;
     if (pre && category == 'apu' && !noCreate) {
       switch (pre.type_module) {

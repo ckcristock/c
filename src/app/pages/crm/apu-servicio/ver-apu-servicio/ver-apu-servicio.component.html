@@ -117,14 +117,11 @@
           ></app-acompanamiento>
           <hr />
         </ng-container>
-        <h6 class="d-flex justify-content-between">
-          SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA
-          <span class="badge badge-success badge-pill"
-            >${{
-              data.general_subtotal_travel_expense_labor | number : "1.2-2"
-            }}</span
-          >
-        </h6>
+        <app-list-items
+          title1="SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA"
+          [var1]="data.general_subtotal_travel_expense_labor"
+          type1="cop"
+        ></app-list-items>
       </div>
     </mat-expansion-panel>
     <mat-expansion-panel
@@ -174,14 +171,11 @@
           ></app-acompanamiento-contratista>
           <hr />
         </ng-container>
-        <h6 class="d-flex justify-content-between">
-          SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA
-          <span class="badge badge-success badge-pill"
-            >${{
-              data.general_subtotal_travel_expense_labor_c | number : "1.2-2"
-            }}</span
-          >
-        </h6>
+        <app-list-items
+          title1="SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA"
+          [var1]="data.general_subtotal_travel_expense_labor_c"
+          type1="cop"
+        ></app-list-items>
       </div>
     </mat-expansion-panel>
   </mat-accordion>
@@ -191,8 +185,34 @@
       <hr class="line" />
       <div class="d-flex justify-content-center">
         <div class="rounded-top table-responsive">
-          <table class="table table-bordered text-uppercase table-sm">
+          <table
+            class="table table-borderless table-striped text-uppercase table-sm"
+          >
             <tbody>
+              <tr>
+                <th colspan="2">Subtotal maqmo</th>
+                <td class="text-right">
+                  ${{
+                    data.general_subtotal_travel_expense_labor
+                      | number : "1.2-2"
+                  }}
+                </td>
+              </tr>
+              <tr>
+                <th colspan="2">Subtotal contratistas</th>
+                <td class="text-right">
+                  ${{
+                    data.general_subtotal_travel_expense_labor_c
+                      | number : "1.2-2"
+                  }}
+                </td>
+              </tr>
+              <tr>
+                <th colspan="2">Maqmo + Contratistas</th>
+                <th class="text-right">
+                  ${{ data.total_unit_cost | number : "1.2-2" }}
+                </th>
+              </tr>
               <tr>
                 <th class="text-left">Administrativos</th>
                 <td class="text-right">
@@ -234,11 +254,11 @@
                 <th class="text-left" colspan="2">
                   Precio venta COP incluye retención
                 </th>
-                <td class="text-right">
+                <th class="text-right">
                   ${{
                     data.sale_price_cop_withholding_total | number : "1.2-2"
                   }}
-                </td>
+                </th>
               </tr>
               <tr>
                 <th class="text-left" colspan="2">TRM</th>
@@ -248,10 +268,10 @@
                 <th class="text-left" colspan="2">
                   Precio venta USD incluye retención
                 </th>
-                <td class="text-right">
+                <th class="text-right">
                   USD
                   {{ data.sale_price_usd_withholding_total | number : "1.2-2" }}
-                </td>
+                </th>
               </tr>
             </tbody>
           </table>

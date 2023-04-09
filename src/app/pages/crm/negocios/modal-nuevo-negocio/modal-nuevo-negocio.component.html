@@ -2,7 +2,6 @@
   <div class="card-body">
     <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
     <hr class="line" />
-
     <ng-container [formGroup]="form">
       <div class="row">
         <mat-form-field class="col" appearance="outline">
@@ -18,20 +17,32 @@
             required
           />
         </mat-form-field>
+        <!-- <mat-form-field class="col" appearance="outline">
+          <mat-label>Fecha de entrega</mat-label>
+          <input
+            matInput
+            type="date"
+            [min]="today"
+            formControlName="date"
+            required
+            autocomplete="off"
+          />
+        </mat-form-field> -->
         <mat-form-field class="col" appearance="outline">
           <mat-label>Fecha de entrega</mat-label>
           <input
             matInput
-            id="date"
-            type="date"
-            [min]="today"
+            [matDatepicker]="picker"
+            placeholder="Choose a date"
             formControlName="date"
-            name="plazo"
-            required
-            autocomplete="off"
           />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <div class="col mb-4">
+        <div class="col mat-form-field-wrapper">
           <ng-select
             [items]="companies"
             formControlName="third_party_id"
@@ -46,7 +57,7 @@
           >
           </ng-select>
         </div>
-        <div class="col mb-4">
+        <div class="col mat-form-field-wrapper">
           <ng-select
             [items]="contacts"
             formControlName="third_party_person_id"
@@ -78,7 +89,7 @@
           >
           </ng-select>
         </div> -->
-        <div class="col mb-4">
+        <div class="col mat-form-field-wrapper">
           <ng-select
             [items]="cities"
             formControlName="city_id"

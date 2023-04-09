@@ -76,7 +76,11 @@
     </div>
     <mat-accordion multi>
       <mat-expansion-panel
-        [expanded]="true"
+        [expanded]="
+          cmoList.controls.length > 0 ||
+          mpMCalculateLaborList.controls.length > 0 ||
+          apMCalculateLaborList.controls.length > 0
+        "
         class="mat-elevation-z0 border-radius-panel"
       >
         <mat-expansion-panel-header class="custom-panel-header">
@@ -191,6 +195,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 3.4rem"
@@ -200,6 +205,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
@@ -226,6 +232,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
@@ -247,6 +254,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
@@ -273,6 +281,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
@@ -294,6 +303,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
@@ -320,6 +330,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
@@ -364,18 +375,12 @@
             </div>
           </ng-container>
           <ng-container *ngIf="cmoList.controls.length">
-            <div class="row d-flex justify-content-start mt-3">
-              <div class="col-md-6">
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL MANO DE OBRA
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_labor").value | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-              </div>
-            </div>
+            <app-list-items
+              title1="SUBTOTAL MANO DE OBRA"
+              [var1]="this.form.get('subtotal_labor').value"
+              type1="cop"
+              mt="mt-2"
+            ></app-list-items>
           </ng-container>
           <ng-container *ngIf="cmoList.controls.length">
             <h6>Viáticos</h6>
@@ -405,7 +410,7 @@
                               <th>Unidad</th>
                               <th>Cantidad</th>
                               <th>Valor Unitario</th>
-                              <th>Valor Total</th>
+                              <th>Total</th>
                             </tr>
                           </thead>
                           <tbody formArrayName="viatic_estimation">
@@ -429,7 +434,8 @@
                                 <td>
                                   <input
                                     currencyMask
-                                    [options]="masksMoney.maskNumbersDecimal"
+                                    appInputPositionInitial
+                                    [options]="masksMoney.maskNumbers3Decimal"
                                     placeholder="Cantidad"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="amount"
@@ -438,6 +444,7 @@
                                 <td class="text-right">
                                   <input
                                     currencyMask
+                                    appInputPosition
                                     [options]="masksMoney.maskCOP"
                                     placeholder="Valor unitario"
                                     class="form-control form-control-sm form-control-travel"
@@ -481,28 +488,15 @@
                 </ng-container>
               </div>
             </ng-container>
-            <div class="row d-flex justify-content-start mt-3">
-              <div class="col-md-6">
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL VIÁTICOS
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_travel_expense").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL VALIDACIÓN DIMENSIONAL
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_dimensional_validation").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-              </div>
-            </div>
+            <app-list-items
+              title1="SUBTOTAL VIÁTICOS"
+              [var1]="this.form.get('subtotal_travel_expense').value"
+              type1="cop"
+              title2="SUBTOTAL VALIDACIÓN DIMENSIONAL"
+              [var2]="this.form.get('subtotal_dimensional_validation').value"
+              type2="cop"
+              mt="mt-2"
+            ></app-list-items>
           </ng-container>
           <hr />
           <h5 class="text-center">Montaje de equipos</h5>
@@ -613,6 +607,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 3.4rem"
@@ -622,6 +617,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
@@ -648,6 +644,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
@@ -669,6 +666,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
@@ -695,6 +693,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
@@ -716,6 +715,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
@@ -742,6 +742,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
@@ -784,21 +785,13 @@
             </div>
           </ng-container>
           <ng-container *ngIf="mpMCalculateLaborList.controls.length">
-            <div class="row d-flex justify-content-start mt-3">
-              <div class="col-md-6">
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL MANO DE OBRA
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_labor_mpm").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-              </div>
-            </div>
+            <app-list-items
+              title1="SUBTOTAL MANO DE OBRA"
+              [var1]="this.form.get('subtotal_labor_mpm').value"
+              type1="cop"
+              mt="mt-2"
+            ></app-list-items>
           </ng-container>
-
           <ng-container *ngIf="mpMCalculateLaborList.controls.length">
             <h6>Viáticos</h6>
             <ng-container formArrayName="mpm_calculate_labor">
@@ -830,7 +823,7 @@
                               <th>Unidad</th>
                               <th>Cantidad</th>
                               <th>Valor Unitario</th>
-                              <th>Valor Total</th>
+                              <th>Total</th>
                             </tr>
                           </thead>
                           <tbody formArrayName="viatic_estimation">
@@ -854,7 +847,8 @@
                                 <td>
                                   <input
                                     currencyMask
-                                    [options]="masksMoney.maskNumbersDecimal"
+                                    appInputPositionInitial
+                                    [options]="masksMoney.maskNumbers3Decimal"
                                     placeholder="Cantidad"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="amount"
@@ -863,6 +857,7 @@
                                 <td class="text-right">
                                   <input
                                     currencyMask
+                                    appInputPosition
                                     [options]="masksMoney.maskCOP"
                                     placeholder="Valor unitario"
                                     class="form-control form-control-sm form-control-travel"
@@ -909,28 +904,15 @@
           </ng-container>
 
           <ng-container *ngIf="mpMCalculateLaborList.controls.length">
-            <div class="row d-flex justify-content-start mt-3">
-              <div class="col-md-6">
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL VIÁTICOS
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_travel_expense_mpm").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL MONTAJE DE EQUIPOS
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_assembly_commissioning").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-              </div>
-            </div>
+            <app-list-items
+              title1="SUBTOTAL VIÁTICOS"
+              [var1]="this.form.get('subtotal_travel_expense_mpm').value"
+              type1="cop"
+              title2="SUBTOTAL MONTAJE EQUIPOS"
+              [var2]="this.form.get('subtotal_assembly_commissioning').value"
+              type2="cop"
+              mt="mt-2"
+            ></app-list-items>
           </ng-container>
           <hr />
           <h5 class="text-center">Acompañamiento y puesta en marcha</h5>
@@ -1041,6 +1023,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 3.4rem"
@@ -1050,6 +1033,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
@@ -1076,6 +1060,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
@@ -1097,6 +1082,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
@@ -1123,6 +1109,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
@@ -1144,6 +1131,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
@@ -1170,6 +1158,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
@@ -1212,19 +1201,12 @@
             </div>
           </ng-container>
           <ng-container *ngIf="apMCalculateLaborList.controls.length">
-            <div class="row d-flex justify-content-start mt-3">
-              <div class="col-md-6">
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL MANO DE OBRA
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_labor_apm").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-              </div>
-            </div>
+            <app-list-items
+              title1="SUBTOTAL MANO DE OBRA"
+              [var1]="this.form.get('subtotal_labor_apm').value"
+              type1="cop"
+              mt="mt-2"
+            ></app-list-items>
           </ng-container>
 
           <ng-container *ngIf="apMCalculateLaborList.controls.length">
@@ -1258,7 +1240,7 @@
                               <th>Unidad</th>
                               <th>Cantidad</th>
                               <th>Valor Unitario</th>
-                              <th>Valor Total</th>
+                              <th>Total</th>
                             </tr>
                           </thead>
                           <tbody formArrayName="viatic_estimation">
@@ -1282,7 +1264,8 @@
                                 <td>
                                   <input
                                     currencyMask
-                                    [options]="masksMoney.maskNumbersDecimal"
+                                    appInputPositionInitial
+                                    [options]="masksMoney.maskNumbers3Decimal"
                                     placeholder="Cantidad"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="amount"
@@ -1291,6 +1274,7 @@
                                 <td class="text-right">
                                   <input
                                     currencyMask
+                                    appInputPosition
                                     [options]="masksMoney.maskCOP"
                                     placeholder="Valor unitario"
                                     class="form-control form-control-sm form-control-travel"
@@ -1337,42 +1321,35 @@
           </ng-container>
 
           <ng-container *ngIf="apMCalculateLaborList.controls.length">
-            <div class="row d-flex justify-content-start mt-3">
-              <div class="col-md-6">
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL VIÁTICOS
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_travel_expense_apm").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL ACOMPAÑAMIENTO Y PUESTA EN MARCHA
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_accompaniment").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-              </div>
-            </div>
+            <app-list-items
+              title1="SUBTOTAL VIÁTICOS"
+              [var1]="this.form.get('subtotal_travel_expense_apm').value"
+              type1="cop"
+              title2="SUBTOTAL ACOMPAÑAMIENTO"
+              [var2]="this.form.get('subtotal_accompaniment').value"
+              type2="cop"
+              mt="mt-2"
+            ></app-list-items>
           </ng-container>
           <hr />
-          <h6 class="d-flex justify-content-between">
-            SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA
-            <span class="badge badge-success badge-pill"
-              >${{
-                this.form.get("general_subtotal_travel_expense_labor").value
-                  | number : "1.2-2"
-              }}</span
-            >
-          </h6>
+          <app-list-items
+            title1="SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA"
+            [var1]="
+              this.form.get('general_subtotal_travel_expense_labor').value
+            "
+            type1="cop"
+            mt="mt-2"
+          ></app-list-items>
         </div>
       </mat-expansion-panel>
-      <mat-expansion-panel class="mat-elevation-z0 border-radius-panel">
+      <mat-expansion-panel
+        [expanded]="
+          cVdCalculateLaborList.controls.length > 0 ||
+          cMeCalculateLaborList.controls.length > 0 ||
+          cApMCalculateLaborList.controls.length > 0
+        "
+        class="mat-elevation-z0 border-radius-panel"
+      >
         <mat-expansion-panel-header class="custom-panel-header">
           <mat-panel-title> CONTRATISTAS </mat-panel-title>
         </mat-expansion-panel-header>
@@ -1477,6 +1454,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="people_number"
@@ -1485,6 +1463,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_displacement"
@@ -1509,6 +1488,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_displacement"
@@ -1517,6 +1497,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_ordinary"
@@ -1541,6 +1522,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_ordinary"
@@ -1549,6 +1531,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_festive"
@@ -1573,6 +1556,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_festive"
@@ -1626,7 +1610,7 @@
                               <th>Unidad</th>
                               <th>Cantidad</th>
                               <th>Valor Unitario</th>
-                              <th>Valor Total</th>
+                              <th>Total</th>
                             </tr>
                           </thead>
                           <tbody formArrayName="viatic_estimation">
@@ -1650,7 +1634,8 @@
                                 <td>
                                   <input
                                     currencyMask
-                                    [options]="masksMoney.maskNumbersDecimal"
+                                    appInputPositionInitial
+                                    [options]="masksMoney.maskNumbers3Decimal"
                                     placeholder="Cantidad"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="amount"
@@ -1659,6 +1644,7 @@
                                 <td class="text-right">
                                   <input
                                     currencyMask
+                                    appInputPosition
                                     [options]="masksMoney.maskCOP"
                                     placeholder="Valor unitario"
                                     class="form-control form-control-sm form-control-travel"
@@ -1700,28 +1686,15 @@
             </ng-container>
           </ng-container>
           <ng-container *ngIf="cVdCalculateLaborList.controls.length">
-            <div class="row d-flex justify-content-start mt-3">
-              <div class="col-md-6">
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL VIÁTICOS
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_travel_expense_vd_c").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL ACOMPAÑAMIENTO Y PUESTA EN MARCHA
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_dimensional_validation_c").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-              </div>
-            </div>
+            <app-list-items
+              title1="SUBTOTAL VIÁTICOS"
+              [var1]="this.form.get('subtotal_travel_expense_vd_c').value"
+              type1="cop"
+              title2="SUBTOTAL VALIDACIÓN DIMENSIONAL"
+              [var2]="this.form.get('subtotal_dimensional_validation_c').value"
+              type2="cop"
+              mt="mt-2"
+            ></app-list-items>
           </ng-container>
           <hr />
           <h5 class="text-center">Montaje de equipos</h5>
@@ -1824,6 +1797,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="people_number"
@@ -1832,6 +1806,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_displacement"
@@ -1856,6 +1831,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_displacement"
@@ -1864,6 +1840,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_ordinary"
@@ -1888,6 +1865,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_ordinary"
@@ -1896,6 +1874,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_festive"
@@ -1920,6 +1899,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_festive"
@@ -1973,7 +1953,7 @@
                               <th>Unidad</th>
                               <th>Cantidad</th>
                               <th>Valor Unitario</th>
-                              <th>Valor Total</th>
+                              <th>Total</th>
                             </tr>
                           </thead>
                           <tbody formArrayName="viatic_estimation">
@@ -1997,7 +1977,8 @@
                                 <td>
                                   <input
                                     currencyMask
-                                    [options]="masksMoney.maskNumbersDecimal"
+                                    appInputPositionInitial
+                                    [options]="masksMoney.maskNumbers3Decimal"
                                     placeholder="Cantidad"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="amount"
@@ -2006,6 +1987,7 @@
                                 <td class="text-right">
                                   <input
                                     currencyMask
+                                    appInputPosition
                                     [options]="masksMoney.maskCOP"
                                     placeholder="Valor unitario"
                                     class="form-control form-control-sm form-control-travel"
@@ -2047,28 +2029,15 @@
             </ng-container>
           </ng-container>
           <ng-container *ngIf="cMeCalculateLaborList.controls.length">
-            <div class="row d-flex justify-content-start mt-3">
-              <div class="col-md-6">
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL VIÁTICOS
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_travel_expense_me_c").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL ACOMPAÑAMIENTO Y PUESTA EN MARCHA
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_assembly_c").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-              </div>
-            </div>
+            <app-list-items
+              title1="SUBTOTAL VIÁTICOS"
+              [var1]="this.form.get('subtotal_travel_expense_me_c').value"
+              type1="cop"
+              title2="SUBTOTAL MONTAJE EQUIPOS"
+              [var2]="this.form.get('subtotal_assembly_c').value"
+              type2="cop"
+              mt="mt-2"
+            ></app-list-items>
           </ng-container>
           <hr />
           <h5 class="text-center">Acompañamiento y puesta en marcha</h5>
@@ -2172,6 +2141,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="people_number"
@@ -2180,6 +2150,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_displacement"
@@ -2204,6 +2175,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_displacement"
@@ -2212,6 +2184,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_ordinary"
@@ -2236,6 +2209,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_ordinary"
@@ -2244,6 +2218,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_festive"
@@ -2268,6 +2243,7 @@
                           <td>
                             <input
                               currencyMask
+                              appInputPositionInitial
                               [options]="masksMoney.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_festive"
@@ -2321,7 +2297,7 @@
                               <th>Unidad</th>
                               <th>Cantidad</th>
                               <th>Valor Unitario</th>
-                              <th>Valor Total</th>
+                              <th>Total</th>
                             </tr>
                           </thead>
                           <tbody formArrayName="viatic_estimation">
@@ -2345,7 +2321,8 @@
                                 <td>
                                   <input
                                     currencyMask
-                                    [options]="masksMoney.maskNumbersDecimal"
+                                    appInputPositionInitial
+                                    [options]="masksMoney.maskNumbers3Decimal"
                                     placeholder="Cantidad"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="amount"
@@ -2354,6 +2331,7 @@
                                 <td class="text-right">
                                   <input
                                     currencyMask
+                                    appInputPosition
                                     [options]="masksMoney.maskCOP"
                                     placeholder="Valor unitario"
                                     class="form-control form-control-sm form-control-travel"
@@ -2395,38 +2373,25 @@
             </ng-container>
           </ng-container>
           <ng-container *ngIf="cApMCalculateLaborList.controls.length">
-            <div class="row d-flex justify-content-start mt-3">
-              <div class="col-md-6">
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL VIÁTICOS
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_travel_expense_apm_c").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-                <h6 class="d-flex justify-content-between">
-                  SUBTOTAL ACOMPAÑAMIENTO Y PUESTA EN MARCHA
-                  <span class="badge badge-success badge-pill"
-                    >${{
-                      this.form.get("subtotal_accompaniment_c").value
-                        | number : "1.2-2"
-                    }}</span
-                  >
-                </h6>
-              </div>
-            </div>
+            <app-list-items
+              title1="SUBTOTAL VIÁTICOS"
+              [var1]="this.form.get('subtotal_travel_expense_apm_c').value"
+              type1="cop"
+              title2="SUBTOTAL ACOMPAÑAMIENTO"
+              [var2]="this.form.get('subtotal_accompaniment_c').value"
+              type2="cop"
+              mt="mt-2"
+            ></app-list-items>
           </ng-container>
-          <h6 class="d-flex justify-content-between">
-            SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA
-            <span class="badge badge-success badge-pill"
-              >${{
-                this.form.get("general_subtotal_travel_expense_labor_c").value
-                  | number : "1.2-2"
-              }}</span
-            >
-          </h6>
+          <hr />
+          <app-list-items
+            title1="SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA"
+            [var1]="
+              this.form.get('general_subtotal_travel_expense_labor_c').value
+            "
+            type1="cop"
+            mt="mt-2"
+          ></app-list-items>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
@@ -2439,10 +2404,37 @@
             <table class="table table-borderless">
               <tbody class="text-uppercase">
                 <tr>
+                  <td colspan="2">Subtotal maqmo</td>
+                  <td class="text-right">
+                    ${{
+                      this.form.get("general_subtotal_travel_expense_labor")
+                        .value | number : "1.2-2"
+                    }}
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">Subtotal contratistas</td>
+                  <td class="text-right">
+                    ${{
+                      this.form.get("general_subtotal_travel_expense_labor_c")
+                        .value | number : "1.2-2"
+                    }}
+                  </td>
+                </tr>
+                <tr class="table-primary">
+                  <th colspan="2">Maqmo + Contratistas</th>
+                  <th class="text-right">
+                    ${{
+                      this.form.get("total_unit_cost").value | number : "1.2-2"
+                    }}
+                  </th>
+                </tr>
+                <tr>
                   <td class="col-7">Administrativos</td>
                   <td class="col-2">
                     <input
                       currencyMask
+                      appInputPositionInitial
                       [options]="masksMoney.maskPorcentaje"
                       class="form-control form-control-sm"
                       formControlName="administrative_percentage"
@@ -2460,6 +2452,7 @@
                   <td class="col-2">
                     <input
                       currencyMask
+                      appInputPositionInitial
                       [options]="masksMoney.maskPorcentaje"
                       class="form-control form-control-sm"
                       formControlName="unforeseen_percentage"
@@ -2485,6 +2478,7 @@
                   <td class="col-3">
                     <input
                       currencyMask
+                      appInputPositionInitial
                       [options]="masksMoney.maskPorcentaje"
                       class="form-control form-control-sm"
                       formControlName="utility_percentage"
@@ -2500,48 +2494,41 @@
                     }}
                   </td>
                 </tr>
-                <tr>
-                  <td class="col-9" colspan="2">
+                <tr class="table-primary">
+                  <th class="col-9 align-middle" colspan="2">
                     Precio venta COP incluye retención
-                  </td>
-                  <td class="col-3 text-right">
-                    <h5>
-                      <span class="badge badge-success">
-                        $
-                        {{
-                          form.get("sale_price_cop_withholding_total").value
-                            | number : "1.2-2"
-                        }}
-                      </span>
-                    </h5>
-                  </td>
+                  </th>
+                  <th class="col-3 align-middle text-right">
+                    $
+                    {{
+                      form.get("sale_price_cop_withholding_total").value
+                        | number : "1.2-2"
+                    }}
+                  </th>
                 </tr>
                 <tr>
                   <td class="col-9" colspan="2">TRM</td>
                   <td class="col-3">
                     <input
                       currencyMask
+                      appInputPosition
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       formControlName="trm"
                     />
                   </td>
                 </tr>
-                <tr>
-                  <td class="col-9" colspan="2">
+                <tr class="table-primary">
+                  <th class="col-9 align-middle" colspan="2">
                     Precio venta USD incluye retención
-                  </td>
-                  <td class="col-3 text-right">
-                    <h5>
-                      <span class="badge badge-success">
-                        USD
-                        {{
-                          form.get("sale_price_usd_withholding_total").value
-                            | number : "1.2-2"
-                        }}
-                      </span>
-                    </h5>
-                  </td>
+                  </th>
+                  <th class="col-3 align-middle text-right">
+                    USD
+                    {{
+                      form.get("sale_price_usd_withholding_total").value
+                        | number : "1.2-2"
+                    }}
+                  </th>
                 </tr>
               </tbody>
             </table>

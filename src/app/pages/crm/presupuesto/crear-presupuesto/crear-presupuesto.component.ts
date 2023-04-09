@@ -115,10 +115,11 @@ export class CrearPresupuestoComponent implements OnInit {
   }
   async getIndirectCosts() {
     if (this.dataEdit) {
+      console.log(this.dataEdit)
       this.indirectCosts =
         this.dataEdit.indirect_costs.reduce((acc, el) => {
           return [...acc,
-          { text: el.indirect_cost.name, value: el.indirect_cost_id, percentage: el.percentage }
+          { text: el.indirect_cost.name, value: el.indirect_cost_id, percentage: el.percentage, apply_service: el.indirect_cost.apply_service }
           ]
         }, [])
     } else {
@@ -216,6 +217,7 @@ export class CrearPresupuestoComponent implements OnInit {
   }
 
   indirectCostPush(indirect, all = true) {
+    console.log('insertar', indirect)
     indirect.clear();
     this.indirectCosts.forEach((element) => {
       indirect.push(this.indirectCostgroup(element, this.fb, all));
@@ -227,6 +229,7 @@ export class CrearPresupuestoComponent implements OnInit {
 
     let group = fb.group({
       indirect_cost_id: el.value,
+      apply_service: el.apply_service,
       value: 0,
       ...optionals
     });

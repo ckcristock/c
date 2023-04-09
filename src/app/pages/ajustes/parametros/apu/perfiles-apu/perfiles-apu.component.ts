@@ -155,18 +155,20 @@ export class PerfilesApuComponent implements OnInit {
   }
 
   save() {
-    this._profiles.save(this.form.value).subscribe((r: any) => {
-      this.modalService.dismissAll();
-      this.form.reset();
-      this.getProfiles();
-      this._swal.show({
-        icon: 'success',
-        title: 'Correcto',
-        text: '',
-        showCancel: false,
-        timer: 1000,
+    if (this.form.valid) {
+      this._profiles.save(this.form.value).subscribe((r: any) => {
+        this.modalService.dismissAll();
+        this.form.reset();
+        this.getProfiles();
+        this._swal.show({
+          icon: 'success',
+          title: 'Correcto',
+          text: '',
+          showCancel: false,
+          timer: 1000,
+        })
       })
-    })
+    }
   }
 
 

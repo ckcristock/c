@@ -6,7 +6,7 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 export class InputPositionDirective {
   constructor(private el: ElementRef<HTMLInputElement>) {
   }
-
+  // $ 00.000,00
   @HostListener('click')
   onClick() {
     const value = this.el.nativeElement.value;

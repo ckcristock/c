@@ -1,8 +1,9 @@
 import { PlatformLocation } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
+import { ModalNoCloseService } from 'src/app/core/services/modal-no-close.service';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/person.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
@@ -30,7 +31,7 @@ export class GetBudgetsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private _modal: ModalService,
+    private _modal: ModalNoCloseService,
     private _budgets: BudgetService,
     private platformLocation: PlatformLocation,
     private _swal: SwalService,

@@ -8,6 +8,7 @@ import { SafePipe } from './safe.pipe';
 import { TimePipe } from './time.pipe';
 import { NumberPipePipe } from './number-pipe.pipe';
 import { SanitizeHtmlPipe } from './sanitize-html.pipe';
+import { CapitalLetterPipe } from './capital-letter.pipe';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { SanitizeHtmlPipe } from './sanitize-html.pipe';
     ObjToArraykeysPipe,
     SafePipe,
     NumberPipePipe,
-    SanitizeHtmlPipe
+    SanitizeHtmlPipe,
+    CapitalLetterPipe
   ],
   exports: [
     ImagePipe,
@@ -30,7 +32,8 @@ import { SanitizeHtmlPipe } from './sanitize-html.pipe';
     ObjToArraykeysPipe,
     SafePipe,
     NumberPipePipe,
-    SanitizeHtmlPipe
+    SanitizeHtmlPipe,
+    CapitalLetterPipe
   ],
 })
 export class PipesModule { }

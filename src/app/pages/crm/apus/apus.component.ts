@@ -11,6 +11,8 @@ import { debounceTime } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
 import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 import { PermissionService } from 'src/app/core/services/permission.service';
+import { CurrencyMaskInputMode } from 'ngx-currency';
+import { consts } from 'src/app/core/utils/consts';
 @Component({
   selector: 'app-apus',
   templateUrl: './apus.component.html',
@@ -58,6 +60,7 @@ export class ApusComponent implements OnInit {
   filtrosActivos: boolean = false
   paginacion: any
 
+  masksInput = consts;
   ngOnInit(): void {
     if (this.permission.permissions.show) {
       this.createFormFilters();

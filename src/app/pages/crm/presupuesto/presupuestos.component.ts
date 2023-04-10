@@ -21,6 +21,7 @@ export class PresupuestosComponent implements OnInit {
   @ViewChild('secondAccordion') secondAccordion: MatAccordion;
   matPanel = false;
   form_filters: FormGroup;
+  dateMat = null;
   openClose() {
     if (this.matPanel == false) {
       this.firstAccordion.openAll();
@@ -92,6 +93,7 @@ export class PresupuestosComponent implements OnInit {
               formValues[param] = params[param];
             }
             this.form_filters.patchValue(formValues['params']);
+            this.dateMat = this.form_filters.get('date').value || ''
           }
           if (this.orderObj.params.pag) {
             this.getBudgets(this.orderObj.params.pag);
@@ -103,6 +105,19 @@ export class PresupuestosComponent implements OnInit {
         );
     } else {
       this.router.navigate(['/notauthorized'])
+    }
+  }
+
+  dateChange(e) {
+    console.log(e)
+    if (e.value) {
+      this.form_filters.patchValue({
+        date: new Date(e.value).toISOString()
+      })
+    } else {
+      this.form_filters.patchValue({
+        date: ''
+      })
     }
   }
 

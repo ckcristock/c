@@ -29,8 +29,6 @@ export class VerNegocioComponent implements OnInit {
   cotizacionesSeleccionadas: any[] = [];
   apuSelected: any[] = [];
   business_budget_id: any = '';
-  budget_value: number;
-  quotation_value: number;
   qr;
   loadingBudgets: boolean;
   loadingQuotation: boolean;
@@ -205,7 +203,10 @@ export class VerNegocioComponent implements OnInit {
     this._swal.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
-      text: 'Vamos a cambiar el estado',
+      text: 'Vamos a cambiar el estado. ' +
+        ((status == 'Aprobado' || status == 'Aprobada') ?
+          ('Al aprobar ' + (label == 'quotation' ? 'una cotización' : 'un presupuesto') + ' el resto se rechazarán automáticamente.') : ''),
+
     }).then(r => {
       if (r.isConfirmed) {
         let data = {
@@ -295,12 +296,8 @@ export class VerNegocioComponent implements OnInit {
   }
 
   addCotizacion() {
-    this.cotizacionesSeleccionadas.reduce((a, b) => {
-      return this.quotation_value = a + b.total_cop;
-    }, this.negocio.quotation_value)
     let data = {
       business_id: this.filtros.id,
-      quotation_value: this.quotation_value,
       quotations: this.cotizacionesSeleccionadas,
       person_id: this.person_id
     }
@@ -325,12 +322,8 @@ export class VerNegocioComponent implements OnInit {
   }
 
   saveBudget() {
-    this.presupuestosSeleccionados.reduce((a, b) => {
-      return this.budget_value = a + b.total_cop;
-    }, this.negocio.budget_value)
     let data = {
       business_id: this.filtros.id,
-      budget_value: this.budget_value,
       budgets: this.presupuestosSeleccionados,
       person_id: this.person_id
     }

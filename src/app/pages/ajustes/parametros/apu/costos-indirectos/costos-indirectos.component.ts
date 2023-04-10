@@ -23,7 +23,7 @@ export class CostosIndirectosComponent implements OnInit {
   indirect: any = {};
   pagination = {
     page: 1,
-    pageSize: 10,
+    pageSize: 50,
     collectionSize: 0
   }
   filtro: any = {
@@ -32,8 +32,8 @@ export class CostosIndirectosComponent implements OnInit {
 
   masksMoney = consts
 
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
@@ -77,7 +77,8 @@ export class CostosIndirectosComponent implements OnInit {
     this.form = this.fb.group({
       id: [this.indirect.id],
       name: ['', this._validators.required],
-      percentage: ['', this._validators.required]
+      percentage: ['', this._validators.required],
+      apply_service: [0]
     })
   }
 
@@ -86,7 +87,8 @@ export class CostosIndirectosComponent implements OnInit {
     this.form.patchValue({
       id: this.indirect.id,
       name: this.indirect.name,
-      percentage: this.indirect.percentage
+      percentage: this.indirect.percentage,
+      apply_service: this.indirect.apply_service
     })
   }
 

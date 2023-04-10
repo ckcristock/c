@@ -183,8 +183,8 @@
         >
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
-              <th *ngIf="checkFecha">Fecha de Creación</th>
               <th>Código</th>
+              <th *ngIf="checkFecha">Fecha</th>
               <th *ngIf="checkNombre">Nombre</th>
               <th *ngIf="checkDestino">Ciudad</th>
               <th *ngIf="checkCliente">Cliente</th>
@@ -196,26 +196,32 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of apus" class="text-center">
+              <td class="align-middle">{{ item.code | uppercase }}</td>
               <td class="align-middle" *ngIf="checkFecha">
-                {{ item.created_at | date : "shortDate" }}
+                {{ item.created_at | date : "MMM d, y" }}
               </td>
-              <td class="align-middle">{{ item.code }}</td>
-              <td class="align-middle" *ngIf="checkNombre">{{ item.name }}</td>
+              <td class="align-middle" *ngIf="checkNombre">
+                {{ item.name | capitalLetter }}
+              </td>
               <td class="align-middle" *ngIf="checkDestino">
-                {{ item.city.name }}
+                {{ item.city.name | capitalLetter }}
               </td>
               <td class="align-middle" *ngIf="checkCliente">
-                {{ item.third_party.full_name }}
+                {{ item.third_party.full_name | titlecase }}
               </td>
-              <td class="align-middle" *ngIf="checkLinea">{{ item.line }}</td>
+              <td class="align-middle" *ngIf="checkLinea">
+                {{ item.line | capitalLetter }}
+              </td>
               <td class="align-middle" *ngIf="checkTipo">
-                {{ item.type_name }}
+                {{ item.type_name | capitalLetter }}
               </td>
               <td class="align-middle">
                 <i
                   role="button"
                   class="fas fa-eye text-info"
-                  [ngbPopover]="item.observation || 'Sin observaciones'"
+                  [ngbPopover]="
+                    item.observation || 'Sin observaciones' | capitalLetter
+                  "
                 ></i>
               </td>
               <td class="align-middle">

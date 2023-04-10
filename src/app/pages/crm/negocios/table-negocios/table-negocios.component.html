@@ -8,8 +8,9 @@
         <th>Foto</th>
         <th>Código</th>
         <th>Nombre</th>
-        <th>Empresa</th>
+        <th>Tercero</th>
         <th>Presupuesto</th>
+        <th>Cotización</th>
         <th>Fecha entrega</th>
         <th class="">Etapa</th>
         <th><i class="mdi mdi-chevron-down"></i></th>
@@ -24,16 +25,21 @@
             class="rounded-circle mx-auto img-fluid header-profile-user"
           />
         </td>
-        <td class="align-middle" scope="row">{{ neg.code }}</td>
-        <td class="align-middle" scope="row">{{ neg.name }}</td>
+        <td class="align-middle" scope="row">{{ neg.code | uppercase }}</td>
+        <td class="align-middle" scope="row">{{ neg.name | capitalLetter }}</td>
         <td class="align-middle">
-          {{ neg.third_party.full_name }}
+          {{ neg.third_party.full_name | titlecase }}
         </td>
-        <td class="align-middle">$ {{ neg.budget_value | number }}</td>
-        <td class="align-middle">{{ neg.date | date }}</td>
+        <td class="align-middle">
+          $ {{ neg.budget_value || 0 | number : "1.2-2" }}
+        </td>
+        <td class="align-middle">
+          $ {{ neg.quotation_value || 0 | number : "1.2-2" }}
+        </td>
+        <td class="align-middle">{{ neg.date | date : "MMM d, y" }}</td>
         <td class="align-middle p-0">
           <select
-            class="form-control form-control-sm"
+            class="form-control form-control-sm form-control-table"
             [value]="neg.status"
             (change)="changeState($event, neg)"
           >

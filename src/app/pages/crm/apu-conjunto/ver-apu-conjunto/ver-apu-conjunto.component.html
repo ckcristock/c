@@ -104,7 +104,7 @@
         [data]="data.other"
         [others_subtotal]="data.others_subtotal"
       ></app-otros-conjunto>
-      <div class="rounded-top table-responsive">
+      <div class="rounded-top table-responsive mt-4">
         <table class="table table-borderless text-center">
           <thead>
             <tr class="table-primary">
@@ -135,7 +135,7 @@
                 <ng-container *ngFor="let item of data.indirect; let i = index">
                   <tr>
                     <td>{{ item.name }}</td>
-                    <td class="text-right">{{ item.percentage }}$</td>
+                    <td class="text-right">{{ item.percentage }}%</td>
                     <td class="text-right">
                       ${{ item.value | number : "1.2-2" }}
                     </td>
@@ -143,19 +143,19 @@
                 </ng-container>
                 <tr>
                   <th colspan="2">Costos Indirectos</th>
-                  <td class="text-right">
+                  <th class="text-right">
                     ${{ data.indirect_cost_total | number : "1.2-2" }}
-                  </td>
+                  </th>
                 </tr>
                 <tr>
                   <th colspan="2">
                     Costos Directos + Costos Indirectos Totales
                   </th>
-                  <td class="text-right">
+                  <th class="text-right">
                     ${{
                       data.direct_costs_indirect_costs_total | number : "1.2-2"
                     }}
-                  </td>
+                  </th>
                 </tr>
               </tbody>
             </table>
@@ -185,11 +185,11 @@
                 </tr>
                 <tr>
                   <th colspan="2">SubTotal + Administrativos + Imprevistos</th>
-                  <td class="text-right">
+                  <th class="text-right">
                     ${{
                       data.administrative_unforeseen_subtotal | number : "1.2-2"
                     }}
-                  </td>
+                  </th>
                 </tr>
                 <tr>
                   <td colspan="2">Utilidad</td>
@@ -197,25 +197,25 @@
                 </tr>
                 <tr>
                   <th colspan="2">SubTotal + Admin + Imprevisto + Utilidad</th>
-                  <td class="text-right">
+                  <th class="text-right">
                     ${{
                       data.admin_unforeseen_utility_subtotal | number : "1.2-2"
                     }}
-                  </td>
+                  </th>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="rounded-top table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped text-uppercase">
               <tbody class="bg-light">
                 <tr>
                   <th>Precio Venta Total COP + Retención</th>
-                  <td class="text-right">
+                  <th class="text-right">
                     ${{
                       data.sale_price_cop_withholding_total | number : "1.2-2"
                     }}
-                  </td>
+                  </th>
                 </tr>
                 <tr>
                   <td>TRM</td>
@@ -227,11 +227,11 @@
                 </tr>
                 <tr>
                   <th>Precio Venta Total USD + Retención</th>
-                  <td class="text-right">
+                  <th class="text-right">
                     ${{
                       data.sale_price_usd_withholding_total | number : "1.2-2"
                     }}
-                  </td>
+                  </th>
                 </tr>
               </tbody>
             </table>

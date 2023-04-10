@@ -15,7 +15,7 @@
     <tbody>
       <ng-container *ngIf="comercials.length">
         <ng-container *ngFor="let item of comercials; let i = index">
-          <tr class="text-center">
+          <tr class="text-center text-uppercase">
             <td>
               {{ i + 1 }}
             </td>
@@ -39,13 +39,8 @@
     </tbody>
   </table>
 </div>
-<div class="row d-flex justify-content-end">
-  <div class="col-md-4">
-    <h6 class="d-flex justify-content-between">
-      Subtotal
-      <span class="badge badge-success badge-pill"
-        >${{ commercial_materials_subtotal | number : "1.2-2" }}</span
-      >
-    </h6>
-  </div>
-</div>
+<app-list-items
+  title1="SUBTOTAL"
+  [var1]="commercial_materials_subtotal"
+  type1="cop"
+></app-list-items>

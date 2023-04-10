@@ -1,0 +1,206 @@
+<ng-template #modal let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Agregar presupuesto</h4>
+    <!-- <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button> -->
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <ng-container [formGroup]="form_filters">
+        <div class="col-md-3 mat-form-field-wrapper">
+          <ng-select
+            [items]="people"
+            formControlName="person_id"
+            bindLabel="text"
+            appearance="outline"
+            [appendTo]="'body'"
+            [clearable]="false"
+            placeholder="Quién elabora"
+            bindValue="value"
+          >
+          </ng-select>
+        </div>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Código</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por código"
+            formControlName="code"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <input
+            matInput
+            (dateChange)="dateChange($event)"
+            (dateInput)="dateChange($event)"
+            [(ngModel)]="dateMat"
+            [ngModelOptions]="{ standalone: true }"
+            [matDatepicker]="picker"
+            placeholder="Busca por fecha"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Cliente</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por cliente"
+            formControlName="customer"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Destino</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por destino"
+            formControlName="municipality_id"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Línea</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por línea"
+            formControlName="line"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </ng-container>
+    </div>
+    <ng-container *ngIf="budgets.length && !loading; else notData">
+      <mat-radio-group [(ngModel)]="selectedOption">
+        <div class="rounded-top table-responsive">
+          <table class="table table-bordered table-striped table-sm">
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th></th>
+                <th>Código</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Destino</th>
+                <th>Linea</th>
+                <th>Quien elabora</th>
+                <th>Total COP</th>
+                <th>Total USD</th>
+                <th>Estado</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of budgets" class="text-center">
+                <td>
+                  <mat-radio-button
+                    color="primary"
+                    [value]="item"
+                  ></mat-radio-button>
+                </td>
+                <td class="align-middle">
+                  {{ item.code | uppercase }}
+                </td>
+                <td class="align-middle">
+                  {{ item.created_at | date : "MMM d, y" }}
+                </td>
+                <td class="align-middle">
+                  {{ item.customer.name | titlecase }}
+                </td>
+                <td class="align-middle">
+                  {{ item.destiny.name | capitalLetter }}
+                </td>
+                <td class="align-middle">
+                  {{ item.line | capitalLetter }}
+                </td>
+                <td class="align-middle">
+                  {{ item.user.person.first_name | titlecase }}
+                  {{ item.user.person.first_surname | titlecase }}
+                </td>
+                <td class="align-middle">
+                  ${{ item.total_cop | number : "1.2-2" }}
+                </td>
+                <td class="align-middle">
+                  USD {{ item.total_usd | number : "1.2-2" }}
+                </td>
+                <td>
+                  <span
+                    class="badge"
+                    [class]="
+                      item.state == 'Activo' ? 'badge-success' : 'badge-danger'
+                    "
+                  >
+                    {{ item.state | uppercase }}
+                  </span>
+                </td>
+                <td class="align-middle">
+                  <div
+                    ngbDropdown
+                    container="body"
+                    class="d-inline-block dropdown-primary"
+                  >
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm"
+                      type="button"
+                      id="dropdownBasic1"
+                    >
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                      <a
+                        class="dropdown-item text-success"
+                        (click)="openNewTab(item.id)"
+                      >
+                        <i class="far fa-eye"></i> Ver
+                      </a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </mat-radio-group>
+    </ng-container>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="pagination.collectionSize"
+      [pageSize]="pagination.pageSize"
+      [(page)]="pagination.page"
+      (pageChange)="getBudgets($event)"
+      aria-label="Default pagination"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
+  </div>
+  <div class="modal-footer">
+    <!-- <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button> -->
+    <button type="button" (click)="send()" class="btn btn-primary">
+      Agregar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

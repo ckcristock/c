@@ -27,7 +27,7 @@ export class MaterialesMateriaPrimaComponent implements OnInit {
   title: any = '';
   pagination = {
     page: 1,
-    pageSize: 10,
+    pageSize: 50,
     collectionSize: 0
   }
   filtro = {
@@ -108,7 +108,7 @@ export class MaterialesMateriaPrimaComponent implements OnInit {
 
   openConfirm(confirm, titulo) {
     this.title = titulo;
-    this._modal.open(confirm, 'lg')
+    this._modal.open(confirm, 'sm')
     if (titulo != 'Editar material') {
       this.form.reset();
       this.getMaterialsIndex();

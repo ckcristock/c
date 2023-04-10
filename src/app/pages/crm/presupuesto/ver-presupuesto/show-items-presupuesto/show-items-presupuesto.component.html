@@ -6,7 +6,7 @@
         <span class="badge badge-primary">{{ i + 1 }}</span>
       </h4>
       <span class="text-center">
-        <strong>{{ item.name }}</strong></span
+        <strong>{{ item.name | uppercase }}</strong></span
       >
     </div>
     <div class="rounded-top table-responsive">
@@ -121,7 +121,7 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let subItem of item.subitems; let y = index">
-            <tr>
+            <tr class="text-uppercase">
               <td class="align-middle">{{ i + 1 }}.{{ y + 1 }}</td>
               <td class="align-middle">
                 {{

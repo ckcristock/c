@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { CalculationBasesService } from './calculation-bases.service';
 import { SwalService } from '../../informacion-base/services/swal.service';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-base-calculos',
@@ -18,23 +19,23 @@ export class BaseCalculosComponent implements OnInit {
     laser_cut_minute_value: undefined,
     warer_cut_minute_value: undefined
   }
-
-  constructor(private _calculationBase: CalculationBasesService, private _swal :SwalService) { }
+  masks = consts;
+  constructor(private _calculationBase: CalculationBasesService, private _swal: SwalService) { }
 
   ngOnInit(): void {
     this.getBases()
   }
 
   guardar(form: NgForm) {
-    const data =  Object.entries(form.value);
-    
-    this._calculationBase.update({data}).subscribe(r => { 
+    const data = Object.entries(form.value);
+
+    this._calculationBase.update({ data }).subscribe(r => {
       this._swal.show({
-          icon:'success',
-          title:'Se ha guardado con éxito',
-          text:'',
-          showCancel:false,
-          timer: 1000
+        icon: 'success',
+        title: 'Se ha guardado con éxito',
+        text: '',
+        showCancel: false,
+        timer: 1000
       })
     });
   }

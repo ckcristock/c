@@ -23,15 +23,15 @@ export class PerfilesApuComponent implements OnInit {
   profile: any = {};
   pagination = {
     page: 1,
-    pageSize: 10,
+    pageSize: 50,
     collectionSize: 0
   }
   filtro: any = {
     name: ''
   }
   masksMoney = consts
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
@@ -155,18 +155,20 @@ export class PerfilesApuComponent implements OnInit {
   }
 
   save() {
-    this._profiles.save(this.form.value).subscribe((r: any) => {
-      this.modalService.dismissAll();
-      this.form.reset();
-      this.getProfiles();
-      this._swal.show({
-        icon: 'success',
-        title: 'Correcto',
-        text: '',
-        showCancel: false,
-        timer: 1000,
+    if (this.form.valid) {
+      this._profiles.save(this.form.value).subscribe((r: any) => {
+        this.modalService.dismissAll();
+        this.form.reset();
+        this.getProfiles();
+        this._swal.show({
+          icon: 'success',
+          title: 'Correcto',
+          text: '',
+          showCancel: false,
+          timer: 1000,
+        })
       })
-    })
+    }
   }
 
 

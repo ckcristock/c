@@ -16,13 +16,15 @@ import { NotDataComponent } from './not-data/not-data.component';
 import { ApplicantComponent } from './applicant/applicant.component';
 import { GetApusComponent } from './get-apus/get-apus.component';
 import { CabeceraComponent } from './cabecera/cabecera.component';
-import { MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatNativeDateModule, MatSelectModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatNativeDateModule, MatRadioModule, MatSelectModule } from '@angular/material';
 import { NoPermissionsComponent } from './no-permissions/no-permissions.component';
 import { PlaceholderFormComponent } from './placeholder-form/placeholder-form.component';
 import { ReloadButtonComponent } from './reload-button/reload-button.component';
 import { ModalPreliquidarComponent } from './modal-preliquidar/modal-preliquidar.component';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { ListItemsComponent } from './list-items/list-items.component';
+import { GetBudgetsComponent } from './get-budgets/get-budgets.component';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -49,7 +51,9 @@ export const MY_FORMATS = {
     NoPermissionsComponent,
     PlaceholderFormComponent,
     ReloadButtonComponent,
-    ModalPreliquidarComponent
+    ModalPreliquidarComponent,
+    ListItemsComponent,
+    GetBudgetsComponent
   ],
   exports: [
     ModalBasicComponent,
@@ -65,7 +69,9 @@ export const MY_FORMATS = {
     NoPermissionsComponent,
     PlaceholderFormComponent,
     ReloadButtonComponent,
-    ModalPreliquidarComponent
+    ModalPreliquidarComponent,
+    ListItemsComponent,
+    GetBudgetsComponent
   ],
   imports: [
     NgbAccordionModule,
@@ -87,6 +93,7 @@ export const MY_FORMATS = {
     MatNativeDateModule,
     SatDatepickerModule,
     SatNativeDateModule,
+    MatRadioModule
   ],
   providers: [
     {

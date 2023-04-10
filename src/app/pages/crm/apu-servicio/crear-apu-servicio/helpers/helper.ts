@@ -23,6 +23,7 @@ export const functionsApuService = {
       administrative_value: data.administrative_value,
       general_subtotal_travel_expense_labor: data.general_subtotal_travel_expense_labor,
       general_subtotal_travel_expense_labor_c: data.general_subtotal_travel_expense_labor_c,
+      total_unit_cost: data.total_unit_cost,
       sale_price_cop_withholding_total: data.sale_price_cop_withholding_total,
       sale_price_usd_withholding_total: data.sale_price_usd_withholding_total,
       subtotal_administrative_unforeseen: data.subtotal_administrative_unforeseen,
@@ -85,6 +86,7 @@ export const functionsApuService = {
       subtotal_accompaniment: [0],
       general_subtotal_travel_expense_labor: [0],
       general_subtotal_travel_expense_labor_c: [0],
+      total_unit_cost: [0],
       administrative_percentage: [calculationBase.administration_percentage.value],
       administrative_value: [0],
       unforeseen_percentage: [calculationBase.unforeseen_percentage.value],
@@ -237,22 +239,26 @@ export const functionsApuService = {
       let administrative_percentage = form.get('administrative_percentage')
       let unforeseen_percentage = form.get('unforeseen_percentage')
       let general_subtotal_travel_expense_labor_c = form.get('general_subtotal_travel_expense_labor_c')
-      let resultAdministrative = ((value + general_subtotal_travel_expense_labor_c.value) * (administrative_percentage.value / 100));
-      let resultUnforeseen = ((value + general_subtotal_travel_expense_labor_c.value) * (unforeseen_percentage.value / 100));
+      let total_unit_cost = value + general_subtotal_travel_expense_labor_c.value;
+      let resultAdministrative = ((total_unit_cost) * (administrative_percentage.value / 100));
+      let resultUnforeseen = ((total_unit_cost) * (unforeseen_percentage.value / 100));
       form.patchValue({
         administrative_value: Math.round(resultAdministrative),
-        unforeseen_value: Math.round(resultUnforeseen)
+        unforeseen_value: Math.round(resultUnforeseen),
+        total_unit_cost: Math.round(total_unit_cost)
       })
     });
     form.get('general_subtotal_travel_expense_labor_c').valueChanges.subscribe(value => {
       let administrative_percentage = form.get('administrative_percentage')
       let unforeseen_percentage = form.get('unforeseen_percentage')
       let general_subtotal_travel_expense_labor = form.get('general_subtotal_travel_expense_labor')
-      let resultAdministrative = ((value + general_subtotal_travel_expense_labor.value) * (administrative_percentage.value / 100));
-      let resultUnforeseen = ((value + general_subtotal_travel_expense_labor.value) * (unforeseen_percentage.value / 100));
+      let total_unit_cost = value + general_subtotal_travel_expense_labor.value;
+      let resultAdministrative = ((total_unit_cost) * (administrative_percentage.value / 100));
+      let resultUnforeseen = ((total_unit_cost) * (unforeseen_percentage.value / 100));
       form.patchValue({
         administrative_value: Math.round(resultAdministrative),
-        unforeseen_value: Math.round(resultUnforeseen)
+        unforeseen_value: Math.round(resultUnforeseen),
+        total_unit_cost: Math.round(total_unit_cost)
       })
     });
     form.get('administrative_value').valueChanges.subscribe(value => {

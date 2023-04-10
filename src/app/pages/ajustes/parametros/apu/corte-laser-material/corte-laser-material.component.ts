@@ -7,6 +7,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
 import { MaterialesService } from '../materiales/materiales.service';
 import { ModalService } from 'src/app/core/services/modal.service';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-corte-laser-material',
@@ -19,6 +20,7 @@ export class CorteLaserMaterialComponent implements OnInit {
   matPanel = false;
   loading: boolean = false;
   form: FormGroup;
+  masksMoney = consts;
   title: any = 'Nuevo material';
   materials: any[] = [];
   materialsIndex: any[] = [];
@@ -27,7 +29,7 @@ export class CorteLaserMaterialComponent implements OnInit {
   material: any = {};
   pagination = {
     page: 1,
-    pageSize: 10,
+    pageSize: 50,
     collectionSize: 0
   }
   filtro: any = {
@@ -45,17 +47,17 @@ export class CorteLaserMaterialComponent implements OnInit {
   }
   variables = [
     { label: 'Espesor', var: 'thickness' },
-    { label: 'Cantidad Laminas', var: 'sheets_amount' },
+    { label: 'Cantidad láminas', var: 'sheets_amount' },
     { label: 'Largo', var: 'long' },
     { label: 'Ancho', var: 'width' },
     { label: 'Longitud total', var: 'total_length' },
-    { label: 'Cant. Agujeros', var: 'amount_holes' },
-    { label: 'Diametro', var: 'diameter' },
-    { label: 'Perim. Total Agujero', var: 'total_hole_perimeter' },
+    { label: 'Cantidad agujeros', var: 'amount_holes' },
+    { label: 'Diámetro', var: 'diameter' },
+    { label: 'Perimetro total agujero', var: 'total_hole_perimeter' },
     { label: 'Tiempo', var: 'time' },
-    { label: 'Valor Unitario', var: 'unit_value' },
-    { label: 'Velocidad Real', var: 'actual_speed' },
-    { label: 'Seg. Percing', var: 'seconds_percing' }
+    { label: 'Valor unitario', var: 'unit_value' },
+    { label: 'Velocidad real', var: 'actual_speed' },
+    { label: 'Segundos percing', var: 'seconds_percing' }
   ]
 
 
@@ -77,6 +79,7 @@ export class CorteLaserMaterialComponent implements OnInit {
 
   openConfirm(confirm, titulo) {
     this.title = titulo;
+    this.materialsList.clear();
     this._modal.open(confirm, 'xl')
     if (titulo != 'Editar material') {
       this.form.reset();
@@ -176,36 +179,39 @@ export class CorteLaserMaterialComponent implements OnInit {
   }
 
   save() {
-    if (this.form.get('id').value) {
-      this._cutLaserM.update(this.form.value, this.material.id).subscribe(async (r: any) => {
-        this.form.reset();
-        this.modalService.dismissAll();
-        this.materialsList.clear();
-        await this.getMaterials();
-        this.getMaterialsIndex();
-        this._swal.show({
-          icon: 'success',
-          title: 'Material actualizado con éxito',
-          text: '',
-          showCancel: false,
-          timer: 1000,
+    if (this.form.valid) {
+
+      if (this.form.get('id').value) {
+        this._cutLaserM.update(this.form.value, this.material.id).subscribe(async (r: any) => {
+          this.form.reset();
+          this.modalService.dismissAll();
+          this.materialsList.clear();
+          await this.getMaterials();
+          this.getMaterialsIndex();
+          this._swal.show({
+            icon: 'success',
+            title: 'Material actualizado con éxito',
+            text: '',
+            showCancel: false,
+            timer: 1000,
+          })
         })
-      })
-    } else {
-      this._cutLaserM.save(this.form.value).subscribe(async (r: any) => {
-        this.form.reset();
-        this.modalService.dismissAll();
-        this.materialsList.clear();
-        await this.getMaterials();
-        this.getMaterialsIndex();
-        this._swal.show({
-          icon: 'success',
-          title: 'Material creado con éxito',
-          text: '',
-          showCancel: false,
-          timer: 1000,
+      } else {
+        this._cutLaserM.save(this.form.value).subscribe(async (r: any) => {
+          this.form.reset();
+          this.modalService.dismissAll();
+          this.materialsList.clear();
+          await this.getMaterials();
+          this.getMaterialsIndex();
+          this._swal.show({
+            icon: 'success',
+            title: 'Material creado con éxito',
+            text: '',
+            showCancel: false,
+            timer: 1000,
+          })
         })
-      })
+      }
     }
   }
 }

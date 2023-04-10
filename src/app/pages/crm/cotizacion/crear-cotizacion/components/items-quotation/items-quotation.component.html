@@ -15,13 +15,14 @@
       <ng-container>
         <div class="rounded-top">
           <table
-            class="table table-bordered table-sm text-nowrap table-custom-quotation"
+            class="table table-borderless table-striped table-sm text-nowrap table-custom-quotation"
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th rowspan="2">#</th>
-                <th rowspan="2">Descripción</th>
-                <th rowspan="2" class="col-1">Cantidad</th>
+                <th rowspan="2" class="col-md-5">Descripción</th>
+                <th rowspan="2"></th>
+                <th rowspan="2">Cantidad</th>
                 <th colspan="2">Valor unitario</th>
                 <th colspan="2">Valor total</th>
                 <th rowspan="2"></th>
@@ -40,68 +41,94 @@
               >
                 <tr
                   class="text-center"
-                  [class]="item.value.type ? 'table-primary' : 'bg-white'"
+                  [class]="item.value.type ? 'table-info' : ''"
                 >
-                  <td>{{ i + 1 }}</td>
+                  <td class="align-middle">{{ i + 1 }}</td>
                   <td>
-                    <div class="d-flex justify-content-between">
-                      <input
+                    <ckeditor
+                      class="custom-ck"
+                      [editor]="_texteditor.Editor"
+                      (ready)="_texteditor.onReady($event)"
+                      [config]="_texteditor.configEditor"
+                      formControlName="name"
+                    ></ckeditor>
+
+                    <!-- <input
                         type="text"
                         class="text-left"
                         placeholder="Ingresa la descripción"
                         formControlName="name"
-                      />
-                      <button
-                        (click)="addSubItem(item, 'subitem')"
-                        class="btn btn-warning btn-sm"
-                        ngbTooltip="Agregar subitem"
-                        type="button"
-                      >
-                        <i class="fas fa-plus"></i>
-                      </button>
-                    </div>
+                      /> -->
                   </td>
-                  <td>
+                  <td class="align-middle">
+                    <button
+                      (click)="addSubItem(item, 'subitem')"
+                      class="btn btn-primary btn-sm"
+                      ngbTooltip="Agregar subitem"
+                      type="button"
+                    >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </td>
+                  <td class="align-middle">
                     <input
                       currencyMask
+                      appInputPositionInitial
+                      class="input-cuantity"
                       [options]="masksMoney.maskNumbers"
                       formControlName="cuantity_aux"
                     />
                   </td>
-                  <td>
+                  <td class="align-middle text-right">
                     <input
                       currencyMask
+                      *ngIf="item.get('value_cop_aux').enabled; else itemCop"
+                      appInputPosition
                       [options]="masksMoney.maskCOP"
                       formControlName="value_cop_aux"
                     />
+                    <ng-template #itemCop>
+                      ${{ item.get("value_cop_aux").value | number : "1.2-2" }}
+                    </ng-template>
                   </td>
-                  <td>
+                  <td class="align-middle text-right">
                     <input
                       currencyMask
+                      appInputPositionUsd
+                      *ngIf="item.get('value_usd_aux').enabled; else itemUsd"
                       [options]="masksMoney.maskUSD"
                       formControlName="value_usd_aux"
                     />
+                    <ng-template #itemUsd>
+                      USD
+                      {{ item.get("value_usd_aux").value | number : "1.2-2" }}
+                    </ng-template>
                   </td>
-                  <td>
-                    <input
+                  <td class="align-middle text-right">
+                    ${{ item.get("total_cop_aux").value | number : "1.2-2" }}
+                    <!-- <input
                       currencyMask
+                      appInputPosition
                       [options]="masksMoney.maskCOP"
                       formControlName="total_cop_aux"
-                    />
+                    /> -->
                   </td>
-                  <td>
-                    <input
+                  <td class="align-middle text-right">
+                    USD {{ item.get("total_usd_aux").value | number : "1.2-2" }}
+                    <!-- <input
                       currencyMask
+                      appInputPositionUsd
                       [options]="masksMoney.maskUSD"
                       formControlName="total_usd_aux"
-                    />
+                    /> -->
                   </td>
-                  <td>
+                  <td class="align-middle">
                     <i
                       ngbTooltip="Eliminar item {{ i + 1 }}"
                       (click)="deleteItem(i)"
                       role="button"
-                      class="text-danger fas fa-trash-alt bg-white"
+                      [class]="item.value.type ? 'bd-info' : 'bg-white'"
+                      class="text-danger fas fa-trash-alt"
                     ></i>
                   </td>
                 </tr>
@@ -117,9 +144,7 @@
                       "
                     >
                       <tr
-                        [class]="
-                          subItem.value.type ? 'table-primary' : 'bg-white'
-                        "
+                        [class]="subItem.value.type ? 'table-primary' : ''"
                         class="position-relative"
                       >
                         <td class="align-middle">
@@ -139,91 +164,107 @@
                           {{ i + 1 }}.{{ y + 1 }}
                         </td>
                         <td>
-                          <div class="d-flex justify-content-between">
-                            <input
-                              type="text"
-                              class="text-left"
-                              placeholder="Ingresa la descripción"
-                              formControlName="description"
-                            />
-                            <div class="btn-group btn-group-sm" role="group">
-                              <button
-                                (click)="
-                                  apus.openConfirm(false);
-                                  subItemActive = item;
-                                  indexAdd = y;
-                                  insert = false
-                                "
-                                ngbTooltip="Asignar APU"
-                                *ngIf="
-                                  !subItem.get('quotationitemsubitemable_id')
-                                    .value
-                                "
-                                class="btn btn-info btn-sm"
-                                type="button"
-                              >
-                                <i class="fas fa-search"></i>
-                              </button>
-                              <button
-                                type="button"
-                                *ngIf="
-                                  subItem.get('quotationitemsubitemable_id')
-                                    .value &&
+                          <ckeditor
+                            class="custom-ck dark"
+                            [editor]="_texteditor.Editor"
+                            (ready)="_texteditor.onReady($event)"
+                            [config]="_texteditor.configEditor"
+                            formControlName="description"
+                          ></ckeditor>
+                        </td>
+                        <td class="align-middle">
+                          <div class="btn-group btn-group-sm" role="group">
+                            <button
+                              (click)="
+                                apus.openConfirm(false);
+                                subItemActive = item;
+                                indexAdd = y;
+                                insert = false
+                              "
+                              ngbTooltip="Asignar APU"
+                              *ngIf="
+                                !subItem.get('quotationitemsubitemable_id')
+                                  .value
+                              "
+                              class="btn btn-info btn-sm"
+                              type="button"
+                            >
+                              <i class="fas fa-search"></i>
+                            </button>
+                            <button
+                              type="button"
+                              *ngIf="
+                                subItem.get('quotationitemsubitemable_id')
+                                  .value &&
+                                subItem.get('quotationitemsubitemable_type')
+                                  .value != 'App\\Models\\BudgetItemSubitem'
+                              "
+                              ngbTooltip="Ver APU"
+                              (click)="
+                                openNewTab(
                                   subItem.get('quotationitemsubitemable_type')
-                                    .value != 'App\\Models\\BudgetItemSubitem'
-                                "
-                                ngbTooltip="Ver APU"
-                                (click)="
-                                  openNewTab(
-                                    subItem.get('quotationitemsubitemable_type')
-                                      .value,
-                                    subItem.get('quotationitemsubitemable_id')
-                                      .value
-                                  )
-                                "
-                                class="btn btn-primary btn-sm"
-                              >
-                                <i class="fas fa-eye"></i>
-                              </button>
-                            </div>
+                                    .value,
+                                  subItem.get('quotationitemsubitemable_id')
+                                    .value
+                                )
+                              "
+                              class="btn btn-primary btn-sm"
+                            >
+                              <i class="fas fa-eye"></i>
+                            </button>
                           </div>
                         </td>
-                        <td>
+                        <td class="align-middle position-relative">
                           <input
                             currencyMask
+                            appInputPositionInitial
+                            class="input-cuantity"
                             [options]="masksMoney.maskNumbers"
                             formControlName="cuantity_aux"
                           />
                         </td>
-                        <td>
+                        <td class="align-middle position-relative">
                           <input
                             currencyMask
+                            appInputPosition
                             [options]="masksMoney.maskCOP"
                             formControlName="value_cop_aux"
                           />
                         </td>
-                        <td>
+                        <td class="align-middle position-relative">
                           <input
                             currencyMask
+                            appInputPositionUsd
                             [options]="masksMoney.maskUSD"
                             formControlName="value_usd_aux"
                           />
                         </td>
-                        <td>
-                          <input
+                        <td class="align-middle text-right">
+                          ${{
+                            subItem.get("total_cop_aux").value
+                              | number : "1.2-2"
+                          }}
+                          <!-- <input
                             currencyMask
+                            appInputPosition
                             [options]="masksMoney.maskCOP"
                             formControlName="total_cop_aux"
-                          />
+                          /> -->
                         </td>
-                        <td>
-                          <input
+                        <td class="align-middle text-right">
+                          USD
+                          {{
+                            subItem.get("total_usd_aux").value
+                              | number : "1.2-2"
+                          }}
+                          <!-- <input
                             currencyMask
+                            appInputPositionUsd
                             [options]="masksMoney.maskUSD"
                             formControlName="total_usd_aux"
-                          />
+                          /> -->
                         </td>
-                        <td>
+                        <td class="align-middle">
                           <i
                             ngbTooltip="Eliminar subitem {{ y + 1 }}"
                             (click)="deleteSubItem(item, y)"
@@ -254,32 +295,15 @@
       </div>
     </div>
   </div>
-  <div class="row d-flex justify-content-end mt-3">
-    <div class="col-md-6">
-      <ul class="list-group list-group-flush">
-        <li
-          class="list-group-item d-flex justify-content-between align-items-center"
-        >
-          Total COP sin IVA
-          <h6>
-            <span class="badge badge-success badge-pill"
-              >${{ form.controls.total_cop.value | number : "1.2-2" }}</span
-            >
-          </h6>
-        </li>
-        <li
-          class="list-group-item d-flex justify-content-between align-items-center"
-        >
-          Total USD
-          <h6>
-            <span class="badge badge-success badge-pill"
-              >${{ form.controls.total_usd.value | currency }}</span
-            >
-          </h6>
-        </li>
-      </ul>
-    </div>
-  </div>
+  <app-list-items
+    title1="Total COP sin IVA"
+    [var1]="form.controls.total_cop.value"
+    type1="cop"
+    title2="Total USD"
+    [var2]="form.controls.total_usd.value"
+    type2="usd"
+    mt="mt-2"
+  ></app-list-items>
 </ng-container>
 
 <ng-template #notData>

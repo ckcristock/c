@@ -11,7 +11,8 @@
       border: 0;
       text-align: end;
       width: 100%;
-      background-color: transparent;
+      background-color: #F0F2F6;
+      border-radius: 5px;
     }
 
     input:focus {
@@ -78,4 +79,33 @@ input[type="radio"] {
 .btn_agregar_tr:hover:after {
   color: #4AA3FF;
   /* Mostrar el contenido al aplicar :hover */
+}
+
+.table-input-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #E0EEC0;
+  margin-left: 3px;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.input-cuantity {
+  max-width: 70px;
 }

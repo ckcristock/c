@@ -5,6 +5,8 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 })
 export class InputPositionInitialDirective {
 
+  //0.000,00
+  //0,00 %
   constructor(private el: ElementRef<HTMLInputElement>) { }
   @HostListener('click')
   onClick() {

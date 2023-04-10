@@ -6,7 +6,7 @@
     <div class="card-body">
       <app-cabecera [datosCabecera]="datos"></app-cabecera>
       <hr class="line" />
-      <ng-container *ngIf="path != 'crear' && form.controls.included">
+      <ng-container *ngIf="path != 'crear' && form.controls.included.value">
         <div class="alert alert-warning" role="alert">
           Esta cotización está ligada a un
           <a

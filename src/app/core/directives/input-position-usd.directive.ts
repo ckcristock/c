@@ -5,6 +5,7 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 })
 export class InputPositionUsdDirective {
 
+  //? USD 0.000,00
   constructor(private el: ElementRef<HTMLInputElement>) { }
   @HostListener('click')
   onClick() {

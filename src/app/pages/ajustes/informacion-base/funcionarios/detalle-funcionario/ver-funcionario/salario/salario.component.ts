@@ -225,7 +225,6 @@ export class SalarioComponent implements OnInit {
     });
     this.form.get('work_contract_type_id').valueChanges.subscribe(r => {
       this.getContractTerms(r);
-      console.log('hgfg')
     })
   }
 

@@ -151,7 +151,7 @@
                   </strong>
                 </td>
                 <td class="align-middle">
-                  {{ contract.identifier }}
+                  {{ contract.identifier | number: '1.0-0' }}
                 </td>
                 <!-- <td>
                   <img
@@ -365,18 +365,7 @@
   <div class="modal-body pb-0">
     <form [formGroup]="formContrato">
       <div class="row">
-        <mat-form-field class="col-4" appearance="outline">
-          <mat-label>Contrato</mat-label>
-          <input
-            type="text"
-            formControlName="codigo"
-            matInput
-            placeholder="Contrato"
-            autocomplete="off"
-            readonly
-          />
-        </mat-form-field>
-        <mat-form-field class="col-8" appearance="outline">
+        <mat-form-field class="col-12" appearance="outline">
           <mat-label>Nombre</mat-label>
           <input
             type="text"
@@ -410,9 +399,10 @@
             placeholder="Tipo de contrato"
             required
           >
-            <mat-option *ngFor="let term of terms" [value]="term.id">{{
-              term.name
-            }}</mat-option>
+            <mat-option *ngFor="let term of terms"
+            [value]="term.id"
+            >{{term.name}}
+            </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
@@ -448,7 +438,7 @@
       </div>
       <div class="row">
         <mat-form-field class="col" appearance="outline">
-          <mat-label for="Aplica_Separacion_Categorias">Posición</mat-label>
+          <mat-label for="Aplica_Separacion_Categorias">Cargo</mat-label>
           <mat-select
             formControlName="position_id"
             placeholder="Posición"
@@ -468,6 +458,8 @@
             class="text-right"
             formControlName="salary"
             matInput
+            currencyMask
+            appInputPositionInitial
             placeholder="Salario"
             autocomplete="off"
           />

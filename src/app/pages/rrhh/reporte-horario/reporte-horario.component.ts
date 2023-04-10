@@ -238,7 +238,11 @@ export class ReporteHorarioComponent implements OnInit {
   }
 
   get turn_type_value() {
-    return this.formFilters.get('turn_type').value;
+    const turnType = this.formFilters.get('turn_type').value;
+  if (turnType === 'Todos') { // Si se selecciona la opción "Todos"
+    return ''; // Retorna un valor vacío para que se muestren todos los datos
+  }
+  return turnType; // De lo contrario, retorna el valor del campo de filtro
   }
 
   donwloading = false;

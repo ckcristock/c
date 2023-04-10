@@ -115,7 +115,7 @@ export class ContratosComponent implements OnInit {
       }
     });
     this.getTurnTypes();
-    this.getTermsTypes();
+   // this.getTermsTypes();
     this.getWorkContractTypes();
   }
 
@@ -231,15 +231,25 @@ export class ContratosComponent implements OnInit {
     })
   }
 
-  getTermsTypes() {
+  getTermsTypes(value) {
     this._typesTermsService.getTermsTypeList().subscribe((res: any) => {
-      this.terms = res.data;
+      this.terms = []
+      res.data.forEach(
+        (contract_term: any) => contract_term.work_contract_types.forEach(
+          (work_contract_type: any) => {
+            if (work_contract_type.id == value) {
+              this.terms.push(contract_term)
+            }
+          })
+      )
     });
   }
+
 
   getWorkContractTypes() {
     this._workContractTypesService.getWorkContractTypes().subscribe((res: any) => {
       this.contractTypes = res.data;
+      console.log(this.contractTypes)
     });
   }
 
@@ -449,6 +459,15 @@ export class ContratosComponent implements OnInit {
         .map(([ key ]) => [ key,  ['',(key=='date_diff')?[Validators.min(res.data.date_diff),Validators.required]:Validators.required] ])
       );
       this.formContrato = this.fb.group(formVacio); */
+
+        this.formContrato.get('work_contract_type_id').valueChanges.subscribe(r => {
+        this.getTermsTypes(r);
+        })
+
+
+
+
+
 
       // Si se va a modificar un proceso existente, se crea de nuevo el campo "id".
       if (employee.renewed!=null) {

@@ -19,6 +19,7 @@ export class PreliquidadosComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   preliquidados: any = [];
+  preliquidadosSelect: any = [];
   responsable: any = {};
   formFilters: FormGroup;
   loading: boolean = false;
@@ -34,8 +35,8 @@ export class PreliquidadosComponent implements OnInit {
 
   listPreliquidados: any = []; //countries: [];
   page = 1;
-	pageSize = 10;
-	collectionSize = 0;
+  pageSize = 10;
+  collectionSize = 0;
 
 
   constructor(
@@ -50,11 +51,12 @@ export class PreliquidadosComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.getPreliquidados();
+    this.getPreliquidadosList();
     console.log(this.preliquidados);
     this.responsable = this._user.user;
   }
 
-  createForm(){
+  createForm() {
     this.formFilters = this.fb.group({
       person_id: ''
     })
@@ -62,7 +64,7 @@ export class PreliquidadosComponent implements OnInit {
 
     this.formFilters.valueChanges.pipe(
       debounceTime(500),
-    ).subscribe(r=>{
+    ).subscribe(r => {
       this.getPreliquidados();
     })
   }
@@ -76,6 +78,13 @@ export class PreliquidadosComponent implements OnInit {
     this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
   }
 
+  getPreliquidadosList() {
+    this._preliquidadosService.getPreliquidados().subscribe((res: any) => {
+      this.preliquidadosSelect = res.data;
+      this.preliquidadosSelect.unshift({ full_names: 'Todos', id: '' });
+    })
+  }
+
   getPreliquidados() {
     this.loading = true;
     let params = {
@@ -85,6 +94,7 @@ export class PreliquidadosComponent implements OnInit {
       .subscribe((res: any) => {
         this.preliquidados = res.data;
         this.listPreliquidados = res.data;
+
         this.collectionSize = res.data.length;
         this.loading = false;
         this.refreshPreLiquidated()
@@ -97,11 +107,11 @@ export class PreliquidadosComponent implements OnInit {
   }
 
   refreshPreLiquidated() {
-		 this.listPreliquidados = this.preliquidados.map((preliq, i) => ({ id: i + 1, ...preliq })).slice(
-			(this.page - 1) * this.pageSize,
-			(this.page - 1) * this.pageSize + this.pageSize,
-		);
-	}
+    this.listPreliquidados = this.preliquidados.map((preliq, i) => ({ id: i + 1, ...preliq })).slice(
+      (this.page - 1) * this.pageSize,
+      (this.page - 1) * this.pageSize + this.pageSize,
+    );
+  }
 
   cantidadDate(fecha) {
     let now = moment(fecha).startOf('D').fromNow();
@@ -169,17 +179,17 @@ export class PreliquidadosComponent implements OnInit {
         let info = {
           id: preliquidado.id,
           identifier: preliquidado.identifier,
-          full_name: preliquidado.first_name+' '+preliquidado.first_surname,
+          full_name: preliquidado.first_name + ' ' + preliquidado.first_surname,
           contract_work: preliquidado.work_contract_id ?? 0,
           liquidated_at: moment().format('YYYY-MM-DD'),
           reponsible: {
-              person_id: this.responsable.id,
-              usuario: this.responsable.usuario
+            person_id: this.responsable.id,
+            usuario: this.responsable.usuario
           },
           status: "Reincorporado"
         }
 
-        this._detalle.setPreliquidadoLog(info).subscribe((res:any)=>{
+        this._detalle.setPreliquidadoLog(info).subscribe((res: any) => {
           if (res.status) {
             this._detalle.blockUser({ status: 'Activo' }, preliquidado.id).subscribe((r: any) => {
               console.log(r.status);

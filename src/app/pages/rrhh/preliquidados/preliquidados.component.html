@@ -19,15 +19,17 @@
           <ng-container [formGroup]="formFilters">
             <div class="col mat-form-field-wrapper">
               <ng-select
-                [items]="preliquidados"
+                [items]="preliquidadosSelect"
                 formControlName="person_id"
-                bindLabel="text"
+                bindLabel="full_names"
                 appearance="outline"
                 [appendTo]="'body'"
                 placeholder="Funcionario"
-                bindValue="value"
+                bindValue="id"
                 loadingText="loading "
+                [clearable]="false"
               >
+              <ng-option value="">Todos</ng-option>
               </ng-select>
             </div>
             <mat-form-field class="col" appearance="outline">

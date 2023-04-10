@@ -175,25 +175,27 @@
                 />
               </td>
               <td class="align-middle" *ngIf="listaCampos[1].selected">
-                {{ third.name }}
+                {{ third.name | titlecase }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[2].selected">
-                {{ third.nit }}
+                {{ third.nit | number }}{{ third.dv ? "-" + third.dv : "" }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[3].selected">
-                {{ third.cod_dian_address }}
+                {{ third.cod_dian_address | titlecase }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[4].selected">
-                {{ third.municipality.name }}
+                {{ third.municipality.name | capitalLetter }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[5].selected">
-                {{ third.landline }} - {{ third.cell_phone }}
+                {{ third.landline }}
+                {{ third.landline && third.cell_phone ? "-" : "" }}
+                {{ third.cell_phone }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[6].selected">
-                {{ third.third_party_type }}
+                {{ third.third_party_type | capitalLetter }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[7].selected">
-                {{ third.email }}
+                {{ third.email | lowercase }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[8].selected">
                 <span
@@ -203,7 +205,7 @@
                       : 'badge badge-success'
                   "
                 >
-                  {{ third.state }}
+                  {{ third.state | uppercase }}
                 </span>
               </td>
               <td class="p-0 align-middle">

@@ -4,6 +4,9 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalService } from '../../../informacion-base/services/swal.service';
 import { EspesoresService } from './espesores.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { consts } from 'src/app/core/utils/consts';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-espesores',
@@ -15,27 +18,28 @@ export class EspesoresComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
   form: FormGroup;
+  masks = consts;
   loading: boolean = false;
   title: any = '';
   espesores: any[] = [];
   espesor: any = {};
   pagination = {
     page: 1,
-    pageSize: 10,
+    pageSize: 50,
     collectionSize: 0
   }
   filtro: any = {
     thickness: ''
   }
 
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
 
   constructor(
@@ -51,7 +55,7 @@ export class EspesoresComponent implements OnInit {
     this.getThicknesses();
   }
   closeResult = '';
-  public openConfirm(confirm,titulo) {
+  public openConfirm(confirm, titulo) {
     this.title = titulo;
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'sm', scrollable: true }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -61,7 +65,7 @@ export class EspesoresComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   createform() {
@@ -98,18 +102,31 @@ export class EspesoresComponent implements OnInit {
   }
 
   save() {
-    this._espesores.save(this.form.value).subscribe((r: any) => {
-      this.modalService.dismissAll();
-      this.form.reset();
-      this.getThicknesses();
-      this._swal.show({
-        icon: 'success',
-        title: r.data.title,
-        text: r.data.text,
-        showCancel: false,
-        timer: 1000,
-      })
-    })
+    this._espesores.save(this.form.value).pipe(
+      catchError(e => {
+        this._swal.error();
+        return throwError(e)
+      })).subscribe(
+        (r: any) => {
+          if (!r.status) {
+            this._swal.hardError();
+            return throwError('')
+          }
+          this.modalService.dismissAll();
+          this.form.reset();
+          this.getThicknesses();
+          this._swal.show({
+            icon: 'success',
+            title: r.data.title,
+            text: r.data.text,
+            showCancel: false,
+            timer: 1000,
+          })
+        },
+        (error) => {
+          this._swal.error();
+        }
+      )
   }
 
 }

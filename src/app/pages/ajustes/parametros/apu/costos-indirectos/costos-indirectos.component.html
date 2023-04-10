@@ -44,6 +44,7 @@
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
             <th>%</th>
+            <th>Aplica servicio</th>
             <th>Fecha Creación</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
@@ -56,10 +57,13 @@
               'text-danger font-weight-bold': item.state == 'Inactivo'
             }"
           >
-            <td class="align-middle">{{ item.name }}</td>
-            <td class="align-middle">{{ item.percentage }}</td>
+            <td class="align-middle">{{ item.name | uppercase }}</td>
+            <td class="align-middle">{{ item.percentage | number }}%</td>
             <td class="align-middle">
-              {{ item.created_at | date : "longDate" }}
+              {{ item.apply_service ? "Sí" : "No" }}
+            </td>
+            <td class="align-middle">
+              {{ item.created_at | date }}
             </td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -151,12 +155,18 @@
           <input
             matInput
             currencyMask
+            appInputPositionInitial
             [options]="masksMoney.maskPorcentaje"
             placeholder="Ingresa el porcentaje"
             formControlName="percentage"
             required
           />
         </mat-form-field>
+        <div class="col-12">
+          <mat-checkbox color="primary" formControlName="apply_service"
+            >Aplica servicio</mat-checkbox
+          >
+        </div>
       </div>
     </form>
   </div>

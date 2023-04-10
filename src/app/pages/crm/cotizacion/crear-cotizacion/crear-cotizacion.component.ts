@@ -23,6 +23,7 @@ import { consts } from 'src/app/core/utils/consts';
 })
 export class CrearCotizacionComponent implements OnInit {
   @ViewChild('itemsQuotation') itemsQuotation;
+  @ViewChild('modalBudgets') modalBudgets;
   public datos: any = {
     Titulo: 'Nueva cotización',
     Fecha: new Date()
@@ -76,24 +77,22 @@ export class CrearCotizacionComponent implements OnInit {
     this.getThirdParties();
     this.getBudgets();
     await this.getCities();
-    this.getContacts();
-    this.loadingView = false
     if (this.path != 'crear') {
       this.getQuotation(this.id)
     }
+    this.loadingView = false
     await this.getConsecutivo();
   }
 
   async reloadData() {
     this.reload = true;
     this.getTexts();
-    this.getThirdParties();
     this.getBudgets();
     if (this.path != 'crear') {
       this.getQuotation(this.id)
     }
+    this.getThirdParties();
     await this.getCities();
-    this.getContacts();
     this.reload = false
   }
 
@@ -134,6 +133,7 @@ export class CrearCotizacionComponent implements OnInit {
   getThirdParties() {
     this._terceros.getThirds().subscribe((res: any) => {
       this.thirdParties = res.data;
+
     })
   }
 
@@ -174,14 +174,14 @@ export class CrearCotizacionComponent implements OnInit {
         legal_requirements: res.data.legal_requirements,
         technical_requirements: res.data.technical_requirements
       })
-      if (res.data.included == 'budget') {
+      this.getContacts()
+      if (res.data.included) {
         this.form.get('included').disable()
         this.form.get('budget').disable()
       }
       res.data.items.forEach(element => {
         const action = element.sub_items.length > 0 ? 'subitems' : 'withSub';
         let cat = element.quotationitemable_type == 'App\\Models\\Budget' ? 'budget' : 'apu';
-        console.log(this.itemsQuotation)
         this.itemsQuotation.addItems(element, action, cat, true);
       });
     })
@@ -196,7 +196,7 @@ export class CrearCotizacionComponent implements OnInit {
       destinity_id: [null, Validators.required],
       trm: [this.trm, Validators.required],
       description: [''],
-      included: ['', Validators.required],
+      included: [''],
       budget: [''],
       budget_id: [''],
       //indirect_costs: this.fb.array([]),
@@ -219,6 +219,12 @@ export class CrearCotizacionComponent implements OnInit {
         items.removeAt(i);
       }
     })
+  }
+
+  openBudgets(e) {
+    if (e.checked) {
+      this.modalBudgets.openModal()
+    }
   }
 
   getTRM() {
@@ -246,7 +252,15 @@ export class CrearCotizacionComponent implements OnInit {
   formatter = (x: { name: string, id }) => x.name;
   //*Fin del typeahead
 
+  openNewTab(id) {
+    let uri = '/crm/presupuesto/ver';
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([uri + '/' + id])
+    );
+    window.open(url, '_blank');
+  }
   budgetSelected(item) {
+    console.log(item)
     if (this.form.controls.money_type.value != '') {
       (async () => {
         const { value: choice } = await Swal.fire({
@@ -268,7 +282,7 @@ export class CrearCotizacionComponent implements OnInit {
         })
         if (choice) {
           const action = choice === 'si' ? 'subitems' : 'withSub';
-          this.form.patchValue({ budget_id: this.form.controls.budget.value.id });
+          this.form.patchValue({ budget_id: item.id });
           this.form.controls.budget.disable();
           this.form.controls.included.disable();
           item.items.forEach(element => {

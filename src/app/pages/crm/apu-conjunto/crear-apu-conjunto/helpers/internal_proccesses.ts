@@ -18,6 +18,7 @@ export const internalProcessesHelper = {
           name_description: [r.internal.name],
           unit_id: [r.unit_id],
           q_unit: [r.q_unit],
+          unit_name: [r.unit.name],
           amount: [r.amount],
           unit_cost: [r.unit_cost],
           total: [r.total]
@@ -43,10 +44,10 @@ export const internalProcessesHelper = {
     return internal;
   },
 
-  subscribeInternalProcesses( internal: FormGroup, form:FormGroup, list: FormArray){
+  subscribeInternalProcesses(internal: FormGroup, form: FormGroup, list: FormArray) {
     internal.get('amount').valueChanges.subscribe(value => {
       let unit_cost = internal.get('unit_cost');
-      let result = (typeof unit_cost.value == 'number' && typeof value == 'number' ? (unit_cost.value * value) : 0 )
+      let result = (typeof unit_cost.value == 'number' && typeof value == 'number' ? (unit_cost.value * value) : 0)
       internal.patchValue({
         total: Math.round(result)
       })
@@ -63,14 +64,14 @@ export const internalProcessesHelper = {
     })
   },
 
-  subtotalInternalProcesses(list: FormArray, form: FormGroup){
+  subtotalInternalProcesses(list: FormArray, form: FormGroup) {
     setTimeout(() => {
       let total =
-      list.value.reduce(
-        (a, b) => {
-          return  a + b.total
-        },0
-      );
+        list.value.reduce(
+          (a, b) => {
+            return a + b.total
+          }, 0
+        );
       form.patchValue({
         internal_processes_subtotal: total
       })

@@ -21,7 +21,7 @@
     <tbody>
       <ng-container *ngIf="cutlaser.length">
         <ng-container *ngFor="let item of cutlaser; let i = index">
-          <tr class="text-center">
+          <tr class="text-center text-uppercase">
             <td class="align-middle">
               {{ i + 1 }}
             </td>
@@ -66,36 +66,14 @@
   </table>
 </div>
 
-<div class="row d-flex justify-content-end">
-  <div class="col-md-4">
-    <ul class="list-group list-group-flush">
-      <li
-        class="list-group-item d-flex justify-content-between align-items-center p-1"
-      >
-        <h6>Cantidad total</h6>
-        <h6>{{ cut_laser_total_amount | number }}</h6>
-      </li>
-      <li
-        class="list-group-item d-flex justify-content-between align-items-center p-1"
-      >
-        <h6>Subtotal unitario</h6>
-        <h6>
-          <span class="badge badge-success badge-pill">
-            ${{ cut_laser_unit_subtotal | number : "1.2-2" }}</span
-          >
-        </h6>
-      </li>
-      <li
-        class="list-group-item d-flex justify-content-between align-items-center p-1"
-      >
-        <h6>Subtotal</h6>
-        <h6>
-          <span class="badge badge-success badge-pill"
-            >${{ cut_laser_subtotal | number : "1.2-2" }}</span
-          >
-        </h6>
-      </li>
-    </ul>
-  </div>
-</div>
-
+<app-list-items
+  title1="CANTIDAD TOTAL"
+  [var1]="cut_laser_total_amount"
+  type1="amount"
+  title2="SUBTOTAL UNITARIO"
+  [var2]="cut_laser_unit_subtotal"
+  type2="cop"
+  title3="SUBTOTAL"
+  [var3]="cut_laser_subtotal"
+  type3="cop"
+></app-list-items>

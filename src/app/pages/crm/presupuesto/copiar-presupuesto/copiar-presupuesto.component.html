@@ -2,5 +2,8 @@
   [title]="'Copiar presupuesto'"
   [dataEdit]="data"
   [id]="id"
-  *ngIf="data"
+  *ngIf="!loading && data; else placeholder"
 ></app-crear-presupuesto>
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>

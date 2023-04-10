@@ -12,52 +12,49 @@
           <span class="input-group-text col-md-12">Administración</span>
         </div>
         <input
-          style="text-align: right"
           class="form-control"
           [(ngModel)]="data.administration_percentage"
           #admin="ngModel"
           name="administration_percentage"
+          currencyMask
+          appInputPositionInitial
+          [options]="masks.maskPorcentaje"
           placeholder="0"
-          type="number"
+          type="text"
           required
         />
-        <div class="input-group-append">
-          <span class="input-group-text">%</span>
-        </div>
       </div>
       <div class="input-group mb-2">
         <div class="input-group-prepend col-md-7 px-0">
           <span class="input-group-text col-md-12">Imprevistos</span>
         </div>
         <input
-          style="text-align: right"
           class="form-control"
           [(ngModel)]="data.unforeseen_percentage"
           name="unforeseen_percentage"
           placeholder="0"
-          type="number"
+          type="text"
+          currencyMask
+          appInputPositionInitial
+          [options]="masks.maskPorcentaje"
           required
         />
-        <div class="input-group-append">
-          <span class="input-group-text">%</span>
-        </div>
       </div>
       <div class="input-group mb-2">
         <div class="input-group-prepend col-md-7 px-0">
           <span class="input-group-text col-md-12">Utilidad</span>
         </div>
         <input
-          style="text-align: right"
           class="form-control"
           [(ngModel)]="data.utility_percentage"
           name="utility_percentage"
           placeholder="0"
-          type="number"
+          type="text"
+          currencyMask
+          appInputPositionInitial
+          [options]="masks.maskPorcentaje"
           required
         />
-        <div class="input-group-append">
-          <span class="input-group-text">%</span>
-        </div>
       </div>
       <h6 class="mt-3"><b>Valores</b></h6>
       <div class="input-group mb-2">
@@ -65,51 +62,48 @@
           <span class="input-group-text col-md-12">TRM</span>
         </div>
         <input
-          style="text-align: right"
           class="form-control"
           [(ngModel)]="data.trm"
           name="trm"
           placeholder="0"
-          type="number"
+          type="text"
+          currencyMask
+          appInputPosition
+          [options]="masks.maskCOP"
           required
         />
-        <div class="input-group-append">
-          <span class="input-group-text">$</span>
-        </div>
       </div>
       <div class="input-group mb-2">
         <div class="input-group-prepend col-md-7 px-0">
           <span class="input-group-text col-md-12">Minuto de corte láser</span>
         </div>
         <input
-          style="text-align: right"
           class="form-control"
           [(ngModel)]="data.laser_cut_minute_value"
           name="laser_cut_minute_value"
           placeholder="0"
-          type="number"
+          type="text"
+          currencyMask
+          appInputPosition
+          [options]="masks.maskCOP"
           required
         />
-        <div class="input-group-append">
-          <span class="input-group-text">$</span>
-        </div>
       </div>
       <div class="input-group mb-2">
         <div class="input-group-prepend col-md-7 px-0">
           <span class="input-group-text col-md-12">Minuto de corte agua</span>
         </div>
         <input
-          style="text-align: right"
           class="form-control"
           [(ngModel)]="data.warer_cut_minute_value"
           name="warer_cut_minute_value"
           placeholder="0"
-          type="number"
+          type="text"
+          currencyMask
+          appInputPosition
+          [options]="masks.maskCOP"
           required
         />
-        <div class="input-group-append">
-          <span class="input-group-text">$</span>
-        </div>
       </div>
       <button
         [disabled]="formP.invalid"

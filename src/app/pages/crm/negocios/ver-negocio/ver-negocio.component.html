@@ -1,4 +1,7 @@
-<div class="row" *ngIf="!loading && negocio; else notData">
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<div class="row" *ngIf="!loading && negocio; else placeholder">
   <div class="col-12">
     <div class="card">
       <div class="card-body">
@@ -14,21 +17,23 @@
 
           <div class="col-md-3">
             <span class="badge badge-pill badge-primary">{{
-              negocio?.code
+              negocio?.code | uppercase
             }}</span>
             <h6>
               {{
-                negocio?.third_party.social_reason
+                (negocio?.third_party.social_reason
                   ? negocio?.third_party.social_reason
                   : negocio?.third_party.full_name
+                ) | capitalLetter
               }}
             </h6>
             <small>
               <p>
-                {{ negocio?.third_party_person.name | uppercase }} <br />
+                {{ negocio?.third_party_person.name | titlecase }} <br />
                 {{ negocio?.date | date | uppercase }} <br />
                 {{ negocio?.name | uppercase }} <br />
-                {{ negocio?.country.name | uppercase }} <br />
+                <!-- {{ negocio?.country.name | uppercase }} -->
+                <br />
               </p>
             </small>
             <mat-form-field class="pb-0" appearance="outline">
@@ -50,6 +55,7 @@
             <p>
               <small>{{
                 negocio?.description || "No existen detalles para mostrar"
+                  | uppercase
               }}</small>
             </p>
           </div>
@@ -103,10 +109,10 @@
                 class="text-center"
               >
                 <th class="align-middle" scope="row">
-                  {{ pres?.budget.code }}
+                  {{ pres?.budget.code | uppercase }}
                 </th>
                 <td class="align-middle">
-                  {{ pres?.budget.created_at | date }}
+                  {{ pres?.budget.created_at | date : "MMM d, y" }}
                 </td>
                 <td class="align-middle text-right">
                   $ {{ pres?.budget.total_cop | number : "1.2-2" }}
@@ -124,7 +130,7 @@
                         ? 'badge-success'
                         : ''
                     "
-                    >{{ pres?.status }}</span
+                    >{{ pres?.status | uppercase }}</span
                   >
                 </td>
                 <td>
@@ -216,19 +222,19 @@
                 <th>Código</th>
                 <th>Fecha</th>
                 <th>Valor</th>
-                <th>Presupuesto</th>
+                <!-- <th>Presupuesto</th> -->
                 <th>Estado</th>
                 <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let item of negocio?.quotations" class="text-center">
-                <th scope="row">{{ item.code }}</th>
-                <td>{{ item.created_at | date }}</td>
+                <th scope="row">{{ item.code | uppercase }}</th>
+                <td>{{ item.created_at | date : "MMM d, y" }}</td>
                 <td class="text-right">
                   $ {{ item.total_cop | number : "1.2-2" }}
                 </td>
-                <td
+                <!-- <td
                   [role]="item.budget_included == 'si' ? 'button' : ''"
                   [class]="item.budget_included == 'si' ? 'text-primary' : ''"
                   [routerLink]="
@@ -242,7 +248,7 @@
                       ? item.budgets.code
                       : "No incluye"
                   }}
-                </td>
+                </td> -->
                 <td>
                   <span
                     class="badge"
@@ -255,7 +261,7 @@
                         ? 'badge-success'
                         : ''
                     "
-                    >{{ item.pivot.status }}</span
+                    >{{ item.pivot.status | uppercase }}</span
                   >
                 </td>
                 <td>
@@ -369,10 +375,10 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of negocio?.apus" class="text-center">
-                <td>{{ item.apuable.code }}</td>
-                <td>{{ item.apuable.name }}</td>
-                <td>{{ item.apuable.line }}</td>
-                <td>{{ item.apuable.typeapu_name }}</td>
+                <th scope="row">{{ item.apuable.code | uppercase }}</th>
+                <td>{{ item.apuable.name | capitalLetter }}</td>
+                <td>{{ item.apuable.line | capitalLetter }}</td>
+                <td>{{ item.apuable.typeapu_name | capitalLetter }}</td>
                 <td class="text-right">
                   ${{
                     (item.apuable.typeapu_name == "Pieza"
@@ -380,7 +386,7 @@
                       : item.apuable.typeapu_name == "Conjunto"
                       ? item.apuable.total_direct_cost
                       : item.apuable.typeapu_name == "Servicio"
-                      ? item.apuable.general_subtotal_travel_expense_labor
+                      ? item.apuable.total_unit_cost
                       : ""
                     ) | number : "1.2-2"
                   }}
@@ -453,10 +459,10 @@
             >
               <div class="d-flex w-100 justify-content-between">
                 <h6 class="mb-1">
-                  {{ item.person.person }}
+                  {{ item.person.person | uppercase }}
                 </h6>
               </div>
-              <div class="card-text">{{ item.note }}</div>
+              <div class="card-text">{{ item.note | capitalLetter }}</div>
               <small class="text-muted">{{
                 item.created_at | date : "MMM d, y, h:mm a"
               }}</small>
@@ -629,6 +635,7 @@
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
+            <th></th>
             <th>Código</th>
             <th>Fecha</th>
             <th>Cliente</th>
@@ -648,23 +655,27 @@
               'text-danger font-weight-bold': item.state == 'Inactivo'
             }"
           >
-            <td class="align-middle pb-0 text-left">
+            <td class="pb-0">
               <mat-checkbox
                 color="primary"
                 (change)="guardarPresupuesto(item.id, item.total_cop)"
                 [id]="item.id"
-                >{{ item.code }}</mat-checkbox
-              >
+              ></mat-checkbox>
             </td>
             <td class="align-middle">
-              {{ item.created_at | date : "longDate" }}
+              {{ item.code | uppercase }}
             </td>
-            <td class="align-middle">{{ item.customer.name }}</td>
-            <td class="align-middle">{{ item.destiny.name }}</td>
-            <td class="align-middle">{{ item.line }}</td>
             <td class="align-middle">
-              {{ item.user.person.first_name }}
-              {{ item.user.person.first_surname }}
+              {{ item.created_at | date : "MMM d, y" }}
+            </td>
+            <td class="align-middle">{{ item.customer.name | titlecase }}</td>
+            <td class="align-middle">
+              {{ item.destiny.name | capitalLetter }}
+            </td>
+            <td class="align-middle">{{ item.line | capitalLetter }}</td>
+            <td class="align-middle">
+              {{ item.user.person.first_name | titlecase }}
+              {{ item.user.person.first_surname | titlecase }}
             </td>
             <td class="align-middle">
               ${{ item.total_cop | number : "1.2-2" }}
@@ -827,11 +838,11 @@
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
+            <th></th>
             <th>Código</th>
             <th>Fecha</th>
             <th>Cliente</th>
             <th>Destino</th>
-            <th>Linea</th>
             <th>Total COP</th>
             <th>Total USD</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
@@ -839,24 +850,26 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of quotations" class="text-center">
-            <td class="pb-0 text-left">
+            <td class="pb-0">
               <mat-checkbox
                 color="primary"
                 (change)="guardarCotizacion(item.id, item.total_cop)"
                 [id]="item.id"
-                >{{ item.code }}</mat-checkbox
-              >
+              ></mat-checkbox>
             </td>
-            <td>{{ item.created_at | date : "longDate" }}</td>
+            <td>
+              {{ item.code | uppercase }}
+            </td>
+            <td>{{ item.created_at | date : "MMM d, y" }}</td>
             <td>
               {{
-                item.client.social_reason
+                (item.client.social_reason
                   ? item.client.social_reason
                   : item.client.full_name
+                ) | titlecase
               }}
             </td>
-            <td>{{ item.municipality.name }}</td>
-            <td>{{ item.line }}</td>
+            <td>{{ item.municipality.name | capitalLetter }}</td>
             <td>${{ item.total_cop | number : "1.2-2" }}</td>
             <td>${{ item.total_usd | number : "1.2-2" }}</td>
             <td>

@@ -45,86 +45,90 @@ import { InformacionBaseModule } from "../informacion-base/informacion-base.modu
 import { ViaticosComponent } from './viaticos/viaticos.component';
 import { VacantesComponent } from './vacantes/vacantes.component';
 import { TercerosComponent } from './terceros/terceros.component';
-import { MatButtonModule, MatIconModule } from "@angular/material";
+import { MatButtonModule, MatCheckboxModule, MatIconModule } from "@angular/material";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ParametrosNominaComponent } from './params-nomina/parametros-nomina/parametros-nomina.component';
 import { TiposModule } from "../tipos/tipos.module";
 import { AccommodationsComponent } from './viaticos/hoteles/accommodations/accommodations.component';
 import { MatCard, MatRadioGroup, MatSlideToggleModule } from "@angular/material";
-import { CurrencyMaskModule } from "ng2-currency-mask";
 import { MaterialesComponent } from "./apu/materiales/materiales.component";
 import { MaterialesMateriaPrimaComponent } from "./apu/materiales-materia-prima/materiales-materia-prima.component";
+import { DirectivesModule } from "src/app/core/directives/directives.module";
+import { NgxCurrencyModule } from "ngx-currency";
 
 
 
 @NgModule({
-    declarations: [
-        NotasTecnicasComponent,
-        // PerfilesComponent,
-        ZonasComponent,
-        RgpComponent,
-        EpsComponent,
-        BancosComponent,
-        CuentasBancariasComponent,
-        HotelesComponent,
-        TaxisComponent,
-        LicenciaConduccionComponent,
-        GeometriasComponent,
-        CrearGeometriaComponent,
-        VerGeometriaComponent,
-        MaterialesComponent,
-        UnidadesMedidasComponent,
-        MaquinasHerramientasComponent,
-        ProcesosInternosComponent,
-        ProcesosExternosComponent,
-        MedidasComponent,
-        CostosIndirectosComponent,
-        EspesoresComponent,
-        CorteLaserMaterialComponent,
-        PerfilesApuComponent,
-        EstimacionViaticosComponent,
-        EstimacionViaticosValuesComponent,
-        ValorAlmuerzosComponent,
-        NominaComponent,
-        ViaticosComponent,
-        VacantesComponent,
-        TercerosComponent,
-        ParametrosNominaComponent,
-        AccommodationsComponent,
-        MaterialesMateriaPrimaComponent,
-    ],
-    imports: [
-        ParametrosRoutingModule,
-        ReactiveFormsModule,
-        ComponentsModule,
-        HttpClientModule,
-        NgbDropdownModule,
-        NgbPaginationModule,
-        FormsModule,
-        NgSelectModule,
-        CommonModule,
-        PerfectScrollbarModule,
-        PipesModule,
-        MatExpansionModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatToolbarModule,
-        MatButtonModule,
-        MatAutocompleteModule,
-        MatIconModule,
-        MatSlideToggleModule,
-        MatPaginatorModule,
-        SweetAlert2Module.forRoot(),
-        InformacionBaseModule,
-        TiposModule,
-        CurrencyMaskModule,
-    ],
-    exports: [
-        CuentasBancariasComponent,
-        ValorAlmuerzosComponent,
-        CorteLaserMaterialComponent
-    ]
+  declarations: [
+    NotasTecnicasComponent,
+    // PerfilesComponent,
+    ZonasComponent,
+    RgpComponent,
+    EpsComponent,
+    BancosComponent,
+    CuentasBancariasComponent,
+    HotelesComponent,
+    TaxisComponent,
+    LicenciaConduccionComponent,
+    GeometriasComponent,
+    CrearGeometriaComponent,
+    VerGeometriaComponent,
+    MaterialesComponent,
+    UnidadesMedidasComponent,
+    MaquinasHerramientasComponent,
+    ProcesosInternosComponent,
+    ProcesosExternosComponent,
+    MedidasComponent,
+    CostosIndirectosComponent,
+    EspesoresComponent,
+    CorteLaserMaterialComponent,
+    PerfilesApuComponent,
+    EstimacionViaticosComponent,
+    EstimacionViaticosValuesComponent,
+    ValorAlmuerzosComponent,
+    NominaComponent,
+    ViaticosComponent,
+    VacantesComponent,
+    TercerosComponent,
+    ParametrosNominaComponent,
+    AccommodationsComponent,
+    MaterialesMateriaPrimaComponent,
+  ],
+  imports: [
+    ParametrosRoutingModule,
+    ReactiveFormsModule,
+    ComponentsModule,
+    HttpClientModule,
+    NgbDropdownModule,
+    NgbPaginationModule,
+    FormsModule,
+    DirectivesModule,
+    NgSelectModule,
+    CommonModule,
+    PerfectScrollbarModule,
+    PipesModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    MatSlideToggleModule,
+    MatPaginatorModule,
+    SweetAlert2Module.forRoot(),
+    InformacionBaseModule,
+    TiposModule,
+    NgxCurrencyModule,
+    DirectivesModule,
+    MatCheckboxModule
+  ],
+  exports: [
+    CuentasBancariasComponent,
+    ValorAlmuerzosComponent,
+    CorteLaserMaterialComponent
+  ]
 })
 
 export class ParametrosModule { }

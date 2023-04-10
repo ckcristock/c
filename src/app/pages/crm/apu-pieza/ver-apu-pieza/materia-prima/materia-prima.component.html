@@ -20,14 +20,14 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="text-center">
+          <tr class="text-center text-uppercase">
             <td class="align-middle">
               {{ i + 1 }}
             </td>
             <td class="align-middle">
               {{ item.geometry.name }}
             </td>
-            <td class="align-middle">
+            <td class="align-middle p-0">
               <img [src]="item.geometry.image" />
             </td>
             <td class="align-middle">
@@ -60,13 +60,8 @@
     </div>
   </ng-container>
 </ng-container>
-<div class="row d-flex justify-content-end">
-  <div class="col-md-4">
-    <h6 class="d-flex justify-content-between">
-      Subtotal
-      <span class="badge badge-success badge-pill"
-        >${{ subtotal_raw_material | number : "1.2-2" }}</span
-      >
-    </h6>
-  </div>
-</div>
+<app-list-items
+  title1="SUBTOTAL"
+  [var1]="subtotal_raw_material"
+  type1="cop"
+></app-list-items>

@@ -74,7 +74,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this.createFormFiltersBudgets();
     this.createFormFiltersQuotations();
     this.getCompanies();
-    this.getCountries();
+    this.getCities();
     this.getPeople();
     this.getConsecutivo();
   }
@@ -82,7 +82,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
   async reloadData() {
     this.reload = true;
     this.getCompanies();
-    this.getCountries();
+    this.getCities();
     await this.getPeople();
     this.reload = false
   }
@@ -156,7 +156,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
       description: [''],
       third_party_id: [null, Validators.required],
       third_party_person_id: [null, Validators.required],
-      country_id: [null, Validators.required],
+      /* country_id: [null, Validators.required], */
       city_id: [null, Validators.required],
       date: ['', Validators.required],
       person_id: [this.id],
@@ -187,13 +187,13 @@ export class ModalNuevoNegocioComponent implements OnInit {
     })
   }
 
-  getCountries() {
+  /* getCountries() {
     this._negocios.getCountries().subscribe((data: any) => {
       this.countries = data.data;
     });
-  }
+  } */
 
-  filterDepartments(id) {
+  /* filterDepartments(id) {
     this.cities = []
     this.countries.forEach(country => {
       if (country.id == id) {
@@ -207,12 +207,12 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this.cities.sort((a, b) =>
       ('' + a.text).localeCompare(b.text)
     )
-  }
+  } */
 
-  getCities() {
-    this._negocios.getCities(this.form.value.country_id).subscribe((data: any) => {
-      this.cities = data.data;
-    });
+  async getCities() {
+    await this._negocios.getMunicipalities().toPromise().then((r: any) => {
+      this.cities = r.data;
+    })
   }
 
   getCompanies() {
@@ -323,12 +323,12 @@ export class ModalNuevoNegocioComponent implements OnInit {
           this.form.addControl('budgets', this.fb.control(this.budgetsSelected));
           this.form.addControl('quotations', this.fb.control(this.quotationSelected));
           this.form.addControl('apu', this.fb.control(this.apuSelected));
-          this.budgetsSelected.reduce((a, b) => {
+          /* this.budgetsSelected.reduce((a, b) => {
             return this.form.addControl('budget_value', this.fb.control(a + b.total_cop))
           }, 0)
           this.quotationSelected.reduce((a, b) => {
             return this.form.addControl('quotation_value', this.fb.control(a + b.total_cop))
-          }, 0)
+          }, 0) */
           this._negocios.saveNeg(this.form.value).subscribe(r => {
             this.form.reset();
             this.budgetsSelected = [];

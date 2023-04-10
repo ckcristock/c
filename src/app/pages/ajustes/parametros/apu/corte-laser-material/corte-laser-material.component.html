@@ -107,12 +107,15 @@
     <h4 class="text-primary modal-title">{{ title }}</h4>
     <button
       type="button"
-      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      class="close"
+      data-dismiss="modal"
       aria-label="Close"
       (click)="
         modal.dismiss('Cross click'); form.reset(); materialsList.clear()
       "
-    ></button>
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body">
     <form [formGroup]="form">
@@ -134,54 +137,52 @@
               </ng-select>
             </div>
           </div>
-          <div class="rounded-top table-responsive">
-            <table class="table table-bordered table-striped table-sm">
-              <thead class="bg-light">
-                <tr class="text-center text-uppercase">
-                  <th class="align-middle">Espesor</th>
-                  <th class="align-middle">Valor Unitario</th>
-                  <th class="align-middle">Velocidad Real</th>
-                  <th class="align-middle">Seg. Percing</th>
-                  <th class="align-middle"><i class="fas fa-trash-alt"></i></th>
-                </tr>
-              </thead>
-              <tbody formArrayName="materials">
-                <ng-container
-                  *ngIf="materialsList.controls.length; else sinDatos"
-                >
+          <ng-container *ngIf="materialsList.controls.length; else sinDatos">
+            <div class="rounded-top table-responsive">
+              <table class="table table-bordered table-striped table-sm">
+                <thead class="bg-light">
+                  <tr class="text-center text-uppercase">
+                    <th class="align-middle">Espesor</th>
+                    <th class="align-middle">Velocidad Real</th>
+                    <th class="align-middle">Seg. Percing</th>
+                    <th class="align-middle">
+                      <i class="fas fa-trash-alt"></i>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="materials">
                   <ng-container
                     *ngFor="let item of materialsList.controls; let i = index"
                   >
                     <tr [formGroupName]="i">
-                      <td>
+                      <td class="p-0">
                         <input
-                          type="number"
                           class="form-control form-control-sm"
                           formControlName="thickness"
+                          currencyMask
+                          appInputPositionInitial
+                          [options]="masksMoney.maskNumbers2Decimal"
                         />
                       </td>
-                      <td>
+                      <td class="p-0">
                         <input
-                          type="number"
-                          class="form-control form-control-sm"
-                          formControlName="unit_value"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="number"
                           class="form-control form-control-sm"
                           formControlName="actual_speed"
+                          currencyMask
+                          appInputPositionInitial
+                          [options]="masksMoney.maskNumbers5Decimal"
                         />
                       </td>
-                      <td>
+                      <td class="p-0">
                         <input
-                          type="text"
                           class="form-control form-control-sm"
                           formControlName="seconds_percing"
+                          currencyMask
+                          appInputPositionInitial
+                          [options]="masksMoney.maskNumbers2Decimal"
                         />
                       </td>
-                      <td>
+                      <td class="p-0 text-center">
                         <button
                           class="btn btn-outline-danger btn-sm"
                           type="button"
@@ -192,19 +193,18 @@
                       </td>
                     </tr>
                   </ng-container>
-                </ng-container>
-              </tbody>
-            </table>
-            <div class="d-flex justify-content-end">
-              <button
-                class="btn btn-primary btn-sm"
-                type="button"
-                (click)="newMaterial()"
-              >
-                <i class="fas fa-plus"></i>
-              </button>
+                </tbody>
+              </table>
             </div>
-          </div>
+          </ng-container>
+          <button
+            class="btn btn-primary btn-block btn-sm"
+            type="button"
+            (click)="newMaterial()"
+          >
+            <i class="fas fa-plus"></i>
+            Agregar espesor
+          </button>
         </div>
         <div class="col-lg-7">
           <h6 class="text-center">Variables</h6>
@@ -263,10 +263,13 @@
     <h4 class="text-primary modal-title">Ver material</h4>
     <button
       type="button"
-      class="btn btn-sm btn-flash-border-primary ri-close-fill"
+      class="close"
+      data-dismiss="modal"
       aria-label="Close"
       (click)="modal.dismiss('Cross click'); closeModalVer()"
-    ></button>
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body">
     <h5 class="text-center">{{ material.name | titlecase }}</h5>
@@ -275,7 +278,6 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Espesor</th>
-            <th>Valor Unitario</th>
             <th>Velocidad Real</th>
             <th>Seg. Percing</th>
           </tr>
@@ -285,13 +287,15 @@
             *ngFor="let item of material.cut_laser_material_value"
             class="text-center"
           >
-            <td>{{ item.thickness }}</td>
-            <td>{{ item.unit_value }}</td>
-            <td>{{ item.actual_speed }}</td>
-            <td>{{ item.seconds_percing }}</td>
+            <td>{{ item.thickness | number }}</td>
+            <td>{{ item.actual_speed | number }}</td>
+            <td>{{ item.seconds_percing | number }}</td>
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="alert alert-info" role="alert">
+      {{ material.formula.trim() }}
     </div>
   </div>
   <div class="modal-footer">
@@ -315,9 +319,7 @@
   <p>No</p>
 </ng-template>
 <ng-template #sinDatos>
-  <tr>
-    <td colspan="100%" class="text-center">
-      <div class="alert alert-warning" role="alert">Sin datos agregados</div>
-    </td>
-  </tr>
+  <div class="alert alert-warning" role="alert">
+    Da click en el botón para agregar un nuevo espesor
+  </div>
 </ng-template>

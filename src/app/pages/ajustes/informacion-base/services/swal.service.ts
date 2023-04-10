@@ -96,4 +96,40 @@ export class SwalService {
     return Swal.fire(swal)
   }
 
+  error() {
+    let swal: any = {
+      title: 'ERROR',
+      text: 'Ha ocurrido un error. Inténtalo nuevamente.',
+      icon: 'error',
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+      showCancelButton: false,
+      confirmButtonColor: this.buttonColor.confirm,
+      confirmButtonText: 'OK',
+      cancelButtonColor: this.buttonColor.cancel,
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+
+    };
+    return Swal.fire(swal)
+  }
+
+  hardError() {
+    let swal: any = {
+      title: 'Algo no salió bien',
+      text: 'Comunícate con el equipo de tecnología.',
+      icon: 'error',
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+      showCancelButton: false,
+      confirmButtonColor: '#F27474',
+      confirmButtonText: 'OK',
+      cancelButtonColor: this.buttonColor.cancel,
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+
+    };
+    return Swal.fire(swal)
+  }
+
 }

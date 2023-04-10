@@ -231,10 +231,11 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   collapses() {
-    if (this.data == undefined) {
+    console.log(this.data)
+    if (!this.data) {
       return null;
     }
-    (this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
+    (this.data.other.length > 0 ? this.otherCollapsed = true : this.otherCollapsed = false);
   }
 
   getApuSets() {

@@ -181,7 +181,7 @@ export const cmoHelper = {
       if (value == 1 && city?.department_?.country_id != 1) {
         group.patchValue({ unit_value: estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
       } else if (value == 2 && city?.department_?.country_id != 1) {
-        group.patchValue({ unit_value: estimation?.land_international_value || estimation?.international_value || estimation.unit_value })
+        group.patchValue({ unit_value: estimation?.land_international_value || estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
       } else if (value == 3) {
         group.patchValue({ unit_value: estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
       }
@@ -195,10 +195,20 @@ export const cmoHelper = {
     });
     forma.get('city_id').valueChanges.subscribe(value => {
       let city = cities.find(c => c.id == value);
-      if (city?.department_?.country_id != 1) {
-        group.patchValue({ unit_value: estimation.aerial_international_value || estimation?.international_value || estimation.unit_value })
-      } else {
-        group.patchValue({ unit_value: estimation.land_national_value || estimation?.national_value || estimation.unit_value })
+      let displacement_type = form.get('displacement_type').value
+      if (displacement_type == 1 && city?.department_?.country_id != 1) {
+        group.patchValue({ unit_value: estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
+      } else if (displacement_type == 2 && city?.department_?.country_id != 1) {
+        group.patchValue({ unit_value: estimation?.land_international_value || estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
+      } else if (displacement_type == 3) {
+        group.patchValue({ unit_value: estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
+      }
+      if (displacement_type == 1 && city?.department_?.country_id == 1) {
+        group.patchValue({ unit_value: estimation?.aerial_national_value || estimation?.national_value || estimation.unit_value })
+      } else if (displacement_type == 2 && city?.department_?.country_id == 1) {
+        group.patchValue({ unit_value: estimation?.land_national_value || estimation?.national_value || estimation.unit_value })
+      } else if (displacement_type == 3) {
+        group.patchValue({ unit_value: estimation?.aerial_international_value || estimation?.international_value || estimation.unit_value })
       }
     });
     group.get('amount').valueChanges.pipe(debounceTime(500)).subscribe(value => {
@@ -221,6 +231,7 @@ export const cmoHelper = {
     });
     form.get('days_number_displacement').valueChanges.subscribe(value => {
       group.patchValue({ days_number_displacement: value })
+      this.operationAmount(group);
     })
     form.get('hours_displacement').valueChanges.subscribe(value => {
       group.patchValue({ hours_displacement: value })
@@ -233,6 +244,7 @@ export const cmoHelper = {
     })
     form.get('days_number_ordinary').valueChanges.subscribe(value => {
       group.patchValue({ days_number_ordinary: value })
+      this.operationAmount(group);
     })
     form.get('hours_ordinary').valueChanges.subscribe(value => {
       group.patchValue({ hours_ordinary: value })
@@ -245,6 +257,7 @@ export const cmoHelper = {
     })
     form.get('days_number_festive').valueChanges.subscribe(value => {
       group.patchValue({ days_number_festive: value })
+      this.operationAmount(group);
     })
     form.get('hours_festive').valueChanges.subscribe(value => {
       group.patchValue({ hours_festive: value })
@@ -320,14 +333,14 @@ export const cmoHelper = {
     group.get('hours_value_ordinary').valueChanges.subscribe(value => {
       let hours_ordinary = group.get('hours_ordinary')
       let days_number_ordinary = group.get('days_number_ordinary')
-      let people_number = group.get('days_number_ordinary')
+      let people_number = group.get('people_number')
       let result = (days_number_ordinary.value * hours_ordinary.value * value * people_number.value);
       group.patchValue({ total_value_ordinary: Math.round(result) })
     });
     group.get('hours_ordinary').valueChanges.subscribe(value => {
       let hours_value_ordinary = group.get('hours_value_ordinary')
       let days_number_ordinary = group.get('days_number_ordinary')
-      let people_number = group.get('days_number_ordinary')
+      let people_number = group.get('people_number')
       let result = (days_number_ordinary.value * value * hours_value_ordinary.value * people_number.value);
       group.patchValue({ total_value_ordinary: Math.round(result) })
     });
@@ -342,7 +355,7 @@ export const cmoHelper = {
     group.get('hours_value_festive').valueChanges.subscribe(value => {
       let hours_festive = group.get('hours_festive')
       let days_number_festive = group.get('days_number_festive')
-      let people_number = group.get('days_number_ordinary')
+      let people_number = group.get('people_number')
       let result = (days_number_festive.value * hours_festive.value * value * people_number.value);
       group.patchValue({ total_value_festive: Math.round(result) })
     });
@@ -406,7 +419,29 @@ export const cmoHelper = {
         group.patchValue({ hours_value_festive: data.sunday_night_time_value });
       }
     });
-
+    //!Nuevas ---> aplicar a todas
+    group.get('apu_profile_id').valueChanges.subscribe(value => {
+      let data = profiles.find(p => p.id == value);
+      let working_day_festive = group.get('working_day_festive').value;
+      let working_day_ordinary = group.get('working_day_ordinary').value;
+      let workind_day_displacement = group.get('workind_day_displacement').value
+      if (working_day_festive == 'Diurna') {
+        group.patchValue({ hours_value_festive: data.sunday_daytime_value });
+      } else if (working_day_festive == 'Nocturna') {
+        group.patchValue({ hours_value_festive: data.sunday_night_time_value });
+      }
+      if (working_day_ordinary == 'Diurna') {
+        group.patchValue({ hours_value_ordinary: data.daytime_ordinary_hour_value });
+      } else if (working_day_ordinary == 'Nocturna') {
+        group.patchValue({ hours_value_ordinary: data.night_ordinary_hour_value });
+      }
+      if (workind_day_displacement == 'Diurna') {
+        group.patchValue({ hours_value_displacement: data.value_time_daytime_displacement });
+      } else if (workind_day_displacement == 'Nocturna') {
+        group.patchValue({ hours_value_displacement: data.value_time_night_displacement });
+      }
+    })
+    //!Fin de nuevas
     group.get('salary_value').valueChanges.subscribe(value => {
       this.subtotalLabor(list, form);
     })

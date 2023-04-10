@@ -41,6 +41,7 @@ export class VerPresupuestoComponent implements OnInit {
     })
   }
   donwloading = false;
+  donwloadingInterno: boolean = false;
   downloadClient() {
     Swal.fire({
       inputOptions: {
@@ -84,6 +85,23 @@ export class VerPresupuestoComponent implements OnInit {
           };
       }
     })
+  }
+  downloadInterno() {
+    this.donwloadingInterno = true;
+    this._budget.downloadIntern(this.id).subscribe((response: BlobPart) => {
+      let blob = new Blob([response], { type: 'application/pdf' });
+      let link = document.createElement('a');
+      const filename = 'presupuesto_interno';
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${filename}.pdf`;
+      link.click();
+      this.donwloadingInterno = false;
+    }),
+      (error) => {
+        this.donwloadingInterno = false;
+      },
+      () => {
+      };
   }
 
 }

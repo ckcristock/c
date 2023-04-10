@@ -1,5 +1,8 @@
-<div class="card">
-  <ng-container *ngIf="!loading && quotation; else notData">
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<ng-container *ngIf="!loading && quotation; else placeholder">
+  <div class="card">
     <div class="card-body" #printPDF>
       <app-cabecera [datosCabecera]="headerData"></app-cabecera>
       <hr class="line" />
@@ -36,90 +39,144 @@
           </button>
         </div>
       </div>
-      <h5 class="card-title">Señores:</h5>
-      <p class="card-text">
-        {{ quotation.third_person.name }} -
-        {{
-          quotation.client.social_reason
-            ? quotation.client.social_reason
-            : quotation.client.full_name
-        }}
-        <br />
-        <small>{{ quotation.municipality.name }}</small>
-      </p>
-      <div class="alert alert-primary" role="alert">
-        <i class="fas fa-cogs"></i> {{ quotation.description | uppercase }}
-      </div>
-      <div class="rounded-top table-responsive">
-        <table class="table table-bordered table-striped table-sm">
-          <thead class="bg-light">
-            <tr class="text-center text-uppercase">
-              <th>#</th>
-              <th>Descripción</th>
-              <th>Cantidad</th>
-              <th>Valor unitario</th>
-              <th>Valor total</th>
+      <div class="rounded-top table-responsive mt-2">
+        <table class="table table-borderless text-center text-uppercase">
+          <thead>
+            <tr class="table-secondary">
+              <th scope="row">Nombre</th>
+              <th scope="row">Destino</th>
+              <th scope="row">Cliente</th>
+              <th scope="row">Contacto</th>
             </tr>
           </thead>
           <tbody>
-            <tr
-              *ngFor="let item of quotation.items; let i = index"
-              class="text-center"
-            >
-              <td>{{ i + 1 }}</td>
-              <td class="text-left">
-                <b>{{ item.name }}</b>
-                <ng-container *ngIf="item.sub_items.length > 0">
-                  <p>Comprende:</p>
-                  <ul class="mb-0">
-                    <ng-container *ngFor="let sub_item of item.sub_items">
-                      <li>{{ sub_item.description }}</li>
-                    </ng-container>
-                  </ul>
-                </ng-container>
+            <tr>
+              <td>{{ quotation.description }}</td>
+              <td>{{ quotation.municipality.name }}</td>
+              <td>
+                {{ quotation.client.full_name }}
               </td>
-              <td>{{ item.cuantity }}</td>
-              <ng-container *ngIf="quotation.money_type == 'cop'; else usd">
-                <td>${{ item.value_cop | number : "1.2-2" }} (SIN IVA)</td>
-                <td>${{ item.total_cop | number : "1.2-2" }} (SIN IVA)</td>
-              </ng-container>
-              <ng-template #usd>
-                <td>USD {{ item.value_usd | number : "1.2-2" }}</td>
-                <td>USD {{ item.total_usd | number : "1.2-2" }}</td>
-              </ng-template>
+              <td>{{ quotation.third_person.name }}</td>
+            </tr>
+            <tr class="text-left">
+              <th colspan="100%">Observaciones</th>
+            </tr>
+            <tr class="text-left">
+              <td colspan="100%">
+                {{ quotation.observation || "No existen observaciones" }}
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="d-flex justify-content-end">
-        <ng-container *ngIf="quotation.money_type == 'cop'; else usd_total">
-          <h6>TOTAL SIN IVA: ${{ quotation.total_cop | number : "1.2-2" }}</h6>
-        </ng-container>
-        <ng-template #usd_total>
-          <h6>TOTAL: USD {{ quotation.total_usd | number : "1.2-2" }}</h6>
-        </ng-template>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="rounded-top table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th rowspan="2">#</th>
+              <th rowspan="2" class="col-md-7">Descripción</th>
+              <th rowspan="2">Cantidad</th>
+              <th colspan="2">Valor unitario</th>
+              <th colspan="2">Valor total</th>
+            </tr>
+            <tr class="text-center text-uppercase">
+              <th>COP sin iva</th>
+              <th>USD</th>
+              <th>COP sin iva</th>
+              <th>USD</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let item of quotation.items; let i = index">
+              <tr>
+                <td class="text-center">{{ i + 1 }}</td>
+                <td>
+                  <div [ngClass]="'alert-p-0'" [innerHTML]="item.name"></div>
+                </td>
+                <td class="text-center">{{ item.cuantity }}</td>
+                <td class="text-right">
+                  ${{ item.value_cop | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ item.total_cop | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  USD{{ item.value_usd | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  USD{{ item.total_usd | number : "1.2-2" }}
+                </td>
+              </tr>
+              <ng-container *ngIf="item.sub_items.length > 0">
+                <ng-container
+                  *ngFor="let sub_item of item.sub_items; let y = index"
+                >
+                  <tr>
+                    <td class="text-center">{{ i + 1 }}.{{ y + 1 }}</td>
+                    <td>
+                      <div
+                        [ngClass]="'alert-p-0'"
+                        [innerHTML]="sub_item.description"
+                      ></div>
+                    </td>
+                    <td class="text-center">{{ sub_item.cuantity }}</td>
+                    <td class="text-right">
+                      ${{ sub_item.value_cop | number : "1.2-2" }}
+                    </td>
+                    <td class="text-right">
+                      ${{ sub_item.total_cop | number : "1.2-2" }}
+                    </td>
+                    <td class="text-right">
+                      USD{{ sub_item.value_usd | number : "1.2-2" }}
+                    </td>
+                    <td class="text-right">
+                      USD{{ sub_item.total_usd | number : "1.2-2" }}
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </tbody>
+        </table>
       </div>
+      <app-list-items
+        title1="VALOR TOTAL SIN IVA"
+        [var1]="quotation.total_cop"
+        type1="cop"
+        title2="TOTAL USD"
+        [var2]="quotation.total_usd"
+        type2="usd"
+      >
+      </app-list-items>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
       <div
-        class="alert alert-secondary alert-custom-quotation pb-0"
+        class="alert alert-light alert-custom-quotation pb-0"
         [innerHTML]="quotation.commercial_terms"
         role="alert"
         [ngClass]="'alert-p-0'"
       ></div>
       <div
-        class="alert alert-secondary alert-custom-quotation pb-0"
+        class="alert alert-light alert-custom-quotation pb-0"
         [innerHTML]="quotation.legal_requirements"
         role="alert"
         [ngClass]="'alert-p-0'"
       ></div>
       <div
-        class="alert alert-secondary alert-custom-quotation pb-0"
+        class="alert alert-light alert-custom-quotation pb-0"
         [innerHTML]="quotation.technical_requirements"
         role="alert"
         [ngClass]="'alert-p-0'"
       ></div>
     </div>
-  </ng-container>
-</div>
+  </div>
+</ng-container>
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

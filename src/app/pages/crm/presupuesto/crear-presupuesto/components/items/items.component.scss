@@ -3,7 +3,7 @@ table.table-bordered>thead>tr>th {
 }
 
 .h4-custom {
-  margin-bottom: 1px;
+  margin-bottom: 3px;
 }
 
 .values {
@@ -56,15 +56,18 @@ $principal: #232247;
 
 .table-custom {
   font-size: 0.6rem !important;
+
   th {
     white-space: break-spaces;
   }
+
   td {
     padding: 2px;
 
     input {
       height: auto;
       padding: 0;
+      padding-right: 3px;
       border: 0;
       font-size: 10px !important;
       background-color: transparent;
@@ -90,11 +93,12 @@ $principal: #232247;
 
 .btn_agregar_tr {
   position: absolute;
-  width: 98%;
-  left: 12px;
+  width: 96.9%;
+  left: 18px;
   height: 1px;
   border: 1px solid transparent;
   border-width: thin;
+  z-index: 2;
 }
 
 .btn_agregar_tr:after {
@@ -114,5 +118,30 @@ $principal: #232247;
 }
 
 .btn_agregar_tr:hover:after {
-  color: #4AA3FF; /* Mostrar el contenido al aplicar :hover */
+  color: #4AA3FF;
+}
+
+.table-input-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #E0EEC0;
+  margin-left: 3px;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }

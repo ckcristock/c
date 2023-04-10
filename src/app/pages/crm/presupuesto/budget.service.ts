@@ -34,4 +34,9 @@ export class BudgetService {
     return this.http.post(`${environment.base_url}/budgets-download-client`, body, { headers, responseType: 'blob' as 'json' });
   }
 
+  downloadIntern(id) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/budgets-download-intern/${id}`, { headers, responseType: 'blob' as 'json' });
+  }
+
 }

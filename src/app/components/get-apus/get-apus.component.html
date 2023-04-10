@@ -52,14 +52,13 @@
         />
       </mat-form-field>
       <mat-form-field class="col" appearance="outline">
-        <mat-label>Observaciones</mat-label>
+        <mat-label>Ciudad</mat-label>
         <input
           matInput
           type="text"
-          [(ngModel)]="filtros.description"
-          placeholder="Busca por observaciones"
+          [(ngModel)]="filtros.city"
           (input)="getApus()"
-          name="line"
+          placeholder="Busca por ciudad"
           autocomplete="off"
         />
       </mat-form-field>
@@ -83,8 +82,8 @@
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
               <th><i class="fas fa-check"></i></th>
-              <th>Fecha de Creación</th>
               <th>Código</th>
+              <th>Fecha de Creación</th>
               <th>Nombre</th>
               <th>Destino</th>
               <th>Cliente</th>
@@ -103,13 +102,17 @@
                   (change)="setState(apu, $event)"
                 ></mat-checkbox>
               </td>
-              <td class="align-middle">{{ apu.created_at | date }}</td>
-              <td class="align-middle">{{ apu.code }}</td>
-              <td class="align-middle">{{ apu.name }}</td>
-              <td class="align-middle">{{ apu.city.name }}</td>
-              <td class="align-middle">{{ apu.third_party.full_name }}</td>
-              <td class="align-middle">{{ apu.line }}</td>
-              <td class="align-middle">{{ apu.type_name }}</td>
+              <td class="align-middle">{{ apu.code | uppercase }}</td>
+              <td class="align-middle">
+                {{ apu.created_at | date : "MMM d, y" }}
+              </td>
+              <td class="align-middle">{{ apu.name | capitalLetter }}</td>
+              <td class="align-middle">{{ apu.city.name | capitalLetter }}</td>
+              <td class="align-middle">
+                {{ apu.third_party.full_name | titlecase }}
+              </td>
+              <td class="align-middle">{{ apu.line | capitalLetter }}</td>
+              <td class="align-middle">{{ apu.type_name | capitalLetter }}</td>
               <td class="align-middle">
                 {{ apu.unit_cost | number : "1.2-2" }}
               </td>

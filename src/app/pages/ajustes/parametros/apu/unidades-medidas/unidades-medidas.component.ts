@@ -22,7 +22,7 @@ export class UnidadesMedidasComponent implements OnInit {
   unit: any = {};
   pagination = {
     page: 1,
-    pageSize: 10,
+    pageSize: 50,
     collectionSize: 0
   }
   filtro: any = {

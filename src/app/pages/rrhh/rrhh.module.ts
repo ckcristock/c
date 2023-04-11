@@ -92,6 +92,7 @@ import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-mo
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
+import { MatSelectFilterModule } from 'mat-select-filter';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -193,7 +194,8 @@ export const MY_FORMATS = {
     SatNativeDateModule,
     MatExpansionModule,
     NgxCurrencyModule,
-    DirectivesModule
+    DirectivesModule,
+    MatSelectFilterModule
   ],
   providers: [
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' },

@@ -17,6 +17,7 @@ import { convertCompilerOptionsFromJson } from 'typescript';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { TiposTerminosService } from '../../ajustes/tipos/tipos-termino/tipos-terminos.service';
 import { WorkContractTypesService } from '../../ajustes/informacion-base/services/workContractTypes.service';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-contratos',
@@ -72,6 +73,10 @@ export class ContratosComponent implements OnInit {
     position: '',
     group: ''
   }
+  masksMoney = consts
+  filteredGroups: any[] = [];
+  filteredDependencies: any[] = [];
+  filteredPosition: any[] = [];
   constructor(
     private contractService: ContratosService,
     private _group: GroupService,
@@ -98,6 +103,8 @@ export class ContratosComponent implements OnInit {
     this.getCompanies();
     this.getContractsToExpire();
     this.getContractByTrialPeriod();
+    this.getTurnTypes();
+
     this.route.queryParamMap.subscribe((params) => {
       this.orderObj = { ...params.keys, ...params };
       for (let i in this.orderObj.params) {
@@ -115,13 +122,14 @@ export class ContratosComponent implements OnInit {
       }
     });
     this.getTurnTypes();
-   // this.getTermsTypes();
+
     this.getWorkContractTypes();
   }
 
   getTurnTypes() {
     this.contractService.getTurnTypes().subscribe((res: any) => {
       this.listaTiposTurno = res.data;
+      console.log(this.listaTiposTurno)
     });
   }
 
@@ -129,18 +137,24 @@ export class ContratosComponent implements OnInit {
     this.listaTurnos = [];
     this.formContrato.get('turn_id').setValue("");
     if (turnType == "Fijo") {
-      this._fixedTurns.getFixedTurns().subscribe((res: any) => {
-        res.data.data.forEach(data => {
+      this._fixedTurns.getFixedTurnsActive().subscribe((res: any) => {
+        res.data.forEach(data => {
           this.listaTurnos.push({ "id": data.value, "name": data.text });
         });
       });
     } else {
-      this._rotatingTurs.getAllCreate().subscribe((res: any) => {
-        res.data.forEach(data => {
-          this.listaTurnos.push({ "id": data.id, "name": data.name });
-        });
-      });
+      // this._rotatingTurs.getAllCreate().subscribe((res: any) => {
+      //   res.data.forEach(data => {
+      //     this.listaTurnos.push({ "id": data.id, "name": data.name });
+      //   });
+      // });
+      this.formContrato.get('turn_id').clearValidators();
+      this.formContrato.patchValue({turn_id: null})
     }
+  }
+
+  get turnSelected(){
+    return this.formContrato.get('turn_type').value;
   }
 
   calcularDias(event) {
@@ -228,6 +242,7 @@ export class ContratosComponent implements OnInit {
   getGroups() {
     this._group.getGroup().subscribe((r: any) => {
       this.groups = r.data
+      this.filteredGroups = r.data.slice()
     })
   }
 
@@ -262,6 +277,7 @@ export class ContratosComponent implements OnInit {
   getPositions() {
     this.contractService.getPositions().subscribe((d: any) => {
       this.positions = d.data;
+
       //this.positions.unshift({ text: 'Seleccione una', value: '' });
     });
   }
@@ -270,6 +286,7 @@ export class ContratosComponent implements OnInit {
     this.formContrato.get('dependency_id').setValue("");
     this._dependencies.getDependencies({ group_id }).subscribe((r: any) => {
       this.dependencies = r.data;
+      this.filteredDependencies = r.data.slice();
     });
   }
 
@@ -277,6 +294,7 @@ export class ContratosComponent implements OnInit {
     this.formContrato.get('position_id').setValue("");
     this._positions.getPositions({ dependency_id }).subscribe((r: any) => {
       this.positions = r.data
+      this.filteredPosition = r.data.slice()
     });
   }
 
@@ -378,14 +396,15 @@ export class ContratosComponent implements OnInit {
       })()
     }else{
       Swal.fire({
-        title: 'Atención!',
-        text: "Este empleado ya presenta un proceso de preliquidación de contrato, desea renovarlo?",
+        title: '¡Atención!',
+        text: "Este empleado ya presenta un proceso de preliquidación de contrato, ¿deseas renovarlo?",
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: this._swal.buttonColor.confirm,
         cancelButtonColor: this._swal.buttonColor.cancel,
         confirmButtonText: 'Renovar contrato',
         cancelButtonText: 'Cancelar',
+        reverseButtons: true,
         footer: (employee.cantidad>0)?'Renovaciones previas: <strong>'+employee.cantidad+'</strong>':'',
       }).then((result) => {
         if (result.isConfirmed) {
@@ -462,6 +481,11 @@ export class ContratosComponent implements OnInit {
 
         this.formContrato.get('work_contract_type_id').valueChanges.subscribe(r => {
         this.getTermsTypes(r);
+        if(r !== 2 ){
+          this.formContrato.get('date_end').disable()
+        }else{
+          this.formContrato.get('date_end').enable()
+        }
         })
 
 

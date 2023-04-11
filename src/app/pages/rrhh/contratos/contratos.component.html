@@ -385,11 +385,13 @@
             placeholder="Término del contrato"
             required
           >
+
             <mat-option
               *ngFor="let contractType of contractTypes"
               [value]="contractType.id"
               >{{ contractType.name }}</mat-option
             >
+
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
@@ -412,9 +414,18 @@
           <mat-select
             formControlName="group_id"
             placeholder="Grupo"
+            [disableOptionCentering]="true"
+            #selectGroups
             (selectionChange)="getDependenciesByGroup($event.value)"
             required
           >
+          <mat-select-filter
+                    *ngIf="selectGroups.focused"
+                    [placeholder]="'Buscar'"
+                    [array]="groups"
+                    [displayMember]="'text'"
+                    (filteredReturn)="filteredGroups = $event"
+                  ></mat-select-filter>
             <mat-option *ngFor="let group of groups" [value]="group.value">{{
               group.text
             }}</mat-option>
@@ -425,11 +436,19 @@
           <mat-select
             formControlName="dependency_id"
             placeholder="Dependencia"
-            (selectionChange)="getPositionsByDependency($event.value)"
+            #selectDependencies
             required
+            (selectionChange)="getPositionsByDependency($event.value)"
           >
+            <mat-select-filter
+            *ngIf="selectDependencies.focused"
+            [placeholder]="'Buscar'"
+            [array]="dependencies"
+            [displayMember]="'text'"
+            (filteredReturn)="filteredDependencies = $event"
+          ></mat-select-filter>
             <mat-option
-              *ngFor="let dependency of dependencies"
+              *ngFor="let dependency of filteredDependencies"
               [value]="dependency.value"
               >{{ dependency.text }}</mat-option
             >
@@ -441,11 +460,20 @@
           <mat-label for="Aplica_Separacion_Categorias">Cargo</mat-label>
           <mat-select
             formControlName="position_id"
+            [disableOptionCentering]="true"
+            #selectPositions
             placeholder="Posición"
             required
           >
-            <mat-option
-              *ngFor="let position of positions"
+          <mat-select-filter
+                    *ngIf="selectPositions.focused"
+                    [placeholder]="'Buscar'"
+                    [array]="positions"
+                    [displayMember]="'text'"
+                    (filteredReturn)="filteredPosition = $event"
+          ></mat-select-filter>
+          <mat-option
+              *ngFor="let position of filteredPosition"
               [value]="position.value"
               >{{ position.text }}</mat-option
             >
@@ -454,12 +482,13 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Salario</mat-label>
           <input
-            type="number"
+
             class="text-right"
             formControlName="salary"
             matInput
             currencyMask
-            appInputPositionInitial
+            appInputPosition
+            [options]="masksMoney.maskCOP"
             placeholder="Salario"
             autocomplete="off"
           />
@@ -468,7 +497,7 @@
       <div class="row">
         <mat-form-field class="col" appearance="outline">
           <mat-label for="Aplica_Separacion_Categorias"
-            >Tipo de turno</mat-label
+            >Turno</mat-label
           >
           <mat-select
             formControlName="turn_type"
@@ -483,11 +512,11 @@
             >
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label for="Aplica_Separacion_Categorias">Turno</mat-label>
+        <mat-form-field class="col" appearance="outline" *ngIf="turnSelected == 'Fijo'">
+          <mat-label for="Aplica_Separacion_Categorias">Turno asignado</mat-label>
           <mat-select formControlName="turn_id" placeholder="Turno" required>
             <mat-option *ngFor="let turno of listaTurnos" [value]="turno.id">{{
-              turno.name
+              turno.name | uppercase
             }}</mat-option>
           </mat-select>
         </mat-form-field>
@@ -522,7 +551,7 @@
             La fecha de finalización debe ser posterior a <strong>{{ dateMin }}</strong>
           </mat-error> -->
         </mat-form-field>
-        <mat-form-field class="col-4" appearance="outline">
+         <mat-form-field class="col-4" appearance="outline" *ngIf="formContrato.get('date_end').enabled">
           <mat-label>Fecha de finalización</mat-label>
           <input
             matInput

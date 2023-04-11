@@ -62,9 +62,9 @@ export class CrearOrdenProduccionComponent implements OnInit {
   }
 
   getConsecutivo() {
-    this._consecutivos.getConsecutivo('work_orders').subscribe((r:any) => {
+    this._consecutivos.getConsecutivo('work_orders').subscribe((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
-      this.form.patchValue({format_code: this.datosCabecera.CodigoFormato})
+      this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
       if (this.path != 'editar') {
         let con = this._consecutivos.construirConsecutivo(r.data);
         this.datosCabecera.Codigo = con
@@ -95,6 +95,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
       this.form.patchValue({
         id: param == 'editar' ? res.data.id : '',
         purchase_order: this.work_order.purchase_order,
+        name: this.work_order.name,
         type: this.work_order.type,
         third_party_id: this.work_order.third_party,
         quotation_id: this.work_order.quotation,
@@ -121,6 +122,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
       id: [''],
       purchase_order: ['', Validators.required],
       type: ['', Validators.required],
+      name: ['', Validators.required],
       third_party_id: ['', Validators.required],
       quotation_id: ['', Validators.required],
       delivery_date: ['', Validators.required],

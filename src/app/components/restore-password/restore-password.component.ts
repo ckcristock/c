@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { ModalNoCloseService } from 'src/app/core/services/modal-no-close.service';
 
 @Component({
   selector: 'app-restore-password',
@@ -18,15 +19,10 @@ export class RestorePasswordComponent implements OnInit {
   hide = true;
   form: FormGroup
   constructor(public _user: UserService,
-    private router: Router,
-    private modalService: NgbModal,
-    config: NgbModalConfig,
+    private _modal: ModalNoCloseService,
     private fb: FormBuilder,
     private _swal: SwalService
-  ) {
-    config.backdrop = 'static';
-    config.keyboard = false;
-  }
+  ) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -39,41 +35,39 @@ export class RestorePasswordComponent implements OnInit {
     })
   }
 
-
-
   ngAfterViewInit() {
     if (this._user.user.change_password == true) {
       this.openConfirm(this.restoreModal)
 
     }
   }
-  closeResult = '';
-  public openConfirm(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'sm', scrollable: true })
+  openConfirm(confirm) {
+    this._modal.openNoClose(confirm, 'sm')
   }
-  /* private getDismissReason(reason: any) {
-
-  } */
 
   changePassword() {
-    this.form.patchValue({
-      id: this._user.user.id,
-    })
-    this._user.changePassword(this.form.value).subscribe(d => {
-      this.modalService.dismissAll();
-      this._swal.show({
-        icon: 'success',
-        title: 'Operacion exitosa',
-        text: 'Tu contraseña se ha actualizado con exito, presiona "OK" y vuelve a iniciar sesión',
-        showCancel: false
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this._user.logout();
-        }
+    if (this.form.valid) {
+      this.form.patchValue({
+        id: this._user.user.id,
       })
-    }, err => {
-      Swal.fire('Ha ocurrido un error', '', 'error')
-    });
+      this._user.changePassword(this.form.value).subscribe(d => {
+        this._modal.close();
+        this._swal.show({
+          icon: 'success',
+          title: 'Operacion exitosa',
+          text: 'Tu contraseña se ha actualizado con exito, presiona "OK" y vuelve a iniciar sesión',
+          showCancel: false
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this._user.logout();
+          }
+        })
+      }, err => {
+        Swal.fire('Ha ocurrido un error', '', 'error')
+      });
+    } else {
+      this._swal.incompleteError()
+    }
 
   }
 

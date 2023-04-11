@@ -14,14 +14,14 @@ export class TiposVisaComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   loading: boolean = false;
   form: FormGroup;
@@ -48,25 +48,24 @@ export class TiposVisaComponent implements OnInit {
   openModal() {
     this.modal.show();
   }
-  
-closeResult = '';
-public openConfirm(confirm, titulo){
-  this.title = titulo;
+
+  public openConfirm(confirm, titulo) {
+    this.title = titulo;
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
+
     }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      this.getDismissReason();
     });
   }
-private getDismissReason(reason: any) {
-  this.form.reset()
-    
+  private getDismissReason() {
+    this.form.reset()
+
   }
   createForm() {
     this.form = this.fb.group({
       id: [this.visa.id],
       name: ['', Validators.required],
-      purpose: ['']
+      purpose: ['', Validators.required]
     });
   }
 
@@ -90,18 +89,22 @@ private getDismissReason(reason: any) {
   }
 
   save() {
-    this._visa.save(this.form.value).subscribe((r: any) => {
-      this.modalService.dismissAll(); 
-      this.form.reset();
-      this.getVisaTypes();
-      this._swal.show({
-        icon: 'success',
-        title: r.data.title,
-        text: r.data.text,
-        showCancel: false,
-        timer: 1000
+    if (this.form.valid) {
+      this._visa.save(this.form.value).subscribe((r: any) => {
+        this.modalService.dismissAll();
+        this.form.reset();
+        this.getVisaTypes();
+        this._swal.show({
+          icon: 'success',
+          title: r.data.title,
+          text: r.data.text,
+          showCancel: false,
+          timer: 1000
+        })
       })
-    })
+    } else {
+      this._swal.incompleteError();
+    }
   }
 
   activateOrInactivate(visa, state) {

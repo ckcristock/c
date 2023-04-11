@@ -8,13 +8,13 @@ import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swa
   styleUrls: ['./accommodations.component.scss']
 })
 export class AccommodationsComponent implements OnInit {
-  @Input('data') values : any;
+  @Input('data') values: any;
   @Input('pagination') pagination: any;
-  @Output() saveEvent = new EventEmitter<any> ();
-  @Output() paginationEvent = new EventEmitter<any> ();
-  @Output() anularOActivarEvent = new EventEmitter<any> ();
+  @Input('loading') loading: any;
+  @Output() saveEvent = new EventEmitter<any>();
+  @Output() paginationEvent = new EventEmitter<any>();
+  @Output() anularOActivarEvent = new EventEmitter<any>();
 
-  loading: boolean = false;
   filtro: any = {
     value: ''
   }
@@ -34,29 +34,33 @@ export class AccommodationsComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [this.value.id],
-      name: ['', Validators.required]
+      name: ['']
     })
   }
 
-  getValue(value: any){
+  getValue(value: any) {
     this.title = 'Editar'
-    this.value = {...value}
+    this.value = { ...value }
     this.form.patchValue({
       id: value.id,
       name: value.name
     })
   }
 
-  getValues($event){
+  getValues($event) {
     this.paginationEvent.emit($event);
   }
 
-  save(){
-    this.saveEvent.emit(this.form)
+  save() {
+    if (this.form.get('name').value) {
+      this.saveEvent.emit(this.form)
+    } else {
+      this._swal.incompleteError()
+    }
   }
 
-  anularOActivar(value: any, action: any){
-    let params = { value, action}
+  anularOActivar(value: any, action: any) {
+    let params = { value, action }
     this.anularOActivarEvent.emit(params)
   }
 }

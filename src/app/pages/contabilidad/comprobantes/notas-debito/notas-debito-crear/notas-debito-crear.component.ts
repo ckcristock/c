@@ -11,14 +11,15 @@ import { environment } from 'src/environments/environment';
 import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
-  selector: 'app-notascreditocrear',
-  templateUrl: './notascreditocrear.component.html',
-  styleUrls: ['./notascreditocrear.component.scss']
+  selector: 'app-notas-debito-crear',
+  templateUrl: './notas-debito-crear.component.html',
+  styleUrls: ['./notas-debito-crear.component.scss']
 })
-export class NotascreditocrearComponent implements OnInit {
+export class NotasDebitoCrearComponent implements OnInit {
+  //!Hay que cambiar todo, actualmente solo es copia de notas crédito
   enviromen: any;
   public datosCabecera: any = {
-    Titulo: 'Nueva nota de crédito',
+    Titulo: 'Nueva nota de débito',
     Fecha: new Date(),
     Codigo: ''
   }
@@ -435,5 +436,6 @@ export class NotascreditocrearComponent implements OnInit {
     this.Codigo_Factura = '';
 
   }
+
 
 }

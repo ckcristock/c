@@ -132,4 +132,22 @@ export class SwalService {
     return Swal.fire(swal)
   }
 
+  incompleteError() {
+    let swal: any = {
+      title: 'Campos incompletos',
+      text: 'Revisa todos los campos requeridos y vuelve a intentarlo.',
+      icon: 'error',
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+      showCancelButton: false,
+      confirmButtonColor: '#F27474',
+      confirmButtonText: 'OK',
+      cancelButtonColor: this.buttonColor.cancel,
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+
+    };
+    return Swal.fire(swal)
+  }
+
 }

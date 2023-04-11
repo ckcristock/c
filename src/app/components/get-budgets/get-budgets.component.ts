@@ -43,7 +43,7 @@ export class GetBudgetsComponent implements OnInit {
   }
 
   openModal() {
-    this._modal.open(this.modal, 'xl');
+    this._modal.openNoClose(this.modal, 'xl');
     this.createFormFilters();
     this.getBudgets();
     this.getPeople();

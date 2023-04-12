@@ -113,7 +113,7 @@ export class ReporteHorarioComponent implements OnInit {
     }
   }
 
-  openClose(){
+  openClose() {
     this.matPanel = !this.matPanel;
     this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
   }
@@ -146,7 +146,7 @@ export class ReporteHorarioComponent implements OnInit {
 
   createFormFilters() {
     this.formFilters = this.fb.group({
-      turn_type: [''],
+      turn_type: ['Rotativo'],
       group_id: [''],
       dependency_id: [''],
       company_id: [1],
@@ -194,13 +194,13 @@ export class ReporteHorarioComponent implements OnInit {
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/rrhh/turnos/reporte', paramsurl.toString());
     const fecha_ini = this.formFilters.controls.date_from.value == ''
-                        ? moment().format('YYYY-MM-DD')
-                        : this.formFilters.controls.date_from.value
+      ? moment().format('YYYY-MM-DD')
+      : this.formFilters.controls.date_from.value
     const fecha_fin = this.formFilters.controls.date_to.value == ''
-                        ? moment().format('YYYY-MM-DD')
-                        : this.formFilters.controls.date_to.value
+      ? moment().format('YYYY-MM-DD')
+      : this.formFilters.controls.date_to.value
     this._reporteHorario
-      .getFixedTurnsDiaries(fecha_ini, fecha_fin, params )
+      .getFixedTurnsDiaries(fecha_ini, fecha_fin, params)
       .subscribe((r) => {
         this.reporteHorarios = r.data;
         this.loading = false;
@@ -227,7 +227,7 @@ export class ReporteHorarioComponent implements OnInit {
     });
   }
   getCompanies() {
-    this.companies = this.user.person.companies.map(ele=>({value: ele.id, text: ele.short_name}));
+    this.companies = this.user.person.companies.map(ele => ({ value: ele.id, text: ele.short_name }));
     this.formFilters.patchValue({
       company_id: 1
     })
@@ -239,20 +239,21 @@ export class ReporteHorarioComponent implements OnInit {
 
   get turn_type_value() {
     const turnType = this.formFilters.get('turn_type').value;
-  if (turnType === 'Todos') { // Si se selecciona la opción "Todos"
-    return ''; // Retorna un valor vacío para que se muestren todos los datos
-  }
-  return turnType; // De lo contrario, retorna el valor del campo de filtro
+    console.log(turnType);
+    if (turnType === 'Todos') { // Si se selecciona la opción "Todos"
+      return ''; // Retorna un valor vacío para que se muestren todos los datos
+    }
+    return turnType; // De lo contrario, retorna el valor del campo de filtro
   }
 
   donwloading = false;
   download() {
     const fecha_ini = this.formFilters.controls.date_from.value == ''
-                        ? moment().format('YYYY-MM-DD')
-                        : this.formFilters.controls.date_from.value
+      ? moment().format('YYYY-MM-DD')
+      : this.formFilters.controls.date_from.value
     const fecha_fin = this.formFilters.controls.date_to.value == ''
-                        ? moment().format('YYYY-MM-DD')
-                        : this.formFilters.controls.date_to.value
+      ? moment().format('YYYY-MM-DD')
+      : this.formFilters.controls.date_to.value
 
     this.donwloading = true;
 
@@ -277,10 +278,10 @@ export class ReporteHorarioComponent implements OnInit {
       };
   }
 
-  getForm(){
+  getForm() {
     let form = this.formFilters.value;
     if (form.person_id == null) {
-       delete form.person_id
+      delete form.person_id
     }
     return form
   }

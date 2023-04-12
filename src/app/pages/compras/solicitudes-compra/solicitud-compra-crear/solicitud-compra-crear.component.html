@@ -1,0 +1,126 @@
+<ng-container [formGroup]="form">
+  <div class="card">
+    <div class="card-body">
+      <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+      <hr class="line" />
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo de solicitud independiente</mat-label>
+          <mat-select required formControlName="category_id">
+            <mat-option
+              *ngFor="let category of categories"
+              [value]="category.value"
+              >{{ category.text }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Fecha esperada</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            placeholder="Elije la fecha"
+            required
+            formControlName="expected_date"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-12 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Observaciones</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingresa las observaciones"
+            rows="5"
+            required
+            formControlName="observations"
+            [cdkTextareaAutosize]="true"
+          ></textarea>
+        </mat-form-field>
+        <mat-form-field class="col-12" appearance="outline">
+          <mat-label> Productos </mat-label>
+          <input
+            matInput
+            #inputProduct
+            type="text"
+            id="typeahead-http"
+            [class.is-invalid]="searchFailed"
+            [ngbTypeahead]="search"
+            [inputFormatter]="formatter"
+            [resultFormatter]="formatter"
+            (selectItem)="addProduct($event.item, $event, inputProduct)"
+            placeholder="Busca producto"
+            required
+            autocomplete="off"
+          />
+          <mat-hint *ngIf="searching"> Buscando </mat-hint>
+          <mat-hint *ngIf="searchFailed">
+            No hemos encontrado resultados
+          </mat-hint>
+        </mat-form-field>
+      </div>
+      <ng-container formArrayName="products">
+        <ng-container *ngIf="products.controls.length > 0; else notData">
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>#</th>
+                  <th>Referencia</th>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                  <th>Unidad de medida</th>
+                  <th><i class="mdi mdi-chevron-down"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  [formGroupName]="i"
+                  *ngFor="let product of products.controls; let i = index"
+                  class="text-center"
+                >
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ product.get("reference").value }}</td>
+                  <td>{{ product.get("name").value }}</td>
+                  <td>
+                    <input
+                      type="text"
+                      formControlName="ammount"
+                      currencyMask
+                      [options]="masks.maskNumbers"
+                      appInputPositionInitial
+                      class="w-100 border-0"
+                      style="border: 0;"
+                    />
+                  </td>
+                  <td>{{ product.get("unit").value }}</td>
+                  <td> <button type="button"
+                    (click)="addProduct()"
+                    class="btn btn-danger btn-sm btn-block">Eliminar</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+        <!-- <button
+          type="button"
+          (click)="addProduct()"
+          class="btn btn-primary btn-sm btn-block"
+        >
+          <i class="fas fa-plus"></i> Agregar
+        </button> -->
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+
+<button type="button" class="btn btn-primary" (click)="view()"></button>
+<ng-template #notData>
+  <app-not-data></app-not-data>
+</ng-template>

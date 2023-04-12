@@ -38,7 +38,7 @@ export class SwalService {
       }
     }
   }
-  show({ title, text, icon, timer = 0, showCancel = true,
+  show({ title, text, icon, timer = 0, showCancel = true, confirmButtonColor = null
 
   }, preConfirm?) {
     let swal: any = {
@@ -49,7 +49,7 @@ export class SwalService {
       allowOutsideClick: true,
       allowEscapeKey: true,
       showCancelButton: showCancel,
-      confirmButtonColor: this.buttonColor.confirm,
+      confirmButtonColor: confirmButtonColor || this.buttonColor.confirm,
       confirmButtonText: showCancel ? '¡Sí, confirmar!' : 'OK',
       cancelButtonColor: this.buttonColor.cancel,
       cancelButtonText: 'Cancelar',

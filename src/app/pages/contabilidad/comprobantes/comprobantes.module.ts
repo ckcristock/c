@@ -33,6 +33,8 @@ import { NotasDebitoComponent } from './notas-debito/notas-debito.component';
 import { TiposNotaCreditoComponent } from './notascredito/tipos-nota-credito/tipos-nota-credito.component';
 import { NotasDebitoVerComponent } from './notas-debito/notas-debito-ver/notas-debito-ver.component';
 import { NotasDebitoCrearComponent } from './notas-debito/notas-debito-crear/notas-debito-crear.component';
+import { NgxCurrencyModule } from 'ngx-currency';
+import { DirectivesModule } from 'src/app/core/directives/directives.module';
 
 
 @NgModule({
@@ -76,6 +78,8 @@ import { NotasDebitoCrearComponent } from './notas-debito/notas-debito-crear/not
     MatNativeDateModule,
     MatDatepickerModule,
     NgbModule,
+    NgxCurrencyModule,
+    DirectivesModule,
     SweetAlert2Module.forRoot()
   ],
   providers: [

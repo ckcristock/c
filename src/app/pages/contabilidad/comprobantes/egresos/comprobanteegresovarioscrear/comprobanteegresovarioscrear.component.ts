@@ -3,7 +3,6 @@ import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { SwalService } from '../../../../ajustes/informacion-base/services/swal.service';
 import swal from 'sweetalert2';
 import { Observable } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
@@ -12,6 +11,8 @@ import { EgresosService } from '../egresos.service';
 import { NotasContablesService } from '../../notas-contables/notas-contables.service';
 import { environment } from 'src/environments/environment';
 import { CentroCostosService } from '../../../centro-costos/centro-costos.service';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-comprobanteegresovarioscrear',
@@ -19,26 +20,21 @@ import { CentroCostosService } from '../../../centro-costos/centro-costos.servic
   styleUrls: ['./comprobanteegresovarioscrear.component.scss']
 })
 export class ComprobanteegresovarioscrearComponent implements OnInit {
+  @ViewChild('FormEgreso') FormEgreso: any;
+  @ViewChild('confirmacionSwal') confirmacionSwal: any;
 
   public datosCabecera: any = {
     Titulo: 'Nuevo egreso',
     Fecha: new Date(),
     Codigo: ''
   }
-
+  masks = consts;
   public Tipo_Comprobante: string = 'Egreso'
   public alertOption: SweetAlertOptions = {};
   public Cargando: boolean = false;
   public Mostrar_Facturas: boolean = false;
   public Facturas: any = [];
   public position_document: number;
-
-  public ChequesSeleccionados: any = [];
-
-  @ViewChild('FormEgreso') FormEgreso: any;
-  @ViewChild('confirmacionSwal') confirmacionSwal: any;
-  @ViewChild('confirmacionGuardarCheque') confirmacionGuardarCheque: SwalComponent;
-  @ViewChild('modalAgregarCheque') modalAgregarCheque: any;
   public fecha = new Date();
   public Fecha: any = '';
   public display_Banco: string = 'none';
@@ -83,7 +79,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   public Retenciones_Totales = 0;
   public Mostrar: boolean = false;
   public Mostrar_Cliente: boolean = false;
-  public Forma_Pago: string = 'Cheque';
+  public Forma_Pago: string;
   public Impuesto = 0;
   public reducer = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Subtotal);
   public reducer_deb = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Debito);
@@ -108,14 +104,12 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   Tipo_Beneficiario: any;
   Documento: string = '';
   Concepto: string = '';
-  Cheques: any = [];
   public ModelCheque: any = {
     Id_Plan_Cuentas: '',
     Prefijo: '',
     Inicial: null,
     Final: null
   }
-  mostrarCheque: boolean = true;
   idBorrador: any = '';
   Codigo: string = '';
   public Total_Abono: number = 0;
@@ -125,7 +119,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private router: Router,
-    // private swalService: SwalService,
+    private _swal: SwalService,
     private _egresos: EgresosService,
     private _general: NotasContablesService,
     private _companies: CentroCostosService
@@ -151,23 +145,6 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       preConfirm: (value) => {
         return new Promise((resolve) => {
           this.guardarEgreso(this.FormEgreso, value);
-        })
-      },
-      allowOutsideClick: () => !swal.isLoading()
-    }
-
-    this.alertOption2 = {
-      title: "¿Está Seguro?",
-      text: "Se dispone a registrar un nuevo cheque",
-      showCancelButton: true,
-      cancelButtonText: "No, Dejame Comprobar!",
-      confirmButtonText: 'Si, Registrar',
-      showLoaderOnConfirm: true,
-      focusCancel: true,
-      icon: 'info',
-      preConfirm: () => {
-        return new Promise((resolve) => {
-          this.nuevoCheque(this.modalAgregarCheque);
         })
       },
       allowOutsideClick: () => !swal.isLoading()
@@ -216,7 +193,6 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
 
     this.ListarRetenciones();
 
-    this.listarCheques();
     // this.getCompanies();
   }
 
@@ -229,6 +205,17 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   BuscarProveedor(modelo) {
     this.NombreProveedor = modelo.Proveedores;
     this.Id_Proveedor = modelo.Id_Proveedor;
+  }
+  transferCodeView: boolean;
+  chequeNumber: boolean;
+  formaPagoChange(e) {
+    if (e.value == 'Transferencia') {
+      this.transferCodeView = true;
+      this.chequeNumber = false;
+    } else {
+      this.transferCodeView = false;
+      this.chequeNumber = true;
+    }
   }
 
   BuscarDatosCliente(cliente, pos?) {
@@ -549,7 +536,7 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
 
     setTimeout(() => { // Para actualizar los totales
       this.ActualizaValores();
-      this.armarDatosBorrador();
+      //this.armarDatosBorrador();
     }, 200);
 
   }
@@ -565,41 +552,6 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     return '0';
   }
 
-  listarCheques() {
-    this.http.get(environment.base_url + '/php/comprobantes/lista_cheques.php').subscribe((data: any) => {
-      this.Cheques = data;
-    });
-  }
-
-  nuevoCheque(modal) {
-
-    let info = this._egresos.normalize(JSON.stringify(this.ModelCheque));
-
-    let datos = new FormData();
-    datos.append('datos', info);
-
-    this.http.post(environment.ruta + 'php/comprobantes/nuevo_cheque.php', datos).subscribe((data: any) => {
-      let toastObj = { textos: [data.titulo, data.mensaje], tipo: data.tipo, duracion: 4000 };
-      this._egresos.ShowToast(toastObj);
-
-      modal.hide();
-      // this.confirmacionGuardarCheque.nativeSwal.close();
-
-      this.listarCheques();
-
-      this.ModelCheque = {
-        Id_Plan_Cuentas: '',
-        Prefijo: '',
-        Inicial: null,
-        Final: null
-      }
-
-
-    });
-
-    // return true;
-
-  }
 
   isBank(banco, pos) {
     let existe = this.Bancos.findIndex(x => x.value == banco.Id_Plan_Cuentas);
@@ -617,13 +569,17 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
   validarCampo(campo, event, tipo) { // Funcion que validará los campos de typeahead
     if (typeof (campo) != 'object' && campo != '') {
       let id = event.target.id;
-      (document.getElementById(id) as HTMLInputElement).focus();
-      Swal.fire({
+      //(document.getElementById(id) as HTMLInputElement).focus();
+      this.Nom_Centro_Costo = ''
+      event.target.value = ''
+      console.log(event)
+      this._swal.show({
         icon: 'error',
-        title: 'Incorrecto!',
-        text: `El valor ${tipo} no es valido.`
+        title: '¡Incorrecto!',
+        text: `${tipo} no válido.`,
+        showCancel: false,
+        confirmButtonColor: '#F27474'
       })
-      // this.swalService.ShowMessage(swal);
     }
   }
 
@@ -647,18 +603,8 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     }, 200);
   }
 
-  formaPago(tipo) {
-    if (tipo == 'Cheque') {
-      this.mostrarCheque = true;
-    } else {
-      this.mostrarCheque = false;
-    }
-  }
-
   tab(event, ele) {
-
     this._general.tabular(event, ele);
-
   }
 
   reloadData() {
@@ -675,47 +621,6 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
 
   }
 
-  armarDatosBorrador() {
-    let datosCabecera = {
-      Fecha: this.Fecha_Nota_Contable,
-      Beneficiario: this.Nom_Cliente,
-      Id_Cliente: this.Id_Cliente,
-      Tipo_Beneficiario: this.Tipo_Beneficiario,
-      Nom_Centro_Costo: this.Nom_Centro_Costo,
-      Centro_Costo: this.Centro_Costo,
-      Documento: this.Documento,
-      Concepto: this.Concepto,
-      ChequesSeleccionados: this.ChequesSeleccionados
-    };
-
-    let Datos = {
-      Cabecera: datosCabecera,
-      Cuentas_Contables: this.Cuentas_Contables
-    };
-
-    setTimeout(() => {
-      let datosBorrador = {
-        Id_Borrador_Contabilidad: this.idBorrador,
-        Codigo: this.Codigo,
-        Tipo_Comprobante: 'Egreso',
-        // Identificacion_Funcionario: this.Funcionario.Identificacion_Funcionario,
-        Datos: Datos
-      }
-
-      let info = this._egresos.Utf8.encode(JSON.stringify(datosBorrador));
-
-      let datos = new FormData();
-      datos.append('datos', info);
-      this.http.post(environment.base_url + '/php/contabilidad/guardar_borrador_contable.php', datos)
-        .subscribe((data: any) => {
-          if (data.status == 202) {
-            if (this.idBorrador == '')
-              this.idBorrador = data.Id_Borrador;
-          }
-        })
-    }, 300);
-  }
-
   setDatosBorrador(data = null) {
 
     if (data == 'clean') {
@@ -729,7 +634,6 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       this.Nom_Centro_Costo = Datos.Cabecera.Nom_Centro_Costo;
       this.Centro_Costo = Datos.Cabecera.Centro_Costo;
       this.Documento = Datos.Cabecera.Documento;
-      this.ChequesSeleccionados = Datos.Cabecera.ChequesSeleccionados;
       this.Concepto = Datos.Cabecera.Concepto;
       this.Cuentas_Contables = Datos.Cuentas_Contables;
       this.datosCabecera.Codigo = data.Codigo;
@@ -764,7 +668,6 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       Cred_Niif: 0
     }];
 
-    this.ChequesSeleccionados = [];
 
     this.datosCabecera.Codigo = this.getCodigoEgreso();
   }

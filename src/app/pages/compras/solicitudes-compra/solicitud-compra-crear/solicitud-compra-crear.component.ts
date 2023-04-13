@@ -4,6 +4,8 @@ import { SolicitudesCompraService } from '../solicitudes-compra.service';
 import { Observable, OperatorFunction, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { consts } from 'src/app/core/utils/consts';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-solicitud-compra-crear',
@@ -22,7 +24,9 @@ export class SolicitudCompraCrearComponent implements OnInit {
   }
   constructor(
     private fb: FormBuilder,
-    private _solicitudesCompra: SolicitudesCompraService
+    private _solicitudesCompra: SolicitudesCompraService,
+    private _swal: SwalService,
+    private _modal: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -74,6 +78,7 @@ formatter = (x: any) => x.name;
 
 addProduct(prod, $event, input) {
   let product = this.fb.group({
+    id: [prod.Id_Producto],
     reference: [prod.Referencia],
     name: [prod.name],
     ammount: [1, Validators.min(1)],
@@ -87,6 +92,46 @@ addProduct(prod, $event, input) {
 
   get products() {
     return this.form.get('products') as FormArray;
+  }
+
+  deleteProduct(index: number) {
+    this.products.removeAt(index);
+  }
+
+  savePurchaseRequest(){
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: 'Si ya verificó la información y está de acuerdo, por favor proceda.',
+      icon: 'question',
+      showCancel: true
+    }).then(result => {
+      if (result.isConfirmed) {
+        const data = this.form.value;
+        this._solicitudesCompra.savePurchaseRequest(data).subscribe(r=>{ 
+          this._swal.show({
+            title:'Tarea completada con éxito!',
+            text: 'Solicitud de compra creada',
+            icon: 'success',
+            showCancel: false,
+            timer: 3000
+          })
+          //this._modal.close();
+        })
+    console.log(this.form.value)
+      }else{
+        this._swal.show({
+          icon: 'error',
+          title: '¡Solicitud Cancelada!',
+          text: 'La solicitud no ha sido registrada correctamente',
+          timer: 3000,
+          showCancel: false
+        })
+      }
+    }); 
+  }
+
+  prueba(){
+    console.log('click')
   }
 
 }

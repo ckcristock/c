@@ -1,4 +1,4 @@
-<ng-container [formGroup]="form">
+<ng-container [formGroup]="form"  id="form">
   <div class="card">
     <div class="card-body">
       <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
@@ -100,14 +100,17 @@
                     />
                   </td>
                   <td>{{ product.get("unit").value }}</td>
-                  <td> <button type="button"
-                    (click)="addProduct()"
-                    class="btn btn-danger btn-sm btn-block">Eliminar</button></td>
+                  <td> <button type="button" (click)="deleteProduct(i)" class="btn btn-danger btn-sm btn-block"><i class="fas fa-trash-alt"></i></button></td>
                 </tr>
               </tbody>
             </table>
+            <button class="btn btn-block btn-primary mt-3" type="submit" form="form" (click)="savePurchaseRequest()">
+              Guardar
+            </button> 
           </div>
         </ng-container>
+
+        
         <!-- <button
           type="button"
           (click)="addProduct()"
@@ -115,6 +118,7 @@
         >
           <i class="fas fa-plus"></i> Agregar
         </button> -->
+        
       </ng-container>
     </div>
   </div>

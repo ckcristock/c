@@ -21,4 +21,9 @@ export class SolicitudesCompraService {
       map(response => response['data'])
     );
   }
+
+  savePurchaseRequest(data: any) {
+    return this.http.post(`${environment.base_url}/purchase-request`, data);
+
+  }
 }

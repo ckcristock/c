@@ -31,6 +31,8 @@ import { SolicitudesCompraComponent } from './solicitudes-compra/solicitudes-com
 import { SolicitudCompraCrearComponent } from './solicitudes-compra/solicitud-compra-crear/solicitud-compra-crear.component';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 
 export const MY_FORMATS = {
   parse: {
@@ -52,13 +54,13 @@ export const MY_FORMATS = {
     SolicitudCompraCrearComponent,
   ],
   providers: [
-      {
-        provide: DateAdapter,
-        useClass: MomentDateAdapter,
-        deps: [MAT_DATE_LOCALE],
-      },
-      { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    ],
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+  ],
   imports: [
     PresupuestoModule,
     NgSelectModule,
@@ -84,7 +86,8 @@ export const MY_FORMATS = {
     SatDatepickerModule,
     SatNativeDateModule,
     NgxCurrencyModule,
-    DirectivesModule
+    DirectivesModule,
+    MatPaginatorModule,
 
   ],
 

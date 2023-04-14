@@ -143,6 +143,8 @@ export class DatosEmpresaComponent implements OnInit {
         })
       });
   }
+
+
   createForm() {
     this.form = this.fb.group({
       dependency_id: ['', Validators.required],
@@ -160,6 +162,7 @@ export class DatosEmpresaComponent implements OnInit {
       this.form.get('dependency_id').invalid && this.form.get('dependency_id').touched
     );
   }
+  
   get company_valid() {
     return (
       this.form.get('company_id').invalid && this.form.get('company_id').touched

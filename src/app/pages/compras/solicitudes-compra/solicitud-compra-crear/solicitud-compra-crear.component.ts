@@ -6,6 +6,7 @@ import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from '
 import { consts } from 'src/app/core/utils/consts';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { ModalService } from 'src/app/core/services/modal.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-solicitud-compra-crear',
@@ -26,7 +27,8 @@ export class SolicitudCompraCrearComponent implements OnInit {
     private fb: FormBuilder,
     private _solicitudesCompra: SolicitudesCompraService,
     private _swal: SwalService,
-    private _modal: ModalService
+    private _modal: ModalService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -40,9 +42,9 @@ export class SolicitudCompraCrearComponent implements OnInit {
     })
   }
 
-  view(){
-    console.log(this.form)
-  }
+  // view(){
+  //   console.log(this.form)
+  // }
 
   createForm() {
     this.form = this.fb.group({
@@ -64,7 +66,13 @@ export class SolicitudCompraCrearComponent implements OnInit {
         tap(() => (this.searching = true)),
         switchMap((term) =>
             this._solicitudesCompra.getProducts({ search: term, category_id: this.form.get('category_id').value  }).pipe(
-                tap(() => (this.searchFailed = false)),
+              tap((results) => {
+                if (results.length === 0) {
+                    this.searchFailed = true;
+                } else {
+                    this.searchFailed = false;
+                }
+                }),
                 catchError(() => {
                     this.searchFailed = true;
                     return of([]);
@@ -99,39 +107,59 @@ addProduct(prod, $event, input) {
   }
 
   savePurchaseRequest(){
-    this._swal.show({
-      title: '¿Estás seguro(a)?',
-      text: 'Si ya verificó la información y está de acuerdo, por favor proceda.',
-      icon: 'question',
-      showCancel: true
-    }).then(result => {
-      if (result.isConfirmed) {
-        const data = this.form.value;
-        this._solicitudesCompra.savePurchaseRequest(data).subscribe(r=>{ 
-          this._swal.show({
-            title:'Tarea completada con éxito!',
-            text: 'Solicitud de compra creada',
-            icon: 'success',
-            showCancel: false,
-            timer: 3000
+    
+    if (this.form.invalid) { return false; }
+    if (this.form.valid) {
+      this._swal.show({
+        title: '¿Estás seguro(a)?',
+        text: 'Si ya verificaste la información y estás de acuerdo, por favor procede.',
+        icon: 'question',
+        showCancel: true
+      }).then(result => {
+        if (result.isConfirmed) {
+          const data = this.form.value;
+          this._solicitudesCompra.savePurchaseRequest(data).subscribe(r=>{ 
+            this._swal.show({
+              title:'Tarea completada con éxito!',
+              text: 'Solicitud de compra creada',
+              icon: 'success',
+              showCancel: false,
+              timer: 3000
+            })
+            
+            this.router.navigateByUrl('/compras/solicitud')
           })
-          //this._modal.close();
-        })
-    console.log(this.form.value)
-      }else{
-        this._swal.show({
-          icon: 'error',
-          title: '¡Solicitud Cancelada!',
-          text: 'La solicitud no ha sido registrada correctamente',
-          timer: 3000,
-          showCancel: false
-        })
-      }
-    }); 
+      console.log(this.form.value)
+        }else{
+          this._swal.show({
+            icon: 'error',
+            title: '¡Solicitud Cancelada!',
+            text: 'La solicitud no ha sido registrada correctamente',
+            timer: 3000,
+            showCancel: false
+          })
+        }
+      }); 
+    }
+    
   }
 
-  prueba(){
-    console.log('click')
+  get category_id_valid(){
+    return (
+      this.form.get('category_id').invalid && this.form.get('category_id').touched
+    );
+  }
+
+  get expected_date_valid(){
+    return (
+      this.form.get('expected_date').invalid && this.form.get('expected_date').touched
+    );
+  }
+
+  get observations_valid(){
+    return (
+      this.form.get('observations').invalid && this.form.get('observations').touched
+    );
   }
 
 }

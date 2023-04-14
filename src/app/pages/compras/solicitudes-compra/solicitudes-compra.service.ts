@@ -26,4 +26,10 @@ export class SolicitudesCompraService {
     return this.http.post(`${environment.base_url}/purchase-request`, data);
 
   }
+
+  getPurchaseRequest(params = {}) {
+    return this.http.get(`${environment.base_url}/paginate-purchase-request`, { params });
+  }
 }
+
+

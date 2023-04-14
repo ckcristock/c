@@ -13,6 +13,7 @@
               >{{ category.text }}</mat-option
             >
           </mat-select>
+          <mat-error *ngIf="category_id_valid"> Campo obligatorio </mat-error>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Fecha esperada</mat-label>
@@ -22,12 +23,15 @@
             placeholder="Elije la fecha"
             required
             formControlName="expected_date"
+            readonly
+            autocomplete="off"
           />
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"
           ></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="expected_date_valid"> Campo obligatorio </mat-error>
         </mat-form-field>
         <mat-form-field
           class="col-md-12 mat-form-field-no-padding textarea"
@@ -42,6 +46,7 @@
             formControlName="observations"
             [cdkTextareaAutosize]="true"
           ></textarea>
+          <mat-error *ngIf="observations_valid"> Campo obligatorio </mat-error>
         </mat-form-field>
         <mat-form-field class="col-12" appearance="outline">
           <mat-label> Productos </mat-label>
@@ -55,7 +60,7 @@
             [inputFormatter]="formatter"
             [resultFormatter]="formatter"
             (selectItem)="addProduct($event.item, $event, inputProduct)"
-            placeholder="Busca producto"
+            placeholder="Busca producto segun tipo de solicitud independiente"
             required
             autocomplete="off"
           />
@@ -104,27 +109,17 @@
                 </tr>
               </tbody>
             </table>
-            <button class="btn btn-block btn-primary mt-3" type="submit" form="form" (click)="savePurchaseRequest()">
+            <button class="btn btn-block btn-primary mt-3" type="submit" form="form" [disabled]="!form.valid" (click)="savePurchaseRequest()">
               Guardar
             </button> 
           </div>
-        </ng-container>
-
-        
-        <!-- <button
-          type="button"
-          (click)="addProduct()"
-          class="btn btn-primary btn-sm btn-block"
-        >
-          <i class="fas fa-plus"></i> Agregar
-        </button> -->
-        
+        </ng-container>       
       </ng-container>
     </div>
   </div>
 </ng-container>
 
-<button type="button" class="btn btn-primary" (click)="view()"></button>
+<!-- <button type="button" class="btn btn-primary" (click)="view()"></button> -->
 <ng-template #notData>
   <app-not-data></app-not-data>
 </ng-template>

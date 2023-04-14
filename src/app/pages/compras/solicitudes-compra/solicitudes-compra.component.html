@@ -2,19 +2,172 @@
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
-        <h4 class="text-primary">Solicitudes de compra</h4>
+        <h4 class="text-primary">
+          Solicitudes de compra
+          <span style="font-size: smaller" *ngIf="paginationMaterial"
+            ><small class="pb-2 text-secondary text-muted"
+              >pág. {{ paginationMaterial.current_page }}</small
+            ></span>
+        </h4>
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
           <button class="btn btn-primary btn-sm" [routerLink]="['crear']">
+            <!-- //este boton debe tener un ngIf de permisos  -->
             <i class="fa fa-plus"></i> Agregar
-          </button>
-          <!-- <button class="btn btn-info btn-sm" (click)="openClose()">
+          </button>  
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
-          </button> -->
+          </button> 
         </div>
       </div>
     </div>
     <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <ng-container [formGroup]="formFilters">
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Estado</mat-label>
+              <mat-select formControlName="status">
+                <input
+                type="text"
+                matInput
+                formControlName="status"
+                autocomplete="off"
+                placeholder="Busca por número de solicitud"
+              />
+                <!-- <mat-option value="xx"
+                  >Pendiente</mat-option
+                >
+                <mat-option value="xx"
+                  >Aprobada</mat-option
+                >
+                <mat-option value="xx">Rechazada</mat-option>
+                <mat-option value="">Todas</mat-option> -->
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label> Número de solicitud</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="purchase_request_id"
+                autocomplete="off"
+                placeholder="Busca por número de solicitud"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label> Fecha de solicitud</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="purchase_request_date"
+                autocomplete="off"
+                placeholder="Busca por número de solicitud"
+              />
+              <!-- <input
+                matInput
+                [satDatepicker]="pickerDelivery"
+                [value]="date"
+                (dateChange)="selectedDate($event, 'delivery')"
+                name="daterange"
+                autocomplete="off"
+              />
+              <sat-datepicker
+                #pickerDelivery
+                [rangeMode]="true"
+              ></sat-datepicker>
+              <sat-datepicker-toggle
+                matSuffix
+                [for]="pickerDelivery"
+              ></sat-datepicker-toggle> -->
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label> Funcionario</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="funcionario"
+                autocomplete="off"
+                placeholder="Busca por nombre del funcionario"
+              />
+            </mat-form-field>
+            
+          </ng-container>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <!-- //aqui va el mat accordion de los filtros y un div que dice que hay filtros de busqueda activos  -->
+    <div class="rounded-top table-responsive">
+      <table class="table table-bordered table-striped table-sm"
+      *ngIf="!loading && solicitudesCompra.length > 0; else notData">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase"
+          >
+            <th>#Solicitud</th>
+            <th>Fecha solicitud</th>
+            <th>Funcionario</th>
+            <th>Orden de producción</th>
+            <th>Fecha esperada</th>
+            <th>Estado</th>
+            <th>#Productos</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- *nfor -->
+          <tr *ngFor="let solicitud of solicitudesCompra" class="text-center">             
+           <td class="align-middle">{{solicitud.id}}</td>
+           <td class="align-middle">{{solicitud.created_at | date : "MMM d, y"}}</td>
+           <td class="align-middle"></td>
+           <td class="align-middle"></td>           
+           <td class="align-middle">{{solicitud.expected_date | date : "MMM d, y"}}</td>
+           <td class="align-middle">{{solicitud.status}}</td>
+           <td class="align-middle">{{solicitud.quantity_of_products}}</td>
+           <td class="align-middle">
+            <div ngbDropdown container="body" class="dropdown-primary">
+              <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm"
+                      type="button"
+                    >
+                      <i class="mdi mdi-chevron-down"></i>
+              </button>
+              <div ngbDropdownMenu>
+                <a
+                type="button"
+                class="dropdown-item text-info"><i class="fas fa-edit"></i>
+              Editar</a>
+              <a
+                type="button"
+                class="dropdown-item text-success"><i class="fas fa-upload"></i>
+              Cotizar</a>
+              </div>
+            </div>
+           </td>
+           
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <!-- aqui va el paginator  -->
+    <mat-paginator
+      *ngIf="paginationMaterial"
+      [length]="paginationMaterial.total"
+      [pageSize]="paginationMaterial.per_page"
+      [pageIndex]="paginationMaterial.current_page - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
   </div>
 </div>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<!--  aqui va el notdata para que mientras trae los datos este la fechita dando vueltas  -->

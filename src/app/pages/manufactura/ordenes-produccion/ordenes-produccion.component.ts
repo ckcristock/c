@@ -203,3 +203,6 @@ export class OrdenesProduccionComponent implements OnInit {
     this._work_orders.updateWorkOrder(id, param).subscribe();
   }
 }
+
+
+

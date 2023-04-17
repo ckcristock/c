@@ -53,7 +53,6 @@ import { CatalogoComponent } from './catalogo/catalogo.component';
 import { TableProductosCatalogoComponent } from './catalogo/components/table-productos-catalogo/table-productos-catalogo.component';
 import { ActivoFijoCatalogoComponent } from './catalogo/components/activo-fijo-catalogo/activo-fijo-catalogo.component';
 import { ProductoComponent } from './productos/producto/producto.component';
-import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
 import { CrearProductoComponent } from './productos/crear-producto/crear-producto.component';
 import { DotacionCrearComponent } from './catalogo/components/dotacion-crear/dotacion-crear.component';
 import { BoardPermissionsComponent } from './funcionarios/detalle-funcionario/permissions/board-permissions/board-permissions.component';
@@ -98,6 +97,8 @@ export const MY_FORMATS = {
 };
 import { ProfilePermissionsComponent } from './funcionarios/detalle-funcionario/permissions/profile-permissions/profile-permissions.component';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
+import { EmbalajeComponent } from './catalogo/components/embalaje/embalaje.component';
+import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
 
 @NgModule({
   declarations: [
@@ -136,7 +137,6 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
     TableProductosCatalogoComponent,
     ActivoFijoCatalogoComponent,
     ProductoComponent,
-    EditarProductoComponent,
     CrearProductoComponent,
     DotacionCrearComponent,
     BoardPermissionsComponent,
@@ -145,6 +145,8 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
     BodegasComponent,
     FilePermissionsComponent,
     ProfilePermissionsComponent,
+    EmbalajeComponent,
+    EditarProductoComponent,
   ],
 
   imports: [

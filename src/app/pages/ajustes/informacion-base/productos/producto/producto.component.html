@@ -1,50 +1,45 @@
-<ng-container *ngIf="!cargando.valor(); else notProduct">
+<ng-container *ngIf="!loading; else placeholder">
   <div class="row">
     <div class="col-lg-4">
       <div class="card">
         <div class="card-body">
           <h5 class="text-primary">Actividad</h5>
           <hr class="line" />
-          <div class="text-center justify-content-center">
-            <ng-container *ngIf="Actividades.length > 0; else notActividad">
-              <ng-container *ngFor="let item of Actividades">
-                <section class="gradient-custom-5">
-                  <div class="main-timeline-5">
-                    <div class="timeline-5 right-5">
-                      <div class="card bg-light">
-                        <div class="card-body p-4">
-                          <div class="d-flex justify-content-between text-left">
-                            <h6>
-                              <!-- <i [class]="item.icon"></i> {{ item.title }} <br /> -->
-                              <div
-                                class="text-muted"
-                                style="font-size: x-small"
-                              >
-                                <i class="fas fa-clock me-1"></i>
-                                {{ item.Fecha | date : "MMM d, y, h:mm a" }}
-                              </div>
-                              <div class="text-muted" style="font-size: small">
-                                <i class="fas fa-user me-1"></i>
-                                {{ item.funcionario.complete_name }}
-                              </div>
-                            </h6>
-                            <img
-                              [src]="item.funcionario.image"
-                              onerror="this.src='../../../../assets/images/noprofile.png'"
-                              class="float-right rounded-circle img-fluid header-profile-user"
-                            />
-                          </div>
-                          <small>
-                            {{ item.Detalles }}
-                          </small>
+          <ng-container *ngIf="product.activity.length > 0; else notActivity">
+            <ng-container *ngFor="let item of product.activity">
+              <section class="gradient-custom-5">
+                <div class="main-timeline-5">
+                  <div class="timeline-5 right-5">
+                    <div class="card bg-light">
+                      <div class="card-body p-3">
+                        <div class="d-flex justify-content-between text-left">
+                          <h6>
+                            <!-- <i [class]="item.icon"></i> {{ item.title }} <br /> -->
+                            <div class="text-muted" style="font-size: x-small">
+                              <i class="fas fa-clock me-1"></i>
+                              {{ item.Fecha | date : "MMM d, y, h:mm a" }}
+                            </div>
+                            <div class="text-muted" style="font-size: small">
+                              <i class="fas fa-user me-1"></i>
+                              {{ item.funcionario.person }}
+                            </div>
+                          </h6>
+                          <img
+                            [src]="item.funcionario.image"
+                            onerror="this.src='../../../../assets/images/noprofile.png'"
+                            class="float-right rounded-circle img-fluid header-profile-user"
+                          />
                         </div>
+                        <small>
+                          {{ item.Detalles }}
+                        </small>
                       </div>
                     </div>
                   </div>
-                </section>
-              </ng-container>
+                </div>
+              </section>
             </ng-container>
-          </div>
+          </ng-container>
         </div>
       </div>
     </div>
@@ -57,7 +52,7 @@
             >
               <img
                 onerror="this.src='../../../../assets/images/not-available.png'"
-                [src]="productoPorVer.Foto"
+                [src]="product.Imagen"
                 class="img-fluid img-product mx-auto"
                 alt="Vista previa del producto"
               />
@@ -86,17 +81,17 @@
                     <tr
                       class="text-center"
                       [ngClass]="{
-                        'text-danger': productoPorVer.Estado == 'Inactivo'
+                        'text-danger': product.Estado == 'Inactivo'
                       }"
                     >
                       <td class="align-middle">
-                        {{ productoPorVer.Nombre_Comercial }}
+                        {{ product.Nombre_Comercial | uppercase }}
                       </td>
                       <td class="align-middle">
-                        {{ productoPorVer.Categoria }}
+                        {{ product.category.Nombre | uppercase }}
                       </td>
                       <td class="align-middle">
-                        {{ productoPorVer.Subcategoria }}
+                        {{ product.subcategory.Nombre | uppercase }}
                       </td>
                     </tr>
                   </tbody>
@@ -129,16 +124,16 @@
                   <tbody>
                     <tr class="text-center">
                       <td class="align-middle">
-                        {{ productoPorVer.Presentacion }}
+                        {{ product.Presentacion | uppercase }}
                       </td>
                       <td class="align-middle">
-                        {{ productoPorVer.Nom_unidad_medida }}
+                        {{ product.unit.name | uppercase }}
                       </td>
                       <td class="align-middle">
-                        {{ productoPorVer.Codigo_Barras }}
+                        {{ product.Codigo_Barras || "Sin código de barras" }}
                       </td>
                       <td class="align-middle">
-                        {{ productoPorVer.Embalaje }}
+                        {{ product.packaging.name | uppercase }}
                       </td>
                     </tr>
                   </tbody>
@@ -152,88 +147,26 @@
         <div class="col">
           <div class="card">
             <div class="card-body">
-              <div class="row card-title d-flex justify-content-between">
-                <div class="col px-0">
-                  <h4 class="text-primary">Variables de categoría</h4>
-                </div>
-              </div>
+              <h4 class="text-primary">Variables adicionales</h4>
               <hr class="line" />
-              <ng-container
-                *ngIf="
-                  VariablesProducto.categoria.nom.length > 0;
-                  else notVariablesCat
-                "
-              >
-                <div class="rounded-top table-responsive">
-                  <table class="table table-bordered table-striped table-sm">
-                    <thead class="bg-light">
-                      <tr class="text-center text-uppercase">
-                        <ng-container
-                          *ngFor="let item of VariablesProducto.categoria.nom"
-                        >
-                          <th>{{ item.replace("_", " ") }}</th>
-                        </ng-container>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="text-center">
-                        <ng-container
-                          *ngFor="let item of VariablesProducto.categoria.valor"
-                        >
-                          <td class="align-middle">{{ item }}</td>
-                        </ng-container>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </ng-container>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <div class="card">
-            <div class="card-body">
-              <div class="row card-title d-flex justify-content-between">
-                <div class="col px-0">
-                  <h4 class="text-primary">Variables de subcategoría</h4>
-                </div>
+              <div class="row text-center">
+                <ng-container *ngFor="let item of product.variables">
+                  <ng-container *ngIf="item.category_variables_id; else subCat">
+                    <div class="col-md-4">
+                      <h6>{{ item.category_variables.label | uppercase }}</h6>
+                      <p>{{ item.valor | uppercase }}</p>
+                    </div>
+                  </ng-container>
+                  <ng-template #subCat>
+                    <div class="col-md-4">
+                      <h6>
+                        {{ item.sub_category_variables.label | uppercase }}
+                      </h6>
+                      <p>{{ item.valor | uppercase }}</p>
+                    </div>
+                  </ng-template>
+                </ng-container>
               </div>
-              <hr class="line" />
-              <ng-container
-                *ngIf="
-                  VariablesProducto.subcategoria.nom.length > 0;
-                  else notVariablesSubcat
-                "
-              >
-                <div class="rounded-top table-responsive">
-                  <table class="table table-bordered table-striped table-sm">
-                    <thead class="bg-light">
-                      <tr class="text-center text-uppercase">
-                        <ng-container
-                          *ngFor="
-                            let item of VariablesProducto.subcategoria.nom
-                          "
-                        >
-                          <th>{{ item.replace("_", " ") }}</th>
-                        </ng-container>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr class="text-center">
-                        <ng-container
-                          *ngFor="
-                            let item of VariablesProducto.subcategoria.valor
-                          "
-                        >
-                          <td class="align-middle">{{ item }}</td>
-                        </ng-container>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </ng-container>
             </div>
           </div>
         </div>
@@ -241,24 +174,9 @@
     </div>
   </div>
 </ng-container>
-<ng-template #notProduct>
-  <app-not-data [loading]="cargando.valor()"></app-not-data>
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
 </ng-template>
-<ng-template #notActividad>
-  <app-not-data
-    [loading]="cargando.actividad"
-    text="Este producto no registra actividad!"
-  ></app-not-data>
-</ng-template>
-<ng-template #notVariablesCat>
-  <app-not-data
-    [loading]="cargando.actividad"
-    text="La categoría no registra varaibles para este producto"
-  ></app-not-data>
-</ng-template>
-<ng-template #notVariablesSubcat>
-  <app-not-data
-    [loading]="cargando.actividad"
-    text="La subcategoría no registra varaibles para este producto"
-  ></app-not-data>
+<ng-template #notActivity>
+  <app-not-data></app-not-data>
 </ng-template>

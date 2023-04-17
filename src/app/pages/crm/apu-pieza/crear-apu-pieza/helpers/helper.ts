@@ -14,8 +14,8 @@ export const functionsApu = {
     percentage_product: []
   },
 
-  fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials: Array<any>, cutLmaterials: Array<any>) {
-
+  fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials: Array<any>, cutLmaterials: Array<any>, commercialMaterials: Array<any>) {
+    console.log(materials)
     form.patchValue({
       name: data.name,
       city_id: data.city.id,
@@ -57,7 +57,7 @@ export const functionsApu = {
       internal_proccesses_subtotal: data.internal_proccesses_subtotal,
       external_proccesses_subtotal: data.external_proccesses_subtotal
     });
-    materiaHelper.createFillInMateria(form, fb, data, geometriesList, materials);
+    materiaHelper.createFillInMateria(form, fb, data, geometriesList, commercialMaterials);
     materialsHelper.createFillInMaterials(form, fb, data);
     cutWaterHelper.createFillInCutWater(form, fb, data, materials);
     cutLaserHelper.createFillInCutLaser(form, fb, data, cutLmaterials);

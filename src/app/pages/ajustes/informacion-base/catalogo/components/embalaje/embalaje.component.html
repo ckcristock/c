@@ -1,0 +1,84 @@
+<ng-template #addPackaging let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Agregar embalaje</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <ng-container [formGroup]="form">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>{{ title }} embalaje</mat-label>
+          <input
+            matInput
+            formControlName="name"
+            placeholder="Ingresa el nombre"
+            type="text"
+            autocomplete="off"
+            required
+          />
+          <button mat-icon-button matSuffix (click)="save()">
+            <mat-icon>save</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!loading && packagings.length > 0; else notData">
+      <div class="rounded-top table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <td>Nombre</td>
+              <td>Fecha creación</td>
+              <th><i class="mdi mdi-chevron-down"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of packagings" class="text-center">
+              <td>{{ item.name | uppercase }}</td>
+              <td>{{ item.created_at | date }}</td>
+              <td>
+                <a
+                  class="text-info"
+                  (click)="edit(item)"
+                  href="javascript: void(0);"
+                >
+                  <i class="far fa-edit"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ngb-pagination
+        class="d-flex justify-content-center pagination-rounded pagination-sm"
+        [collectionSize]="pagination.collectionSize"
+        [pageSize]="pagination.pageSize"
+        [(page)]="pagination.page"
+        (pageChange)="paginate($event)"
+        maxSize="5"
+        rotate="true"
+        ellipses="false"
+        boundaryLinks="true"
+      >
+      </ngb-pagination>
+    </ng-container>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>

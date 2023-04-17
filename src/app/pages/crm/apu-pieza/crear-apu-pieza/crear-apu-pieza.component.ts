@@ -293,7 +293,7 @@ export class CrearApuPiezaComponent implements OnInit {
   planos: any[] = [];
   validateData() {
     if (this.data) {
-      help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries, this.materials, this.cutLaserMaterials);
+      help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries, this.materials, this.cutLaserMaterials, this.commercialMaterials);
       this.planos = this.data.files
     }
   }

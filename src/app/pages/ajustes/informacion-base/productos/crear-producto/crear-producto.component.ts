@@ -6,6 +6,7 @@ import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { ProductoService } from '../producto.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { filter, skip, skipWhile } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-crear-producto',
@@ -20,6 +21,7 @@ export class CrearProductoComponent implements OnInit {
   packagings: any[] = [];
   unidades_medida: any[] = [];
   categories: any[] = [];
+  taxes: any[] = [];
   subcategories: any[] = [];
   photoPreview: any;
   loading: boolean;
@@ -28,7 +30,8 @@ export class CrearProductoComponent implements OnInit {
     private _catalogo: CatalogoService,
     private _swal: SwalService,
     private _producto: ProductoService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private router: Router,
 
   ) { }
 
@@ -44,7 +47,9 @@ export class CrearProductoComponent implements OnInit {
       Id_Subcategoria: this.data.Id_Subcategoria,
       Nombre_Comercial: this.data.Nombre_Comercial,
       Presentacion: this.data.Presentacion,
+      Referencia: this.data.Referencia,
       Unidad_Medida: this.data.Unidad_Medida,
+      impuesto_id: this.data.impuesto_id,
       Codigo_Barras: this.data.Codigo_Barras,
       Embalaje_id: this.data.Embalaje_id,
       Imagen: this.data.Imagen,
@@ -66,6 +71,7 @@ export class CrearProductoComponent implements OnInit {
       this.packagings = res.data.packagings;
       this.unidades_medida = res.data.units;
       this.categories = res.data.categories;
+      this.taxes = res.data.taxes;
       this.loading = false;
       if (this.id && this.data) {
         this.fillInForm()
@@ -85,6 +91,8 @@ export class CrearProductoComponent implements OnInit {
       Presentacion: ['', Validators.required],
       Unidad_Medida: ['', Validators.required],
       Codigo_Barras: [''],
+      Referencia: [''],
+      impuesto_id: ['', Validators.required],
       Embalaje_id: ['', Validators.required],
       Imagen: [''],
       typeFile: [''],
@@ -105,6 +113,15 @@ export class CrearProductoComponent implements OnInit {
     })
   }
 
+  laodingReload: boolean;
+
+  async reload() {
+    this.laodingReload = true;
+    this.getVariablesCat(this.form.get('Id_Categoria').value);
+    await this.getVariablesSubCat(this.form.get('Id_Subcategoria').value);
+    this.laodingReload = false;
+  }
+
   getVariablesCat(value) {
     this._producto.getVariablesCat(value).subscribe((res: any) => {
       this.category_variables.clear();
@@ -114,8 +131,8 @@ export class CrearProductoComponent implements OnInit {
     })
   }
 
-  getVariablesSubCat(value) {
-    this._producto.getVariablesSubCat(value).subscribe((res: any) => {
+  async getVariablesSubCat(value) {
+    await this._producto.getVariablesSubCat(value).toPromise().then((res: any) => {
       this.subcategory_variables.clear();
       res.data.forEach(element => {
         this.subcategory_variables.push(this.addVariables(element))
@@ -125,9 +142,9 @@ export class CrearProductoComponent implements OnInit {
 
   addVariables(element, edit = false, type = '') {
     return this.fb.group({
-      id: [],
-      subcategory_variables_id: [element.subcategory_id || null],
-      category_variables_id: [element.category_id || null],
+      id: [edit ? element.id : ''],
+      subcategory_variables_id: [edit ? element.subcategory_variables_id : element.subcategory_id ? element.id : null],
+      category_variables_id: [edit ? element.category_variables_id : element.category_id ? element.id : null],
       valor: [edit ? element.valor : '', Validators.required],
       label: [(edit && type == 'cat') ? element.category_variables.label : (edit && type == 'subcat') ? element.sub_category_variables.label : element.label],
       type: [(edit && type == 'cat') ? element.category_variables.type : (edit && type == 'subcat') ? element.sub_category_variables.type : element.type],
@@ -170,6 +187,7 @@ export class CrearProductoComponent implements OnInit {
       });
     }
   }
+
   saveProductos() {
     console.log(this.form.value)
     if (this.form.valid) {
@@ -188,6 +206,7 @@ export class CrearProductoComponent implements OnInit {
               timer: 1000,
               showCancel: false
             });
+            this.router.navigateByUrl('/ajustes/informacion-base/catalogo')
           }, (error) => {
             this._swal.show({
               icon: 'error',

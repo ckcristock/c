@@ -151,6 +151,8 @@
                 <th>Imagen</th>
                 <th>Nombre</th>
                 <th>Embalaje</th>
+                <th>Presentación</th>
+                <th>Unidad</th>
                 <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
@@ -160,15 +162,25 @@
                 *ngFor="let producto of Productos"
                 [ngClass]="{ 'text-danger': producto.Estado == 'Inactivo' }"
               >
-                <td class="align-middle p-0">
+                <td class="align-middle p-0" style="width: 1rem">
                   <img
-                    onerror="this.src='../../../../assets/images/not-available.png'"
-                    [src]="producto.Foto"
+                    onerror="this.src='../../../../assets/images/product.jpg'"
+                    [src]="producto.Imagen"
                     class="img-fluid img-product"
                   />
                 </td>
-                <td class="align-middle">{{ producto.Nombre_Comercial }}</td>
-                <td class="align-middle">{{ producto.Embalaje }}</td>
+                <td class="align-middle">
+                  {{ producto.Nombre_Comercial | uppercase }}
+                </td>
+                <td class="align-middle">
+                  {{ producto.packaging.name | capitalLetter }}
+                </td>
+                <td class="align-middle">
+                  {{ producto.Presentacion | capitalLetter }}
+                </td>
+                <td class="align-middle">
+                  {{ producto.unit.name | capitalLetter }}
+                </td>
                 <td class="align-middle">
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
@@ -181,20 +193,20 @@
                     <div ngbDropdownMenu>
                       <a
                         role="button"
+                        class="dropdown-item text-warning"
+                        [routerLink]="['ver', producto.Id_Producto]"
+                      >
+                        <i class="fa fa-file-invoice"></i> Ver detalle
+                      </a>
+                      <a
+                        role="button"
                         class="dropdown-item text-info"
                         [routerLink]="[
                           '/ajustes/informacion-base/catalogo/editar',
                           producto.Id_Producto
                         ]"
                       >
-                        <i class="far fa-edit"></i> Editar
-                      </a>
-                      <a
-                        role="button"
-                        class="dropdown-item text-warning"
-                        [routerLink]="['ver', producto.Id_Producto]"
-                      >
-                        <i class="fa fa-file-invoice"></i> Ver detalle
+                        <i class="fas fa-edit"></i> Editar
                       </a>
                       <a
                         role="button"

@@ -7,7 +7,6 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  NgForm,
   Validators,
 } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
@@ -35,12 +34,6 @@ const MENSAJES_ERROR: any = {
   styleUrls: ['./crear-compra-nacional.component.scss'],
 })
 export class CrearCompraNacionalComponent implements OnInit {
-  @ViewChild('confirmacionSwal') confirmacionSwal: any;
-  @ViewChild('modalProductos') modalProductos: any;
-  @ViewChild('colCantidad') colCantidad: NgbTooltip;
-  @ViewChild('colCosto') colCosto: NgbTooltip;
-  //@ViewChild('FormCompra') FormCompra: NgForm;
-
   public reducerCantidad = (accumulator, currentValue) =>
     accumulator + parseFloat(currentValue.Cantidad);
   public reducerCosto = (accumulator, currentValue) =>
@@ -101,8 +94,6 @@ export class CrearCompraNacionalComponent implements OnInit {
   productsValidation: any[] = [];
   mostrarAlertas: boolean = false;
   formCompra: FormGroup;
-  closeResult = '';
-  tipoMaterial = ['Activo_Fijo', 'Medicamento', 'Material', 'Dotacion_EPP'];
   deleteSwal: any;
   ListaProducto: any[] = [];
   productoFiltro: any = null;

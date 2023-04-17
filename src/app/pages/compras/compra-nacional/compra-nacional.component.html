@@ -12,18 +12,15 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button class="btn btn-info btn-sm" (click)="openClose()">
+          <button class="btn btn-info btn-sm" (click)="matPanel.toggle()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
-          <!-- <button class="btn btn-secondary btn-sm" (click)="openClose2()">
-            <i class="fas fa-eye"></i>
-          </button> -->
         </div>
       </div>
     </div>
     <hr class="line" />
-    <mat-accordion multi #firstAccordion="matAccordion">
-      <mat-expansion-panel class="mat-elevation-z0">
+    <mat-accordion multi>
+      <mat-expansion-panel #matPanel class="mat-elevation-z0">
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Funcionario</mat-label>
@@ -85,47 +82,12 @@
               (selectionChange)="listarComprasNacionales()"
             >
               <mat-option value="">Todos</mat-option>
-              <mat-option
-                *ngFor="let item of estadosCompra"
-                [value]="item.estado"
+              <mat-option *ngFor="let item of estadosCompra" [value]="item">
+                {{ item }}</mat-option
               >
-                {{ item.estado }}</mat-option
-              >
-              <!-- <mat-option value="Pendiente">Pendiente</mat-option>
-              <mat-option value="No conforme">No Conforme</mat-option>estadosCompra
-              <mat-option value="Anulada">Anulada</mat-option>
-              <mat-option value="Recibida">Recibida</mat-option>
-              <mat-option value="Devuelta">Devuelta</mat-option> -->
             </mat-select>
           </mat-form-field>
         </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <mat-accordion multi #secondAccordion="matAccordion">
-      <mat-expansion-panel class="mat-elevation-z0">
-        <section class="d-flex justify-content-between mx-1">
-          <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Foto"
-            >Foto</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Funcionario"
-            >Funcionario</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Fecha"
-            >Fecha</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Codigo"
-            >Código</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Proveedor"
-            >Proveedor</mat-checkbox
-          >
-          <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Estado"
-            >Estado</mat-checkbox
-          >
-          <!-- <mat-checkbox color="primary" [(ngModel)]="checkVerCols.Aprobacion"
-            >Aprobación</mat-checkbox
-          > -->
-        </section>
       </mat-expansion-panel>
     </mat-accordion>
     <div class="rounded-top table-responsive">
@@ -135,38 +97,37 @@
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
-            <th *ngIf="checkVerCols.Foto">Foto</th>
-            <th *ngIf="checkVerCols.Funcionario">Funcionario</th>
-            <th *ngIf="checkVerCols.Fecha">Fecha</th>
-            <th *ngIf="checkVerCols.Codigo">Código</th>
-            <th *ngIf="checkVerCols.Proveedor">Proveedor</th>
-            <th *ngIf="checkVerCols.Estado">Estado</th>
-            <!-- <th *ngIf="checkVerCols.Aprobacion">Aprobación</th> -->
+            <th>Código</th>
+            <th>Funcionario</th>
+            <th>Creación</th>
+            <th>Entrega probable</th>
+            <th>Entrega real</th>
+            <th>Proveedor</th>
+            <th>Estado</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let compra of comprasnacionales" class="text-center">
-            <td *ngIf="checkVerCols.Foto" class="p-0">
-              <img
-                class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
-                [src]="compra.image"
-                onerror="this.src='../../../../assets/images/noprofile.png'"
-              />
-            </td>
-            <td class="align-middle" *ngIf="checkVerCols.Funcionario">
-              {{ compra.Funcionario }}
-            </td>
-            <td class="align-middle" *ngIf="checkVerCols.Fecha">
-              {{ compra.Fecha | date : "longDate" }}
-            </td>
-            <td class="align-middle" *ngIf="checkVerCols.Codigo">
+            <td class="align-middle">
               {{ compra.Codigo }}
             </td>
-            <td class="align-middle" *ngIf="checkVerCols.Proveedor">
-              {{ compra.Proveedor }}
+            <td class="align-middle">
+              {{ compra.person.full_names }}
             </td>
-            <td class="align-middle" *ngIf="checkVerCols.Estado">
+            <td class="align-middle">
+              {{ compra.Fecha | date }}
+            </td>
+            <td class="align-middle">
+              {{ compra.Fecha_Entrega_Probable | date }}
+            </td>
+            <td class="align-middle">
+              {{ (compra.Fecha_Entrega_Real | date) || "Sin entregar" }}
+            </td>
+            <td class="align-middle">
+              {{ compra.third.full_name }}
+            </td>
+            <td class="align-middle">
               <span
                 class="badge {{
                   compra.Estado == 'Anulada'
@@ -182,13 +143,6 @@
                 >{{ compra.Estado }}
               </span>
             </td>
-            <!-- <td class="align-middle" *ngIf="checkVerCols.Aprobacion">
-              <span class="badge {{
-                compra.Aprobacion == 'Rechazada' ? 'badge-danger' : ''
-              }} {{ compra.Aprobacion == 'Aprobada' ? 'badge-success' : '' }} {{
-                compra.Aprobacion == 'Pendiente' ? 'badge-warning' : ''
-              }}">{{ compra.Aprobacion }}</span>
-            </td> -->
             <td>
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -300,27 +254,6 @@
     </ngb-pagination>
   </div>
 </div>
-
-<!-- <swal
-  #anulacion
-  title="¿Está Seguro?"
-  text="Ingrese la causal de anulación"
-  input="text"
-  type="warning"
-  showCancelButton="true"
-  confirmButtonText="Si, Eliminar"
-  cancelButtonText="No, Dejame Comprobar!"
-></swal>
-
-<swal
-  #deleteSwal
-  title="Orden de Compra Anulada"
-  text="Se ha Anulado Correctamente la Orden de Compra"
-  type="success"
->
-</swal>
-
-<swal #infoSwal title="" text="" type=""> </swal> -->
 
 <ng-template #Message>No existe precompras en este momento </ng-template>
 

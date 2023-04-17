@@ -13,6 +13,7 @@ import { UnidadesMedidasService } from '../../parametros/apu/unidades-medidas/un
 import { CategoriasService } from '../../parametros/cat-subcat/categorias/categorias.service';
 import { SwalService } from '../services/swal.service';
 import { CatalogoService } from './catalogo.service';
+import { ProductoService } from '../productos/producto.service';
 
 @Component({
   selector: 'app-catalogo',
@@ -72,6 +73,7 @@ export class CatalogoComponent implements OnInit {
     private _permission: PermissionService,
     private _categoria: CategoriasService,
     private _swal: SwalService,
+    private _producto: ProductoService,
     private _catalogo: CatalogoService,
     private _unit: UnidadesMedidasService,
     private fb: FormBuilder,
@@ -187,7 +189,7 @@ export class CatalogoComponent implements OnInit {
 
     var paramsurl = this.SetFiltros(params);
     this.location.replaceState(this.router.url.split("?")[0], paramsurl.toString());
-    this._catalogo.getData(params).subscribe((res: any) => {
+    this._producto.paginate(params).subscribe((res: any) => {
       this.Productos = res.data.data;
       this.loadingProductos = false;
       this.pagination.collectionSize = res.data.total;

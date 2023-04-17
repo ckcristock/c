@@ -1,4 +1,7 @@
-<div class="card" *ngIf="!loading">
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<div class="card" *ngIf="!loading; else placeholder">
   <div class="card-body">
     <h5 class="text-primary">{{ title }}</h5>
     <hr class="line" />
@@ -9,7 +12,7 @@
             <img
               id="imageOutput"
               [src]="photoPreview"
-              onerror="this.src='../../../../assets/images/not-available.png'"
+              onerror="this.src='../../../../assets/images/product.jpg'"
               class="d-block img-thumbnail mx-auto img-fluid img-product"
             />
             <input
@@ -19,21 +22,21 @@
               type="file"
               accept=".png, .jpg, .jpeg"
             />
-            <button
-              type="button"
-              class="btn btn-info btn-block"
-              (click)="photoInput.click()"
-            >
-              Cargar imagen
-            </button>
             <div class="col-md-12 text-center">
               <small *ngIf="photoPreview" class="text-success"
                 >Imagen cargada</small
               >
             </div>
+            <button
+              type="button"
+              class="btn btn-info btn-block mt-3"
+              (click)="photoInput.click()"
+            >
+              Cargar imagen
+            </button>
           </div>
         </div>
-        <div class="col-lg-10">
+        <div class="col-lg-10 d-flex flex-column justify-content-between">
           <div class="row">
             <mat-form-field class="col" appearance="outline">
               <mat-label>Categoría</mat-label>
@@ -69,7 +72,7 @@
             <mat-form-field class="col" appearance="outline">
               <mat-label>Presentación</mat-label>
               <input
-                type="text"
+                type="cel"
                 formControlName="Presentacion"
                 matInput
                 placeholder="Presentación del producto"
@@ -99,12 +102,7 @@
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
               <mat-label>Unidad de medida</mat-label>
-              <mat-select
-                formControlName="Unidad_Medida"
-                matInput
-                placeholder="Unidad de medida"
-                required
-              >
+              <mat-select formControlName="Unidad_Medida" required>
                 <mat-option
                   *ngFor="let unidad of unidades_medida"
                   [value]="unidad.value"
@@ -112,7 +110,24 @@
                 >
               </mat-select>
             </mat-form-field>
-
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Impuesto</mat-label>
+              <mat-select formControlName="impuesto_id" required>
+                <mat-option *ngFor="let tax of taxes" [value]="tax.value">{{
+                  tax.text
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Referencia</mat-label>
+              <input
+                type="text"
+                formControlName="Referencia"
+                matInput
+                placeholder="Ingresa la referencia"
+                autocomplete="off"
+              />
+            </mat-form-field>
             <ng-container
               formArrayName="category_variables"
               *ngIf="category_variables.value.length > 0"
@@ -161,18 +176,26 @@
                 </ng-container>
               </ng-container>
             </ng-container>
-            <div class="col-12">
-              <button
-                type="button"
-                (click)="saveProductos()"
-                class="btn btn-primary btn-block"
-              >
-                Guardar
-              </button>
-            </div>
           </div>
         </div>
       </div>
     </form>
   </div>
+  <div class="card-footer">
+    <button
+      type="button"
+      (click)="saveProductos()"
+      class="btn btn-primary btn-block"
+    >
+      Guardar
+    </button>
+  </div>
 </div>
+
+<ng-container *ngIf="id">
+  <app-reload-button
+    [title]="'Recargar campos adicionales'"
+    [relaod]="laodingReload"
+    (reloadData)="reload()"
+  ></app-reload-button>
+</ng-container>

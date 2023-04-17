@@ -13,6 +13,10 @@ export class ProductoService {
     return this.http.get(`${environment.base_url}/product2/${id}`)
   }
 
+  paginate(params = {}) {
+    return this.http.get(`${environment.base_url}/product2-paginate`, { params })
+  }
+
   getDataCreate() {
     return this.http.get(`${environment.base_url}/product-create-data`)
   }

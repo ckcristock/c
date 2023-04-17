@@ -32,6 +32,7 @@ import { SolicitudCompraCrearComponent } from './solicitudes-compra/solicitud-co
 import { NgxCurrencyModule } from 'ngx-currency';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { SolicitudesCompraEditarComponent } from './solicitudes-compra/solicitudes-compra-editar/solicitudes-compra-editar.component';
 
 
 export const MY_FORMATS = {
@@ -52,6 +53,7 @@ export const MY_FORMATS = {
     VerCompraNacionalComponent,
     SolicitudesCompraComponent,
     SolicitudCompraCrearComponent,
+    SolicitudesCompraEditarComponent,
   ],
   providers: [
     {

@@ -1,8 +1,10 @@
-<ng-container [formGroup]="form"  id="form">
+
   <div class="card">
     <div class="card-body">
       <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
       <hr class="line" />
+      <ng-container *ngIf="!loading && form; else notData">
+      <ng-container [formGroup]="form"  id="form"></ng-container>
       <div class="row">
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de solicitud independiente</mat-label>
@@ -115,9 +117,10 @@
           </div>
         </ng-container>       
       </ng-container>
+    </ng-container>
     </div>
   </div>
-</ng-container>
+
 
 <!-- <button type="button" class="btn btn-primary" (click)="view()"></button> -->
 <ng-template #notData>

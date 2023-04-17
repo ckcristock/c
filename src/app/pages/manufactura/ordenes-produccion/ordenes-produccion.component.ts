@@ -103,8 +103,8 @@ export class OrdenesProduccionComponent implements OnInit {
     this.getWorkOrders()
   }
 
-  resetFiltros() {
-    this._paginator.resetFiltros(this.formFilters)
+  resetFiltros() {  
+    this._paginator.resetFiltros(this.formFilters)  
     this.active_filters = false
   }
 

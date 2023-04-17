@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SolicitudesCompraService } from '../solicitudes-compra.service';
 import { Observable, OperatorFunction, of } from 'rxjs';
@@ -7,6 +7,7 @@ import { consts } from 'src/app/core/utils/consts';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { Router } from '@angular/router';
+import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 
 @Component({
   selector: 'app-solicitud-compra-crear',
@@ -14,31 +15,61 @@ import { Router } from '@angular/router';
   styleUrls: ['./solicitud-compra-crear.component.scss']
 })
 export class SolicitudCompraCrearComponent implements OnInit {
+  @Input('data') data;
+  @Input('id') id;
   form: FormGroup;
+  loading: boolean;
   categories: any[] = [];
   searching: boolean;
   searchFailed: boolean;
   masks = consts;
+  path: string;
   datosCabecera = {
     Titulo: 'Nueva solicitud de compra',
-    Fecha: new Date()
+    Fecha: new Date(),
+    Codigo: '',
+    CodigoFormato: ''
   }
   constructor(
     private fb: FormBuilder,
     private _solicitudesCompra: SolicitudesCompraService,
     private _swal: SwalService,
     private _modal: ModalService,
-    private router: Router
+    private router: Router,
+    private _consecutivos: ConsecutivosService
   ) { }
 
   ngOnInit(): void {
     this.createForm();
     this.getCategoryForSelect()
+    if (this.data && this.id) {
+      this.fillInForm();
+    }
+  }
+
+  getConsecutivo() {
+    this._consecutivos.getConsecutivo('purchase_requests').subscribe((r:any) => {
+      this.datosCabecera.CodigoFormato = r.data.format_code
+      this.form.patchValue({format_code: this.datosCabecera.CodigoFormato})
+      if (this.path != 'editar') {
+        let con = this._consecutivos.construirConsecutivo(r.data);
+        this.datosCabecera.Codigo = con
+      }
+    })
+  }
+
+  fillInForm() {
+    this.form.patchValue({
+      id: this.data.id,
+      category_id: this.data.category_id
+    })
   }
 
   getCategoryForSelect() {
+    this.loading = true
     this._solicitudesCompra.getCategoryForSelect().subscribe((res: any) => {
       this.categories = res.data;
+      this.loading = false
     })
   }
 

@@ -7,7 +7,8 @@
           <span style="font-size: smaller" *ngIf="paginationMaterial"
             ><small class="pb-2 text-secondary text-muted"
               >pág. {{ paginationMaterial.current_page }}</small
-            ></span>
+            ></span
+          >
         </h4>
       </div>
       <div class="col-md-6 px-0 text-right">
@@ -15,36 +16,26 @@
           <button class="btn btn-primary btn-sm" [routerLink]="['crear']">
             <!-- //este boton debe tener un ngIf de permisos  -->
             <i class="fa fa-plus"></i> Agregar
-          </button>  
-          <button class="btn btn-info btn-sm" (click)="openClose()">
+          </button>
+          <button class="btn btn-info btn-sm" (click)="matPanel.toggle()">
             <i class="fas fa-sliders-h"></i> Filtros
-          </button> 
+          </button>
         </div>
       </div>
     </div>
     <hr class="line" />
     <mat-accordion multi>
-      <mat-expansion-panel class="mat-elevation-z0">
-        <div class="row">
-          <ng-container [formGroup]="formFilters">
+      <mat-expansion-panel #matPanel class="mat-elevation-z0">
+        <ng-container [formGroup]="formFilters">
+          <div class="row">
             <mat-form-field class="col" appearance="outline">
               <mat-label>Estado</mat-label>
               <mat-select formControlName="status">
-                <input
-                type="text"
-                matInput
-                formControlName="status"
-                autocomplete="off"
-                placeholder="Busca por número de solicitud"
-              />
-                <!-- <mat-option value="xx"
-                  >Pendiente</mat-option
-                >
-                <mat-option value="xx"
-                  >Aprobada</mat-option
-                >
-                <mat-option value="xx">Rechazada</mat-option>
-                <mat-option value="">Todas</mat-option> -->
+                <mat-option value="">Todas</mat-option>
+                <mat-option value="Pendiente">Pendiente</mat-option>
+                <mat-option value="Cotizada">Cotizadas</mat-option>
+                <mat-option value="Aprobada">Aprobadas</mat-option>
+                <mat-option value="Comprada">Compradas</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
@@ -57,20 +48,40 @@
                 placeholder="Busca por número de solicitud"
               />
             </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label> Fecha de solicitud</mat-label>
+
+            <!-- <mat-form-field class="col" appearance="outline">
+              <mat-label> Orden de trabajo</mat-label>
               <input
                 type="text"
                 matInput
-                formControlName="purchase_request_date"
+                formControlName="work_order_id"
                 autocomplete="off"
                 placeholder="Busca por número de solicitud"
               />
-              <!-- <input
+            </mat-form-field>    -->
+            <mat-form-field appearance="outline" class="col">
+              <mat-label>Fecha de solicitud</mat-label>
+              <input
+                matInput
+                [satDatepicker]="pickerDate"
+                [value]="date"
+                (dateChange)="selectedDate($event, 'created_at')"
+                name="daterange"
+                autocomplete="off"
+              />
+              <sat-datepicker #pickerDate [rangeMode]="true"></sat-datepicker>
+              <sat-datepicker-toggle
+                matSuffix
+                [for]="pickerDate"
+              ></sat-datepicker-toggle>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col">
+              <mat-label>Fecha de entrega estimada</mat-label>
+              <input
                 matInput
                 [satDatepicker]="pickerDelivery"
-                [value]="date"
-                (dateChange)="selectedDate($event, 'delivery')"
+                [value]="date2"
+                (dateChange)="selectedDate($event, 'expected_date')"
                 name="daterange"
                 autocomplete="off"
               />
@@ -81,33 +92,31 @@
               <sat-datepicker-toggle
                 matSuffix
                 [for]="pickerDelivery"
-              ></sat-datepicker-toggle> -->
+              ></sat-datepicker-toggle>
             </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label> Funcionario</mat-label>
-              <input
-                type="text"
-                matInput
-                formControlName="funcionario"
-                autocomplete="off"
-                placeholder="Busca por nombre del funcionario"
-              />
-            </mat-form-field>
-            
-          </ng-container>
-        </div>
+          </div>
+        </ng-container>
       </mat-expansion-panel>
     </mat-accordion>
-    <!-- //aqui va el mat accordion de los filtros y un div que dice que hay filtros de busqueda activos  -->
+    
+    <div class="alert alert-info" *ngIf="active_filters" role="alert">
+      <strong
+        >Hay filtros de búsqueda activos, para mostrar todos los resultados haz
+        click
+      </strong>
+      <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link"
+        >aquí</a
+      >
+    </div>
     <div class="rounded-top table-responsive">
-      <table class="table table-bordered table-striped table-sm"
-      *ngIf="!loading && solicitudesCompra.length > 0; else notData">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!loading && solicitudesCompra.length > 0; else notData"
+      >
         <thead class="bg-light">
-          <tr class="text-center text-uppercase"
-          >
+          <tr class="text-center text-uppercase">
             <th>#Solicitud</th>
             <th>Fecha solicitud</th>
-            <th>Funcionario</th>
             <th>Orden de producción</th>
             <th>Fecha esperada</th>
             <th>Estado</th>
@@ -117,40 +126,41 @@
         </thead>
         <tbody>
           <!-- *nfor -->
-          <tr *ngFor="let solicitud of solicitudesCompra" class="text-center">             
-           <td class="align-middle">{{solicitud.id}}</td>
-           <td class="align-middle">{{solicitud.created_at | date : "MMM d, y"}}</td>
-           <td class="align-middle"></td>
-           <td class="align-middle"></td>           
-           <td class="align-middle">{{solicitud.expected_date | date : "MMM d, y"}}</td>
-           <td class="align-middle">{{solicitud.status}}</td>
-           <td class="align-middle">{{solicitud.quantity_of_products}}</td>
-           <td class="align-middle">
-            <div ngbDropdown container="body" class="dropdown-primary">
-              <button
-                      ngbDropdownToggle
-                      class="btn btn-primary btn-sm"
-                      type="button"
-                    >
-                      <i class="mdi mdi-chevron-down"></i>
-              </button>
-              <div ngbDropdownMenu>
-                <a
-                type="button"
-                class="dropdown-item text-info"><i class="fas fa-edit"></i>
-              Editar</a>
-              <a
-                type="button"
-                class="dropdown-item text-success"><i class="fas fa-upload"></i>
-              Cotizar</a>
+          <tr *ngFor="let solicitud of solicitudesCompra" class="text-center">
+            <td class="align-middle">{{ solicitud.id }}</td>
+            <td class="align-middle">
+              {{ solicitud.created_at | date : "MMM d, y" }}
+            </td>
+            <!-- a LA FECHA DE SOLICITUD ME FALTA AGREGARLE EN PARENTESIS EL NOMBRE DEL SOLICITANTE -->
+            <td class="align-middle"></td>
+            <td class="align-middle">
+              {{ solicitud.expected_date | date : "MMM d, y" }}
+            </td>
+            <td class="align-middle">{{ solicitud.status }}</td>
+            <td class="align-middle">{{ solicitud.quantity_of_products }}</td>
+            <td class="align-middle">
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a type="button" class="dropdown-item text-info"
+                  [routerLink]="['editar', solicitud.id]"
+                    ><i class="fas fa-edit"></i> Editar</a
+                  >
+                  <a type="button" class="dropdown-item text-success"
+                    ><i class="fas fa-upload"></i> Cotizar</a
+                  >
+                </div>
               </div>
-            </div>
-           </td>
-           
+            </td>
           </tr>
         </tbody>
       </table>
-
     </div>
     <!-- aqui va el paginator  -->
     <mat-paginator

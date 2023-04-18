@@ -76,6 +76,7 @@
                       <th>Nombre</th>
                       <th>Categoría</th>
                       <th>Subcategoría</th>
+                      <th>Precio</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -93,6 +94,9 @@
                       </td>
                       <td class="align-middle">
                         {{ product.subcategory.Nombre | uppercase }}
+                      </td>
+                      <td class="align-middle">
+                        ${{ product.Precio | number : "1.2-2" }}
                       </td>
                     </tr>
                   </tbody>

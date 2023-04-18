@@ -29,6 +29,7 @@ import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-mo
 import { PresupuestoModule } from '../crm/presupuesto/presupuesto.module';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
+import { MatSelectFilterModule } from 'mat-select-filter';
 
 export const MY_FORMATS = {
   parse: {
@@ -80,7 +81,8 @@ export const MY_FORMATS = {
     SatDatepickerModule,
     SatNativeDateModule,
     NgxCurrencyModule,
-    DirectivesModule
+    DirectivesModule,
+    MatSelectFilterModule
 
   ],
 

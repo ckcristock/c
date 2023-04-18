@@ -7,6 +7,7 @@ import { ProductoService } from '../producto.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { filter, skip, skipWhile } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-crear-producto',
@@ -19,6 +20,7 @@ export class CrearProductoComponent implements OnInit {
   @Input('id') id;
   form: FormGroup;
   packagings: any[] = [];
+  masks = consts;
   unidades_medida: any[] = [];
   categories: any[] = [];
   taxes: any[] = [];
@@ -49,6 +51,7 @@ export class CrearProductoComponent implements OnInit {
       Presentacion: this.data.Presentacion,
       Referencia: this.data.Referencia,
       Unidad_Medida: this.data.Unidad_Medida,
+      Precio: this.data.Precio,
       impuesto_id: this.data.impuesto_id,
       Codigo_Barras: this.data.Codigo_Barras,
       Embalaje_id: this.data.Embalaje_id,
@@ -94,6 +97,7 @@ export class CrearProductoComponent implements OnInit {
       Referencia: [''],
       impuesto_id: ['', Validators.required],
       Embalaje_id: ['', Validators.required],
+      Precio: ['', Validators.required],
       Imagen: [''],
       typeFile: [''],
       category_variables: this.fb.array([]),

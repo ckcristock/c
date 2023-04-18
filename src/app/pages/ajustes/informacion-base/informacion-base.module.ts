@@ -99,6 +99,7 @@ import { ProfilePermissionsComponent } from './funcionarios/detalle-funcionario/
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { EmbalajeComponent } from './catalogo/components/embalaje/embalaje.component';
 import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
+import { DirectivesModule } from 'src/app/core/directives/directives.module';
 
 @NgModule({
   declarations: [
@@ -192,6 +193,7 @@ import { EditarProductoComponent } from './productos/editar-producto/editar-prod
     MatNativeDateModule,
     SatDatepickerModule,
     SatNativeDateModule,
+    DirectivesModule,
     CurrencyMaskModule,
     SweetAlert2Module.forRoot(),
   ],

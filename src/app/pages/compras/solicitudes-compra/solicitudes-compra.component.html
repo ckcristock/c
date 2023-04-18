@@ -43,7 +43,7 @@
               <input
                 type="text"
                 matInput
-                formControlName="purchase_request_id"
+                formControlName="code"
                 autocomplete="off"
                 placeholder="Busca por número de solicitud"
               />
@@ -127,7 +127,7 @@
         <tbody>
           <!-- *nfor -->
           <tr *ngFor="let solicitud of solicitudesCompra" class="text-center">
-            <td class="align-middle">{{ solicitud.id }}</td>
+            <td class="align-middle">{{ solicitud.code }}</td>
             <td class="align-middle">
               {{ solicitud.created_at | date : "MMM d, y" }}
             </td>
@@ -148,12 +148,13 @@
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
+                  
+                  <a type="button" class="dropdown-item text-success"
+                    ><i class="fas fa-eye"></i> Ver</a
+                  >
                   <a type="button" class="dropdown-item text-info"
                   [routerLink]="['editar', solicitud.id]"
                     ><i class="fas fa-edit"></i> Editar</a
-                  >
-                  <a type="button" class="dropdown-item text-success"
-                    ><i class="fas fa-upload"></i> Cotizar</a
                   >
                 </div>
               </div>

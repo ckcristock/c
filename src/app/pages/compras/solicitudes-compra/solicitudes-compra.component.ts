@@ -96,7 +96,7 @@ export class SolicitudesCompraComponent implements OnInit {
   createFormFilters() {
     this.formFilters =this.fb.group({
       status: '',
-      purchase_request_id: '',
+      code: '',
       // work_order_id: '',      
       start_created_at: '',
       end_created_at: '',

@@ -5,7 +5,6 @@ import { Observable, OperatorFunction, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { consts } from 'src/app/core/utils/consts';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
-import { ModalService } from 'src/app/core/services/modal.service';
 import { Router } from '@angular/router';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 
@@ -15,8 +14,10 @@ import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecu
   styleUrls: ['./solicitud-compra-crear.component.scss']
 })
 export class SolicitudCompraCrearComponent implements OnInit {
-  @Input('data') data;
+  @Input('dataEdit') dataEdit;
   @Input('id') id;
+  @Input('title') title = 'Nueva solicitud de compra';
+ 
   form: FormGroup;
   loading: boolean;
   categories: any[] = [];
@@ -25,8 +26,8 @@ export class SolicitudCompraCrearComponent implements OnInit {
   masks = consts;
   path: string;
   datosCabecera = {
-    Titulo: 'Nueva solicitud de compra',
-    Fecha: new Date(),
+    Titulo: '',
+    Fecha: '',
     Codigo: '',
     CodigoFormato: ''
   }
@@ -34,42 +35,54 @@ export class SolicitudCompraCrearComponent implements OnInit {
     private fb: FormBuilder,
     private _solicitudesCompra: SolicitudesCompraService,
     private _swal: SwalService,
-    private _modal: ModalService,
     private router: Router,
     private _consecutivos: ConsecutivosService
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.datosCabecera.Fecha = this.path != 'editar' ? new Date() : this.dataEdit?.created_at;
+    this.datosCabecera.Titulo = this.title;
+    this.loading = true
+    this.getCategoryForSelect();
     this.createForm();
-    this.getCategoryForSelect()
-    if (this.data && this.id) {
-      this.fillInForm();
+    await this.getConsecutivo();
+    if (this.dataEdit && this.id) {
+      this.fillInForm(); 
     }
+    this.loading = false
   }
 
-  getConsecutivo() {
-    this._consecutivos.getConsecutivo('purchase_requests').subscribe((r:any) => {
+  async getConsecutivo() {
+    await this._consecutivos.getConsecutivo('purchase_requests').toPromise().then((r:any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
       this.form.patchValue({format_code: this.datosCabecera.CodigoFormato})
       if (this.path != 'editar') {
         let con = this._consecutivos.construirConsecutivo(r.data);
         this.datosCabecera.Codigo = con
+      }else {
+        this.datosCabecera.Codigo = this.dataEdit.code
+        this.form.patchValue({
+          code: this.dataEdit.code
+        })        
       }
     })
   }
 
   fillInForm() {
     this.form.patchValue({
-      id: this.data.id,
-      category_id: this.data.category_id
+      id: this.dataEdit.id,
+      category_id: this.dataEdit.category_id,
+      expected_date: this.dataEdit.expected_date,
+      observations: this.dataEdit.observations,
+      products: this.dataEdit.products,
+      code: this.dataEdit.code,
+      format_code: this.dataEdit.format_code,
     })
   }
 
-  getCategoryForSelect() {
-    this.loading = true
+  getCategoryForSelect() {      
     this._solicitudesCompra.getCategoryForSelect().subscribe((res: any) => {
-      this.categories = res.data;
-      this.loading = false
+      this.categories = res.data;    
     })
   }
 
@@ -79,11 +92,13 @@ export class SolicitudCompraCrearComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
-      id: [],
-      category_id: ['', Validators.required],
-      expected_date: ['', Validators.required],
-      observations: ['', Validators.required],
-      products: this.fb.array([])
+      id: (this.dataEdit && this.path == 'editar' ? this.dataEdit.id : ''),
+      category_id: [(this.dataEdit ? this.dataEdit.category_id : null), Validators.required],
+      expected_date: [(this.dataEdit ? this.dataEdit.expected_date : null), Validators.required],
+      observations: [(this.dataEdit ? this.dataEdit.observations : null), Validators.required],
+      products: this.fb.array([]),
+      code: [''],
+      format_code: [''],
     })
 
   }
@@ -115,13 +130,21 @@ export class SolicitudCompraCrearComponent implements OnInit {
 
 formatter = (x: any) => x.name;
 
-addProduct(prod, $event, input) {
+addProduct(prod, $event, input, edit = false) {
   let product = this.fb.group({
+
     id: [prod.Id_Producto],
     reference: [prod.Referencia],
     name: [prod.name],
     ammount: [1, Validators.min(1)],
     unit: [prod.unit.name],
+    // esta condicion me esta dejando en blanco el formulario al crearlo
+    // id: [edit ? prod.id: ''],
+    // product_id: [edit ? prod.Id_Producto: ''],
+    // reference: [edit ? prod.Referencia: '' ],
+    // name: [edit ? prod.name: '' ],
+    // ammount: [edit ? prod.ammount: '1', Validators.min(1)],
+    // unit: [edit ? prod.unit.name: ''],
   })
 
   this.products.push(product)

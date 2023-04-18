@@ -30,6 +30,11 @@ export class SolicitudesCompraService {
   getPurchaseRequest(params = {}) {
     return this.http.get(`${environment.base_url}/paginate-purchase-request`, { params });
   }
+
+  get(id) {
+    return this.http.get(`${environment.base_url}/purchase-request/${id}`);
+  }
+
 }
 
 

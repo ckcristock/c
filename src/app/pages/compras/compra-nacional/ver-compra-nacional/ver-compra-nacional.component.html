@@ -10,6 +10,7 @@
             <h5 class="text-primary">Seguimiento</h5>
           </div>
           <hr class="line" />
+
           <ul class="list-group list-group-flush">
             <li
               class="list-group-item px-0"
@@ -58,7 +59,57 @@
         <div class="card-body">
           <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
           <hr class="line" />
-          <div class="rounded-top table-responsive">
+          <div class="d-flex justify-content-end">
+            <div class="btn-group" role="group" aria-label="Button group">
+              <ng-container *ngIf="permission.permissions.approve">
+                <ng-container *ngIf="Compra.Estado == 'Pendiente'">
+                  <button
+                    class="btn btn-danger btn-sm"
+                    (click)="EstadoAprobacion('Rechazada')"
+                    type="button"
+                  >
+                    <i class="fa fa-thumbs-down"></i> Rechazar
+                  </button>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    (click)="EstadoAprobacion('Aprobada')"
+                    type="button"
+                  >
+                    <i class="fa fa-thumbs-up"></i> Aprobar y proceder
+                  </button>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    (click)="EstadoAprobacion('Anulada')"
+                    type="button"
+                  >
+                    <i class="fa fa-ban"></i> Anular
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="Compra.Estado == 'Anulada'">
+                  <button
+                    class="btn btn-success btn-sm"
+                    (click)="EstadoAprobacion('Pendiente')"
+                    type="button"
+                  >
+                    <i class="fa fa-check"></i> Activar
+                  </button>
+                </ng-container>
+                <!-- TODO PENDIENTE IMPRIMIR -->
+                <button class="btn btn-danger btn-sm" (click)="download(id)">
+                  <span
+                    ><i
+                      class="fas"
+                      [class]="
+                        !downloading ? 'fa-file-download' : 'fa-spinner fa-spin'
+                      "
+                    ></i>
+                    {{ !downloading ? "Descargar" : "Descargando" }}</span
+                  >
+                </button>
+              </ng-container>
+            </div>
+          </div>
+          <div class="rounded-top table-responsive mt-2">
             <table class="table table-bordered table-striped table-sm">
               <thead class="bg-light">
                 <tr class="text-center text-uppercase">
@@ -86,7 +137,6 @@
               </tbody>
             </table>
           </div>
-          <hr />
           <div class="rounded-top table-responsive">
             <table class="table table-bordered table-striped table-sm">
               <thead class="bg-light">
@@ -102,6 +152,7 @@
             </table>
           </div>
           <hr />
+          <h6>Productos</h6>
           <div class="rounded-top table-responsive">
             <table class="table table-bordered table-striped table-sm">
               <thead class="bg-light">
@@ -124,14 +175,11 @@
                 >
                   <th>{{ i + 1 }}</th>
                   <td class="align-middle">
-                    <strong>{{ producto.Nombre_Comercial }}</strong>
-                    <span>
-                      {{ producto.product.Nombre_Comercial }}
-                    </span>
+                    {{ producto.product.Nombre_Comercial | uppercase }}
                   </td>
                   <td class="align-middle">
                     <span class="text-muted">
-                      {{ producto.product.packaging.name }}
+                      {{ producto.product.packaging.name | titlecase }}
                     </span>
                   </td>
                   <td class="align-middle">
@@ -141,7 +189,7 @@
                     ${{ producto.product.Precio | number : "1.2-2" }}
                   </td>
                   <td class="align-middle">
-                    ${{ producto.tax.Valor | number : "1.2-2" }}%
+                    {{ producto.tax.Valor | number : "1.2-2" }}%
                   </td>
                   <td class="align-middle">
                     ${{ producto.Subtotal | number : "1.2-2" }}
@@ -169,76 +217,6 @@
             mt="mt-2"
           >
           </app-list-items>
-
-          <!-- TODO APROBAR COMPRA -->
-          <ng-container *ngIf="Compra.Estado == 'Pendiente'">
-            <div
-              class="btn-group btn-block mt-3"
-              role="group"
-              aria-label="Button group"
-            >
-              <button
-                class="btn btn-danger"
-                (click)="EstadoAprobacion('Rechazada')"
-                type="button"
-              >
-                <!-- [swal]="{
-                  title: '¿Está Seguro?',
-                  text: 'Se dispone a rechazar esta Orden de Compra, por favor seleccione un motivo',
-                  icon: 'warning',
-                  input: 'select',
-                  inputOptions: Lista_Rechazo,
-                  inputPlaceholder: 'Seleccione un Motivo',
-                  showCancelButton: true,
-                  confirmButtonText: 'Si, Rechazar',
-                  cancelButtonText: 'No, Dejame Comprobar!'
-                }"
-                (confirm)="EstadoAprobacion($event, 'Rechazada')" -->
-                <i class="fa fa-thumbs-down"></i> Rechazar
-              </button>
-              <button
-                class="btn btn-primary rounded-right"
-                (click)="EstadoAprobacion('Aprobada')"
-                type="button"
-              >
-                <!-- [swal]="{
-                  title: '¿Está Seguro?',
-                  text: 'Se dispone a aprobar esta Orden de Compra para Proceder a Solicitarla',
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonText: 'Si, Aprobar',
-                  cancelButtonText: 'No, Dejame Comprobar!'
-                }"
-                (confirm)="EstadoAprobacion('', 'Aprobada')" -->
-                <i class="fa fa-thumbs-up"></i> Aprobar y proceder
-              </button>
-              <button
-                class="btn btn-danger rounded-right"
-                (click)="EstadoAprobacion('Anulada')"
-                type="button"
-              >
-                <i class="fa fa-ban"></i> Anular
-              </button>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="Compra.Estado == 'Anulada'">
-            <div
-              class="btn-group btn-block"
-              role="group"
-              aria-label="Button group"
-            >
-              <button
-                class="btn btn-info rounded-right"
-                (click)="EstadoAprobacion('Pendiente')"
-                type="button"
-              >
-                <i class="fa fa-check"></i> Activar
-              </button>
-            </div>
-          </ng-container>
-          <!-- TODO PENDIENTE IMPRIMIR -->
-          <!-- <a href="{{environment.ruta}}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_Nacional&id={{id}}" target="_blank" class="btn btn-success btn-sm m-l-5 pull-right" style="margin-right: 10px;">
-                <i class="fa fa-print"></i> IMPRIMIR DOCUMENTO</a> -->
         </div>
       </div>
     </div>

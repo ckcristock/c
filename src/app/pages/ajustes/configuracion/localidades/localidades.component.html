@@ -47,7 +47,11 @@
               *ngFor="let country of countries"
               [ngClass]="{ 'shadow-inset-primary': country.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
-              (click)="getStates(country.id); selected(countries, country.id)"
+              (click)="
+                getStates(country.id);
+                selected(countries, country.id);
+                countrySelected = country.id
+              "
             >
               {{ country.name }}
               <span ngbDropdown container="body" class="dropdown-primary">
@@ -112,7 +116,7 @@
                 name="name_country"
                 autocomplete="off"
                 [(ngModel)]="filtro_depto.name"
-                (input)="getStates(form.get('country').value)"
+                (input)="getStates(countrySelected)"
                 placeholder="Busca por país"
               />
             </mat-form-field>
@@ -126,7 +130,11 @@
               *ngFor="let state of states"
               [ngClass]="{ 'shadow-inset-primary': state.selected }"
               class="list-group-item d-flex justify-content-between align-items-center rounded"
-              (click)="getMunicipalities(state.id); selected(states, state.id)"
+              (click)="
+                getMunicipalities(state.id);
+                selected(states, state.id);
+                departmentSelected = state.id
+              "
             >
               {{ state.name }}
               <span ngbDropdown container="body" class="dropdown-primary">
@@ -190,7 +198,7 @@
                 name="name_country"
                 autocomplete="off"
                 [(ngModel)]="filtro_muni.name"
-                (input)="getMunicipalities(form.get('state').value)"
+                (input)="getMunicipalities(departmentSelected)"
                 placeholder="Busca por municipios"
               />
             </mat-form-field>

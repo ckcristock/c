@@ -56,6 +56,27 @@ export class CompraNacionalComponent implements OnInit {
     this.getDiasAnulacion();
     this.getFuncioriosParaResponsables();
   }
+  downloading: boolean;
+  download(id) {
+    this.downloading = true;
+    this._compraNacional.download(id).subscribe((response: BlobPart) => {
+      let blob = new Blob([response], { type: 'application/pdf' });
+      let link = document.createElement('a');
+      const filename = 'orden-compra' + id;
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${filename}.pdf`;
+      link.click();
+      this.downloading = false;
+    }),
+      (error) => {
+        console.log('Error downloading the file');
+        this.downloading = false;
+      },
+      () => {
+        console.info('File downloaded successfully');
+        this.downloading = false;
+      };
+  }
 
   listarComprasNacionales(page = 1) {
 
@@ -97,9 +118,9 @@ export class CompraNacionalComponent implements OnInit {
       Pendiente: 'activar'
     }
     this._swal.show({
-      title: '¿Está Seguro?',
-      text: 'Se dispone a ' + MENSAJE_ACCION[estado] + ' esta orden de compra',
-      icon: 'warning',
+      title: '¿Estás seguro(a)?',
+      text: 'Vamos a ' + MENSAJE_ACCION[estado] + ' la orden de compra.',
+      icon: 'question',
       showCancel: true
     }).then((result) => {
       if (result.isConfirmed) {

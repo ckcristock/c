@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   submitted = false;
   error = '';
   returnUrl: string;
-  log_in: boolean = false
+  log_in: boolean;
   show: boolean = false;
   // set the currenr year
   year: number = new Date().getFullYear();
@@ -44,19 +44,18 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
+    this.log_in = true
     this._user.login(this.loginForm.value)
       .subscribe(resp => {
-        this.log_in = false
         if (this.loginForm.get('remember').value) {
           localStorage.setItem('user', this.loginForm.get('user').value);
         } else {
           localStorage.removeItem('user');
         }
-
         // Navegar al Dashboard
         this.router.navigateByUrl('/');
-        this.log_in = true
+        this.log_in = false
+
       }, (err) => {
         // Si sucede un error
         this.log_in = false

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HotelesService } from '../hoteles/hoteles.service';
 import { TaxisService } from './taxis.service';
 import { SwalService } from '../../../informacion-base/services/swal.service';
@@ -78,11 +78,11 @@ export class TaxisComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [this.taxi.id],
-      route: ['', this._validators.required],
-      type: ['', this._validators.required],
-      city_id: [null, this._validators.required],
-      value: ['', this._validators.required],
-      taxi_id: [this.taxi.taxi_id]
+      route: ['', Validators.required],
+      type: ['', Validators.required],
+      city_id: [null, Validators.required],
+      value: ['', Validators.required],
+      taxi_id: [Validators.required]
     })
   }
 

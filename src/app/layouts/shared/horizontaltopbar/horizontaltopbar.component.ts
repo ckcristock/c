@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient } from '@angular/common/http';
@@ -14,6 +14,7 @@ import { UserService } from '../../../core/services/user.service';
 import { User } from 'src/app/core/models/users.model';
 import { interval, timer, Subscription } from 'rxjs';
 import { AlertasComunService } from 'src/app/pages/rrhh/alertas-comun/alertas-comun.service';
+import { RightsidebarComponent } from '../rightsidebar/rightsidebar.component';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -21,6 +22,7 @@ import { AlertasComunService } from 'src/app/pages/rrhh/alertas-comun/alertas-co
   styleUrls: ['./horizontaltopbar.component.scss'],
 })
 export class HorizontaltopbarComponent implements OnInit {
+  @ViewChild('sideBar', { static: false }) sideBar: RightsidebarComponent;
   alerts$: Subscription;
   configData: any;
   alerts: any[] = [];
@@ -158,8 +160,8 @@ export class HorizontaltopbarComponent implements OnInit {
    * on settings button clicked from topbar
    */
   onSettingsButtonClicked() {
-    document.body.classList.toggle('right-bar-enabled');
-
+    //document.body.classList.toggle('right-bar-enabled');
+    this.sideBar.init();
   }
 
   /**

@@ -10,7 +10,7 @@
             class="btn btn-warning btn-sm"
             (click)="openValues(alojamiento)"
           >
-            <i class="fas fa-hotel"></i>Tipo de alojamientos
+            <i class="fas fa-hotel"></i> Tipo de alojamientos
           </button>
           <button
             class="btn btn-sm btn-primary"
@@ -62,9 +62,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let hotel of hotels" class="text-center">
-            <td class="align-middle">{{ hotel.type }}</td>
-            <td class="align-middle">{{ hotel.name }}</td>
-            <td class="align-middle">{{ hotel.address }}</td>
+            <td class="align-middle">{{ hotel.type | capitalLetter }}</td>
+            <td class="align-middle">{{ hotel.name | uppercase }}</td>
+            <td class="align-middle">{{ hotel.address | uppercase }}</td>
             <td class="align-middle">
               {{ hotel.city != undefined ? hotel.city.name : "" }}
             </td>
@@ -176,15 +176,17 @@
             </mat-option>
           </mat-autocomplete>
         </mat-form-field> -->
-        <div class="col">
+        <div class="col mat-form-field-wrapper">
           <ng-select
             [items]="cities"
             formControlName="city_id"
             bindLabel="text"
             bindValue="value"
             appearance="outline"
+            [class.is-invalid]="form.get('city_id').invalid"
+            [clearable]="false"
             [appendTo]="'body'"
-            placeholder="Ciudad"
+            placeholder="Ciudad *"
             loadingText="loading "
             ngDefaultControl
           >
@@ -303,6 +305,7 @@
   <div class="modal-body">
     <app-accommodations
       [data]="accommodationsPaginate"
+      [loading]="loadingTypes"
       [pagination]="paginationAccomodations"
       (saveEvent)="saveAccommodation($event)"
       (paginationEvent)="getAccommodation($event)"

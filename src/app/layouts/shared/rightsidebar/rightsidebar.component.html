@@ -1,4 +1,10 @@
-<div class="right-bar" id="right-bar" #changes (clickOutside)="hide()" [exclude]="'.right-bar-toggle'">
+<div
+  class="right-bar"
+  id="right-bar"
+  #changes
+  (clickOutside)="hide()"
+  [exclude]="'.right-bar-toggle'"
+>
   <div data-simplebar class="h-100">
     <div class="px-2 py-2">
       <div class="d-flex justify-content-between">
@@ -26,7 +32,7 @@
     </div>
     <div class="container">
       <button
-        (click)="openModal(); hide()"
+        (click)="newTask.openInit(); hide()"
         type="button"
         class="btn btn-primary btn btn-block mb-2"
       >
@@ -51,4 +57,4 @@
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
-<app-new-task [open]="open.asObservable()"></app-new-task>
+<app-new-task #newTask></app-new-task>

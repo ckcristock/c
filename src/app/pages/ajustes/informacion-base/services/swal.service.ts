@@ -38,7 +38,7 @@ export class SwalService {
       }
     }
   }
-  show({ title, text, icon, timer = 0, showCancel = true,
+  show({ title, text, icon, timer = 0, showCancel = true, confirmButtonColor = null
 
   }, preConfirm?) {
     let swal: any = {
@@ -49,7 +49,7 @@ export class SwalService {
       allowOutsideClick: true,
       allowEscapeKey: true,
       showCancelButton: showCancel,
-      confirmButtonColor: this.buttonColor.confirm,
+      confirmButtonColor: confirmButtonColor || this.buttonColor.confirm,
       confirmButtonText: showCancel ? '¡Sí, confirmar!' : 'OK',
       cancelButtonColor: this.buttonColor.cancel,
       cancelButtonText: 'Cancelar',
@@ -118,6 +118,24 @@ export class SwalService {
     let swal: any = {
       title: 'Algo no salió bien',
       text: 'Comunícate con el equipo de tecnología.',
+      icon: 'error',
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+      showCancelButton: false,
+      confirmButtonColor: '#F27474',
+      confirmButtonText: 'OK',
+      cancelButtonColor: this.buttonColor.cancel,
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+
+    };
+    return Swal.fire(swal)
+  }
+
+  incompleteError() {
+    let swal: any = {
+      title: 'Campos incompletos',
+      text: 'Revisa todos los campos requeridos y vuelve a intentarlo.',
       icon: 'error',
       allowOutsideClick: true,
       allowEscapeKey: true,

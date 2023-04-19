@@ -1,6 +1,9 @@
 <div class="ngbNavContent text-center">
   <div class="d-flex justify-content-end">
-    <button class="btn btn-sm btn-primary btn-block mb-3" (click)="openModal()">
+    <button
+      class="btn btn-sm btn-primary btn-block mb-3"
+      (click)="newTask.openInit()"
+    >
       <i class="fa fa-plus"></i> Agregar
     </button>
   </div>
@@ -18,7 +21,7 @@
 </div>
 
 <app-new-task
-  [open]="open.asObservable()"
+  #newTask
   [category]="'Negocios'"
   [business_id]="business_budget_id"
   (refresh)="getTasks()"
@@ -27,4 +30,3 @@
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
-

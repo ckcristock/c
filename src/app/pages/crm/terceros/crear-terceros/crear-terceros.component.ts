@@ -504,6 +504,14 @@ export class CrearTercerosComponent implements OnInit {
     this.loading = true
     this._terceros.editThirdParty(this.id).subscribe((r: any) => {
       this.third = r.data;
+      let thirdPartyType = [];
+      if (this.third.is_client) {
+        thirdPartyType.push('Cliente');
+      }
+      if (this.third.is_supplier) {
+        thirdPartyType.push('Proveedor');
+      }
+      this.third.third_party_type = thirdPartyType;
       this.form.patchValue({
         id: this.third.id,
         document_type: this.third.document_type,

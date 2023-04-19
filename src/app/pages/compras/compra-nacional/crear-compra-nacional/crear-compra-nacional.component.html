@@ -1,5 +1,7 @@
-<!-- <form [formGroup]=" -->
-<form [formGroup]="formCompra">
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<ng-container *ngIf="!loading; else placeholder">
   <div class="card">
     <div class="card-body">
       <div class="row card-title d-flex justify-content-between">
@@ -9,111 +11,129 @@
         ></app-cabecera>
       </div>
       <hr class="line" />
-      <div class="row">
-        <mat-form-field class="col-lg-2" appearance="outline">
-          <mat-label>Tipo de compra:</mat-label>
-          <mat-select name="Tipo" formControlName="Tipo" matInput required>
-            <mat-option value="Recurrente" selected>Recurrente</mat-option>
-            <mat-option value="Ocasional">Ocasional</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="col-lg-2" appearance="outline">
-          <mat-label>Fecha de entrega probable: </mat-label>
-          <input
-            type="date"
-            [min]="fecha.toISOString().slice(0, 10)"
-            formControlName="Fecha_Entrega_Probable"
-            placeholder=""
-            matInput
-            required
-          />
-          <mat-error class="text-danger" *ngIf="formCompra.get('Fecha_Entrega_Probable').hasError('fechaMin')">
-            La fecha señalada debe ser posterior a la actual.
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="col-lg-2" appearance="outline">
-          <mat-label>Tipo de bodega</mat-label>
-          <mat-select
-            name="Tipo_Bodega"
-            formControlName="Tipo_Bodega"
-            matInput
-            required
-          >
-            <mat-option value="Bodega">Bodega</mat-option>
-            <mat-option value="Punto">Punto de dispensación</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <ng-container *ngIf="formCompra.controls.Tipo_Bodega.value == 'Bodega'; else selectPuntoDispensacion">
-          <mat-form-field class="col-lg-3" appearance="outline">
+      <div class="alert alert-info" role="alert">
+        Recuerda que solo podrás agregar productos que pertenencen a una misma
+        subcategoría.
+      </div>
+      <ng-container [formGroup]="formCategories">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Categoría</mat-label>
+            <mat-select
+              formControlName="category_id"
+              [disableOptionCentering]="true"
+              #selectCategories
+            >
+              <mat-select-filter
+                *ngIf="selectCategories.focused"
+                [placeholder]="'Buscar categoría'"
+                [array]="Categorias"
+                [displayMember]="'Nombre'"
+                (filteredReturn)="filteredCategories = $event"
+              ></mat-select-filter>
+
+              <mat-option
+                *ngFor="let item of filteredCategories"
+                [value]="item.Id_Categoria_Nueva"
+                >{{ item.Nombre }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Subcategoría</mat-label>
+            <mat-select
+              formControlName="subcategory_id"
+              [disableOptionCentering]="true"
+              #selectSubcategories
+            >
+              <mat-select-filter
+                *ngIf="selectSubcategories.focused"
+                [placeholder]="'Buscar subcategoría'"
+                [array]="subcategorias"
+                [displayMember]="'Nombre'"
+                (filteredReturn)="filteredSubategories = $event"
+              ></mat-select-filter>
+
+              <mat-option
+                *ngFor="let item of filteredSubategories"
+                [value]="item.Id_Subcategoria"
+                >{{ item.Nombre }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </ng-container>
+      <ng-container [formGroup]="formCompra">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Tipo de compra</mat-label>
+            <mat-select name="Tipo" formControlName="Tipo" matInput required>
+              <mat-option value="Recurrente" selected>Recurrente</mat-option>
+              <mat-option value="Ocasional">Ocasional</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de entrega probable</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [min]="today"
+              formControlName="Fecha_Entrega_Probable"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Bodega</mat-label>
             <mat-select
               formControlName="Id_Bodega_Nuevo"
-              matInput
+              [disableOptionCentering]="true"
+              #selectBodegas
               required
-              placeholder="Seleccione una Bodega"
             >
-              <!-- <mat-option [ngValue]="undefined"
-                >Seleccione una Bodega</mat-option
-              > -->
+              <mat-select-filter
+                *ngIf="selectBodegas.focused"
+                [placeholder]="'Buscar bodega'"
+                [array]="bodegas"
+                [displayMember]="'Nombre'"
+                (filteredReturn)="filteredBodega = $event"
+              ></mat-select-filter>
               <mat-option
-                *ngFor="let Bodega of Bodegas"
-                [value]="Bodega.Id_Bodega_Nuevo"
-              >
-                {{ Bodega.Nombre }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </ng-container>
-        <ng-template #selectPuntoDispensacion>
-          <mat-form-field class="col-lg-3" appearance="outline">
-            <mat-label>Punto de dispensación</mat-label>
-            <mat-select
-              formControlName="Id_Punto_Dispensacion"
-              matInput
-              required
-              placeholder="Seleccione un Punto de dispensación"
-            >
-              <!-- <mat-option [ngValue]="undefined"
-                >Seleccione un Punto</mat-option
-              > -->
-              <mat-option
-                *ngFor="let item of puntos"
-                [value]="item.Id_Punto_Dispensacion"
+                *ngFor="let item of filteredBodega"
+                [value]="item.Id_Bodega_Nuevo"
               >
                 {{ item.Nombre }}
               </mat-option>
             </mat-select>
           </mat-form-field>
-        </ng-template>
-        <!-- <input
-          type="text"
-          [(value)]="user"
-          formControlName="Identificacion_Funcionario"
-          readonly
-          hidden
-        /> -->
-        <div class="col-lg-3 mat-form-field-wrapper" [ngClass]="(!proveedorValido)?'text-danger':''">
-          <ng-select
-            [items]="Proveedores"
-            formControlName="Id_Proveedor"
-            bindLabel="text"
-            appearance="outline"
-            [appendTo]="'body'"
-            placeholder="Proveedor *"
-            bindValue="value"
-            loadingText="Cargando"
-            matInput
-            required
-            [ngClass]="(!proveedorValido)?'text-danger':''"
-          >
-          </ng-select>
-          <small class="text-danger position-absolute" *ngIf="!proveedorValido">Seleccione un Proveedor</small>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Proveedor</mat-label>
+            <mat-select
+              formControlName="Id_Proveedor"
+              [disableOptionCentering]="true"
+              #selectProveedor
+              required
+            >
+              <mat-select-filter
+                *ngIf="selectProveedor.focused"
+                [placeholder]="'Buscar proveedor'"
+                [array]="proveedores"
+                [displayMember]="'text'"
+                (filteredReturn)="filteredProveedor = $event"
+              ></mat-select-filter>
+              <mat-option
+                *ngFor="let item of filteredProveedor"
+                [value]="item.value"
+              >
+                {{ item.text }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
           <mat-form-field
-            class="col-md-12 px-0 mat-form-field-no-padding textarea"
+            class="col-md-12 mat-form-field-no-padding textarea"
             appearance="outline"
           >
             <mat-label>Observaciones</mat-label>
@@ -126,413 +146,164 @@
             ></textarea>
           </mat-form-field>
         </div>
-      </div>
-      <div class="row">
-        <small class="font-weight-bold col">
-          *Nota: Para hacer más efectiva la busqueda, por favor digite el nombre
-          completo del producto.
-        </small>
-      </div>
-      <div class="row">
-        <div class="col-lg-4 mat-form-field-wrapper">
-          <ng-select
-            name="Categoria"
-            [items]="Categorias"
-            bindLabel="Nombre"
-            bindValue="Id_Categoria_Nueva"
-            [(ngModel)]="selectedCategory.categoria"
-            [ngModelOptions]="{ standalone: true }"
-            (change)="getSubCategories($event)"
-            [disabled]="listaProductosPorAgregar.length > 0"
-            appearance="outline"
-            autocomplete="off"
-            [appendTo]="'body'"
-            placeholder="Categoria"
-            matInput
-          >
-          </ng-select>
-        </div>
-        <div class="col-lg-4 mat-form-field-wrapper">
-          <ng-select
-            name="Subcategoria"
-            [items]="subcategorias"
-            bindLabel="Nombre"
-            bindValue="Id_Subcategoria"
-            [(ngModel)]="selectedCategory.subcategoria"
-            [ngModelOptions]="{ standalone: true }"
-            (change)="filtros()"
-            [disabled]="listaProductosPorAgregar.length > 0"
-            appearance="outline"
-            autocomplete="off"
-            [appendTo]="'body'"
-            placeholder="Subcategoria"
-            matInput
-          >
-          </ng-select>
-        </div>
-        <div class="col-lg-4 mat-form-field-wrapper">
-          <ng-select
-            name="Producto"
-            [(ngModel)]="productoFiltro"
-            [ngModelOptions]="{ standalone: true }"
-            [items]="Productos"
-            bindLabel="producto"
-            (change)="AgregarProducto($event)"
-            (click)="productoFiltro = {}"
-            [editableSearchTerm]="true"
-            appearance="outline"
-            autocomplete="off"
-            [appendTo]="'body'"
-            placeholder="Producto"
-            matInput
-          >
-          </ng-select>
-        </div>
-      </div>
-      <div class="row" *ngIf="listaProductosPorAgregar.length > 0">
-        <small class="font-weight-bold col text-danger text-center"
-          >Sólo puede agregar productos pertenecientes a la misma subcategoría.</small
-        >
-      </div>
 
-      <div
-        class="rounded-top table-responsive"
-        *ngIf="listaProductosPorAgregar.length > 0; else notData3"
-      >
-
-        <table class="table table-bordered table-striped table-sm">
-          <thead class="bg-light">
-            <tr class="text-center text-uppercase">
-              <th>#</th>
-              <th class="col-4">Producto</th>
-              <th></th>
-              <th class="col-1">Presentación</th>
-              <th class="col-1" *ngIf="Rotativo">Rotativo</th>
-              <th class="col-1">Cantidad</th>
-              <th class="col-2">Costo</th>
-              <th class="col-1">IVA</th>
-              <th class="col-2">Subtotal</th>
-              <th>
-                <i
-                  role="button"
-                  class="fa fa-trash text-danger"
-                  (click)="deleteProduct()"
-                ></i>
-              </th>
-            </tr>
-          </thead>
-          <tbody formArrayName="Productos">
-            <ng-container
-              *ngFor="let item of listaProductosPorAgregar; let i = index"
-            >
-              <tr
-                *ngIf="item.mostrarProductoEnTabla"
-                id="fila{{ i }}"
-                [formGroupName]="i"
-              >
-                <td class="text-center align-middle">
-                  {{ ((((i+1)%pagination.pageSize)==0)?pagination.pageSize:((i+1)%pagination.pageSize)) }}
-                </td>
-                <td class="align-middle">
-                  <!-- <input
-                    type="hidden"
-                    name="productoModel{{ i }}"
-                    [ngModel]="item.producto"
-                  />
-                  <input
-                    *ngIf="item.Id_Producto == ''"
-                    type="text"
-                    name="producto{{ i }}"
-                    id="Producto{{ i }}"
-                    class="form-control form-control-sm"
-                    autocomplete="off"
-                    [value]="item.producto"
-                    [readonly]="item.producto != ''"
-                  /> -->
-                  <span>{{ item.producto }}</span>
-                </td>
-                <td class="text-center align-middle">
-                  <!-- <button
-                    *ngIf="item.producto == ''"
-                    class="btn btn-primary btn-sm"
-                    (click)="searchProduct(i, item.editar); openConfirm(add)"
-                    title="Buscar Producto"
-                  >
-                    <i class="fa fa-search"></i>
-                  </button> -->
-                  <span *ngIf="item.Embalaje > 0">
-                    Embalaje: {{ item.Embalaje }}
-                  </span>
-                  <!-- <button
-                    *ngIf="item.delete"
-                    class="btn btn-danger btn-xs btn-search"
-                    (click)="deleteProduct(i)"
-                    title="Eliminar producto"
-                    style="display: inline-block"
-                  >
-                    &nbsp;<i class="fa fa-trash"></i>
-                  </button> -->
-                </td>
-                <td class="text-center align-middle">
-                  <input
-                    type="hidden"
-                    name="PresentacionModel{{ i }}"
-                    [value]="item.Presentacion"
-                  />
-                  <span id="Presentacion{{ i }}" name="Presentacion{{ i }}">
-                    {{ item.Presentacion }}
-                  </span>
-                </td>
-                <td *ngIf="Rotativo">
-                  <input
-                    readonly
-                    id="Rotativo{{ i }}"
-                    name="Rotativo{{ i }}"
-                    [value]="item.Rotativo"
-                    type="number"
-                    min="1"
-                    class="form-control form-control-sm text-right f-9"
-                  />
-                </td>
-                <td>
-                  <!--<input id="Cantidad{{i}}" name="Cantidad{{i}}" [ngModel]="item.Cantidad" type="number" min="1" class="form-control form-control-sm text-right f-9"
-                          (change)="CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)">-->
-                  <!-- <input
-                    type="hidden"
-                    name="CantidadModel{{ i }}"
-                    [value]="item.Cantidad"
-                  /> -->
-                  <input
-                    formControlName="Cantidad"
-                    type="number"
-                    matInput
-                    min="1"
-                    class="form-control form-control-sm text-right f-9"
-                    (input)="CalculoTotal(i)"
-                  /><!-- ; CapturarDigitacion(i) (keyup)="ActualizaValores()"-->
-                </td>
-                <td>
-                  <!-- <input
-                    type="hidden"
-                    name="CostoModel{{ i }}"
-                    [value]="item.Costo"
-                  /> -->
-                  <ng-container *ngIf="!item.editCosto; else inputEditCosto">
-                    <div
-                      class="d-flex justify-content-between align-items-center"
-                    >
-                      <i
-                        role="button"
-                        (click)="item.editCosto = true"
-                        class="fas fa-pen fa-sm"
-                      ></i>
-                      <span
-                        >${{
-                          formCompra.value.Productos[i].Costo
-                          | number : "1.2-2"
-                        }}</span
-                      >
-                    </div>
-                  </ng-container>
-                  <ng-template #inputEditCosto>
-                    <input
-                      appAutoFocusDirective
-                      (blur)="item.editCosto = false"
-                      formControlName="Costo"
-                      type="number"
-                      matInput
-                      min="1"
-                      class="form-control form-control-sm text-right f-9"
-                      (input)="CalculoTotal(i)"
-                    /><!-- pattern="[0-9\.]*" ; CapturarDigitacion(i) -->
-                  </ng-template>
-                </td>
-                <td>
-                  <!-- <input
-                    id="Iva{{ i }}"
-                    name="Iva{{ i }}"
-                    [ngModel]="item.Iva"
-                    type="number"
-                    min="1"
-                    class="form-control form-control-sm text-right f-9"
-                    (change)="
-                      CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
-                    "
-                  /> -->
-                  <!-- <input
-                    type="hidden"
-                    name="IvaModel{{ i }}"
-                    [value]="item.Iva"
-                  /> -->
-                  <!-- <mat-form-field class="pb-0" appearance="outline">
-                    <mat-select
-                      [ngModel]="item.Iva"
-                      id="Iva{{ i }}"
-                      name="Iva{{ i }}"
-                      (selectionChange)="
-                        CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)
-                      "
-                    >
-                      <mat-option
-                        *ngFor="let Impuesto of Impuestos; let i = index"
-                        [value]="Impuesto.Valor"
-                      >
-                        {{ Impuesto.Valor }}</mat-option
-                      >
-                    </mat-select>
-                  </mat-form-field> -->
-                  <select
-                    formControlName="Iva"
-                    class="form-control form-control-sm"
-                    matInput
-                    (change)="CalculoTotal(i)"
-                  >
-                    <!-- ; CapturarDigitacion(i) -->
-                    <option
-                      *ngFor="let Impuesto of Impuestos; let i = index"
-                      [value]="Impuesto.Valor"
-                    >
-                      {{ Impuesto.Valor }}
-                    </option>
-                  </select>
-                </td>
-                <td class="text-center align-middle">
-                  <input type="hidden" formControlName="Total" />
-                  <!-- <input
-                    type="hidden"
-                    name="TotalModel{{ i }}"
-                    [value]="item.Total"
-                  /> -->
-                  <span
-                    name="Total{{ i }}"
-                    id="Total{{ i }}"
-                    type="text"
-                    readonly
-                    ><!-- (change)=" CalculoTotal(i); ActualizaValores(); CapturarDigitacion(i)" -->
-                    $ {{ item.Total | number : "1.2-2" }}
-                  </span>
-                </td>
-                <td class="align-middle text-center">
-                  <button
-                    type="button"
-                    class="btn btn-danger btn-sm"
-                    (click)="deleteProduct(i, $event)"
-                    *ngIf="item.producto != ''"
-                  >
-                    <i class="fa fa-trash"></i>
-                  </button>
-                </td>
-              </tr>
-            </ng-container>
-          </tbody>
-        </table>
-      </div>
-      <ngb-pagination
-        *ngIf="listaProductosPorAgregar.length > 0"
-        class="d-flex justify-content-center pagination-rounded pagination-sm"
-        [collectionSize]="pagination.collectionSize"
-        (pageChange)="paginarProductos($event)"
-        maxSize="5"
-        rotate="true"
-        ellipses="false"
-        boundaryLinks="true"
-        [pageSize]="pagination.pageSize"
-        [(page)]="pagination.page"
-        aria-label="Default pagination"
-      >
-      </ngb-pagination>
-      <ng-container *ngIf="Total_F != 0">
-        <div class="row d-flex justify-content-end">
-          <div class="col-sm-5">
-            <table class="table table-hover">
+        <ng-container formArrayName="Productos">
+          <div
+            class="rounded-top table-responsive"
+            *ngIf="products.controls.length > 0; else notDataProducts"
+          >
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>#</th>
+                  <th class="col-4">Producto</th>
+                  <th>Embalaje</th>
+                  <th class="col-1">Presentación</th>
+                  <th class="col-1" *ngIf="Rotativo">Rotativo</th>
+                  <th class="col-1">Cantidad</th>
+                  <th class="col-2">Costo</th>
+                  <th class="col-1">IVA %</th>
+                  <th class="col-2">Subtotal</th>
+                  <th class="col-2">IVA $</th>
+                  <th class="col-2">Total</th>
+                  <th>
+                    <i
+                      role="button"
+                      class="fa fa-trash text-danger"
+                      (click)="deleteProduct()"
+                    ></i>
+                  </th>
+                </tr>
+              </thead>
               <tbody>
-                <tr>
-                  <th>( = ) Subtotal :</th>
-                  <td class="d-flex justify-content-end">
-                    $ {{ Subtotal_F | number : "1.2-2" }}
-                  </td>
-                </tr>
-                <tr>
-                  <th>( + ) Iva :</th>
-                  <td class="d-flex justify-content-end">
-                    $ {{ Iva_F | number : "1.2-2" }}
-                  </td>
-                </tr>
-                <tr>
-                  <th>( = ) Total :</th>
-                  <td class="d-flex justify-content-end">
-                    $ {{ Total_F | number : "1.2-2" }}
-                  </td>
-                </tr>
+                <ng-container
+                  [formGroupName]="i"
+                  *ngFor="let item of products.controls; let i = index"
+                >
+                  <tr class="text-center">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item.get("Nombre_Comercial").value }}</td>
+                    <td>{{ item.get("Embalaje_nombre").value }}</td>
+                    <td>{{ item.get("Presentacion").value }}</td>
+                    <td *ngIf="Rotativo">
+                      <input
+                        readonly
+                        id="Rotativo{{ i }}"
+                        name="Rotativo{{ i }}"
+                        [value]="item.Rotativo"
+                        type="number"
+                        class="form-control form-control-sm text-right f-9"
+                      />
+                    </td>
+                    <td class="py-0">
+                      <input
+                        formControlName="Cantidad"
+                        currencyMask
+                        [options]="masks.maskNumbers"
+                        appInputPositionInitial
+                        matInput
+                        class="form-control form-control-sm text-right f-9"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        (blur)="item.editCosto = false"
+                        formControlName="Costo"
+                        currencyMask
+                        [options]="masks.maskCOP"
+                        appInputPosition
+                        matInput
+                        class="form-control form-control-sm text-right f-9"
+                      />
+                    </td>
+                    <td class="py-0">
+                      <select
+                        formControlName="impuesto_id"
+                        class="form-control form-control-sm"
+                        style="border: 0"
+                      >
+                        <option
+                          *ngFor="let Impuesto of Impuestos; let i = index"
+                          [value]="Impuesto.Id_Impuesto"
+                        >
+                          {{ Impuesto.Valor }}
+                        </option>
+                      </select>
+                    </td>
+                    <td class="text-right">
+                      ${{ item.get("Subtotal").value | number : "1.2-2" }}
+                    </td>
+                    <td class="text-right">
+                      ${{ item.get("Valor_Iva").value | number : "1.2-2" }}
+                    </td>
+                    <td class="text-right">
+                      ${{ item.get("Total").value | number : "1.2-2" }}
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        class="btn btn-danger btn-sm"
+                        (click)="deleteProduct(i, $event)"
+                        *ngIf="item.producto != ''"
+                      >
+                        <i class="fa fa-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
               </tbody>
             </table>
           </div>
+        </ng-container>
+        <div class="row">
+          <mat-form-field class="col-12" appearance="outline">
+            <mat-label> Productos </mat-label>
+            <input
+              matInput
+              #inputProduct
+              type="text"
+              id="typeahead-http"
+              [class.is-invalid]="searchFailed"
+              [ngbTypeahead]="search"
+              [inputFormatter]="formatter"
+              [resultFormatter]="formatter"
+              (selectItem)="addProduct($event.item, $event, inputProduct)"
+              placeholder="Busca producto por nombre"
+              autocomplete="off"
+            />
+            <mat-hint *ngIf="searching"> Buscando </mat-hint>
+          </mat-form-field>
         </div>
-      </ng-container>
-
-      <ng-container #erroresProductos *ngIf="mostrarAlertas">
-        <div class="alert alert-danger" role="alert" *ngFor="let campo of Object.keys(productsValidation)">
-          <strong>{{ campo }}</strong>
-          <ul>
-            <li *ngFor="let item of productsValidation[campo]">{{item.texto}}
-              <button
-                type="button"
-                class="btn btn-danger btn-sm"
-                (click)="paginarProductos(item.pagina)"
-              >
-                <i class="fa-regular fa-square-arrow-up-right"></i> Ir a la página
-              </button>
-            </li>
-          </ul>
-        </div>
-      </ng-container>
-
-      <div class="row d-flex justify-content-center">
-        <div class="col-sm-12 text-center">
-          <button
-            class="btn btn-primary btn-block"
-            (click)="GuardarCompra()"
-          ><!-- [disabled]="formCompra.invalid" -->
-            Realizar compra
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</form>
-
-<div class="row invoice-contact" style="align-items: flex-start !important">
-  <div class="col-md-8">
-    <div class="invoice-box row">
-      <div class="col-sm-12">
-        <table
-          class="table invoice-table table-borderless"
-          style="text-align: left; font-size: 12px"
+        <ng-container *ngIf="products.controls.length > 0">
+          <app-list-items
+            title1="SUBTOTAL"
+            [var1]="formCompra.get('Subtotal').value"
+            type1="cop"
+            title2="IVA"
+            [var2]="formCompra.get('Iva').value"
+            type2="cop"
+            title3="Total"
+            [var3]="formCompra.get('Total').value"
+            type3="cop"
+            mt="mt-2"
+          >
+          </app-list-items>
+        </ng-container>
+        <button
+          class="btn btn-primary btn-block mt-3"
+          (click)="GuardarCompra()"
         >
-          <tbody>
-            <tr>
-              <td style="width: 100px">
-                <!--  <img src="{{globales.urlLogoColor}}" class="m-b-10 img-60" alt="Pro-H Software"> -->
-              </td>
-              <td>
-                <!-- TODO DATOS DE EMPRESA -->
-                <!-- {{globales.Nombre}}
-                                              <br> {{globales.Nit}}
-                                              <br> {{globales.Direccion}}
-                                              <br> {{globales.Telefono}} -->
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          Realizar compra
+        </button>
+      </ng-container>
     </div>
   </div>
-</div>
+</ng-container>
 
 <ng-template #notData>
   <app-not-data [loading]="Cargando"></app-not-data>
 </ng-template>
-<ng-template #notData3>
+<ng-template #notDataProducts>
   <div class="alert alert-warning text-center" role="alert">
     ¡No has agregado productos!
   </div>

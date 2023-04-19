@@ -28,14 +28,14 @@ export class LicenciaConduccionComponent implements OnInit {
     tipo: ''
   }
 
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   constructor(
     private fb: FormBuilder,
@@ -54,17 +54,14 @@ export class LicenciaConduccionComponent implements OnInit {
   }
 
   closeResult = '';
-  public openConfirm(confirm, titulo) {
+  openConfirm(confirm, titulo) {
     this.title = titulo;
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => { }, (reason) => {
+      this.getDismissReason();
     });
   }
-  private getDismissReason(reason: any) {
+  getDismissReason() {
     this.form.reset();
-    
   }
 
   createForm() {
@@ -125,18 +122,22 @@ export class LicenciaConduccionComponent implements OnInit {
   }
 
   save() {
-    this._licencia.save(this.form.value).subscribe((r: any) => {
-      this.modalService.dismissAll(); 
-      this.getDrivingLicenses();
-      this.form.reset();
-      this._swal.show({
-        icon: 'success',
-        title: r.data.title,
-        text: '',
-        showCancel: false,
-        timer: 1000,
+    if (this.form.valid) {
+      this._licencia.save(this.form.value).subscribe((r: any) => {
+        this.modalService.dismissAll();
+        this.getDrivingLicenses();
+        this.form.reset();
+        this._swal.show({
+          icon: 'success',
+          title: r.data.title,
+          text: '',
+          showCancel: false,
+          timer: 1000,
+        })
       })
-    })
+    } else {
+      this._swal.incompleteError();
+    }
   }
 
 }

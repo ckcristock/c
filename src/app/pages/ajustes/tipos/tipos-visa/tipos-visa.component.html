@@ -2,7 +2,7 @@
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
-        <h4 class="text-primary">Tipos de visa</h4>
+        <h5 class="text-primary">Tipos de visa</h5>
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
@@ -47,8 +47,8 @@
               'text-danger font-weight-bold': item.state == 'Inactivo'
             }"
           >
-            <td class="align-middle">{{ item.name }}</td>
-            <td class="align-middle">{{ item.purpose }}</td>
+            <td class="align-middle">{{ item.name | uppercase }}</td>
+            <td class="align-middle">{{ item.purpose | uppercase }}</td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -99,9 +99,6 @@
       (pageChange)="getVisaTypes($event)"
       aria-label="Default pagination"
       maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
       rotate="true"
       ellipses="false"
       boundaryLinks="true"
@@ -159,12 +156,7 @@
     >
       Cancelar
     </button>
-    <button
-      type="button"
-      [disabled]="!form.valid"
-      (click)="save()"
-      class="btn btn-primary"
-    >
+    <button type="button" (click)="save()" class="btn btn-primary">
       Guardar
     </button>
   </div>

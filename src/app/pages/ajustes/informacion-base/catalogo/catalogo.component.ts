@@ -1,41 +1,31 @@
 import { Location } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Template } from '@angular/compiler/src/render3/r3_ast';
-import { noUndefined } from '@angular/compiler/src/util';
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { fromEvent } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { PermissionService } from 'src/app/core/services/permission.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { UnidadesMedidasService } from '../../parametros/apu/unidades-medidas/unidades-medidas.service';
 import { CategoriasService } from '../../parametros/cat-subcat/categorias/categorias.service';
 import { SwalService } from '../services/swal.service';
 import { CatalogoService } from './catalogo.service';
+import { ProductoService } from '../productos/producto.service';
 
 @Component({
   selector: 'app-catalogo',
   templateUrl: './catalogo.component.html',
   styleUrls: ['./catalogo.component.scss'],
 })
-export class CatalogoComponent implements OnInit, AfterViewInit {
+export class CatalogoComponent implements OnInit {
   @ViewChild('matPanel') matPanel: MatExpansionPanel;
-
-  private modalRef: NgbModalRef;
-
   public Categorias: any[] = [];
   public Subcategorias: any[] = [];
   public Productos: any[] = [];
   public tipos_catalogo: any[] = [];
-  public estados: any[] = [];
-  public campos: any = { cat: [], subcat: [] };
-  public unidades_medida: any[] = [];
   public selectedCategory: any = {
     categoria: {
       id: null,
@@ -46,30 +36,27 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       nombre: ''
     }
   }
-  public pagination: any = {
+  pagination: any = {
     page: 1,
-    pageSize: 5
-  }/* ,
-    collectionSize: 0 */
-  public alerta: any = {
+    pageSize: 10,
+    collectionSize: 0
+  }
+  alerta: any = {
     senyal: "",
     texto: ""
   }
-
-  //ngbNavItem
   Object = Object;
   orderObj: any;
   filtroActivado: boolean = false;
   event = new EventEmitter<Event>();
   formFiltros: FormGroup;
-  formProductos: FormGroup;
   productoDetalle: any = {};
   filtroDefault: any = {};
   productoDefault: any = {};
-  camposFlag: any = {};
   active = 1;
   loadingCategorias: boolean = false;
   loadingProductos: boolean = false;
+
   title: string = "";
   permission: Permissions = {
     menu: 'Catálogo',
@@ -77,12 +64,7 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       show: true
     }
   };
-  foto: any = {
-    name: '',
-    string: '',
-    type: '',
-    file: ''
-  }
+
 
   constructor(
     public router: Router,
@@ -90,12 +72,12 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
     private location: Location,
     private _permission: PermissionService,
     private _categoria: CategoriasService,
-    private _user: UserService,
     private _swal: SwalService,
+    private _producto: ProductoService,
     private _catalogo: CatalogoService,
-    private _modalCatalogo: ModalService,
     private _unit: UnidadesMedidasService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+
   ) {
     this.permission = this._permission.validatePermissions(this.permission);
   }
@@ -103,6 +85,7 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     if (this.permission.permissions.show) {
       this.createForms();
+      this.getProducts();
       this.getCategorias();
       this.route.queryParamMap.subscribe((params: any) => {
         this.pagination.pageSize = (params.params.pageSize) ? parseInt(params.params.pageSize) : 10;
@@ -117,19 +100,9 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
           this.getProductosBySubcategoria(this.selectedCategory, false);
         }
       })
-
-      this._unit.selectUnits().subscribe((res: any) => {
-        this.unidades_medida = res.data;
-      })
-      this._catalogo.getEstados().subscribe((res: any) => {
-        this.estados = res.data;
-      })
     } else {
       this.router.navigate(['/notauthorized'])
     }
-  }
-
-  ngAfterViewInit(): void {
   }
 
   verificarFiltros(): boolean {
@@ -161,10 +134,10 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
 
   SetFiltros(data) {
     let params = new HttpParams;
-    data.categoria = (this.selectedCategory.categoria.id !== null) ? data.categoria : '';
-    data.subcategoria = (this.selectedCategory.subcategoria.id !== null) ? data.subcategoria : '';
-    data.nom_categoria = (this.selectedCategory.categoria.id !== null) ? this.selectedCategory.categoria.nombre : '';
-    data.nom_subcategoria = (this.selectedCategory.subcategoria.id !== null) ? this.selectedCategory.subcategoria.nombre : '';
+    data.categoria = this.selectedCategory.categoria.id ? data.categoria : '';
+    data.subcategoria = this.selectedCategory.subcategoria.id ? data.subcategoria : '';
+    data.nom_categoria = this.selectedCategory.categoria.id ? this.selectedCategory.categoria.nombre : '';
+    data.nom_subcategoria = this.selectedCategory.subcategoria.id ? this.selectedCategory.subcategoria.nombre : '';
     this.Object.keys(data).forEach(control => {
       if (data[control]) { params = params.set(control, data[control]); }
     })
@@ -193,120 +166,6 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
     ).subscribe(r => {
       this.getProducts();
     })
-
-    this.formProductos = this.fb.group({
-      Id_Producto: [''],
-      Id_Categoria: ['', Validators.required],
-      Id_Subcategoria: ['', Validators.required],
-      Nombre_Comercial: ['', Validators.required],
-      Presentacion: ['', Validators.required],
-      Unidad_Medida: ['', Validators.required],
-      Codigo_Barras: [''],
-      Embalaje: ['', Validators.required],
-      Foto: [''],
-      FormCamposCategoria: this.fb.array([]),
-      FormCamposSubcategoria: this.fb.array([])
-    });
-
-  }
-
-  get arrayCamposCat() {
-    return this.formProductos.get('FormCamposCategoria') as FormArray;
-  }
-
-  get arrayCamposSubcat() {
-    return this.formProductos.get('FormCamposSubcategoria') as FormArray;
-  }
-
-  catSubcatCampos(tipo: string) {
-    const formCampos = {};
-    this.campos[tipo].forEach(campo => {
-      formCampos[campo.label] = campo.required == "Si" ?
-        new FormControl(campo.valor || '', Validators.required) :
-        new FormControl(campo.valor || '')
-    });
-
-    return this.fb.group(formCampos);
-  }
-
-  newCampoCatSubcat(tipo: string) {
-    let field = (tipo == "cat") ? this.arrayCamposCat : this.arrayCamposSubcat;
-    field.push(this.catSubcatCampos(tipo));
-  }
-
-  mostrarCampos(param, tipos: string[], template?: any) {
-    this._catalogo.getCampos(param).subscribe((res: any) => {
-      this.campos = res.data;
-      tipos.forEach(tipo => {
-        if (tipo == "cat") {
-          this.arrayCamposCat.removeAt(0);
-        } else {
-          this.arrayCamposSubcat.removeAt(0);
-        }
-        this.newCampoCatSubcat(tipo);
-      });
-      if (template != undefined) {
-        this.camposFlag = { cat: this.campos.cat.length, subcat: this.campos.subcat.length }
-        this._modalCatalogo.open(template, 'lg');
-      }
-    });
-  }
-
-  openConfirm(confirm: any, titulo: string, data?: any) {
-    this.title = titulo;
-    this.formProductos.reset();
-    this.foto = {
-      name: '',
-      string: '',
-      type: '',
-      file: ''
-    }
-    let params = {};
-    if (titulo == "Agregar") {
-      this.formProductos.patchValue({
-        Id_Categoria: this.selectedCategory.categoria.id,
-        Id_Subcategoria: this.selectedCategory.subcategoria.id
-      });
-      params = {
-        categoria: this.selectedCategory.categoria.id,
-        subcategoria: this.selectedCategory.subcategoria.id
-      };
-    } else if (titulo == "Editar") {
-      this.formProductos.patchValue({
-        Id_Producto: data.Id_Producto,
-        Id_Categoria: data.Id_Categoria,
-        Id_Subcategoria: data.Id_Subcategoria,
-        Nombre_Comercial: data.Nombre_Comercial,
-        Presentacion: data.Presentacion,
-        Unidad_Medida: data.Unidad_Medida,
-        Codigo_Barras: data.Codigo_Barras,
-        Embalaje: data.Embalaje,
-        Foto: data.Foto
-      });
-      params = { producto: data.Id_Producto };
-    }/* else if(titulo == "Detalle del"){
-      this.productoDetalle = data;
-    } */
-
-    this.mostrarCampos(params, ["cat", "subcat"], confirm);
-  }
-
-  openCatSubcatModal(template: any, tipo: string) {
-    let params = (this.title == "Agregar") ?
-      {
-        categoria: this.selectedCategory.categoria.id,
-        subcategoria: this.selectedCategory.subcategoria.id
-      }
-      :
-      { producto: this.formProductos.value.Id_Producto };
-
-    this._modalCatalogo.open(template, 'md');
-    this.modalRef = this._modalCatalogo.modalRef;
-    this.modalRef.result.then((res: any) => {
-      this.mostrarCampos(params, [tipo]);
-    }, (reason) => {
-      this.mostrarCampos(params, [tipo]);
-    });
   }
 
   getCategorias() {
@@ -330,10 +189,11 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
 
     var paramsurl = this.SetFiltros(params);
     this.location.replaceState(this.router.url.split("?")[0], paramsurl.toString());
-    this._catalogo.getData(params).subscribe((res: any) => {
+    this._producto.paginate(params).subscribe((res: any) => {
       this.Productos = res.data.data;
       this.loadingProductos = false;
-    })/* this.pagination.collectionSize = res.data.total; */
+      this.pagination.collectionSize = res.data.total;
+    })/*  */
   }
 
   getProductosBySubcategoria(categoria, clickedFlag = true) {
@@ -344,34 +204,6 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       this.selectedCategory = categoria;
     }
     this.getProducts();
-  }
-
-  onFileSelected(event) {
-    if (event.target.files[0]) {
-      let file = event.target.files[0];
-      const types = ['image/png', 'image/jpg', 'image/jpeg']
-      if (!types.includes(file.type)) {
-        this._swal.show({
-          icon: 'error',
-          title: 'Error de archivo',
-          showCancel: false,
-          text: 'El tipo de archivo no es válido'
-        });
-        return null
-      }
-      this.foto.name = file.name;
-      var reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onload = (event) => {
-        this.foto.string = (<FileReader>event.target).result;
-        const type = { ext: this.foto.string };
-        this.foto.type = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
-      };
-      functionsUtils.fileToBase64(file).subscribe((base64) => {
-        this.foto.file = base64;
-        this.formProductos.get("Foto").setValue(this.foto.file);
-      });
-    }
   }
 
   cambiarEstado(producto, state) {
@@ -401,68 +233,5 @@ export class CatalogoComponent implements OnInit, AfterViewInit {
       })
   }
 
-  saveProductos(modal: any) {
-    if (this.formProductos.valid) {
-      ["cat", "subcat"].forEach(tipo => {
-        let campos = this.campos[tipo].map((campo) => campo = {
-          id: campo.vp_id || "",
-          subcategory_variables_id: campo.sv_id,
-          category_variables_id: campo.cv_id,
-          valor: ((tipo == "cat") ? this.arrayCamposCat : this.arrayCamposSubcat).value[0][campo.label]
-        });
-        this.formProductos.value[(tipo == "cat") ? "camposCategoria" : "camposSubcategoria"] = campos;
-      });
-      delete this.formProductos.value.FormCamposCategoria;
-      delete this.formProductos.value.FormCamposSubcategoria;
 
-      let formData = {
-        ...this.formProductos.value,
-        user_id: this._user.user.id,
-        camposFlag: {
-          cat: (this.campos.cat.length > this.camposFlag.cat),
-          subcat: (this.campos.subcat.length > this.camposFlag.subcat)
-        }
-      };
-
-      formData["Foto"] = { ...this.foto };
-      delete formData.string;
-      delete formData.name;
-      this._swal.show({
-        title: '¿Estás seguro(a)?',
-        text: 'Si ya verificó la información y está de acuerdo, por favor proceda.',
-        icon: 'question',
-        showCancel: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this._catalogo.saveProduct(formData).subscribe((r: any) => {
-            this.getProducts(this.pagination.page);
-            modal.close();
-            this._swal.show({
-              icon: 'success',
-              title: 'Tarea completada con éxito!',
-              text: 'El producto ha sido registrado con éxito.',
-              timer: 1000,
-              showCancel: false
-            });
-          }, (error) => {
-            this._swal.show({
-              icon: 'error',
-              title: 'Se presentó un error!',
-              text: error.message,
-              timer: 1000,
-              showCancel: false
-            });
-          });
-        }
-      })
-    } else {
-      this._swal.show({
-        icon: 'error',
-        title: 'Validación no superada!',
-        text: 'El producto no ha sido registrado correctamente. Por favor verifique la información y vuelva a intentarlo.',
-        timer: 1000,
-        showCancel: false
-      });
-    }
-  }
 }

@@ -12,6 +12,9 @@ import { NotascreditoComponent } from './notascredito/notascredito.component';
 import { NotascreditocrearComponent } from './notascredito/notascreditocrear/notascreditocrear.component';
 import { NotascreditoverComponent } from './notascredito/notascreditover/notascreditover.component';
 import { NotasDebitoComponent } from './notas-debito/notas-debito.component';
+import { TiposNotaCreditoComponent } from './notascredito/tipos-nota-credito/tipos-nota-credito.component';
+import { NotasDebitoVerComponent } from './notas-debito/notas-debito-ver/notas-debito-ver.component';
+import { NotasDebitoCrearComponent } from './notas-debito/notas-debito-crear/notas-debito-crear.component';
 
 const routes: Routes = [
   { path: 'notas-contables', component: NotasContablesComponent },
@@ -24,10 +27,11 @@ const routes: Routes = [
   { path: 'notas-cartera-crear', component: NotascarteracrearComponent }, */
   { path: 'notas-credito', component: NotascreditoComponent },
   { path: 'notas-credito/crear', component: NotascreditocrearComponent },
+  { path: 'notas-credito/tipos', component: TiposNotaCreditoComponent },
   { path: 'notas-credito/ver/:id', component: NotascreditoverComponent },
   { path: 'notas-debito', component: NotasDebitoComponent },
-
-
+  { path: 'notas-debito/crear', component: NotasDebitoCrearComponent },
+  { path: 'notas-debito/ver/:id', component: NotasDebitoVerComponent },
 ];
 
 @NgModule({

@@ -5,19 +5,24 @@ import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
   providedIn: 'root'
 })
 export class ModalNoCloseService {
-  public modalRef: any;
+  public modalRefNoClose: any;
   constructor(
-    private modalService: NgbModal,
-    config: NgbModalConfig,
+    private modalServiceNoClose: NgbModal,
+    private config: NgbModalConfig,
   ) {
     config.backdrop = 'static';
     config.keyboard = false;
   }
-  open(content, size = 'md', scroll = true) {
-    this.modalRef = this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: size, scrollable: scroll });
+  openNoClose(contentNoClose, size = 'md', scroll = true) {
+    this.modalRefNoClose = this.modalServiceNoClose.open(contentNoClose, {
+      ariaLabelledBy: 'modal-basic-title',
+      size: size,
+      scrollable: scroll,
+      backdrop: 'static',
+      keyboard: false,
+    });
   }
   close() {
-    this.modalService.dismissAll();
-    /* this.modalRef.dismiss(this.modalRef); */
+    this.modalServiceNoClose.dismissAll();
   }
 }

@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class ReloadButtonComponent implements OnInit {
   @Input('reload') reload: boolean;
   @Output('reloadData') reloadDataEvent = new EventEmitter();
+  @Input('title') title = 'Recargar datos iniciales'
   constructor() { }
 
   ngOnInit(): void {

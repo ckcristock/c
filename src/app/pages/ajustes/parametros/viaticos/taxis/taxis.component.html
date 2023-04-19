@@ -52,9 +52,9 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of taxis" class="text-center">
-            <td class="align-middle">{{ item.type }}</td>
-            <td class="align-middle">{{ item.taxi.route }}</td>
-            <td class="align-middle">{{ item.city.name }}</td>
+            <td class="align-middle">{{ item.type | capitalLetter }}</td>
+            <td class="align-middle">{{ item.taxi.route | uppercase }}</td>
+            <td class="align-middle">{{ item.city.name | uppercase }}</td>
             <td class="align-middle">${{ item.value | number : "1.2-2" }}</td>
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -141,7 +141,7 @@
             bindValue="value"
             appearance="outline"
             [appendTo]="'body'"
-            [class.is-invalid]="form.get('city_id').valid"
+            [class.is-invalid]="form.get('city_id').invalid"
             [clearable]="false"
             placeholder="Ciudad"
             loadingText="loading "

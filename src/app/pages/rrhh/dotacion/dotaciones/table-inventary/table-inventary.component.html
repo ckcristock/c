@@ -46,6 +46,7 @@
             [appendTo]="'body'"
             placeholder="Funcionario entrega"
             bindLabel="text"
+            [clearable]="false"
             bindValue="value"
             (change)="filtrar()"
             ngDefaultControl
@@ -61,6 +62,7 @@
             bindLabel="text"
             bindValue="value"
             appearance="outline"
+            [clearable]="false"
             (change)="filtrar()"
             [appendTo]="'body'"
             placeholder="Funcionario recibe"
@@ -85,7 +87,6 @@
             name="Tipo"
             id="tipo"
             [(ngModel)]="type"
-            required
             (selectionChange)="filtrar()"
           >
             <mat-option value="">Todos</mat-option>
@@ -99,7 +100,6 @@
             name="Estado"
             id="estado"
             [(ngModel)]="delivery"
-            required
             (selectionChange)="filtrar()"
           >
             <mat-option value="">Todos</mat-option>
@@ -147,7 +147,7 @@
         *ngIf="!loading && Lista_Dotaciones.length > 0; else notDataTable"
       >
         <thead class="bg-light">
-          <tr class="text-center text-uppercase">
+          <tr class="text-center text-uppercase" style="font-size: 0.7rem">
             <th class="align-middle">Código</th>
             <th class="align-middle">Tipo</th>
             <th class="align-middle">Fecha</th>
@@ -157,7 +157,7 @@
             <th class="align-middle">Artículos</th>
             <th class="align-middle">Valor</th>
             <th class="align-middle">Estado</th>
-            <th class="align-middle">Estado Entrega</th>
+            <th class="align-middle">Estado</th>
             <th class="align-middle"><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
@@ -168,21 +168,24 @@
             [ngClass]="{
               'text-danger font-weight-bold': item.state == 'Anulada'
             }"
+            style="font-size: 0.7rem"
           >
             <td class="align-middle">{{ item.delivery_code }}</td>
             <td class="align-middle">{{ item.type }}</td>
             <td class="align-middle">
               {{ item.created_at | date : "dd/MM/yyyy" }}
             </td>
-            <td class="align-middle">{{ item.entrega }}</td>
-            <td class="align-middle">{{ item.recibe }}</td>
-            <td class="align-middle">{{ item.description }}</td>
+            <td class="align-middle">{{ item.entrega | titlecase }}</td>
+            <td class="align-middle">{{ item.recibe | titlecase }}</td>
+            <td class="align-middle">
+              {{ item.description || "Sin detalles" }}
+            </td>
             <td class="align-middle">
               <div class="articulos-table">
                 {{ item.product_name }}
               </div>
             </td>
-            <td class="align-middle">${{ item.total | number | puntos }}</td>
+            <td class="align-middle">${{ item.total | number : "1.2-2" }}</td>
             <td class="align-middle">
               <span>{{ item.state }}</span>
             </td>
@@ -205,7 +208,7 @@
                     href="javascript:void(0)"
                     (click)="anularDotacion(item.id)"
                   >
-                    <i class="fas fa-times"></i> Anular
+                    <i class="fas fa-trash"></i> Anular
                   </a>
                   <a
                     *ngIf="item.delivery_state == 'Pendiente'"
@@ -248,24 +251,24 @@
         <h5 class="text-center">Montos totales</h5>
         <div class="row text-center mt-2">
           <div class="col-md-6 costo">
-            <i class="fas fa-dollar-sign"></i>
+            <i class="fas fa-dollar-sign text-primary"></i>
             <p class="card-text mb-0">Costos total</p>
             <h5 class="mb-1">$ {{ Totales | number | puntos }}</h5>
           </div>
           <div class="col-md-6 costo">
-            <i class="fas fa-hand-holding-heart"></i>
+            <i class="fas fa-hand-holding-heart text-primary"></i>
             <p class="card-text mb-0"># Entregas realizadas</p>
             <h5>{{ CantidadTotal | number | puntos }}</h5>
           </div>
         </div>
         <div class="row text-center mt-2">
           <div class="col-md-6 costo">
-            <i class="fas fa-street-view"></i>
+            <i class="fas fa-street-view text-primary"></i>
             <p class="card-text mb-0"># Dotaciones totales</p>
             <h5 class="mb-1">{{ TotalesDotaciones | number | puntos }}</h5>
           </div>
           <div class="col-md-6 costo">
-            <i class="fas fa-user-shield"></i>
+            <i class="fas fa-user-shield text-primary"></i>
             <p class="card-text mb-0"># EPP totales</p>
             <h5>{{ totalEpp | number | puntos }}</h5>
           </div>

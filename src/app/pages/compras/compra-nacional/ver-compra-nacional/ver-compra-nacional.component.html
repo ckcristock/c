@@ -1,255 +1,248 @@
-<div class="row">
-  <div class="col-md-4">
-    <div class="card">
-      <div class="card-body">
-        <div class="card-title">
-          <h5 class="text-primary">Seguimiento orden de compra</h5>
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<ng-container *ngIf="!loading; else placeholder">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">
+            <h5 class="text-primary">Seguimiento</h5>
+          </div>
+          <hr class="line" />
+          <ul class="list-group list-group-flush">
+            <li
+              class="list-group-item px-0"
+              *ngFor="let activity of activities"
+            >
+              <div class="d-flex w-100 justify-content-between">
+                <div>
+                  <h6 class="mb-0">
+                    <span
+                      class="badge"
+                      [class]="
+                        activity.Estado == 'Creacion'
+                          ? 'badge-info'
+                          : activity.Estado == 'Edicion'
+                          ? 'badge-warning'
+                          : activity.Estado == 'Anulada' ||
+                            activity.Estado == 'Rechazada'
+                          ? 'badge-danger'
+                          : activity.Estado == 'Aprobacion'
+                          ? 'badge-success '
+                          : ''
+                      "
+                    >
+                      {{ activity.Estado }}</span
+                    >
+                  </h6>
+                  <p class="mb-1">{{ activity.Detalles }}</p>
+                  <small>{{ activity.Fecha }}</small>
+                  <small class="d-block">{{
+                    activity.person.full_names
+                  }}</small>
+                </div>
+                <img
+                  class="d-block img-thumbnail rounded-circle img-fluid header-profile-user"
+                  [src]="activity.person.image"
+                  onerror="this.src='../../../../../assets/images/noprofile.png'"
+                />
+              </div>
+            </li>
+          </ul>
         </div>
-        <hr class="line" />
-        <ul class="list-group list-group-flush">
-          <li
-            class="list-group-item px-0"
-            *ngFor="let Actividad of Actividades"
-          >
-            <div class="d-flex w-100 justify-content-between">
-              <h6>
-                <span
-                  class="mb-1 badge {{
-                    Actividad.Estado == 'Creacion' ? 'badge-info' : ''
-                  }} {{
-                    Actividad.Estado == 'Edicion' ? 'badge-warning' : ''
-                  }}{{
-                    Actividad.Estado == 'Anulada' ||
-                    Actividad.Estado == 'Rechazada'
-                      ? 'badge-danger'
-                      : ''
-                  }} {{
-                    Actividad.Estado == 'Aprobacion' ? 'badge-success ' : ''
-                  }}"
-                ><!-- {{ Actividad.Estado == 'Recepcion' ? 'badge-dark' : '' }} -->
-                  {{ Actividad.Estado }}</span
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="card">
+        <div class="card-body">
+          <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+          <hr class="line" />
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th style="text-align: center">Proveedor</th>
+                  <th style="text-align: center">Bodega</th>
+                  <th style="text-align: center">Fecha de Compra</th>
+                  <th style="text-align: center">Fecha Probable de Entrega</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center">
+                  <td>
+                    {{ Compra.third.full_name | uppercase }}
+                  </td>
+                  <td>
+                    {{ Compra.store.Nombre | uppercase }}
+                  </td>
+                  <td>
+                    {{ Compra.created_at | date }}
+                  </td>
+                  <td>
+                    {{ Compra.Fecha_Entrega_Probable | date }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <hr />
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th colspan="100%" class="bg-light">Observaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center">
+                  <td colspan="100%">{{ Compra.Observaciones | uppercase }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <hr />
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>#</th>
+                  <th>Producto</th>
+                  <th>Embalaje</th>
+                  <th>Cantidad</th>
+                  <th>Costo</th>
+                  <th>IVA %</th>
+                  <th>SubTotal</th>
+                  <th>IVA $</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let producto of Compra.products; let i = index"
+                  class="text-center"
                 >
-              </h6>
-              <img
-                class="d-block img-thumbnail rounded-circle img-fluid header-profile-user"
-                [src]="Actividad.Imagen"
-                href="javascript:"
-                onerror="this.src='../../../../../assets/images/nofound.png'"
-              />
-            </div>
-            <p class="mb-1">{{ Actividad.Detalles }}</p>
-            <small>{{ Actividad.Fecha }}</small>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-8">
-    <div class="card">
-      <div class="card-body">
-        <div class="row card-title d-flex justify-content-between">
-          <div class="col-md-6 px-0">
-            <img src="assets/images/logo2.png" alt="" height="45" />
+                  <th>{{ i + 1 }}</th>
+                  <td class="align-middle">
+                    <strong>{{ producto.Nombre_Comercial }}</strong>
+                    <span>
+                      {{ producto.product.Nombre_Comercial }}
+                    </span>
+                  </td>
+                  <td class="align-middle">
+                    <span class="text-muted">
+                      {{ producto.product.packaging.name }}
+                    </span>
+                  </td>
+                  <td class="align-middle">
+                    {{ producto.Cantidad | number }}
+                  </td>
+                  <td class="align-middle">
+                    ${{ producto.product.Precio | number : "1.2-2" }}
+                  </td>
+                  <td class="align-middle">
+                    ${{ producto.tax.Valor | number : "1.2-2" }}%
+                  </td>
+                  <td class="align-middle">
+                    ${{ producto.Subtotal | number : "1.2-2" }}
+                  </td>
+                  <td class="align-middle">
+                    ${{ producto.Valor_Iva | number : "1.2-2" }}
+                  </td>
+                  <td class="align-middle">
+                    $ {{ producto.Total | number : "1.2-2" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="col-md-6 px-0 text-md-right text-center">
-            <h4 class="text-primary">
-              {{ Compra.Codigo }} - {{ Compra.Estado }}
-            </h4>
-            <h6>{{ Fecha | date: "longDate" }}</h6>
-          </div>
-        </div>
-        <hr class="line" />
-        <div class="rounded-top table-responsive">
-          <table
-            class="table table-bordered table-striped table-sm"
-
+          <app-list-items
+            title1="SUBTOTAL"
+            [var1]="Compra.Subtotal"
+            type1="cop"
+            title2="IVA"
+            [var2]="Compra.Iva"
+            type2="cop"
+            title3="Total"
+            [var3]="Compra.Total"
+            type3="cop"
+            mt="mt-2"
           >
-            <thead class="bg-light">
-              <tr class="text-center text-uppercase">
-                <th style="text-align: center">Proveedor</th>
-                <th style="text-align: center">Bodega</th>
-                <th style="text-align: center">Fecha de Compra</th>
-                <th style="text-align: center">Fecha Probable de Entrega</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="text-center">
-                <td>
-                  {{ Compra.Proveedor }}
-                </td>
-                <td>
-                  {{ Compra.Bodega }}
-                </td>
-                <td>
-                  {{ Compra.Fecha_Compra | date: "dd/MM/yyyy" }}
-                </td>
-                <td>
-                  {{ Compra.Fecha_Probable }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="clearfix"></div>
-        <hr />
-        <div class="rounded-top table-responsive">
-          <table
-            class="table table-bordered table-striped table-sm"
+          </app-list-items>
 
-          >
-            <thead class="bg-light">
-              <tr class="text-center text-uppercase">
-                <th colspan="100%" class="bg-light">Observaciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="text-center">
-                <td colspan="100%">{{ Compra.Observaciones }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <hr />
-        <div class="rounded-top table-responsive">
-          <table
-            class="table table-bordered table-striped table-sm"
-
-          >
-            <thead class="bg-light">
-              <tr class="text-center text-uppercase">
-                <th>#</th>
-                <th>Producto</th>
-                <th>Embalaje</th>
-                <th>Cantidad</th>
-                <th>Costo</th>
-                <th>IVA</th>
-                <th>SubTotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                *ngFor="let Producto of Productos; let i = index"
-                class="text-center"
-                id="fila{{ i }}"
+          <!-- TODO APROBAR COMPRA -->
+          <ng-container *ngIf="Compra.Estado == 'Pendiente'">
+            <div
+              class="btn-group btn-block mt-3"
+              role="group"
+              aria-label="Button group"
+            >
+              <button
+                class="btn btn-danger"
+                (click)="EstadoAprobacion('Rechazada')"
+                type="button"
               >
-                <td class="align-middle">
-                  <strong>{{ i + 1 }}</strong>
-                </td>
-                <td class="align-middle">
-                  <strong>{{ Producto.Nombre_Comercial }}</strong>
-                  <span>
-                    {{ Producto.Nombre_Producto }}
-                  </span>
-                </td>
-                <td class="align-middle">
-                  <span class="text-muted">
-                    {{ Producto.Embalaje }}
-                  </span>
-                </td>
-                <td class="align-middle">
-                  {{ Producto.Cantidad | number | puntos }}
-                </td>
-                <td class="align-middle">
-                  {{ Producto.Costo | currency: "COP" }}
-                </td>
-                <td class="align-middle">{{ Producto.Iva }}%</td>
-                <td class="align-middle">
-                  {{ Producto.Total | currency: "COP" }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <hr class="line" />
-        <div class="d-flex justify-content-end">
-          <table class="table table-hover">
-            <thead class="bg-light">
-              <tr class="text-center text-uppercase">
-                <th>SubTotal :</th>
-                <th>Iva :</th>
-                <th>Total :</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="text-center">
-                <td>$ {{ SubTotalFinal }}</td>
-                <td>$ {{ IvaFinal }}</td>
-                <td>$ {{ TotalFinal }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- TODO APROBAR COMPRA -->
-        <ng-container *ngIf="permiso && Compra.Estado == 'Pendiente'">
-          <div
-            class="btn-group btn-block"
-            role="group"
-            aria-label="Button group"
-          >
-            <button
-              class="btn btn-danger"
-              (click)="EstadoAprobacion('Rechazada')"
-              type="button"
-            ><!-- [swal]="{
-                title: '¿Está Seguro?',
-                text: 'Se dispone a rechazar esta Orden de Compra, por favor seleccione un motivo',
-                icon: 'warning',
-                input: 'select',
-                inputOptions: Lista_Rechazo,
-                inputPlaceholder: 'Seleccione un Motivo',
-                showCancelButton: true,
-                confirmButtonText: 'Si, Rechazar',
-                cancelButtonText: 'No, Dejame Comprobar!'
-              }"
-              (confirm)="EstadoAprobacion($event, 'Rechazada')" -->
-              <i class="fa fa-thumbs-down"></i> Rechazar
-            </button>
-            <button
-              class="btn btn-primary rounded-right"
-              (click)="EstadoAprobacion('Aprobada')"
-              type="button"
-            ><!-- [swal]="{
-                title: '¿Está Seguro?',
-                text: 'Se dispone a aprobar esta Orden de Compra para Proceder a Solicitarla',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Si, Aprobar',
-                cancelButtonText: 'No, Dejame Comprobar!'
-              }"
-              (confirm)="EstadoAprobacion('', 'Aprobada')" -->
-              <i class="fa fa-thumbs-up"></i> Aprobar y proceder
-            </button>
-            <button
-              class="btn btn-danger rounded-right"
-              (click)="EstadoAprobacion('Anulada')"
-              type="button"
+                <!-- [swal]="{
+                  title: '¿Está Seguro?',
+                  text: 'Se dispone a rechazar esta Orden de Compra, por favor seleccione un motivo',
+                  icon: 'warning',
+                  input: 'select',
+                  inputOptions: Lista_Rechazo,
+                  inputPlaceholder: 'Seleccione un Motivo',
+                  showCancelButton: true,
+                  confirmButtonText: 'Si, Rechazar',
+                  cancelButtonText: 'No, Dejame Comprobar!'
+                }"
+                (confirm)="EstadoAprobacion($event, 'Rechazada')" -->
+                <i class="fa fa-thumbs-down"></i> Rechazar
+              </button>
+              <button
+                class="btn btn-primary rounded-right"
+                (click)="EstadoAprobacion('Aprobada')"
+                type="button"
+              >
+                <!-- [swal]="{
+                  title: '¿Está Seguro?',
+                  text: 'Se dispone a aprobar esta Orden de Compra para Proceder a Solicitarla',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Si, Aprobar',
+                  cancelButtonText: 'No, Dejame Comprobar!'
+                }"
+                (confirm)="EstadoAprobacion('', 'Aprobada')" -->
+                <i class="fa fa-thumbs-up"></i> Aprobar y proceder
+              </button>
+              <button
+                class="btn btn-danger rounded-right"
+                (click)="EstadoAprobacion('Anulada')"
+                type="button"
+              >
+                <i class="fa fa-ban"></i> Anular
+              </button>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="Compra.Estado == 'Anulada'">
+            <div
+              class="btn-group btn-block"
+              role="group"
+              aria-label="Button group"
             >
-              <i class="fa fa-ban"></i> Anular
-            </button>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="permiso && Compra.Estado == 'Anulada'">
-          <div
-            class="btn-group btn-block"
-            role="group"
-            aria-label="Button group"
-          >
-            <button
-              class="btn btn-info rounded-right"
-              (click)="EstadoAprobacion('Pendiente')"
-              type="button"
-            >
-              <i class="fa fa-check"></i> Activar
-            </button>
-          </div>
-        </ng-container>
-        <!-- TODO PENDIENTE IMPRIMIR -->
-        <!-- <a href="{{environment.ruta}}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_Nacional&id={{id}}" target="_blank" class="btn btn-success btn-sm m-l-5 pull-right" style="margin-right: 10px;">
-              <i class="fa fa-print"></i> IMPRIMIR DOCUMENTO</a> -->
+              <button
+                class="btn btn-info rounded-right"
+                (click)="EstadoAprobacion('Pendiente')"
+                type="button"
+              >
+                <i class="fa fa-check"></i> Activar
+              </button>
+            </div>
+          </ng-container>
+          <!-- TODO PENDIENTE IMPRIMIR -->
+          <!-- <a href="{{environment.ruta}}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_Nacional&id={{id}}" target="_blank" class="btn btn-success btn-sm m-l-5 pull-right" style="margin-right: 10px;">
+                <i class="fa fa-print"></i> IMPRIMIR DOCUMENTO</a> -->
+        </div>
       </div>
     </div>
   </div>
-</div>
+</ng-container>
 
 <swal #confirmacionSwal title="" text="" icon=""></swal>

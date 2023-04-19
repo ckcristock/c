@@ -1,1 +1,214 @@
-<p>notas-debito works!</p>
+<div class="card">
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Notas de débito</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <!-- <button [routerLink]="['tipos']" class="btn btn-warning btn-sm">
+            <i class="fa fa-plus"></i>
+            Tipos
+          </button> -->
+          <button [routerLink]="['crear']" class="btn btn-primary btn-sm">
+            <i class="fa fa-plus"></i>
+            Agregar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
+        </div>
+      </div>
+    </div>
+    <hr class="line" />
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-elevation-z0">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de inicio</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              [(ngModel)]="fechita"
+              (dateInput)="fechitaF($event)"
+              autocomplete="off"
+              placeholder="Busca por fecha"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Fecha de fin</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker2"
+              [(ngModel)]="fechita2"
+              (dateInput)="fechitaF2($event)"
+              autocomplete="off"
+              placeholder="Busca por fecha"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker2"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Código</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por código"
+              [(ngModel)]="filtro_cod_nota"
+              (input)="filtros1()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Funcionario</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por funcionario"
+              [(ngModel)]="filtro_funcionario"
+              (input)="filtros1()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Cliente</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por cliente"
+              [(ngModel)]="filtro_cliente"
+              (input)="filtros1()"
+            />
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Código Factura</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Busca por código factura"
+              [(ngModel)]="filtro_cod_factura"
+              (input)="filtros1()"
+            />
+          </mat-form-field>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!Cargando && Notas.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Código Nota</th>
+            <th>Fecha</th>
+            <th>Funcionario</th>
+            <th>Cliente</th>
+            <th>Código Factura</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let nota of Notas" class="text-center">
+            <td>{{ nota.Codigo_Nota }}</td>
+            <td class="text-center">
+              {{ nota.Fecha_Nota | date : "dd/MM/yyyy" }}
+            </td>
+            <td>{{ nota.Funcionario }}</td>
+            <td>{{ nota.Cliente }}</td>
+            <td>{{ nota.Codigo_Factura }}</td>
+            <td>
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item"
+                    href=""
+                    [routerLink]="[
+                      '/contabilidad/notas-credito/ver',
+                      nota.Id_Nota_Credito_Global
+                    ]"
+                  >
+                    <i class="ti-eye"></i>Ver Nota</a
+                  >
+                  <a
+                    class="dropdown-item"
+                    href="{{
+                      enviromen.ruta
+                    }}php/notas_credito_nuevo/descarga_pdf.php?tipo=Nota_Credito&id={{
+                      nota.Id_Nota_Credito_Global
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="ti-printer"></i>Imprimir</a
+                  >
+                  <a
+                    *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
+                    class="dropdown-item"
+                    href="{{
+                      enviromen.ruta
+                    }}php/contabilidad/movimientoscontables/movimientos_nota_credito_global_pdf.php?id_registro={{
+                      nota.Id_Nota_Credito_Global
+                    }}&id_funcionario_elabora={{ funcionario }}"
+                    target="_blank"
+                  >
+                    <i class="fa fa-book"></i> Contab. PCGA
+                  </a>
+                  <a
+                    *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
+                    class="dropdown-item"
+                    href="{{
+                      enviromen.ruta
+                    }}php/contabilidad/movimientoscontables/movimientos_nota_credito_global_pdf.php?id_registro={{
+                      nota.Id_Nota_Credito_Global
+                    }}&id_funcionario_elabora={{ funcionario }}&tipo_valor=Niif"
+                    target="_blank"
+                  >
+                    <i class="fa fa-book"></i> Contab. NIIF
+                  </a>
+                  <!-- <a
+                    class="dropdown-item"
+                    href="{{
+                      enviromen.ruta
+                    }}php/facturasventas/factura_dis_pdf.php?id={{
+                      factura.Id_Factura_Administrativa
+                    }}"
+                    target="_blank"
+                  >
+                    <i class="ti-printer"></i>Imprimir Factura</a
+                  > -->
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm"
+      [collectionSize]="TotalItems1"
+      [(page)]="page1"
+      [maxSize]="10"
+      [pageSize]="maxSize"
+      size="sm"
+      (pageChange)="paginacion()"
+      [boundaryLinks]="true"
+    ></ngb-pagination>
+  </div>
+</div>
+<ng-template #notData>
+  <app-not-data [loading]="Cargando"></app-not-data>
+</ng-template>

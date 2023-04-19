@@ -42,13 +42,15 @@ export class NewTaskComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+  }
+
+  openInit() {
     this.company_id = this._user.user.person.company_worked.id
     this.getPeople();
     this.getTypes();
     this.createForm();
-    this._suscription = this.open.subscribe((data: any) =>
-      this._modal.open(this.newtask, 'lg')
-    );
+    this._modal.open(this.newtask, 'lg')
   }
 
   getPeople() {

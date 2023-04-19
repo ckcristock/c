@@ -192,7 +192,8 @@
                 {{ third.cell_phone }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[6].selected">
-                {{ third.third_party_type | capitalLetter }}
+                {{ third.is_client ? "Cliente. " : ("" | capitalLetter) }}
+                {{ third.is_supplier ? "Proveedor" : ("" | capitalLetter) }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[7].selected">
                 {{ third.email | lowercase }}

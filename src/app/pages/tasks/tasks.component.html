@@ -435,7 +435,7 @@
       <button
         type="button"
         class="btn btn-primary btn-sm"
-        (click)="openModal()"
+        (click)="newTask.openInit()"
       >
         <i class="fa fa-plus"></i> Agregar
       </button>
@@ -522,10 +522,7 @@
     </button>
   </div>
 </ng-template>
-<app-new-task
-  [open]="open.asObservable()"
-  (refresh)="getTasks()"
-></app-new-task>
+<app-new-task #newTask (refresh)="getTasks()"></app-new-task>
 
 <ng-template #notDataTypes>
   <app-not-data [loading]="loadingTypes"></app-not-data>

@@ -8,6 +8,7 @@ import * as math from 'mathjs';
 export const materiaHelper = {
 
   createFillInMateria(form: FormGroup, fb: FormBuilder, data, geometriesList: Array<any>, materials: Array<any>) {
+    console.log(materials)
     if (data.rawmaterial) {
       let materia_prima = form.get('materia_prima') as FormArray;
       data.rawmaterial.forEach((r) => {
@@ -59,6 +60,7 @@ export const materiaHelper = {
   },
 
   createMeasuresGroup(element, fb: FormBuilder, materia: FormGroup, materials) {
+    console.log(materials)
     let group = fb.group({
       measure_id: element.id,
       value: [0],
@@ -79,14 +81,17 @@ export const materiaHelper = {
       measureGroup.controls.forEach(element => {
         let measure = element.controls.measure.value;
         let value = element.controls.value.value;
-        formula = formula.replace('{' + measure + '}', value);
+        formula = formula.replace(new RegExp('{' + measure + '}', 'g'), value);
         console.log(formula);
       });
       let data = materials.find(m => m.id == materiaControl.material_id.value);
       let result;
       try {
         result = math.evaluate(formula);
-      } catch (error) {
+        console.log(result)
+      }
+      catch (error) {
+        console.log(error)
       }
       materia.patchValue({
         weight_kg: result * data.density   //multiplicar por una variable del manterial aun no existente
@@ -123,6 +128,7 @@ export const materiaHelper = {
     });
     group.get('geometry_id').valueChanges.subscribe(value => {
       let data = geometriesList.find(m => m.id == value);
+      console.log(data)
       group.patchValue({
         image: data.image,
         weight_formula: data.weight_formula

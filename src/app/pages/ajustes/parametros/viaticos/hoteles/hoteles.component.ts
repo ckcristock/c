@@ -30,6 +30,7 @@ export class HotelesComponent implements OnInit {
     }
   }
   loading: boolean = false;
+  loadingTypes: boolean = false;
   form: FormGroup;
   cities: any[] = [];
   hotels: any[] = [];
@@ -66,25 +67,7 @@ export class HotelesComponent implements OnInit {
     this.getCities();
     this.getHotels();
     this.getAccommodation();
-
-    /* this.filteredOptions = this.form.get('city_id').valueChanges
-      .pipe(
-        startWith(''),
-        map(value => typeof value === 'string' ? value : (<any>value).text),
-        map(name => name ? this._filter(name) : this.cities.slice())
-      ); */
   }
-
-  /* private _filter(value: string) {
-    const filterValue = value.toLowerCase();
-    return this.cities.filter(option => option.text.toLowerCase().indexOf(filterValue) === 0);
-
-  }
-
-  displayFn(country: any): string {
-    return country ? country : undefined;
-  } */
-
 
   closeResult = '';
   public openConfirm(confirm, titulo) {
@@ -95,22 +78,21 @@ export class HotelesComponent implements OnInit {
         'md',
         true
       );
-    }else {
-      this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
-        this.closeResult = `Closed with: ${result}`;
-      }, (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    } else {
+      this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => { }, (reason) => {
+        this.getDismissReason();
       });
     }
   }
 
-  private getDismissReason(reason: any) {
+  private getDismissReason() {
     this.form.reset();
     this.form.removeControl('alojamientos')
     this.form.setControl('alojamientos', this.fb.array([]))
   }
 
   getAccommodation(page = 1) {
+    this.loadingTypes = true
     this.paginationAccomodations.page = page;
     let params = {
       ...this.paginationAccomodations, ...this.filtro
@@ -119,9 +101,11 @@ export class HotelesComponent implements OnInit {
       .subscribe((res: any) => {
         if (res.status) {
           this.accommodationsPaginate = res.data.data
+          this.loadingTypes = false;
           this.paginationAccomodations.collectionSize = res.data.total
         } else {
           console.log('error', res.err);
+          this._swal.error()
         }
       })
     this._hoteles.getAccommodation()
@@ -139,7 +123,7 @@ export class HotelesComponent implements OnInit {
       id: [this.hotel.id],
       type: ['', Validators.required],
       name: ['', Validators.required],
-      city_id: ['', Validators.required],
+      city_id: [null, Validators.required],
       landline: ['', Validators.required],
       address: ['', Validators.required],
       phone: ['', Validators.required],
@@ -159,8 +143,8 @@ export class HotelesComponent implements OnInit {
   selectAccommodation(e) {
     if (e._selected) {
       let subItems = this.form.get('alojamientos') as FormArray
-      let elem = this.accommodations.find(ele=>ele.id==e.value)
-      subItems.push(this.patchValues(elem.id,elem.name, null))
+      let elem = this.accommodations.find(ele => ele.id == e.value)
+      subItems.push(this.patchValues(elem.id, elem.name, null))
     } else {
       this.form.controls.alojamientos.value.forEach((element, index) => {
         if (element.id == e.value) {

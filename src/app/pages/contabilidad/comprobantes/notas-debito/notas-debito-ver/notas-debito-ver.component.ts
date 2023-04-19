@@ -1,0 +1,15 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-notas-debito-ver',
+  templateUrl: './notas-debito-ver.component.html',
+  styleUrls: ['./notas-debito-ver.component.scss']
+})
+export class NotasDebitoVerComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+}

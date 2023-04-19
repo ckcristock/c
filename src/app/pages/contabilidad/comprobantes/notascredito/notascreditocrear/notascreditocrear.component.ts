@@ -25,8 +25,8 @@ export class NotascreditocrearComponent implements OnInit {
 
   public Tipo_Factura = [
     // {Nombre:'Factura Dispensación',Modulo:'Factura'},
-    { Nombre: 'Factura capita', Modulo: 'Factura_Capita' },
-    { Nombre: 'Factura venta', Modulo: 'Factura_Venta' },
+    { Nombre: 'Factura nacional', Modulo: 'Factura_Capita' },
+    { Nombre: 'Factura internacional', Modulo: 'Factura_Venta' },
     { Nombre: 'Factura administrativa', Modulo: 'Factura_Administrativa' }
   ];
   public TipoClientes = [

@@ -14,8 +14,6 @@ import { TaskService } from 'src/app/pages/tasks/task.service';
 
 
 export class RightsidebarComponent implements OnInit {
-  public open: Subject<any> = new Subject;
-  
   pendientes: any[] = [];
   loading: boolean;
   changes: any;
@@ -27,11 +25,12 @@ export class RightsidebarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getPersonTaskPendiente();
+    //this.getPersonTaskPendiente();
   }
 
-  openModal() {
-    this.open.next()
+  init() {
+    document.body.classList.toggle('right-bar-enabled');
+    this.getPersonTaskPendiente();
   }
 
   getPersonTaskPendiente() {
@@ -40,16 +39,14 @@ export class RightsidebarComponent implements OnInit {
       person_id: this._user.user.person.id,
       estado: 'Pendiente'
     }
-    this._task
-      .personTasks(params)
-      .subscribe(
-        (d: any) => {
-          this.loading = false
-          this.pendientes = d.data;
-          for (let i in d.data) {
-            this.pendientes[i].descripcion = this.sanitizer.bypassSecurityTrustHtml(atob(this.pendientes[i].descripcion))
-          }
-        });
+    this._task.personTasks(params).subscribe(
+      (d: any) => {
+        this.loading = false
+        this.pendientes = d.data;
+        for (let i in d.data) {
+          this.pendientes[i].descripcion = this.sanitizer.bypassSecurityTrustHtml(atob(this.pendientes[i].descripcion))
+        }
+      });
   }
 
   route(id) {

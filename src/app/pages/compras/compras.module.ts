@@ -27,8 +27,12 @@ import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from 'saturn-datepicker';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { PresupuestoModule } from '../crm/presupuesto/presupuesto.module';
+import { SolicitudesCompraComponent } from './solicitudes-compra/solicitudes-compra.component';
+import { SolicitudCompraCrearComponent } from './solicitudes-compra/solicitud-compra-crear/solicitud-compra-crear.component';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { SolicitudesCompraEditarComponent } from './solicitudes-compra/solicitudes-compra-editar/solicitudes-compra-editar.component';
 import { MatSelectFilterModule } from 'mat-select-filter';
 
 export const MY_FORMATS = {
@@ -47,6 +51,9 @@ export const MY_FORMATS = {
     CompraNacionalComponent,
     CrearCompraNacionalComponent,
     VerCompraNacionalComponent,
+    SolicitudesCompraComponent,
+    SolicitudCompraCrearComponent,
+    SolicitudesCompraEditarComponent,
   ],
   providers: [
     {
@@ -82,8 +89,8 @@ export const MY_FORMATS = {
     SatNativeDateModule,
     NgxCurrencyModule,
     DirectivesModule,
+    MatPaginatorModule,
     MatSelectFilterModule
-
   ],
 
 })

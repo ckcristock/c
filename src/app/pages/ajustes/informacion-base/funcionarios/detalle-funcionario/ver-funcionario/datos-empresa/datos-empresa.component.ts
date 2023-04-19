@@ -10,6 +10,7 @@ import { GroupService } from '../../../../services/group.service';
 import { PositionService } from '../../../../services/positions.service';
 import { SwalService } from '../../../../services/swal.service';
 import { DatosEmpresaService } from './datos-empresa.service';
+import { FixedTurnService } from '../../../../turnos/turno-fijo/turno-fijo.service';
 
 @Component({
   selector: 'app-datos-empresa',
@@ -39,6 +40,7 @@ export class DatosEmpresaComponent implements OnInit {
     private _company: CompanyService,
     private _modal: ModalService,
     private _swal: SwalService,
+    private _fixedTurns: FixedTurnService,
   ) { }
 
   ngOnInit(): void {
@@ -88,7 +90,7 @@ export class DatosEmpresaComponent implements OnInit {
   }
 
   getFixed_turn() {
-    this.enterpriseDataService.getFixed_turn().subscribe((r: any) => {
+    this._fixedTurns.getFixedTurnsActive().subscribe((r: any) => {
       this.fixed_turns = r.data;
       this.fixed_turns.unshift({ text: 'Seleccione una', value: '' });
     })
@@ -141,6 +143,8 @@ export class DatosEmpresaComponent implements OnInit {
         })
       });
   }
+
+
   createForm() {
     this.form = this.fb.group({
       dependency_id: ['', Validators.required],
@@ -158,6 +162,7 @@ export class DatosEmpresaComponent implements OnInit {
       this.form.get('dependency_id').invalid && this.form.get('dependency_id').touched
     );
   }
+  
   get company_valid() {
     return (
       this.form.get('company_id').invalid && this.form.get('company_id').touched

@@ -12,6 +12,10 @@ export class FixedTurnService {
     return this.http.get(`${environment.base_url}/paginate-fixed-turns`, { params });
   }
 
+  getFixedTurnsActive(params = {}) {
+    return this.http.get(`${environment.base_url}/fixed-turns_active`, { params });
+  }
+
   comboFixedTurns() {
     return this.http.get(`${environment.base_url}/fixed-turns`);
   }

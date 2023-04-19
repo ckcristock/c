@@ -179,21 +179,23 @@
                     <i class="fas fa-eye"></i> Ver</a
                   >
                   <!-- TODO Imprimir Orden Compra -->
-                  <!-- <a
-                    class="
-                      dropdown-item
-
-
-                    "
-                    href="{{
-                      environment.ruta
-                    }}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_Nacional&id={{
-                      compra.Id_Orden_Compra_Nacional
-                    }}"
-                    target="_blank"
+                  <a
+                    class="dropdown-item text-danger"
+                    href="javascript: void(0);"
+                    (click)="download(compra.Id_Orden_Compra_Nacional)"
                   >
-                    <i class="ti-printer"></i>Imprimir
-                  </a> -->
+                    <span
+                      ><i
+                        class="fas"
+                        [class]="
+                          !donwloading
+                            ? 'fa-file-download'
+                            : 'fa-spinner fa-spin'
+                        "
+                      ></i>
+                      {{ !donwloading ? "Descargar" : "Descargando" }}</span
+                    >
+                  </a>
                   <a
                     *ngIf="compra.Estado == 'Anulada'"
                     class="dropdown-item text-success"
@@ -220,17 +222,6 @@
                   >
                     <i class="fa fa-ban"></i> Anular</a
                   >
-                  <!-- <a
-                    *ngIf="compra.Estado != 'Anulada'"
-                    class="dropdown-item text-danger   "
-                    href=""
-                    [swal]="anulacion"
-                    (confirm)="
-                      anularCompra(compra.Id_Orden_Compra_Nacional, $event)
-                    "
-                  >
-                    <i class="fa fa-times"></i> Anular</a
-                  > -->
                 </div>
               </div>
             </td>

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -50,5 +50,10 @@ export class CompraNacionalService {
 
   getTipoRechazo() {
     return this.http.get(`${environment.base_url}/php/comprasnacionales/detalle_rechazo`)
+  }
+
+  download(id: string) {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get(`${environment.base_url}/php/comprasnacionales/descarga_pdf.php/${id}`, { headers, responseType: 'blob' as 'json' });
   }
 }

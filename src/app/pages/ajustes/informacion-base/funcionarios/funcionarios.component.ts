@@ -86,7 +86,7 @@ export class FuncionariosComponent implements OnInit {
           this.orderObj = { ...params.keys, ...params };
           for (let i in this.orderObj.params) {
             if (this.orderObj.params[i]) {
-              if (Object.keys(this.orderObj).length > 2) {
+              if (Object.keys(this.orderObj).length > 3) {
                 this.filtrosActivos = true
               }
               this.filtros[i] = this.orderObj.params[i]
@@ -122,14 +122,14 @@ export class FuncionariosComponent implements OnInit {
 
     this.filtros.pag = paginacion;
     for (let i in this.filtros) {
-        if (this.filtros[i] != "") {
-            params[i] = this.filtros[i];
-        }
+      if (this.filtros[i] != "") {
+        params[i] = this.filtros[i];
+      }
     }
     console.log(params)
     let queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     return queryString;
-}
+  }
 
   getPeople(page = 1) {
     this.pagination.page = page;

@@ -6,6 +6,7 @@ import { VerCompraNacionalComponent } from './compra-nacional/ver-compra-naciona
 import { SolicitudesCompraComponent } from './solicitudes-compra/solicitudes-compra.component';
 import { SolicitudCompraCrearComponent } from './solicitudes-compra/solicitud-compra-crear/solicitud-compra-crear.component';
 import { SolicitudesCompraEditarComponent } from './solicitudes-compra/solicitudes-compra-editar/solicitudes-compra-editar.component';
+import { SolicitudCompraVerComponent } from './solicitudes-compra/solicitud-compra-ver/solicitud-compra-ver.component';
 
 const routes: Routes = [
   { path: 'compra-nacional', component: CompraNacionalComponent },
@@ -14,9 +15,11 @@ const routes: Routes = [
   { path: 'solicitud', component: SolicitudesCompraComponent },
   { path: 'solicitud/crear', component: SolicitudCompraCrearComponent },
   { path: 'solicitud/editar/:id', component: SolicitudesCompraEditarComponent },
+  { path: 'solicitud/ver/:id' , component: SolicitudCompraVerComponent},
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
 export class ComprasRoutingModule {}
+

@@ -34,6 +34,8 @@ import { DirectivesModule } from 'src/app/core/directives/directives.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { SolicitudesCompraEditarComponent } from './solicitudes-compra/solicitudes-compra-editar/solicitudes-compra-editar.component';
 import { MatSelectFilterModule } from 'mat-select-filter';
+import { SolicitudCompraVerComponent } from './solicitudes-compra/solicitud-compra-ver/solicitud-compra-ver.component';
+
 
 export const MY_FORMATS = {
   parse: {
@@ -54,6 +56,7 @@ export const MY_FORMATS = {
     SolicitudesCompraComponent,
     SolicitudCompraCrearComponent,
     SolicitudesCompraEditarComponent,
+    SolicitudCompraVerComponent,
   ],
   providers: [
     {

@@ -48,20 +48,18 @@
                         <input
                           type="number"
                           formControlName="user"
-                          class="form-control"
+                          class="form-control input-user"
                           id="user"
                           placeholder="Ingresa tu identificación"
                           [ngClass]="{
-                            'is-invalid': submitted && f.email.errors
+                            'is-invalid': submitted && f.user.invalid
                           }"
                         />
                         <div
-                          *ngIf="submitted && f.user.errors"
+                          *ngIf="submitted && f.user.invalid"
                           class="invalid-feedback"
                         >
-                          <div *ngIf="f.email.errors.required">
-                            Campo obligatorio
-                          </div>
+                          <div *ngIf="f.user.errors">Campo obligatorio</div>
                         </div>
                       </div>
 
@@ -74,15 +72,15 @@
                           class="form-control"
                           id="password"
                           [ngClass]="{
-                            'is-invalid': submitted && f.password.errors
+                            'is-invalid': submitted && f.password.invalid
                           }"
                           placeholder="Ingresa tu contraseña"
                         />
                         <div
-                          *ngIf="submitted && f.password.errors"
+                          *ngIf="submitted && f.password.invalid"
                           class="invalid-feedback"
                         >
-                          <div *ngIf="f.password.errors.required">
+                          <div *ngIf="f.password.invalid">
                             Campo obligatorio
                           </div>
                         </div>
@@ -106,13 +104,14 @@
                           type="submit"
                         >
                           <span
-                            class="spinner-border spinner-border-sm"
-                            role="status"
-                            aria-hidden="true"
-                            *ngIf="log_in"
-                          ></span>
-                          <span class="sr-only">Loading...</span>
-                          Iniciar sesión
+                            ><i
+                              class="fas"
+                              [class]="!log_in ? '' : 'fa-spinner fa-spin'"
+                            ></i>
+                            {{
+                              !log_in ? "Iniciar sesión" : "Iniciando sesión"
+                            }}</span
+                          >
                         </button>
                       </div>
 

@@ -52,6 +52,9 @@ export class LocalidadesComponent implements OnInit {
   municipalitySelected: any = 0;
   dataSource = new MatTableDataSource();
 
+  countrySelected: any;
+  departmentSelected: any;
+
   constructor(
     private _countries: PaisesService,
     private _state: DepartamentosService,
@@ -124,6 +127,7 @@ export class LocalidadesComponent implements OnInit {
       this.pagination_pais.collectionSize = r.data.total;
       if (this.countries.length > 0) {
         this.countries[0].selected = true;
+        this.countrySelected = this.countries[0].id;
         this.getStates(this.countries[0].id);
       }
       this.loadingCountry = false;
@@ -142,6 +146,7 @@ export class LocalidadesComponent implements OnInit {
         this.pagination_depto.collectionSize = r.data.total;
         if (this.states.length > 0) {
           this.states[0].selected = true;
+          this.departmentSelected = this.states[0].id
           this.getMunicipalities(this.states[0].id);
         }
         if (r.data.total == 0) {

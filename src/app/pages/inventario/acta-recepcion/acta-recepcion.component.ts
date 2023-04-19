@@ -115,8 +115,8 @@ export class ActaRecepcionComponent implements OnInit {
 
   ngOnInit() {
     this.getComprasPendientes();
-    this.ListarActaRecepcion();
     this.getActasPendientes();
+    this.ListarActaRecepcion();
     this.ConsultaFiltrada();
     this.ListarCausalesAnulacion();
   }
@@ -340,16 +340,6 @@ export class ActaRecepcionComponent implements OnInit {
       }
     });
     this.rowsFilter = temp;
-  }
-
-  perfilAdministrador() {
-    let miPerfil = localStorage.getItem('miPerfil');
-
-    if (miPerfil == '16') {
-      return true;
-    }
-
-    return false;
   }
 
   AnularActa() {

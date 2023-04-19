@@ -259,9 +259,7 @@
                         <i class="fas fa-print"></i> Imprimir</a
                       > -->
                       <a
-                        *ngIf="
-                          perfilAdministrador() && item.Estado != 'Anulada'
-                        "
+                        *ngIf="item.Estado != 'Anulada'"
                         class="dropdown-item"
                         (click)="AsignarDatos(item.Id_Acta_Recepcion)"
                       >

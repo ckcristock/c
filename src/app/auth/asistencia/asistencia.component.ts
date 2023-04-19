@@ -43,8 +43,8 @@ export class AsistenciaComponent implements OnInit {
     this.CambiaVista();
     this._asistencia.validate({ imagen }).subscribe((r: any) => {
       this.CambiaVista();
-     /*  r.data.timer = 4000; */
-     /*  r.data.showConfirmButton = false; */
+      /*  r.data.timer = 4000; */
+      /*  r.data.showConfirmButton = false; */
       r.timer = 1500
       Swal.fire(r);
     }, err => {
@@ -55,7 +55,7 @@ export class AsistenciaComponent implements OnInit {
           title: 'Oops!',
           text: "Han ocurrido errores, por favor intentar más tarde",
           icon: "error",
-          timer:1500
+          timer: 1500
         })
     })
 
@@ -103,39 +103,39 @@ export class AsistenciaComponent implements OnInit {
     //validar empresa
     if (localStorage.getItem('tenant')) {
     } else {
-     /*  Swal.fire({
-        title: 'Ingresa el nit de vuestra compañia',
-        input: 'text',
-        inputAttributes: {
-          autocapitalize: 'on',
-        },
-        // showCancelButton: true,
-        confirmButtonText: 'Aceptar',
-        showLoaderOnConfirm: true,
-        preConfirm: (nit) => {
-          return axios
-              .post(`/getTenant`, { nit: nit })
-              .then(datos => {
-                if (datos.data == "") {
-                  window.location = "/";
-                }
-                localStorage.setItem("tenant", datos.data);
-              })
-              .catch(err => {
-                this.$swal.showValidationMessage(
-                  `Esta compañia no se encuentra registrada`
-                );
-              }); 
-        },
-        allowOutsideClick: () => !Swal.isLoading(),
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire({
-             title: `${result.value.login}'s avatar`,
-              imageUrl: result.value.avatar_url
-          });
-        }
-      });*/
+      /*  Swal.fire({
+         title: 'Ingresa el nit de vuestra compañia',
+         input: 'text',
+         inputAttributes: {
+           autocapitalize: 'on',
+         },
+         // showCancelButton: true,
+         confirmButtonText: 'Aceptar',
+         showLoaderOnConfirm: true,
+         preConfirm: (nit) => {
+           return axios
+               .post(`/getTenant`, { nit: nit })
+               .then(datos => {
+                 if (datos.data == "") {
+                   window.location = "/";
+                 }
+                 localStorage.setItem("tenant", datos.data);
+               })
+               .catch(err => {
+                 this.$swal.showValidationMessage(
+                   `Esta compañia no se encuentra registrada`
+                 );
+               });
+         },
+         allowOutsideClick: () => !Swal.isLoading(),
+       }).then((result) => {
+         if (result.isConfirmed) {
+           Swal.fire({
+              title: `${result.value.login}'s avatar`,
+               imageUrl: result.value.avatar_url
+           });
+         }
+       });*/
     }
   }
 }

@@ -13,15 +13,15 @@
           </div>
           <div class="col-md-4 px-0 text-right">
             <div class="btn-group rounded w-sm-100">
-              <button class="btn btn-info btn-sm" (click)="openClose()">
+              <button class="btn btn-info btn-sm" (click)="matPanelCP.toggle()">
                 <i class="fas fa-sliders-h"></i> Filtros
               </button>
             </div>
           </div>
         </div>
         <hr class="line" />
-        <mat-accordion multi #firstAccordion="matAccordion">
-          <mat-expansion-panel class="mat-elevation-z0">
+        <mat-accordion>
+          <mat-expansion-panel #matPanelCP class="mat-elevation-z0">
             <div class="row">
               <mat-form-field class="col-lg-6" appearance="outline">
                 <mat-label>Código</mat-label>
@@ -29,8 +29,8 @@
                   matInput
                   type="text"
                   placeholder="Busca por código"
-                  [(ngModel)]="filtro_Codigo"
-                  (input)="filtros2()"
+                  [(ngModel)]="filtersCP.codigo"
+                  (input)="getComprasPendientes()"
                   autocomplete="off"
                 />
               </mat-form-field>
@@ -40,8 +40,8 @@
                   matInput
                   type="text"
                   placeholder="Busca por proveedor"
-                  [(ngModel)]="filtro_Proveedor"
-                  (input)="filtros2()"
+                  [(ngModel)]="filtersCP.proveedor"
+                  (input)="getComprasPendientes()"
                   autocomplete="off"
                 />
               </mat-form-field>
@@ -52,7 +52,10 @@
           <table
             class="table table-bordered table-striped table-sm"
             style="font-size: x-small"
-            *ngIf="!Cargando2 && ListaNacional.length > 0; else notData1"
+            *ngIf="
+              !loadingComprasPendientes && ListaNacional.length > 0;
+              else notData1
+            "
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
@@ -77,9 +80,9 @@
                   <strong>{{ item.Codigo }}</strong>
                 </td>
                 <td class="align-middle">
-                  {{ item.Fecha | date : "dd/MM/yyyy" }}
+                  {{ item.created_at | date : "dd/MM/yyyy" }}
                 </td>
-                <td class="align-middle">{{ item.Nombre }}</td>
+                <td class="align-middle">{{ item.third.full_name }}</td>
                 <td class="align-middle">{{ item.Items }}</td>
                 <td class="align-middle">
                   <div ngbDropdown container="body" class="dropdown-primary">
@@ -92,20 +95,20 @@
                     </button>
                     <div ngbDropdownMenu>
                       <a
-                        class="dropdown-item"
-                        href=""
-                        [routerLink]="['crear', item.Codigo, 'Nacional']"
-                      >
-                        <i class="fa fa-server"></i> Realizar</a
-                      >
-                      <a
-                        class="dropdown-item"
+                        class="dropdown-item text-success"
                         [routerLink]="[
                           '/compras/ver-nacional',
                           item.Id_Orden_Compra_Nacional
                         ]"
                       >
-                        <i class="fas fa-eye"></i> Ver orden</a
+                        <i class="fas fa-eye"></i> Ver</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        href=""
+                        [routerLink]="['crear', item.Codigo, 'Nacional']"
+                      >
+                        <i class="fa fa-server"></i> Realizar</a
                       >
                     </div>
                   </div>
@@ -198,9 +201,17 @@
             <tbody>
               <tr *ngFor="let item of actas_pendientes" class="text-center">
                 <!-- <td>
-                     <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen">
-                                              <img *ngIf="item.Imagen !=''" src="{{envi.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen">
-                  </td> -->
+                  <img
+                    *ngIf="item.Imagen == ''"
+                    src="assets/images/user.jpg"
+                    class="img-radius imagen"
+                  />
+                  <img
+                    *ngIf="item.Imagen != ''"
+                    src="{{ envi.ruta }}IMAGENES/FUNCIONARIOS/{{ item.Imagen }}"
+                    class="img-radius imagen"
+                  />
+                </td> -->
                 <td class="align-middle">
                   <strong>{{ item.Codigo }}</strong>
                 </td>
@@ -236,7 +247,7 @@
                         <i class="fas fa-eye"></i> Ver</a
                       >
                       <!-- <a class="dropdown-item   " [routerLink]="[ '/actarecepcioneditar', item.Id_Acta_Recepcion ]"><i class="fa fa-pencil"></i> Editar</a> -->
-                      <a
+                      <!-- <a
                         class="dropdown-item text-primary"
                         href="{{
                           envi.ruta
@@ -246,7 +257,7 @@
                         target="_blank"
                       >
                         <i class="fas fa-print"></i> Imprimir</a
-                      >
+                      > -->
                       <a
                         *ngIf="
                           perfilAdministrador() && item.Estado != 'Anulada'
@@ -287,15 +298,15 @@
           </div>
           <div class="col-md-4 px-0 text-right">
             <div class="btn-group rounded w-sm-100">
-              <button class="btn btn-info btn-sm" (click)="openClose2()">
+              <button class="btn btn-info btn-sm" (click)="matPanelAA.toggle()">
                 <i class="fas fa-sliders-h"></i> Filtros
               </button>
             </div>
           </div>
         </div>
         <hr class="line" />
-        <mat-accordion multi #secondAccordion="matAccordion">
-          <mat-expansion-panel class="mat-elevation-z0">
+        <mat-accordion>
+          <mat-expansion-panel #matPanelAA class="mat-elevation-z0">
             <div class="row">
               <mat-form-field class="col" appearance="outline">
                 <mat-label>Código</mat-label>
@@ -373,15 +384,15 @@
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-info btn-sm" (click)="openClose3()">
+          <button class="btn btn-info btn-sm" (click)="matPanelAI.toggle()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
       </div>
     </div>
     <hr class="line" />
-    <mat-accordion multi #thirdAccordion="matAccordion">
-      <mat-expansion-panel class="mat-elevation-z0">
+    <mat-accordion>
+      <mat-expansion-panel #matPanelAI class="mat-elevation-z0">
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Código</mat-label>
@@ -814,7 +825,7 @@
 <swal #confirmacionGuardar [swalOptions]="alertOption"></swal>
 
 <ng-template #notData1>
-  <app-not-data [loading]="Cargando2"></app-not-data>
+  <app-not-data [loading]="loadingComprasPendientes"></app-not-data>
 </ng-template>
 <ng-template #notData2>
   <app-not-data [loading]="Cargando3"></app-not-data>

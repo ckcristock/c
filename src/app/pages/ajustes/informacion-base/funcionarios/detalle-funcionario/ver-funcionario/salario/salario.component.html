@@ -10,14 +10,14 @@
 
   <div class="row">
     <div class="col-lg-6 text-lg-right text-center text-primary">
-      Término de contrato
+      Tipo de contrato
     </div>
     <div class="col-lg-6 text-lg-left text-center">
       {{ salary_info.contract_type }}
     </div>
 
     <div class="col-lg-6 text-lg-right text-center text-primary">
-      Tipo de contrato
+      Término de contrato
     </div>
     <div class="col-lg-6 text-lg-left text-center">
       {{ salary_info.contract_term }}
@@ -119,7 +119,7 @@
       <div class="row">
         <!-- /*Selector de termino de contrato*/ -->
         <mat-form-field class="col-md-6" appearance="outline">
-          <mat-label>Término</mat-label>
+          <mat-label>Tipo de contrato</mat-label>
           <mat-select formControlName="work_contract_type_id" required>
             <mat-option
               *ngFor="let contract_type of contract_types"
@@ -136,7 +136,7 @@
 
         <!-- /*Selector de tipo de contrato*/ -->
         <mat-form-field class="col" appearance="outline">
-          <mat-label>Tipo de contrato</mat-label>
+          <mat-label>Término de contrato</mat-label>
           <mat-select formControlName="contract_term_id" required>
             <mat-option
               *ngFor="let contract_term of contractTerms"
@@ -178,7 +178,7 @@
         <mat-form-field
           class="col-md-6"
           appearance="outline"
-          *ngIf="conludeContract"
+          *ngIf="conludeContract || form.get('date_end').enabled"
         >
           <mat-label>Fecha de retiro</mat-label>
           <input

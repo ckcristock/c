@@ -22,7 +22,7 @@ import { addDays } from '@fullcalendar/core';
 })
 
 
-export class SalarioComponent implements OnInit {
+export class SalarioComponent implements OnInit{
   @ViewChild('modal') modal: any;
   form: FormGroup;
   formHistoryContract: FormGroup;
@@ -58,14 +58,16 @@ export class SalarioComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
     this.salaryService.getWorkContractType().subscribe((d: any) => {
       this.contract_types = d.data;
-    });
+    }); // trae los tipos de contrato cloclude puede ser 0 o 1
     this.id = this.activateRoute.snapshot.params.id;
     this.getSalaryInfo();
     this.createForm();
     this.getSalaryHistory();
   }
+
 
   //Secccion Historial de contratos
   openModalContracts(content) {
@@ -82,6 +84,8 @@ export class SalarioComponent implements OnInit {
     })
 
   }
+
+
 
   printForm() {
     console.log(this.formHistoryContract)
@@ -225,7 +229,6 @@ export class SalarioComponent implements OnInit {
     });
     this.form.get('work_contract_type_id').valueChanges.subscribe(r => {
       this.getContractTerms(r);
-      console.log('hgfg')
     })
   }
 
@@ -261,9 +264,9 @@ export class SalarioComponent implements OnInit {
           date_end: this.salary_info?.date_end,
           transport_assistance: this.salary_info?.transport_assistance
         })
-        if (!this.salary_info?.conclude) {
-          this.form.get('date_end').disable();
-        }
+        if (this.salary_info?.work_contract_type_id !== 2) {
+           this.form.get('date_end').disable();
+         }
         this.getContractTerms(this.salary_info?.work_contract_type_id)
       });
   }
@@ -277,6 +280,7 @@ export class SalarioComponent implements OnInit {
       this.loadingHistory = false
     })
   }
+
   conludeContract = false;
   changeType(conclude) {
     if (conclude) {
@@ -287,6 +291,8 @@ export class SalarioComponent implements OnInit {
       this.conludeContract = false;
     }
   }
+
+
   updateSalaryInfo() {
     /*  this.form.markAllAsTouched();
      if (this.form.invalid) { return false;} */

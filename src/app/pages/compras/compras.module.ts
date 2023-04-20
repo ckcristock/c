@@ -35,6 +35,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { SolicitudesCompraEditarComponent } from './solicitudes-compra/solicitudes-compra-editar/solicitudes-compra-editar.component';
 import { MatSelectFilterModule } from 'mat-select-filter';
 import { SolicitudCompraVerComponent } from './solicitudes-compra/solicitud-compra-ver/solicitud-compra-ver.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 export const MY_FORMATS = {
@@ -93,8 +94,10 @@ export const MY_FORMATS = {
     NgxCurrencyModule,
     DirectivesModule,
     MatPaginatorModule,
-    MatSelectFilterModule
+    MatSelectFilterModule,
+    NgbModule
   ],
+
 
 })
 export class ComprasModule { }

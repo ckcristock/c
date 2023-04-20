@@ -40,6 +40,7 @@
                 <div class="card-body">
                     <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
                     <hr class="line" />
+                    <!-- Tablas con información -->
                     <div class="rounded-top table-responsive mt-2">
                         <table class="table table-bordered table-striped table-sm">
                           <thead class="bg-light">
@@ -53,16 +54,16 @@
                           <tbody>
                             <tr class="text-center">
                               <td>
-                                
+                                {{ solicitud.person.full_names | titlecase }}
                               </td>
                               <td>
-                                
+                                {{ solicitud.person.contractultimate.position.dependency.name | capitalLetter }}
                               </td>
                               <td>
-                                
+                                {{ solicitud.created_at | date : "MMM d, y" }}
                               </td>
                               <td>
-                                
+                                {{ solicitud.expected_date | date : "MMM d, y" }}
                               </td>
                             </tr>
                           </tbody>
@@ -83,25 +84,51 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <!-- falta for que itera lista de productos  -->
-                            <tr>
-                              <th></th>
+                            <tr
+                            *ngFor="let solicitud of solicitud.product_purchase_request; let i = index"
+                            class="text-center"
+                            >
+                              <th>
+                                {{ i + 1 }}
+                              </th>
                               <td class="align-middle">
-                                
+                                {{solicitud.product.Referencia | uppercase}}
                               </td>
                               <td class="align-middle">
-                                <span class="text-muted">
-                                  
-                                </span>
+                                {{solicitud.name | uppercase}}
                               </td>
                               <td class="align-middle">
-                               
+                                {{solicitud.ammount | number }}
                               </td>
                               <td class="align-middle">
-                                
+                                {{solicitud.product.unit.name}}
                               </td>
                               <td class="align-middle">
-                                
+                                <div ngbDropdown container="body" class="dropdown-primary">
+                                  <button
+                                    ngbDropdownToggle
+                                    class="btn btn-primary btn-sm"
+                                    type="button"
+                                  >
+                                    <i class="mdi mdi-chevron-down"> Cargar Cotización</i>
+                                  </button>
+                                  <div ngbDropdownMenu>
+                                    <a
+                                      class="dropdown-item text-success"
+                                      href="javascript: void(0);"
+                                      (click)="openModal(cotizacion_regular)"
+                                    >
+                                    <i class="far fa-money-check-edit"></i> Regular 
+                                   </a>
+                                   <a
+                                      class="dropdown-item text-success"
+                                      href="javascript: void(0);"
+                                      (click)="openModal2(cotizacion_nuevo_proveedor)"
+                                    >
+                                    <i class="far fa-money-check-edit"></i> Nuevo Proveedor
+                                   </a>
+                                  </div>
+                                </div>
                               </td>
                             </tr>
                           </tbody>
@@ -116,14 +143,160 @@
                           </thead>
                           <tbody>
                             <tr class="text-center">
-                              <td colspan="100%"></td>
+                              <td colspan="100%">
+                                {{ solicitud.observations | titlecase }}
+                              </td>
                             </tr>
                           </tbody>
                         </table>
                       </div>                 
-
+                      <!-- Fin tablas con información -->
                 </div>
             </div>
         </div>
     </div>   
 </ng-container>
+
+<!--  Modal cotizar proveedor existente -->
+<ng-template #cotizacion_regular let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Cotizaciones Material</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+
+    <ngb-tabset>
+      <ngb-tab title="Cotización 1">
+        <ng-template ngbTabContent>
+          <ng-container [formGroup]="formCotizacionRegular1" id="formCotizacionRegular1">
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Nombre proveedor 1:</mat-label>
+              <mat-select
+                formControlName="Id_Proveedor"
+                
+                required
+              >
+                <mat-select-filter
+                  
+                ></mat-select-filter>
+                <mat-option>
+                  
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Numero de Cotización 1:</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="Ingresa el numero de cotización"
+                formControlName="numero_cotizacion"
+                required
+                autocomplete="off"
+              />
+              <!-- <mat-icon matSuffix>question_mark</mat-icon> -->
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Precio Total 1:</mat-label>
+              <input
+                matInput
+                placeholder="Ingresa el precio total de la cotización"
+                formControlName="precio_total"
+                required
+                autocomplete="off"
+              />
+              <!-- <mat-icon matPrefix>monetization_on</mat-icon> -->
+            </mat-form-field>
+            <div class="col-md-6">
+              <div class="form-group text-center">
+                <div class="custom-input-file col-md-12">
+                  <input
+                    type="file"
+                    #fileInput
+                    id="importFile"
+                    class="input-file"
+                    (change)="onFileChanged($event)"
+                  />
+                  Cargar documento legal
+                </div>
+                <div class="col-md-12 text-center">
+                  <small *ngIf="file" class="text-success">Documento cargado</small>
+                </div>
+              </div>
+            </div>
+          </ng-container> 
+      </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Cotización 2">
+        Contenido de la pestaña 2
+      </ngb-tab>
+      <ngb-tab title="Cotización 3">
+        Contenido de la pestaña 3
+      </ngb-tab>
+    </ngb-tabset>
+
+    
+
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"     
+    >
+    <!-- (click)="saveMemorandum()"
+      [disabled]="!formMemorando.valid" -->
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
+<!--  Modal cotizar proveedor nuevo -->
+<ng-template #cotizacion_nuevo_proveedor let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Cotizaciones Material</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <ngb-tabset>
+      <ngb-tab title="Cotización 1">
+        Contenido de la pestaña 1
+      </ngb-tab>
+      <ngb-tab title="Cotización 2">
+        Contenido de la pestaña 2
+      </ngb-tab>
+      <ngb-tab title="Cotización 3">
+        Contenido de la pestaña 3
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
+      Cerrar
+    </button>
+  </div>
+</ng-template>

@@ -35,6 +35,9 @@ export class SolicitudesCompraService {
     return this.http.get(`${environment.base_url}/purchase-request/${id}`);
   }
 
+  getDatosPurchaseRequest(params = {}){
+    return this.http.get(`${environment.base_url}/datos-purchase-request`, { params });
+  }
 }
 
 

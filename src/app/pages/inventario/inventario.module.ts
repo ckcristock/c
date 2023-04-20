@@ -1,17 +1,16 @@
 import { NgModule } from '@angular/core';
-
 import { MyDateRangePickerModule } from 'mydaterangepicker';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
 import { ComponentsModule } from '../../components/components.module';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-
 import {
   NgbModalModule,
   NgbPaginationModule,
   NgbTypeaheadModule,
   NgbDropdownModule,
+  NgbTooltipModule,
+  NgbPopoverModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { InventarioRoutingModule } from './inventario-routing.module';
 import { InventarioComponent } from './inventario/inventario.component';
@@ -55,6 +54,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 //import { InventarioEstibaComponent } from './inventario-fisico/inventario-estiba/inventario-estiba.component';
 import { InventarioEstibasComponent } from './inventario-fisico/inventario-estibas/inventario-estibas.component';
 import { ReconteoEstibaComponent } from './inventario-fisico/reconteo-estiba/reconteo-estiba.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 export const MY_FORMATS = {
   parse: {
@@ -111,6 +111,9 @@ export const MY_FORMATS = {
     MatIconModule,
     MatCheckboxModule,
     MatButtonModule,
+    NgbTooltipModule,
+    NgbPopoverModule,
+    NgSelectModule
   ],
   providers: [
     {

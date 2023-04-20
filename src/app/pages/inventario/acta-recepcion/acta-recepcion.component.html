@@ -1,11 +1,11 @@
 <div class="row">
-  <div class="col-lg-4 mb-4">
+  <div class="col-lg-6 mb-4">
     <div class="card h-100">
       <span
-        class="badge badge-pill badge-danger position-absolute float-right"
-        style="top: -5px; left: -5px"
-        >{{ ListaNacional.length }}</span
+        class="badge badge-pill badge-danger position-absolute float-right badge-float"
       >
+        {{ pendientesNacional.length }}
+      </span>
       <div class="card-body">
         <div class="row card-title d-flex justify-content-between">
           <div class="col-md-8 px-0">
@@ -51,15 +51,13 @@
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
-            style="font-size: x-small"
             *ngIf="
-              !loadingComprasPendientes && ListaNacional.length > 0;
-              else notData1
+              !loadingComprasPendientes && pendientesNacional.length > 0;
+              else notDataComprasPendientes
             "
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
-                <!-- <th></th> -->
                 <th>Código</th>
                 <th>Fecha</th>
                 <th>Proveedor</th>
@@ -69,22 +67,14 @@
             </thead>
             <tbody>
               <tr
-                *ngFor="let item of ListaNacional; let i = index"
+                *ngFor="let item of pendientesNacional; let i = index"
                 class="text-center"
-                id="fila{{ i }}"
               >
-                <!-- <td>
-                    <img class="img-radius imagen" />
-                  </td> -->
-                <td class="align-middle">
-                  <strong>{{ item.Codigo }}</strong>
-                </td>
-                <td class="align-middle">
-                  {{ item.created_at | date : "dd/MM/yyyy" }}
-                </td>
-                <td class="align-middle">{{ item.third.full_name }}</td>
-                <td class="align-middle">{{ item.Items }}</td>
-                <td class="align-middle">
+                <th>{{ item.Codigo }}</th>
+                <td>{{ item.created_at | date : "dd/MM/yyyy" }}</td>
+                <td>{{ item.third.full_name }}</td>
+                <td>{{ item.Items }}</td>
+                <td>
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
                       ngbDropdownToggle
@@ -104,33 +94,25 @@
                         <i class="fas fa-eye"></i> Ver</a
                       >
                       <a
-                        class="dropdown-item"
+                        class="dropdown-item text-info"
                         href=""
                         [routerLink]="['crear', item.Codigo, 'Nacional']"
                       >
-                        <i class="fa fa-server"></i> Realizar</a
+                        <i class="fas fa-check"></i> Realizar</a
                       >
                     </div>
                   </div>
                 </td>
               </tr>
-              <tr
+              <!-- <tr
                 *ngFor="let item of ListaIntrernacional; let i = index"
                 class="text-center"
-                id="fila{{ i }}"
               >
+                <td>{{ item.Codigo }}</td>
+                <td>{{ item.Fecha | date : "dd/MM/yyyy" }}</td>
+                <td>{{ item.Nombre }}</td>
+                <td>{{ item.Items }}</td>
                 <td>
-                  <!-- TODO IMAGEN -->
-                  <!--  <img *ngIf="item.Imagen ==''" src="assets/images/user.jpg" class="img-radius imagen ">
-                                                      <img *ngIf="item.Imagen !=''" src="{{environment.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen"> -->
-                </td>
-                <td class="align-middle">{{ item.Codigo }}</td>
-                <td class="align-middle">
-                  {{ item.Fecha | date : "dd/MM/yyyy" }}
-                </td>
-                <td class="align-middle">{{ item.Nombre }}</td>
-                <td class="align-middle">{{ item.Items }}</td>
-                <td class="align-middle">
                   <div ngbDropdown class="dropdown-info">
                     <button
                       ngbDropdownToggle
@@ -163,14 +145,14 @@
                     </div>
                   </div>
                 </td>
-              </tr>
+              </tr> -->
             </tbody>
           </table>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-lg-4 mb-4">
+  <div class="col-lg-6 mb-4">
     <div class="card h-100">
       <span
         class="badge badge-pill badge-danger position-absolute float-right"
@@ -212,21 +194,21 @@
                     class="img-radius imagen"
                   />
                 </td> -->
-                <td class="align-middle">
+                <td>
                   <strong>{{ item.Codigo }}</strong>
                 </td>
-                <td class="align-middle">
+                <td>
                   {{ item.Fecha_Creacion | date : "dd/MM/yyyy" }}
                 </td>
-                <td class="align-middle">
+                <td>
                   <strong>{{
                     item.Codigo_Compra_N != ""
                       ? item.Codigo_Compra_N
                       : item.Codigo_Compra_I
                   }}</strong>
                 </td>
-                <td class="align-middle">{{ item.Facturas }}</td>
-                <td class="align-middle">
+                <td>{{ item.Facturas }}</td>
+                <td>
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
                       ngbDropdownToggle
@@ -282,7 +264,7 @@
       </div>
     </div>
   </div>
-  <div class="col-lg-4 mb-4">
+  <div class="col-lg-6 mb-4">
     <div class="card h-100">
       <span
         class="badge badge-pill badge-danger position-absolute float-right"
@@ -313,7 +295,7 @@
                   type="text"
                   placeholder="Busca por código"
                   [(ngModel)]="Filtros.codigo_acta"
-                  (input)="ConsultaFiltrada()"
+                  (input)="getActasAnuladas()"
                   autocomplete="off"
                 />
               </mat-form-field>
@@ -324,7 +306,7 @@
           <table
             class="table table-bordered table-striped table-sm"
             style="font-size: x-small"
-            *ngIf="!Cargando4 && ActasAnuladas.length > 0; else notData3"
+            *ngIf="!loadindAA && ActasAnuladas.length > 0; else notData3"
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
@@ -336,14 +318,14 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of ActasAnuladas" class="text-center">
-                <td class="align-middle">
+                <td>
                   <strong>{{ item.Codigo }}</strong>
                 </td>
-                <td class="align-middle">
+                <td>
                   <strong>{{ item.Codigo_Orden }}</strong>
                 </td>
-                <td class="align-middle">{{ item.Proveedor }}</td>
-                <td class="align-middle">
+                <td>{{ item.Proveedor }}</td>
+                <td>
                   <a
                     class="text-primary"
                     href=""
@@ -367,387 +349,393 @@
           [maxSize]="maxSize1"
           [pageSize]="pageSize1"
           size="sm"
-          (pageChange)="ConsultaFiltrada(true)"
+          (pageChange)="getActasAnuladas(true)"
           [boundaryLinks]="true"
         ></ngb-pagination>
       </div>
     </div>
   </div>
-</div>
-<div class="card">
-  <div class="card-body">
-    <div class="row card-title d-flex justify-content-between">
-      <div class="col-md-6 px-0">
-        <h4 class="text-primary">Actas ingresadas</h4>
-      </div>
-      <div class="col-md-6 px-0 text-right">
-        <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-info btn-sm" (click)="matPanelAI.toggle()">
-            <i class="fas fa-sliders-h"></i> Filtros
-          </button>
+  <div class="col-lg-6 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="row card-title d-flex justify-content-between">
+          <div class="col-md-6 px-0">
+            <h4 class="text-primary">Actas ingresadas</h4>
+          </div>
+          <div class="col-md-6 px-0 text-right">
+            <div class="btn-group rounded w-sm-100">
+              <button class="btn btn-info btn-sm" (click)="matPanelAI.toggle()">
+                <i class="fas fa-sliders-h"></i> Filtros
+              </button>
+            </div>
+          </div>
         </div>
+        <hr class="line" />
+        <mat-accordion>
+          <mat-expansion-panel #matPanelAI class="mat-elevation-z0">
+            <div class="row">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Código</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Busca por código"
+                  [(ngModel)]="filtro_cod"
+                  (input)="filtros()"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="col">
+                <mat-label>Fecha de acta</mat-label>
+                <input
+                  matInput
+                  [satDatepicker]="picker"
+                  [value]="date"
+                  (dateChange)="selectedDate($event)"
+                  (dateInput)="selectedDate($event)"
+                  name="daterange"
+                  autocomplete="off"
+                  required
+                />
+                <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+                <sat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"
+                ></sat-datepicker-toggle>
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Órden de compra</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Busca por órden de compra"
+                  [(ngModel)]="filtro_compra"
+                  (input)="filtros()"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="col">
+                <mat-label>Fecha de compra</mat-label>
+                <input
+                  matInput
+                  [satDatepicker]="picker2"
+                  [value]="date2"
+                  (dateChange)="selectedDate2($event)"
+                  (dateInput)="selectedDate2($event)"
+                  name="daterange2"
+                  autocomplete="off"
+                  required
+                />
+                <sat-datepicker #picker2 [rangeMode]="true"></sat-datepicker>
+                <sat-datepicker-toggle
+                  matSuffix
+                  [for]="picker2"
+                ></sat-datepicker-toggle>
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Facturas</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Busca por órden de compra"
+                  [(ngModel)]="filtro_fact"
+                  (input)="filtros()"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Proveedor</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Busca por órden de compra"
+                  [(ngModel)]="filtro_proveedor"
+                  (input)="filtros()"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+        <div class="rounded-top table-responsive">
+          <table
+            class="table table-bordered table-striped table-sm"
+            style="font-size: smaller"
+            *ngIf="!Cargando && actarecepciones.length > 0; else notData4"
+          >
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Foto</th>
+                <th>Código Acta</th>
+                <th>Fecha Acta</th>
+                <th>Orden Compra</th>
+                <th>Fecha Compra</th>
+                <th>Facturas</th>
+                <th>Proveedor</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of actarecepciones" class="text-center">
+                <td>
+                  <img
+                    *ngIf="item.Imagen == ''"
+                    src="assets/images/user.jpg"
+                    class="img-radius imagen"
+                  />
+                  <!-- TODO imagen func -->
+                  <!--  <img *ngIf="item.Imagen !=''" src="{{envi.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen"> -->
+                </td>
+                <td>
+                  <strong>{{ item.Codigo }}</strong>
+                </td>
+                <td>
+                  {{ item.Fecha_Creacion | date : "dd/MM/yyyy" }}
+                </td>
+                <td>
+                  <strong>{{
+                    item.Codigo_Compra_N != ""
+                      ? item.Codigo_Compra_N
+                      : item.Codigo_Compra_I
+                  }}</strong>
+                </td>
+                <td>
+                  {{
+                    item.Fecha_Compra_N != ""
+                      ? (item.Fecha_Compra_N | date : "dd/MM/yyyy")
+                      : (item.Fecha_Compra_I | date : "dd/MM/yyyy")
+                  }}
+                </td>
+                <!--  <td *ngIf=" item.Tipo_Acomodar == 'Ajuste_Individual' ">
+                                                  {{ Item.Fecha_Compra_N }}
+                                              </td> -->
+                <td>{{ item.Facturas }}</td>
+                <td>
+                  <strong>{{ item.Proveedor }}</strong>
+                </td>
+                <td>
+                  <div ngbDropdown container="body" class="dropdown-primary">
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm"
+                      type="button"
+                    >
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <a
+                        class="dropdown-item text-success"
+                        (click)="verActa(item)"
+                      >
+                        <i class="fas fa-eye"></i> Ver</a
+                      >
+                      <!-- <a
+                        *ngIf="item.Tipo_Acomodar == 'Ajuste_Individual'"
+                        class="dropdown-item   "
+                        href=""
+                        [routerLink]="['/ajustesinventariover', item.Id_Acta]"
+                      >
+                        <i class="ti-eye"></i> Ver</a
+                      >
+                      <a
+                        *ngIf="item.Tipo_Acomodar == 'Nota_Credito'"
+                        class="dropdown-item   "
+                        href=""
+                        [routerLink]="['/notascreditover', item.Id_Acta]"
+                      >
+                        <i class="ti-eye"></i> Ver</a
+                      > -->
+                      <!--IMPRIMIR-->
+                      <!--ACTA RECEPCION-->
+                      <!-- <a
+                        *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
+                        class="dropdown-item text-info"
+                        href="{{
+                          enviroment.ruta
+                        }}php/actarecepcion/descarga_pdf.php?tipo=Acta_Recepcion&id={{
+                          item.Id_Acta
+                        }}"
+                        target="_blank"
+                      >
+                        <i class="fas fa-print"></i> Imprimir</a
+                      > -->
+                      <!-- <a
+                        *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
+                        class="dropdown-item text-info"
+                        href="{{
+                          envi.ruta
+                        }}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_{{
+                          item.Tipo
+                        }}&id={{ item.Id_Orden_Compra }}"
+                        target="_blank"
+                      >
+                        <i class="fas fa-print"></i> Imprimir OC
+                        {{ item.Tipo }}</a
+                      > -->
+                      <!--Nota_Credito-->
+                      <!-- <a
+                        *ngIf="item.Tipo_Acomodar == 'Nota_Credito'"
+                        class="dropdown-item text-info"
+                        href="{{
+                          envi.ruta
+                        }}php/notascredito/descarga_pdf.php?tipo=Nota_Credito&id={{
+                          item.Id_Acta
+                        }}"
+                        target="_blank"
+                      >
+                        <i class="fas fa-print"></i> Imprimir</a
+                      > -->
+                      <!-- <a
+                        *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
+                        class="dropdown-item text-primary"
+                        href="{{
+                          envi.ruta
+                        }}php/archivos/descarga_etiqueta_zebra.php?id={{
+                          item.Id_Acta
+                        }}"
+                        target="_blank"
+                      >
+                        <i class="fa fa-tag"></i> Descargar etiquetas</a
+                      > -->
+                      <a
+                        *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
+                        class="dropdown-item"
+                        (click)="verContabilidad(item, 'PGCA')"
+                      >
+                        <i class="fa fa-book"></i> Contab. PCGA
+                      </a>
+                      <a
+                        *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
+                        class="dropdown-item"
+                        (click)="verContabilidad(item, 'NIF')"
+                      >
+                        <i class="fa fa-book"></i> Contab. NIIF
+                      </a>
+                      <!--      -->
+                      <!-- <a
+                        *ngIf="
+                          (perfilUsuario == '27' || perfilUsuario == '16') &&
+                          item.Tipo_Acomodar == 'Acta_Recepcion'
+                        "
+                        class="dropdown-item   "
+                        href="{{
+                          envi.ruta
+                        }}php/contabilidad/movimientoscontables/movimientos_acta_recepcion_pdf.php?id_registro={{
+                          item.Id_Acta
+                        }}&id_funcionario_elabora={{
+                          funcionario.Identificacion_Funcionario
+                        }}"
+                        target="_blank"
+                      >
+                        <i class="fa fa-book"></i> Contab. PCGA
+                      </a>
+                      <a
+                        *ngIf="
+                          (perfilUsuario == '27' || perfilUsuario == '16') &&
+                          item.Tipo_Acomodar == 'Acta_Recepcion'
+                        "
+                        class="dropdown-item   "
+                        href="{{
+                          envi.ruta
+                        }}php/contabilidad/movimientoscontables/movimientos_acta_recepcion_pdf.php?id_registro={{
+                          item.Id_Acta
+                        }}&id_funcionario_elabora={{
+                          funcionario.Identificacion_Funcionario
+                        }}&tipo_valor=Niif"
+                        target="_blank"
+                      >
+                        <i class="fa fa-book"></i> Contab. NIIF
+                      </a> -->
+                      <!-- Ajuste individual cont -->
+                      <!--  <a
+                        *ngIf="
+                          (perfilUsuario == '27' || perfilUsuario == '16') &&
+                          item.Tipo_Acomodar == 'Ajuste_Individual'
+                        "
+                        class="dropdown-item   "
+                        href="{{
+                          envi.ruta
+                        }}php/contabilidad/movimientoscontables/movimientos_ajuste_individual_pdf.php?id_registro={{
+                          item.Id_Acta
+                        }}&id_funcionario_elabora={{
+                          funcionario.Identificacion_Funcionario
+                        }}"
+                        target="_blank "
+                      >
+                        <i class="fa fa-book"></i> Contab. PCGA
+                      </a>
+                      <a
+                        *ngIf="
+                          (perfilUsuario == '27' || perfilUsuario == '16') &&
+                          item.Tipo_Acomodar == 'Ajuste_Individual'
+                        "
+                        class="dropdown-item   "
+                        href="{{
+                          envi.ruta
+                        }}php/contabilidad/movimientoscontables/movimientos_ajuste_individual_pdf.php?id_registro={{
+                          item.Id_Acta
+                        }}&id_funcionario_elabora={{
+                          funcionario.Identificacion_Funcionario
+                        }}&tipo_valor=Niif "
+                        target="_blank "
+                      >
+                        <i class="fa fa-book"></i> Contab. NIIF
+                      </a> -->
+                      <!-- Nota Credito cont -->
+                      <!-- <a
+                        *ngIf="
+                          (perfilUsuario == '27' || perfilUsuario == '16') &&
+                          item.Tipo_Acomodar == 'Nota_Credito'
+                        "
+                        class="dropdown-item   "
+                        href="{{
+                          envi.ruta
+                        }}php/contabilidad/movimientoscontables/movimientos_nota_credito_pdf.php?id_registro={{
+                          item.Id_Acta
+                        }}&id_funcionario_elabora={{
+                          funcionario.Identificacion_Funcionario
+                        }}"
+                        target="_blank "
+                      >
+                        <i class="fa fa-book"></i> Contab. PCGA
+                      </a>
+                      <a
+                        *ngIf="
+                          (perfilUsuario == '27' || perfilUsuario == '16') &&
+                          item.Tipo_Acomodar == 'Nota_Credito'
+                        "
+                        class="dropdown-item   "
+                        href="{{
+                          envi.ruta
+                        }}php/contabilidad/movimientoscontables/movimientos_nota_credito_pdf.php?id_registro={{
+                          item.Id_Acta
+                        }}&id_funcionario_elabora={{
+                          funcionario.Identificacion_Funcionario
+                        }}&tipo_valor=Niif "
+                        target="_blank "
+                      >
+                        <i class="fa fa-book"></i> Contab. NIIF
+                      </a> -->
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ngb-pagination
+          class="d-flex justify-content-center pagination-rounded pagination-sm"
+          [collectionSize]="TotalItems"
+          [(page)]="page"
+          [maxSize]="maxSize"
+          size="sm"
+          (pageChange)="paginacion()"
+          [pageSize]="10"
+          [boundaryLinks]="true"
+        >
+        </ngb-pagination>
       </div>
     </div>
-    <hr class="line" />
-    <mat-accordion>
-      <mat-expansion-panel #matPanelAI class="mat-elevation-z0">
-        <div class="row">
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Código</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por código"
-              [(ngModel)]="filtro_cod"
-              (input)="filtros()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="col">
-            <mat-label>Fecha de acta</mat-label>
-            <input
-              matInput
-              [satDatepicker]="picker"
-              [value]="date"
-              (dateChange)="selectedDate($event)"
-              (dateInput)="selectedDate($event)"
-              name="daterange"
-              autocomplete="off"
-              required
-            />
-            <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
-            <sat-datepicker-toggle
-              matSuffix
-              [for]="picker"
-            ></sat-datepicker-toggle>
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Órden de compra</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por órden de compra"
-              [(ngModel)]="filtro_compra"
-              (input)="filtros()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="col">
-            <mat-label>Fecha de compra</mat-label>
-            <input
-              matInput
-              [satDatepicker]="picker2"
-              [value]="date2"
-              (dateChange)="selectedDate2($event)"
-              (dateInput)="selectedDate2($event)"
-              name="daterange2"
-              autocomplete="off"
-              required
-            />
-            <sat-datepicker #picker2 [rangeMode]="true"></sat-datepicker>
-            <sat-datepicker-toggle
-              matSuffix
-              [for]="picker2"
-            ></sat-datepicker-toggle>
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Facturas</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por órden de compra"
-              [(ngModel)]="filtro_fact"
-              (input)="filtros()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Proveedor</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por órden de compra"
-              [(ngModel)]="filtro_proveedor"
-              (input)="filtros()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-        </div>
-      </mat-expansion-panel>
-    </mat-accordion>
-    <div class="rounded-top table-responsive">
-      <table
-        class="table table-bordered table-striped table-sm"
-        style="font-size: smaller"
-        *ngIf="!Cargando && actarecepciones.length > 0; else notData4"
-      >
-        <thead class="bg-light">
-          <tr class="text-center text-uppercase">
-            <th>Foto</th>
-            <th>Código Acta</th>
-            <th>Fecha Acta</th>
-            <th>Orden Compra</th>
-            <th>Fecha Compra</th>
-            <th>Facturas</th>
-            <th>Proveedor</th>
-            <th><i class="mdi mdi-chevron-down"></i></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of actarecepciones" class="text-center">
-            <td class="align-middle">
-              <img
-                *ngIf="item.Imagen == ''"
-                src="assets/images/user.jpg"
-                class="img-radius imagen"
-              />
-              <!-- TODO imagen func -->
-              <!--  <img *ngIf="item.Imagen !=''" src="{{envi.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen"> -->
-            </td>
-            <td class="align-middle">
-              <strong>{{ item.Codigo }}</strong>
-            </td>
-            <td class="align-middle">
-              {{ item.Fecha_Creacion | date : "dd/MM/yyyy" }}
-            </td>
-            <td class="align-middle">
-              <strong>{{
-                item.Codigo_Compra_N != ""
-                  ? item.Codigo_Compra_N
-                  : item.Codigo_Compra_I
-              }}</strong>
-            </td>
-            <td class="align-middle">
-              {{
-                item.Fecha_Compra_N != ""
-                  ? (item.Fecha_Compra_N | date : "dd/MM/yyyy")
-                  : (item.Fecha_Compra_I | date : "dd/MM/yyyy")
-              }}
-            </td>
-            <!--  <td *ngIf=" item.Tipo_Acomodar == 'Ajuste_Individual' ">
-                                              {{ Item.Fecha_Compra_N }}
-                                          </td> -->
-            <td class="align-middle">{{ item.Facturas }}</td>
-            <td class="align-middle">
-              <strong>{{ item.Proveedor }}</strong>
-            </td>
-            <td class="align-middle">
-              <div ngbDropdown container="body" class="dropdown-primary">
-                <button
-                  ngbDropdownToggle
-                  class="btn btn-primary btn-sm"
-                  type="button"
-                >
-                  <i class="fas fa-chevron-down"></i>
-                </button>
-                <div ngbDropdownMenu>
-                  <a class="dropdown-item text-success" (click)="verActa(item)">
-                    <i class="fas fa-eye"></i> Ver</a
-                  >
-                  <!-- <a
-                    *ngIf="item.Tipo_Acomodar == 'Ajuste_Individual'"
-                    class="dropdown-item   "
-                    href=""
-                    [routerLink]="['/ajustesinventariover', item.Id_Acta]"
-                  >
-                    <i class="ti-eye"></i> Ver</a
-                  >
-                  <a
-                    *ngIf="item.Tipo_Acomodar == 'Nota_Credito'"
-                    class="dropdown-item   "
-                    href=""
-                    [routerLink]="['/notascreditover', item.Id_Acta]"
-                  >
-                    <i class="ti-eye"></i> Ver</a
-                  > -->
-                  <!--IMPRIMIR-->
-                  <!--ACTA RECEPCION-->
-                  <a
-                    *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
-                    class="dropdown-item text-info"
-                    href="{{
-                      envi.ruta
-                    }}php/actarecepcion/descarga_pdf.php?tipo=Acta_Recepcion&id={{
-                      item.Id_Acta
-                    }}"
-                    target="_blank"
-                  >
-                    <i class="fas fa-print"></i> Imprimir</a
-                  >
-                  <a
-                    *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
-                    class="dropdown-item text-info"
-                    href="{{
-                      envi.ruta
-                    }}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_{{
-                      item.Tipo
-                    }}&id={{ item.Id_Orden_Compra }}"
-                    target="_blank"
-                  >
-                    <i class="fas fa-print"></i> Imprimir OC {{ item.Tipo }}</a
-                  >
-                  <!--Nota_Credito-->
-                  <a
-                    *ngIf="item.Tipo_Acomodar == 'Nota_Credito'"
-                    class="dropdown-item text-info"
-                    href="{{
-                      envi.ruta
-                    }}php/notascredito/descarga_pdf.php?tipo=Nota_Credito&id={{
-                      item.Id_Acta
-                    }}"
-                    target="_blank"
-                  >
-                    <i class="fas fa-print"></i> Imprimir</a
-                  >
-                  <a
-                    *ngIf="item.Tipo_Acomodar == 'Acta_Recepcion'"
-                    class="dropdown-item text-primary"
-                    href="{{
-                      envi.ruta
-                    }}php/archivos/descarga_etiqueta_zebra.php?id={{
-                      item.Id_Acta
-                    }}"
-                    target="_blank"
-                  >
-                    <i class="fa fa-tag"></i> Descargar etiquetas</a
-                  >
-                  <a
-                    *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
-                    class="dropdown-item"
-                    (click)="verContabilidad(item, 'PGCA')"
-                  >
-                    <i class="fa fa-book"></i> Contab. PCGA
-                  </a>
-                  <a
-                    *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
-                    class="dropdown-item"
-                    (click)="verContabilidad(item, 'NIF')"
-                  >
-                    <i class="fa fa-book"></i> Contab. NIIF
-                  </a>
-                  <!--      -->
-                  <!-- <a
-                    *ngIf="
-                      (perfilUsuario == '27' || perfilUsuario == '16') &&
-                      item.Tipo_Acomodar == 'Acta_Recepcion'
-                    "
-                    class="dropdown-item   "
-                    href="{{
-                      envi.ruta
-                    }}php/contabilidad/movimientoscontables/movimientos_acta_recepcion_pdf.php?id_registro={{
-                      item.Id_Acta
-                    }}&id_funcionario_elabora={{
-                      funcionario.Identificacion_Funcionario
-                    }}"
-                    target="_blank"
-                  >
-                    <i class="fa fa-book"></i> Contab. PCGA
-                  </a>
-                  <a
-                    *ngIf="
-                      (perfilUsuario == '27' || perfilUsuario == '16') &&
-                      item.Tipo_Acomodar == 'Acta_Recepcion'
-                    "
-                    class="dropdown-item   "
-                    href="{{
-                      envi.ruta
-                    }}php/contabilidad/movimientoscontables/movimientos_acta_recepcion_pdf.php?id_registro={{
-                      item.Id_Acta
-                    }}&id_funcionario_elabora={{
-                      funcionario.Identificacion_Funcionario
-                    }}&tipo_valor=Niif"
-                    target="_blank"
-                  >
-                    <i class="fa fa-book"></i> Contab. NIIF
-                  </a> -->
-                  <!-- Ajuste individual cont -->
-                  <!--  <a
-                    *ngIf="
-                      (perfilUsuario == '27' || perfilUsuario == '16') &&
-                      item.Tipo_Acomodar == 'Ajuste_Individual'
-                    "
-                    class="dropdown-item   "
-                    href="{{
-                      envi.ruta
-                    }}php/contabilidad/movimientoscontables/movimientos_ajuste_individual_pdf.php?id_registro={{
-                      item.Id_Acta
-                    }}&id_funcionario_elabora={{
-                      funcionario.Identificacion_Funcionario
-                    }}"
-                    target="_blank "
-                  >
-                    <i class="fa fa-book"></i> Contab. PCGA
-                  </a>
-                  <a
-                    *ngIf="
-                      (perfilUsuario == '27' || perfilUsuario == '16') &&
-                      item.Tipo_Acomodar == 'Ajuste_Individual'
-                    "
-                    class="dropdown-item   "
-                    href="{{
-                      envi.ruta
-                    }}php/contabilidad/movimientoscontables/movimientos_ajuste_individual_pdf.php?id_registro={{
-                      item.Id_Acta
-                    }}&id_funcionario_elabora={{
-                      funcionario.Identificacion_Funcionario
-                    }}&tipo_valor=Niif "
-                    target="_blank "
-                  >
-                    <i class="fa fa-book"></i> Contab. NIIF
-                  </a> -->
-                  <!-- Nota Credito cont -->
-                  <!-- <a
-                    *ngIf="
-                      (perfilUsuario == '27' || perfilUsuario == '16') &&
-                      item.Tipo_Acomodar == 'Nota_Credito'
-                    "
-                    class="dropdown-item   "
-                    href="{{
-                      envi.ruta
-                    }}php/contabilidad/movimientoscontables/movimientos_nota_credito_pdf.php?id_registro={{
-                      item.Id_Acta
-                    }}&id_funcionario_elabora={{
-                      funcionario.Identificacion_Funcionario
-                    }}"
-                    target="_blank "
-                  >
-                    <i class="fa fa-book"></i> Contab. PCGA
-                  </a>
-                  <a
-                    *ngIf="
-                      (perfilUsuario == '27' || perfilUsuario == '16') &&
-                      item.Tipo_Acomodar == 'Nota_Credito'
-                    "
-                    class="dropdown-item   "
-                    href="{{
-                      envi.ruta
-                    }}php/contabilidad/movimientoscontables/movimientos_nota_credito_pdf.php?id_registro={{
-                      item.Id_Acta
-                    }}&id_funcionario_elabora={{
-                      funcionario.Identificacion_Funcionario
-                    }}&tipo_valor=Niif "
-                    target="_blank "
-                  >
-                    <i class="fa fa-book"></i> Contab. NIIF
-                  </a> -->
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="TotalItems"
-      [(page)]="page"
-      [maxSize]="maxSize"
-      size="sm"
-      (pageChange)="paginacion()"
-      [pageSize]="10"
-      [boundaryLinks]="true"
-    >
-    </ngb-pagination>
   </div>
 </div>
 
@@ -822,14 +810,14 @@
 
 <swal #confirmacionGuardar [swalOptions]="alertOption"></swal>
 
-<ng-template #notData1>
+<ng-template #notDataComprasPendientes>
   <app-not-data [loading]="loadingComprasPendientes"></app-not-data>
 </ng-template>
 <ng-template #notData2>
   <app-not-data [loading]="Cargando3"></app-not-data>
 </ng-template>
 <ng-template #notData3>
-  <app-not-data [loading]="Cargando4"></app-not-data>
+  <app-not-data [loading]="loadindAA"></app-not-data>
 </ng-template>
 <ng-template #notData4>
   <app-not-data [loading]="Cargando"></app-not-data>

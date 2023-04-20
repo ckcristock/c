@@ -56,6 +56,7 @@ export class CompraNacionalComponent implements OnInit {
     this.getDiasAnulacion();
     this.getFuncioriosParaResponsables();
   }
+
   downloading: boolean;
   download(id) {
     this.downloading = true;

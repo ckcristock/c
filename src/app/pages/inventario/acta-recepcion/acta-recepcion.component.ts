@@ -7,10 +7,8 @@ import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { functionsUtils } from '../../../core/utils/functionsUtils';
-import { IMyDrpOptions } from 'mydaterangepicker';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { UserService } from 'src/app/core/services/user.service';
-import { MatAccordion } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { DateAdapter } from 'saturn-datepicker';
 import { ActaRecepcionService } from './acta-recepcion.service';
@@ -27,7 +25,7 @@ export class ActaRecepcionComponent implements OnInit {
     codigo: '',
     proveedor: ''
   }
-  ListaNacional = [];
+  pendientesNacional = [];
   ListaIntrernacional = [];
   actas_pendientes = [];
   rowsFilter = [];
@@ -48,7 +46,7 @@ export class ActaRecepcionComponent implements OnInit {
   public Cargando: boolean = false;
   public loadingComprasPendientes: boolean = false;
   public Cargando3: boolean = false;
-  public Cargando4: boolean = false;
+  public loadindAA: boolean = false;
 
   @ViewChild('PlantillaBotones') PlantillaBotones: TemplateRef<any>;
   @ViewChild('PlantillaBotones1') PlantillaBotones1: TemplateRef<any>;
@@ -116,9 +114,9 @@ export class ActaRecepcionComponent implements OnInit {
   ngOnInit() {
     this.getComprasPendientes();
     this.getActasPendientes();
-    this.ListarActaRecepcion();
-    this.ConsultaFiltrada();
-    this.ListarCausalesAnulacion();
+    this.getActasAnuladas();
+    this.getCausalesAnulacion();
+    this.getActasIngresadas();
   }
 
   getComprasPendientes(compra = 'Nacioal') {
@@ -129,7 +127,7 @@ export class ActaRecepcionComponent implements OnInit {
       ...this.filtersCP
     }
     this._actaRecepcion.getComprasPendientes(params).subscribe((res: any) => {
-      this.ListaNacional = res.data;
+      this.pendientesNacional = res.data;
       //this.ListaIntrernacional = res;
       this.loadingComprasPendientes = false;
     })
@@ -146,7 +144,7 @@ export class ActaRecepcionComponent implements OnInit {
     });
   }
 
-  ListarActaRecepcion() {
+  getActasIngresadas() {
     let params = this.route.snapshot.queryParams;
     let queryString = '';
     if (Object.keys(params).length > 0) {
@@ -165,18 +163,16 @@ export class ActaRecepcionComponent implements OnInit {
         .join('&');
     }
     this.Cargando = true;
-    this.http
-      .get(
-        environment.ruta +
-        'php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Acomodada&tipo=General&' +
-        queryString,
-        { params: { company_id: this._user.user.person.company_worked.id } }
-      )
-      .subscribe((data: any) => {
-        this.actarecepciones = data.actarecepciones;
-        this.TotalItems = data.numReg;
-        this.Cargando = false;
-      });
+    let params2 = {
+      estado: 'Acomodada',
+      tipo: 'General',
+      company_id: this.companyWorkedId
+    }
+    this._actaRecepcion.getActasIngresadas(params2).subscribe((data: any) => {
+      this.actarecepciones = data.actarecepciones;
+      this.TotalItems = data.numReg;
+      this.Cargando = false;
+    });
   }
 
   paginacion() {
@@ -371,12 +367,10 @@ export class ActaRecepcionComponent implements OnInit {
     this.modalAnularActa.show();
   }
 
-  ListarCausalesAnulacion() {
-    this.http
-      .get(environment.ruta + 'php/facturasventas/causales_anulacion.php')
-      .subscribe((data: any) => {
-        this.Causales = data;
-      });
+  getCausalesAnulacion() {
+    this._actaRecepcion.getCausalesAnulacion().subscribe((res: any) => {
+      this.Causales = res.data;
+    });
   }
 
   SetFiltros(paginacion: boolean) {
@@ -398,28 +392,23 @@ export class ActaRecepcionComponent implements OnInit {
     return params;
   }
 
-  ConsultaFiltrada(paginacion: boolean = false) {
-    var params = this.SetFiltros(paginacion);
-    this.Cargando4 = true;
-    this.http
-      .get(environment.ruta + 'php/actarecepcion/lista_acta_anula.php', {
-        params: {
-          ...params,
-          company_id: this._user.user.person.company_worked.id,
-        },
-      })
-      .subscribe((data: any) => {
-        if (data.codigo == 'success') {
-          this.ActasAnuladas = data.query_result;
-          this.TotalItems1 = data.numReg;
-          this.Cargando4 = false;
-        } else {
-          this.ActasAnuladas = [];
-          this.Cargando4 = false;
-        }
-
-        this.SetInformacionPaginacion();
-      });
+  getActasAnuladas(paginacion: boolean = false) {
+    this.loadindAA = true;
+    let params = {
+      ...this.SetFiltros(paginacion),
+      company_id: this.companyWorkedId,
+    }
+    this._actaRecepcion.getActasAnuladas(params).subscribe((data: any) => {
+      if (data.codigo == 'success') {
+        this.ActasAnuladas = data.query_result;
+        this.TotalItems1 = data.numReg;
+        this.loadindAA = false;
+      } else {
+        this.ActasAnuladas = [];
+        this.loadindAA = false;
+      }
+      this.SetInformacionPaginacion();
+    });
   }
 
   SetInformacionPaginacion() {

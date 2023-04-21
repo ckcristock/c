@@ -16,7 +16,7 @@
         </h6>
         <div *ngIf="dependency.people.length > 0; else alertNoData">
           <div class="rounded-top table-responsive">
-            <table class="table table-hover table-sm">
+            <table class="table table-sm">
               <tbody>
                 <ng-container
                   *ngFor="let person of dependency.people; let i = index"
@@ -28,12 +28,12 @@
                   >
                     <td class="col-1">
                       <img
-                        src="{{ person.image | image: 'users' }}"
+                        src="{{ person.image | image : 'users' }}"
                         onerror="this.src='../../../../assets/images/noprofile.png'"
                         class="rounded-circle mx-auto header-profile-user"
                       />
                     </td>
-                    <td>{{ person.first_name | titlecase }} {{ person.first_surname | titlecase}}</td>
+                    <td>{{ person.completed_name | titlecase }}</td>
                     <td class="col-1">
                       <i
                         [ngClass]="

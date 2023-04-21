@@ -22,15 +22,15 @@
               Generando...
             </ng-template>
           </button>
-          <button class="btn btn-info btn-sm" (click)="openClose()">
+          <button class="btn btn-info btn-sm" (click)="matPanel.toggle()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
       </div>
     </div>
     <hr class="line" />
-    <mat-accordion multi>
-      <mat-expansion-panel class="mat-elevation-z0">
+    <mat-accordion>
+      <mat-expansion-panel #matPanel class="mat-elevation-z0">
         <form [formGroup]="formFilters">
           <div class="row">
             <mat-form-field
@@ -49,25 +49,21 @@
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
               <mat-label>Grupo</mat-label>
-              <mat-select
-                formControlName="group_id"
-              >
+              <mat-select formControlName="group_id">
                 <mat-option
                   *ngFor="let item of groupList"
                   [value]="item.value"
-                  >{{ item.text }}</mat-option
+                  >{{ item.text | uppercase }}</mat-option
                 >
               </mat-select>
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
               <mat-label>Dependencia</mat-label>
-              <mat-select
-                formControlName="dependency_id"
-              >
+              <mat-select formControlName="dependency_id">
                 <mat-option
                   *ngFor="let item of dependencyList"
                   [value]="item.value"
-                  >{{ item.text }}</mat-option
+                  >{{ item.text | uppercase }}</mat-option
                 >
               </mat-select>
             </mat-form-field>
@@ -89,20 +85,15 @@
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
               <mat-label>Funcionario</mat-label>
-              <mat-select
-                formControlName="person_id"
-              >
+              <mat-select formControlName="person_id">
                 <mat-option *ngFor="let item of people" [value]="item.value">{{
-                  item.text
+                  item.text | titlecase
                 }}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field class="col" appearance="outline">
               <mat-label>Tipo de turno</mat-label>
-              <mat-select
-                formControlName="turn_type"
-                name="tipo_turno"
-              >
+              <mat-select formControlName="turn_type" name="tipo_turno">
                 <mat-option value="Rotativo">Rotativo</mat-option>
                 <mat-option value="Fijo">Fijo</mat-option>
               </mat-select>

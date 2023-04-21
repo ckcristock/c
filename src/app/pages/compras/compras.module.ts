@@ -94,7 +94,7 @@ export const MY_FORMATS = {
     DirectivesModule,
     MatPaginatorModule,
     MatSelectFilterModule,
-    NgbModule
+    NgbModule,
     MatTabsModule
   ],
 

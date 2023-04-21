@@ -16,9 +16,9 @@ import { LiquidadosComponent } from './preliquidados/liquidados/liquidados.compo
 import { AlertasComunComponent } from './alertas-comun/alertas-comun.component';
 import { DisciplinariosComponent } from './procesos/disciplinarios/disciplinarios.component';
 import { MemorandosComponent } from './procesos/memorandos/memorandos.component';
-import {CertificadosComponent} from './certificados/certificados.component';
-import {ReporteHorarioComponent} from './reporte-horario/reporte-horario.component';
-import {FondoEmpleadoComponent} from './fondo-empleado/fondo-empleado.component';
+import { CertificadosComponent } from './certificados/certificados.component';
+import { ReporteHorarioComponent } from './reporte-horario/reporte-horario.component';
+import { FondoEmpleadoComponent } from './fondo-empleado/fondo-empleado.component';
 import { AsignarHorasExtrasComponent } from './asignar-horas-extras/asignar-horas-extras.component';
 import { AlmuerzosComponent } from './almuerzos/almuerzos.component';
 import { TableInventaryComponent } from './dotacion/dotaciones/table-inventary/table-inventary.component';
@@ -30,6 +30,7 @@ import { CategoryStockComponent } from './dotacion/dotaciones/category-stock/cat
 import { DescargoComponent } from './procesos/disciplinarios/descargo/descargo.component';
 import { CerrarProcesoComponent } from './procesos/disciplinarios/cerrar-proceso/cerrar-proceso.component';
 import { CrearProcesoComponent } from './procesos/disciplinarios/crear-proceso/crear-proceso.component';
+import { ReporteErroresComponent } from './reporte-errores/reporte-errores.component';
 
 
 
@@ -40,6 +41,7 @@ const routes: Routes = [
   { path: 'actividades', component: ActividadesComponent },
   { path: 'novedades', component: NovedadesComponent },
   { path: 'llegadas-tarde', component: LlegadasTardesComponent },
+  { path: 'asistencia-errores', component: ReporteErroresComponent },
 
 
   { path: 'dotacion/dotaciones', component: DotacionesComponent },
@@ -74,4 +76,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class RrhhRouterModule {}
+export class RrhhRouterModule { }

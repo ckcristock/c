@@ -25,13 +25,9 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./reporte-horario.component.scss'],
 })
 export class ReporteHorarioComponent implements OnInit {
-
-  @ViewChild(MatAccordion) accordion: MatAccordion;
   datePipe = new DatePipe('es-CO');
-
   loading: boolean;
-  matPanel: boolean;
-  date: any;
+  date = new Date();
   estadoFiltros = false;
   formFilters: FormGroup;
   orderObj: any
@@ -102,7 +98,6 @@ export class ReporteHorarioComponent implements OnInit {
           this.formFilters.patchValue(formValues['params']);
         }
       });//aqui
-      this.createFormFilters();
       this.getCompanies();
       this.getGroup();
       this.getPeople();
@@ -111,11 +106,6 @@ export class ReporteHorarioComponent implements OnInit {
     } else {
       this.router.navigate(['/notautorized']);
     }
-  }
-
-  openClose() {
-    this.matPanel = !this.matPanel;
-    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
   }
 
   handlePageEvent(event: PageEvent) {
@@ -164,7 +154,7 @@ export class ReporteHorarioComponent implements OnInit {
         this.formFilters.get('dependency_id').enable();
         this.getDependencies(valor);
       } else {
-        this.formFilters.patchValue({ dependency_id: 0 });
+        this.formFilters.patchValue({ dependency_id: '' });
         this.formFilters.get('dependency_id').disable();
       }
     });
@@ -211,19 +201,19 @@ export class ReporteHorarioComponent implements OnInit {
   getPeople() {
     this._people.getAll({}).subscribe((res: any) => {
       this.people = res.data;
-      this.people.unshift({ text: 'Todos', value: 0 });
+      this.people.unshift({ text: 'Todos', value: '' });
     });
   }
   getGroup() {
     this._grups.getGroup().subscribe((r: any) => {
       this.groupList = r.data;
-      this.groupList.unshift({ value: 0, text: 'Todos' });
+      this.groupList.unshift({ value: '', text: 'Todos' });
     });
   }
   getDependencies(group_id) {
     this._dependencies.getDependencies({ group_id }).subscribe((r: any) => {
       this.dependencyList = r.data;
-      this.dependencyList.unshift({ value: 0, text: 'Todas' });
+      this.dependencyList.unshift({ value: '', text: 'Todas' });
     });
   }
   getCompanies() {

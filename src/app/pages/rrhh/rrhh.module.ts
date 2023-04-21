@@ -8,7 +8,8 @@ import {
   NgbPaginationModule,
   NgbDropdownModule,
   NgbTypeaheadModule,
-  NgbNavModule
+  NgbNavModule,
+  NgbPopoverModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { MyDateRangePickerModule } from 'mydaterangepicker';
 import { VacantesCrearComponent } from './vacantes/vacantes-crear/vacantes-crear.component';
@@ -22,7 +23,8 @@ import { NovedadesComponent } from './novedades/novedades.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { VacantesVerComponent } from './vacantes/vacantes-ver/vacantes-ver.component';
 import { CrearNovedadComponent } from './novedades/crear-novedad/crear-novedad.component';
-import { MatExpansionModule,
+import {
+  MatExpansionModule,
   MatFormFieldModule,
   MatInputModule,
   MatSelectModule,
@@ -33,16 +35,15 @@ import { MatExpansionModule,
   MatPaginatorModule,
   MatRadioModule,
   MatBadgeModule,
-  MatTooltipModule} from '@angular/material';
+  MatTooltipModule
+} from '@angular/material';
 
 import { InventarioDotacionComponent } from './dotacion/inventario-dotacion/inventario-dotacion.component';
 import { DotacionesComponent } from './dotacion/dotaciones/dotaciones.component';
 import { DotacionEntradasComponent } from './dotacion/dotaciones/dotacion-entradas/dotacion-entradas.component';
 import { DotacionSalidasComponent } from './dotacion/dotaciones/dotacion-salidas/dotacion-salidas.component';
-
 import { TableInventaryComponent } from './dotacion/dotaciones/table-inventary/table-inventary.component';
 import { ActividadesComponent } from './actividades/actividades.component';
-
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { DetalleLlegadaComponent } from './llegadas-tardes/detalle-llegada/detalle-llegada.component';
 import { ContratosComponent } from './contratos/contratos.component';
@@ -83,7 +84,6 @@ import { CrearProcesoComponent } from './procesos/disciplinarios/crear-proceso/c
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ParametrosModule } from '../ajustes/parametros/parametros.module';
 import { TiposModule } from '../ajustes/tipos/tipos.module';
-
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
@@ -93,6 +93,7 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
 import { MatSelectFilterModule } from 'mat-select-filter';
+import { ReporteErroresComponent } from './reporte-errores/reporte-errores.component';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -113,12 +114,10 @@ export const MY_FORMATS = {
     NovedadesComponent,
     VacantesVerComponent,
     CrearNovedadComponent,
-
     InventarioDotacionComponent,
     DotacionEntradasComponent,
     DotacionSalidasComponent,
     DotacionesComponent,
-
     TableInventaryComponent,
     AsignacionTurnosComponent,
     SemanaTurnoComponent,
@@ -153,6 +152,7 @@ export const MY_FORMATS = {
     DescargoComponent,
     CerrarProcesoComponent,
     CrearProcesoComponent,
+    ReporteErroresComponent,
   ],
   imports: [
     RrhhRouterModule,
@@ -195,7 +195,8 @@ export const MY_FORMATS = {
     MatExpansionModule,
     NgxCurrencyModule,
     DirectivesModule,
-    MatSelectFilterModule
+    MatSelectFilterModule,
+    NgbPopoverModule
   ],
   providers: [
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'COP' },

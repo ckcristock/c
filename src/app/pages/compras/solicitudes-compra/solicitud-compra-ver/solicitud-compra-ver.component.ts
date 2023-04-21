@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SolicitudesCompraService } from '../solicitudes-compra.service';
 import { ModalService } from 'src/app/core/services/modal.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TerceroService } from 'src/app/core/services/tercero.service';
+import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
+import { consts } from 'src/app/core/utils/consts';
+
 
 @Component({
   selector: 'app-solicitud-compra-ver',
@@ -10,17 +14,24 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./solicitud-compra-ver.component.scss']
 })
 export class SolicitudCompraVerComponent implements OnInit {
+  mask = consts
   loading: boolean;
   id: any;
   solicitud: any[] = [];
   datosCabecera: any = {};
-  formCotizacionRegular1: FormGroup;
+  formCotizacionRegular: FormGroup;
+  proveedores: any = [];
+  filteredProveedor: any[] = [];
 
-  constructor(
+
+  constructor( 
     private route:ActivatedRoute,
     private _solicitudesCompra: SolicitudesCompraService,
     private _modal: ModalService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _proveedor: TercerosService,
+    private router: Router,
+    
     
   ) { }
 
@@ -29,25 +40,55 @@ export class SolicitudCompraVerComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
       this.getData();
-      this.createFormCotizacionRegular1();
+      this.createFormCotizacionRegular();
+      this.getProveedores();
+      
     })
   }
   //Modales
   openModal(content) {
-    this._modal.open(content, 'md');
+    this._modal.open(content, 'lg');
   }
 
   openModal2(content) {
-    this._modal.open(content, 'md');
+    this._modal.open(content, 'lg');
   }
 
-  createFormCotizacionRegular1(){
-    this.formCotizacionRegular1 =this.fb.group({
-      Id_Proveedor: [null, Validators.required],
-      numero_cotizacion: ['', Validators.required],
-      precio_total: ['', Validators.required],
-      file: [''],
+  createFormCotizacionRegular(){
+    this.formCotizacionRegular = this.fb.group({
+      items: this.fb.array([])
     })
+    let items = this.formCotizacionRegular.get('items') as FormArray;
+    for (let index = 0; index < 3; index++) {
+      items.push(
+        this.fb.group({
+          Id_Proveedor: [null, Validators.required],
+          numero_cotizacion: ['', Validators.required],
+          precio_total: ['', Validators.required],
+          file: [''],
+        })
+      )
+      
+    }
+  }
+
+  printForm(){
+    console.log(this.formCotizacionRegular)
+  }
+
+  getProveedores() {
+    this._proveedor.getThirdPartyProvider({}).subscribe((res: any) => {
+      this.proveedores = res.data;
+      this.filteredProveedor = res.data.slice();
+    });
+  }
+
+  redirectTercero(){ 
+    window.open('/crm/terceros/crear-tercero', '_blank');
+  }
+
+  saveCotizacion(){
+
   }
   
   //Fin modales

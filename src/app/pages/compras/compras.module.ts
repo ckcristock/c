@@ -34,7 +34,7 @@ import { DirectivesModule } from 'src/app/core/directives/directives.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { SolicitudesCompraEditarComponent } from './solicitudes-compra/solicitudes-compra-editar/solicitudes-compra-editar.component';
 import { MatSelectFilterModule } from 'mat-select-filter';
-
+import { MatTabsModule } from '@angular/material/tabs';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -90,7 +90,8 @@ export const MY_FORMATS = {
     NgxCurrencyModule,
     DirectivesModule,
     MatPaginatorModule,
-    MatSelectFilterModule
+    MatSelectFilterModule,
+    MatTabsModule
   ],
 
 })

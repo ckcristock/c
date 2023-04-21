@@ -34,4 +34,17 @@ export class PaginatorService {
     return params;
   }
 
+  checkParams(pagination, params) {
+    if (params.params.pageSize) {
+      pagination.pageSize = params.params.pageSize
+    } else {
+      pagination.pageSize = 10
+    }
+    if (params.params.pag) {
+      pagination.page = params.params.pag
+    } else {
+      pagination.page = 1
+    }
+  }
+
 }

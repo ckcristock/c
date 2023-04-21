@@ -1,8 +1,5 @@
 <div class="rounded-top table-responsive">
-  <table
-    class="table table-bordered table-striped table-sm mt-2"
-    
-  >
+  <table class="table table-bordered table-striped table-sm mt-2">
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
         <th>Fecha</th>
@@ -16,7 +13,20 @@
     <tbody>
       <tr *ngFor="let horario of horarios" class="text-center">
         <td>{{ horario.date }}</td>
-        <td>{{ horario.entry_time_one | time }}
+        <td>
+          <span
+            [ngbPopover]="entradaUno"
+            [popoverTitle]="popTitle"
+            class="custom-label text-info"
+            role="button"
+            triggers="mouseenter:mouseleave"
+            >{{ horario.entry_time_one | time }}
+          </span>
+          <ng-template #entradaUno>
+            <div>
+              <img [src]="horario.img_one" class="img-fluid" />
+            </div>
+          </ng-template>
           <a
             class="btn btn-link p-0"
             *ngIf="horario.temp_one && horario.temp_one != '0.0'"
@@ -32,7 +42,19 @@
               else notHour2
             "
           >
-            <span class="custom-label">{{ horario.leave_time_one | time }} </span>
+            <span
+              [ngbPopover]="salidaUno"
+              [popoverTitle]="popTitle"
+              class="custom-label text-info"
+              role="button"
+              triggers="mouseenter:mouseleave"
+              >{{ horario.leave_time_one | time }}
+            </span>
+            <ng-template #salidaUno>
+              <div>
+                <img [src]="horario.img_two" class="img-fluid" />
+              </div>
+            </ng-template>
             <a
               class="btn btn-link p-0"
               *ngIf="horario.temp_two && horario.temp_two != '0.0'"
@@ -49,7 +71,19 @@
               else notHour2
             "
           >
-            <span class="custom-label">{{ horario.entry_time_two | time }} </span>
+            <span
+              [ngbPopover]="entradaDos"
+              [popoverTitle]="popTitle"
+              class="custom-label text-info"
+              role="button"
+              triggers="mouseenter:mouseleave"
+              >{{ horario.entry_time_two | time }}
+            </span>
+            <ng-template #entradaDos>
+              <div>
+                <img [src]="horario.img_three" class="img-fluid" />
+              </div>
+            </ng-template>
             <a
               class="btn btn-link p-0"
               *ngIf="horario.temp_three && horario.temp_three != '0.0'"
@@ -66,7 +100,19 @@
               else notHour2
             "
           >
-            <span class="custom-label">{{ horario.leave_time_two | time }} </span>
+            <span
+              [ngbPopover]="salidaDos"
+              [popoverTitle]="popTitle"
+              class="custom-label text-info"
+              role="button"
+              triggers="mouseenter:mouseleave"
+              >{{ horario.leave_time_two | time }}
+            </span>
+            <ng-template #salidaDos>
+              <div>
+                <img [src]="horario.img_four" class="img-fluid" />
+              </div>
+            </ng-template>
             <a
               class="btn btn-link p-0"
               *ngIf="horario.temp_four && horario.temp_four != '0.0'"
@@ -96,5 +142,6 @@
 </div>
 
 <ng-template #notHour2>
-  <span>Sin Reportar</span>
+  <span>Sin reportar</span>
 </ng-template>
+<ng-template #popTitle>Foto</ng-template>

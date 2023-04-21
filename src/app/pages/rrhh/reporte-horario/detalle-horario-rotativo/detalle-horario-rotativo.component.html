@@ -18,8 +18,20 @@
           <span class="custom-label text-center">{{ horario.date }}</span>
         </td>
         <td>
-          <!-- <span class="dot" [class]="horario.colors.entry"></span> -->
-          <span class="custom-label">{{ horario.entry_time_one | time }} </span>
+          <span
+            [ngbPopover]="entradaUno"
+            [popoverTitle]="popTitle"
+            class="custom-label text-info"
+            role="button"
+            triggers="mouseenter:mouseleave"
+            >{{ horario.entry_time_one | time }}
+          </span>
+          <ng-template #entradaUno>
+            <div>
+              <img [src]="horario.img_one" class="img-fluid" />
+            </div>
+          </ng-template>
+
           <a
             class="btn btn-link p-0"
             *ngIf="horario.temp_one && horario.temp_one != '0.0'"
@@ -36,10 +48,19 @@
               else notHour2
             "
           >
-            <!-- <span class="dot" [class]="horario.colors.breckEntry"></span> -->
-            <span class="custom-label"
+            <span
+              [ngbPopover]="breakUno"
+              [popoverTitle]="popTitle"
+              class="custom-label text-info"
+              role="button"
+              triggers="mouseenter:mouseleave"
               >{{ horario.breack_time_one | time }}
             </span>
+            <ng-template #breakUno>
+              <div>
+                <img [src]="horario.img_breack_one" class="img-fluid" />
+              </div>
+            </ng-template>
           </div>
         </td>
 
@@ -50,10 +71,19 @@
               else notHour2
             "
           >
-            <!-- <span class="dot" [class]="'red'"></span> -->
-            <span class="custom-label"
+            <span
+              [ngbPopover]="breakDos"
+              [popoverTitle]="popTitle"
+              class="custom-label text-info"
+              role="button"
+              triggers="mouseenter:mouseleave"
               >{{ horario.breack_time_two | time }}
             </span>
+            <ng-template #breakDos>
+              <div>
+                <img [src]="horario.img_breack_two" class="img-fluid" />
+              </div>
+            </ng-template>
           </div>
         </td>
 
@@ -64,10 +94,19 @@
               else notHour2
             "
           >
-            <!-- <span class="dot" [class]="horario.colors.launchEntry"></span> -->
-            <span class="custom-label">
-              {{ horario.launch_time_one | time }}</span
-            >
+            <span
+              [ngbPopover]="lunchUno"
+              [popoverTitle]="popTitle"
+              class="custom-label text-info"
+              role="button"
+              triggers="mouseenter:mouseleave"
+              >{{ horario.launch_time_one | time }}
+            </span>
+            <ng-template #lunchUno>
+              <div>
+                <img [src]="horario.img_launch_one" class="img-fluid" />
+              </div>
+            </ng-template>
           </div>
         </td>
         <td>
@@ -77,10 +116,19 @@
               else notHour2
             "
           >
-            <!--  <span class="dot" [class]="horario.colors.launchLeave"></span> -->
-            <span class="custom-label"
+            <span
+              [ngbPopover]="lunchDos"
+              [popoverTitle]="popTitle"
+              class="custom-label text-info"
+              role="button"
+              triggers="mouseenter:mouseleave"
               >{{ horario.launch_time_two | time }}
             </span>
+            <ng-template #lunchDos>
+              <div>
+                <img [src]="horario.img_launch_two" class="img-fluid" />
+              </div>
+            </ng-template>
           </div>
         </td>
 
@@ -91,10 +139,19 @@
               else notHour2
             "
           >
-            <!-- <span class="dot" [class]="horario.colors.leave"></span> -->
-            <span class="custom-label"
+            <span
+              [ngbPopover]="salidaUno"
+              [popoverTitle]="popTitle"
+              class="custom-label text-info"
+              role="button"
+              triggers="mouseenter:mouseleave"
               >{{ horario.leave_time_one | time }}
             </span>
+            <ng-template #salidaUno>
+              <div>
+                <img [src]="horario.img_two" class="img-fluid" />
+              </div>
+            </ng-template>
             <a
               class="btn btn-link p-0"
               *ngIf="horario.temp_two && horario.temp_two != '0.0'"
@@ -124,5 +181,6 @@
 </div>
 
 <ng-template #notHour2>
-  <span>Sin Reportar</span>
+  <span>Sin reportar</span>
 </ng-template>
+<ng-template #popTitle>Foto</ng-template>

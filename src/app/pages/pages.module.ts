@@ -39,6 +39,7 @@ import { MatButtonModule, MatIconModule, MatPaginatorModule } from '@angular/mat
 import { BoardJefeIngenieriaComponent } from './boards/board-jefe-ingenieria/board-jefe-ingenieria.component';
 import { BoardJefeDisenoComponent } from './boards/board-jefe-diseno/board-jefe-diseno.component';
 import { BoardJefeProduccionComponent } from './boards/board-jefe-produccion/board-jefe-produccion.component';
+
 registerLocaleData(localeEs, 'es');
 
 @NgModule({
@@ -83,6 +84,7 @@ registerLocaleData(localeEs, 'es');
         MatIconModule,
         NgbTypeaheadModule,
         MatPaginatorModule
+        
         //AngularFileUploaderModule,
     ],
     exports: [

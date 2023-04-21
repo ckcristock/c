@@ -38,54 +38,10 @@
   <div class="col">
     <div class="card">
       <div class="card-body">
-        <div class="row card-title d-flex justify-content-between">
-          <div class="col-sm-6 px-0">
-            <div class="card m-0 p-0 border-0 shadow-none">
-              <div class="img-square-wrapper">
-                <img src="assets/images/logo2.png" alt="" height="45" />
-              </div>
-              <div class="card-body p-0 m-0">
-                <span class="card-text" style="font-size: x-small">
-                  {{ userF.person.company_worked.name }} • NIT
-                  {{ userF.person.company_worked.document_number }} •
-                  {{ userF.person.company_worked.address }} •
-                  {{ userF.person.company_worked.phone }}
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6 px-0 text-right">
-            <h4>
-              <span class="badge badge-primary">{{ Datos.Codigo }}</span>
-            </h4>
-            <h6>{{ Datos.Fecha_Creacion | date: "longDate" }}</h6>
-            <img
-              *ngIf="Datos.Codigo_Qr != ''"
-              src="{{ envi.ruta }}IMAGENES/QR/{{ Datos.Codigo_Qr }}"
-              height="45"
-              onerror="this.src='../../../../../assets/images/nofound.png'"
-            />
-          </div>
-
-          <!-- <div class="row text-right" style="margin: 0">
-            , P.
-            <div class="col-sm-12">
-              <h4>Acta de Recepción</h4>
-              <div class="clearfix"></div>
-              <h5>{{ Datos.Codigo }}</h5>
-              <h6 style="font-weight: normal">
-                Fecha: {{ Fecha | date: "dd/MM/yyyy" }}
-              </h6>
-              <h6 style="font-weight: normal">Prov.: {{ Datos.Proveedor }}</h6>
-              <h6 style="font-weight: normal">
-                Compra: {{ Datos.Codigo_Compra }}
-              </h6>
-            </div>
-          </div> -->
-        </div>
+        <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
         <hr class="line" />
         <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-sm" >
+          <table class="table table-bordered table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th>Compra</th>
@@ -113,7 +69,7 @@
         </div>
         <hr />
         <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-sm" >
+          <table class="table table-bordered table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th>Proveedor</th>
@@ -132,7 +88,7 @@
         </div>
         <hr />
         <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-sm" >
+          <table class="table table-bordered table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th>#</th>
@@ -150,14 +106,14 @@
                 <td>{{ item.Factura }}</td>
                 <td>{{ item.Fecha_Factura }}</td>
                 <td>
-                  <a
+                  <!-- <a
                     href="{{ envi.ruta }}ARCHIVOS/FACTURAS_COMPRA/{{
                       item.Archivo_Factura
                     }}"
                     target="_blank"
                     title="Descargar Archivo"
                     ><i class="fas fa-file-pdf"></i
-                  ></a>
+                  ></a> -->
                 </td>
               </tr>
             </tbody>
@@ -165,7 +121,7 @@
         </div>
         <hr />
         <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-sm" >
+          <table class="table table-bordered table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th>Observaciones</th>
@@ -180,7 +136,7 @@
         </div>
         <hr />
         <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-sm" >
+          <table class="table table-bordered table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th>#</th>
@@ -209,10 +165,7 @@
                 </td>
                 <td class="align-middle" colspan="6">
                   <div class="rounded-top table-responsive">
-                    <table
-                      class="table table-bordered table-sm"
-                      
-                    >
+                    <table class="table table-bordered table-sm">
                       <thead class="bg-light">
                         <tr class="text-center text-uppercase">
                           <th>Cantidad</th>
@@ -235,11 +188,11 @@
                             {{ lote.Fecha_Vencimiento }}
                           </td>
                           <td class="align-middle">
-                            {{ lote.Precio | currency: "COP" }}
+                            {{ lote.Precio | currency : "COP" }}
                           </td>
                           <td class="align-middle">{{ lote.Impuesto }}%</td>
                           <td class="align-middle">
-                            {{ lote.Precio * lote.Cantidad | currency: "COP" }}
+                            {{ lote.Precio * lote.Cantidad | currency : "COP" }}
                           </td>
                         </tr>
                       </tbody>
@@ -254,32 +207,29 @@
           </table>
         </div>
         <div class="d-flex justify-content-end">
-          <table
-            class="table table-hover table-sm col-md-4"
-            
-          >
+          <table class="table table-hover table-sm col-md-4">
             <tbody>
               <tr>
                 <th>(=) SubTotal :</th>
                 <td class="text-right">
-                  {{ Datos.Subtotal | currency: "COP" }}
+                  {{ Datos.Subtotal | currency : "COP" }}
                 </td>
               </tr>
               <tr>
                 <th>(+) Iva :</th>
                 <td class="text-right">
-                  {{ Datos.Impuesto | currency: "COP" }}
+                  {{ Datos.Impuesto | currency : "COP" }}
                 </td>
               </tr>
               <tr>
                 <th>(=) Total :</th>
-                <td class="text-right">{{ Datos.Total | currency: "COP" }}</td>
+                <td class="text-right">{{ Datos.Total | currency : "COP" }}</td>
               </tr>
             </tbody>
           </table>
         </div>
         <button
-          *ngIf="permiso && Datos.Estado == 'Pendiente'"
+          *ngIf="Datos.Estado == 'Pendiente'"
           [swal]="{
             title: '¿Está Seguro?',
             text: 'Se dispone a aprobar el acta de recepción ',

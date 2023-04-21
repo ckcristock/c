@@ -8,6 +8,7 @@ import { RetencionService } from '../../../../core/services/retencion.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
+import { ActaRecepcionService } from '../acta-recepcion.service';
 
 @Component({
   selector: 'app-crear-acta-recepcion',
@@ -15,6 +16,14 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./crear-acta-recepcion.component.scss'],
 })
 export class CrearActaRecepcionComponent implements OnInit {
+  datosCabecera = {
+    Titulo: 'Acta de recepción',
+    Fecha: new Date(),
+    Codigo: ''
+  }
+
+
+
   Lista_Productos: any[] = [];
   public Lista_Eliminados: any = [];
   NoConformes = [];
@@ -135,7 +144,8 @@ export class CrearActaRecepcionComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private swalService: SwalService,
-    private retencionService: RetencionService
+    private retencionService: RetencionService,
+    private _actaRecepcion: ActaRecepcionService
   ) {
     // this.http.get(environment.base_url+ '/php/contabilidad/lista_retenciones.php', { params: { modulo: 'Impuesto' } }).subscribe((data: any) => {
     //   this.ListaRetenciones = data;
@@ -168,34 +178,31 @@ export class CrearActaRecepcionComponent implements OnInit {
       }
       this.Actualiza_Valores();
     }
-    this.http
-      .get(environment.ruta + ruta, {
-        params: {
-          codigo: this.route.snapshot.params['codigo'],
-          compra: this.route.snapshot.params['compra'],
-          id: this.id_no_conforme,
-        },
-      })
-      .subscribe((data: any) => {
-        let params = this.route.snapshot.queryParams;
-
-        this.DataRetencionesProveedor = data.Data_Retenciones;
-        this.ValoresRetenciones = data.Valores_Base_Retenciones;
-        this.AsignarRetencionesDefault();
-        this.OperacionParaValoresMinimosRetenciones();
-        this.encabezado = data.encabezado;
-        this.cargarSubcategorias(data.encabezado.Id_Bodega);
-        this.Total_Items = data.Items;
-        this.Productos = data.Productos;
-        if (params.devolucion != undefined) {
-          this.Total_Items = data.producto.length;
-          this.Lista_Productos = data.producto;
-          this.Codigo_barras = false;
-        }
-        setTimeout(() => {
-          this.Opciones();
-        }, 100);
-      });
+    let params2 = {
+      codigo: this.route.snapshot.params['codigo'],
+      compra: this.route.snapshot.params['compra'],
+      id: this.id_no_conforme,
+    }
+    this._actaRecepcion.getActaRecepcionCompra(params2).subscribe((data: any) => {
+      let params = this.route.snapshot.queryParams;
+      this.DataRetencionesProveedor = data.Data_Retenciones;
+      this.ValoresRetenciones = data.Valores_Base_Retenciones;
+      this.AsignarRetencionesDefault();
+      this.OperacionParaValoresMinimosRetenciones();
+      this.encabezado = data.encabezado;
+      this.datosCabecera.Codigo = this.encabezado.Codigo
+      this.cargarSubcategorias(data.encabezado.Id_Bodega);
+      this.Total_Items = data.Items;
+      this.Productos = data.Productos;
+      if (params.devolucion != undefined) {
+        this.Total_Items = data.producto.length;
+        this.Lista_Productos = data.producto;
+        this.Codigo_barras = false;
+      }
+      setTimeout(() => {
+        this.Opciones();
+      }, 100);
+    });
 
     this.http
       .get(environment.ruta + 'php/actarecepcion/causal_no_conformes.php')
@@ -393,6 +400,7 @@ export class CrearActaRecepcionComponent implements OnInit {
   }
 
   addFactura(pos, event) {
+    console.log(event)
     let pos2 = pos + 1;
 
     let factura = (document.getElementById('Factura' + pos) as HTMLInputElement)
@@ -588,7 +596,7 @@ export class CrearActaRecepcionComponent implements OnInit {
   consultarCodigoBarras(codigo) {
     if (codigo != '') {
       this.http
-        .get(environment.ruta + 'php/actarecepcion/codigo_barrad.php', {
+        .get(environment.base_url + '/php/actarecepcion/codigo_barrad.php', {
           params: {
             codigo: codigo,
             orden: this.route.snapshot.params['codigo'],
@@ -1312,7 +1320,7 @@ export class CrearActaRecepcionComponent implements OnInit {
         let valores_factura = this.TotalesFacturas.find(
           (x) => x.Factura == fac.Factura
         );
-        console.log(valores_factura.total_factura);
+        //console.log(valores_factura.total_factura);
 
         if (!functionsUtils.IsObjEmpty(valores_factura)) {
           if (this.Facturas[i].Retenciones.length > 0) {

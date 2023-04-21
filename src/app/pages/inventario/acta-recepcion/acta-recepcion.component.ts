@@ -7,12 +7,11 @@ import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { functionsUtils } from '../../../core/utils/functionsUtils';
-import { IMyDrpOptions } from 'mydaterangepicker';
 import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
 import { UserService } from 'src/app/core/services/user.service';
-import { MatAccordion } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { DateAdapter } from 'saturn-datepicker';
+import { ActaRecepcionService } from './acta-recepcion.service';
 
 @Component({
   selector: 'app-acta-recepcion',
@@ -20,50 +19,18 @@ import { DateAdapter } from 'saturn-datepicker';
   styleUrls: ['./acta-recepcion.component.scss'],
 })
 export class ActaRecepcionComponent implements OnInit {
-  @ViewChild('firstAccordion') firstAccordion: MatAccordion;
-  @ViewChild('secondAccordion') secondAccordion: MatAccordion;
-  @ViewChild('thirdAccordion') thirdAccordion: MatAccordion;
-  matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.firstAccordion.openAll();
-      this.matPanel = true;
-    } else {
-      this.firstAccordion.closeAll();
-      this.matPanel = false;
-    }
-  }
-  matPanel2 = false;
-  openClose2() {
-    if (this.matPanel2 == false) {
-      this.secondAccordion.openAll();
-      this.matPanel2 = true;
-    } else {
-      this.secondAccordion.closeAll();
-      this.matPanel2 = false;
-    }
-  }
-  matPanel3 = false;
-  openClose3() {
-    if (this.matPanel3 == false) {
-      this.thirdAccordion.openAll();
-      this.matPanel3 = true;
-    } else {
-      this.thirdAccordion.closeAll();
-      this.matPanel3 = false;
-    }
-  }
   datePipe = new DatePipe('es-CO');
-  envi: any = {
-    ruta: '',
-  };
-  ListaNacional = [];
+  companyWorkedId: any;
+  filtersCP = {
+    codigo: '',
+    proveedor: ''
+  }
+  pendientesNacional = [];
   ListaIntrernacional = [];
   actas_pendientes = [];
   rowsFilter = [];
   tempFilter = [];
   columns = [];
-  public punto_activo: any;
   public actarecepciones: any = [];
   public maxSize = 10;
   public TotalItems: number;
@@ -77,17 +44,9 @@ export class ActaRecepcionComponent implements OnInit {
   public filtro_Codigo: any = '';
   public filtro_Proveedor: any = '';
   public Cargando: boolean = false;
-  public Cargando2: boolean = false;
+  public loadingComprasPendientes: boolean = false;
   public Cargando3: boolean = false;
-  public Cargando4: boolean = false;
-  myDateRangePickerOptions: IMyDrpOptions = {
-    width: '120px',
-    height: '21px',
-    selectBeginDateTxt: 'Inicio',
-    selectEndDateTxt: 'Fin',
-    selectionTxtFontSize: '10px',
-    dateFormat: 'yyyy-mm-dd',
-  };
+  public loadindAA: boolean = false;
 
   @ViewChild('PlantillaBotones') PlantillaBotones: TemplateRef<any>;
   @ViewChild('PlantillaBotones1') PlantillaBotones1: TemplateRef<any>;
@@ -129,14 +88,11 @@ export class ActaRecepcionComponent implements OnInit {
     private location: Location,
     private _swalService: SwalService,
     private _user: UserService,
+    private _actaRecepcion: ActaRecepcionService,
     private dateAdapter: DateAdapter<any>
   ) {
-    this.envi = environment;
-    this.ListarActaRecepcion();
-    this.ListarActasPendientes();
-    this.ConsultaFiltrada();
     this.dateAdapter.setLocale('es');
-
+    this.companyWorkedId = this._user.user.person.company_worked.id;
     this.alertOption = {
       title: '¿Está Seguro?',
       text: 'Se dispone a Anular esta Acta de Recepción esta acción es irreversible',
@@ -156,46 +112,39 @@ export class ActaRecepcionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.Cargando2 = true;
-    this.punto_activo = localStorage.getItem('Punto');
-    this.http
-      .get(environment.ruta + 'php/bodega_nuevo/lista_compras_pendientes.php', {
-        params: {
-          compra: 'Nacional',
-          company_id: this._user.user.person.company_worked.id,
-        },
-      })
-      .subscribe((data: any) => {
-        this.ListaNacional = data;
-        this.Cargando2 = false;
-      });
-
-    this.http
-      .get(environment.ruta + 'php/bodega_nuevo/lista_compras_pendientes.php', {
-        params: {
-          compra: 'Internacional',
-          company_id: this._user.user.person.company_worked.id,
-        },
-      })
-      .subscribe((data: any) => {
-        this.ListaIntrernacional = data;
-      });
-
-    this.ListarCausalesAnulacion();
+    this.getComprasPendientes();
+    this.getActasPendientes();
+    this.getActasAnuladas();
+    this.getCausalesAnulacion();
+    this.getActasIngresadas();
   }
-  ListarActasPendientes() {
+
+  getComprasPendientes(compra = 'Nacioal') {
+    this.loadingComprasPendientes = true;
+    let params = {
+      compra: compra,
+      company_id: this.companyWorkedId,
+      ...this.filtersCP
+    }
+    this._actaRecepcion.getComprasPendientes(params).subscribe((res: any) => {
+      this.pendientesNacional = res.data;
+      //this.ListaIntrernacional = res;
+      this.loadingComprasPendientes = false;
+    })
+  }
+
+  getActasPendientes() {
     this.Cargando3 = true;
-    this.http
-      .get(
-        environment.ruta + 'php/actarecepcion_nuevo/lista_actas_pendientes.php',
-        { params: { company_id: this._user.user.person.company_worked.id } }
-      )
-      .subscribe((data: any) => {
-        this.actas_pendientes = data;
-        this.Cargando3 = false;
-      });
+    let params = {
+      company_id: this.companyWorkedId
+    }
+    this._actaRecepcion.getActaRecepcion(params).subscribe((data: any) => {
+      this.actas_pendientes = data;
+      this.Cargando3 = false;
+    });
   }
-  ListarActaRecepcion() {
+
+  getActasIngresadas() {
     let params = this.route.snapshot.queryParams;
     let queryString = '';
     if (Object.keys(params).length > 0) {
@@ -214,18 +163,16 @@ export class ActaRecepcionComponent implements OnInit {
         .join('&');
     }
     this.Cargando = true;
-    this.http
-      .get(
-        environment.ruta +
-          'php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Acomodada&tipo=General&' +
-          queryString,
-        { params: { company_id: this._user.user.person.company_worked.id } }
-      )
-      .subscribe((data: any) => {
-        this.actarecepciones = data.actarecepciones;
-        this.TotalItems = data.numReg;
-        this.Cargando = false;
-      });
+    let params2 = {
+      estado: 'Acomodada',
+      tipo: 'General',
+      company_id: this.companyWorkedId
+    }
+    this._actaRecepcion.getActasIngresadas(params2).subscribe((data: any) => {
+      this.actarecepciones = data.actarecepciones;
+      this.TotalItems = data.numReg;
+      this.Cargando = false;
+    });
   }
 
   paginacion() {
@@ -261,8 +208,8 @@ export class ActaRecepcionComponent implements OnInit {
     this.http
       .get(
         environment.ruta +
-          '/php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Acomodada&tipo=General&' +
-          queryString,
+        '/php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Acomodada&tipo=General&' +
+        queryString,
         { params: { company_id: this._user.user.person.company_worked.id } }
       )
       .subscribe((data: any) => {
@@ -347,8 +294,8 @@ export class ActaRecepcionComponent implements OnInit {
       this.http
         .get(
           environment.ruta +
-            'php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Acomodada&tipo=General&' +
-            queryString,
+          'php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Acomodada&tipo=General&' +
+          queryString,
           { params: { company_id: this._user.user.person.company_worked.id } }
         )
         .subscribe((data: any) => {
@@ -368,67 +315,13 @@ export class ActaRecepcionComponent implements OnInit {
       this.http
         .get(
           environment.ruta +
-            '/php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Acomodada&tipo=General.php',
+          '/php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Acomodada&tipo=General.php',
           { params: { company_id: this._user.user.person.company_worked.id } }
         )
         .subscribe((data: any) => {
           this.actarecepciones = data.actarecepciones;
           this.TotalItems = data.numReg;
           this.Cargando = false;
-        });
-    }
-  }
-
-  filtros2() {
-    let params: any = {};
-    this.Cargando2 = true;
-    if (this.filtro_Codigo != '' || this.filtro_Proveedor != '') {
-      this.page = 1;
-      params.pag = this.page;
-
-      if (this.filtro_Codigo != '') {
-        params.cod = this.filtro_Codigo;
-      }
-
-      if (this.filtro_Proveedor != '') {
-        params.proveedor = this.filtro_Proveedor;
-      }
-
-      let queryString = Object.keys(params)
-        .map((key) => key + '=' + params[key])
-        .join('&');
-
-      // this.location.replaceState('/actarecepcion', queryString);
-
-      this.http
-        .get(
-          environment.ruta +
-            'php/bodega_nuevo/lista_compras_pendientes.php?compra=Nacional&' +
-            queryString,
-          { params: { company_id: this._user.user.person.company_worked.id } }
-        )
-        .subscribe((data: any) => {
-          this.ListaNacional = data;
-          this.Cargando2 = false;
-        });
-    } else {
-      this.location.replaceState('/actarecepcionnuevo', '');
-      this.filtro_Codigo = '';
-      this.filtro_Proveedor = '';
-
-      this.http
-        .get(
-          environment.ruta + 'php/bodega_nuevo/lista_compras_pendientes.php',
-          {
-            params: {
-              compra: 'Nacional',
-              company_id: this._user.user.person.company_worked.id,
-            },
-          }
-        )
-        .subscribe((data: any) => {
-          this.ListaNacional = data;
-          this.Cargando2 = false;
         });
     }
   }
@@ -443,16 +336,6 @@ export class ActaRecepcionComponent implements OnInit {
       }
     });
     this.rowsFilter = temp;
-  }
-
-  perfilAdministrador() {
-    let miPerfil = localStorage.getItem('miPerfil');
-
-    if (miPerfil == '16') {
-      return true;
-    }
-
-    return false;
   }
 
   AnularActa() {
@@ -475,7 +358,7 @@ export class ActaRecepcionComponent implements OnInit {
           this._swalService.show({ ...data });
         }
         this.modalAnularActa.hide();
-        this.ListarActasPendientes();
+        this.getActasPendientes();
       });
   }
   AsignarDatos(id) {
@@ -484,12 +367,10 @@ export class ActaRecepcionComponent implements OnInit {
     this.modalAnularActa.show();
   }
 
-  ListarCausalesAnulacion() {
-    this.http
-      .get(environment.ruta + 'php/facturasventas/causales_anulacion.php')
-      .subscribe((data: any) => {
-        this.Causales = data;
-      });
+  getCausalesAnulacion() {
+    this._actaRecepcion.getCausalesAnulacion().subscribe((res: any) => {
+      this.Causales = res.data;
+    });
   }
 
   SetFiltros(paginacion: boolean) {
@@ -511,28 +392,23 @@ export class ActaRecepcionComponent implements OnInit {
     return params;
   }
 
-  ConsultaFiltrada(paginacion: boolean = false) {
-    var params = this.SetFiltros(paginacion);
-    this.Cargando4 = true;
-    this.http
-      .get(environment.ruta + 'php/actarecepcion/lista_acta_anula.php', {
-        params: {
-          ...params,
-          company_id: this._user.user.person.company_worked.id,
-        },
-      })
-      .subscribe((data: any) => {
-        if (data.codigo == 'success') {
-          this.ActasAnuladas = data.query_result;
-          this.TotalItems1 = data.numReg;
-          this.Cargando4 = false;
-        } else {
-          this.ActasAnuladas = [];
-          this.Cargando4 = false;
-        }
-
-        this.SetInformacionPaginacion();
-      });
+  getActasAnuladas(paginacion: boolean = false) {
+    this.loadindAA = true;
+    let params = {
+      ...this.SetFiltros(paginacion),
+      company_id: this.companyWorkedId,
+    }
+    this._actaRecepcion.getActasAnuladas(params).subscribe((data: any) => {
+      if (data.codigo == 'success') {
+        this.ActasAnuladas = data.query_result;
+        this.TotalItems1 = data.numReg;
+        this.loadindAA = false;
+      } else {
+        this.ActasAnuladas = [];
+        this.loadindAA = false;
+      }
+      this.SetInformacionPaginacion();
+    });
   }
 
   SetInformacionPaginacion() {

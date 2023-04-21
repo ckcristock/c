@@ -26,6 +26,7 @@
               [matDatepicker]="picker"
               placeholder="Elije la fecha"
               required
+              [min]="today"
               formControlName="expected_date"
               readonly
               autocomplete="off"
@@ -118,7 +119,7 @@
                 [ngbTypeahead]="search"
                 [inputFormatter]="formatter"
                 [resultFormatter]="formatter"
-                (selectItem)="addProduct($event.item, $event, inputProduct)"
+                (selectItem)="addProduct($event.item, false, $event, inputProduct)"
                 placeholder="Busca producto segun tipo de solicitud independiente"
                 required
                 autocomplete="off"

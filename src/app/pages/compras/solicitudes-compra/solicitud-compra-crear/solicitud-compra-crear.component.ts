@@ -17,7 +17,7 @@ export class SolicitudCompraCrearComponent implements OnInit {
   @Input('dataEdit') dataEdit;
   @Input('id') id;
   @Input('title') title = 'Nueva solicitud de compra';
- 
+
   form: FormGroup;
   loading: boolean;
   categories: any[] = [];
@@ -25,6 +25,7 @@ export class SolicitudCompraCrearComponent implements OnInit {
   searchFailed: boolean;
   masks = consts;
   path: string;
+  today = new Date()
   datosCabecera = {
     Titulo: '',
     Fecha: '',
@@ -40,129 +41,138 @@ export class SolicitudCompraCrearComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    this.datosCabecera.Fecha = this.path != 'editar' ? new Date() : this.dataEdit?.created_at;
+
+    this.datosCabecera.Fecha = !this.dataEdit && !this.id ? new Date() : this.dataEdit?.created_at;
     this.datosCabecera.Titulo = this.title;
     this.loading = true
     this.getCategoryForSelect();
     this.createForm();
     await this.getConsecutivo();
-    if (this.dataEdit && this.id) {
-      this.fillInForm(); 
-    }
     this.loading = false
   }
 
   async getConsecutivo() {
-    await this._consecutivos.getConsecutivo('purchase_requests').toPromise().then((r:any) => {
+    await this._consecutivos.getConsecutivo('purchase_requests').toPromise().then((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
-      this.form.patchValue({format_code: this.datosCabecera.CodigoFormato})
-      if (this.path != 'editar') {
+      if (!this.dataEdit && !this.id) {
+        this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
         let con = this._consecutivos.construirConsecutivo(r.data);
         this.datosCabecera.Codigo = con
-      }else {
+      } else {
         this.datosCabecera.Codigo = this.dataEdit.code
-        this.form.patchValue({
-          code: this.dataEdit.code
-        })        
       }
     })
   }
 
-  fillInForm() {
-    this.form.patchValue({
-      id: this.dataEdit.id,
-      category_id: this.dataEdit.category_id,
-      expected_date: this.dataEdit.expected_date,
-      observations: this.dataEdit.observations,
-      products: this.dataEdit.products,
-      code: this.dataEdit.code,
-      format_code: this.dataEdit.format_code,
-    })
-  }
-
-  getCategoryForSelect() {      
+  getCategoryForSelect() {
     this._solicitudesCompra.getCategoryForSelect().subscribe((res: any) => {
-      this.categories = res.data;    
+      this.categories = res.data;
     })
   }
 
-  // view(){
-  //   console.log(this.form)
-  // }
+  validateProducts() {
+    if (this.products.controls.length > 0) {
+      this._swal.show({
+        icon: 'warning',
+        title: 'Productos en lista',
+        text: 'Ya has agregado productos a la lista, si cambias este valor se vaciará la lista de productos.'
+      }).then(r => {
+        if (r.isConfirmed) {
+          this.products.value.forEach(product => {
+            this.productDelete.push(product.id)
+          });
+          
+          this.products.clear();
+        }
+      })
+    }
+  }
 
   createForm() {
     this.form = this.fb.group({
-      id: (this.dataEdit && this.path == 'editar' ? this.dataEdit.id : ''),
+      id: (this.dataEdit && this.id ? this.dataEdit.id : ''),
       category_id: [(this.dataEdit ? this.dataEdit.category_id : null), Validators.required],
       expected_date: [(this.dataEdit ? this.dataEdit.expected_date : null), Validators.required],
       observations: [(this.dataEdit ? this.dataEdit.observations : null), Validators.required],
+      code: [this.dataEdit ? this.dataEdit.code : this.datosCabecera.Codigo],
+      format_code: [this.dataEdit ? this.dataEdit.format_code : this.datosCabecera.CodigoFormato],
       products: this.fb.array([]),
-      code: [''],
-      format_code: [''],
     })
-
+    this.form.get('category_id').valueChanges.subscribe(v => {
+      this.validateProducts();
+    })
+    if (this.dataEdit) {
+      this.dataEdit.product_purchase_request.forEach(product => {
+        this.addProduct(product, true)
+      });
+    }
   }
 
   search: OperatorFunction<string, readonly string[]> = (
     text$: Observable<string>
-) =>
+  ) =>
     text$.pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        tap(() => (this.searching = true)),
-        switchMap((term) =>
-            this._solicitudesCompra.getProducts({ search: term, category_id: this.form.get('category_id').value  }).pipe(
-              tap((results) => {
-                if (results.length === 0) {
-                    this.searchFailed = true;
-                } else {
-                    this.searchFailed = false;
-                }
-                }),
-                catchError(() => {
-                    this.searchFailed = true;
-                    return of([]);
-                })
-            )
-        ),
-        tap(() => (this.searching = false))
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => (this.searching = true)),
+      switchMap((term) =>
+        this._solicitudesCompra.getProducts({ search: term, category_id: this.form.get('category_id').value }).pipe(
+          tap((results) => {
+            if (results.length === 0) {
+              this.searchFailed = true;
+            } else {
+              this.searchFailed = false;
+            }
+          }),
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.searching = false))
     );
 
-formatter = (x: any) => x.name;
+  formatter = (x: any) => x.name;
 
-addProduct(prod, $event, input, edit = false) {
-  let product = this.fb.group({
-
-    id: [prod.Id_Producto],
-    reference: [prod.Referencia],
-    name: [prod.name],
-    ammount: [1, Validators.min(1)],
-    unit: [prod.unit.name],
-    // esta condicion me esta dejando en blanco el formulario al crearlo
-    // id: [edit ? prod.id: ''],
-    // product_id: [edit ? prod.Id_Producto: ''],
-    // reference: [edit ? prod.Referencia: '' ],
-    // name: [edit ? prod.name: '' ],
-    // ammount: [edit ? prod.ammount: '1', Validators.min(1)],
-    // unit: [edit ? prod.unit.name: ''],
-  })
-
-  this.products.push(product)
-  $event.preventDefault();
-  input.value = '';
-}
+  addProduct(prod, edit, $event = undefined, input = undefined) {
+    console.log(this.products.value, prod, edit)
+    if (!this.products.value.some(x => x.product_id == (edit ? prod.product_id : prod.Id_Producto))) {
+      let product = this.fb.group({
+        id: [edit ? prod.id : ''],
+        product_id: [edit ? prod.product_id : prod.Id_Producto],
+        reference: [edit ? prod.product.Referencia : prod.Referencia],
+        name: [edit ? prod.name : prod.Nombre_Comercial],
+        ammount: [edit ? prod.ammount : '1', Validators.min(1)],
+        unit: [edit ? prod.product.unit.name : prod.unit.name],
+      })
+      this.products.push(product)
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'Elemento duplicado',
+        text: 'Ya has agregado este producto',
+        showCancel: false
+      })
+    }
+    if (!edit) {
+      $event.preventDefault();
+      input.value = '';
+    }
+  }
 
   get products() {
     return this.form.get('products') as FormArray;
   }
-
+  productDelete: any[] = [];
   deleteProduct(index: number) {
+    if (this.dataEdit && this.id) {
+      this.productDelete.push(this.products.value[index].id);
+    }
     this.products.removeAt(index);
   }
 
-  savePurchaseRequest(){
-    
-    if (this.form.invalid) { return false; }
+  savePurchaseRequest() {
     if (this.form.valid) {
       this._swal.show({
         title: '¿Estás seguro(a)?',
@@ -171,20 +181,23 @@ addProduct(prod, $event, input, edit = false) {
         showCancel: true
       }).then(result => {
         if (result.isConfirmed) {
-          const data = this.form.value;
-          this._solicitudesCompra.savePurchaseRequest(data).subscribe(r=>{ 
+          const data = {
+            ...this.form.value,
+            products_delete : this.productDelete
+          };
+          this._solicitudesCompra.savePurchaseRequest(data).subscribe(r => {
             this._swal.show({
-              title:'Tarea completada con éxito!',
+              title: 'Tarea completada con éxito!',
               text: 'Solicitud de compra creada',
               icon: 'success',
               showCancel: false,
               timer: 3000
             })
-            
+
             this.router.navigateByUrl('/compras/solicitud')
           })
-      console.log(this.form.value)
-        }else{
+          console.log(this.form.value)
+        } else {
           this._swal.show({
             icon: 'error',
             title: '¡Solicitud Cancelada!',
@@ -193,24 +206,26 @@ addProduct(prod, $event, input, edit = false) {
             showCancel: false
           })
         }
-      }); 
+      });
+    } else {
+      this._swal.incompleteError();
     }
-    
+
   }
 
-  get category_id_valid(){
+  get category_id_valid() {
     return (
       this.form.get('category_id').invalid && this.form.get('category_id').touched
     );
   }
 
-  get expected_date_valid(){
+  get expected_date_valid() {
     return (
       this.form.get('expected_date').invalid && this.form.get('expected_date').touched
     );
   }
 
-  get observations_valid(){
+  get observations_valid() {
     return (
       this.form.get('observations').invalid && this.form.get('observations').touched
     );

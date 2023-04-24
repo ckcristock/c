@@ -25,7 +25,7 @@ export class SolicitudesCompraEditarComponent implements OnInit {
 
   getData() {
     this.loading = true
-    this._solicitudesCompra.get(this.id).subscribe((r:any) => {
+    this._solicitudesCompra.getDataPurchaseRequest(this.id).subscribe((r:any) => {
       this.data = r.data;
       this.loading = false
       console.log(this.data)

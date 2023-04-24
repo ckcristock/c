@@ -31,12 +31,13 @@ export class SolicitudesCompraService {
     return this.http.get(`${environment.base_url}/paginate-purchase-request`, { params });
   }
 
-  get(id) {
+  getDataPurchaseRequest(id) {
     return this.http.get(`${environment.base_url}/purchase-request/${id}`);
   }
 
-  getDatosPurchaseRequest(params = {}){
-    return this.http.get(`${environment.base_url}/datos-purchase-request`, { params });
+
+  saveQuotationsPurchaseRequest(data) {
+    return this.http.post(`${environment.base_url}/save-quotation-purchase-request`, data);
   }
 }
 

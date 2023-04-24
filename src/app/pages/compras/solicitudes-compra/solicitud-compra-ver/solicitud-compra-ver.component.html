@@ -81,13 +81,14 @@
                   <th>Producto</th>
                   <th>Cantidad</th>
                   <th>Unidad Medida</th>
+                  <th>Estado</th>
                   <th>Cotizaciones</th>
                 </tr>
               </thead>
               <tbody>
                 <tr
                   *ngFor="
-                    let solicitud of solicitud.product_purchase_request;
+                    let product of solicitud.product_purchase_request;
                     let i = index
                   "
                   class="text-center"
@@ -96,17 +97,21 @@
                     {{ i + 1 }}
                   </th>
                   <td class="align-middle">
-                    {{ solicitud.product.Referencia | uppercase }}
+                    {{ product.product.Referencia | uppercase }}
                   </td>
                   <td class="align-middle">
-                    {{ solicitud.name | uppercase }}
+                    {{ product.name | uppercase }}
                   </td>
                   <td class="align-middle">
-                    {{ solicitud.ammount | number }}
+                    {{ product.ammount | number }}
                   </td>
                   <td class="align-middle">
-                    {{ solicitud.product.unit.name }}
+                    {{ product.product.unit.name }}
                   </td>
+                  <td class="align-middle">
+                    {{ product.status }}
+                  </td>
+
                   <td class="align-middle">
                     <div ngbDropdown container="body" class="dropdown-primary">
                       <button
@@ -120,7 +125,8 @@
                         <a
                           class="dropdown-item text-info"
                           href="javascript: void(0);"
-                          (click)="openModal(cotizacion_regular)"
+                          *ngIf="product.quotation.length == 0"
+                          (click)="openModal(cotizacion_regular, product.id)"
                         >
                           <i class="fas fa-cloud-upload-alt"></i> Cargar
                         </a>
@@ -139,16 +145,16 @@
             </table>
           </div>
           <div class="rounded-top table-responsive">
-            <table class="table table-bordered table-striped table-sm">
+            <table class="table table-borderless table-sm">
               <thead class="bg-light">
-                <tr class="text-center text-uppercase">
-                  <th colspan="100%" class="bg-light">Observaciones</th>
+                <tr class="text-uppercase">
+                  <th class="bg-light">Observaciones</th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="text-center">
-                  <td colspan="100%">
-                    {{ solicitud.observations | titlecase }}
+                <tr>
+                  <td>
+                    {{ solicitud.observations | uppercase }}
                   </td>
                 </tr>
               </tbody>
@@ -177,101 +183,99 @@
   </div>
 
   <div class="modal-body">
-    
-    <button type="button" class="btn btn-primary" (click)="printForm()">Print</button>
+    <button type="button" class="btn btn-primary" (click)="printForm()">
+      Print
+    </button>
     <ngb-tabset>
       <ng-container [formGroup]="formCotizacionRegular">
         <ng-container formArrayName="items">
           <ngb-tab
-            *ngFor="let item of [0, 1, 2]; let i = index"
+            *ngFor="let item of items.controls; let i = index"
             [title]="'Cotización ' + (i + 1)"
           >
             <ng-template ngbTabContent>
-              <ng-container [formGroupName]="i">          
-              <div class="row mt-3">
-                <mat-form-field class="col" appearance="outline">
-                  <mat-label>Nombre proveedor {{ i + 1 }}</mat-label>
-                  <mat-select
-                    formControlName="Id_Proveedor"
-                    required
-                    [disableOptionCentering]="true"
-                    #selectProveedor
-                  >
-                    <mat-select-filter
-                      *ngIf="selectProveedor.focused"
-                      [placeholder]="'Selecciona el proveedor'"
-                      [array]="proveedores"
-                      [displayMember]="'text'"
-                      (filteredReturn)="filteredProveedor = $event"
-                    ></mat-select-filter>
-                    <mat-option
-                      *ngFor="let proveedor of filteredProveedor"
-                      [value]="proveedor.value"
+              <ng-container [formGroupName]="i">
+                <div class="row mt-3">
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>Nombre proveedor {{ i + 1 }}</mat-label>
+                    <mat-select
+                      formControlName="third_party_id"
+                      required
+                      [disableOptionCentering]="true"
+                      #selectProveedor
                     >
-                      {{ proveedor.text }}
-                    </mat-option>
-                  </mat-select>
-                  <button mat-icon-button matSuffix (click)="redirectTercero()">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                </mat-form-field>
-                
+                      <mat-select-filter
+                        *ngIf="selectProveedor.focused"
+                        [placeholder]="'Selecciona el proveedor'"
+                        [array]="proveedores"
+                        [displayMember]="'text'"
+                        (filteredReturn)="filteredProveedor = $event"
+                      ></mat-select-filter>
+                      <mat-option
+                        *ngFor="let proveedor of filteredProveedor"
+                        [value]="proveedor.value"
+                      >
+                        {{ proveedor.text }}
+                      </mat-option>
+                    </mat-select>
+                    <button
+                      mat-icon-button
+                      matSuffix
+                      (click)="redirectTercero()"
+                    >
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </mat-form-field>
 
-                <mat-form-field class="col" appearance="outline">
-                  <mat-label>Número de cotización {{ i + 1 }}</mat-label>
-                  <input
-                    matInput
-                    type="text"
-                    placeholder="Digita el numero de cotización"
-                    formControlName="numero_cotizacion"
-                    required
-                    autocomplete="off"
-                  />
-                 
-                </mat-form-field>
-                <mat-form-field class="col" appearance="outline">
-                  <mat-label>Precio total cotización {{ i + 1 }}</mat-label>
-                  <input
-                    matInput
-                    currencyMask
-                    appInputPosition
-                    [options]="mask.maskCOP"
-                    placeholder="Digita el precio total de la cotización"
-                    formControlName="precio_total"
-                    required
-                    autocomplete="off"
-                  />
-                 
-                </mat-form-field>
-
-                <div class="form-group text-center col-md-12">
-                  <div class="custom-input-file col-md-12">
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>Número de cotización {{ i + 1 }}</mat-label>
+                    <input matInput readonly formControlName="code" required />
+                  </mat-form-field>
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>Precio total cotización {{ i + 1 }}</mat-label>
                     <input
-                      type="file"
-                      #fileInput
-                      id="importFile"
-                      class="input-file"
-                      (change)="onFileChanged($event)"
+                      matInput
+                      currencyMask
+                      appInputPosition
+                      [options]="mask.maskCOP"
+                      placeholder="Digita el precio total de la cotización"
+                      formControlName="total_price"
+                      required
+                      autocomplete="off"
                     />
-                    Cargar documento legal
+                  </mat-form-field>
+
+                  <div class="form-group text-center col-md-12">
+                    <div class="custom-input-file col-md-12">
+                      <input
+                        type="file"
+                        #fileInput
+                        id="importFile"
+                        accept=".pdf"
+                        class="input-file"
+                        (change)="onFileChanged($event, i)"
+                      />
+                      Cargar cotización {{ i + 1 }}
+                    </div>
+                    <div class="col-md-12 text-center">
+                      <small *ngIf="item.get('file').value" class="text-success"
+                        >Cotización cargada exitosamente</small
+                      >
+                    </div>
                   </div>
-                  <div class="col-md-12 text-center">
-                    <small *ngIf="file" class="text-success"
-                      >Cotización cargada exitosamente</small
-                    >
-                  </div>
-                </div>                
-              </div>
-              <div class="alert alert-info  col-md-12 text-center" role="alert">
-                Solo podrás cargar una vez las cotizaciones, puedes cargar una o más cotizaciones de este producto. 
-              </div>
-            </ng-container>
+                </div>
+                <div
+                  class="alert alert-info col-md-12 text-center"
+                  role="alert"
+                >
+                  Solo podrás cargar una vez las cotizaciones, puedes cargar una
+                  o más cotizaciones de este producto.
+                </div>
+              </ng-container>
             </ng-template>
           </ngb-tab>
         </ng-container>
-        
       </ng-container>
-      
     </ngb-tabset>
   </div>
   <div class="modal-footer">
@@ -282,9 +286,7 @@
     >
       Cancelar
     </button>
-    <button type="submit" class="btn btn-primary">
-      <!-- (click)="saveQuotation()"
-      [disabled]="!formMemorando.valid" -->
+    <button type="submit" class="btn btn-primary" (click)="saveQuotation()">
       Guardar
     </button>
   </div>

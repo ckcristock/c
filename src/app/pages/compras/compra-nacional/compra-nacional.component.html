@@ -104,6 +104,7 @@
             <th>Entrega real</th>
             <th>Proveedor</th>
             <th>Estado</th>
+            <th>Aprobación</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
@@ -134,13 +135,25 @@
                     ? 'badge-danger'
                     : compra.Estado == 'Pendiente'
                     ? 'badge-warning'
-                    : compra.Estado == 'Aprobada'
+                    : compra.Estado == 'Recibida'
                     ? 'badge-success'
-                    : compra.Estado == 'Rechazada'
-                    ? 'badge-danger'
                     : ''
                 }}"
                 >{{ compra.Estado }}
+              </span>
+            </td>
+            <td class="align-middle">
+              <span
+                class="badge {{
+                  compra.Aprobacion == 'Rechazada'
+                    ? 'badge-danger'
+                    : compra.Aprobacion == 'Pendiente'
+                    ? 'badge-warning'
+                    : compra.Aprobacion == 'Aprobada'
+                    ? 'badge-success'
+                    : ''
+                }}"
+                >{{ compra.Aprobacion }}
               </span>
             </td>
             <td>

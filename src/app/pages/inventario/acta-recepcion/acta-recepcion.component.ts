@@ -119,7 +119,7 @@ export class ActaRecepcionComponent implements OnInit {
     this.getActasIngresadas();
   }
 
-  getComprasPendientes(compra = 'Nacioal') {
+  getComprasPendientes(compra = 'Nacional') {
     this.loadingComprasPendientes = true;
     let params = {
       compra: compra,

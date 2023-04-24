@@ -64,7 +64,12 @@
           <div class="d-flex justify-content-end">
             <div class="btn-group" role="group" aria-label="Button group">
               <ng-container *ngIf="permission.permissions.approve">
-                <ng-container *ngIf="Compra.Estado == 'Pendiente'">
+                <ng-container
+                  *ngIf="
+                    Compra.Aprobacion == 'Pendiente' &&
+                    Compra.Estado == 'Pendiente'
+                  "
+                >
                   <button
                     class="btn btn-danger btn-sm"
                     (click)="EstadoAprobacion('Rechazada')"
@@ -111,7 +116,7 @@
               </ng-container>
             </div>
           </div>
-          
+
           <div class="rounded-top table-responsive mt-2">
             <table class="table table-bordered table-striped table-sm">
               <thead class="bg-light">
@@ -140,20 +145,7 @@
               </tbody>
             </table>
           </div>
-          <div class="rounded-top table-responsive">
-            <table class="table table-bordered table-striped table-sm">
-              <thead class="bg-light">
-                <tr class="text-center text-uppercase">
-                  <th colspan="100%" class="bg-light">Observaciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="text-center">
-                  <td colspan="100%">{{ Compra.Observaciones | uppercase }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+
           <hr />
           <h6>Productos</h6>
           <div class="rounded-top table-responsive">
@@ -203,6 +195,20 @@
                   <td class="align-middle">
                     $ {{ producto.Total | number : "1.2-2" }}
                   </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="rounded-top table-responsive">
+            <table class="table table-borderless table-sm">
+              <thead class="bg-light">
+                <tr class="text-uppercase">
+                  <th class="bg-light">Observaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ Compra.Observaciones | uppercase }}</td>
                 </tr>
               </tbody>
             </table>

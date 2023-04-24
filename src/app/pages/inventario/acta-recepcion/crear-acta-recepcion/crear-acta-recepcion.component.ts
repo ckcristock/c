@@ -698,14 +698,14 @@ export class CrearActaRecepcionComponent implements OnInit {
       let eliminados = JSON.stringify(this.Lista_Eliminados);
       datos.append('eliminados', eliminados);
     }
-    var ruta_guardar = 'php/bodega_nuevo/guardar_acta_recepciond.php';
+    var ruta_guardar = '/php/bodega_nuevo/guardar_acta_recepciond.php';
     if (this.id_no_conforme != '') {
       datos.append('id_no_conforme', this.id_no_conforme);
       ruta_guardar = 'php/bodega_nuevo/guardar_acta_recepcion_devolucion.php';
     }
 
     this.http
-      .post(environment.ruta + ruta_guardar, datos)
+      .post(environment.base_url + ruta_guardar, datos)
       .subscribe((data: any) => {
         if (data.tipo == 'success') {
           this.confirmacionSwal.title = 'Acta de recepción Guardada';
@@ -1163,7 +1163,7 @@ export class CrearActaRecepcionComponent implements OnInit {
         Nombre: retenciones.Nombre_Retefuente,
         Valor: '',
         Porcentaje: parseFloat(
-          retenciones.Porcentaje_Retefuente.replace(',', '.')
+          retenciones.Porcentaje_Retefuente?.replace(',', '.')
         ),
         Tipo: 'Renta',
         Tipo_R: retenciones.Tipo_Retencion,
@@ -1181,7 +1181,7 @@ export class CrearActaRecepcionComponent implements OnInit {
         Nombre: retenciones.Nombre_Reteica,
         Valor: '',
         Porcentaje: parseFloat(
-          retenciones.Porcentaje_Reteica.replace(',', '.')
+          retenciones.Porcentaje_Reteica?.replace(',', '.')
         ),
         Tipo: 'Ica',
         Tipo_R: retenciones.Tipo_Reteica,
@@ -1199,7 +1199,7 @@ export class CrearActaRecepcionComponent implements OnInit {
         Nombre: retenciones.Nombre_Reteiva,
         Valor: '',
         Porcentaje: parseFloat(
-          retenciones.Porcentaje_Reteiva.replace(',', '.')
+          retenciones.Porcentaje_Reteiva?.replace(',', '.')
         ),
         Tipo: 'Iva',
         Tipo_R: retenciones.Contribuyente,

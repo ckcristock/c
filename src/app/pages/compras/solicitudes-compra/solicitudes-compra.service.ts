@@ -39,6 +39,14 @@ export class SolicitudesCompraService {
   saveQuotationsPurchaseRequest(data) {
     return this.http.post(`${environment.base_url}/save-quotation-purchase-request`, data);
   }
+
+  getQuotationPurchaserequest(id) {
+    return this.http.get(`${environment.base_url}/quotation-purchase-request/${id}`);
+  }
+
+  saveQuotationApproved(id) {
+    return this.http.get(`${environment.base_url}/save-quotation-approved/${id}`);
+  }
 }
 
 

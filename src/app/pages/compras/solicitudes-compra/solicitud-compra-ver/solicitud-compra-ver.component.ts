@@ -26,6 +26,10 @@ export class SolicitudCompraVerComponent implements OnInit {
   formCotizacionRegular: FormGroup;
   proveedores: any = [];
   filteredProveedor: any[] = [];
+  quotations: any[] = [];
+  id_producto: any;
+  loadingQuotations: boolean;
+  quotationSelected: number;
 
 
   constructor(
@@ -56,7 +60,9 @@ export class SolicitudCompraVerComponent implements OnInit {
     this._modal.open(content, 'lg');
   }
 
-  openModal2(content) {
+  openModal2(content, id) {
+    this.quotationSelected = undefined;
+    this.getQuotationPurchaserequest(id);
     this._modal.open(content, 'lg');
   }
 
@@ -115,7 +121,7 @@ export class SolicitudCompraVerComponent implements OnInit {
 
 
   saveQuotation() {
-    if (this.formCotizacionRegular.valid){
+    if (this.formCotizacionRegular.valid) {
       let cont = 0;
       this.items.value.forEach(item => {
         if (item.file) {
@@ -195,12 +201,42 @@ export class SolicitudCompraVerComponent implements OnInit {
         CodigoFormato: res.data.format_code
       }
       this.loading = false;
+
     });
   }
 
 
   get items() {
     return this.formCotizacionRegular.get('items') as FormArray;
+  }
+
+  selectedQuotation(id) {
+    this.quotationSelected = id;
+  }
+
+  getQuotationPurchaserequest(id) {
+    this.loadingQuotations = true;
+    this._solicitudesCompra.getQuotationPurchaserequest(id).subscribe((res: any) => {
+      this.quotations = res.data;
+      this.loadingQuotations = false;
+    })
+  }
+
+  saveQuotationApproved() {
+    if (this.quotationSelected) {
+      this._solicitudesCompra.saveQuotationApproved(this.quotationSelected).subscribe((res: any) => {
+        this._swal.show({
+          title: 'Operación exitosa',
+          text: '¡Cotización(es) agregadas con éxito!',
+          icon: 'success',
+          showCancel: false,
+          timer: 1000
+        })
+        this._modal.close();
+      })
+    } else {
+      this._swal.incompleteError()
+    }
   }
 
 }

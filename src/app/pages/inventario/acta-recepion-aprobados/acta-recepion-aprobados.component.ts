@@ -12,7 +12,7 @@ import { IMyDrpOptions } from 'mydaterangepicker';
 })
 export class ActaRecepionAprobadosComponent implements OnInit {
 
-  public User : any  =  {};
+  public User: any = {};
   public filtro_cod: string = '';
   public filtro_fact: string = '';
   public filtro_fecha: any = '';
@@ -20,7 +20,7 @@ export class ActaRecepionAprobadosComponent implements OnInit {
   public filtro_proveedor: any = '';
   public filtro_compra: any = '';
   public maxSize = 10;
-  
+
   public Cargando = false;
 
   public page = 1;
@@ -35,20 +35,20 @@ export class ActaRecepionAprobadosComponent implements OnInit {
   };
 
 
-  
+
   public actarecepciones: any = [];
 
-  constructor(private location: Location,private http: HttpClient,private route: ActivatedRoute,){ 
-      //TODO auth user
-      this.User = {Identificacion_Funcionario:'1'}
-      this.ListarActaRecepcion();
+  constructor(private location: Location, private http: HttpClient, private route: ActivatedRoute,) {
+    //TODO auth user
+    this.User = { Identificacion_Funcionario: '1' }
+    this.ListarActaRecepcion();
   }
 
-  ngOnInit() {  }
+  ngOnInit() { }
 
   ListarActaRecepcion() {
     let params = this.route.snapshot.queryParams;
- 
+
     let queryString = '';
     if (Object.keys(params).length > 0) { // Si existe parametros o filtros
       // actualizando la variables con los valores de los paremetros.
@@ -61,15 +61,15 @@ export class ActaRecepionAprobadosComponent implements OnInit {
       this.filtro_compra = params.compra ? params.compra : '';
 
       //
-      queryString =  Object.keys(params).map(key => key + '=' + params[key]).join('&');
+      queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
     }
     this.Cargando = true;
-    this.http.get(`${environment.ruta}php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Aprobada&id_funcionario=${this.User.Identificacion_Funcionario}&${queryString}`)
+    this.http.get(`${environment.base_url}/php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Aprobada&id_funcionario=${this.User.Identificacion_Funcionario}&${queryString}`)
       .subscribe((data: any) => {
-      this.actarecepciones = data.actarecepciones;
-      this.TotalItems = data.numReg;
-      this.Cargando = false;
-    });
+        this.actarecepciones = data.actarecepciones;
+        this.TotalItems = data.numReg;
+        this.Cargando = false;
+      });
   }
 
 
@@ -79,7 +79,7 @@ export class ActaRecepionAprobadosComponent implements OnInit {
   //---------------------------------------
   //filtros
   //---------------------------------------
- 
+
   filtros() {
 
     let params: any = {};
@@ -111,13 +111,13 @@ export class ActaRecepionAprobadosComponent implements OnInit {
 
       this.location.replaceState('/actarecepcionaprobados', queryString);
       this.Cargando = true;
-      this.http.get(`${environment.ruta}php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Aprobada&id_funcionario=${this.User.Identificacion_Funcionario}&${queryString}`)
-      .subscribe((data: any) => {
-        this.actarecepciones = data.actarecepciones;
-        this.TotalItems = data.numReg;
-        this.Cargando = false;
+      this.http.get(`${environment.base_url}/php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Aprobada&id_funcionario=${this.User.Identificacion_Funcionario}&${queryString}`)
+        .subscribe((data: any) => {
+          this.actarecepciones = data.actarecepciones;
+          this.TotalItems = data.numReg;
+          this.Cargando = false;
 
-      });
+        });
     } else {
       this.location.replaceState('/actarecepcionaprobados', '');
       this.filtro_cod = '';
@@ -127,17 +127,17 @@ export class ActaRecepionAprobadosComponent implements OnInit {
       this.filtro_fecha2 = '';
       this.filtro_compra = '';
       this.Cargando = true;
-      this.http.get(`${environment.ruta}php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Aprobada&id_funcionario=${this.User.Identificacion_Funcionario}&`)
-      .subscribe((data: any) => {
-        this.actarecepciones = data.actarecepciones;
-        this.TotalItems = data.numReg;
-        this.Cargando = false;
-      });
+      this.http.get(`${environment.base_url}/php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Aprobada&id_funcionario=${this.User.Identificacion_Funcionario}&`)
+        .subscribe((data: any) => {
+          this.actarecepciones = data.actarecepciones;
+          this.TotalItems = data.numReg;
+          this.Cargando = false;
+        });
     }
 
   }
 
-  
+
   dateRangeChanged(event) {
     if (event.formatted != "") {
       this.filtro_fecha = event;
@@ -154,7 +154,7 @@ export class ActaRecepionAprobadosComponent implements OnInit {
     }
     this.filtros();
   }
-  
+
   paginacion() {
 
     let params: any = {
@@ -184,12 +184,12 @@ export class ActaRecepionAprobadosComponent implements OnInit {
 
     this.location.replaceState('/actarecepcionaprobados', queryString);
     this.Cargando = true;
-    this.http.get(`${environment.ruta}php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Aprobada&id_funcionario=${this.User.Identificacion_Funcionario}&${queryString}`)
-    .subscribe((data: any) => {
-      this.actarecepciones = data.actarecepciones;
-      this.TotalItems = data.numReg;
-      this.Cargando = false;
-    });
+    this.http.get(`${environment.base_url}/php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Aprobada&id_funcionario=${this.User.Identificacion_Funcionario}&${queryString}`)
+      .subscribe((data: any) => {
+        this.actarecepciones = data.actarecepciones;
+        this.TotalItems = data.numReg;
+        this.Cargando = false;
+      });
   }
 
 }

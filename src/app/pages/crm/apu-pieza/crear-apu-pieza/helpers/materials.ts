@@ -1,4 +1,4 @@
-import { functionsApu} from './helper';
+import { functionsApu } from './helper';
 import {
   FormGroup,
   FormBuilder,
@@ -12,14 +12,14 @@ export const materialsHelper = {
   createFillInMaterials(form: FormGroup, fb: FormBuilder, data) {
     if (data.commercial) {
       let commercial_materials = form.get('commercial_materials') as FormArray;
-      data.commercial.forEach((r) => {
+      data?.commercial.forEach((r) => {
         let group = fb.group({
-          material_id: [r.material_id],
-          unit_id: [r.unit_id],
-          q_unit: [r.q_unit],
-          q_total: [r.q_total],
-          unit_cost: [r.unit_cost],
-          total: [r.total]
+          material_id: [r?.material_id],
+          unit_id: [r?.unit_id],
+          q_unit: [r?.q_unit],
+          q_total: [r?.q_total],
+          unit_cost: [r?.unit_cost],
+          total: [r?.total]
         });
         this.subscribesMaterials(group, form);
         // this.subtotalMaterials(commercial_materials, form);
@@ -42,7 +42,7 @@ export const materialsHelper = {
     return materials;
   },
 
-  subscribesMaterials(materials: FormGroup, form: FormGroup){
+  subscribesMaterials(materials: FormGroup, form: FormGroup) {
     let list = form.get('commercial_materials') as FormArray;
     materials.get('q_unit').valueChanges.subscribe(value => {
       let q_total = materials.get('q_total').value;
@@ -51,7 +51,7 @@ export const materialsHelper = {
       materials.patchValue({
         total: Math.round(result)
       })
-    }); 
+    });
     materials.get('q_total').valueChanges.subscribe(value => {
       let q_unit = materials.get('q_unit').value;
       let unit_cost = materials.get('unit_cost').value;
@@ -63,7 +63,7 @@ export const materialsHelper = {
     materials.get('unit_cost').valueChanges.subscribe(value => {
       let q_unit = materials.get('q_unit').value;
       let q_total = materials.get('q_total').value;
-      let result =  q_total * value * q_unit;
+      let result = q_total * value * q_unit;
       materials.patchValue({
         total: Math.round(result)
       })
@@ -71,7 +71,7 @@ export const materialsHelper = {
     materials.get('unit_cost').valueChanges.subscribe(value => {
       let q_unit = materials.get('q_unit').value;
       let q_total = materials.get('q_total').value;
-      let result =  q_total * value * q_unit;
+      let result = q_total * value * q_unit;
       materials.patchValue({
         total: Math.round(result)
       })
@@ -84,27 +84,27 @@ export const materialsHelper = {
         q_total: value
       })
     });
-        /* materials.get('unit_cost').valueChanges.subscribe(value => { // Hace lo mismo solo que realiza la acción cuando cambia el costo unitario
-      let q_unit = materials.get('q_unit').value;
-      let q_total = materials.get('q_total').value;
-      let result = q_unit * value * q_total;
-      materials.patchValue({
-        total: result
-      })
-    }) */
+    /* materials.get('unit_cost').valueChanges.subscribe(value => { // Hace lo mismo solo que realiza la acción cuando cambia el costo unitario
+  let q_unit = materials.get('q_unit').value;
+  let q_total = materials.get('q_total').value;
+  let result = q_unit * value * q_total;
+  materials.patchValue({
+    total: result
+  })
+}) */
   },
 
-  subtotalMaterials(list: FormArray, form:FormGroup){
+  subtotalMaterials(list: FormArray, form: FormGroup) {
     setTimeout(() => {
-      let total = 
-      list.value.reduce(
-        (a, b) => {
-          return  a + b.total
-        },0
-      );
+      let total =
+        list.value.reduce(
+          (a, b) => {
+            return a + b.total
+          }, 0
+        );
       form.patchValue({
         commercial_materials_subtotal: total
-      }) 
+      })
     }, 100);
   }
 

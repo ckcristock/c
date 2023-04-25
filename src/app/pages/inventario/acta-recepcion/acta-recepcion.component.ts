@@ -12,6 +12,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import { DatePipe } from '@angular/common';
 import { DateAdapter } from 'saturn-datepicker';
 import { ActaRecepcionService } from './acta-recepcion.service';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-acta-recepcion',
@@ -50,7 +51,6 @@ export class ActaRecepcionComponent implements OnInit {
 
   @ViewChild('PlantillaBotones') PlantillaBotones: TemplateRef<any>;
   @ViewChild('PlantillaBotones1') PlantillaBotones1: TemplateRef<any>;
-  @ViewChild('modalAnularActa') modalAnularActa: any;
   @ViewChild('confirmacionGuardar') private confirmacionGuardar: SwalComponent;
   filtro_codigo: string;
   //TODO Auth Person
@@ -87,6 +87,7 @@ export class ActaRecepcionComponent implements OnInit {
     private router: Router,
     private location: Location,
     private _swalService: SwalService,
+    private _modal: ModalService,
     private _user: UserService,
     private _actaRecepcion: ActaRecepcionService,
     private dateAdapter: DateAdapter<any>
@@ -94,14 +95,17 @@ export class ActaRecepcionComponent implements OnInit {
     this.dateAdapter.setLocale('es');
     this.companyWorkedId = this._user.user.person.company_worked.id;
     this.alertOption = {
-      title: '¿Está Seguro?',
-      text: 'Se dispone a Anular esta Acta de Recepción esta acción es irreversible',
+      title: '¿Estás seguro(a)?',
+      text: 'Vamos a anular el acta de recepción, esta acción es irreversible.',
       showCancelButton: true,
-      cancelButtonText: 'No, Dejame Comprobar!',
-      confirmButtonText: 'Si, Anular',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: this._swalService.buttonColor.confirm,
+      cancelButtonColor: this._swalService.buttonColor.cancel,
+      confirmButtonText: '¡Sí, confirmar!',
       showLoaderOnConfirm: true,
       focusCancel: true,
-      icon: 'info',
+      reverseButtons: true,
+      icon: 'question',
       preConfirm: () => {
         return new Promise((resolve) => {
           this.AnularActa();
@@ -207,7 +211,7 @@ export class ActaRecepcionComponent implements OnInit {
     this.Cargando = true;
     this.http
       .get(
-        environment.ruta +
+        environment.base_url +
         '/php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Acomodada&tipo=General&' +
         queryString,
         { params: { company_id: this._user.user.person.company_worked.id } }
@@ -293,8 +297,8 @@ export class ActaRecepcionComponent implements OnInit {
       this.Cargando = true;
       this.http
         .get(
-          environment.ruta +
-          'php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Acomodada&tipo=General&' +
+          environment.base_url +
+          '/php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Acomodada&tipo=General&' +
           queryString,
           { params: { company_id: this._user.user.person.company_worked.id } }
         )
@@ -314,7 +318,7 @@ export class ActaRecepcionComponent implements OnInit {
       this.Cargando = true;
       this.http
         .get(
-          environment.ruta +
+          environment.base_url +
           '/php/actarecepcion_nuevo/lista_actarecepcion.php?estado=Acomodada&tipo=General.php',
           { params: { company_id: this._user.user.person.company_worked.id } }
         )
@@ -343,7 +347,7 @@ export class ActaRecepcionComponent implements OnInit {
     let data = new FormData();
     data.append('modelo', modelo);
     this.http
-      .post(environment.ruta + 'php/actarecepcion/anular_acta.php', data)
+      .post(environment.base_url + '/php/actarecepcion/anular_acta.php', data)
       .subscribe((data: any) => {
         if (data.tipo == 'success') {
           this.Model = {
@@ -353,18 +357,18 @@ export class ActaRecepcionComponent implements OnInit {
             Identificacion_Funcionario: '1',
           };
 
-          this._swalService.show({ ...data });
+          this._swalService.show({ ...data, showCancel: false });
         } else {
-          this._swalService.show({ ...data });
+          this._swalService.show({ ...data, showCancel: false });
         }
-        this.modalAnularActa.hide();
+        this._modal.close();
         this.getActasPendientes();
+        this.getActasAnuladas();
       });
   }
-  AsignarDatos(id) {
+  AsignarDatos(id, content) {
     this.Model.Id_Acta_Recepcion = id;
-
-    this.modalAnularActa.show();
+    this._modal.open(content)
   }
 
   getCausalesAnulacion() {

@@ -11,14 +11,14 @@
           <button
             class="btn btn-info btn-sm"
             type="button"
-            [routerLink]="['/crm/apu/editar-apu-pieza/', data.id]"
+            [routerLink]="['/crm/apu/editar-apu-pieza/', data?.id]"
           >
             <i class="fas fa-edit"></i> Editar
           </button>
           <button
             class="btn btn-success btn-sm"
             type="button"
-            [routerLink]="['/crm/apu/copiar-apu-pieza/', data.id]"
+            [routerLink]="['/crm/apu/copiar-apu-pieza/', data?.id]"
           >
             <i class="fas fa-copy"></i> Copiar
           </button>
@@ -53,15 +53,15 @@
           </thead>
           <tbody>
             <tr>
-              <td>{{ data.name }}</td>
-              <td>{{ data.city.name }}</td>
+              <td>{{ data?.name }}</td>
+              <td>{{ data?.city.name }}</td>
               <td>
-                {{ data.person.first_name }} {{ data.person.first_surname }}
+                {{ data?.person?.first_name }} {{ data?.person?.first_surname }}
               </td>
-              <td>{{ data.thirdparty.name }}</td>
-              <td>{{ data.line }}</td>
+              <td>{{ data?.thirdparty?.name }}</td>
+              <td>{{ data?.line }}</td>
               <td>
-                {{ data.amount }}
+                {{ data?.amount }}
               </td>
             </tr>
             <tr class="text-left">
@@ -69,7 +69,7 @@
             </tr>
             <tr class="text-left">
               <td colspan="100%">
-                {{ data.observation || "No existen observaciones" }}
+                {{ data?.observation || "No existen observaciones" }}
               </td>
             </tr>
           </tbody>
@@ -82,54 +82,54 @@
       <h5 class="mt-2 text-center">Costos directos</h5>
       <hr class="line" />
       <app-planos
-        *ngIf="data.files.length > 0"
-        [data]="data.files"
+        *ngIf="data?.files?.length > 0"
+        [data]="data?.files"
         [info]="'ver'"
       >
       </app-planos>
       <app-materia-prima
-        *ngIf="data.rawmaterial.length"
-        [data]="data.rawmaterial"
-        [subtotal_raw_material]="data.subtotal_raw_material"
+        *ngIf="data?.rawmaterial?.length"
+        [data]="data?.rawmaterial"
+        [subtotal_raw_material]="data?.subtotal_raw_material"
       ></app-materia-prima>
       <app-materiales-comerciales
-        *ngIf="data.commercial.length"
-        [data]="data.commercial"
-        [commercial_materials_subtotal]="data.commercial_materials_subtotal"
+        *ngIf="data?.commercial?.length"
+        [data]="data?.commercial"
+        [commercial_materials_subtotal]="data?.commercial_materials_subtotal"
       ></app-materiales-comerciales>
       <app-corte-agua
-        *ngIf="data.cutwater.length"
-        [data]="data.cutwater"
-        [cut_water_total_amount]="data.cut_water_total_amount"
-        [cut_water_unit_subtotal]="data.cut_water_unit_subtotal"
-        [cut_water_subtotal]="data.cut_water_subtotal"
+        *ngIf="data?.cutwater?.length"
+        [data]="data?.cutwater"
+        [cut_water_total_amount]="data?.cut_water_total_amount"
+        [cut_water_unit_subtotal]="data?.cut_water_unit_subtotal"
+        [cut_water_subtotal]="data?.cut_water_subtotal"
       ></app-corte-agua>
       <app-corte-laser
-        *ngIf="data.cutlaser.length"
-        [data]="data.cutlaser"
-        [cut_laser_total_amount]="data.cut_laser_total_amount"
-        [cut_laser_unit_subtotal]="data.cut_laser_unit_subtotal"
-        [cut_laser_subtotal]="data.cut_laser_subtotal"
+        *ngIf="data?.cutlaser?.length"
+        [data]="data?.cutlaser"
+        [cut_laser_total_amount]="data?.cut_laser_total_amount"
+        [cut_laser_unit_subtotal]="data?.cut_laser_unit_subtotal"
+        [cut_laser_subtotal]="data?.cut_laser_subtotal"
       ></app-corte-laser>
       <app-maquinas-herramientas
-        *ngIf="data.machine.length"
-        [data]="data.machine"
-        [machine_tools_subtotal]="data.machine_tools_subtotal"
+        *ngIf="data?.machine?.length"
+        [data]="data?.machine"
+        [machine_tools_subtotal]="data?.machine_tools_subtotal"
       ></app-maquinas-herramientas>
       <app-procesos-internos
-        *ngIf="data.internal.length"
-        [data]="data.internal"
-        [internal_proccesses_subtotal]="data.internal_proccesses_subtotal"
+        *ngIf="data?.internal.length"
+        [data]="data?.internal"
+        [internal_proccesses_subtotal]="data?.internal_proccesses_subtotal"
       ></app-procesos-internos>
       <app-procesos-externos
-        *ngIf="data.external.length"
-        [data]="data.external"
-        [external_proccesses_subtotal]="data.external_proccesses_subtotal"
+        *ngIf="data?.external?.length"
+        [data]="data?.external"
+        [external_proccesses_subtotal]="data?.external_proccesses_subtotal"
       ></app-procesos-externos>
       <app-otros
-        *ngIf="data.other.length"
-        [data]="data.other"
-        [others_subtotal]="data.others_subtotal"
+        *ngIf="data?.other.length"
+        [data]="data?.other"
+        [others_subtotal]="data?.others_subtotal"
       ></app-otros>
       <div class="rounded-top table-responsive mt-4">
         <table class="table table-borderless text-center">
@@ -143,12 +143,12 @@
             <tr>
               <td>
                 <h5>
-                  <span>${{ data.unit_direct_cost | number : "1.2-2" }}</span>
+                  <span>${{ data?.unit_direct_cost | number : "1.2-2" }}</span>
                 </h5>
               </td>
               <td>
                 <h5>
-                  <span>${{ data.total_direct_cost | number : "1.2-2" }}</span>
+                  <span>${{ data?.total_direct_cost | number : "1.2-2" }}</span>
                 </h5>
               </td>
             </tr>
@@ -162,7 +162,9 @@
           <div class="rounded-top table-responsive">
             <table class="table table-striped text-uppercase">
               <tbody class="bg-light">
-                <ng-container *ngFor="let item of data.indirect; let i = index">
+                <ng-container
+                  *ngFor="let item of data?.indirect; let i = index"
+                >
                   <tr>
                     <td>{{ item.name }}</td>
                     <td class="text-right">{{ item.percentage }}%</td>
@@ -174,7 +176,7 @@
                 <tr>
                   <th colspan="2">Costos indirectos</th>
                   <th class="text-right">
-                    ${{ data.indirect_cost_total | number : "1.2-2" }}
+                    ${{ data?.indirect_cost_total | number : "1.2-2" }}
                   </th>
                 </tr>
                 <tr>
@@ -183,7 +185,7 @@
                   </th>
                   <th class="text-right">
                     ${{
-                      data.direct_costs_indirect_costs_total | number : "1.2-2"
+                      data?.direct_costs_indirect_costs_total | number : "1.2-2"
                     }}
                   </th>
                 </tr>
@@ -193,7 +195,7 @@
                   </th>
                   <th class="text-right">
                     ${{
-                      data.direct_costs_indirect_costs_unit | number : "1.2-2"
+                      data?.direct_costs_indirect_costs_unit | number : "1.2-2"
                     }}
                   </th>
                 </tr>
@@ -210,24 +212,25 @@
                 <tr>
                   <td>Administrativos</td>
                   <td class="text-right">
-                    {{ data.administrative_percentage }}%
+                    {{ data?.administrative_percentage }}%
                   </td>
                   <td class="text-right">
-                    ${{ data.administrative_value | number : "1.2-2" }}
+                    ${{ data?.administrative_value | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>
                   <td>Imprevistos</td>
-                  <td class="text-right">{{ data.unforeseen_percentage }}%</td>
+                  <td class="text-right">{{ data?.unforeseen_percentage }}%</td>
                   <td class="text-right">
-                    ${{ data.unforeseen_value | number : "1.2-2" }}
+                    ${{ data?.unforeseen_value | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>
                   <th colspan="2">SubTotal + Administrativos + Imprevistos</th>
                   <th class="text-right">
                     ${{
-                      data.administrative_Unforeseen_subTotal | number : "1.2-2"
+                      data?.administrative_Unforeseen_subTotal
+                        | number : "1.2-2"
                     }}
                   </th>
                 </tr>
@@ -237,19 +240,19 @@
                   </th>
                   <th class="text-right">
                     ${{
-                      data.administrative_Unforeseen_unit | number : "1.2-2"
+                      data?.administrative_Unforeseen_unit | number : "1.2-2"
                     }}
                   </th>
                 </tr>
                 <tr>
                   <td colspan="2">Utilidad</td>
-                  <td class="text-right">{{ data.utility_percentage }}%</td>
+                  <td class="text-right">{{ data?.utility_percentage }}%</td>
                 </tr>
                 <tr>
                   <th colspan="2">SubTotal + Admin + Imprevisto + Utilidad</th>
                   <th class="text-right">
                     ${{
-                      data.admin_unforeseen_utility_subTotal | number : "1.2-2"
+                      data?.admin_unforeseen_utility_subTotal | number : "1.2-2"
                     }}
                   </th>
                 </tr>
@@ -258,7 +261,9 @@
                     SubTotal + Admin + Imprevisto + Utilidad Unitario
                   </th>
                   <th class="text-right">
-                    ${{ data.admin_unforeseen_utility_unit | number : "1.2-2" }}
+                    ${{
+                      data?.admin_unforeseen_utility_unit | number : "1.2-2"
+                    }}
                   </th>
                 </tr>
               </tbody>
@@ -271,32 +276,34 @@
                   <th>Precio Venta Total COP + Retención</th>
                   <th class="text-right">
                     ${{
-                      data.sale_price_cop_withholding_total | number : "1.2-2"
+                      data?.sale_price_cop_withholding_total | number : "1.2-2"
                     }}
                   </th>
                 </tr>
                 <tr>
                   <th>Valor de Venta Unitario COP</th>
                   <th class="text-right">
-                    ${{ data.sale_value_cop_unit | number : "1.2-2" }}
+                    ${{ data?.sale_value_cop_unit | number : "1.2-2" }}
                   </th>
                 </tr>
                 <tr>
                   <td>TRM</td>
-                  <td class="text-right">${{ data.trm | number : "1.2-2" }}</td>
+                  <td class="text-right">
+                    ${{ data?.trm | number : "1.2-2" }}
+                  </td>
                 </tr>
                 <tr>
                   <th>Precio Venta Total USD + Retención</th>
                   <th class="text-right">
                     USD{{
-                      data.sale_price_usd_withholding_total | number : "1.2-2"
+                      data?.sale_price_usd_withholding_total | number : "1.2-2"
                     }}
                   </th>
                 </tr>
                 <tr>
                   <th>Valor de Venta Unitario USD</th>
                   <th class="text-right">
-                    USD{{ data.sale_value_usd_unit | number : "1.2-2" }}
+                    USD{{ data?.sale_value_usd_unit | number : "1.2-2" }}
                   </th>
                 </tr>
               </tbody>

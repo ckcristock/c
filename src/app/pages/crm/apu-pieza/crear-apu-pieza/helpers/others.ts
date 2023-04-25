@@ -1,4 +1,4 @@
-import { functionsApu} from './helper';
+import { functionsApu } from './helper';
 import {
   FormGroup,
   FormBuilder,
@@ -12,14 +12,14 @@ export const othersHelper = {
   createFillInOthers(form: FormGroup, fb: FormBuilder, data) {
     if (data.other) {
       let others = form.get('others') as FormArray;
-      data.other.forEach((r) => {
+      data?.other.forEach((r) => {
         let group = fb.group({
-          description: [r.description],
-          unit_id: [r.unit_id],
-          q_unit: [r.q_unit],
-          q_total: [r.q_total],
-          unit_cost: [r.unit_cost],
-          total: [r.total]
+          description: [r?.description],
+          unit_id: [r?.unit_id],
+          q_unit: [r?.q_unit],
+          q_total: [r?.q_total],
+          unit_cost: [r?.unit_cost],
+          total: [r?.total]
         });
         this.subscribeOthers(group, form, others);
         others.push(group);
@@ -42,7 +42,7 @@ export const othersHelper = {
     return others;
   },
 
-  subscribeOthers( others: FormGroup, form:FormGroup, list: FormArray){
+  subscribeOthers(others: FormGroup, form: FormGroup, list: FormArray) {
     others.get('q_unit').valueChanges.subscribe(value => {
       let q_total = others.get('q_total').value;
       let unit_cost = others.get('unit_cost').value;
@@ -77,17 +77,17 @@ export const othersHelper = {
     });
   },
 
-  subtotalOthers(list: FormArray, form: FormGroup){
+  subtotalOthers(list: FormArray, form: FormGroup) {
     setTimeout(() => {
-      let total = 
-      list.value.reduce(
-        (a, b) => {
-          return  a + b.total
-        },0
-      );
+      let total =
+        list.value.reduce(
+          (a, b) => {
+            return a + b.total
+          }, 0
+        );
       form.patchValue({
         others_subtotal: total
-      }) 
+      })
     }, 100);
   }
 };

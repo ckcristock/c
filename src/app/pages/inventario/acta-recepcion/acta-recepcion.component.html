@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-lg-6 mb-4">
+  <div class="col-lg-12 mb-4">
     <div class="card h-100">
       <span
         class="badge badge-pill badge-danger position-absolute float-right badge-float"
@@ -152,7 +152,7 @@
       </div>
     </div>
   </div>
-  <div class="col-lg-6 mb-4">
+  <div class="col-lg-12 mb-4">
     <div class="card h-100">
       <span
         class="badge badge-pill badge-danger position-absolute float-right"
@@ -177,7 +177,7 @@
                 <th>Fecha</th>
                 <th>Orden</th>
                 <th>Facturas</th>
-                <th>Acc</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -207,7 +207,7 @@
                       : item.Codigo_Compra_I
                   }}</strong>
                 </td>
-                <td>{{ item.Facturas }}</td>
+                <td>{{ item.Facturas | uppercase }}</td>
                 <td>
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button
@@ -228,8 +228,15 @@
                       >
                         <i class="fas fa-eye"></i> Ver</a
                       >
-                      <!-- <a class="dropdown-item   " [routerLink]="[ '/actarecepcioneditar', item.Id_Acta_Recepcion ]"><i class="fa fa-pencil"></i> Editar</a> -->
                       <!-- <a
+                        class="dropdown-item"
+                        [routerLink]="[
+                          '/actarecepcioneditar',
+                          item.Id_Acta_Recepcion
+                        ]"
+                        ><i class="fa fa-pencil"></i> Editar</a
+                      >
+                      <a
                         class="dropdown-item text-primary"
                         href="{{
                           envi.ruta
@@ -242,18 +249,38 @@
                       > -->
                       <a
                         *ngIf="item.Estado != 'Anulada'"
-                        class="dropdown-item"
-                        (click)="AsignarDatos(item.Id_Acta_Recepcion)"
+                        class="dropdown-item text-danger"
+                        href="javascript: void(0);"
+                        (click)="
+                          AsignarDatos(item.Id_Acta_Recepcion, modalAnularActa)
+                        "
                       >
-                        <i class="ti-close"></i> Anular
+                        <i class="fas fa-trash"></i> Anular
                       </a>
-                      <!--
-                                <a class="dropdown-item   " href="{{envi.ruta}}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_{{item.Tipo}}&id={{item.Id_Orden_Compra}}"
-                                  target="_blank">
-                                  <i class="ti-printer"></i> Imprimir OC {{item.Tipo}}</a>
-                                <a class="dropdown-item   " href="{{envi.ruta}}php/archivos/descarga_etiqueta_zebra.php?id={{item.Id_Acta_Recepcion}}"
-                                  target="_blank">
-                                  <i class="fa fa-tag"></i> Descargar Etiquetas</a> -->
+
+                      <!-- <a
+                        class="dropdown-item"
+                        href="{{
+                          envi.ruta
+                        }}php/comprasnacionales/descarga_pdf.php?tipo=Orden_Compra_{{
+                          item.Tipo
+                        }}&id={{ item.Id_Orden_Compra }}"
+                        target="_blank"
+                      >
+                        <i class="ti-printer"></i> Imprimir OC
+                        {{ item.Tipo }}</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        href="{{
+                          envi.ruta
+                        }}php/archivos/descarga_etiqueta_zebra.php?id={{
+                          item.Id_Acta_Recepcion
+                        }}"
+                        target="_blank"
+                      >
+                        <i class="fa fa-tag"></i> Descargar Etiquetas</a
+                      > -->
                     </div>
                   </div>
                 </td>
@@ -264,7 +291,7 @@
       </div>
     </div>
   </div>
-  <div class="col-lg-6 mb-4">
+  <div class="col-lg-12 mb-4">
     <div class="card h-100">
       <span
         class="badge badge-pill badge-danger position-absolute float-right"
@@ -305,7 +332,6 @@
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
-            style="font-size: x-small"
             *ngIf="!loadindAA && ActasAnuladas.length > 0; else notData3"
           >
             <thead class="bg-light">
@@ -313,29 +339,40 @@
                 <th>Código</th>
                 <th>Orden</th>
                 <th>Proveedor</th>
-                <th>Acc</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let item of ActasAnuladas" class="text-center">
                 <td>
-                  <strong>{{ item.Codigo }}</strong>
+                  {{ item.Codigo }}
                 </td>
                 <td>
-                  <strong>{{ item.Codigo_Orden }}</strong>
+                  {{ item.Codigo_Orden }}
                 </td>
                 <td>{{ item.Proveedor }}</td>
                 <td>
-                  <a
-                    class="text-primary"
-                    href=""
-                    [routerLink]="[
-                      '/inventario/acta-recepcion/ver',
-                      item.Id_Acta_Recepcion
-                    ]"
-                  >
-                    <i class="fa fa-eye"></i>
-                  </a>
+                  <div ngbDropdown container="body" class="dropdown-primary">
+                    <button
+                      ngbDropdownToggle
+                      class="btn btn-primary btn-sm"
+                      type="button"
+                    >
+                      <i class="mdi mdi-chevron-down"></i>
+                    </button>
+                    <div ngbDropdownMenu>
+                      <a
+                        class="dropdown-item text-success"
+                        href=""
+                        [routerLink]="[
+                          '/inventario/acta-recepcion/ver',
+                          item.Id_Acta_Recepcion
+                        ]"
+                      >
+                        <i class="fas fa-eye"></i> Ver</a
+                      >
+                    </div>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -355,7 +392,7 @@
       </div>
     </div>
   </div>
-  <div class="col-lg-6 mb-4">
+  <div class="col-lg-12 mb-4">
     <div class="card">
       <div class="card-body">
         <div class="row card-title d-flex justify-content-between">
@@ -460,12 +497,10 @@
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
-            style="font-size: smaller"
             *ngIf="!Cargando && actarecepciones.length > 0; else notData4"
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
-                <th>Foto</th>
                 <th>Código Acta</th>
                 <th>Fecha Acta</th>
                 <th>Orden Compra</th>
@@ -478,26 +513,17 @@
             <tbody>
               <tr *ngFor="let item of actarecepciones" class="text-center">
                 <td>
-                  <img
-                    *ngIf="item.Imagen == ''"
-                    src="assets/images/user.jpg"
-                    class="img-radius imagen"
-                  />
-                  <!-- TODO imagen func -->
-                  <!--  <img *ngIf="item.Imagen !=''" src="{{envi.ruta}}IMAGENES/FUNCIONARIOS/{{item.Imagen}}" class="img-radius imagen"> -->
-                </td>
-                <td>
-                  <strong>{{ item.Codigo }}</strong>
+                  {{ item.Codigo }}
                 </td>
                 <td>
                   {{ item.Fecha_Creacion | date : "dd/MM/yyyy" }}
                 </td>
                 <td>
-                  <strong>{{
+                  {{
                     item.Codigo_Compra_N != ""
                       ? item.Codigo_Compra_N
                       : item.Codigo_Compra_I
-                  }}</strong>
+                  }}
                 </td>
                 <td>
                   {{
@@ -506,12 +532,9 @@
                       : (item.Fecha_Compra_I | date : "dd/MM/yyyy")
                   }}
                 </td>
-                <!--  <td *ngIf=" item.Tipo_Acomodar == 'Ajuste_Individual' ">
-                                                  {{ Item.Fecha_Compra_N }}
-                                              </td> -->
-                <td>{{ item.Facturas }}</td>
+                <td>{{ item.Facturas | uppercase }}</td>
                 <td>
-                  <strong>{{ item.Proveedor }}</strong>
+                  {{ item.Proveedor }}
                 </td>
                 <td>
                   <div ngbDropdown container="body" class="dropdown-primary">
@@ -598,14 +621,12 @@
                         <i class="fa fa-tag"></i> Descargar etiquetas</a
                       > -->
                       <a
-                        *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
                         class="dropdown-item"
                         (click)="verContabilidad(item, 'PGCA')"
                       >
                         <i class="fa fa-book"></i> Contab. PCGA
                       </a>
                       <a
-                        *ngIf="perfilUsuario == '27' || perfilUsuario == '16'"
                         class="dropdown-item"
                         (click)="verContabilidad(item, 'NIF')"
                       >
@@ -739,74 +760,70 @@
   </div>
 </div>
 
-<app-modal-basic #modalAnularActa>
-  <div class="app-modal-header">
-    <h4 class="modal-title">Anular Acta Recepción</h4>
+<ng-template #modalAnularActa let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Anular acta de recepción</h4>
     <button
       type="button"
-      class="close basic-close"
-      (click)="modalAnularActa.hide()"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-  <div class="app-modal-body">
+
+  <div class="modal-body">
     <form #FormAnularFactura="ngForm">
       <div class="row">
-        <div class="col-md-12">
-          <div class="form-group">
-            <label>Causal Anulación </label>
-            <select
-              class="form-control form-control-sm"
-              name="Causal"
-              [(ngModel)]="Model.Id_Causal_Anulacion"
-              required
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Causa</mat-label>
+          <mat-select
+            name="Causal"
+            [(ngModel)]="Model.Id_Causal_Anulacion"
+            required
+          >
+            <mat-option
+              *ngFor="let item of Causales"
+              [value]="item.Id_Causal_Anulacion"
             >
-              <option
-                *ngFor="let item of Causales"
-                [value]="item.Id_Causal_Anulacion"
-              >
-                {{ item.Nombre }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-12">
-          <div class="form-group">
-            <label>Observaciones </label>
-            <textarea
-              name="Observaciones"
-              rows="4"
-              [(ngModel)]="Model.Observaciones"
-              class="form-control"
-              required
-            ></textarea>
-          </div>
-        </div>
+              {{ item.Nombre | uppercase }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field
+          class="col-md-12 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Observaciones</mat-label>
+          <textarea
+            matInput
+            placeholder="Ingresa las observaciones"
+            rows="5"
+            [(ngModel)]="Model.Observaciones"
+            name="Observaciones"
+            required
+            [cdkTextareaAutosize]="true"
+          ></textarea>
+        </mat-form-field>
       </div>
     </form>
   </div>
-
-  <div class="app-modal-footer">
-    <div class="text-right">
-      <button
-        type="button"
-        class="btn btn-danger btn-sm"
-        (click)="modalAnularActa.hide()"
-      >
-        Cancelar
-      </button>
-      <button
-        type="button"
-        class="btn btn-primary btn-sm"
-        (click)="confirmacionGuardar.fire()"
-        [disabled]="!FormAnularFactura.valid"
-      >
-        Anular
-      </button>
-    </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="confirmacionGuardar.fire()"
+      [disabled]="!FormAnularFactura.valid"
+    >
+      Anular
+    </button>
   </div>
-</app-modal-basic>
+</ng-template>
 
 <swal #confirmacionGuardar [swalOptions]="alertOption"></swal>
 

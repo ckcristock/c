@@ -39,50 +39,6 @@
             />
           </mat-form-field>
           <mat-form-field class="col" appearance="outline">
-            <mat-label>Laboratorio comercial</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por laboratorio comercial"
-              [(ngModel)]="filtro_lab"
-              (input)="filtro()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Laboratorio genérico</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por laboratorio genérico"
-              [(ngModel)]="filtro_lab_gen"
-              (input)="filtro()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Invima</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por invima"
-              [(ngModel)]="filtro_invima"
-              (input)="filtro()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Código CUM</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por código CUM"
-              [(ngModel)]="filtro_cum"
-              (input)="filtro()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
             <mat-label>Lote</mat-label>
             <input
               matInput
@@ -139,7 +95,7 @@
               <mat-option value="No">No</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field appearance="outline" class="col">
+          <!-- <mat-form-field appearance="outline" class="col">
             <mat-label>Fechas de vencimiento</mat-label>
             <input
               matInput
@@ -156,7 +112,7 @@
               matSuffix
               [for]="picker"
             ></sat-datepicker-toggle>
-          </mat-form-field>
+          </mat-form-field> -->
           <mat-form-field class="col" appearance="outline">
             <mat-label>Bodega</mat-label>
             <mat-select
@@ -238,24 +194,16 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-      
         *ngIf="!Cargando_Tabla && Inventarios.length > 0; else notData"
       >
         <!--  -->
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th class="align-middle">Categoría</th>
-            <th class="align-middle">N. Producto</th>
-            <th class="align-middle th-edit">
-              <i class="fa fa-archive"></i> Embalaje
-            </th>
-            <th class="align-middle th-edit"><i class="fa fa-th"></i> Estiba</th>
+            <th class="align-middle">Producto</th>
+            <th class="align-middle">Embalaje</th>
+            <th class="align-middle">Estiba</th>
             <th class="align-middle">Grupo</th>
-            <th class="align-middle">Invima</th>
-            <th class="align-middle">Laboratorios</th>
-            <th class="align-middle">Cum</th>
-            <th class="align-middle">Lote</th>
-            <th class="align-middle">F. Venc</th>
             <th class="align-middle" *ngIf="permiso">Costo</th>
             <th class="align-middle" *ngIf="!permiso && lista_informe != 0">
               Precio Venta
@@ -264,18 +212,11 @@
             <th class="align-middle">Cant. Apar</th>
             <th class="align-middle">Cant. Selecc</th>
             <th class="align-middle">Cant. Contra</th>
-            <!-- <th class="align-middle">Borradores</th> -->
             <th class="align-middle">Iva</th>
             <th class="align-middle"><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
-          <!-- <tr *ngIf="Inventarios.length == 0 && !Cargando_Tabla && !filtrando">
-            <td colspan="100%" class="text-center">
-              <i class="fa fa-exclamation-circle fa-5x"></i>
-              <h4>Seleccione la Bodega a consultar</h4>
-            </td>
-          </tr> -->
           <tr
             *ngFor="let inventario of Inventarios; let i = index"
             class="text-center"
@@ -284,16 +225,6 @@
               type="hidden"
               id="NombreProducto{{ i }}"
               [value]="inventario.Nombre_Comercial"
-            />
-            <input
-              type="hidden"
-              id="LoteProducto{{ i }}"
-              [value]="inventario.Lote"
-            />
-            <input
-              type="hidden"
-              id="Fecha_Venc{{ i }}"
-              [value]="inventario.Fecha_Vencimiento"
             />
             <td class="align-middle td-edit">
               <strong>{{ inventario.Nombre_Categoria }}</strong>
@@ -307,28 +238,16 @@
             <td class="align-middle td-edit">{{ inventario.Embalaje }}</td>
             <td class="align-middle td-edit">{{ inventario.Nombre_Estiba }}</td>
             <td class="align-middle td-edit">{{ inventario.Nombre_Grupo }}</td>
-            <td class="align-middle td-edit">{{ inventario.Invima }}</td>
-            <td class="align-middle td-edit">
-              <strong>Comercial: </strong
-              ><span>{{ inventario.Laboratorio_Comercial }} </span> <br />
-              <strong>Genérico: </strong
-              ><span>{{ inventario.Laboratorio_Generico }} </span>
-            </td>
-            <td class="align-middle td-edit">{{ inventario.Codigo_CUM }}</td>
-            <td class="align-middle td-edit">{{ inventario.Lote }}</td>
-            <td class="align-middle td-edit">
-              {{ inventario.Fecha_Vencimiento | date: "dd/MM/yyyy" }}
-            </td>
             <td class="text-right align-middle td-edit" *ngIf="permiso">
               <span
                 *ngIf="inventario.Costo"
                 style="color: red"
                 role="button"
                 (click)="verCompras(inventario.Id_Producto, i, addCompras)"
-                >{{ inventario.Costo | currency: "COP" }}</span
+                >{{ inventario.Costo | currency : "COP" }}</span
               >
               <br /><span style="color: rgb(17, 43, 129)">{{
-                inventario.Precio_Lista | currency: "COP"
+                inventario.Precio_Lista | currency : "COP"
               }}</span>
             </td>
             <td
@@ -336,20 +255,20 @@
               *ngIf="!permiso && lista_informe != 0"
             >
               <span style="color: rgb(17, 43, 129)">{{
-                inventario.Precio_Lista | currency: "COP"
+                inventario.Precio_Lista | currency : "COP"
               }}</span>
             </td>
             <td class="align-middle td-edit">
               {{
                 inventario.Cantidad_Disponible - inventario.cantidadContrato
-                  | number: "1.0-0"
+                  | number : "1.0-0"
               }}
             </td>
             <td class="align-middle td-edit">
-              {{ inventario.Cantidad_Apartada | number: "1.0-0" }}
+              {{ inventario.Cantidad_Apartada | number : "1.0-0" }}
             </td>
             <td class="align-middle td-edit">
-              {{ inventario.Cantidad_Seleccionada | number: "1.0-0" }}
+              {{ inventario.Cantidad_Seleccionada | number : "1.0-0" }}
             </td>
             <td
               class="align-middle td-edit"
@@ -416,7 +335,11 @@
                     class="dropdown-item text-info"
                     href="javascript:void(0)"
                     (click)="
-                      verContrato(inventario.Id_Inventario_Nuevo, i, addContrato)
+                      verContrato(
+                        inventario.Id_Inventario_Nuevo,
+                        i,
+                        addContrato
+                      )
                     "
                   >
                     <i class="fa fa-eye"></i> Ver contrato</a
@@ -462,7 +385,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="
           !CargandoDetalleContrato && DetalleContrato.length > 0;
           else notDataContrato
@@ -521,10 +443,7 @@
   </div>
   <div class="modal-body">
     <div class="rounded-top table-responsive">
-      <table
-        class="table table-bordered table-striped table-sm"
-        
-      >
+      <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
@@ -536,7 +455,7 @@
           <tr class="text-center">
             <td>{{ nombre_producto }}</td>
             <td>{{ lote_producto }}</td>
-            <td>{{ fecha_venc_producto | date: "dd/MM/yyyy" }}</td>
+            <td>{{ fecha_venc_producto | date : "dd/MM/yyyy" }}</td>
           </tr>
         </tbody>
       </table>
@@ -545,7 +464,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="
           !Cargando_Apartadas && Apartadas.length > 0;
           else notDataApartadas
@@ -573,7 +491,7 @@
                 >{{ item.Codigo }}</a
               >
             </td>
-            <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
+            <td>{{ item.Fecha | date : "dd/MM/yyyy" }}</td>
             <td>{{ item.Identificacion_Funcionario }}</td>
             <td>{{ item.Destino }}</td>
             <td>{{ item.Cantidad }}</td>
@@ -615,10 +533,7 @@
   </div>
   <div class="modal-body">
     <div class="rounded-top table-responsive">
-      <table
-        class="table table-bordered table-striped table-sm"
-        
-      >
+      <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
@@ -630,7 +545,7 @@
           <tr class="text-center">
             <td>{{ nombre_producto }}</td>
             <td>{{ lote_producto }}</td>
-            <td>{{ fecha_venc_producto | date: "dd/MM/yyyy" }}</td>
+            <td>{{ fecha_venc_producto | date : "dd/MM/yyyy" }}</td>
           </tr>
         </tbody>
       </table>
@@ -639,7 +554,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="
           !Cargando_Seleccionados && Seleccionados.length > 0;
           else notDataSeleccionadas
@@ -662,7 +576,7 @@
             <td>
               {{ item.Codigo }}
             </td>
-            <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
+            <td>{{ item.Fecha | date : "dd/MM/yyyy" }}</td>
             <td>{{ item.Identificacion_Funcionario }}</td>
             <td>{{ item.Nombre_Origen }}</td>
             <td>{{ item.Nombre_Destino }}</td>
@@ -704,10 +618,7 @@
   </div>
   <div class="modal-body">
     <div class="rounded-top table-responsive">
-      <table
-        class="table table-bordered table-striped table-sm"
-        
-      >
+      <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Nombre</th>
@@ -724,7 +635,6 @@
     <div class="rounded-top table-responsive">
       <table
         class="table table-bordered table-striped table-sm"
-        
         *ngIf="!Cargando_Compras && Compras.length > 0; else notDataCompras"
       >
         <thead class="bg-light">
@@ -761,11 +671,11 @@
                 >{{ item.Codigo_Acta }}</a
               >
             </td>
-            <td>{{ item.Fecha | date: "dd/MM/yyyy" }}</td>
+            <td>{{ item.Fecha | date : "dd/MM/yyyy" }}</td>
             <td>{{ item.Funcionario }}</td>
             <td>{{ item.Proveedor }}</td>
             <td>{{ item.Cantidad }}</td>
-            <td class="text-right">{{ item.Precio | currency: "COP" }}</td>
+            <td class="text-right">{{ item.Precio | currency : "COP" }}</td>
           </tr>
         </tbody>
       </table>

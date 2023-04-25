@@ -175,16 +175,16 @@
                 />
               </td>
               <td class="align-middle" *ngIf="listaCampos[1].selected">
-                {{ third.name | titlecase }}
+                {{ third.name | uppercase }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[2].selected">
-                {{ third.nit | number }}{{ third.dv ? "-" + third.dv : "" }}
+                {{ third.nit }}{{ third.dv ? "-" + third.dv : "" }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[3].selected">
                 {{ third.cod_dian_address | titlecase }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[4].selected">
-                {{ third.municipality.name | capitalLetter }}
+                {{ third.municipality.name | uppercase }}
               </td>
               <td class="align-middle" *ngIf="listaCampos[5].selected">
                 {{ third.landline }}

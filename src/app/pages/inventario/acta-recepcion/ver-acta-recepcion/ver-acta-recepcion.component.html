@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="!loading; else placeholder">
   <div class="col-xl-4 col-lg-12" *ngIf="ActividadesActa.length > 0">
     <div class="card">
       <div class="card-body">
@@ -17,15 +17,7 @@
                   Actividad.Estado
                 }}</span>
               </h6>
-              <a *ngIf="Actividad.Imagen != ''" href="javascript:">
-                <!-- TODO Images -->
-                <!--   <img class="img-radius img-40" src="{{globales.ruta}}/IMAGENES/FUNCIONARIOS/{{Actividad.Imagen}}" alt=""> -->
-              </a>
-              <a *ngIf="Actividad.Imagen == ''" href="javascript:">
-                <!--    <img class="img-radius img-40" src="assets/images/user.jpg" alt="chat-user"> -->
-              </a>
             </div>
-
             <p>
               {{ Actividad.Detalles }} <br />
               <small class="text-muted"> {{ Actividad.Fecha }}</small>
@@ -65,11 +57,6 @@
                 </td>
               </tr>
             </tbody>
-          </table>
-        </div>
-        <hr />
-        <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th>Proveedor</th>
@@ -86,7 +73,7 @@
             </tbody>
           </table>
         </div>
-        <hr />
+        <h6>Facturas</h6>
         <div class="rounded-top table-responsive">
           <table class="table table-bordered table-sm">
             <thead class="bg-light">
@@ -103,7 +90,7 @@
                 class="text-center"
               >
                 <td>{{ i + 1 }}</td>
-                <td>{{ item.Factura }}</td>
+                <td>{{ item.Factura | uppercase }}</td>
                 <td>{{ item.Fecha_Factura }}</td>
                 <td>
                   <!-- <a
@@ -121,156 +108,121 @@
         </div>
         <hr />
         <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-sm">
+          <table class="table table-borderless table-sm">
             <thead class="bg-light">
-              <tr class="text-center text-uppercase">
+              <tr class="text-uppercase">
                 <th>Observaciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr class="text-center">
-                <td>{{ Datos.Observaciones }}</td>
+              <tr>
+                <td>{{ Datos.Observaciones | uppercase }}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <hr />
-        <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-sm">
-            <thead class="bg-light">
-              <tr class="text-center text-uppercase">
-                <th>#</th>
-                <th>Producto</th>
-                <th>Solicitadas</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                *ngFor="let item of Productos; let i = index"
-                id="fila{{ i }}"
-                class="text-center"
-              >
-                <td class="align-middle">
-                  {{ i + 1 }}
-                </td>
-                <td class="align-middle">
-                  <strong>{{ item.Nombre_Comercial }}</strong>
-                  <span class="text-muted" style="font-size: smaller">
-                    {{ item.Nombre_Producto }}
-                  </span>
-                </td>
-                <td class="align-middle">
-                  {{ item.Cantidad_Solicitada | number | puntos }}
-                </td>
-                <td class="align-middle" colspan="6">
-                  <div class="rounded-top table-responsive">
-                    <table class="table table-bordered table-sm">
-                      <thead class="bg-light">
-                        <tr class="text-center text-uppercase">
-                          <th>Cantidad</th>
-                          <th>Lote</th>
-                          <th>FV</th>
-                          <th>Precio</th>
-                          <th>Iva</th>
-                          <th>Subtotal</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let lote of item.Lotes" class="text-center">
-                          <td class="align-middle">
-                            {{ lote.Cantidad | number | puntos }}
-                          </td>
-                          <td class="align-middle">
-                            {{ lote.Lote }}
-                          </td>
-                          <td class="align-middle">
-                            {{ lote.Fecha_Vencimiento }}
-                          </td>
-                          <td class="align-middle">
-                            {{ lote.Precio | currency : "COP" }}
-                          </td>
-                          <td class="align-middle">{{ lote.Impuesto }}%</td>
-                          <td class="align-middle">
-                            {{ lote.Precio * lote.Cantidad | currency : "COP" }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </td>
-                <!-- <td class="text-center">{{item.Precio}} </td>
-                          <td class="text-center">{{item.Lote}} </td>
-                          <td class="text-center">{{item.Fecha_Vencimiento}} </td> -->
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="d-flex justify-content-end">
-          <table class="table table-hover table-sm col-md-4">
-            <tbody>
-              <tr>
-                <th>(=) SubTotal :</th>
-                <td class="text-right">
-                  {{ Datos.Subtotal | currency : "COP" }}
-                </td>
-              </tr>
-              <tr>
-                <th>(+) Iva :</th>
-                <td class="text-right">
-                  {{ Datos.Impuesto | currency : "COP" }}
-                </td>
-              </tr>
-              <tr>
-                <th>(=) Total :</th>
-                <td class="text-right">{{ Datos.Total | currency : "COP" }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ng-container *ngIf="Productos">
+          <h6>Productos</h6>
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>#</th>
+                  <th>Producto</th>
+                  <th>Solicitadas</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let item of Productos; let i = index"
+                  id="fila{{ i }}"
+                  class="text-center"
+                >
+                  <td class="align-middle">
+                    {{ i + 1 }}
+                  </td>
+                  <td class="align-middle">
+                    <strong>{{ item.Nombre_Comercial }}</strong>
+                    <span class="text-muted" style="font-size: smaller">
+                      {{ item.Nombre_Producto }}
+                    </span>
+                  </td>
+                  <td class="align-middle">
+                    {{ item.Cantidad_Solicitada | number | puntos }}
+                  </td>
+                  <td class="align-middle" colspan="6">
+                    <div class="rounded-top table-responsive">
+                      <table class="table table-bordered table-sm">
+                        <thead class="bg-light">
+                          <tr class="text-center text-uppercase">
+                            <th>Cantidad</th>
+                            <th>Lote</th>
+                            <th>FV</th>
+                            <th>Precio</th>
+                            <th>Iva</th>
+                            <th>Subtotal</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            *ngFor="let lote of item.Lotes"
+                            class="text-center"
+                          >
+                            <td class="align-middle">
+                              {{ lote.Cantidad | number | puntos }}
+                            </td>
+                            <td class="align-middle">
+                              {{ lote.Lote }}
+                            </td>
+                            <td class="align-middle">
+                              {{ lote.Fecha_Vencimiento }}
+                            </td>
+                            <td class="align-middle">
+                              {{ lote.Precio | currency : "COP" }}
+                            </td>
+                            <td class="align-middle">{{ lote.Impuesto }}%</td>
+                            <td class="align-middle">
+                              {{
+                                lote.Precio * lote.Cantidad | currency : "COP"
+                              }}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+        <app-list-items
+          [title1]="'SUBTOTAL'"
+          [var1]="Datos.Subtotal"
+          [type1]="'cop'"
+          [title2]="'IVA'"
+          [var2]="Datos.Impuesto"
+          [type2]="'cop'"
+          [title3]="'TOTAL'"
+          [var3]="Datos.Total"
+          [type3]="'cop'"
+        ></app-list-items>
         <button
           *ngIf="Datos.Estado == 'Pendiente'"
-          [swal]="{
-            title: '¿Está Seguro?',
-            text: 'Se dispone a aprobar el acta de recepción ',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Si, aprobar',
-            cancelButtonText: 'No, déjame comprobar'
-          }"
-          (confirm)="
-            aprobarActa(Datos.Id_Acta_Recepcion, Datos.Id_Bodega_Nuevo)
-          "
+          (click)="aprobarActa(Datos.Id_Acta_Recepcion, Datos.Id_Bodega_Nuevo)"
           type="button"
-          class="btn btn-primary btn-block"
+          class="btn btn-primary btn-block mt-3"
         >
           Aprobar acta
         </button>
-        <!-- <div class="row">
-          <div class="col-md-12">
-            <div class="float-right">
-              <button
-                *ngIf="Tipo == 'Bodega'"
-                type="button"
-                [routerLink]="['/inventario/acta-recepcion']"
-                class="btn btn-primary btn-sm btn-block"
-              >
-                Volver
-              </button>
-              <button
-                *ngIf="Tipo == 'Punto_Dispensacion'"
-                type="button"
-                [routerLink]="['/inventario/acta-recepcion']"
-                class="btn btn-primary btn-sm btn-block"
-              >
-                Volver
-              </button>
-            </div>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
 </div>
 
 <swal #confirmacionSwal title="" text="" type=""></swal>
+
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>

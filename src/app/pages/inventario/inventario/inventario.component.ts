@@ -227,7 +227,7 @@ export class InventarioComponent implements OnInit {
 
     this.http
       .get(
-        environment.ruta + "php/inventario_nuevo/lista_inventario.php" + queryString).subscribe((data: any) => {
+        environment.base_url + "/php/inventario_nuevo/lista_inventario.php" + queryString).subscribe((data: any) => {
           this.Cargando_Tabla = false;
           this.Inventarios = data.inventarios;
           console.log("lista de inventarios");

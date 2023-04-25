@@ -199,14 +199,14 @@ export class AlistamientoComponent implements OnInit {
       this.http
         .get(
           environment.ruta +
-            'php/alistamiento_nuevo/detalle_fase1.php?funcionario=' +
-            this.user.Identificacion_Funcionario +
-            queryString
+          'php/alistamiento_nuevo/detalle_fase1.php?funcionario=' +
+          this.user.Identificacion_Funcionario +
+          queryString
         )
         .subscribe((data: any) => {
           this.FaseI = data;
         });
-    }, 60000);
+    }, 6000000);
 
     this.ElementosFaseII = setInterval(() => {
       let queryString2 = '';
@@ -227,14 +227,14 @@ export class AlistamientoComponent implements OnInit {
       this.http
         .get(
           environment.ruta +
-            'php/alistamiento_nuevo/detalle_fase2.php?funcionario=' +
-            this.user.Identificacion_Funcionario +
-            queryString2
+          'php/alistamiento_nuevo/detalle_fase2.php?funcionario=' +
+          this.user.Identificacion_Funcionario +
+          queryString2
         )
         .subscribe((data: any) => {
           this.FaseII = data;
         });
-    }, 10000);
+    }, 1000000);
     this.Alistadas = setInterval(() => {
       let params: any = {};
 
@@ -282,8 +282,8 @@ export class AlistamientoComponent implements OnInit {
         this.http
           .get(
             environment.ruta +
-              'php/alistamiento/detalle_alistamiento.php?' +
-              queryString
+            'php/alistamiento/detalle_alistamiento.php?' +
+            queryString
           )
           .subscribe((data: any) => {
             this.Alistamientos = data.remisiones;
@@ -302,8 +302,8 @@ export class AlistamientoComponent implements OnInit {
         this.http
           .get(
             environment.ruta +
-              'php/alistamiento/detalle_alistamiento.php?pag=' +
-              this.page
+            'php/alistamiento/detalle_alistamiento.php?pag=' +
+            this.page
           )
           .subscribe((data: any) => {
             this.Alistamientos = data.remisiones;
@@ -311,7 +311,7 @@ export class AlistamientoComponent implements OnInit {
             this.TotalItems = data.numReg;
           });
       }
-    }, 10000);
+    }, 1000000);
   }
   ngOnDestroy() {
     clearInterval(this.ElementosFaseI);
@@ -352,8 +352,8 @@ export class AlistamientoComponent implements OnInit {
     this.http
       .get(
         environment.ruta +
-          'php/alistamiento/detalle_alistamiento.php' +
-          queryString
+        'php/alistamiento/detalle_alistamiento.php' +
+        queryString
       )
       .subscribe((data: any) => {
         console.log('remisiones');
@@ -399,8 +399,8 @@ export class AlistamientoComponent implements OnInit {
     this.http
       .get(
         environment.ruta +
-          'php/alistamiento/detalle_alistamiento.php?' +
-          queryString
+        'php/alistamiento/detalle_alistamiento.php?' +
+        queryString
       )
       .subscribe((data: any) => {
         this.Alistamientos = data.remisiones;
@@ -477,8 +477,8 @@ export class AlistamientoComponent implements OnInit {
       this.http
         .get(
           environment.ruta +
-            'php/alistamiento/detalle_alistamiento.php?' +
-            queryString
+          'php/alistamiento/detalle_alistamiento.php?' +
+          queryString
         )
         .subscribe((data: any) => {
           this.Alistamientos = data.remisiones;
@@ -537,10 +537,10 @@ export class AlistamientoComponent implements OnInit {
       this.http
         .get(
           environment.ruta +
-            'php/alistamiento_nuevo/detalle_fase1.php?funcionario=' +
-            this.user.Identificacion_Funcionario +
-            '&' +
-            queryString
+          'php/alistamiento_nuevo/detalle_fase1.php?funcionario=' +
+          this.user.Identificacion_Funcionario +
+          '&' +
+          queryString
         )
         .subscribe((data: any) => {
           this.FaseI = data;
@@ -556,8 +556,8 @@ export class AlistamientoComponent implements OnInit {
       this.http
         .get(
           environment.ruta +
-            'php/alistamiento_nuevo/detalle_fase1.php?funcionario=' +
-            this.user.Identificacion_Funcionario
+          'php/alistamiento_nuevo/detalle_fase1.php?funcionario=' +
+          this.user.Identificacion_Funcionario
         )
         .subscribe((data: any) => {
           this.FaseI = data;
@@ -596,9 +596,9 @@ export class AlistamientoComponent implements OnInit {
       this.http
         .get(
           environment.ruta +
-            'php/alistamiento_nuevo/detalle_fase2.php?funcionario=' +
-            this.user.Identificacion_Funcionario +
-            queryString
+          'php/alistamiento_nuevo/detalle_fase2.php?funcionario=' +
+          this.user.Identificacion_Funcionario +
+          queryString
         )
         .subscribe((data: any) => {
           this.FaseII = data;
@@ -614,8 +614,8 @@ export class AlistamientoComponent implements OnInit {
       this.http
         .get(
           environment.ruta +
-            'php/alistamiento_nuevo/detalle_fase2.php?funcionario=' +
-            this.user.Identificacion_Funcionario
+          'php/alistamiento_nuevo/detalle_fase2.php?funcionario=' +
+          this.user.Identificacion_Funcionario
         )
         .subscribe((data: any) => {
           this.FaseII = data;

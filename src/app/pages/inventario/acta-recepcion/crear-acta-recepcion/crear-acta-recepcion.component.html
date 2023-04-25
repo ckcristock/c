@@ -97,6 +97,7 @@
             <button
               type="button"
               class="btn btn-info btn-block mt-1"
+              style="height: 43px"
               (click)="photoInput.click()"
             >
               Cargar archivo
@@ -127,7 +128,8 @@
             <ng-template #popTitle>Retenciones factura {{ i + 1 }}</ng-template>
             <button
               type="button"
-              class="btn btn-outline-info btn-block"
+              style="height: 43px"
+              class="btn btn-warning btn-block"
               [ngbPopover]="popContent"
               [popoverTitle]="popTitle"
             >
@@ -176,7 +178,7 @@
                     'label-success': item.Eliminado == 'No'
                   }"
                 >
-                  <td *ngIf="id_no_conforme">
+                  <!-- <td *ngIf="id_no_conforme">
                     <a
                       class="btn"
                       (click)="MarcarNoConforme(i)"
@@ -189,7 +191,7 @@
                         }"
                       ></i
                     ></a>
-                  </td>
+                  </td> -->
                   <td>
                     <img
                       onerror="this.src='../../../../assets/images/product.jpg'"
@@ -290,22 +292,6 @@
                       style="text-transform: uppercase"
                     />
                   </td>
-                  <!-- <td style="width: 140px; max-width: 140px">
-                    <input
-                      (change)="
-                        capturarDigitacion(i, j, item.Id_Producto + j + i)
-                      "
-                      class="form-control form-control-sm"
-                      (blur)="Validar_Fecha(i, j)"
-                      name="Fecha_Vencimiento{{ item.Id_Producto + j + i }}"
-                      placeholder="Fecha Vencimiento"
-                      [(ngModel)]="item.Fecha_Vencimiento"
-                      type="date"
-                      id="Fecha_Vencimiento{{ item.Id_Producto + j + i }}"
-                      [disabled]="item.Disabled"
-                      [required]="item.Required"
-                    />
-                  </td> -->
                   <td>
                     <input
                       (change)="
@@ -432,18 +418,6 @@
                       style="display: none"
                     />
                   </td>
-                  <!-- <td>
-                    <input
-                      type="number"
-                      onkeypress="return event.charCode >= 46  && event.charCode <= 57 "
-                      placeholder="Temp"
-                      class="form-control form-control-sm"
-                      name="Temp{{ item.Id_Producto + j + i }}"
-                      [(ngModel)]="item.Temperatura"
-                      id="Temp{{ item.Id_Producto + j + i }}"
-                      (change)="AsignarCumple(i, j)"
-                    />
-                  </td> -->
                   <td>
                     <select
                       name="Cumple{{ item.Id_Producto + j + i }}"
@@ -488,29 +462,10 @@
         [var3]="Retenciones_Totales"
         [type3]="'cop'"
         [title4]="'Total'"
-        [var4]="Total_Final + Flete"
+        [var4]="Total_Final"
         [type4]="'cop'"
       >
       </app-list-items>
-      <!-- <tr>
-        <td class="text-right">Retenciones :</td>
-        <td class="text-right">
-          {{ Retenciones_Totales | currency }}
-        </td>
-      </tr>
-      <tr>
-        <td class="text-right">( + ) Flete :</td>
-        <td class="text-right" style="width: 100px">
-          <input
-            type="number"
-            name="Flete"
-            id="Flete"
-            (focus)="$event.target.select()"
-            [(ngModel)]="Flete"
-            class="input-flete"
-          />
-        </td>
-      </tr> -->
       <button
         type="button"
         [swal]="confirmacionGuardar"
@@ -526,7 +481,7 @@
 <swal #confirmacionSwal title="" text="" html="" icon=""></swal>
 <swal #confirmacionGuardar [swalOptions]="alertOption"></swal>
 
-<app-modal-basic
+<!-- <app-modal-basic
   #ModalRetenciones
   [dialogClass]="'modal-dialog'"
   hideFooter="true"
@@ -598,4 +553,4 @@
       </div>
     </div>
   </div>
-</app-modal-basic>
+</app-modal-basic> -->

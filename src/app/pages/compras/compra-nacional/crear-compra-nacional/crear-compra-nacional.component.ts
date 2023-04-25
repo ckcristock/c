@@ -20,9 +20,9 @@ import { CompraNacionalService } from '../compra-nacional.service';
   styleUrls: ['./crear-compra-nacional.component.scss'],
 })
 export class CrearCompraNacionalComponent implements OnInit {
-  reducerCosto = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Subtotal);
-  reducerIva = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Valor_Iva);
-  reducerTotal = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Total);
+  reducerCosto = (accumulator, currentValue) => accumulator + parseFloat(currentValue?.Subtotal);
+  reducerIva = (accumulator, currentValue) => accumulator + parseFloat(currentValue?.Valor_Iva);
+  reducerTotal = (accumulator, currentValue) => accumulator + parseFloat(currentValue?.Total);
 
   loading: boolean;
   user: any;
@@ -34,12 +34,10 @@ export class CrearCompraNacionalComponent implements OnInit {
   formCompra: FormGroup;
   formCategories: FormGroup;
   filteredCategories: any[] = [];
-  filteredSubategories: any[] = [];
   filteredBodega: any[] = [];
   filteredProveedor: any[] = [];
   Categorias: any = [];
   Productos: any = [];
-  subcategorias: any[] = [];
   Impuestos: any[] = [];
   datosCabecera: any = {
     Titulo: 'Nueva orden de compra',
@@ -60,8 +58,8 @@ export class CrearCompraNacionalComponent implements OnInit {
     public _compra: CompraNacionalService,
     private fb: FormBuilder
   ) {
-    this.user = this._user.user.person.id;
-    this.id = this.route.snapshot.params['id'];
+    this.user = this._user?.user?.person?.id;
+    this.id = this.route?.snapshot?.params['id'];
   }
 
   async ngOnInit() {
@@ -81,22 +79,22 @@ export class CrearCompraNacionalComponent implements OnInit {
 
   async getCategories() {
     await this._categoria.getCategorias().toPromise().then((res: any) => {
-      this.Categorias = res.data;
-      this.filteredCategories = res.data.slice()
+      this.Categorias = res?.data;
+      this.filteredCategories = res?.data?.slice()
     });
   }
 
   getProveedores() {
     this._proveedor.getThirdPartyProvider({}).subscribe((res: any) => {
-      this.proveedores = res.data;
-      this.filteredProveedor = res.data.slice();
+      this.proveedores = res?.data;
+      this.filteredProveedor = res?.data?.slice();
     });
   }
 
   getBodegas() {
     this._bodegas.getAllBodegas().subscribe((res: any) => {
-      this.bodegas = res.data;
-      this.filteredBodega = res.data.slice();
+      this.bodegas = res?.data;
+      this.filteredBodega = res?.data?.slice();
     });
   }
   searching: boolean;
@@ -109,9 +107,9 @@ export class CrearCompraNacionalComponent implements OnInit {
       distinctUntilChanged(),
       tap(() => (this.searching = true)),
       switchMap((term) =>
-        this._compra.getProducts({ search: term, subcategory_id: this.formCategories.get('subcategory_id').value }).pipe(
+        this._compra.getProducts({ search: term, category_id: this.formCategories.get('category_id').value }).pipe(
           tap((results) => {
-            if (results.length === 0) {
+            if (results?.length === 0) {
               this.searchFailed = true;
             } else {
               this.searchFailed = false;
@@ -130,31 +128,31 @@ export class CrearCompraNacionalComponent implements OnInit {
 
   getImpuestos() {
     this.http.get(environment.base_url + '/impuestos').subscribe((res: any) => {
-      this.Impuestos = res.data;
+      this.Impuestos = res?.data;
     });
   }
 
   getConsecutivo() {
     this._consecutivos.getConsecutivo('Orden_Compra_Nacional').subscribe((r: any) => {
-      this.datosCabecera.CodigoFormato = r.data.format_code
-      this.formCompra.patchValue({ format_code: this.datosCabecera.CodigoFormato })
+      this.datosCabecera.CodigoFormato = r.data?.format_code
+      this.formCompra.patchValue({ format_code: this.datosCabecera?.CodigoFormato })
       let con = this._consecutivos.construirConsecutivo(r.data);
       this.datosCabecera.Codigo = con
     })
   }
 
   addProduct(product, $event, input) {
-    if (!this.products.value.some(x => x.Id_Producto == product.Id_Producto)) {
+    if (!this.products?.value?.some(x => x.Id_Producto == product.Id_Producto)) {
       let prod = this.fb.group({
         Id_Producto_Orden_Compra_Nacional: [''],
-        Nombre_Comercial: [product.Nombre_Comercial],
-        Embalaje_id: [product.Embalaje_id],
-        Embalaje_nombre: [product.packaging.name],
-        Presentacion: [product.Presentacion],
-        Id_Producto: [product.Id_Producto],
+        Nombre_Comercial: [product?.Nombre_Comercial],
+        Embalaje_id: [product?.Embalaje_id],
+        Embalaje_nombre: [product?.packaging?.name],
+        Presentacion: [product?.Presentacion],
+        Id_Producto: [product?.Id_Producto],
         Cantidad: [1, Validators.min(1)],
-        Costo: [product.Precio, Validators.min(1)],
-        impuesto_id: [product.impuesto_id, Validators.required],
+        Costo: [product?.Precio, Validators.min(1)],
+        impuesto_id: [product?.impuesto_id, Validators.required],
         Total: [0],
         Subtotal: [0],
         Valor_Iva: [0],
@@ -174,15 +172,15 @@ export class CrearCompraNacionalComponent implements OnInit {
   }
 
   subscribeProductsForm(prod) {
-    let total = prod.get('Total');
-    let subtotal = prod.get('Subtotal');
-    let iva = prod.get('Valor_Iva');
-    let costo = prod.get('Costo');
-    let cantidad = prod.get('Cantidad');
-    let impuesto_id = prod.get('impuesto_id');
-    let impuesto = this.Impuestos.find(x => x.Id_Impuesto == impuesto_id.value);
-    let valorIva = (cantidad.value * costo.value * impuesto.Valor / 100);
-    let subtotalItem = (cantidad.value * costo.value);
+    let total = prod?.get('Total');
+    let subtotal = prod?.get('Subtotal');
+    let iva = prod?.get('Valor_Iva');
+    let costo = prod?.get('Costo');
+    let cantidad = prod?.get('Cantidad');
+    let impuesto_id = prod?.get('impuesto_id');
+    let impuesto = this.Impuestos?.find(x => x?.Id_Impuesto == impuesto_id?.value);
+    let valorIva = (cantidad?.value * costo?.value * impuesto?.Valor / 100);
+    let subtotalItem = (cantidad?.value * costo?.value);
     let totalItem = valorIva + subtotalItem;
     this.updateTotals();
     prod.patchValue({
@@ -221,7 +219,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       let costo = prod.get('Costo');
       let impuesto = this.Impuestos.find(x => x.Id_Impuesto == value);
 
-      let valorIva = (costo.value * cantidad.value * impuesto.Valor / 100);
+      let valorIva = (costo.value * cantidad.value * impuesto?.Valor / 100);
       let subtotal = (costo.value * cantidad.value);
       let total = valorIva + subtotal;
       prod.patchValue({
@@ -263,14 +261,8 @@ export class CrearCompraNacionalComponent implements OnInit {
   createFormCategories() {
     this.formCategories = this.fb.group({
       category_id: [''],
-      subcategory_id: ['']
     })
     this.formCategories.get('category_id').valueChanges.subscribe(v => {
-      this.getSubCategories(v);
-      this.validateProducts();
-    })
-    this.formCategories.get('subcategory_id').valueChanges.subscribe(v => {
-      this.getProducts(v);
       this.validateProducts();
     })
   }
@@ -294,12 +286,6 @@ export class CrearCompraNacionalComponent implements OnInit {
 
   get products(): FormArray {
     return this.formCompra.get('Productos') as FormArray;
-  }
-
-  getSubCategories(value) {
-    let vat = this.Categorias.find(x => x.Id_Categoria_Nueva == value)
-    this.subcategorias = vat.subcategory;
-    this.filteredSubategories = vat.subcategory.slice()
   }
 
   validateProducts() {

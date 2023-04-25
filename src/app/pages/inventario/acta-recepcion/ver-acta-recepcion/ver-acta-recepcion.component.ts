@@ -5,6 +5,7 @@ import { environment } from '../../../../../environments/environment';
 import { User } from 'src/app/core/models/users.model';
 import { UserService } from 'src/app/core/services/user.service';
 import { ActaRecepcionService } from '../acta-recepcion.service';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-ver-acta-recepcion',
@@ -28,6 +29,7 @@ export class VerActaRecepcionComponent implements OnInit {
   public IvaFinal = 0;
   public TotalFinal = 0;
   public ActividadesActa: any[] = [];
+  loading: boolean;
   public Tipo: string = "Bodega";
   public userF: User;
   public reducer_subt = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Subtotal);
@@ -36,7 +38,8 @@ export class VerActaRecepcionComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _actaRecepcion: ActaRecepcionService
+    private _actaRecepcion: ActaRecepcionService,
+    private _swal: SwalService
   ) { }
 
   ngOnInit() {
@@ -44,12 +47,14 @@ export class VerActaRecepcionComponent implements OnInit {
   }
 
   init() {
+    this.loading = true;
     let params: any = {};
     params.id = this.id;
     this._actaRecepcion.detalleActa(params).subscribe((data: any) => {
       this.Datos = data.Datos2;
       this.Productos = data.ProductosNuevo;
       this.Facturas = data.Facturas;
+      this.loading = false;
     });
     this.getActividadesActa();
   }
@@ -64,16 +69,24 @@ export class VerActaRecepcionComponent implements OnInit {
   }
 
   aprobarActa(id, Id_Bodega_Nuevo) {
-    let datos = new FormData();
-    datos.append('id', id);
-    datos.append('Id_Bodega_Nuevo', Id_Bodega_Nuevo);
-    datos.append('funcionario', this.user.Identificacion_Funcionario);
-    this.http.post(environment.ruta + 'php/actarecepcion_nuevo/aprobar_acta.php', datos).subscribe((data: any) => {
-      this.confimracionSwal.title = data.titulo;
-      this.confimracionSwal.text = data.mensaje;
-      this.confimracionSwal.icon = data.tipo;
-      this.confimracionSwal.fire();
-      this.init();
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: 'Vamos a aprobar el acta de recepción ',
+      icon: 'question',
+    }).then(r => {
+      if (r.isConfirmed) {
+        let datos = new FormData();
+        datos.append('id', id);
+        datos.append('Id_Bodega_Nuevo', Id_Bodega_Nuevo);
+        datos.append('funcionario', this.user.Identificacion_Funcionario);
+        this.http.post(environment.base_url + '/php/actarecepcion_nuevo/aprobar_acta.php', datos).subscribe((data: any) => {
+          this.confimracionSwal.title = data.titulo;
+          this.confimracionSwal.text = data.mensaje;
+          this.confimracionSwal.icon = data.tipo;
+          this.confimracionSwal.fire();
+          this.init();
+        })
+      }
     })
   }
 

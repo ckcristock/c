@@ -13,7 +13,7 @@
       <hr class="line" />
       <div class="alert alert-info" role="alert">
         Recuerda que solo podrás agregar productos que pertenencen a una misma
-        subcategoría.
+        categoría.
       </div>
       <ng-container [formGroup]="formCategories">
         <div class="row">
@@ -35,28 +35,6 @@
               <mat-option
                 *ngFor="let item of filteredCategories"
                 [value]="item.Id_Categoria_Nueva"
-                >{{ item.Nombre }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Subcategoría</mat-label>
-            <mat-select
-              formControlName="subcategory_id"
-              [disableOptionCentering]="true"
-              #selectSubcategories
-            >
-              <mat-select-filter
-                *ngIf="selectSubcategories.focused"
-                [placeholder]="'Buscar subcategoría'"
-                [array]="subcategorias"
-                [displayMember]="'Nombre'"
-                (filteredReturn)="filteredSubategories = $event"
-              ></mat-select-filter>
-
-              <mat-option
-                *ngFor="let item of filteredSubategories"
-                [value]="item.Id_Subcategoria"
                 >{{ item.Nombre }}</mat-option
               >
             </mat-select>

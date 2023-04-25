@@ -94,13 +94,13 @@ export class CrearTercerosComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.createForm();
     this.getZones();
+    this.getTypeDocuments();
     await this.getFields();
     await this.getCountriesWith();
     this.getWinningLists();
     this.getCiiuCodeLists();
     this.getDianAddress();
     this.getAccountPlan();
-    this.getTypeDocuments();
     this.getTitle();
     this.getRegimeType();
     this.getFiscalResponsibility();

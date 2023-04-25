@@ -159,7 +159,7 @@ export class CrearApuPiezaComponent implements OnInit {
   }
   getConsecutivo() {
     this._consecutivos.getConsecutivo('apu_parts').subscribe((r: any) => {
-      this.datosCabecera.CodigoFormato = r.data.format_code
+      this.datosCabecera.CodigoFormato = r?.data?.format_code
       this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
       if (this.title !== 'Editar pieza') {
         this.buildConsecutivo(this.form.get('city_id').value, r)
@@ -167,9 +167,9 @@ export class CrearApuPiezaComponent implements OnInit {
           this.buildConsecutivo(value, r)
         });
       } else {
-        this.datosCabecera.Codigo = this.data.code
+        this.datosCabecera.Codigo = this.data?.code
         this.form.patchValue({
-          code: this.data.code
+          code: this.data?.code
         })
         this.form.get('city_id').disable()
       }

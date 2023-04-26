@@ -403,9 +403,9 @@ export class ActaRecepcionComponent implements OnInit {
       company_id: this.companyWorkedId,
     }
     this._actaRecepcion.getActasAnuladas(params).subscribe((data: any) => {
-      if (data.codigo == 'success') {
-        this.ActasAnuladas = data.query_result;
-        this.TotalItems1 = data.numReg;
+      if (data.status) {
+        this.ActasAnuladas = data.data.data;
+        this.TotalItems1 = data.data.total;
         this.loadindAA = false;
       } else {
         this.ActasAnuladas = [];

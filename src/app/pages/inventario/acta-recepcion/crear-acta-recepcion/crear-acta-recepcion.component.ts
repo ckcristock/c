@@ -9,6 +9,7 @@ import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
 import { ActaRecepcionService } from '../acta-recepcion.service';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-crear-acta-recepcion',
@@ -20,6 +21,7 @@ export class CrearActaRecepcionComponent implements OnInit {
   /* @ViewChild('ModalRetenciones') ModalRetenciones: any; */
   @ViewChild('FormActa') FormActa: NgForm;
   alertOption: SweetAlertOptions = {};
+  masks = consts;
   Codigo: any = this.route.snapshot.params['codigo'];
   Fecha = new Date();
   Lista_Productos: any[] = [];
@@ -154,7 +156,7 @@ export class CrearActaRecepcionComponent implements OnInit {
   getListaImpuestoMes() {
     this.http
       .get(
-        environment.ruta + 'php/actarecepcion_nuevo/lista_impuesto_mes.php',
+        environment.base_url + '/php/actarecepcion_nuevo/lista_impuesto_mes.php',
         { params: { modulo: 'Impuesto' } }
       )
       .subscribe((data: any) => {
@@ -166,7 +168,7 @@ export class CrearActaRecepcionComponent implements OnInit {
 
   getNoConformes() {
     this.http
-      .get(environment.ruta + 'php/actarecepcion/causal_no_conformes.php')
+      .get(environment.base_url + '/php/actarecepcion/causal_no_conformes.php')
       .subscribe((data: any) => {
         this.NoConformes = data;
       });
@@ -197,7 +199,7 @@ export class CrearActaRecepcionComponent implements OnInit {
   }
 
   getRetencionesPorModalidad(p: any) {
-    return this.http.get(environment.ruta + 'php/GENERALES/retenciones/get_retenciones_modalidad.php', { params: p });
+    return this.http.get(environment.base_url + '/php/GENERALES/retenciones/get_retenciones_modalidad.php', { params: p });
   }
 
   getRetencionesCompras() {
@@ -218,7 +220,7 @@ export class CrearActaRecepcionComponent implements OnInit {
   cargarSubcategorias(id_bodega) {
     this.http
       .get(
-        environment.ruta + 'php/actarecepcion_nuevo/lista_subcategorias.php',
+        environment.base_url + '/php/actarecepcion_nuevo/lista_subcategorias.php',
         { params: { id_bodega: id_bodega } }
       )
       .subscribe((data: any) => {
@@ -350,7 +352,6 @@ export class CrearActaRecepcionComponent implements OnInit {
   }
 
 
-
   capturarDigitacion(i, j, k) {
     this.Lista_Productos[i].producto[j].Cantidad = (
       document.getElementById('Cantidad' + k) as HTMLInputElement
@@ -358,12 +359,6 @@ export class CrearActaRecepcionComponent implements OnInit {
 
     this.Lista_Productos[i].producto[j].Precio = (
       document.getElementById('Precio' + k) as HTMLInputElement
-    ).value;
-    this.Lista_Productos[i].producto[j].Lote = (
-      document.getElementById('Lote' + k) as HTMLInputElement
-    ).value;
-    this.Lista_Productos[i].producto[j].Fecha_Vencimiento = (
-      document.getElementById('Fecha_Vencimiento' + k) as HTMLInputElement
     ).value;
     this.Lista_Productos[i].producto[j].No_Conforme = (
       document.getElementById('noconformidad' + k) as HTMLInputElement
@@ -432,53 +427,51 @@ export class CrearActaRecepcionComponent implements OnInit {
       this.Subtotal_Final + this.Iva_Final - this.Retenciones_Totales;
   }
 
-  consultarCodigoBarras(codigo) {
-    if (codigo != '') {
-      this.http
-        .get(environment.base_url + '/php/actarecepcion/codigo_barrad.php', {
-          params: {
-            codigo: codigo,
-            orden: this.route.snapshot.params['codigo'],
-          },
-        })
-        .subscribe((data: any) => {
-          (document.getElementById('Codigo_Barras') as HTMLInputElement).value = '';
-          data = JSON.parse(functionsUtils.utf8_decode(JSON.stringify(data)));
-          if (data.Id_Producto) {
-            let posicion = this.Lista_Productos.findIndex(
-              (x) => x.Id_Producto == data.Id_Producto
+  consultarCodigoBarras(event, input) {
+    if (event.target.value) {
+      let params = {
+        codigo: event.target.value,
+        orden: this.route.snapshot.params['codigo'],
+      }
+      this._actaRecepcion.codigoBarras(params).subscribe((data: any) => {
+        console.log(data);
+        let product = data.producto[0];
+        if (data.Id_Producto) {
+          let posicion = this.Lista_Productos.findIndex(
+            (x) => x.Id_Producto == data.Id_Producto
+          );
+          if (posicion < 0) {
+            this.Lista_Productos.push(data);
+            localStorage.setItem(
+              'Lista_Producto',
+              JSON.stringify(this.Lista_Productos)
             );
-            if (posicion < 0) {
-              this.Lista_Productos.push(data);
-              localStorage.setItem(
-                'Lista_Producto',
-                JSON.stringify(this.Lista_Productos)
-              );
-            } else {
-              let html = `
-            <h5>El siguiente producto ya se encuentra dentro de la lista:</h5>
-
-            <ul>
-              <li><strong style="font-weight:bold;font-size:15px">Nombre: </strong> <span style="font-size:15px">${data.Nombre_Comercial}</span></li>
-              <li><strong style="font-weight:bold;font-size:15px">Laboratorio: </strong> <span style="font-size:15px">${data.Laboratorio_Comercial}</span></li>
-              <li><strong style="font-weight:bold;font-size:15px">Embalaje: </strong> <span style="font-size:15px">${data.Embalaje}</span></li>
-            </ul>
-          `;
-              this.confirmacionSwal.title = '';
-              this.confirmacionSwal.html = html;
-              this.confirmacionSwal.icon = 'warning';
-              this.confirmacionSwal.fire();
-            }
           } else {
-            this.confirmacionSwal.title = 'No existe';
-            this.confirmacionSwal.html =
-              'El código de barras ingresado: ' +
-              codigo +
-              ' no corresponde a ningun de nuestros productos registrados en nuestra Base de Datos';
-            this.confirmacionSwal.icon = 'error';
-            this.confirmacionSwal.fire();
+            let html = `
+            <div>Este producto ya se encuentra agregado</div>
+            <strong style="font-weight:bold;font-size:15px">Nombre: </strong> <span style="font-size:15px">${product.Nombre_Comercial}</span><br>
+            <strong style="font-weight:bold;font-size:15px">Embalaje: </strong> <span style="font-size:15px">${product.Embalaje}</span>
+          `;
+            this.swalService.show({
+              icon: 'error',
+              title: 'Error',
+              showCancel: false,
+              html: html,
+              confirmButtonColor: '#d33'
+            })
           }
-        });
+        } else {
+          this.swalService.show({
+            icon: 'error',
+            title: 'Error',
+            showCancel: false,
+            text: 'Código de barras no encontrado',
+            confirmButtonColor: '#d33'
+          })
+        }
+      });
+      event.preventDefault();
+      input.value = '';
     }
     localStorage.setItem('Codigo', this.route.snapshot.params['codigo']);
     this.Opciones();
@@ -570,13 +563,8 @@ export class CrearActaRecepcionComponent implements OnInit {
     ).value;
     let precio = (document.getElementById('Precio' + poss) as HTMLInputElement)
       .value;
-    let lote = (document.getElementById('Lote' + poss) as HTMLInputElement)
-      .value;
-    let fecha_venc = (
-      document.getElementById('Fecha_Vencimiento' + poss) as HTMLInputElement
-    ).value;
 
-    if (cantidad != '' && precio != '' && lote != '' && fecha_venc != '') {
+    if (cantidad && precio) {
       let pos3 = pos2 + 1;
       if (this.Lista_Productos[pos].producto[pos3] == undefined) {
         this.Lista_Productos[pos].producto[pos2].Required = true;

@@ -1,5 +1,5 @@
 <div class="row" *ngIf="!loading; else placeholder">
-  <div class="col-xl-4 col-lg-12" *ngIf="ActividadesActa.length > 0">
+  <div class="col-xl-4 col-lg-12" *ngIf="data?.orden?.activity?.length > 0">
     <div class="card">
       <div class="card-body">
         <div class="card-title">
@@ -9,19 +9,41 @@
         <ul class="list-group list-group-flush">
           <li
             class="list-group-item px-0"
-            *ngFor="let Actividad of ActividadesActa"
+            *ngFor="let activity of data?.orden?.activity"
           >
-            <div class="card-title d-flex justify-content-between">
-              <h6>
-                <span [class]="AsignarClaseLabel(Actividad.Estado)">{{
-                  Actividad.Estado
-                }}</span>
-              </h6>
+            <div class="d-flex w-100 justify-content-between">
+              <div>
+                <h6 class="mb-0">
+                  <span
+                    class="badge"
+                    [class]="
+                      activity.Estado == 'Creacion'
+                        ? 'badge-info'
+                        : activity.Estado == 'Edicion'
+                        ? 'badge-warning'
+                        : activity.Estado == 'Anulada' ||
+                          activity.Estado == 'Rechazada'
+                        ? 'badge-danger'
+                        : activity.Estado == 'Aprobacion'
+                        ? 'badge-success '
+                        : activity.Estado == 'Recepcion'
+                        ? 'badge-primary '
+                        : ''
+                    "
+                  >
+                    {{ activity.Estado }}</span
+                  >
+                </h6>
+                <p class="mb-1">{{ activity.Detalles }}</p>
+                <small>{{ activity.Fecha }}</small>
+                <small class="d-block">{{ activity.person.full_names }}</small>
+              </div>
+              <img
+                class="d-block img-thumbnail rounded-circle img-fluid header-profile-user"
+                [src]="activity.person.image"
+                onerror="this.src='../../../../../assets/images/noprofile.png'"
+              />
             </div>
-            <p>
-              {{ Actividad.Detalles }} <br />
-              <small class="text-muted"> {{ Actividad.Fecha }}</small>
-            </p>
           </li>
         </ul>
       </div>
@@ -32,28 +54,36 @@
       <div class="card-body">
         <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
         <hr class="line" />
+        <div class="d-flex justify-content-end mb-2">
+          <span class="badge badge-info">{{ data.Estado }}</span>
+        </div>
         <div class="rounded-top table-responsive">
           <table class="table table-bordered table-sm">
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th>Compra</th>
-                <th *ngIf="Tipo == 'Bodega'">Bodega</th>
-                <th *ngIf="Tipo == 'Punto_Dispensacion'">Punto</th>
+                <th>Bodega</th>
                 <th>Productos Ingresados</th>
               </tr>
             </thead>
             <tbody>
               <tr class="text-center">
-                <td>{{ Datos.Codigo_Compra }}</td>
-                <td *ngIf="Tipo == 'Bodega'">{{ Datos.Nombre_Bodega }}</td>
-                <td *ngIf="Tipo == 'Punto_Dispensacion'">
-                  {{ Datos.Nombre_Bodega }}
-                </td>
                 <td>
-                  {{ Datos.ConteoProductos }} Producto{{
+                  <a
+                    [routerLink]="[
+                      '/compras/ver-nacional',
+                      data.orden.Id_Orden_Compra_Nacional
+                    ]"
+                    target="_blank"
+                    >{{ data.orden.Codigo }}</a
+                  >
+                </td>
+                <td>{{ data.bodega.Nombre | titlecase }}</td>
+                <td>
+                  <!-- {{ Datos.ConteoProductos }} Producto{{
                     Datos.ConteoProductos > 1 ? "s" : ""
                   }}
-                  Diferente{{ Datos.ConteoProductos > 1 ? "s" : "" }}
+                  Diferente{{ Datos.ConteoProductos > 1 ? "s" : "" }} -->
                 </td>
               </tr>
             </tbody>
@@ -66,9 +96,15 @@
             </thead>
             <tbody>
               <tr class="text-center">
-                <td>{{ Datos.NombreProveedor }}</td>
-                <td>{{ Datos.DireccionProveedor }}</td>
-                <td>{{ Datos.TelefonoProveedor }}</td>
+                <td>
+                  <a
+                    [routerLink]="['/crm/terceros/ver', data.third.id]"
+                    target="_blank"
+                    >{{ data.third.full_name | titlecase }}</a
+                  >
+                </td>
+                <td>{{ data.third.cod_dian_address }}</td>
+                <td>{{ data.third.landline }}</td>
               </tr>
             </tbody>
           </table>
@@ -86,21 +122,16 @@
             </thead>
             <tbody>
               <tr
-                *ngFor="let item of Facturas; let i = index"
+                *ngFor="let item of data.facturas; let i = index"
                 class="text-center"
               >
                 <td>{{ i + 1 }}</td>
                 <td>{{ item.Factura | uppercase }}</td>
                 <td>{{ item.Fecha_Factura }}</td>
                 <td>
-                  <!-- <a
-                    href="{{ envi.ruta }}ARCHIVOS/FACTURAS_COMPRA/{{
-                      item.Archivo_Factura
-                    }}"
-                    target="_blank"
-                    title="Descargar Archivo"
-                    ><i class="fas fa-file-pdf"></i
-                  ></a> -->
+                  <a [href]="item.Archivo_Factura" target="_blank">
+                    <i class="fas fa-file-pdf text-danger"></i>
+                  </a>
                 </td>
               </tr>
             </tbody>
@@ -116,12 +147,14 @@
             </thead>
             <tbody>
               <tr>
-                <td>{{ Datos.Observaciones | uppercase }}</td>
+                <td>
+                  {{ data.Observaciones || "Sin observaciones" | uppercase }}
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <ng-container *ngIf="Productos">
+        <ng-container *ngIf="data.products.length > 0">
           <h6>Productos</h6>
           <div class="rounded-top table-responsive">
             <table class="table table-bordered table-sm">
@@ -130,74 +163,54 @@
                   <th>#</th>
                   <th>Producto</th>
                   <th>Solicitadas</th>
-                  <th></th>
+                  <th>Cantidad</th>
+                  <th>Precio</th>
+                  <th>Iva</th>
+                  <th>Subtotal</th>
                 </tr>
               </thead>
               <tbody>
                 <tr
-                  *ngFor="let item of Productos; let i = index"
-                  id="fila{{ i }}"
+                  *ngFor="let item of data.products; let i = index"
                   class="text-center"
                 >
                   <td class="align-middle">
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <strong>{{ item.Nombre_Comercial }}</strong>
-                    <span class="text-muted" style="font-size: smaller">
-                      {{ item.Nombre_Producto }}
-                    </span>
+                    <a
+                      [routerLink]="[
+                        '/ajustes/informacion-base/catalogo/ver',
+                        item.product.Id_Producto
+                      ]"
+                      target="_blank"
+                      >{{ item.product.Nombre_Comercial | uppercase }}</a
+                    >
                   </td>
                   <td class="align-middle">
-                    {{ item.Cantidad_Solicitada | number | puntos }}
+                    {{ item.Cantidad | number }}
                   </td>
-                  <td class="align-middle" colspan="6">
-                    <div class="rounded-top table-responsive">
-                      <table class="table table-bordered table-sm">
-                        <thead class="bg-light">
-                          <tr class="text-center text-uppercase">
-                            <th>Cantidad</th>
-                            <th>Lote</th>
-                            <th>FV</th>
-                            <th>Precio</th>
-                            <th>Iva</th>
-                            <th>Subtotal</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            *ngFor="let lote of item.Lotes"
-                            class="text-center"
-                          >
-                            <td class="align-middle">
-                              {{ lote.Cantidad | number | puntos }}
-                            </td>
-                            <td class="align-middle">
-                              {{ lote.Lote }}
-                            </td>
-                            <td class="align-middle">
-                              {{ lote.Fecha_Vencimiento }}
-                            </td>
-                            <td class="align-middle">
-                              {{ lote.Precio | currency : "COP" }}
-                            </td>
-                            <td class="align-middle">{{ lote.Impuesto }}%</td>
-                            <td class="align-middle">
-                              {{
-                                lote.Precio * lote.Cantidad | currency : "COP"
-                              }}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                  <td class="align-middle">
+                    {{ item.Cantidad | number }}
+                  </td>
+                  <td class="align-middle">
+                    ${{ item.Precio | number : "1.2-2" }}
+                  </td>
+                  <td class="align-middle">{{ item.Impuesto }}%</td>
+                  <td class="align-middle">
+                    ${{ item.Precio * item.Cantidad | number : "1.2-2" }}
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </ng-container>
-        <app-list-items
+        <ng-container *ngIf="data.Id_Causal_Anulacion">
+          <h6>Causa y observaciones de la anulación</h6>
+          <div>Causa: {{ data.causal.Nombre }}</div>
+          <div>Observaciones: {{ data.Observaciones_Anulacion }}</div>
+        </ng-container>
+        <!-- <app-list-items
           [title1]="'SUBTOTAL'"
           [var1]="Datos.Subtotal"
           [type1]="'cop'"
@@ -207,10 +220,10 @@
           [title3]="'TOTAL'"
           [var3]="Datos.Total"
           [type3]="'cop'"
-        ></app-list-items>
+        ></app-list-items> -->
         <button
-          *ngIf="Datos.Estado == 'Pendiente'"
-          (click)="aprobarActa(Datos.Id_Acta_Recepcion, Datos.Id_Bodega_Nuevo)"
+          *ngIf="data.Estado == 'Pendiente'"
+          (click)="aprobarActa(data.Id_Acta_Recepcion, data.Id_Bodega_Nuevo)"
           type="button"
           class="btn btn-primary btn-block mt-3"
         >

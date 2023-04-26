@@ -32,25 +32,10 @@
         [(ngModel)]="encabezado.Id_Bodega_Nuevo"
       />
       <h6>Bodega: {{ encabezado.Nombre_Bodega | titlecase }}</h6>
-      <!-- <select
-        [(ngModel)]="encabezado.Id_Bodega_Nuevo"
-        name="Id_Bodega_Nuevo"
-        class="form-control form-control-sm"
-        readonly
-        required
-      >
-        <option [ngValue]="undefined">Seleccione una Bodega</option>
-        <option
-          *ngFor="let Bodega of Bodegas; let i = index"
-          [value]="Bodega.Id_Bodega_Nuevo"
-        >
-          {{ Bodega.Nombre }}
-        </option>
-      </select> -->
       <h6>Facturas</h6>
       <ng-container *ngFor="let item of Facturas; let i = index">
         <div class="row">
-          <mat-form-field class="col" appearance="outline">
+          <mat-form-field class="col custom" appearance="outline">
             <mat-label>Factura #{{ i + 1 }}</mat-label>
             <input
               matInput
@@ -65,7 +50,7 @@
               autocomplete="off"
             />
           </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
+          <mat-form-field class="col custom" appearance="outline">
             <mat-label>Fecha #{{ i + 1 }}</mat-label>
             <input
               matInput
@@ -171,11 +156,10 @@
             <tbody>
               <ng-container *ngFor="let item of Lista_Productos; let i = index">
                 <tr
-                  id="fila{{ i }}"
                   class="text-center"
                   [ngClass]="{
-                    'label-danger': item.Eliminado == 'Si',
-                    'label-success': item.Eliminado == 'No'
+                    'label-danger': item.producto[0].Eliminado == 'Si',
+                    'label-success': item.producto[0].Eliminado == 'No'
                   }"
                 >
                   <!-- <td *ngIf="id_no_conforme">
@@ -192,30 +176,30 @@
                       ></i
                     ></a>
                   </td> -->
-                  <td>
+                  <td class="p-0">
                     <img
                       onerror="this.src='../../../../assets/images/product.jpg'"
-                      [src]="item.Foto"
+                      [src]="item.producto[0].Foto"
                       class="img-fluid img-product mx-auto"
                     />
                   </td>
                   <td colspan="2">
                     <i
-                      *ngIf="item.Diferente == true"
+                      *ngIf="item.Diferente"
                       class="fa fa-exclamation-circle text-danger"
                       title="Cambia la Presentacion respecto al producto de la Orden"
                     ></i>
-                    <strong> {{ item.Nombre_Comercial }}</strong>
+                    <strong> {{ item.producto[0].Nombre_Comercial }}</strong>
                   </td>
-                  <td>
+                  <td class="p-0">
                     <mat-form-field class="pb-0" appearance="outline">
                       <mat-label>Subcategoria</mat-label>
                       <select
                         name="Id_Subcategoria{{ i }}"
-                        [(ngModel)]="item.Id_Subcategoria"
+                        [(ngModel)]="item.producto[0].Id_Subcategoria"
                         matNativeControl
                         id="Id_Categoria{{ i }}"
-                        [disabled]="item.Disabled"
+                        [disabled]="item.producto[0].Disabled"
                         required
                       >
                         <optgroup
@@ -232,7 +216,7 @@
                       </select>
                     </mat-form-field>
                   </td>
-                  <td>
+                  <td class="p-0">
                     <mat-form-field class="pb-0" appearance="outline">
                       <mat-label>Peso</mat-label>
                       <input
@@ -241,57 +225,32 @@
                         name="Peso{{ i }}"
                         id="Peso{{ i }}"
                         placeholder="Peso regular"
-                        [(ngModel)]="item.Peso"
+                        [(ngModel)]="item.producto[0].Peso"
                         [disabled]="item.Disabled"
                         required
                       />
                     </mat-form-field>
                   </td>
+                  <td>{{ item.producto[0].Embalaje }}</td>
                   <td>
-                    <i
-                      class="fa fa-archive fa-lg"
-                      role="button"
-                      [ngbTooltip]="item.Embalaje_id"
-                    ></i>
-                  </td>
-                  <td>
-                    <strong>{{ item.CantidadProducto }}</strong>
+                    <strong>{{ item.producto[0].CantidadProducto }}</strong>
                   </td>
                   <td class="text-right">
                     <strong
-                      >$ {{ item.CostoProducto | number | puntos }}
+                      >${{ item.producto[0].CostoProducto | number : "1.2-2" }}
                     </strong>
                   </td>
                 </tr>
                 <tr class="text-uppercase table-info text-center">
-                  <th>Lote</th>
-                  <!-- <th>Fecha Venc</th> -->
                   <th>Cantidad</th>
                   <th>Precio</th>
-                  <th>IVA</th>
+                  <th colspan="2">IVA</th>
                   <th>SubTotal</th>
                   <th>Factura</th>
                   <th>No Conformidad</th>
-                  <!-- <th>Temp.</th> -->
                   <th>Cumple</th>
                 </tr>
                 <tr *ngFor="let item of item.producto; let j = index">
-                  <td>
-                    <input
-                      (change)="
-                        capturarDigitacion(i, j, item.Id_Producto + j + i)
-                      "
-                      class="form-control form-control-sm"
-                      name="Lote{{ item.Id_Producto + j + i }}"
-                      [(ngModel)]="item.Lote"
-                      placeholder="Lote"
-                      type="text"
-                      id="Lote{{ item.Id_Producto + j + i }}"
-                      [disabled]="item.Disabled"
-                      [required]="item.Required"
-                      style="text-transform: uppercase"
-                    />
-                  </td>
                   <td>
                     <input
                       (change)="
@@ -303,8 +262,9 @@
                       [(ngModel)]="item.Cantidad"
                       placeholder="Cantidad"
                       class="form-control form-control-sm"
-                      min="1"
-                      type="number"
+                      currencyMask
+                      [options]="masks.maskNumbers"
+                      appInputPositionInitial
                       id="Cantidad{{ item.Id_Producto + j + i }}"
                       [disabled]="item.Disabled"
                       [required]="item.Required"
@@ -318,8 +278,9 @@
                         CalcularRetencionesProveedor()
                       "
                       class="form-control form-control-sm"
-                      type="number"
-                      min="0"
+                      currencyMask
+                      [options]="masks.maskCOP"
+                      appInputPosition
                       name="Precio{{ item.Id_Producto + j + i }}"
                       placeholder="Precio"
                       [(ngModel)]="item.Precio"
@@ -328,7 +289,7 @@
                       [required]="item.Required"
                     />
                   </td>
-                  <td>
+                  <td colspan="2">
                     <select
                       class="form-control form-control-sm"
                       name="Impuesto{{ item.Id_Producto + j + i }}"
@@ -350,8 +311,9 @@
                     <input
                       class="form-control form-control-sm"
                       placeholder="Subtotal"
-                      value="0"
-                      type="text"
+                      currencyMask
+                      [options]="masks.maskCOP"
+                      appInputPosition
                       name="Subtotal{{ item.Id_Producto + j + i }}"
                       id="Subtotal{{ item.Id_Producto + j + i }}"
                       [(ngModel)]="item.Subtotal"
@@ -443,8 +405,8 @@
               matInput
               type="text"
               placeholder="Escanea el código de barras del producto"
-              id="Codigo_Barras"
-              (change)="consultarCodigoBarras($event.target.value)"
+              #codigoBarras
+              (change)="consultarCodigoBarras($event, codigoBarras)"
               autocomplete="off"
             />
             <mat-icon matSuffix><i class="fas fa-barcode"></i></mat-icon>

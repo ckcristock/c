@@ -71,7 +71,7 @@
             </table>
           </div>
           <hr />
-          <h6>Productos</h6>
+
           <div class="rounded-top table-responsive">
             <table class="table table-bordered table-striped table-sm">
               <thead class="bg-light">
@@ -109,7 +109,20 @@
                     {{ product.product.unit.name }}
                   </td>
                   <td class="align-middle">
-                    {{ product.status }}
+                    <span
+                      class="badge"
+                      [class]="
+                        product.status == 'Cotización Aprobada'
+                          ? 'badge-success'
+                          : product.status == 'Cotizaciones cargadas'
+                          ? 'badge-info'
+                          : product.status == 'Pendiente'
+                          ? 'badge-warning'
+                          : 'badge-danger'
+                      "
+                    >
+                      {{ product.status | uppercase }}
+                    </span>
                   </td>
 
                   <td class="align-middle">
@@ -126,17 +139,35 @@
                           class="dropdown-item text-info"
                           href="javascript: void(0);"
                           *ngIf="product.quotation.length == 0"
-                          (click)="openModal(cotizacion_regular, product.id)"
+                          (click)="openModal(modalCotizar, product.id)"
                         >
                           <i class="fas fa-cloud-upload-alt"></i> Cargar
                         </a>
                         <a
                           class="dropdown-item text-success"
                           href="javascript: void(0);"
-                          (click)="openModal2(modalAprobar, product.id)"
+                          *ngIf="product.status == 'Cotizaciones cargadas'"
+                          (click)="openModal2(modalAprobar, product.id, 'lg')"
                         >
                           <i class="fas fa-check"></i> Aprobar
                         </a>
+                        <ng-container
+                          *ngIf="product.status == 'Cotización Aprobada'"
+                        >
+                          <a
+                            class="dropdown-item text-info"
+                            href="javascript: void(0);"
+                            (click)="openModal2(modalAprobar, product.id, 'sm')"
+                          >
+                            <i class="fas fa-eye"></i> Ver
+                          </a>
+                          <a
+                            class="dropdown-item text-success"
+                            href="javascript: void(0);"
+                          >
+                            <i class="fas fa-shopping-cart"></i> Realizar orden
+                          </a>
+                        </ng-container>
                       </div>
                     </div>
                   </td>
@@ -168,7 +199,7 @@
 </ng-container>
 
 <!--  Modal cotizar proveedor existente -->
-<ng-template #cotizacion_regular let-modal>
+<ng-template #modalCotizar let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">Cotizaciones material</h4>
     <button
@@ -295,7 +326,9 @@
 <!--  Modal cotizar proveedor nuevo -->
 <ng-template #modalAprobar let-modal>
   <div class="modal-header">
-    <h5 class="text-primary modal-title">Cotizaciones del producto</h5>
+    <h5 class="text-primary modal-title" *ngIf="!loadingQuotations">
+      {{ validate() ? "Cotización aprobada" : "Cotizaciones del producto" }}
+    </h5>
     <button
       type="button"
       class="close"
@@ -315,13 +348,22 @@
       "
     >
       <div class="row">
-        <div class="col-4" *ngFor="let quotation of quotations; let i = index">
-          <div class="card border border-success">
+        <div
+          *ngFor="let quotation of quotations; let i = index"
+          [class]="quotation.status === 'Aprobada' ? 'col-12' : 'col-md-4'"
+        >
+          <div
+            class="card border border-success"
+            *ngIf="
+              quotation.status == 'Pendiente' || quotation.status == 'Aprobada'
+            "
+          >
             <div class="card-header d-flex justify-content-between">
               <h6 class="text-primary">Cotización {{ i + 1 }}</h6>
               <mat-radio-button
                 color="primary"
                 (click)="selectedQuotation(quotation.id)"
+                *ngIf="quotation.status == 'Pendiente'"
               ></mat-radio-button>
             </div>
             <div class="card-body pt-0">
@@ -333,7 +375,10 @@
                 <small>{{ quotation?.third_party?.full_name }}</small>
               </h5>
               <h5 class="card-title">
-                Precio: <small>{{ quotation?.total_price }}</small>
+                Precio:
+                <small>
+                  $ {{ quotation?.total_price | number : "1.2-2" }}</small
+                >
               </h5>
               <h5 class="card-title">
                 PDF adjunto:
@@ -345,25 +390,29 @@
           </div>
         </div>
       </div>
-      <div class="alert alert-info text-center" role="alert">
-        <strong
-          >Selecciona una cotización para aprobar. Esta acción sólo se podrá
-          realizar una vez.</strong
-        >
-      </div>
+      <ng-container *ngIf="!validate()">
+        <div class="alert alert-info text-center" role="alert">
+          <strong
+            >Selecciona una cotización para aprobar. Esta acción sólo se podrá
+            realizar una vez.</strong
+          >
+        </div>
+      </ng-container>
     </ng-container>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
       Cerrar
     </button>
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="saveQuotationApproved()"
-    >
-      Aprobar
-    </button>
+    <ng-container *ngIf="!validate() && !loadingQuotations">
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="saveQuotationApproved()"
+      >
+        Aprobar
+      </button>
+    </ng-container>
   </div>
 </ng-template>
 

@@ -60,10 +60,18 @@ export class SolicitudCompraVerComponent implements OnInit {
     this._modal.open(content, 'lg');
   }
 
-  openModal2(content, id) {
+  openModal2(content, id, size) {
     this.quotationSelected = undefined;
     this.getQuotationPurchaserequest(id);
-    this._modal.open(content, 'lg');
+    this._modal.open(content, size);
+  }
+
+  validate() {
+    return this.quotations.some(x => x.status == 'Aprobada')
+  }
+
+  reloadData() {
+    this.getData();
   }
 
   createFormCotizacionRegular(id) {
@@ -222,6 +230,8 @@ export class SolicitudCompraVerComponent implements OnInit {
     })
   }
 
+
+
   saveQuotationApproved() {
     if (this.quotationSelected) {
       this._solicitudesCompra.saveQuotationApproved(this.quotationSelected).subscribe((res: any) => {
@@ -233,10 +243,13 @@ export class SolicitudCompraVerComponent implements OnInit {
           timer: 1000
         })
         this._modal.close();
+        this.reloadData();
       })
     } else {
       this._swal.incompleteError()
     }
   }
+
+
 
 }

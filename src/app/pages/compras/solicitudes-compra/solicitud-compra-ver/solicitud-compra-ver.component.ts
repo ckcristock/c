@@ -24,6 +24,7 @@ export class SolicitudCompraVerComponent implements OnInit {
   solicitud: any[] = [];
   datosCabecera: any = {};
   formCotizacionRegular: FormGroup;
+  formCotizacionGeneral: FormGroup;
   proveedores: any = [];
   filteredProveedor: any[] = [];
   quotations: any[] = [];
@@ -52,29 +53,33 @@ export class SolicitudCompraVerComponent implements OnInit {
 
     })
   }
-  //Modales
-  openModal(content, id) {
+  //Modal de cargar cotizaciones
+  openModal(content, id, general) {
     this.getProveedores();
-    this.createFormCotizacionRegular(id);
+    this.createFormCotizacion(id, general);
     this.getConsecutivo();
     this._modal.open(content, 'lg');
   }
 
+  //Modal aprobar cotizaciones
   openModal2(content, id, size) {
     this.quotationSelected = undefined;
     this.getQuotationPurchaserequest(id);
     this._modal.open(content, size);
   }
 
+
+  //Funcion que permite convetir en modal de aprobar a ver
   validate() {
     return this.quotations.some(x => x.status == 'Aprobada')
   }
-
+  // Cargar informacion en el componente ver una vez modales se cierren
   reloadData() {
     this.getData();
   }
 
-  createFormCotizacionRegular(id) {
+  //Formulario de cargar cotizaciones
+  createFormCotizacion(id, general) {
     this.formCotizacionRegular = this.fb.group({
       items: this.fb.array([])
     })
@@ -84,7 +89,8 @@ export class SolicitudCompraVerComponent implements OnInit {
         code: [''],
         total_price: [''],
         format_code: [''],
-        product_purchase_request_id: [id],
+        product_purchase_request_id: [!general ? id : null],
+        purchase_request_id: general ? id : null,
         file: ['', index == 0 ? Validators.required : ''],
       })
       item.get('file').valueChanges.subscribe(value => {
@@ -94,14 +100,15 @@ export class SolicitudCompraVerComponent implements OnInit {
         }
       })
       this.items.push(item)
-
     }
   }
 
+  //Boton brayan pruebas
   printForm() {
     console.log(this.formCotizacionRegular)
   }
 
+  //Funcion que trae los proveedores al formulario de cargar cotizaciones
   getProveedores() {
     this._proveedor.getThirdPartyProvider({}).subscribe((res: any) => {
       this.proveedores = res.data;
@@ -110,10 +117,12 @@ export class SolicitudCompraVerComponent implements OnInit {
     });
   }
 
+  //Funcion que re dirige a el usuario a crear el proveedor sino existe en el formulario
   redirectTercero() {
     window.open('/crm/terceros/crear-tercero', '_blank');
   }
 
+  // Crear consecutivos de las cotizaciones
   async getConsecutivo() {
     await this._consecutivos.getConsecutivo('quotation_purchase_requests').toPromise().then((r: any) => {
       let con = this._consecutivos.construirConsecutivo(r.data);
@@ -127,7 +136,7 @@ export class SolicitudCompraVerComponent implements OnInit {
   }
 
 
-
+  //Funcion de guardar cotizaciones individuales
   saveQuotation() {
     if (this.formCotizacionRegular.valid) {
       let cont = 0;
@@ -172,7 +181,7 @@ export class SolicitudCompraVerComponent implements OnInit {
 
   }
 
-
+  //Funcion que valida el pdf de la cotizacion y lo transforma a base 64
   onFileChanged(event, i) {
     if (event.target.files.length == 1) {
       let file = event.target.files[0];
@@ -196,7 +205,7 @@ export class SolicitudCompraVerComponent implements OnInit {
     }
   }
 
-  //Fin modales
+  //Funcion que trae la informacion del la solicitud a la tabla del componente ver
   getData() {
     this.loading = true;
     this._solicitudesCompra.getDataPurchaseRequest(this.id).subscribe((res: any) => {
@@ -213,15 +222,17 @@ export class SolicitudCompraVerComponent implements OnInit {
     });
   }
 
-
+  //Funcion que crear el form array de los productos
   get items() {
     return this.formCotizacionRegular.get('items') as FormArray;
   }
 
+  //Funcion que selecciona una cotizacion especifica al hacer clic en  el radio button
   selectedQuotation(id) {
     this.quotationSelected = id;
   }
 
+  //funcion que trae todas las ctoizaciones de un producto especifico
   getQuotationPurchaserequest(id) {
     this.loadingQuotations = true;
     this._solicitudesCompra.getQuotationPurchaserequest(id).subscribe((res: any) => {
@@ -231,13 +242,13 @@ export class SolicitudCompraVerComponent implements OnInit {
   }
 
 
-
+  // Funcion que guarda cual cotizacion fue aprobada y por medio del back cambia su status a aprobada y las demas a rechazadas
   saveQuotationApproved() {
     if (this.quotationSelected) {
       this._solicitudesCompra.saveQuotationApproved(this.quotationSelected).subscribe((res: any) => {
         this._swal.show({
           title: 'Operación exitosa',
-          text: '¡Cotización(es) agregadas con éxito!',
+          text: '¡Cotización aprobada con éxito!',
           icon: 'success',
           showCancel: false,
           timer: 1000

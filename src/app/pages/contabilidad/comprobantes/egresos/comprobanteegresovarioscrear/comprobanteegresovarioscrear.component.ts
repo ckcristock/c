@@ -445,7 +445,6 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       this.position_document = pos;
       let p: any = { nit: nit };
       let id_plan_cuenta = this.Cuentas_Contables[pos].Cuenta.value;
-      console.log(id_plan_cuenta)
       if (id_plan_cuenta != '') {
         p.id_plan_cuenta = id_plan_cuenta;
       }
@@ -572,7 +571,6 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
       //(document.getElementById(id) as HTMLInputElement).focus();
       this.Nom_Centro_Costo = ''
       event.target.value = ''
-      console.log(event)
       this._swal.show({
         icon: 'error',
         title: '¡Incorrecto!',
@@ -613,7 +611,6 @@ export class ComprobanteegresovarioscrearComponent implements OnInit {
     });
     this.http.get(environment.base_url + '/php/comprobantes/lista_cuentas.php').subscribe((data: any) => {
       this.Cuenta = data;
-      console.log(data, this.Cuenta)
     });
     this.http.get(environment.base_url + '/php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
       this.Centros = data;

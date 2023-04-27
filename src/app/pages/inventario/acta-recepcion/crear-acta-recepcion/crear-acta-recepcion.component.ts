@@ -434,7 +434,6 @@ export class CrearActaRecepcionComponent implements OnInit {
         orden: this.route.snapshot.params['codigo'],
       }
       this._actaRecepcion.codigoBarras(params).subscribe((data: any) => {
-        console.log(data);
         let product = data.producto[0];
         if (data.Id_Producto) {
           let posicion = this.Lista_Productos.findIndex(

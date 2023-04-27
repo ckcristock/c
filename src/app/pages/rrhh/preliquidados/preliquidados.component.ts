@@ -52,7 +52,6 @@ export class PreliquidadosComponent implements OnInit {
     this.createForm();
     this.getPreliquidados();
     this.getPreliquidadosList();
-    console.log(this.preliquidados);
     this.responsable = this._user.user;
   }
 
@@ -60,8 +59,6 @@ export class PreliquidadosComponent implements OnInit {
     this.formFilters = this.fb.group({
       person_id: ''
     })
-    console.log(this.formFilters.controls.value);
-
     this.formFilters.valueChanges.pipe(
       debounceTime(500),
     ).subscribe(r => {
@@ -192,10 +189,8 @@ export class PreliquidadosComponent implements OnInit {
         this._detalle.setPreliquidadoLog(info).subscribe((res: any) => {
           if (res.status) {
             this._detalle.blockUser({ status: 'Activo' }, preliquidado.id).subscribe((r: any) => {
-              console.log(r.status);
             })
             this._preliquidadosService.activate({ status: 'Activo' }, preliquidado.id).subscribe((r: any) => {
-              console.log(r);
               this.getPreliquidados();
               this._swal.show({
                 icon: 'success',

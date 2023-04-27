@@ -49,8 +49,6 @@ export class NotascreditoComponent implements OnInit {
   constructor(private http: HttpClient, public globales: Globales, private route: ActivatedRoute, private location: Location) {
     // this.perfilUsuario = localStorage.getItem('miPerfil');
     // this.funcionario = JSON.parse(localStorage.getItem('User')).Identificacion_Funcionario;
-    console.log(this.funcionario);
-
     // this.getServicios();
 
 
@@ -93,8 +91,6 @@ export class NotascreditoComponent implements OnInit {
     let params: any = {
       pag: this.page1
     };
-    console.log('page', this.page1);
-
     if (this.filtro_cod_nota != "") {
       params.cod_nota = this.filtro_cod_nota;
     }
@@ -196,7 +192,6 @@ export class NotascreditoComponent implements OnInit {
     } else {
       this.filtro_fecha_nota = '';
     }
-    console.log('fecha date_R', this.filtro_fecha_nota);
     this.filtros1();
   }
   fechita: any;

@@ -169,7 +169,6 @@ export class TiposActivoFijoComponent implements OnInit {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    console.log(this.CuentaNiif);
   }
   private getDismissReason(reason: any) {
     this.form.reset();

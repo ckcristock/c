@@ -42,8 +42,8 @@ export const hospedajeHelper = {
 
   createHotelGroup(fb: FormBuilder) {
     return fb.group({
-      tipo: ['Seleccione'],
-      hotel_id: [],
+      tipo: ['Selecciona'],
+      hotel_id: [''],
       phone: [],
       rate: [0],
       hoteles: [],
@@ -111,11 +111,11 @@ export const hospedajeHelper = {
   getTotalHospedaje(form: FormGroup, list: FormArray) {
     let total = list.value.reduce(
       (a, b) => {
-          if (b.tipo == 'Nacional'){
-            return { inter: a.inter, nac: a.nac + b.total };
-          }else{
-            return { nac: a.nac, inter: a.inter + b.total };
-          }
+        if (b.tipo == 'Nacional') {
+          return { inter: a.inter, nac: a.nac + b.total };
+        } else {
+          return { nac: a.nac, inter: a.inter + b.total };
+        }
       },
       { nac: 0, inter: 0 }
     );

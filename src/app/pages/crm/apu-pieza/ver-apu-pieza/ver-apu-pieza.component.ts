@@ -56,12 +56,10 @@ export class VerApuPiezaComponent implements OnInit {
       this.donwloading = false;
     }),
       (error) => {
-        console.log('Error downloading the file');
         this.donwloading = false;
       },
       () => {
         this.donwloading = false;
-        console.info('File downloaded successfully');
       };
   }
 }

@@ -24,15 +24,13 @@ export class DashboardComponent implements OnInit {
       .getPersonBoards(this.personId)
       .subscribe(
         (d: any) => {
-          //console.log(d)
           if (d.data.length == 0){
             this.board = 0
           } else {
             for (let i in d.data){
               this.board = d.data[i].id
             }
-          }          
-          //console.log(this.board)
+          }
         });
   } */
 }

@@ -56,23 +56,17 @@
           <div ngbDropdown container="body" class="dropdown-primary">
             <button
               ngbDropdownToggle
-              class="btn btn-secondary btn-sm  "
+              class="btn btn-secondary btn-sm"
               type="button"
               [disabled]="DeshabilitarBoton"
             >
               Rotativo
             </button>
             <div ngbDropdownMenu class="dropdown-menu-2">
-              <a
-                class="dropdown-item  "
-                (click)="GetRotativo('Pos')"
-              >
+              <a class="dropdown-item" (click)="GetRotativo('Pos')">
                 Rotativo</a
               >
-              <a
-                class="dropdown-item  "
-                (click)="GetRotativo('NoPos')"
-              >
+              <a class="dropdown-item" (click)="GetRotativo('NoPos')">
                 Solo Pendientes
               </a>
             </div>
@@ -92,7 +86,6 @@
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
-
             *ngIf="!Cargando && Lista_Productos.length > 0; else notData"
           >
             <thead class="bg-light">
@@ -175,7 +168,7 @@
                   <strong>{{ item.Categoria }} / </strong><br />
                   <!-- <span *ngIf="item.Id_Producto != ''" class="mytooltip tooltip-effect-2"> -->
                   <span class="tooltip-item2">
-                    {{ item.Embalaje | truncate: 12 }}
+                    {{ item.Embalaje | truncate : 12 }}
                   </span>
                   <span class="tooltip-content4 clearfix">
                     <span class="tooltip-text2">{{ item.Embalaje }}</span>
@@ -228,7 +221,9 @@
                     min="0"
                     class="form-control form-control-sm text-right f-9 tabla"
                     [readonly]="Tipo_Remision == 'Interna'"
-                    (change)="ComprobarCantidades(i); CalcularSubtotalProducto(i)"
+                    (change)="
+                      ComprobarCantidades(i); CalcularSubtotalProducto(i)
+                    "
                     onkeypress="return event.charCode >= 48  && event.charCode <= 57 "
                   />
                 </td>
@@ -307,7 +302,7 @@
                   }"
                 >
                   <!-- Subtotal -->
-                  <label>{{ item.Subtotal | customcurrency }}</label>
+                  <label>{{ item.Subtotal | currency }}</label>
                 </td>
                 <td class="text-center">
                   <!-- Boton -->
@@ -328,19 +323,19 @@
             <tbody>
               <tr>
                 <th>Subtotal:</th>
-                <td>{{ _remisionModel.Subtotal_Remision | customcurrency }}</td>
+                <td>{{ _remisionModel.Subtotal_Remision | currency }}</td>
               </tr>
               <tr>
                 <th>Descuento:</th>
-                <td>{{ _remisionModel.Descuento_Remision | customcurrency }}</td>
+                <td>{{ _remisionModel.Descuento_Remision | currency }}</td>
               </tr>
               <tr>
                 <th>Impuestos:</th>
-                <td>{{ _remisionModel.Impuesto_Remision | customcurrency }}</td>
+                <td>{{ _remisionModel.Impuesto_Remision | currency }}</td>
               </tr>
               <tr>
                 <th>Precio Total:</th>
-                <td>{{ _remisionModel.Costo_Remision | customcurrency }}</td>
+                <td>{{ _remisionModel.Costo_Remision | currency }}</td>
               </tr>
             </tbody>
           </table>

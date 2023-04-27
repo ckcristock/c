@@ -160,14 +160,11 @@ export class ConfiguracionEmpresaComponent implements OnInit {
   }
 
   changePaymentConfiguration() {
-    console.log(this.datosEmpresa);
     this.form.value.company_id = 1;
     this._configuracionEmpresaService.changePaymentConfiguration(this.form.value)
       .subscribe((res: any) => {
-        console.log(this.form.value);
         this._modal.close();
         this.form.reset();
-        console.log(res)
         this._swal.show({
           icon: 'success',
           title: 'Configuración cambiada',

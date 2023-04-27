@@ -29,7 +29,7 @@ export class DotacionService {
   }
 
 
-  getStok(params ) {
+  getStok(params) {
     return this.http.get(`${environment.base_url}/inventary-dotation-stock`, { params })
     // .pipe(
     //   map((data:any) =>{
@@ -48,25 +48,25 @@ export class DotacionService {
     //   );
   }
 
-  getTotatInventary(params = {}){
+  getTotatInventary(params = {}) {
     return this.http.get(`${environment.base_url}/get-total-inventary`, { params })
   }
 
-  getSelected(params = {}){
+  getSelected(params = {}) {
     return this.http.get(`${environment.base_url}/get-selected`, { params })
   }
 
 
   getStokEpp(params = {}) {
     return this.http.get(`${environment.base_url}/inventary-dotation-stock-epp`, { params })
-    .pipe(
-      map((data:any) =>{
-        data.data.forEach(element => {
-         element.stock = element.inventary.reduce((acc, el) => {return acc + el.stock},0)
-         element.show = false;
-        });
-        return data;
-      })
+      .pipe(
+        map((data: any) => {
+          data.data.forEach(element => {
+            element.stock = element.inventary.reduce((acc, el) => { return acc + el.stock }, 0)
+            element.show = false;
+          });
+          return data;
+        })
       );
   }
 
@@ -80,9 +80,7 @@ export class DotacionService {
 
   // getDotationsProduct(params = {}) {
   getDotationsProduct({ params }) {
-        console.log(params);
-
-    return this.http.get(`${environment.base_url}/dotations-list-product`, {params} )
+    return this.http.get(`${environment.base_url}/dotations-list-product`, { params })
   }
 
   setDotation({ id, data }) {
@@ -94,18 +92,18 @@ export class DotacionService {
 
   }
 
-  getDotationTotalByCategory( params ){
+  getDotationTotalByCategory(params) {
     return this.http.get(`${environment.base_url}/dotations-total-types`, { params })
   }
 
   DownloadInventoryDotation(date1, date2, params = {}) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.get(`${environment.base_url}/dotations/download/${date1}/${date2}`,{ params, headers, responseType: 'blob' as 'json' });
+    return this.http.get(`${environment.base_url}/dotations/download/${date1}/${date2}`, { params, headers, responseType: 'blob' as 'json' });
   }
 
   downloadDeliveries(date1, date2, params = {}) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.get(`${environment.base_url}/downloadeliveries/download/${date1}/${date2}`,{ params, headers, responseType: 'blob' as 'json' });
+    return this.http.get(`${environment.base_url}/downloadeliveries/download/${date1}/${date2}`, { params, headers, responseType: 'blob' as 'json' });
   }
 
 }

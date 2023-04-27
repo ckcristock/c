@@ -65,8 +65,6 @@ export class ModalcambiarproductossimilarnuevoComponent implements OnInit {
 
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data: any) => {
-      console.log(data);
-
       //this.ListaAgregados = data.agregados;
       this.Cargando = true;
       this.ListaProductos = data.producto.Similares;
@@ -178,7 +176,6 @@ export class ModalcambiarproductossimilarnuevoComponent implements OnInit {
       data.append("mes", mes);
       data.append("grupo", grupo);
       this.http.post('php/remision_nuevo/guardar_cambio_producto.php', { params: data }).subscribe((data: any) => {
-        console.log(data);
         this.alertOption.text = data.mensaje;
         this.CambiarProducto(data);
       });

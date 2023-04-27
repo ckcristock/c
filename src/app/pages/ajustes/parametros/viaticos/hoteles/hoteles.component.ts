@@ -104,7 +104,6 @@ export class HotelesComponent implements OnInit {
           this.loadingTypes = false;
           this.paginationAccomodations.collectionSize = res.data.total
         } else {
-          console.log('error', res.err);
           this._swal.error()
         }
       })
@@ -113,7 +112,6 @@ export class HotelesComponent implements OnInit {
         if (res.status) {
           this.accommodations = res.data
         } else {
-          console.log('error', res.err);
         }
       })
   }

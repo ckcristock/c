@@ -20,7 +20,7 @@ export class UserService {
     private router: Router,
     private ngZone: NgZone
   ) // private getMenu:
-  {}
+  { }
 
   get token(): string {
     return localStorage.getItem('token') || '';
@@ -34,11 +34,10 @@ export class UserService {
       map((resp: any) => {
         const { id, usuario, change_password, person, menu } = resp.user;
         this.user = new User(id, usuario, change_password, person, menu);
-        //console.log(resp.user.state)
-        if(resp.user.state == 'Inactivo'){
+        if (resp.user.state == 'Inactivo') {
           this.logout();
           return false;
-        } 
+        }
         this.guardarLocalStorage(resp.token);
         return true;
       }),

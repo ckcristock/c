@@ -28,7 +28,7 @@ export class ColillaPagoComponent implements OnInit {
   constructor(
     private _payrollDetail: PayRollDetailService,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loading = true;
@@ -52,9 +52,8 @@ export class ColillaPagoComponent implements OnInit {
     return moment().get('date') > 15;
   }
 
-  get hasNovedad(){
-    //console.log(this.novedadesDatos.novedades);
-    if (this.novedadesDatos.novedades!= undefined || this.novedadesDatos.novedades?.length > 0) {
+  get hasNovedad() {
+    if (this.novedadesDatos.novedades != undefined || this.novedadesDatos.novedades?.length > 0) {
       return Object.keys(this.novedadesDatos.novedades).length > 0
     } else {
       return []
@@ -63,7 +62,7 @@ export class ColillaPagoComponent implements OnInit {
 
   async getNominaSeguridadFuncionario() {
 
-    this._payrollDetail.getSocialSecurity().subscribe( (r:any ) =>{
+    this._payrollDetail.getSocialSecurity().subscribe((r: any) => {
       this.nominaSeguridadFuncionario = r;
     })
 

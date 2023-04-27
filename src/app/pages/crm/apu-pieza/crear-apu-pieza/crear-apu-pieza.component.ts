@@ -200,7 +200,6 @@ export class CrearApuPiezaComponent implements OnInit {
   async getBases() {
     await this._calculationBase.getAll().toPromise().then((r: any) => {
       this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
-      console.log(this.calculationBase)
       /* if (this.dataEdit) {
         this.calculationBase.trm.value = this.dataEdit.trm
       } */
@@ -635,7 +634,6 @@ export class CrearApuPiezaComponent implements OnInit {
       this.form.patchValue({
         files: this.fileArr
       });
-      console.log(this.form.value);
       this._swal
         .show({
           text: `Vamos a ${this.id && this.title == 'Editar pieza' ? 'editar' : 'crear'} una pieza`,

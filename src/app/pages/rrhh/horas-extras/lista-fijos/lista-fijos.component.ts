@@ -20,7 +20,7 @@ export class ListaFijosComponent implements OnInit {
   constructor(
     private _extraHour: ExtraHoursService,
     private _swal: SwalService,
-    ) {}
+  ) { }
 
   personData: any;
   loading: boolean = false;
@@ -47,26 +47,26 @@ export class ListaFijosComponent implements OnInit {
     });
   }
 
-  data(data){
+  data(data) {
     let dia = {
-      'person_id' : data.person_id,
-      'date' : data.date,
-      'ht' : data.horasTrabajadas,
-      'hed' : data.horasExtrasDiurnas,
-      'hen' : data.horasExtrasNocturnas,
-      'heddf' : data.horasExtrasDiurnasFestivasDom,
-      'hendf' : data.horasExtrasNocturnasFestivasDom,
-      'hrn' : data.recargosNocturnos,
-      'hrddf' : data.recargosFestivos,
-      'hrndf' : data.recargosNocturnosFestivos,
-      'hed_reales' : data.horasExtrasDiurnasReales,
-      'hen_reales' : data.horasExtrasNocturnasReales,
-      'hedfd_reales' : data.horasExtrasDiurnasFestivasDomReales,
-      'hedfn_reales' : data.horasExtrasNocturnasFestivasDomReales,
-      'rn_reales' : data.recargosNocturnosReales,
-      'rf_reales' : data.recargosFestivosReales,
-      'rnf_reales' : data.recargosNocturnosFestivosReales,
-      'validada' : data.validada,
+      'person_id': data.person_id,
+      'date': data.date,
+      'ht': data.horasTrabajadas,
+      'hed': data.horasExtrasDiurnas,
+      'hen': data.horasExtrasNocturnas,
+      'heddf': data.horasExtrasDiurnasFestivasDom,
+      'hendf': data.horasExtrasNocturnasFestivasDom,
+      'hrn': data.recargosNocturnos,
+      'hrddf': data.recargosFestivos,
+      'hrndf': data.recargosNocturnosFestivos,
+      'hed_reales': data.horasExtrasDiurnasReales,
+      'hen_reales': data.horasExtrasNocturnasReales,
+      'hedfd_reales': data.horasExtrasDiurnasFestivasDomReales,
+      'hedfn_reales': data.horasExtrasNocturnasFestivasDomReales,
+      'rn_reales': data.recargosNocturnosReales,
+      'rf_reales': data.recargosFestivosReales,
+      'rnf_reales': data.recargosNocturnosFestivosReales,
+      'validada': data.validada,
     }
     this.information.push(dia);
   }
@@ -77,17 +77,15 @@ export class ListaFijosComponent implements OnInit {
       text: 'Vas a realizar la validación de las horas extras del funcionario, confirma que todo coincida correctamente pues esto afectará los cálculos de nómina.',
       icon: 'warning',
     })
-    .then((res)=>{
-      if(res.isConfirmed){
-        console.log('confirmado')
-        this._extraHour.createExtrasWeek(this.information)
-        .subscribe(this.respuesta);
-      }
-    });
+      .then((res) => {
+        if (res.isConfirmed) {
+          this._extraHour.createExtrasWeek(this.information)
+            .subscribe(this.respuesta);
+        }
+      });
   }
 
-  respuesta = (r:any) => {
-    console.log(r)
+  respuesta = (r: any) => {
     if (r.status) {
       this._swal.show({
         title: 'Guardado con éxito',

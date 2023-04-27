@@ -22,7 +22,6 @@ export class TableNegociosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.paginacion)
   }
 
   nextState(state, id) {

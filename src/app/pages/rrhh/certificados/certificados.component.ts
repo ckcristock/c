@@ -170,7 +170,7 @@ export class CertificadosComponent implements OnInit {
   createFormLaboral() {
     this.formLaboral = this.fb.group({
       information: ['', Validators.required],
-      person_id: ['', Validators.required],
+      person_id: [null, Validators.required],
       reason: ['', Validators.required],
       addressee: ['']
     })
@@ -188,8 +188,8 @@ export class CertificadosComponent implements OnInit {
     })
     this.formCesantias.get('monto').valueChanges.subscribe(r => {
       r == 'parcial' ?
-      this.formCesantias.get('valormonto').enable() :
-      this.formCesantias.get('valormonto').disable()
+        this.formCesantias.get('valormonto').enable() :
+        this.formCesantias.get('valormonto').disable()
     })
   }
 

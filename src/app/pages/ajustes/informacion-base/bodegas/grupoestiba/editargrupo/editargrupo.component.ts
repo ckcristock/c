@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, ViewChild, Output } from '@angular/core';
-import swal,{SweetAlertOptions} from 'sweetalert2';
+import swal, { SweetAlertOptions } from 'sweetalert2';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -9,16 +9,16 @@ import { HttpClient } from '@angular/common/http';
 })
 export class EditargrupoComponent implements OnInit {
   @Output('actualizarGrupos') actualizarGrupos = new EventEmitter<any>();
-  @Input('abrirModalGrupo') abrirModalGrupo:EventEmitter<any>;
-  @ViewChild('modalActualizarGrupo') modalActualizarGrupo:any;
-  @ViewChild('alert') alert:any;
-  
-  public alertOption:SweetAlertOptions;
+  @Input('abrirModalGrupo') abrirModalGrupo: EventEmitter<any>;
+  @ViewChild('modalActualizarGrupo') modalActualizarGrupo: any;
+  @ViewChild('alert') alert: any;
+
+  public alertOption: SweetAlertOptions;
   public tipo = '';
-  public grupo :any ={
-    Nombre:'',
-    Fecha_Vencimiento:'',
-    Presentacion:''
+  public grupo: any = {
+    Nombre: '',
+    Fecha_Vencimiento: '',
+    Presentacion: ''
   }
   constructor() {
     /* this.alertOption = {
@@ -30,7 +30,7 @@ export class EditargrupoComponent implements OnInit {
       showLoaderOnConfirm: true,
       focusCancel: true,
       type: "question",
-  
+
       preConfirm: () => {
         return new Promise((data) => {
             this.guardar();
@@ -38,21 +38,20 @@ export class EditargrupoComponent implements OnInit {
       },
       allowOutsideClick: () => !swal.isLoading(),
       }; */
-      
-   }
+
+  }
 
   ngOnInit() {
-    this.abrirModalGrupo.subscribe(event=>{
-      if (event.Grupo && event.Tipo=='Editar') {
-        this.grupo = Object.assign({}, event.Grupo) ;
-        console.log(event);
-        this.alertOption.text='aasdasdasd';
-      }else{
-        this.grupo={
-          Nombre:'',
-          Fecha_Vencimiento:'',
-          Presentacion:'',
-          Id_Bodega_Nuevo:event.Grupo.Id_Bodega_Nuevo
+    this.abrirModalGrupo.subscribe(event => {
+      if (event.Grupo && event.Tipo == 'Editar') {
+        this.grupo = Object.assign({}, event.Grupo);
+        this.alertOption.text = 'aasdasdasd';
+      } else {
+        this.grupo = {
+          Nombre: '',
+          Fecha_Vencimiento: '',
+          Presentacion: '',
+          Id_Bodega_Nuevo: event.Grupo.Id_Bodega_Nuevo
         };
       }
       this.tipo = event.Tipo;
@@ -61,12 +60,12 @@ export class EditargrupoComponent implements OnInit {
 
   }
 
-  cerrarModal(){
+  cerrarModal() {
     this.modalActualizarGrupo.hide();
   }
 
   /* guardar(){
-  
+
     const data = new FormData();
     data.append('Grupo',JSON.stringify(this.grupo));
     data.append('Tipo',this.tipo);
@@ -86,7 +85,7 @@ export class EditargrupoComponent implements OnInit {
       })
   } */
 
-  OnDestroy(){
+  OnDestroy() {
     this.abrirModalGrupo.unsubscribe();
   }
 }

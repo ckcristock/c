@@ -63,7 +63,7 @@ export class TiposActividadesComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset()
-    
+
   }
 
   createForm() {
@@ -85,7 +85,6 @@ export class TiposActividadesComponent implements OnInit {
 
   CambiarEstadoTipo(id, state) {
     this._tipoAct.setActivityType({ id, state }).subscribe((r: any) => {
-      console.log(r)
       if (r.code == 200) {
         this._swal.show({
           title: 'Operación exitosa',
@@ -111,7 +110,6 @@ export class TiposActividadesComponent implements OnInit {
 
   save() {
     this._tipoAct.saveActivityType(this.form.value).subscribe((r: any) => {
-      console.log(r);
       this.getActivityTypes();
       this.modalService.dismissAll();
       this.form.reset();

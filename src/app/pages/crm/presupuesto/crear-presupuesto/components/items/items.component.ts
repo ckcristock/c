@@ -315,7 +315,6 @@ export class ItemsComponent implements OnInit {
   }
 
   viewForm() {
-    console.log(this.forma.value)
   }
 
   makeSubItemGroup(apu, edit = false) {
@@ -712,7 +711,6 @@ export class ItemsComponent implements OnInit {
     indirect.forEach((element) => {
       indirectCosts.push(this.indirectCostgroup(element, this.fb, true));
     });
-    console.log(indirectCosts)
     return indirectCosts
   }
 

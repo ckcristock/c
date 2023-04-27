@@ -55,22 +55,21 @@ export class CesantiasComponent implements OnInit {
     }).then(r => {
       if (r.isConfirmed) {
         this._certificados.updateLayoffsCertificate(item.id, data)
-        .subscribe((res:any) => {
-          this.getLayoffsCertificates();
-          this._swal.show({
-            title: res.data,
-            text: state == 'Aprobada' ? 'Cesantías aporbadas con éxito' : 'Cesantías rechazada con éxito',
-            icon: 'success',
-            showCancel: false,
-            timer: 1000
+          .subscribe((res: any) => {
+            this.getLayoffsCertificates();
+            this._swal.show({
+              title: res.data,
+              text: state == 'Aprobada' ? 'Cesantías aporbadas con éxito' : 'Cesantías rechazada con éxito',
+              icon: 'success',
+              showCancel: false,
+              timer: 1000
+            })
           })
-        })
-        console.log(item)
       }
     });
   }
 
-  downloadComprobante(id){
+  downloadComprobante(id) {
     this._certificados.downloadComprobante(id).subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/pdf' });
       let link = document.createElement('a');
@@ -80,10 +79,8 @@ export class CesantiasComponent implements OnInit {
       link.click();
     },
       (error) => {
-        console.log('Error downloading the file');
       },
       () => {
-        console.info('File downloaded successfully');
       })
   }
 }

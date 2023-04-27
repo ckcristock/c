@@ -6,15 +6,18 @@
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-info btn-sm" (click)="openClose()">
+          <button class="btn btn-danger btn-sm" (click)="DescargaExcel()">
+            <i class="fas fa-file-pdf"></i> Descargar
+          </button>
+          <button class="btn btn-info btn-sm" (click)="matPanel.toggle()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
       </div>
     </div>
     <hr class="line" />
-    <mat-accordion multi>
-      <mat-expansion-panel class="mat-elevation-z0">
+    <mat-accordion>
+      <mat-expansion-panel #matPanel class="mat-elevation-z0">
         <div class="row">
           <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre del producto</mat-label>
@@ -34,17 +37,6 @@
               type="text"
               placeholder="Busca por grupo estiba"
               [(ngModel)]="filtro_grupo"
-              (input)="filtro()"
-              autocomplete="off"
-            />
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Lote</mat-label>
-            <input
-              matInput
-              type="text"
-              placeholder="Busca por lote"
-              [(ngModel)]="filtro_lote"
               (input)="filtro()"
               autocomplete="off"
             />
@@ -117,7 +109,7 @@
             <mat-label>Bodega</mat-label>
             <mat-select
               [(ngModel)]="bodega_selected"
-              (selectionChange)="buscar_categorias($event.target.value)"
+              (selectionChange)="buscar_categorias($event.value)"
             >
               <mat-option value="">Todas</mat-option>
               <mat-option
@@ -172,17 +164,6 @@
               (change)="filtro()"
             />
             Sin inventario
-          </div>
-          <div class="col">
-            <button
-              mat-raised-button
-              color="primary"
-              class="text-white"
-              (click)="DescargaExcel()"
-            >
-              <mat-icon>file_download</mat-icon>
-              Descargar
-            </button>
           </div>
         </div>
       </mat-expansion-panel>

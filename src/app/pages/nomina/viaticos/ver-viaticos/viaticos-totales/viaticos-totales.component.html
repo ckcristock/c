@@ -1,8 +1,5 @@
 <div class="rounded-top table-responsive">
-  <table
-    class="table table-bordered table-striped table-sm"
-    
-  >
+  <table class="table table-bordered table-striped table-sm">
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
         <th>Observaciones</th>
@@ -10,23 +7,20 @@
     </thead>
     <tbody>
       <tr>
-        <td>{{ data.observation }}</td>
+        <td>{{ data.observation || "Sin observaciones" }}</td>
       </tr>
     </tbody>
   </table>
 </div>
 <hr />
 <div class="rounded-top table-responsive">
-  <table
-    class="table table-bordered table-striped table-sm"
-    
-  >
+  <table class="table table-bordered table-striped table-sm">
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
-        <th class="col-md-3">Item</th>
+        <th>Item</th>
         <th>Dolares</th>
         <th>Pesos</th>
-        <th class="col-md-3">Item</th>
+        <th>Item</th>
         <th>Dolares</th>
         <th>Pesos</th>
       </tr>
@@ -35,65 +29,58 @@
       <tr class="text-center">
         <th class="align-middle">Hospedaje</th>
         <td class="text-right">
-          {{ data.total_hotels_usd | currency }}
+          USD {{ data.total_hotels_usd | number : "1.2-2" }}
         </td>
         <td class="text-right">
-          {{ data.total_hotels_cop | currency: 'COP' }}
+          ${{ data.total_hotels_cop | number : "1.2-2" }}
         </td>
         <th class="align-middle">Transporte Terrestre</th>
         <td></td>
         <td class="text-right">
-          {{ data.total_transports_cop | currency: 'COP' }}
+          ${{ data.total_transports_cop | number : "1.2-2" }}
         </td>
       </tr>
       <tr class="text-center">
         <th class="align-middle">Taxis</th>
         <td class="text-right">
-          {{ data.total_taxis_usd | currency }}
+          USD {{ data.total_taxis_usd | number : "1.2-2" }}
         </td>
         <td class="text-right">
-          {{ data.total_taxis_cop | currency: 'COP' }}
+          ${{ data.total_taxis_cop | number : "1.2-2" }}
         </td>
         <th class="align-middle">Alimentación</th>
         <td class="text-right">
-          {{ data.total_feedings_usd | currency }}
+          USD {{ data.total_feedings_usd | number : "1.2-2" }}
         </td>
         <td class="text-right">
-          {{ data.total_feedings_cop | currency: 'COP' }}
+          ${{ data.total_feedings_cop | number : "1.2-2" }}
         </td>
       </tr>
       <tr class="text-center">
         <th class="align-middle">Lavanderia</th>
         <td class="text-right">
-          {{ data.total_laundry_usd | currency }}
+          USD {{ data.total_laundry_usd | number : "1.2-2" }}
         </td>
         <td class="text-right">
-          {{ data.total_laundry_cop | currency: 'COP' }}
+          ${{ data.total_laundry_cop | number : "1.2-2" }}
         </td>
         <th class="align-middle">Sobre Equipaje</th>
         <td class="text-right">
-          {{ data.baggage_usd | currency }}
+          USD {{ data.baggage_usd | number : "1.2-2" }}
         </td>
-        <td class="text-right">
-          {{ data.baggage_cop | currency: 'COP' }}
-        </td>
+        <td class="text-right">${{ data.baggage_cop | number : "1.2-2" }}</td>
       </tr>
       <tr class="text-center">
         <th class="align-middle">Otros Gastos</th>
         <td class="text-right">
-          {{ data.other_expenses_usd | currency }}
+          USD {{ data.other_expenses_usd | number : "1.2-2" }}
         </td>
         <td class="text-right">
-          {{ data.other_expenses_cop | currency: 'COP' }}
+          ${{ data.other_expenses_cop | number : "1.2-2" }}
         </td>
         <th class="align-middle">Total</th>
-        <td class="text-right">
-          {{ data.total_usd | currency }}
-        </td>
-  
-        <td class="text-right">
-          {{ data.total_cop | currency: 'COP' }}
-        </td>
+        <td class="text-right">USD {{ data.total_usd | number : "1.2-2" }}</td>
+        <td class="text-right">${{ data.total_cop | number : "1.2-2" }}</td>
       </tr>
     </tbody>
   </table>

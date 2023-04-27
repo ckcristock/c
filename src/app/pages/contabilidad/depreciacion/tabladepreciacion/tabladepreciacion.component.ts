@@ -92,8 +92,6 @@ export class TabladepreciacionComponent implements OnInit {
         // this.ShowSwal(data.tipo, data.titulo, data.mensaje);
       }
     }, error => {
-      console.log(error);
-
       /* let response = {
         tipo: 'error',
         mensaje: 'Ha ocurrido un error en la conexión. Por favor vuelve a intentarlo',

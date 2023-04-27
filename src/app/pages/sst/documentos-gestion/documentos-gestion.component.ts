@@ -51,6 +51,5 @@ export class DocumentosGestionComponent implements OnInit {
         }
       }
     });
-    //console.log(this.rutaActiva.snapshot.params.modulo);
   }
 }

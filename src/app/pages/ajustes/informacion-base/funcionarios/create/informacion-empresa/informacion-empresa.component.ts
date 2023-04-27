@@ -72,7 +72,6 @@ export class InformacionEmpresaComponent implements OnInit {
   getCompanies() {
     this._company.getCompanies().subscribe((d: any) => {
       this.companies = d.data;
-      console.log(this.companies)
       d.data[0]
         ? this.formCompany.patchValue({ company_id: d.data[0].value })
         : '';
@@ -102,7 +101,7 @@ export class InformacionEmpresaComponent implements OnInit {
     this._workContractTypes.getContractTerms().subscribe((r: any) => {
       this.contractTerms = []
       r.data.forEach(
-        (contract_term:any) => contract_term.work_contract_types.forEach(
+        (contract_term: any) => contract_term.work_contract_types.forEach(
           (work_contract_type: any) => {
             if (work_contract_type.id == value) {
               this.contractTerms.push(contract_term)
@@ -138,7 +137,6 @@ export class InformacionEmpresaComponent implements OnInit {
 
   turnChanged(turno) {
     if (turno == 'Fijo') {
-      console.log('llegando')
       this.formCompany.get('fixed_turn_id').enable();
       this.formCompany.get('fixed_turn_id').setValidators(Validators.required);
     } else {

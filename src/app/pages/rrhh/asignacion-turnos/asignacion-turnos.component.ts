@@ -229,7 +229,6 @@ export class AsignacionTurnosComponent implements OnInit {
   getTurns() {
     this._rotatingTurn.getAllSelect().subscribe((r: any) => {
       this.turns = r;
-      /* console.log(this.turns) */
     });
   }
 

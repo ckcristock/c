@@ -14,28 +14,24 @@
   <div class="modal-body">
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="row">
-        <div class="col-md-4" [ngClass]="person_id_invalid ? 'mb-0' : 'mb-4'">
+        <div class="col-md-4 mat-form-field-wrapper">
           <ng-select
             formControlName="person_id"
             [items]="people"
             bindLabel="text"
             bindValue="value"
-            placeholder="Funcionario"
+            placeholder="Funcionario *"
             appearance="outline"
+            [clearable]="false"
+            [class.is-invalid]="form.get('person_id').invalid"
             [appendTo]="'body'"
             loadingText="loading"
             ngDefaultControl
             required
           >
           </ng-select>
-          <span class="ml-2" *ngIf="person_id_invalid">
-            <small class="text-danger"><b> Campo obligatorio </b></small>
-          </span>
         </div>
-        <div
-          class="col-md-4"
-          [ngClass]="disability_leave_id_invalid ? 'mb-0' : 'mb-4'"
-        >
+        <div class="col-md-4 mat-form-field-wrapper">
           <ng-select
             formControlName="disability_leave_id"
             [items]="disabilityLeaves"
@@ -43,16 +39,15 @@
             (change)="obtenerTipoNovedad($event.value)"
             bindValue="value"
             appearance="outline"
+            [clearable]="false"
+            [class.is-invalid]="form.get('disability_leave_id').invalid"
             [appendTo]="'body'"
-            placeholder="Novedad"
+            placeholder="Novedad *"
             loadingText="loading"
             ngDefaultControl
             required
           >
           </ng-select>
-          <span class="ml-2" *ngIf="disability_leave_id_invalid">
-            <small class="text-danger"><b> Campo obligatorio </b></small>
-          </span>
         </div>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de novedad</mat-label>

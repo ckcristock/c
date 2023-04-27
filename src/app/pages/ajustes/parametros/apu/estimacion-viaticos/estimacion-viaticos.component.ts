@@ -92,7 +92,6 @@ export class EstimacionViaticosComponent implements OnInit {
     let land_national_value = this.form.get('land_national_value');
     let land_international_value = this.form.get('land_international_value');
     displacement.valueChanges.subscribe(r => {
-      console.log(r)
       if (r?.length > 0 || destination.value?.length > 0) {
         unit_value.disable();
         national_value.disable();
@@ -148,7 +147,6 @@ export class EstimacionViaticosComponent implements OnInit {
       }
     })
     destination.valueChanges.subscribe(r => {
-      console.log(r)
       if (displacement.value?.length == 0) {
 
       }
@@ -222,7 +220,6 @@ export class EstimacionViaticosComponent implements OnInit {
   }
 
   verForm() {
-    console.log(this.form.value)
   }
   getEstimation(measure) {
     this.estimation = { ...measure };

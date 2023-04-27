@@ -24,7 +24,6 @@ export class ModalplancuentasComponent implements OnInit {
 
   ngOnInit() {
     this.abrirPlanesCuenta.subscribe(data => {
-      console.log(data);
       this.tipoCierre = data;
       this.loading = true;
       //this.ModalPlanes.show();
@@ -60,8 +59,6 @@ export class ModalplancuentasComponent implements OnInit {
   }
 
   setTipoPlan(plan) {
-    console.log(plan);
-
     let data = new FormData();
     data.append('tipo_cierre', this.tipoCierre);
     data.append('id_plan_cuenta', plan.Id_Plan_Cuentas);
@@ -69,7 +66,6 @@ export class ModalplancuentasComponent implements OnInit {
 
     this.http.post(environment.base_url + '/php/plancuentas/set_plan_cuentas_tipo_cierre.php', data)
       .toPromise().catch(err => {
-        console.error(err);
       })
 
   }

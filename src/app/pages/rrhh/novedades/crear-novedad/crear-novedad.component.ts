@@ -8,12 +8,10 @@ import {
 } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DisabilityLeavesService } from '../disability-leaves.service';
-import { Observable } from 'rxjs';
 import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/person.service';
 import { PayrollFactorService } from '../payroll-factor.service';
 import * as moment from 'moment';
-import Swal from 'sweetalert2';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
@@ -42,7 +40,6 @@ export class CrearNovedadComponent implements OnInit {
     this.createForm();
     this.getDisabilityLeaves();
     this.getPeople();
-    console.log(open)
     this.open.subscribe((r) => {
       if (r?.data) {
         this.form.patchValue({
@@ -73,7 +70,7 @@ export class CrearNovedadComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
 
   getPeople() {
@@ -85,7 +82,6 @@ export class CrearNovedadComponent implements OnInit {
   getDisabilityLeaves() {
     this._disabilityLeaves.getDisabilityLeaves().subscribe((r: any) => {
       this.disabilityLeaves = r.data;
-      this.disabilityLeaves.unshift({ text: 'Selecciona', value: '' });
     });
   }
 
@@ -125,7 +121,7 @@ export class CrearNovedadComponent implements OnInit {
         })
         this.createForm();
         this.saving.next();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         //this.modal.hide();
       } else {
         this._swal.show({
@@ -140,8 +136,8 @@ export class CrearNovedadComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [''],
-      person_id: ['', Validators.required],
-      disability_leave_id: ['', Validators.required],
+      person_id: [null, Validators.required],
+      disability_leave_id: [null, Validators.required],
       disability_type: [{ value: '', disabled: true }, Validators.required],
       date_start: ['', Validators.required],
       date_end: ['', Validators.required],
@@ -155,7 +151,7 @@ export class CrearNovedadComponent implements OnInit {
       if (date_start.value) {
         const date_end = this.form.get('date_end');
         const payback_date = this.form.get('payback_date');
-        const finalDate = moment(date_start.value).add(r-1, 'days').format('YYYY-MM-DD');
+        const finalDate = moment(date_start.value).add(r - 1, 'days').format('YYYY-MM-DD');
 
         date_end.patchValue(finalDate);
         payback_date.patchValue(finalDate);

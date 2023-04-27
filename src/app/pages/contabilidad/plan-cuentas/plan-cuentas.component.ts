@@ -419,13 +419,11 @@ export class PlanCuentasComponent implements OnInit {
               text: `El código ${codigo} no pertenece al nivel superior "${data.nivel_superior}"`,
             });
           } else {
-            console.log(codigo.length)
             this.Codigo_Padre = codigo.length === 1 ? "No aplica" : codigo.length === 2 ? codigo.slice(0, - 1) : codigo.slice(0, - 2);
           }
 
         });
       } else {
-        console.log(codigo.length)
         this.Codigo_Padre = codigo.length === 1 ? "No aplica" : codigo.length === 2 ? codigo.slice(0, - 1) : codigo.slice(0, - 2);
       }
     }

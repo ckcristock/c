@@ -61,7 +61,6 @@ export class GeneralService {
 
   // public ThousandRound(value: number): number {
   //   let calculo = Math.round(value / 1000) * 1000;
-  //   console.log(calculo);
 
   //   return calculo;
   // }

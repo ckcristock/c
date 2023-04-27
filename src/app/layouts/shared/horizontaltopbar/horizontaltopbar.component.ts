@@ -63,10 +63,8 @@ export class HorizontaltopbarComponent implements OnInit {
     this.folder_permission = this._user.user.person.folder_id
     this.validateFolder(this.folder_permission)
     this.http.get(this.user.imagenUrl).subscribe(result => {
-      //console.log(result)
     },
       error => {
-        //console.log(error)
         if (error.status == 500) {
           this.imageProfile = null
         } else {
@@ -217,7 +215,6 @@ export class HorizontaltopbarComponent implements OnInit {
 
       this._alert.getAlerts(param).subscribe((r: any) => {
         this.alerts = r.data.data;
-        //console.log(r.data.data)
         this.loading = false
       });
     });

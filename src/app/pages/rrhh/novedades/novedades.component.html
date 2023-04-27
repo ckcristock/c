@@ -101,7 +101,7 @@
         <form [formGroup]="form">
           <mat-accordion multi>
             <mat-expansion-panel class="mat-elevation-z0">
-              <div class="row">
+              <div class="row mt-1px">
                 <div class="col">
                   <ng-select
                     formControlName="personfill"
@@ -110,6 +110,7 @@
                     bindValue="value"
                     loadingText="loading"
                     appearance="outline"
+                    [clearable]="false"
                     [appendTo]="'body'"
                     placeholder="Funcionario"
                     (change)="cargarNovedades()"

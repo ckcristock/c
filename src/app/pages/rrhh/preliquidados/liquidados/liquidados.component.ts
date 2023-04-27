@@ -58,7 +58,6 @@ export class LiquidadosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.date)
     this.id = this.activatedRoute.snapshot.params.id;
     this.diasTrabajados = this.activatedRoute.snapshot.params.value;
     this.getLiquidado();
@@ -67,7 +66,7 @@ export class LiquidadosComponent implements OnInit {
 
 
   liquidar() {
-    this.liquidadosService.liquidar(this.form.value).subscribe((res:any) => {
+    this.liquidadosService.liquidar(this.form.value).subscribe((res: any) => {
       this.router.navigate(['/rrhh/liquidados'])
       this._swal.show({
         icon: 'success',
@@ -77,8 +76,6 @@ export class LiquidadosComponent implements OnInit {
         timer: 1000
       })
     })
-
-    console.log(this.form.value)
   }
 
   createForm() {
@@ -128,7 +125,7 @@ export class LiquidadosComponent implements OnInit {
           fecha_terminacion: fechaFin,
         })
         this.changeParams(fechaFin)
-        if (this.diasTrabajados == 'si'){
+        if (this.diasTrabajados == 'si') {
           this.getDiasTrabajados(fechaFin);
         }
       })
@@ -136,14 +133,13 @@ export class LiquidadosComponent implements OnInit {
 
 
 
-  changeParams (fechaFin) {
+  changeParams(fechaFin) {
     this.liquidadosService.mostrar(this.id, fechaFin).subscribe((res: any) => {
       this.info = res
       this.totalLiquidacion = this.info.total_liquidacion
 
 
       this.form.get('ingresos_adicionales').valueChanges.subscribe(value => {
-        console.log(value)
         this.calcularTotalLiquidacion();
         // this.form.patchValue({
         //   total: this.form.get('total').value + value
@@ -151,7 +147,6 @@ export class LiquidadosComponent implements OnInit {
       })
 
       this.form.get('deducciones_adicionales').valueChanges.subscribe(value => {
-        console.log(value)
         this.calcularTotalLiquidacion();
       })
 
@@ -180,7 +175,7 @@ export class LiquidadosComponent implements OnInit {
       this.valorDiasTrabajados = res.data
 
       this.salarioPendiente = res.data.salario_neto
-      this.total =  this.salarioPendiente + this.totalLiquidacion
+      this.total = this.salarioPendiente + this.totalLiquidacion
 
 
       this.form.patchValue({
@@ -188,13 +183,12 @@ export class LiquidadosComponent implements OnInit {
         salud: res.data.seguridad_social,
         total: this.total
       })
-      console.log(res)
     })
   }
 
 
 
-  calcularTotalLiquidacion(){
+  calcularTotalLiquidacion() {
     let IngresosAdicionales = this.form.get('ingresos_adicionales').value || 0;
     let DeduccionesAdicionales = this.form.get('deducciones_adicionales').value || 0;
     this.totalLiquidacion = this.info.total_liquidacion + IngresosAdicionales - DeduccionesAdicionales;

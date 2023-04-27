@@ -45,7 +45,7 @@ export class DotacionSalidasComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.limpiar()
-    
+
   }
 
   limpiar() {
@@ -68,7 +68,6 @@ export class DotacionSalidasComponent implements OnInit {
         }
         this.loading = true;
         this._dotation.getDotationsProduct({ params }).subscribe((r: any) => {
-          console.log(r)
           this.Lista_Entrega_Dotacion = r.data.data;
           this.pagination.collectionSize = r.data.total;
           this.loading = false;

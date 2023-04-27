@@ -235,8 +235,6 @@ export class EgresosComponent implements OnInit {
     let data = this.normalize(JSON.stringify(this.ComprobanteModel));
     datos.append("Datos", data);
     datos.append("Archivo", this.Soporte);
-
-    // console.log(data);
     //return;
     //this.Comprobantes.push(data);
     this.PeticionGuardarComprobante(datos);

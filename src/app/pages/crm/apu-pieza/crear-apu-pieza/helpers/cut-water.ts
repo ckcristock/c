@@ -79,7 +79,6 @@ export const cutWaterHelper = {
       let thickness_value = cut_water.get('thickness_value').value;
       let total_hole_perimeter = cut_water.get('total_hole_perimeter').value;
       let result = ((Number(total_hole_perimeter) + Number(value)) * Number(thickness_value)) / (60 * 100);
-      console.log('cambiando total')
       cut_water.patchValue({
         time: result.toFixed(7)
       })

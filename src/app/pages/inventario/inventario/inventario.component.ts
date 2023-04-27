@@ -3,10 +3,11 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IMyDrpOptions } from 'mydaterangepicker';
 import { DatePipe, Location } from "@angular/common";
 import { ActivatedRoute } from '@angular/router';
-import { ModalDismissReasons, NgbDropdownConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from 'src/environments/environment';
 import { MatAccordion } from '@angular/material';
 import { DateAdapter } from 'saturn-datepicker';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-inventario',
@@ -14,64 +15,37 @@ import { DateAdapter } from 'saturn-datepicker';
   styleUrls: ['./inventario.component.scss']
 })
 export class InventarioComponent implements OnInit {
-
   @ViewChild("PlantillaProductos") PlantillaProductos: TemplateRef<any>;
-  // @ViewChild(DatatableComponent) table: DatatableComponent;
   @ViewChild("confirmacionSwal") confirmacionSwal: any;
   @ViewChild("modalInventario") modalInventario: any;
   @ViewChild("modalApartadas") modalApartadas: any;
   @ViewChild("modalSeleccionadas") modalSeleccionadas: any;
   @ViewChild("modalCompras") modalCompras: any;
   @ViewChild("modalContrato") modalContrato: any;
-  @ViewChild(MatAccordion) accordion: MatAccordion;
-  matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
-  }
-  datePipe = new DatePipe('es-CO');
-  Bodegadefecto;
-  IdPuntoDispensacion;
-  rowsFilter = [];
-  tempFilter = [];
-  columns = [];
-  loadingIndicator = true;
+  datePipe: any = new DatePipe('es-CO');
+  Bodegadefecto: any;
+  IdPuntoDispensacion: any;
   timeout: any;
-  public cargando = false;
-  public bodegas: any[] = [];
-  public categorias_nuevas: any[] = [];
-  public display_bodega = "block";
-  public display_punto = "none";
+  categorias_nuevas: any[] = [];
+  bodegas_nuevo: any[] = [];
+  Inventarios: any[] = [];
+  rowsFilter: any[] = [];
+  tempFilter: any[] = [];
+  columns: any[] = [];
+  bodegas: any[] = [];
+  Compras: any[] = [];
+  Cargando_Seleccionados: boolean = false;
+  Cargando_Compras: boolean = false;
+  loadingIndicator: boolean = true;
+  cargando: boolean = false;
+  permiso: boolean = false;
+  TotalItems: number;
+  page: number = 1;
+  maxSize: number = 10;
+  pageSize: number = 20;
 
-  public Cargando_Compras = false;
-  public Compras: any = [];
-
-  public bodegas_nuevo: any = [];
   public bodega_selected: any = 0;
-
-  //TODO Corregir funcionario login
-  // public user = JSON.parse(localStorage.getItem("User"));
   public user = { Identificacion_Funcionario: '1' };
-  public permiso: boolean = false;
-
-  public Inventarios: any = [];
-  public TotalItems: number;
-  public page = 1;
-  public maxSize = 10;
-  public pageSize = 20;
-  myDateRangePickerOptions: IMyDrpOptions = {
-    width: "220px",
-    height: "21px",
-    selectBeginDateTxt: "Inicio",
-    selectEndDateTxt: "Fin",
-    selectionTxtFontSize: "10px",
-    dateFormat: "yyyy-mm-dd",
-  };
 
   public filtro_nom: string = "";
   public filtro_lab: string = "";
@@ -104,7 +78,6 @@ export class InventarioComponent implements OnInit {
   public filtro_sin_inventario: boolean = true;
 
   csv: any;
-  Cargando_Seleccionados: boolean = false;
   Seleccionados: any = [];
   CargandoDetalleContrato: boolean = false;
   DetalleContrato: any = [];
@@ -114,91 +87,71 @@ export class InventarioComponent implements OnInit {
     private location: Location,
     private route: ActivatedRoute,
     public dropConfig: NgbDropdownConfig,
-    private modalService: NgbModal,
+    private _modal: ModalService,
     private dateAdapter: DateAdapter<any>
   ) {
-    // configuraciones de boton desplegable ngboostrap
     dropConfig.placement = 'left-top';
     this.dateAdapter.setLocale('es');
-    /* dropConfig.autoClose = false; */
   }
 
   ngOnInit() {
-
-    this.http
-      .get(environment.base_url + "/php/lista_generales.php", { params: { modulo: "Lista_Ganancia" }, }).subscribe((data: any) => {
-        this.listas = data;
-        console.log(data)
-      });
-
+    this.getListaGenerales();
     this.ListarInventario(true);
-
-
-    this.http
-      .get(environment.ruta + "php/actarecepcion/detalle_perfil_dev.php", {
-        params: { funcionario: this.user.Identificacion_Funcionario },
-      })
-      .subscribe((data: any) => {
-        this.permiso = data.status;
-      });
-
-    this.http
-      .get(environment.ruta + "php/bodega_nuevo/get_bodegas.php")
-      .subscribe((data: any) => {
-        if (data.Tipo == "success") this.bodegas_nuevo = data.Bodegas;
-      });
+    this.getDetallePerfil();
+    this.getBodegas();
   }
 
-  closeResult = '';
-  public openConfirm(confirm) {
-    this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'lg', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  getBodegas() {
+    this.http.get(environment.base_url + "/php/bodega_nuevo/get_bodegas.php").subscribe((data: any) => {
+      if (data.Tipo == "success") this.bodegas_nuevo = data.Bodegas;
     });
   }
-  private getDismissReason(reason: any) {
-    this.limpiarContrato()
 
+  getListaGenerales() {
+    this.http.get(environment.base_url + "/php/lista_generales.php", { params: { modulo: "Lista_Ganancia" }, }).subscribe((data: any) => {
+      this.listas = data;
+    });
   }
+
+  getDetallePerfil() {
+    this.http.get(environment.ruta + "php/actarecepcion/detalle_perfil_dev.php", {
+      params: { funcionario: this.user.Identificacion_Funcionario },
+    }).subscribe((data: any) => {
+      this.permiso = data.status;
+    });
+  }
+
+  openConfirm(confirm) {
+    this._modal.open(confirm, 'lg')
+  }
+
   selectedDate(fecha) {
-    //console.log(fecha);
     this.filtro_fecha =
       this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd') +
       ' - ' +
       this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
-    console.log(this.filtro_fecha);
     this.filtro();
   }
+
   ListarInventario(primeraVez = false) {
     let params = Object.assign({}, this.route.snapshot.queryParams);
-
     if (!params.lista) {
       params.lista = 1
-
-
     }
     if (params.id_bodega_nuevo) {
-      //params.id es el id de la categoria!!!
       if (params.id) {
         this.buscar_categorias(params.id_bodega_nuevo, params.id);
       } else {
         this.buscar_categorias(params.id_bodega_nuevo);
       }
     }
-
     let queryString = "";
-
-
     if (Object.keys(params).length > 0 || primeraVez) {
-      // Si existe parametros o filtros
-      // actualizando la variables con los valores de los paremetros.
       this.page = params.pag ? params.pag : 1;
       this.tipo_punto = params.tipo ? params.tipo : "";
       this.subtipo_punto = params.id ? params.id : 0;
       this.Tipo(this.tipo_punto, this.subtipo_punto);
       this.filtro_nom = params.nom ? params.nom : "";
-      this.filtro_lote = params.lote ? params.lote : "";
       this.filtro_lab = params.lab ? params.lab : "";
       this.filtro_cant = params.cant ? params.cant : "";
       this.filtro_cant_sel = params.cant_sel ? params.cant_sel : "";
@@ -216,7 +169,6 @@ export class InventarioComponent implements OnInit {
         ? params.id_bodega_nuevo
         : 0;
       $("#sin-inventario").prop("checked", this.filtro_sin_inventario);
-
       queryString =
         "?" +
         Object.keys(params)
@@ -224,24 +176,16 @@ export class InventarioComponent implements OnInit {
           .join("&");
     }
     this.Cargando_Tabla = true;
-
     this.http
       .get(
         environment.base_url + "/php/inventario_nuevo/lista_inventario.php" + queryString).subscribe((data: any) => {
           this.Cargando_Tabla = false;
           this.Inventarios = data.inventarios;
-          console.log("lista de inventarios");
-
-          console.log(this.Inventarios);
-
           this.TotalItems = data.numReg;
         });
   }
 
   verContrato(inventario, i, modal) {
-    console.log(inventario);
-
-    //this.modalContrato.show();
     this.openConfirm(modal)
     this.CargandoDetalleContrato = true;
     this.http.get(environment.ruta + "php/inventario_nuevo/ver_inventario_contrato.php", { params: { Id_Inventario_Nuevo: inventario }, }).subscribe((data: any) => {
@@ -249,17 +193,13 @@ export class InventarioComponent implements OnInit {
       this.CargandoDetalleContrato = false;
     });
   }
+
   limpiarContrato() {
     this.DetalleContrato = [];
-
   }
 
   buscar_productos() {
-    console.log(this.subtipo_punto, "subtipo punto");
-    console.log(this.bodega_selected, "bodega selected");
     this.AsignarValorSinInventario();
-    // if ((this.tipo_punto != "" && this.tipo_punto != undefined) &&  (this.bodega_selected != "" && this.bodega_selected != undefined)) {
-
     let params: any = {
       pag: 1,
       tipo: this.tipo_punto,
@@ -268,32 +208,25 @@ export class InventarioComponent implements OnInit {
       id_bodega_nuevo: this.bodega_selected,
       sin_inventario: this.filtro_sin_inventario,
     };
-
     let queryString = Object.keys(params)
       .map((key) => key + "=" + params[key])
       .join("&");
-
     this.location.replaceState("/inventarionuevo", queryString);
-
     this.Cargando_Tabla = true;
     this.filtrando = true;
-    console.log(queryString);
+    this.http.get(
+      environment.base_url +
+      "/php/inventario_nuevo/lista_inventario.php?" +
+      queryString
+    ).subscribe((data: any) => {
+      this.Cargando_Tabla = false;
+      this.Inventarios = data.inventarios;
+      this.TotalItems = data.numReg;
 
-    this.http
-      .get(
-        environment.ruta +
-        "php/inventario_nuevo/lista_inventario.php?" +
-        queryString
-      )
-      .subscribe((data: any) => {
-        this.Cargando_Tabla = false;
-        this.Inventarios = data.inventarios;
-        this.TotalItems = data.numReg;
-
-      });
+    });
     // } else {
     //   this.location.replaceState('/inventario', '?sin_inventario='+this.filtro_sin_inventario);
-    //   this.http.get(environment.ruta+ 'php/inventario_nuevo/lista_inventario.php?sin_inventario='+this.filtro_sin_inventario).subscribe((data:any) => {
+    //   this.http.get(environment.base_url+ '/php/inventario_nuevo/lista_inventario.php?sin_inventario='+this.filtro_sin_inventario).subscribe((data:any) => {
     //     this.Cargando_Tabla = false;
     //     this.Inventarios = data.inventarios;
     //     this.TotalItems = data.numReg;
@@ -304,7 +237,6 @@ export class InventarioComponent implements OnInit {
 
   }
   buscar_categorias(id_bodega_nuevo, id_categoria?) {
-
     this.http
       .get(environment.ruta + "php/categoria_nueva/get_categorias_por_bodega.php", {
         params: { id_bodega_nuevo },
@@ -313,33 +245,24 @@ export class InventarioComponent implements OnInit {
         this.categorias_nuevas = data['Categorias'];
         if (id_categoria) {
           let cat = this.categorias_nuevas.findIndex(cat => cat.Id_Categoria_Nueva == id_categoria);
-          console.log('categoria encontrada', cat);
-
         }
       });
-
-
   }
+
   paginacion() {
     let params: any = {
       pag: this.page,
     };
-
     params.sin_inventario = this.filtro_sin_inventario;
-
     if (this.subtipo_punto != undefined) {
       params.tipo = this.tipo_punto;
       params.id = this.subtipo_punto;
     }
-
     if (this.filtro_nom != "") {
       params.nom = this.filtro_nom;
     }
     if (this.filtro_lab != "") {
       params.lab = this.filtro_lab;
-    }
-    if (this.filtro_lote != "") {
-      params.lote = this.filtro_lote;
     }
     if (this.filtro_cum != "") {
       params.cum = this.filtro_cum;
@@ -374,39 +297,34 @@ export class InventarioComponent implements OnInit {
     if (this.lista_informe != 0) {
       params.lista = this.lista_informe;
     }
-
     let queryString = Object.keys(params)
       .map((key) => key + "=" + params[key])
       .join("&");
-
     this.location.replaceState("/inventarionuevo", queryString);
     this.Cargando_Tabla = true;
-    this.http
-      .get(
-        environment.ruta +
-        "/php/inventario_nuevo/lista_inventario.php?" +
-        queryString
-      )
-      .subscribe((data: any) => {
-        this.Cargando_Tabla = false;
-        this.Inventarios = data.inventarios;
-        this.TotalItems = data.numReg;
-      });
+    this.http.get(
+      environment.base_url +
+      "/php/inventario_nuevo/lista_inventario.php?" +
+      queryString
+    ).subscribe((data: any) => {
+      this.Cargando_Tabla = false;
+      this.Inventarios = data.inventarios;
+      this.TotalItems = data.numReg;
+    });
   }
+
   dateRangeChanged(event) {
     if (event.formatted != "") {
       this.filtro_fecha = event;
     } else {
       this.filtro_fecha = "";
     }
-    console.log(this.filtro_fecha.formatted)
     this.filtro();
   }
+
   filtro() {
     this.AsignarValorSinInventario();
-
     let params: any = {};
-
     if (
       this.filtro_nom != "" ||
       this.filtro_lab != "" ||
@@ -440,9 +358,6 @@ export class InventarioComponent implements OnInit {
       }
       if (this.filtro_lab != "") {
         params.lab = this.filtro_lab;
-      }
-      if (this.filtro_lote != "") {
-        params.lote = this.filtro_lote;
       }
       if (this.filtro_cum != "") {
         params.cum = this.filtro_cum;
@@ -493,8 +408,8 @@ export class InventarioComponent implements OnInit {
       this.Cargando_Tabla = true;
       this.http
         .get(
-          environment.ruta +
-          "php/inventario_nuevo/lista_inventario.php?" +
+          environment.base_url +
+          "/php/inventario_nuevo/lista_inventario.php?" +
           queryString
         )
         .subscribe((data: any) => {
@@ -520,8 +435,6 @@ export class InventarioComponent implements OnInit {
     }
   }
   Tipo(tipo, subtipo?) {
-    console.log("tipo", tipo);
-
     if (tipo == "Bodega") {
       this.http
         .get(environment.ruta + "php/inventario/bodega_punto.php", {
@@ -589,12 +502,6 @@ export class InventarioComponent implements OnInit {
     this.nombre_producto = (document.getElementById(
       "NombreProducto" + i
     ) as HTMLInputElement).value;
-    this.lote_producto = (document.getElementById(
-      "LoteProducto" + i
-    ) as HTMLInputElement).value;
-    this.fecha_venc_producto = (document.getElementById(
-      "Fecha_Venc" + i
-    ) as HTMLInputElement).value;
 
     //this.modalApartadas.show();
     this.openConfirm(modal)
@@ -627,7 +534,6 @@ export class InventarioComponent implements OnInit {
       .subscribe((data: any) => {
         this.Cargando_Seleccionados = false;
         this.Seleccionados = data;
-        console.log(this.Seleccionados);
 
       });
   }
@@ -635,12 +541,6 @@ export class InventarioComponent implements OnInit {
     this.Compras = [];
     this.nombre_producto = (document.getElementById(
       "NombreProducto" + i
-    ) as HTMLInputElement).value;
-    this.lote_producto = (document.getElementById(
-      "LoteProducto" + i
-    ) as HTMLInputElement).value;
-    this.fecha_venc_producto = (document.getElementById(
-      "Fecha_Venc" + i
     ) as HTMLInputElement).value;
     this.openConfirm(modal)
     //this.modalCompras.show();

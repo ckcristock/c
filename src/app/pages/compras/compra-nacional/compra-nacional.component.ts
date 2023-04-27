@@ -70,11 +70,9 @@ export class CompraNacionalComponent implements OnInit {
       this.downloading = false;
     }),
       (error) => {
-        console.log('Error downloading the file');
         this.downloading = false;
       },
       () => {
-        console.info('File downloaded successfully');
         this.downloading = false;
       };
   }

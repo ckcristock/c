@@ -75,14 +75,14 @@ export class PrimaFuncionarioComponent implements OnInit {
       params = {
         fecha_inicio: new Date(`01/01/${this.anio}`),
         fecha_fin: new Date(`06/30/${this.anio}`),
-        period: this.anio+'-'+this.periodo
+        period: this.anio + '-' + this.periodo
       }
       this.lapso = ' enero - junio '
     } else {
       params = {
         fecha_inicio: new Date(`07/01/${this.anio}`),
         fecha_fin: new Date(`12/30/${this.anio}`),
-        period: this.anio+'-'+this.periodo
+        period: this.anio + '-' + this.periodo
       }
       this.lapso = ' julio - diciembre '
     }
@@ -131,7 +131,7 @@ export class PrimaFuncionarioComponent implements OnInit {
     this.employees = this.paginate(this.empleados.empleados, e.pageSize)[e.pageIndex]
   }
 
-  habilitarBotonPagar (){
+  habilitarBotonPagar() {
     const hoy = new Date;
     //const hoy = new Date('2022-06-15');
     const hoyMes = hoy.getMonth()
@@ -139,7 +139,7 @@ export class PrimaFuncionarioComponent implements OnInit {
     // 4: Mayo, 5: Junio, 6: Julio, 7: Agosto,
     // 8: Septiembre, 9: Octubre, 10: Noviembre, 11: Diciembre
 
-    if (hoyMes == 5 || hoyMes == 6 || hoyMes == 11 || hoyMes == 0)  {
+    if (hoyMes == 5 || hoyMes == 6 || hoyMes == 11 || hoyMes == 0) {
       this.habilitarPagar = true;
     } else {
       this.habilitarPagar = false;
@@ -161,7 +161,7 @@ export class PrimaFuncionarioComponent implements OnInit {
     let params = {
       anio: this.anio,
       period: this.periodo,
-      status: (status=='pendiente') ? 0 : 1
+      status: (status == 'pendiente') ? 0 : 1
     }
     this.donwloadingExcel = true;
     this._primas.getReport(params)
@@ -173,21 +173,21 @@ export class PrimaFuncionarioComponent implements OnInit {
         link.download = `${filename}.xlsx`;
         link.click();
       }),
-      error => { console.log('Error downloading the file'); this.loading = false },
-      () => { console.info('File downloaded successfully'); this.loading = false };
-      this.donwloadingExcel = false
+      error => { this.loading = false },
+      () => { this.loading = false };
+    this.donwloadingExcel = false
   }
 
   donwloadingPdfs: boolean
-  getReportPdfs(){
+  getReportPdfs() {
     this.donwloadingPdfs = true;
     let params = {
       anio: this.anio,
       period: this.periodo
     }
     this._primas.getReportPdfs(params)
-      .subscribe( (res:BlobPart)=>{
-        let blob = new Blob([res], {type: 'applicarion/pdf'});
+      .subscribe((res: BlobPart) => {
+        let blob = new Blob([res], { type: 'applicarion/pdf' });
         let link = document.createElement("a");
         const filename = 'colilla-primas';
         link.href = window.URL.createObjectURL(blob);
@@ -195,11 +195,11 @@ export class PrimaFuncionarioComponent implements OnInit {
         link.click();
         this.donwloadingPdfs = false;
       }),
-      err=> { console.log('Error downloading the file'); this.loading = false },
-      () => { console.info('File downloaded successfully'); this.loading = false };
+      err => { this.loading = false },
+      () => { this.loading = false };
   }
 
-  donwloadingOne:boolean;
+  donwloadingOne: boolean;
   getOneReportPdfs(id, period) {
     this.donwloadingOne = true;
     let params = {
@@ -207,17 +207,17 @@ export class PrimaFuncionarioComponent implements OnInit {
       period
     }
     this._primas.getOneReportPdfs(params)
-      .subscribe( (res:BlobPart)=>{
-        let blob = new Blob([res], {type: 'applicarion/pdf'});
+      .subscribe((res: BlobPart) => {
+        let blob = new Blob([res], { type: 'applicarion/pdf' });
         let link = document.createElement("a");
-        const filename = 'colilla-prima'+params.period;
+        const filename = 'colilla-prima' + params.period;
         link.href = window.URL.createObjectURL(blob);
         link.download = `${filename}.pdf`;
         link.click();
       }),
-      err=> { console.log('Error downloading the file'); this.loading = false },
-      () => { console.info('File downloaded successfully'); this.loading = false };
-      this.donwloadingOne = false;
+      err => { this.loading = false },
+      () => { this.loading = false };
+    this.donwloadingOne = false;
   }
 
 }

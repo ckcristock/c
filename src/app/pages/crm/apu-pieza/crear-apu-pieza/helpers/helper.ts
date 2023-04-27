@@ -15,7 +15,6 @@ export const functionsApu = {
   },
 
   fillInForm(form: FormGroup, data, fb: FormBuilder, geometriesList: Array<any>, materials: Array<any>, cutLmaterials: Array<any>, commercialMaterials: Array<any>) {
-    console.log(materials)
     form.patchValue({
       name: data?.name,
       city_id: data?.city?.id,

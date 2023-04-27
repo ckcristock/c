@@ -37,7 +37,7 @@ export class TiposContratoComponent implements OnInit {
   types = consts.contract_type;
   contracts: any[] = [];
   listTerms: any[] = [];
-  contractsTerms = new FormControl([{contract_term_id: ''}]);
+  contractsTerms = new FormControl([{ contract_term_id: '' }]);
   contrato: any = {};
   filtro: any = {
     name: '',
@@ -106,7 +106,6 @@ export class TiposContratoComponent implements OnInit {
     this.loading = true;
     this._tiposContratoService.getContractsType(params)
       .subscribe((res: any) => {
-        console.log(res);
         this.loading = false;
         this.contracts = res.data.data;
         this.pagination.collectionSize = res.data.total;
@@ -156,11 +155,10 @@ export class TiposContratoComponent implements OnInit {
       id: this.form.value.id,
       name: this.form.value.name,
       description: this.form.value.description,
-      contract_terms: this.form.value.contract_terms.value.map((ele)=>({"contract_term_id": ele}))
+      contract_terms: this.form.value.contract_terms.value.map((ele) => ({ "contract_term_id": ele }))
     }
     this._tiposContratoService.createNewContract_type(data)
       .subscribe((res: any) => {
-        console.log(res);
         this._swal.show({
           title: res.data,
           icon: 'success',

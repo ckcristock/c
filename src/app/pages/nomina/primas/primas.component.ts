@@ -74,8 +74,6 @@ export class PrimasComponent implements OnInit {
       yearSelected: this.year,
     }
 
-    //console.log(params)
-
     this._primas.checkBonuses(params.yearSelected + '-' + params.periodo).subscribe(res => {
       //chequea en la DB si existe prima de este periodo
       if (res['data'] == null) {
@@ -93,8 +91,8 @@ export class PrimasComponent implements OnInit {
             cancelButtonText: 'Cancelar',
             reverseButtons: true,
             confirmButtonText: 'Sí, confirmar'
-          }).then((res)=>{
-            if(res.isConfirmed){
+          }).then((res) => {
+            if (res.isConfirmed) {
               this.router.navigate(['/nomina/prima', params.yearSelected, params.periodo, 0])
             }
           })
@@ -148,7 +146,7 @@ export class PrimasComponent implements OnInit {
       })
   }
 
-  habilitarBotonPagar (){
+  habilitarBotonPagar() {
     const hoy = new Date;
     const hoyMes = hoy.getMonth()
 
@@ -156,7 +154,7 @@ export class PrimasComponent implements OnInit {
     // 4: Mayo, 5: Junio, 6: Julio, 7: Agosto,
     // 8: Septiembre, 9: Octubre, 10: Noviembre, 11: Diciembre
 
-    if (hoyMes == 5 || hoyMes == 6 || hoyMes == 11 || hoyMes == 0)  {
+    if (hoyMes == 5 || hoyMes == 6 || hoyMes == 11 || hoyMes == 0) {
       this.habilitarPagar = true;
     } else {
       this.habilitarPagar = false;

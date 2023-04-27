@@ -17,9 +17,9 @@ export class ModalBasicComponent implements OnInit {
     wheelSpeed: 0.3,
   };
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   public show(): void {
     this.visible = true;
@@ -32,7 +32,6 @@ export class ModalBasicComponent implements OnInit {
   }
 
   public onContainerClicked(event: MouseEvent): void {
-    console.log('clicks')
     if ((<HTMLElement>event.target).classList.contains('modal')) {
     }
   }

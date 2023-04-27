@@ -1,11 +1,6 @@
-<div class="text-center">
-  <h5>Información del viaje</h5>
-</div>
+<h6>Información del viaje</h6>
 <div class="rounded-top table-responsive">
-  <table
-    class="table table-bordered table-striped table-sm"
-
-  >
+  <table class="table table-bordered table-striped table-sm">
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
         <th>Funcionario</th>
@@ -18,22 +13,31 @@
     </thead>
     <tbody>
       <tr class="text-center">
-        <td>{{ data.person.full_name!= undefined ? data.person.full_name : data.person.first_name+' '+data.person.first_surname }}</td>
+        <td>
+          {{
+            (data.person.full_name != undefined
+              ? data.person.full_name
+              : data.person.first_name + " " + data.person.first_surname
+            ) | titlecase
+          }}
+        </td>
         <td>{{ data.person.identifier }}</td>
-        <td>{{data.person.contractultimate.position.name}}</td>
-        <td>{{ data.person.passport_number ? data.person.passport_number : 'No tiene' }}</td>
-        <td>{{ data.person.visa ? data.person.visa : 'No tiene' }}</td>
+        <td>{{ data.person.contractultimate.position.name }}</td>
+        <td>
+          {{
+            data.person.passport_number
+              ? data.person.passport_number
+              : "No tiene"
+          }}
+        </td>
+        <td>{{ data.person.visa ? data.person.visa : "No tiene" }}</td>
         <td>Funcionario</td>
       </tr>
     </tbody>
   </table>
 </div>
-<hr>
 <div class="rounded-top table-responsive">
-  <table
-    class="table table-bordered table-striped table-sm"
-
-  >
+  <table class="table table-bordered table-striped table-sm">
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
         <th>Origen</th>

@@ -6,18 +6,10 @@ import { RemisioneditarComponent } from './remisioneditar/remisioneditar.compone
 import { RemisionComponent } from './remision/remision.component';
 
 const routes: Routes = [
-  {
-    path: '', component: RemisionesComponent
-  },
-  {
-    path: 'remisioncrearnuevo', component: RemisioncrearnuevoComponent
-  },
-  {
-    path: 'remision/:id', component: RemisionComponent
-  },
-  {
-    path: 'remisioneditar/:id', component: RemisioneditarComponent
-  },
+  { path: '', component: RemisionesComponent },
+  { path: 'remisioncrearnuevo', component: RemisioncrearnuevoComponent },
+  { path: 'remision/:id', component: RemisionComponent },
+  { path: 'remisioneditar/:id', component: RemisioneditarComponent },
 ];
 
 @NgModule({

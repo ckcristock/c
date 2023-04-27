@@ -279,7 +279,6 @@ export class CrearTercerosComponent implements OnInit {
   }
 
   filterMunicipalities(id) {
-    console.log('llegando', this.departments, id)
     this.municipalities = []
     this.departments.forEach(department => {
       if (department.id == id) {

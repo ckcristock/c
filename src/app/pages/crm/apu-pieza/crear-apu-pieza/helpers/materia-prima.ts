@@ -80,16 +80,13 @@ export const materiaHelper = {
         let measure = element?.controls?.measure?.value;
         let value = element?.controls?.value?.value;
         formula = formula.replace(new RegExp('{' + measure + '}', 'g'), value);
-        //console.log(formula);
       });
       let data = materials.find(m => m?.id == materiaControl?.material_id?.value);
       let result;
       try {
         result = math.evaluate(formula);
-        //console.log(result)
       }
       catch (error) {
-        //console.log(error)
       }
       materia.patchValue({
         weight_kg: result * data?.density   //multiplicar por una variable del manterial aun no existente
@@ -126,7 +123,6 @@ export const materiaHelper = {
     });
     group.get('geometry_id').valueChanges.subscribe(value => {
       let data = geometriesList.find(m => m.id == value);
-      console.log(data)
       group.patchValue({
         image: data.image,
         weight_formula: data.weight_formula

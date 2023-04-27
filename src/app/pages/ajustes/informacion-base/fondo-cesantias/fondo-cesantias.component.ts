@@ -131,7 +131,7 @@ export class FondoCesantiasComponent implements OnInit {
 
   createSeveranceFunds() {
     let data = {};
-    if(this.boolNuevoFondo){
+    if (this.boolNuevoFondo) {
       data = this.form.value
     } else {
       data = {
@@ -141,26 +141,24 @@ export class FondoCesantiasComponent implements OnInit {
     }
     this._fondoCensatiasService.createSeveranceFunds(data)
       .subscribe((res: any) => {
-        console.log(res);
         this.modalService.dismissAll();
         this.getSeveranceFunds();
         this._swal.show({
           icon: 'success',
           title: res.data,
-          text: `Se ha ${this.boolNuevoFondo?'creado':'actualizado'} el fondo con éxito.`,
+          text: `Se ha ${this.boolNuevoFondo ? 'creado' : 'actualizado'} el fondo con éxito.`,
           timer: 1000,
           showCancel: false
         })
       },
-      err => {
-        console.log(err)
-        this._swal.show({
-          title: 'ERROR',
-          text: err?.error.errors.nit[0],
-          icon: 'error',
-          showCancel: false,
-        })
-      }
+        err => {
+          this._swal.show({
+            title: 'ERROR',
+            text: err?.error.errors.nit[0],
+            icon: 'error',
+            showCancel: false,
+          })
+        }
       );
   }
 

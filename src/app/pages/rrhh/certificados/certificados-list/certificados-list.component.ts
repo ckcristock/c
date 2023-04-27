@@ -48,10 +48,8 @@ export class CertificadosListComponent implements OnInit {
       link.click();
     },
       (error) => {
-        console.log('Error downloading the file');
       },
       () => {
-        console.info('File downloaded successfully');
       })
   }
 }

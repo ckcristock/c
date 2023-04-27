@@ -198,7 +198,6 @@ export class CrearNotaContableComponent implements OnInit {
   ngOnInit() {
     this.http.get(environment.base_url + '/php/contabilidad/notascontables/nit_buscar.php').subscribe((data: any) => {
       this.Cliente = data;
-      console.log(this.Cliente)
     });
     this.http.get(environment.base_url + '/php/comprobantes/cuentas.php').subscribe((data: any) => {
       this.Cuentas = data;
@@ -208,7 +207,6 @@ export class CrearNotaContableComponent implements OnInit {
     });
     this.http.get(environment.base_url + '/php/contabilidad/notascontables/centrocosto_buscar.php').subscribe((data: any) => {
       this.Centros = data;
-      console.log(this.Centros)
     });
 
     this.getCodigoNuevaNota();
@@ -263,9 +261,6 @@ export class CrearNotaContableComponent implements OnInit {
 
   BuscarCuenta(cuenta, pos) {
     let pos2 = pos + 1;
-
-    // console.log("Model Cuenta --> ",cuenta);
-
     if (cuenta.Centro_Costo == 'S') { // Validar si la cuenta es para Centro de costos o no.
       this.Cuentas_Contables[pos].Centro_Costo = this.Nom_Centro_Costo;
       this.Cuentas_Contables[pos].Id_Centro_Costo = this.Nom_Centro_Costo.Id_Centro_Costo;
@@ -347,12 +342,8 @@ export class CrearNotaContableComponent implements OnInit {
   }
 
   EliminarCuenta(pos) {
-
     this.Cuentas_Contables.splice(pos, 1);
-
     this.Datos_Invalidos = this.Cuentas_Contables.find(data => data.Valido == false);
-    console.log(this.Datos_Invalidos, 'INVALIDOS');
-
     setTimeout(() => {
       this.ActualizaValores();
     }, 100);
@@ -360,11 +351,8 @@ export class CrearNotaContableComponent implements OnInit {
   }
 
   guardarNotaContable(Formulario: NgForm, tipo) {
-
     let info = JSON.stringify(Formulario.value);
-    console.log(info);
     let datos = new FormData();
-
     datos.append('Datos', info);
     datos.append('Cuentas_Contables', JSON.stringify(this.Cuentas_Contables));
 
@@ -670,7 +658,6 @@ export class CrearNotaContableComponent implements OnInit {
     this.http.post(environment.base_url + '/php/contabilidad/notascontables/subir_facturas.php', datos).subscribe((data: any) => {
       this.Cuentas_Contables = data.Facturas;
       this.Datos_Invalidos = this.Cuentas_Contables.some(data => data.Valido == false);
-      console.log(this.Datos_Invalidos, 'INVALIDOS');
       this.Cargando = false;
       this.Facturas_Multiple = false;
 

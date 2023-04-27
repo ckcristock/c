@@ -312,7 +312,6 @@ export class CrearCompraNacionalComponent implements OnInit {
   }
 
   GuardarCompra() {
-    console.log(this.formCompra)
     if (this.formCompra.valid) {
       this._swal
         .show({
@@ -399,7 +398,6 @@ public NombreProveedor: string = '';
 public Tipo: any = '';
 pushCompra() {
   if (this.id && this.precompra) {
-    console.log('llegando por aqui')
     this.Rotativo = true;
     const proveedor = this.precompra.find(
       (lista) => lista.Id_Proveedor === this.id

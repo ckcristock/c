@@ -240,20 +240,16 @@ export class ActaRecepcionComponent implements OnInit {
     this.filtros();
   }
   selectedDate(fecha) {
-    //console.log(fecha);
     this.filtro_fecha =
       this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd') +
       ' - ' +
       this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
-    console.log(this.filtro_fecha);
   }
   selectedDate2(fecha) {
-    //console.log(fecha);
     this.filtro_fecha2 =
       this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd') +
       ' - ' +
       this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
-    console.log(this.filtro_fecha);
   }
 
   filtros() {

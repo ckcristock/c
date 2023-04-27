@@ -109,7 +109,6 @@ export class PresupuestosComponent implements OnInit {
   }
 
   dateChange(e) {
-    console.log(e)
     if (e.value) {
       this.form_filters.patchValue({
         date: new Date(e.value).toISOString()

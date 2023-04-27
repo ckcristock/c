@@ -231,7 +231,6 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   collapses() {
-    console.log(this.data)
     if (!this.data) {
       return null;
     }
@@ -311,7 +310,6 @@ export class CrearApuConjuntoComponent implements OnInit {
   formatter = (x: { name: string }) => x.name;
 
   select(group: FormGroup, key, toUpdate) {
-    console.log(toUpdate)
     let control = group.get(key).value
     if (typeof control == 'object') {
       group.patchValue({ [toUpdate]: control['id'] })
@@ -336,7 +334,6 @@ export class CrearApuConjuntoComponent implements OnInit {
   getApus(e: any[]) {
 
     let item = this.form.get('list_pieces_sets') as FormArray
-    console.log(item, e)
     e.forEach(apu => {
       const exist = item.value.some(x => (x.apu_part_id == apu.apu_id && x.apu_type == apu.type)) //valida que no exista esa pieza en la lista, pero no funcioanria
       !exist ? item.push(this.piecesSetsControl(apu)) :

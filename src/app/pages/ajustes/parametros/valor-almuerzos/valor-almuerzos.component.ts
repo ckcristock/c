@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalService } from 'src/app/core/services/modal.service';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-valor-almuerzos',
@@ -14,6 +15,7 @@ import { ModalService } from 'src/app/core/services/modal.service';
 })
 export class ValorAlmuerzosComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
+  masks = consts;
   matPanel = false;
   values: any[] = [];
   value: any = {};
@@ -27,8 +29,8 @@ export class ValorAlmuerzosComponent implements OnInit {
     value: ''
   }
 
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
@@ -73,14 +75,14 @@ export class ValorAlmuerzosComponent implements OnInit {
         showCancel: false
       })
     },
-    err => {
-      this._swal.show({
-        title: 'ERROR',
-        text: 'Intenta nuevamente',
-        icon: 'error',
-        showCancel: false,
-      })
-    });
+      err => {
+        this._swal.show({
+          title: 'ERROR',
+          text: 'Intenta nuevamente',
+          icon: 'error',
+          showCancel: false,
+        })
+      });
   }
 
   anularOActivar(value, state) {
@@ -91,22 +93,22 @@ export class ValorAlmuerzosComponent implements OnInit {
       icon: 'question',
       showCancel: true
     })
-    .then((result) => {
-      if (result.isConfirmed) {
-        this._lunchValues.save(data)
-          .subscribe(res => {
-            this.getValues();
-            this._swal.show({
-              icon: 'success',
-              title: (state === 'Inactivo' ? '¡Valor inhabilitado!' : '¡Valor activado!'),
-              text: (state === 'Inactivo' ? 'El valor ha sido inhabilitado con éxito.' : 'El valor ha sido activado con éxito.'),
-              timer: 1000,
-              showCancel: false
-            })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this._lunchValues.save(data)
+            .subscribe(res => {
+              this.getValues();
+              this._swal.show({
+                icon: 'success',
+                title: (state === 'Inactivo' ? '¡Valor inhabilitado!' : '¡Valor activado!'),
+                text: (state === 'Inactivo' ? 'El valor ha sido inhabilitado con éxito.' : 'El valor ha sido activado con éxito.'),
+                timer: 1000,
+                showCancel: false
+              })
 
-          })
-      }
-    })
+            })
+        }
+      })
   }
 
   getValue(value) {

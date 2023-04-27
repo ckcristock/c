@@ -31,14 +31,13 @@ export class ModalPreliquidarComponent implements OnInit {
     private detalleService: DetalleService,
   ) {
     this.responsable = this._user.user;
-   }
+  }
 
   ngOnInit() {
   }
 
-  openModal(){
+  openModal() {
     this._modal.open(this.modalLiquidar)
-    console.log(this.funcionario)
     this.createForm()
   }
 
@@ -65,7 +64,6 @@ export class ModalPreliquidarComponent implements OnInit {
   }
 
   liquidar(status: any) {
-    console.log(this.funcionario);
     let dataForm = {
       status,
     }
@@ -93,7 +91,6 @@ export class ModalPreliquidarComponent implements OnInit {
         this.detalleService.setPreliquidadoLog(info).subscribe((r: any) => {
           if (r.status) {
             this.detalleService.blockUser(data, this.funcionario.id).subscribe((r: any) => {
-              console.log(r.status);
             })
             this.detalleService.liquidar(dataForm, this.funcionario.id).subscribe((r: any) => {
               this._swal.show({

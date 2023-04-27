@@ -11,11 +11,11 @@ export class BodeganuevoService {
   constructor(private http: HttpClient) { }
 
   public getBodegas(): Observable<any> {
-    return this.http.get(environment.ruta + 'php/bodega_nuevo/get_bodegas.php');
+    return this.http.get(environment.base_url + '/php/bodega_nuevo/get_bodegas.php');
   }
 
-  getBodegasInternacionales():Observable<any>{
-    return this.http.get(environment.ruta +'php/bodega_nuevo/get_bodegas_internacionales.php');
+  getBodegasInternacionales(): Observable<any> {
+    return this.http.get(environment.ruta + 'php/bodega_nuevo/get_bodegas_internacionales.php');
   }
 
 }

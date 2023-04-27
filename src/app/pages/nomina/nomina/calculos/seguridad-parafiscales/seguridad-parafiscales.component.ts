@@ -54,9 +54,6 @@ export class SeguridadParafiscalesComponent implements OnInit {
       fin: this.fechaFin
     }).subscribe(r => {
       this.seguridadDatos = r
-      //console.log(r);
-
-
     })
   }
 
@@ -64,7 +61,6 @@ export class SeguridadParafiscalesComponent implements OnInit {
     this._payRolSocial.getScurityPercentages({
       pid: this.funcionario.id
     }).subscribe(r => {
-      //console.log(r);
       this.porcentajesDatos = r
 
     })

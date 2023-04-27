@@ -11,33 +11,33 @@ import { environment } from '../../../../../environments/environment';
 export class VerFacturaAdministrativaComponent implements OnInit {
 
   public idFactura = this.route.snapshot.params["id"];
-  public Factura : any = [];
-  public Cliente : any = [];
+  public Factura: any = [];
+  public Cliente: any = [];
   public Descripciones: any[] = [];
   public notasCredito: any[] = [];
   public reducer = (accumulator, currentValue) => accumulator + parseInt(currentValue.Subtotal);
   public reducer1 = (accumulator, currentValue) => accumulator + parseInt(currentValue.Descuento_Factura);
-  public Subtotal : any = 0;
-  public Total : any = 0;
+  public Subtotal: any = 0;
+  public Total: any = 0;
   public TotalNC = 0;
   public valorLetra = '';
-  public contadorNC: number =0 ;
-  public configuracionGeneral : any[] = [];
-  public firmaUsuario: any ='';
-  public Impuesto : any = 0;
+  public contadorNC: number = 0;
+  public configuracionGeneral: any[] = [];
+  public firmaUsuario: any = '';
+  public Impuesto: any = 0;
   public perfilUsuario = localStorage.getItem('miPerfil');
   public funcionario = JSON.parse(localStorage.getItem('User'));
-  public Resolucion:any = {};
+  public Resolucion: any = {};
 
-  public Actividades:any = [];
-  
+  public Actividades: any = [];
+
   Descuento: any;
 
-  constructor(private route: ActivatedRoute,private http : HttpClient) {
-    
-    this.http.get(environment.ruta+'php/factura_administrativa/get_factura_administrativa.php',{
-      params : { id : this.idFactura }
-    }).subscribe((data:any)=>{
+  constructor(private route: ActivatedRoute, private http: HttpClient) {
+
+    this.http.get(environment.ruta + 'php/factura_administrativa/get_factura_administrativa.php', {
+      params: { id: this.idFactura }
+    }).subscribe((data: any) => {
       this.Factura = data.Datos;
       this.Resolucion = data.Resolucion;
       this.Cliente = data.Cliente
@@ -46,27 +46,25 @@ export class VerFacturaAdministrativaComponent implements OnInit {
       //this.notasCredito = data.NotasCredito;
 
       this.Subtotal = data.Subtotal;
-    
-     /*  this.valorLetra = data.letra; */
+
+      /*  this.valorLetra = data.letra; */
 
       this.Impuesto = data.Impuesto;
 
       this.Total = data.Total;
       this.Descuento = data.Descuento;
       this.Actividades = data.actividades;
-      console.log(this.Factura.Id_Factura_Administrativa);
-    
       //this.contadorNC = this.notasCredito.length;
 
     });
 
     var usuario = JSON.parse(localStorage['User']);
     var NombreUsuario = usuario['Nombres'] + " " + usuario['Apellidos'];
-    this.firmaUsuario = NombreUsuario; 
-   }
+    this.firmaUsuario = NombreUsuario;
+  }
 
   ngOnInit() {
- 
-    }
+
+  }
 
 }

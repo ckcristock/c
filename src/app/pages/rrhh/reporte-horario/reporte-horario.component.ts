@@ -229,7 +229,6 @@ export class ReporteHorarioComponent implements OnInit {
 
   get turn_type_value() {
     const turnType = this.formFilters.get('turn_type').value;
-    console.log(turnType);
     if (turnType === 'Todos') { // Si se selecciona la opción "Todos"
       return ''; // Retorna un valor vacío para que se muestren todos los datos
     }
@@ -259,11 +258,9 @@ export class ReporteHorarioComponent implements OnInit {
         this.donwloading = false;
       }),
       (error) => {
-        console.log('Error downloading the file', error);
         this.donwloading = false;
       },
       () => {
-        console.info('File downloaded successfully');
         this.donwloading = false;
       };
   }

@@ -322,7 +322,6 @@ export class AlistamientoComponent implements OnInit {
     this.confirmacionGuardar.fire();
   }
   save() {
-    // console.log("data saved");
   }
   ListarAlistamientos() {
     this.loading = true
@@ -356,9 +355,6 @@ export class AlistamientoComponent implements OnInit {
         queryString
       )
       .subscribe((data: any) => {
-        console.log('remisiones');
-        console.log(data);
-
         this.Alistamientos = data.remisiones;
         this.loading = true
         this.TotalItems = data.numReg;

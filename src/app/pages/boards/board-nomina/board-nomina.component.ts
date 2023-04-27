@@ -9,80 +9,80 @@ import { Location } from '@angular/common';
   styleUrls: ['./board-nomina.component.scss']
 })
 export class BoardNominaComponent implements OnInit {
-  globales = {ruta: 'http://inventario.sigmaqmo.com/'}
+  globales = { ruta: 'http://inventario.sigmaqmo.com/' }
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) { }
 
-  public datos_tabla_semaforo:any = {
-    personas:[],
-    salarios:[],
-    seguridad_social:[],
-    extras_recargos:[],
-    vacaciones:[],
-    incapacidades:[],
-    ingresos_constitutivos:[],
-    ingresos_no_constitutivos:[]
+  public datos_tabla_semaforo: any = {
+    personas: [],
+    salarios: [],
+    seguridad_social: [],
+    extras_recargos: [],
+    vacaciones: [],
+    incapacidades: [],
+    ingresos_constitutivos: [],
+    ingresos_no_constitutivos: []
   };
 
-  private costosGastosPorGrupo:Array<any> = [];
-  private costosGastosPorDependencias:Array<any> = [];
+  private costosGastosPorGrupo: Array<any> = [];
+  private costosGastosPorDependencias: Array<any> = [];
 
-  public meses_tabla:any = {
+  public meses_tabla: any = {
     mes1: '',
     mes2: ''
   };
 
-  public TotalSueldos:number=0;
-  public TotalAuxilio:number=0;
-  public TotalDeducciones:number=0;
+  public TotalSueldos: number = 0;
+  public TotalAuxilio: number = 0;
+  public TotalDeducciones: number = 0;
 
-  public border_color:string = '#ffffff';
+  public border_color: string = '#ffffff';
 
-  public lineChartData:Array<any> = [];
-  public lineChartLabels:Array<any> = [];
-  public lineChartOptions:any = {};
-  public lineChartColors:Array<any> = [];
-  public lineChartLegend:boolean = true;
-  public lineChartType:string = 'line';
+  public lineChartData: Array<any> = [];
+  public lineChartLabels: Array<any> = [];
+  public lineChartOptions: any = {};
+  public lineChartColors: Array<any> = [];
+  public lineChartLegend: boolean = true;
+  public lineChartType: string = 'line';
 
   @ViewChild('costosNominaChart') costosNominaChart: ElementRef;
   public costosNominaChartTag: CanvasRenderingContext2D;
-  public costoNominaChartOption:any;
+  public costoNominaChartOption: any;
   public costosNominaChartData: any;
-  private nominaQuincenasData:any = new Array;
+  private nominaQuincenasData: any = new Array;
 
 
   public ColoresChart = ['#357ff4', '#4834f4', '#34d4f4', '#34f444', '#bcae31', '#d1261d'];
   //public TagsChart = ['Salarios', 'Extras y Recargos', 'Vacaciones', 'Incapacidades', 'Ingresos Constitutivos', 'Ingresos No Constitutivos'];
   public TagsChart = ['Salarios', 'extras y Recargos', 'Vacaciones', 'Incapacidades', 'Ingresos Constitutvos', 'Otros ingresos'];
-  public LabelsChart:any = new Array;
-  private chartDatasets:any = [];
+  public LabelsChart: any = new Array;
+  private chartDatasets: any = [];
 
   public ColoresCostosGastos = ['#357ff4', '#4834f4', '#34d4f4'];
   public TagsCostosGastos = ['Salarios', 'Extras y Recargos', 'Otros Ingresos'];
-  public costosGastosOptions:any = [];
-  public costosGastosFeedbackData:any = [];
-  public costosGastosFeedbackOptions:any = [];
-  private nominaData:any = [];
+  public costosGastosOptions: any = [];
+  public costosGastosFeedbackData: any = [];
+  public costosGastosFeedbackOptions: any = [];
+  private nominaData: any = [];
 
   public ColoresCostosGastosGrupos = ['#357ff4', '#4834f4', '#34d4f4'];
   public TagsCostosGastosGrupos = [];
-  public costosGruposOptions:any = [];
-  public costosGastosGrupoData:any = {};
-  public costosGastosGrupoOptions:any = {};
+  public costosGruposOptions: any = [];
+  public costosGastosGrupoData: any = {};
+  public costosGastosGrupoOptions: any = {};
 
   public ColoresCostosGastosDependencias = ['#357ff4', '#4834f4', '#34d4f4', '#1b5bc1', '#1d1bc1', '#841b45', '#727212', '#c15c0f', '#c1320e', '#c10d0d', '#1c720e'];
   public TagsCostosGastosDependencias = [];
-  public costosDependenciasOptions:any = [];
-  public costosGastosDependenciaData:any = {};
-  public costosGastosDependenciaOptions:any = {};
+  public costosDependenciasOptions: any = [];
+  public costosGastosDependenciaData: any = {};
+  public costosGastosDependenciaOptions: any = {};
 
   ngOnInit() {
     this.DescargarDatosNomina();
     this.DescargarDatosNominaTotatles();
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.ConstruirGrafica();
     this.LoadChart();
     this.ConstruirCostosGastos();
@@ -90,17 +90,16 @@ export class BoardNominaComponent implements OnInit {
     this.ConstruirCostosGastosDependencia();
   }
 
-  DescargarDatosNominaTotatles(){
-    this.http.get(this.globales.ruta + 'php/nomina/lista_funcionarios.php'+'').subscribe((data: any) => {
+  DescargarDatosNominaTotatles() {
+    this.http.get(this.globales.ruta + 'php/nomina/lista_funcionarios.php' + '').subscribe((data: any) => {
       this.TotalSueldos = data.Total_Sueldos;
       this.TotalAuxilio = data.Total_Auxilio;
-      this.TotalDeducciones= data.Total_Deducciones;
+      this.TotalDeducciones = data.Total_Deducciones;
     });
   }
 
   DescargarDatosNomina() {
     this.http.get(this.globales.ruta + 'php/nomina/tablero_nomina.php').subscribe((data: any) => {
-      // console.log(data);
       this.meses_tabla.mes1 = data.meses_tabla.mes1;
       this.meses_tabla.mes2 = data.meses_tabla.mes2;
 
@@ -120,20 +119,20 @@ export class BoardNominaComponent implements OnInit {
       for (const key in costosNominaQuincenas) {
 
         let i = 0;
-        for(const k in costosNominaQuincenas[key]){
+        for (const k in costosNominaQuincenas[key]) {
 
-          if(k == 'fechas'){
+          if (k == 'fechas') {
 
-            this.LabelsChart.push(costosNominaQuincenas[key][k]['inicio']+" al "+costosNominaQuincenas[key][k]['fin']);
+            this.LabelsChart.push(costosNominaQuincenas[key][k]['inicio'] + " al " + costosNominaQuincenas[key][k]['fin']);
 
-          }else if(k != 'fechas'){
+          } else if (k != 'fechas') {
             if (this.nominaQuincenasData[i] === undefined) {
               this.nominaQuincenasData[i] = [];
             }
 
             this.nominaQuincenasData[i].push(costosNominaQuincenas[key][k]);
 
-            if(i == 0 && indexTags == 0)
+            if (i == 0 && indexTags == 0)
               this.TagsChart.push(k);
 
             i++;
@@ -145,7 +144,7 @@ export class BoardNominaComponent implements OnInit {
       //Datos graficas Donas
       let costosNomina = data.costos_nomina;
       for (const key in costosNomina) {
-        let cData = {data: costosNomina[key], costos: 0};
+        let cData = { data: costosNomina[key], costos: 0 };
         this.nominaData.push(costosNomina[key]);
       }
 
@@ -163,7 +162,7 @@ export class BoardNominaComponent implements OnInit {
     });
   }
 
-  LoadChart(){
+  LoadChart() {
     setTimeout(() => {
       const chartTag = (((<HTMLCanvasElement>this.costosNominaChart.nativeElement).children));
       this.costosNominaChartTag = ((chartTag['costos_nomina_chart']).lastChild).getContext('2d');
@@ -178,25 +177,24 @@ export class BoardNominaComponent implements OnInit {
     }, 7000);
   }
 
-  ConstruirGrafica(){
-    setTimeout(()=>{
-      // console.log(this.nominaQuincenasData);
+  ConstruirGrafica() {
+    setTimeout(() => {
       let i = 0;
       this.nominaQuincenasData.forEach(element => {
         let dataset = {
           label: this.TagsChart[i],
-            borderColor: this.ColoresChart[i],
-            pointBorderColor: '#fff',
-            pointBackgroundColor: this.ColoresChart[i],
-            pointHoverBackgroundColor: this.ColoresChart[i],
-            pointHoverBorderColor: this.ColoresChart[i],
-            pointBorderWidth: 2,
-            pointHoverRadius: 8,
-            pointHoverBorderWidth: 1,
-            pointRadius: 8,
-            fill: true,
-            borderWidth: 2,
-            data: element //Eje Y
+          borderColor: this.ColoresChart[i],
+          pointBorderColor: '#fff',
+          pointBackgroundColor: this.ColoresChart[i],
+          pointHoverBackgroundColor: this.ColoresChart[i],
+          pointHoverBorderColor: this.ColoresChart[i],
+          pointBorderWidth: 2,
+          pointHoverRadius: 8,
+          pointHoverBorderWidth: 1,
+          pointRadius: 8,
+          fill: true,
+          borderWidth: 2,
+          data: element //Eje Y
         };
 
         this.chartDatasets.push(dataset);
@@ -207,8 +205,8 @@ export class BoardNominaComponent implements OnInit {
 
   }
 
-  ConstruirCostosGastos(){
-    setTimeout(()=>{
+  ConstruirCostosGastos() {
+    setTimeout(() => {
       this.costosGastosOptions = {
         position: ['bottom', 'right'],
         maxStack: 8,
@@ -243,8 +241,8 @@ export class BoardNominaComponent implements OnInit {
 
   }
 
-  ConstruirCostosGastosGrupos(){
-    setTimeout(()=>{
+  ConstruirCostosGastosGrupos() {
+    setTimeout(() => {
       this.costosGruposOptions = {
         position: ['bottom', 'right'],
         maxStack: 8,
@@ -278,8 +276,8 @@ export class BoardNominaComponent implements OnInit {
     }, 5000);
   }
 
-  ConstruirCostosGastosDependencia(){
-    setTimeout(()=>{
+  ConstruirCostosGastosDependencia() {
+    setTimeout(() => {
       this.costosDependenciasOptions = {
         position: ['bottom', 'right'],
         maxStack: 8,
@@ -314,9 +312,9 @@ export class BoardNominaComponent implements OnInit {
     }, 5500);
   }
 
-  ConstruirGraficaDona(graphOptionContainer:any, graphDataContainer:any, data:Array<any>, colores:Array<string>, tags:Array<string>){
+  ConstruirGraficaDona(graphOptionContainer: any, graphDataContainer: any, data: Array<any>, colores: Array<string>, tags: Array<string>) {
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
       graphDataContainer = {
         datasets: [{

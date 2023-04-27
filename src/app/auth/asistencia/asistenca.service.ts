@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class AsistenciaService {
+  constructor(
+    private http: HttpClient
+  ) { }
 
-    constructor(private http: HttpClient) { }
-
-    validate( data ) {
-        return this.http.post(`${environment.base_url}/asistencia/validar`,data)
-    }
-  
+  validate(data) {
+    return this.http.post(`${environment.base_url}/asistencia/validar`, data)
+  }
 }

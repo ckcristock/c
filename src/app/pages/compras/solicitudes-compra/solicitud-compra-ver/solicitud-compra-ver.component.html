@@ -1,166 +1,305 @@
 <ng-template #placeholder>
-    <app-placeholder-form></app-placeholder-form>
- </ng-template>
- <ng-container *ngIf="!loading; else placeholder">
-    <div class="row">    
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<ng-container *ngIf="!loading; else placeholder">
+  <div class="row">
     <!-- Historial  -->
-        <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">
-                        <h5 class="text-primary">Seguimiento</h5>
-                    </div>
-                    <hr class="line" />
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">
+            <h5 class="text-primary">Seguimiento</h5>
+          </div>
+          <hr class="line" />
 
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item px-0">
-                            <div class="d-flex w-100 justify-content-between">
-                                <div>
-                                    <h6 class="mb-0"> 
-                                        <!-- faltan las actividades -->
-                                        <span
-                                        class="badge">
-                                        </span>
-                                    </h6>
-                                </div>
-                                <!--  falta poner la imagen del funcionario  -->
-                                <img
-                                class="d-block img-thumbnail rounded-circle img-fluid header-profile-user"
-                                [src]="'../../../../../assets/images/noprofile.png'"
-                                />
-                            </div>                        
-                        </li>
-                    </ul>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item px-0">
+              <div class="d-flex w-100 justify-content-between">
+                <div>
+                  <h6 class="mb-0">
+                    <!-- faltan las actividades -->
+                    <span class="badge"> </span>
+                  </h6>
                 </div>
-            </div>
+                <!--  falta poner la imagen del funcionario  -->
+                <img
+                  class="d-block img-thumbnail rounded-circle img-fluid header-profile-user"
+                  [src]="'../../../../../assets/images/noprofile.png'"
+                />
+              </div>
+            </li>
+          </ul>
         </div>
+      </div>
+    </div>
     <!-- Contenido principal -->
-        <div class="col-md-9">
-            <div class="card">
-                <div class="card-body">
-                    <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
-                    <hr class="line" />
-                    <!-- Tablas con información -->
-                    <div class="rounded-top table-responsive mt-2">
-                        <table class="table table-bordered table-striped table-sm">
-                          <thead class="bg-light">
-                            <tr class="text-center text-uppercase">
-                              <th style="text-align: center">Funcionario que solicita</th>
-                              <th style="text-align: center">Area o departamento</th>
-                              <th style="text-align: center">Fecha de solicitud</th>
-                              <th style="text-align: center">Fecha Probable de Entrega</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr class="text-center">
-                              <td>
-                                {{ solicitud.person.full_names | titlecase }}
-                              </td>
-                              <td>
-                                {{ solicitud.person.contractultimate.position.dependency.name | capitalLetter }}
-                              </td>
-                              <td>
-                                {{ solicitud.created_at | date : "MMM d, y" }}
-                              </td>
-                              <td>
-                                {{ solicitud.expected_date | date : "MMM d, y" }}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div> 
-                      <hr />
-                      <h6>Productos</h6>
-                      <div class="rounded-top table-responsive">
-                        <table class="table table-bordered table-striped table-sm">
-                          <thead class="bg-light">
-                            <tr class="text-center text-uppercase">
-                              <th>#</th>
-                              <th>Referencia</th>
-                              <th>Producto</th>
-                              <th>Cantidad</th>
-                              <th>Unidad Medida</th>
-                              <th>Cotizaciones</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr
-                            *ngFor="let solicitud of solicitud.product_purchase_request; let i = index"
-                            class="text-center"
-                            >
-                              <th>
-                                {{ i + 1 }}
-                              </th>
-                              <td class="align-middle">
-                                {{solicitud.product.Referencia | uppercase}}
-                              </td>
-                              <td class="align-middle">
-                                {{solicitud.name | uppercase}}
-                              </td>
-                              <td class="align-middle">
-                                {{solicitud.ammount | number }}
-                              </td>
-                              <td class="align-middle">
-                                {{solicitud.product.unit.name}}
-                              </td>
-                              <td class="align-middle">
-                                <div ngbDropdown container="body" class="dropdown-primary">
-                                  <button
-                                    ngbDropdownToggle
-                                    class="btn btn-primary btn-sm"
-                                    type="button"
-                                  >
-                                    <i class="mdi mdi-chevron-down"> Cargar Cotización</i>
-                                  </button>
-                                  <div ngbDropdownMenu>
-                                    <a
-                                      class="dropdown-item text-success"
-                                      href="javascript: void(0);"
-                                      (click)="openModal(cotizacion_regular)"
-                                    >
-                                    <i class="far fa-money-check-edit"></i> Regular 
-                                   </a>
-                                   <a
-                                      class="dropdown-item text-success"
-                                      href="javascript: void(0);"
-                                      (click)="openModal2(cotizacion_nuevo_proveedor)"
-                                    >
-                                    <i class="far fa-money-check-edit"></i> Nuevo Proveedor
-                                   </a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>  
-                      <div class="rounded-top table-responsive">
-                        <table class="table table-bordered table-striped table-sm">
-                          <thead class="bg-light">
-                            <tr class="text-center text-uppercase">
-                              <th colspan="100%" class="bg-light">Observaciones</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr class="text-center">
-                              <td colspan="100%">
-                                {{ solicitud.observations | titlecase }}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>                 
-                      <!-- Fin tablas con información -->
-                </div>
-            </div>
+    <div class="col-md-9">
+      <div class="card">
+        <div class="card-body">
+          <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+          <hr class="line" />
+          <!-- Tablas con información -->
+          <div class="rounded-top table-responsive mt-2">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th style="text-align: center">Funcionario que solicita</th>
+                  <th style="text-align: center">Area o departamento</th>
+                  <th style="text-align: center">Fecha de solicitud</th>
+                  <th style="text-align: center">Fecha Probable de Entrega</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-center">
+                  <td>
+                    {{ solicitud.person.full_names | titlecase }}
+                  </td>
+                  <td>
+                    {{
+                      solicitud.person.contractultimate.position.dependency.name
+                        | capitalLetter
+                    }}
+                  </td>
+                  <td>
+                    {{ solicitud.created_at | date : "MMM d, y" }}
+                  </td>
+                  <td>
+                    {{ solicitud.expected_date | date : "MMM d, y" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <hr />
+
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>#</th>
+                  <th>Referencia</th>
+                  <th>Producto</th>
+                  <th>Cantidad</th>
+                  <th>Unidad Medida</th>
+                  <th>Estado</th>
+                  <th><i class="mdi mdi-chevron-down"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let product of solicitud.product_purchase_request;
+                    let i = index
+                  "
+                  class="text-center"
+                >
+                  <th>
+                    {{ i + 1 }}
+                  </th>
+                  <td class="align-middle">
+                    {{ product.product.Referencia | uppercase }}
+                  </td>
+                  <td class="align-middle">
+                    {{ product.name | uppercase }}
+                  </td>
+                  <td class="align-middle">
+                    {{ product.ammount | number }}
+                  </td>
+                  <td class="align-middle">
+                    {{ product.product.unit.name }}
+                  </td>
+                  <td class="align-middle">
+                    <span
+                      class="badge"
+                      [class]="
+                        product.status == 'Cotización Aprobada'
+                          ? 'badge-success'
+                          : product.status == 'Cotizaciones cargadas'
+                          ? 'badge-info'
+                          : product.status == 'Pendiente'
+                          ? 'badge-warning'
+                          : 'badge-danger'
+                      "
+                    >
+                      {{ product.status | uppercase }}
+                    </span>
+                  </td>
+
+                  <td class="align-middle">
+                    <div ngbDropdown container="body" class="dropdown-primary">
+                      <button
+                        *ngIf="
+                          product.status == 'Pendiente' ||
+                          (product.status == 'Cotizaciones cargadas' &&
+                            product.quotation.length > 0) ||
+                          (product.status == 'Cotización Aprobada' &&
+                            product.quotation.length > 0)
+                        "
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm"
+                        type="button"
+                      >
+                        <i class="mdi mdi-chevron-down"></i>
+                      </button>
+                      <div ngbDropdownMenu>
+                        <a
+                          class="dropdown-item text-info"
+                          href="javascript: void(0);"
+                          *ngIf="product.status == 'Pendiente'"
+                          (click)="openModal(modalCotizar, product.id, false)"
+                        >
+                          <i class="fas fa-cloud-upload-alt"></i> Cargar
+                        </a>
+                        <a
+                          class="dropdown-item text-success"
+                          href="javascript: void(0);"
+                          *ngIf="product.status == 'Cotizaciones cargadas'"
+                          (click)="
+                            openModal2(
+                              modalAprobar,
+                              product.id,
+                              'lg',
+                              'product'
+                            )
+                          "
+                        >
+                          <i class="fas fa-check"></i> Aprobar
+                        </a>
+                        <ng-container
+                          *ngIf="product.status == 'Cotización Aprobada'"
+                        >
+                          <a
+                            class="dropdown-item text-info"
+                            href="javascript: void(0);"
+                            (click)="
+                              openModal2(
+                                modalAprobar,
+                                product.id,
+                                'sm',
+                                'product'
+                              )
+                            "
+                          >
+                            <i class="fas fa-eye"></i> Ver
+                          </a>
+                          <a
+                            class="dropdown-item text-success"
+                            href="javascript: void(0);"
+                          >
+                            <i class="fas fa-shopping-cart"></i> Realizar orden
+                          </a>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr class="table-warning">
+                  <th
+                    colspan="6"
+                    class="text-right text-uppercase align-middle"
+                  >
+                    Cotización general
+                  </th>
+                  <th class="text-center">
+                    <div ngbDropdown container="body" class="dropdown-primary">
+                      <button
+                        ngbDropdownToggle
+                        class="btn btn-primary btn-sm"
+                        type="button"
+                      >
+                        <i class="mdi mdi-chevron-down"></i>
+                      </button>
+
+                      <div
+                        ngbDropdownMenu
+                        *ngIf="
+                          solicitud.quotation_purchase_request.length > 0 ||
+                          solicitud.status == 'Pendiente'
+                        "
+                      >
+                        <a
+                          class="dropdown-item text-info"
+                          href="javascript: void(0);"
+                          *ngIf="solicitud.status == 'Pendiente'"
+                          (click)="openModal(modalCotizar, solicitud.id, true)"
+                        >
+                          <i class="fas fa-cloud-upload-alt"></i> Cargar
+                        </a>
+                        <a
+                          class="dropdown-item text-success"
+                          href="javascript: void(0);"
+                          *ngIf="solicitud.status == 'Cotizada'"
+                          (click)="
+                            openModal2(
+                              modalAprobar,
+                              solicitud.id,
+                              'lg',
+                              'purchase'
+                            )
+                          "
+                        >
+                          <i class="fas fa-check"></i> Aprobar
+                        </a>
+                        <ng-container *ngIf="solicitud.status == 'Aprobada'">
+                          <a
+                            class="dropdown-item text-info"
+                            href="javascript: void(0);"
+                            (click)="
+                              openModal2(
+                                modalAprobar,
+                                solicitud.id,
+                                'sm',
+                                'purchase'
+                              )
+                            "
+                          >
+                            <i class="fas fa-eye"></i> Ver
+                          </a>
+                          <a
+                            class="dropdown-item text-success"
+                            href="javascript: void(0);"
+                          >
+                            <i class="fas fa-shopping-cart"></i> Realizar orden
+                          </a>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+          <div class="rounded-top table-responsive">
+            <table class="table table-borderless table-sm">
+              <thead class="bg-light">
+                <tr class="text-uppercase">
+                  <th class="bg-light">Observaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {{
+                      solicitud.observations || "Sin observaciones" | uppercase
+                    }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Fin tablas con información -->
         </div>
-    </div>   
+      </div>
+    </div>
+  </div>
 </ng-container>
 
-<!--  Modal cotizar proveedor existente -->
-<ng-template #cotizacion_regular let-modal>
+<!--  Modal cotizar proveedor existente por producto-->
+<ng-template #modalCotizar let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Cotizaciones Material</h4>
+    <h4 class="text-primary modal-title">Cotizaciones material</h4>
     <button
       type="button"
       class="close"
@@ -173,79 +312,100 @@
   </div>
 
   <div class="modal-body">
-
+    <button type="button" class="btn btn-primary" (click)="printForm()">
+      Print
+    </button>
     <ngb-tabset>
-      <ngb-tab title="Cotización 1">
-        <ng-template ngbTabContent>
-          <ng-container [formGroup]="formCotizacionRegular1" id="formCotizacionRegular1">
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Nombre proveedor 1:</mat-label>
-              <mat-select
-                formControlName="Id_Proveedor"
-                
-                required
-              >
-                <mat-select-filter
-                  
-                ></mat-select-filter>
-                <mat-option>
-                  
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Numero de Cotización 1:</mat-label>
-              <input
-                matInput
-                type="text"
-                placeholder="Ingresa el numero de cotización"
-                formControlName="numero_cotizacion"
-                required
-                autocomplete="off"
-              />
-              <!-- <mat-icon matSuffix>question_mark</mat-icon> -->
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Precio Total 1:</mat-label>
-              <input
-                matInput
-                placeholder="Ingresa el precio total de la cotización"
-                formControlName="precio_total"
-                required
-                autocomplete="off"
-              />
-              <!-- <mat-icon matPrefix>monetization_on</mat-icon> -->
-            </mat-form-field>
-            <div class="col-md-6">
-              <div class="form-group text-center">
-                <div class="custom-input-file col-md-12">
-                  <input
-                    type="file"
-                    #fileInput
-                    id="importFile"
-                    class="input-file"
-                    (change)="onFileChanged($event)"
-                  />
-                  Cargar documento legal
+      <ng-container [formGroup]="formCotizacionRegular">
+        <ng-container formArrayName="items">
+          <ngb-tab
+            *ngFor="let item of items.controls; let i = index"
+            [title]="'Cotización ' + (i + 1)"
+          >
+            <ng-template ngbTabContent>
+              <ng-container [formGroupName]="i">
+                <div class="row mt-3">
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>Nombre proveedor {{ i + 1 }}</mat-label>
+                    <mat-select
+                      formControlName="third_party_id"
+                      required
+                      [disableOptionCentering]="true"
+                      #selectProveedor
+                    >
+                      <mat-select-filter
+                        *ngIf="selectProveedor.focused"
+                        [placeholder]="'Selecciona el proveedor'"
+                        [array]="proveedores"
+                        [displayMember]="'text'"
+                        (filteredReturn)="filteredProveedor = $event"
+                      ></mat-select-filter>
+                      <mat-option
+                        *ngFor="let proveedor of filteredProveedor"
+                        [value]="proveedor.value"
+                      >
+                        {{ proveedor.text }}
+                      </mat-option>
+                    </mat-select>
+                    <button
+                      mat-icon-button
+                      matSuffix
+                      (click)="redirectTercero()"
+                    >
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </mat-form-field>
+
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>Número de cotización {{ i + 1 }}</mat-label>
+                    <input matInput readonly formControlName="code" required />
+                  </mat-form-field>
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>Precio total cotización {{ i + 1 }}</mat-label>
+                    <input
+                      matInput
+                      currencyMask
+                      appInputPosition
+                      [options]="mask.maskCOP"
+                      placeholder="Digita el precio total de la cotización"
+                      formControlName="total_price"
+                      required
+                      autocomplete="off"
+                    />
+                  </mat-form-field>
+
+                  <div class="form-group text-center col-md-12">
+                    <div class="custom-input-file col-md-12">
+                      <input
+                        type="file"
+                        #fileInput
+                        id="importFile"
+                        accept=".pdf"
+                        class="input-file"
+                        (change)="onFileChanged($event, i)"
+                      />
+                      Cargar cotización {{ i + 1 }}
+                    </div>
+                    <div class="col-md-12 text-center">
+                      <small *ngIf="item.get('file').value" class="text-success"
+                        >Cotización cargada exitosamente</small
+                      >
+                    </div>
+                  </div>
                 </div>
-                <div class="col-md-12 text-center">
-                  <small *ngIf="file" class="text-success">Documento cargado</small>
+                <div
+                  class="alert alert-info col-md-12 text-center"
+                  role="alert"
+                >
+                  Solo podrás cargar una vez las cotizaciones, puedes cargar una
+                  o más cotizaciones de este producto.
                 </div>
-              </div>
-            </div>
-          </ng-container> 
-      </ng-template>
-      </ngb-tab>
-      <ngb-tab title="Cotización 2">
-        Contenido de la pestaña 2
-      </ngb-tab>
-      <ngb-tab title="Cotización 3">
-        Contenido de la pestaña 3
-      </ngb-tab>
+              </ng-container>
+            </ng-template>
+          </ngb-tab>
+        </ng-container>
+      </ng-container>
     </ngb-tabset>
-
-    
-
   </div>
   <div class="modal-footer">
     <button
@@ -255,21 +415,113 @@
     >
       Cancelar
     </button>
-    <button
-      type="submit"
-      class="btn btn-primary"     
-    >
-    <!-- (click)="saveMemorandum()"
-      [disabled]="!formMemorando.valid" -->
+    <button type="submit" class="btn btn-primary" (click)="saveQuotation()">
       Guardar
     </button>
   </div>
 </ng-template>
 
-<!--  Modal cotizar proveedor nuevo -->
-<ng-template #cotizacion_nuevo_proveedor let-modal>
+<!--  Modal Aprobar por producto-->
+<ng-template #modalAprobar let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">Cotizaciones Material</h4>
+    <h5 class="text-primary modal-title" *ngIf="!loadingQuotations">
+      {{ validate() ? "Cotización aprobada" : "Cotizaciones del producto" }}
+    </h5>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!-- El modalbody va en un ngfor  -->
+  <div class="modal-body">
+    <ng-container
+      *ngIf="
+        !loadingQuotations && quotations.length > 0;
+        else notDataQuotations
+      "
+    >
+      <div class="row">
+        <div
+          *ngFor="let quotation of quotations; let i = index"
+          [class]="quotation.status === 'Aprobada' ? 'col-12' : 'col-md-4'"
+        >
+          <div
+            class="card border border-success"
+            *ngIf="
+              quotation.status == 'Pendiente' || quotation.status == 'Aprobada'
+            "
+          >
+            <div class="card-header d-flex justify-content-between">
+              <h6 class="text-primary">Cotización {{ i + 1 }}</h6>
+              <mat-radio-button
+                color="primary"
+                (click)="selectedQuotation(quotation.id)"
+                *ngIf="quotation.status == 'Pendiente'"
+              ></mat-radio-button>
+            </div>
+            <div class="card-body pt-0">
+              <h5 class="card-title">
+                N°cotización: <small>{{ quotation?.code }}</small>
+              </h5>
+              <h5 class="card-title">
+                Proveedor:
+                <small>{{ quotation?.third_party?.full_name }}</small>
+              </h5>
+              <h5 class="card-title">
+                Precio:
+                <small>
+                  $ {{ quotation?.total_price | number : "1.2-2" }}</small
+                >
+              </h5>
+              <h5 class="card-title">
+                PDF adjunto:
+                <a [href]="quotation?.file" target="_blank "
+                  ><small>Cotización {{ i + 1 }}</small></a
+                >
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-container *ngIf="!validate()">
+        <div class="alert alert-info text-center" role="alert">
+          <strong
+            >Selecciona una cotización para aprobar. Esta acción sólo se podrá
+            realizar una vez.</strong
+          >
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
+      Cerrar
+    </button>
+    <ng-container *ngIf="!validate() && !loadingQuotations">
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="saveQuotationApproved()"
+      >
+        Aprobar
+      </button>
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-template #notDataQuotations>
+  <app-not-data [loading]="loadingQuotations"></app-not-data>
+</ng-template>
+
+<!--  Modal cotizar proveedor existente por producto-->
+<!-- <ng-template #modalCotizarGeneral let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Cotizaciones material</h4>
     <button
       type="button"
       class="close"
@@ -282,21 +534,111 @@
   </div>
 
   <div class="modal-body">
+    <button type="button" class="btn btn-primary" (click)="printForm()">
+      Print
+    </button>
     <ngb-tabset>
-      <ngb-tab title="Cotización 1">
-        Contenido de la pestaña 1
-      </ngb-tab>
-      <ngb-tab title="Cotización 2">
-        Contenido de la pestaña 2
-      </ngb-tab>
-      <ngb-tab title="Cotización 3">
-        Contenido de la pestaña 3
-      </ngb-tab>
+      <ng-container [formGroup]="formCotizacionRegular">
+        <ng-container formArrayName="items">
+          <ngb-tab
+            *ngFor="let item of items.controls; let i = index"
+            [title]="'Cotización ' + (i + 1)"
+          >
+            <ng-template ngbTabContent>
+              <ng-container [formGroupName]="i">
+                <div class="row mt-3">
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>Nombre proveedor {{ i + 1 }}</mat-label>
+                    <mat-select
+                      formControlName="third_party_id"
+                      required
+                      [disableOptionCentering]="true"
+                      #selectProveedor
+                    >
+                      <mat-select-filter
+                        *ngIf="selectProveedor.focused"
+                        [placeholder]="'Selecciona el proveedor'"
+                        [array]="proveedores"
+                        [displayMember]="'text'"
+                        (filteredReturn)="filteredProveedor = $event"
+                      ></mat-select-filter>
+                      <mat-option
+                        *ngFor="let proveedor of filteredProveedor"
+                        [value]="proveedor.value"
+                      >
+                        {{ proveedor.text }}
+                      </mat-option>
+                    </mat-select>
+                    <button
+                      mat-icon-button
+                      matSuffix
+                      (click)="redirectTercero()"
+                    >
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </mat-form-field>
+
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>Número de cotización {{ i + 1 }}</mat-label>
+                    <input matInput readonly formControlName="code" required />
+                  </mat-form-field>
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>Precio total cotización {{ i + 1 }}</mat-label>
+                    <input
+                      matInput
+                      currencyMask
+                      appInputPosition
+                      [options]="mask.maskCOP"
+                      placeholder="Digita el precio total de la cotización"
+                      formControlName="total_price"
+                      required
+                      autocomplete="off"
+                    />
+                  </mat-form-field>
+
+                  <div class="form-group text-center col-md-12">
+                    <div class="custom-input-file col-md-12">
+                      <input
+                        type="file"
+                        #fileInput
+                        id="importFile"
+                        accept=".pdf"
+                        class="input-file"
+                        (change)="onFileChanged($event, i)"
+                      />
+                      Cargar cotización {{ i + 1 }}
+                    </div>
+                    <div class="col-md-12 text-center">
+                      <small *ngIf="item.get('file').value" class="text-success"
+                        >Cotización cargada exitosamente</small
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="alert alert-info col-md-12 text-center"
+                  role="alert"
+                >
+                  Solo podrás cargar una vez las cotizaciones, puedes cargar una
+                  o más cotizaciones de este producto.
+                </div>
+              </ng-container>
+            </ng-template>
+          </ngb-tab>
+        </ng-container>
+      </ng-container>
     </ngb-tabset>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
-      Cerrar
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+    <button type="submit" class="btn btn-primary" (click)="saveQuotation()">
+      Guardar
     </button>
   </div>
-</ng-template>
+</ng-template> -->

@@ -8,6 +8,7 @@ import { SolicitudCompraCrearComponent } from './solicitudes-compra/solicitud-co
 import { SolicitudesCompraEditarComponent } from './solicitudes-compra/solicitudes-compra-editar/solicitudes-compra-editar.component';
 import { SolicitudCompraVerComponent } from './solicitudes-compra/solicitud-compra-ver/solicitud-compra-ver.component';
 
+
 const routes: Routes = [
   { path: 'compra-nacional', component: CompraNacionalComponent },
   { path: 'crear-nacional', component: CrearCompraNacionalComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'solicitud/crear', component: SolicitudCompraCrearComponent },
   { path: 'solicitud/editar/:id', component: SolicitudesCompraEditarComponent },
   { path: 'solicitud/ver/:id' , component: SolicitudCompraVerComponent},
+  
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

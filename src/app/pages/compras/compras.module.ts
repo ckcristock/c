@@ -37,6 +37,10 @@ import { MatSelectFilterModule } from 'mat-select-filter';
 import { SolicitudCompraVerComponent } from './solicitudes-compra/solicitud-compra-ver/solicitud-compra-ver.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonModule, MatIconModule, MatRadioModule } from '@angular/material';
+
+
+
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -57,6 +61,7 @@ export const MY_FORMATS = {
     SolicitudCompraCrearComponent,
     SolicitudesCompraEditarComponent,
     SolicitudCompraVerComponent,
+
   ],
   providers: [
     {
@@ -95,7 +100,10 @@ export const MY_FORMATS = {
     MatPaginatorModule,
     MatSelectFilterModule,
     NgbModule,
-    MatTabsModule
+    MatTabsModule,
+    MatIconModule,
+    MatButtonModule,
+    MatRadioModule
   ],
 
 

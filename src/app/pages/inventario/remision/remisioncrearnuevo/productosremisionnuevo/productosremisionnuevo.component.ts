@@ -201,8 +201,6 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
         } else {
           this.RotativoModel.Id_Origen = 0;
         }
-        console.log('modelo', data.modelo);
-
         if (data.modelo.Grupo.Id_Grupo != 0) {
 
 
@@ -735,11 +733,9 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
       let size = this.Lista_Productos[existe]['Lotes_Seleccionados'].length;
 
       /*   for (let existente = 0; existente < size ; existente++) {
-          console.log(this.Lista_Productos[existe]['Lotes_Seleccionados'],'existente');
 
           let encontrado = false;
           for (let nuevo = 0; nuevo < datos.producto['Lotes_Seleccionados'].length ; nuevo++) {
-          console.log( datos.producto['Lotes_Seleccionados'][nuevo],'nuevo');
 
             if ( this.Lista_Productos[existe]['Lotes_Seleccionados']['Id_Inventario'] ==
                   datos.producto['Lotes_Seleccionados'][nuevo]['Id_Inventario']) {
@@ -782,9 +778,6 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
         }
       }
 
-      console.log(datos.producto['Lotes_Visuales'], 'lv n');
-      console.log(this.Lista_Productos[existe]['Lotes_Seleccionados'], 'lv viejo');
-
       this.Lista_Productos[existe]['Lotes_Visuales'] = [];
       for (let lote = 0; lote < this.Lista_Productos[existe]['Lotes_Seleccionados'].length; lote++) {
         let loteVisual = 'Lote :' + this.Lista_Productos[existe]['Lotes_Seleccionados'][lote]['Lote'] +
@@ -797,7 +790,6 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
 
 
       this.Lista_Productos[existe].Cantidad_Requerida = this.Lista_Productos[existe].Cantidad_Requerida + parseInt(datos.producto.Cantidad_Requerida);
-      console.log(this.Lista_Productos[existe]);
 
 
       /*       this.Lista_Productos[existe].Cantidad = this.Lista_Productos[existe].Cantidad_Requerida + parseInt(datos.producto.Cantidad_Requerida);
@@ -834,19 +826,11 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
 
       let modelo = this.validarJson(txtBorrador);
       if (modelo) {
-
-
-        console.log(modelo);
-
-
         this.Tipo_Remision = modelo.Modelo.Tipo;
         this._remisionModel = modelo.Modelo;
         /*  this._remisionModel.setGrupo(x); */
-
         this.RotativoModel.Id_Origen = modelo.Modelo.Id_Origen;
         this.RotativoModel.Id_Destino = modelo.Modelo.Id_Destino;
-
-
         if (this._remisionModel.Tipo == 'Interna') {
           this.Display_Interna = true;
           this.Display_Cliente = false;
@@ -885,7 +869,6 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
     try {
       conversion = JSON.parse(str);
     } catch (error) {
-      console.error('Ah ocurrido un error con el JSON', error);
       return false
     }
     return conversion;
@@ -911,15 +894,12 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
             this.confirmacionSalir.html = data.mensaje;
             this.confirmacionSalir.type = 'success';
             this.confirmacionSalir.fire();
-            console.log('b-b');
           } else {
-            console.log('else');
             WarningMessage(data);
             this.confirmacionGuardar.close;
           }
         });
       } else {
-        console.log('else-2');
         this.http.post(environment.ruta + 'php/remision_nuevo/save_remision.php', data).subscribe((data: any) => {
           if (data.codigo == 'success') {
             this._limpiarModelos(false);
@@ -930,7 +910,6 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
             this._router.navigate(['/inventario/remisiones'])
 
           } else {
-            console.log('else-else-2');
             WarningMessage(data);
             this.confirmacionGuardar.close;
           }
@@ -1074,8 +1053,6 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
             this.Lista_Productos[posProducto].Lotes[i].Cantidad_Seleccionada = cantidad;
             lote_temp.Cantidad_Seleccionada = cantidad;
             var labelLote = "Lote: " + this.Lista_Productos[posProducto].Lotes[i].Lote + " - Vencimiento: " + this.Lista_Productos[posProducto].Lotes[i].Fecha_Vencimiento + " - Cantidad: " + cantidad;
-            // console.log(labelLote, 'labelLote');
-
             this.Lista_Productos[posProducto].Lotes_Visuales.push(labelLote);
             this.Lista_Productos[posProducto].Cantidad = this.Lista_Productos[posProducto].Cantidad + cantidad;
             flag = false;
@@ -1151,8 +1128,6 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
     if (this._remisionModel.Tipo_Origen == 'Bodega') {
       p.grupo = JSON.stringify(this._remisionModel.Grupo);
     }
-    // console.log("eliminar lotes");
-    // console.log(this._remisionModel);
 
     this.EliminarLotesSeleccionados(this.Lista_Productos[posProducto].Lotes_Seleccionados, true, posProducto);
 
@@ -1162,7 +1137,6 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
         if (data.length > 0) {
           this.Lista_Productos[posProducto].Cantidad_Disponible = parseInt(data[0].Cantidad_Disponible);
           this.Lista_Productos[posProducto].Lotes = data[0].Lotes;
-          // console.log(this.Lista_Productos[posProducto].Cantidad_Disponible, 'comprobar lotes');
           this.SeleccionarLotes(posProducto);
         } else {
           this.Lista_Productos[posProducto].Cantidad_Disponible = 0;
@@ -1195,8 +1169,6 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
   }
 
   ConsultaProductoCodigoBarras() {
-
-    console.log('consulta productos');
 
     if (this.Codigo_Barras != '') {
 
@@ -1240,38 +1212,25 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
 
     if (this._remisionModel.Id_Origen == 0 || this._remisionModel.Id_Origen == undefined) {
       WarningMessage('error', 'Sin Origen Seleccionadoe', 'Debe seleccionar un origen para realizaar la busqueda!');
-      console.log(1);
       return false;
     } else if (this._remisionModel.Tipo_Origen == 'Bodega' && (!this._remisionModel.Grupo.Id_Grupo || this._remisionModel.Grupo.Id_Grupo == undefined)) {
-      console.log(this._remisionModel.Grupo);
-      console.log(this._remisionModel.Tipo_Origen);
       WarningMessage('error', 'Sin Categoria Seleccionada', 'Debe seleccionar un origen de categoria para realizaar la busqueda!');
-      console.log(3);
       return false;
     }
     else {
-      console.log(4);
       params.modelo = this._remisionModel.Modelo;
       params.tiporemision = this._remisionModel.Tipo;
       params.id_origen = this._remisionModel.Id_Origen;
       params.mes = this._remisionModel.Meses;
       params.id_grupo = this._remisionModel.Grupo.Id_Grupo;
-
-      console.log(5);
       if (this._remisionModel.Tipo == 'Cliente') {
         params.id_destino = this._remisionModel.Id_Destino;
         if (this._remisionModel.Id_Destino == 0 || this._remisionModel.Id_Destino == undefined) {
-          console.log(6);
           WarningMessage('error', 'Sin Destino Seleccionado', 'Debe seleccionar un destino para realizaar la busqueda!');
           return;
         }
       }
-
-      console.log(7);
-
       params.cod_barra = this.Codigo_Barras;
-      console.log(params);
-
       return params;
     }
 
@@ -1290,17 +1249,9 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
 
   private SetearProductoCodBarra(producto: any) {
     let product: any = new ProductoCargarRemision();
-
-    console.log("producto cod barra --> ", producto);
-
-
     for (var key in producto) {
-
-
       if (key != 'Codigo_Cum' && key != 'Seleccionado' && key != 'Cantidad_Requerida') {
         if (key == 'Lotes') {
-          console.log("Lotesss --> ", producto[key]);
-
           product[key] = this.SetearLotes(producto[key]);
         } else if (key == 'Cantidad') {
           if (producto[key] == '') {
@@ -1320,10 +1271,6 @@ export class ProductosremisionnuevoComponent implements OnInit, OnChanges, OnDes
         product[key] = producto[key];
       }
     }
-
-    console.log("Luego de setear los productos", product);
-
-
     return product;
 
   }

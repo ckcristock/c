@@ -280,7 +280,6 @@ export class ModalNuevoNegocioComponent implements OnInit {
   //   this.budgetsSelected = this.budgetsSelected.filter(
   //     (data) => data !== value
   //     );
-  //     console.log(this.budgetsSelected);
   //   return;
   // }
   // this.budgetsSelected.push(value);
@@ -311,7 +310,6 @@ export class ModalNuevoNegocioComponent implements OnInit {
   }
 
   saveBusiness() {
-    console.log(this.form.value)
     if (this.form.valid) {
       this._swal.show({
         title: '¿Estás seguro(a)?',

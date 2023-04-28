@@ -456,11 +456,6 @@ export class ItemsQuotationComponent implements OnInit {
 
 
   makeSubItemGroup(pre, edit = null, type, category = '', noCreate = false) {
-    console.log(pre)
-    console.log(edit)
-    console.log(type)
-    console.log(category)
-    console.log(noCreate)
     let type_model;
     if (pre && category == 'apu' && !noCreate) {
       switch (pre.type_module) {
@@ -595,7 +590,6 @@ export class ItemsQuotationComponent implements OnInit {
   }
 
   printForm() {
-    console.log(this.form.value)
   }
 
   deleteItem(pos) {

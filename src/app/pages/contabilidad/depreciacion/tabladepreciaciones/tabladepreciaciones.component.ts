@@ -162,7 +162,6 @@ export class TabladepreciacionesComponent implements OnInit {
   }
 
   /*   public OnDateRangeChanged( event:any){
-      console.log(event.targetElement.value)
       if (event.formatted != "") {
         this.Filtros.fechas_acta = event.formatted;
       } else {

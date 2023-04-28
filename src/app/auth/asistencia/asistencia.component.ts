@@ -25,40 +25,30 @@ export class AsistenciaComponent implements OnInit {
   }
 
   ngAfterContentInit(): void {
-    //Called after ngOnInit when the component's or directive's content has been initialized.
-    //Add 'implements AfterContentInit' to the class.
     this.beforeCreate();
     this.mounted();
-
   }
 
   capture() {
-    var context = this.canvas.nativeElement
-      .getContext('2d')
-      .drawImage(this.video.nativeElement, 0, 0, 640, 480);
+    var context = this.canvas.nativeElement.getContext('2d').drawImage(this.video.nativeElement, 0, 0, 640, 480);
     var imagen = this.canvas.nativeElement.toDataURL('image/png');
-
     const video: HTMLVideoElement = this.video.nativeElement;
     video.pause();
     this.CambiaVista();
     this._asistencia.validate({ imagen }).subscribe((r: any) => {
       this.CambiaVista();
-      /*  r.data.timer = 4000; */
-      /*  r.data.showConfirmButton = false; */
       r.timer = 1500
       Swal.fire(r);
     }, err => {
       this.CambiaVista();
-
       this._swal.show(
         {
-          title: 'Oops!',
-          text: "Han ocurrido errores, por favor intentar más tarde",
+          title: 'Error',
+          text: "Ha ocurrido un error, por favor intenta más tarde",
           icon: "error",
           timer: 1500
         })
     })
-
   }
 
   CambiaVista() {
@@ -68,6 +58,7 @@ export class AsistenciaComponent implements OnInit {
       video.play();
     }
   }
+
   mounted() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
@@ -81,7 +72,7 @@ export class AsistenciaComponent implements OnInit {
         })
         .catch(function (error) {
           alert(
-            'No se puede acceder a la Cámara : ' +
+            'No se puede acceder a la cámara : ' +
             error.name +
             ' ' +
             error.message

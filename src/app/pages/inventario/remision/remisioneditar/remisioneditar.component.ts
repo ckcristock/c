@@ -103,14 +103,11 @@ export class RemisioneditarComponent implements OnInit {
         this.http.get(environment.ruta + 'php/remision/detalle_bodegas_punto.php?id=' + this.Identificacion.Identificacion_Funcionario).subscribe((dato: any) => {
           this.Destino = dato.Bodega;
           this.Destino_Remision = 'B-' + data.Remision.Id_Destino;
-          console.log(this.Destino_Remision);
-
         });
       } else if (data.Remision.Tipo_Destino == "Punto_Dispensacion") {
         this.http.get(environment.ruta + 'php/remision/detalle_bodegas_punto.php?id=' + this.Identificacion.Identificacion_Funcionario).subscribe((dato: any) => {
           this.Destino = dato.Punto;
           this.Destino_Remision = 'P-' + data.Remision.Id_Destino;
-          console.log(this.Destino_Remision);
         });
       }
 
@@ -120,7 +117,6 @@ export class RemisioneditarComponent implements OnInit {
       this.destino = data.Destino;
       this.contrato = data.Contrato;
       this.Cambiar_Remision(this.remision.Tipo);
-      // console.log(this.remision);
 
     });
 
@@ -160,8 +156,6 @@ export class RemisioneditarComponent implements OnInit {
       params: { id: id }
     }).subscribe((data: any) => {
       this.Lista_Productos = data;
-      // console.log(this.Lista_Productos);
-
       this.Lista_Productos.push({
         producto: '',
         Id_Producto: '',
@@ -561,7 +555,6 @@ export class RemisioneditarComponent implements OnInit {
 
   }
   save() {
-    // console.log("Remision Guardada");
   }
 
   GuardarRemision(formulario: NgForm) {

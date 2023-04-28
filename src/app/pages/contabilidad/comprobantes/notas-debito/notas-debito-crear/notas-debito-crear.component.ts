@@ -127,17 +127,11 @@ export class NotasDebitoCrearComponent implements OnInit {
 
 
   NotaCredito(item, check, calculartotal: boolean = true) {
-
     let precioDisponible = item.Precio - item.Precio_Nota_Credito_Acumulado;
-    console.log('precio n', precioDisponible);
-
     if (check) {
-
       item.Disabled = false;
       item.Required = true;
       item.Precio_Nota = 0;
-
-
     } else {
       item.Valor_Nota = 0;
       item.Valor_Nota_Total = 0;
@@ -156,7 +150,6 @@ export class NotasDebitoCrearComponent implements OnInit {
     this.TipoClienteSelected = '';
     this.http.get(environment.base_url + '/php/lista_generales.php', { params: { modulo: 'Cliente' } }).subscribe((data: any) => {
       this.Cliente = data;
-      console.log(data);
     });
 
   }
@@ -265,8 +258,6 @@ export class NotasDebitoCrearComponent implements OnInit {
 
 
     let funcionario = this.user;
-    console.log(this.SubTotalGeneral);
-
     let subTotalGeneral = this.SubTotalGeneral ? this.SubTotalGeneral.toString() : '0';
     let total = this.Total;
     let moduloFactura = this.Tipo_Factura_Selected;
@@ -327,7 +318,6 @@ export class NotasDebitoCrearComponent implements OnInit {
   AbonoFactura(valor) {
     if ((parseInt(this.ValorFactura) >= parseInt(valor) && (this.ValorFactura != undefined))) {
       this.Boton = true;
-      // console.log(valor);
     } else {
       this.Boton = false;
     }
@@ -412,8 +402,6 @@ export class NotasDebitoCrearComponent implements OnInit {
     this.Codigo_Factura = '';
   }
   calcularTotal() {
-    console.log('calcular total');
-
     let acumulador = 0;
     if (this.Lista_Productos) {
       this.Lista_Productos.forEach(producto => {

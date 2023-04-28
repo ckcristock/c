@@ -17,26 +17,25 @@ export class TableProductosCatalogoComponent implements OnInit {
     collectionSize: 0,
   }
 
-  filtros:any = {
+  filtros: any = {
     name: ''
 
   }
 
-  constructor(private _catalogo: CatalogoService ) { }
+  constructor(private _catalogo: CatalogoService) { }
 
   ngOnInit(): void {
-   this.getData()
+    this.getData()
   }
 
-  getData(page=1){
+  getData(page = 1) {
     this.pagination.page = page;
     let params = {
       ...this.pagination, ...this.filtros,
-      tipo : this.type
+      tipo: this.type
 
     }
-    this._catalogo.getData(params).subscribe((r:any)=>{
-      console.log(r);
+    this._catalogo.getData(params).subscribe((r: any) => {
 
     })
   }

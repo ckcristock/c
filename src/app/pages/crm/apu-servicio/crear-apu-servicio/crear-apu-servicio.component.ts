@@ -295,7 +295,6 @@ export class CrearApuServicioComponent implements OnInit {
 
 
   save() {
-    console.log(this.form.value)
     if (this.form.invalid) {
       this._swal.show({
         icon: 'error',

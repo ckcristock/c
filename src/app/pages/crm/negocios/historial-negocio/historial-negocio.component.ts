@@ -47,7 +47,6 @@ export class HistorialNegocioComponent implements OnInit {
         historyAndTimeline.push(newObject);
       });
       historyAndTimeline.sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at)).reverse();
-      console.log(historyAndTimeline)
       this.historial = historyAndTimeline;
       this.loading = false
     });

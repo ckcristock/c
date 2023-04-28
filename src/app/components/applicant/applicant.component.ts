@@ -43,7 +43,6 @@ export class ApplicantComponent implements OnInit {
       this.donwloading = false
     },
       (err: any) => {
-        console.log(err);
         this._swal.show(
           {
             title: 'Error',
@@ -54,7 +53,6 @@ export class ApplicantComponent implements OnInit {
         this.donwloading = false
       },
       () => {
-        console.info('File downloaded successfully');
         this.donwloading = false
       }
     )

@@ -55,7 +55,6 @@ export class BalanceGeneralComponent implements OnInit {
   ListarCentroCostos() {
     this.http.get(environment.base_url + '/php/contabilidad/balanceprueba/lista_centro_costos.php').subscribe((data: any) => {
       this.Centro_Costos = data;
-      console.log(this.Centro_Costos)
     })
   }
 

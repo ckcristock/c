@@ -346,7 +346,6 @@ export class NegociosComponent implements OnInit {
       },
       () => { },
       () => {
-        // console.log(this.companies);
       }
     );
   }
@@ -435,7 +434,6 @@ export class NegociosComponent implements OnInit {
     //   this.budgetsSelected = this.budgetsSelected.filter(
     //     (data) => data !== value
     //     );
-    //     console.log(this.budgetsSelected);
     //   return;
     // }
     // this.budgetsSelected.push(value);

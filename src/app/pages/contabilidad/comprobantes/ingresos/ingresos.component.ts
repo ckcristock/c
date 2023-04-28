@@ -341,8 +341,6 @@ export class IngresosComponent implements OnInit {
   }
 
   MostrarBanco() {
-    // console.log(this.ComprobanteModel.Forma_Pago);
-
     if (this.ComprobanteModel.Forma_Pago == '4' || this.ComprobanteModel.Forma_Pago == '') {
       this.boolVal = false;
     } else {

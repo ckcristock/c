@@ -108,7 +108,7 @@ export class RotativoComponent implements OnInit {
         } else {
           this._swal.show({
             title: 'Ocurrió un error',
-            text: res.isConfirmed,
+            text: '',
             icon: 'error',
             showCancel: false,
           });

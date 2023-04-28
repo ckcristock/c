@@ -20,14 +20,13 @@ export class VerViaticosComponent implements OnInit {
     private location: Location,
     private route: ActivatedRoute,
     private _viaticosData: LegalizarDataService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params.id;
     this.viaticos$ = this._viaticosData.viaticos.subscribe((r) => {
       if (r) {
         this.data = r;
-        console.log(this.data)
       }
     });
 
@@ -55,11 +54,9 @@ export class VerViaticosComponent implements OnInit {
       /*  this.loading = false; */
     }),
       (error) => {
-        console.log('Error downloading the file');
         /*  this.loading = false; */
       },
       () => {
-        console.info('File downloaded successfully');
         /*  this.loading = false; */
       };
   }

@@ -10,7 +10,7 @@ export class VerLiquidacionComponent implements OnInit {
   id = this.route.snapshot.params.id;
   loading: boolean;
   liquidationValid: boolean = true;
-  liquidation: any[] =[]
+  liquidation: any[] = []
   constructor(
     private route: ActivatedRoute,
     private _user: DetalleService,
@@ -22,18 +22,17 @@ export class VerLiquidacionComponent implements OnInit {
 
   getPerson() {
     this.loading = true;
-    this._user.getLiquidation(this.id).subscribe((res:any) => {
+    this._user.getLiquidation(this.id).subscribe((res: any) => {
       this.loading = false;
       this.liquidation = res.data;
       if (this.liquidation["status"] != 'Liquidado') {
         this.liquidationValid = false;
       }
-      console.log(res)
     })
   }
 
   descargar(id) {
-    this._user.descargar(id).subscribe((res:any) => {
+    this._user.descargar(id).subscribe((res: any) => {
 
     })
   }

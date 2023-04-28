@@ -29,7 +29,6 @@ export class MenuChildComponent implements OnInit {
   constructor(private _swal: SwalService) { }
 
   ngOnInit(): void {
-    console.log(this.navItems)
     this.isChecked(this.navItems);
   }
 
@@ -74,7 +73,6 @@ export class MenuChildComponent implements OnInit {
   }
 
   changeAll(item, event) {
-    console.log(item)
     item.child.forEach(el => {
       el.permissions?.forEach(permission => {
         if (event.checked) {

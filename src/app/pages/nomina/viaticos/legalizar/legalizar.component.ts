@@ -1,4 +1,4 @@
-import { Component, OnDestroy,ElementRef, OnInit } from '@angular/core';
+import { Component, OnDestroy, ElementRef, OnInit } from '@angular/core';
 import { VerViaticosService } from '../ver-viaticos/ver-viaticos.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -22,13 +22,13 @@ export class LegalizarComponent implements OnInit, OnDestroy {
     private _viaticos: VerViaticosService,
     private location: Location,
     private route: ActivatedRoute,
-    private _viaticosData:LegalizarDataService
-  ) {}
-  
+    private _viaticosData: LegalizarDataService
+  ) { }
+
 
   ngOnInit(): void {
     this.id = this.route.snapshot.params.id;
-    this.viaticos$ = this._viaticosData.viaticos.subscribe(r=>{
+    this.viaticos$ = this._viaticosData.viaticos.subscribe(r => {
       this.data = r;
     })
 
@@ -47,30 +47,30 @@ export class LegalizarComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
-  get validHotel(){
+  get validHotel() {
     if (this.data?.hotels?.length) {
-      return  ! this.data.hotels.some( hotel =>  this.valid(hotel.reported) || this.valid(hotel.file)   )
+      return !this.data.hotels.some(hotel => this.valid(hotel.reported) || this.valid(hotel.file))
     }
     return true;
   }
-  get validTransport(){
+  get validTransport() {
     if (this.data?.transports?.length) {
-      return  ! this.data.transports.some( transport =>  this.valid(transport.reported) || this.valid(transport.file)   )
+      return !this.data.transports.some(transport => this.valid(transport.reported) || this.valid(transport.file))
     }
     return true;
   }
-  get validTaxi(){
+  get validTaxi() {
     if (this.data?.transports?.length) {
-      return  ! this.data.expense_taxi_cities.some( taxi =>  this.valid(taxi.reported) || this.valid(taxi.file)   )
+      return !this.data.expense_taxi_cities.some(taxi => this.valid(taxi.reported) || this.valid(taxi.file))
     }
     return true;
   }
 
- ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.viaticos$.unsubscribe();
   }
- 
-  valid(variable){
-  return ( variable  === undefined || variable  === null || variable === '')
+
+  valid(variable) {
+    return (variable === undefined || variable === null || variable === '')
   }
 }

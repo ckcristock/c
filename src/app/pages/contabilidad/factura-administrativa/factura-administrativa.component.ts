@@ -12,27 +12,27 @@ import { environment } from '../../../../environments/environment';
 })
 export class FacturaAdministrativaComponent implements OnInit {
 
-  public filtro_cod_fact:string = '';
-  public filtro_fecha_fact:any = '';
-  public filtro_estado_fact:string = '';
-  public filtro_facturador:string = '';
-  public filtro_cliente:string = '';
-  public filtro_tipo_fact:string = '';
+  public filtro_cod_fact: string = '';
+  public filtro_fecha_fact: any = '';
+  public filtro_estado_fact: string = '';
+  public filtro_facturador: string = '';
+  public filtro_cliente: string = '';
+  public filtro_tipo_fact: string = '';
   public page1 = 1;
   public maxSize = 15;
-  public TotalItems1:number;
-  public Cargando=false;
-  public Facturas:any = [];
-  public Servicios:any=[];
+  public TotalItems1: number;
+  public Cargando = false;
+  public Facturas: any = [];
+  public Servicios: any = [];
   myDateRangePickerOptions1: IMyDrpOptions = {
-    width:'120px', 
+    width: '120px',
     height: '21px',
-    selectBeginDateTxt:'Inicio',
-    selectEndDateTxt:'Fin',
+    selectBeginDateTxt: 'Inicio',
+    selectEndDateTxt: 'Fin',
     selectionTxtFontSize: '10px',
     dateFormat: 'yyyy-mm-dd',
   };
-  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) { 
+  constructor(private http: HttpClient, private route: ActivatedRoute, private location: Location) {
     this.getServicios();
   }
 
@@ -41,14 +41,14 @@ export class FacturaAdministrativaComponent implements OnInit {
   }
 
   ListarDetallesFacturacion() {
-    
+
     let params = this.route.snapshot.queryParams;
 
     let queryString = '';
-    
+
     if (Object.keys(params).length > 0) { // Si existe parametros o filtros
       // actualizando la variables con los valores de los paremetros.
-      
+
       this.page1 = params.pag ? params.pag : 1;
       this.filtro_cod_fact = params.cod_fact ? params.cod_fact : '';
       this.filtro_fecha_fact = params.fecha_fact ? params.fecha_fact : '';
@@ -58,23 +58,21 @@ export class FacturaAdministrativaComponent implements OnInit {
 
       queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     }
-    this.Cargando=true;
-    this.http.get(environment.ruta + '/php/factura_administrativa/get_facturas_administrativas.php?'+queryString).subscribe((data: any) => {
+    this.Cargando = true;
+    this.http.get(environment.ruta + '/php/factura_administrativa/get_facturas_administrativas.php?' + queryString).subscribe((data: any) => {
       this.Facturas = data.Facturas;
       this.TotalItems1 = data.numReg;
-      this.Cargando=false;
+      this.Cargando = false;
     });
   }
 
   paginacion() {
 
-    let params:any = {
+    let params: any = {
       pag: this.page1
     };
-  console.log('page', this.page1);
-  
     if (this.filtro_cod_fact != "") {
-      params.cod_fact= this.filtro_cod_fact;
+      params.cod_fact = this.filtro_cod_fact;
     }
     if (this.filtro_fecha_fact != "" && this.filtro_fecha_fact != null) {
       params.fecha_fact = this.filtro_fecha_fact;
@@ -95,27 +93,27 @@ export class FacturaAdministrativaComponent implements OnInit {
 
 
     let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
- 
+
     this.location.replaceState('/facturaadministrativa', queryString);
-    this.Cargando=true;
-    this.http.get(environment.ruta + '/php/factura_administrativa/get_facturas_administrativas.php?'+queryString).subscribe((data: any) => {
+    this.Cargando = true;
+    this.http.get(environment.ruta + '/php/factura_administrativa/get_facturas_administrativas.php?' + queryString).subscribe((data: any) => {
       this.Facturas = data.Facturas;
       this.TotalItems1 = data.numReg;
-      this.Cargando=false;
+      this.Cargando = false;
     });
   }
   filtros1() {
-    let params:any = {};
+    let params: any = {};
 
     if (this.filtro_cod_fact != "" || this.filtro_fecha_fact != "" || this.filtro_estado_fact != "" || this.filtro_facturador != "" || this.filtro_cliente != "" || this.filtro_tipo_fact != "") {
       this.page1 = 1;
       params.pag = this.page1;
-      
+
       if (this.filtro_cod_fact != "") {
-        params.cod_fact= this.filtro_cod_fact;
+        params.cod_fact = this.filtro_cod_fact;
       }
       if (this.filtro_fecha_fact != "" && this.filtro_fecha_fact != null) {
-        if (typeof(this.filtro_fecha_fact)=='object') {
+        if (typeof (this.filtro_fecha_fact) == 'object') {
           this.filtro_fecha_fact = this.filtro_fecha_fact.formatted;
         }
         params.fecha_fact = this.filtro_fecha_fact;
@@ -132,16 +130,16 @@ export class FacturaAdministrativaComponent implements OnInit {
       if (this.filtro_tipo_fact != "") {
         params.tipo = this.filtro_tipo_fact;
       }
-      
+
 
       let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
       this.location.replaceState('/facturaadministrativa', queryString);
-      this.Cargando=true;
-      this.http.get(environment.ruta + 'php/factura_administrativa/get_facturas_administrativas.php?'+queryString).subscribe((data: any) => {
+      this.Cargando = true;
+      this.http.get(environment.ruta + 'php/factura_administrativa/get_facturas_administrativas.php?' + queryString).subscribe((data: any) => {
         this.Facturas = data.Facturas;
         this.TotalItems1 = data.numReg;
-        this.Cargando=false;
+        this.Cargando = false;
       });
     } else {
       this.location.replaceState('/facturaadministrativa', '');
@@ -153,31 +151,31 @@ export class FacturaAdministrativaComponent implements OnInit {
       this.filtro_facturador = '';
       this.filtro_cliente = '';
       this.filtro_tipo_fact = '';
-      this.Cargando=true;
+      this.Cargando = true;
       this.http.get(environment.ruta + 'php/factura_administrativa/get_facturas_administrativas.php?').subscribe((data: any) => {
         this.Facturas = data.Facturas;
-        this.TotalItems1 = data.numReg; 
-        this.Cargando=false;
+        this.TotalItems1 = data.numReg;
+        this.Cargando = false;
       });
     }
   }
 
   dateRangeChanged1(event) {
-    
+
     if (event.formatted != "") {
-      
+
       this.filtro_fecha_fact = event.formatted;
     } else {
       this.filtro_fecha_fact = '';
     }
-    
+
     this.filtros1();
   }
-  getServicios(){
-    this.http.get(environment.ruta+'php/dispensaciones/get_servicios.php')
-    .subscribe((data:any) => {
-      this.Servicios=data;
-    })
+  getServicios() {
+    this.http.get(environment.ruta + 'php/dispensaciones/get_servicios.php')
+      .subscribe((data: any) => {
+        this.Servicios = data;
+      })
   }
 
 }

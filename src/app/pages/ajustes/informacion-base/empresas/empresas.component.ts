@@ -12,11 +12,11 @@ export class EmpresasComponent implements OnInit {
     page: 1,
     collectionSize: 20,
   }
-  
+
   searching = false;
   searchFailed = false;
 
-  enterprises:any[] = [];
+  enterprises: any[] = [];
 
   constructor(private _company: ConfiguracionEmpresaService,) { }
 
@@ -24,10 +24,9 @@ export class EmpresasComponent implements OnInit {
     this.getCompany();
   }
 
-  getCompany(){
-    this._company.getCompanyAll().subscribe((res: any) =>{
+  getCompany() {
+    this._company.getCompanyAll().subscribe((res: any) => {
       this.enterprises = res.data;
-      console.log(this.enterprises)
     })
   }
   filters: any = {

@@ -193,7 +193,6 @@ export class CrearProductoComponent implements OnInit {
   }
 
   saveProductos() {
-    console.log(this.form.value)
     if (this.form.valid) {
       this._swal.show({
         title: '¿Estás seguro(a)?',

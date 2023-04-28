@@ -260,7 +260,6 @@ export class CrearCotizacionComponent implements OnInit {
     window.open(url, '_blank');
   }
   budgetSelected(item) {
-    console.log(item)
     if (this.form.controls.money_type.value != '') {
       (async () => {
         const { value: choice } = await Swal.fire({
@@ -336,7 +335,6 @@ export class CrearCotizacionComponent implements OnInit {
   }
 
   save() {
-    console.log(this.form.value);
     if (this.form.valid) {
       this._swal.show({
         title: '¿Estás seguro(a)?',

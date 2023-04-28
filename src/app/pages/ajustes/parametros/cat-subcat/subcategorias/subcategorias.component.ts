@@ -225,8 +225,6 @@ export class SubcategoriasComponent implements OnInit {
       Fijo: this.Subcategory.Fijo,
       /* Categorias: this.Subcategory.categories */
     });
-    //console.log(this.Subcategory);
-
     this.Subcategory.subcategory_variables.forEach((element) => {
       let group = this.fb.group({
         id: element.id,

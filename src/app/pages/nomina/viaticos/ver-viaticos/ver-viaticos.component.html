@@ -1,14 +1,34 @@
 <div class="card">
-  <div class="card-body" *ngIf="!loading && data; else notData">
+  <div class="card-body" *ngIf="!loading && data; else placeholder">
     <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
         <h4 class="text-primary">Ver viático</h4>
       </div>
       <div class="col-md-6 px-0 text-right">
-        <a [routerLink]="['/manufactura/ordenes-produccion/ver/', data.work_order_id]">{{data.work_order?.text}}</a>
+        <a
+          [routerLink]="[
+            '/manufactura/ordenes-produccion/ver/',
+            data.work_order_id
+          ]"
+          target="_blank"
+          >{{ data.work_order?.text }}</a
+        >
       </div>
     </div>
     <hr class="line" />
+    <div class="d-flex justify-content-end">
+      <div class="btn-group" role="group" aria-label="Button group">
+        <button (click)="download()" class="btn btn-danger btn-sm">
+          <i class="fas fa-file-download"></i> Descargar
+        </button>
+        <button
+          [routerLink]="['/nomina/editar-viatico', data.id]"
+          class="btn btn-info btn-sm"
+        >
+          <i class="fas fa-edit"></i> Editar
+        </button>
+      </div>
+    </div>
     <div *ngIf="!loading">
       <app-viaticos-viaje [data]="data"></app-viaticos-viaje>
       <app-hospedaje *ngIf="data.hotels.length"></app-hospedaje>
@@ -25,11 +45,8 @@
       ></app-viaticos-alimentacion>
       <app-viaticos-totales [data]="data"></app-viaticos-totales>
     </div>
-    <button (click)="download()" class="btn btn-primary btn-block">
-      <i class="fas fa-file-download"></i> Descargar
-    </button>
   </div>
 </div>
-<ng-template #notData>
-  <app-not-data [loading]="loading"></app-not-data>
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
 </ng-template>

@@ -18,25 +18,22 @@ export class AppComponent {
                 if(!_user.user.menu[i].child[j].child[k].link){
                   for (let m in _user.user.menu[i].child[j].child[k].child){
                     if(val.urlAfterRedirects == _user.user.menu[i].child[j].child[k].child[m].link){
-                      console.warn('Igualito')
                     }
                   }
                 }else{
                   if (val.urlAfterRedirects == _user.user.menu[i].child[j].child[k].link){
-                    console.warn('Igualito 2')
-                  }                  
-                }                
+                  }
+                }
               }
             } else {
               if(val.urlAfterRedirects == _user.user.menu[i].child[j].link){
-                console.warn('Igualito 3')
               }
-              
+
             }
-            
+
           }
         }
-      }      
+      }
     })
   } */
 

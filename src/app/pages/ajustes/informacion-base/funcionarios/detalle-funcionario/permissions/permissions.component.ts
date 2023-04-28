@@ -38,10 +38,9 @@ export class PermissionsComponent implements OnInit {
   getMenues() {
     this.loading = true
     this._permissions.getPermissions({ person_id: this.person_id })
-      .subscribe((r: any) => { 
-        this.menues = r; 
-        this.loading = false 
-        //sconsole.log(this.menues)
+      .subscribe((r: any) => {
+        this.menues = r;
+        this.loading = false
       })
   }
 
@@ -105,7 +104,7 @@ export class PermissionsComponent implements OnInit {
       x++;
       if (element.child) { this.filtertData(element.child, element) }
       try {
-        //Buscamos padres sin hijos 
+        //Buscamos padres sin hijos
         if (element.child.length == 0 && !element.link && element.parent_id) {
           let pos = parent.child.findIndex(f => f.id == element.id)
           throw (pos);

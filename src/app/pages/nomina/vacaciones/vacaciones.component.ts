@@ -57,7 +57,6 @@ export class VacacionesComponent implements OnInit {
 
   vacationData(vacation) {
     this.vacation = { ...vacation };
-    console.log(this.vacation)
     this.calcularDias(); // La función se llama justo aca para que calcule los dias antes de hacer la operación.
     this.valor = this.vacation.person.contractultimate.salary * this.daysDiference / 30;
   }
@@ -137,7 +136,6 @@ export class VacacionesComponent implements OnInit {
       this.donwloading = false
     },
       (err: any) => {
-        console.log(err);
         this._swal.show(
           {
             title: 'Error',
@@ -148,7 +146,6 @@ export class VacacionesComponent implements OnInit {
         this.donwloading = false
       },
       () => {
-        console.info('File downloaded successfully');
         this.donwloading = false
       }
     )

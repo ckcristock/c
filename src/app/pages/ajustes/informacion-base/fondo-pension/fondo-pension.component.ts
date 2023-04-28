@@ -61,11 +61,11 @@ export class FondoPensionComponent implements OnInit {
 
   }
 
-  close () {
+  close() {
     this._modal.close()
   }
   closeResult = '';
-  public openConfirm(confirm, titulo,nuevoFondo) {
+  public openConfirm(confirm, titulo, nuevoFondo) {
     this.boolNuevoFondo = nuevoFondo;
     this.selected = titulo;
     this.modalService.open(confirm, { ariaLabelledBy: 'modal-basic-title', size: 'md', scrollable: true }).result.then((result) => {
@@ -144,51 +144,49 @@ export class FondoPensionComponent implements OnInit {
 
   createPensionFund() {
     let data = {};
-    if(this.boolNuevoFondo){
+    if (this.boolNuevoFondo) {
       data = this.form.value;
-    }else{
+    } else {
       data = {
         id: this.form.get("id").value,
-        name: this.form.get("name").value      }
+        name: this.form.get("name").value
+      }
     }
-    this._fondoPensionService.createPensionFund(data)
-      .subscribe((res: any) => {
-        console.log(res)
-
-        if (res.status== true) {
-          this.getPensionFunds();
-          this.modalService.dismissAll();
-          this._swal.show({
-            icon: 'success',
-            title: res.data,
-            text: `Se ha ${this.boolNuevoFondo?'creado':'actualizado'} el fondo con éxito.`,
-            timer:  2000,
-            showCancel: false
-          })
-        }
-        if (res.status == false) {
-          this._swal.show({
-            icon: 'error',
-            title: 'Ocurrió un error',
-            text: 'El NIT se encuentran registrados',
-            timer: 2000,
-            showCancel: false
-          })
-        }
-      },
-        err => {
-          const nit = err?.error.errors.hasOwnProperty('nit') ? err?.error.errors.nit[0] : ' ';
-          const code = err?.error.errors.hasOwnProperty('code') ? err?.error.errors.code[0] : ' ';
-          const texto = nit +' \n '+code
-          this._swal.show({
-            title: 'error',
-            text: texto,
-            icon: 'error',
-            timer: 2000,
-            showCancel: false,
-          })
-        }
-      )
+    this._fondoPensionService.createPensionFund(data).subscribe((res: any) => {
+      if (res.status == true) {
+        this.getPensionFunds();
+        this.modalService.dismissAll();
+        this._swal.show({
+          icon: 'success',
+          title: res.data,
+          text: `Se ha ${this.boolNuevoFondo ? 'creado' : 'actualizado'} el fondo con éxito.`,
+          timer: 2000,
+          showCancel: false
+        })
+      }
+      if (res.status == false) {
+        this._swal.show({
+          icon: 'error',
+          title: 'Ocurrió un error',
+          text: 'El NIT se encuentran registrados',
+          timer: 2000,
+          showCancel: false
+        })
+      }
+    },
+      err => {
+        const nit = err?.error.errors.hasOwnProperty('nit') ? err?.error.errors.nit[0] : ' ';
+        const code = err?.error.errors.hasOwnProperty('code') ? err?.error.errors.code[0] : ' ';
+        const texto = nit + ' \n ' + code
+        this._swal.show({
+          title: 'error',
+          text: texto,
+          icon: 'error',
+          timer: 2000,
+          showCancel: false,
+        })
+      }
+    )
 
   }
 

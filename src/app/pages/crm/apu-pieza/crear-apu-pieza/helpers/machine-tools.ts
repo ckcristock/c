@@ -10,16 +10,16 @@ export const machineToolHelper = {
   createFillInMachineTools(form: FormGroup, fb: FormBuilder, data) {
     if (data.machine) {
       let machine_tools = form.get('machine_tools') as FormArray;
-      data.machine.forEach((r) => {
+      data?.machine.forEach((r) => {
         let group = fb.group({
-          description: [r.description],
-          name_description: [r.machine.name],
-          unit_id: [r.unit_id],
-          unit_name: [r.unit.name],
-          q_unit: [r.q_unit],
-          q_total: [r.q_total],
-          unit_cost: [r.unit_cost],
-          total: [r.total]
+          description: [r?.description],
+          name_description: [r?.machine?.name],
+          unit_id: [r?.unit_id],
+          unit_name: [r?.unit?.name],
+          q_unit: [r?.q_unit],
+          q_total: [r?.q_total],
+          unit_cost: [r?.unit_cost],
+          total: [r?.total]
         });
         this.subscribeMachine(group, form, machine_tools);
         machine_tools.push(group);
@@ -27,16 +27,16 @@ export const machineToolHelper = {
     }
   },
 
-  createMachineToolGroup(form:FormGroup, fb: FormBuilder, element) {
+  createMachineToolGroup(form: FormGroup, fb: FormBuilder, element) {
     let amount = form.get('amount').value;
     let machine = fb.group({
-      description: [element.value],
-      name_description: [element.text],
-      unit_id: [element.unit_id],
-      unit_name: [element.unit.name],
+      description: [element?.value],
+      name_description: [element?.text],
+      unit_id: [element?.unit_id],
+      unit_name: [element?.unit?.name],
       q_unit: [0],
       q_total: [amount],
-      unit_cost: [element.unit_cost],
+      unit_cost: [element?.unit_cost],
       total: [0]
     });
     let list = form.get('machine_tools') as FormArray;
@@ -44,7 +44,7 @@ export const machineToolHelper = {
     return machine;
   },
 
-  subscribeMachine( machine: FormGroup, form:FormGroup, list: FormArray){
+  subscribeMachine(machine: FormGroup, form: FormGroup, list: FormArray) {
     machine.get('q_unit').valueChanges.subscribe(value => {
       let q_total = machine.get('q_total').value;
       let unit_cost = machine.get('unit_cost').value;
@@ -79,14 +79,14 @@ export const machineToolHelper = {
     });
   },
 
-  subtotalMachine(list: FormArray, form: FormGroup){
+  subtotalMachine(list: FormArray, form: FormGroup) {
     setTimeout(() => {
       let total =
-      list.value.reduce(
-        (a, b) => {
-          return  a + b.total
-        },0
-      );
+        list.value.reduce(
+          (a, b) => {
+            return a + b.total
+          }, 0
+        );
       form.patchValue({
         machine_tools_subtotal: total
       })

@@ -1,28 +1,28 @@
-<div class="row card-title d-flex justify-content-between">
-  <div class="col-lg-5 px-0">
-    <form [formGroup]="form">
-      <mat-form-field class="col px-0 edit pb-0" appearance="outline">
-        <mat-label>{{ title }} valor</mat-label>
-        <input
-          matInput
-          type="number"
-          placeholder="Ingresa el valor"
-          formControlName="value"
-          autocomplete="off"
-        />
-        <button
-          mat-icon-button
-          matSuffix
-          (click)="save()"
-          [disabled]="!form.valid"
-          [attr.aria-label]="'Hide password'"
-        >
-          <mat-icon>save</mat-icon>
-        </button>
-      </mat-form-field>
-    </form>
+<form [formGroup]="form">
+  <div class="row">
+    <mat-form-field class="col edit pb-0" appearance="outline">
+      <mat-label>{{ title }} valor</mat-label>
+      <input
+        matInput
+        currencyMask
+        [options]="masks.maskCOP"
+        appInputPosition
+        placeholder="Ingresa el valor"
+        formControlName="value"
+        autocomplete="off"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="save()"
+        [disabled]="!form.valid"
+        [attr.aria-label]="'Hide password'"
+      >
+        <mat-icon>save</mat-icon>
+      </button>
+    </mat-form-field>
   </div>
-</div>
+</form>
 <mat-accordion multi>
   <mat-expansion-panel class="mat-elevation-z0">
     <div class="row">
@@ -47,7 +47,7 @@
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
         <th scope="col">Valor</th>
-        <th scope="col">Fecha C.</th>
+        <th scope="col">Fecha de creación</th>
         <th scope="col"><i class="mdi mdi-chevron-down"></i></th>
       </tr>
     </thead>
@@ -60,7 +60,7 @@
         }"
       >
         <td class="align-middle" scope="row">
-          {{ value.value | currency : "" : "" }}
+          ${{ value.value | number : "1.2-2" }}
         </td>
         <td class="align-middle">{{ value.created_at | date }}</td>
         <td class="align-middle">

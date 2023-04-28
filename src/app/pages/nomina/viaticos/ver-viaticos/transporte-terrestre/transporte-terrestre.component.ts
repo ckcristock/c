@@ -10,6 +10,7 @@ import {
 import { LegalizarDataService } from '../../legalizar/legalizar-data.service';
 import { Subscription } from 'rxjs';
 import { helperLegalizar } from '../../legalizar/helpers-legalizar';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-transporte-terrestre',
@@ -21,9 +22,10 @@ export class TransporteTerrestreComponent implements OnInit, OnDestroy {
   @ViewChildren('file', { read: ElementRef }) file: QueryList<ElementRef>;
   viaticos$: Subscription;
   data: any;
+  masks = consts;
   transports: any[];
 
-  constructor(private _viaticosData: LegalizarDataService) {}
+  constructor(private _viaticosData: LegalizarDataService) { }
 
   ngOnInit(): void {
     this.viaticos$ = this._viaticosData.viaticos.subscribe((r: any) => {
@@ -37,8 +39,8 @@ export class TransporteTerrestreComponent implements OnInit, OnDestroy {
     helperLegalizar.getImage(event, myFile, model);
   }
   ngOnDestroy(): void {
-    
+
     this.viaticos$.unsubscribe();
-  
+
   }
 }

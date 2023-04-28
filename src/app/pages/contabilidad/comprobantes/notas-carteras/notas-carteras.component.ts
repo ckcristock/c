@@ -88,8 +88,6 @@ export class NotasCarterasComponent implements OnInit {
       this.Cargando = false;
       this.NotasCarteras = data.Notas;
       this.TotalItems = data.numReg;
-      console.log(this.NotasCarteras);
-
     });
 
   }

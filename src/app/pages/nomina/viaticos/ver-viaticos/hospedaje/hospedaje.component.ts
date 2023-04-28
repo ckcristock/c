@@ -26,11 +26,12 @@ export class HospedajeComponent implements OnInit, OnDestroy {
   @ViewChildren('file', { read: ElementRef }) file: QueryList<ElementRef>;
   data: any = [];
   hotels: any[];
+  masks = consts;
   viaticos$: Subscription;
   constructor(
     private _viaticosData: LegalizarDataService,
     private _swal: SwalService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.viaticos$ = this._viaticosData.viaticos.subscribe((r: any) => {

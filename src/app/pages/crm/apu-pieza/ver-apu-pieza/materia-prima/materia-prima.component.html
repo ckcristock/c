@@ -9,8 +9,8 @@
             <th class="align-middle col-md-2">Geometría</th>
             <th class="align-middle">Foto</th>
             <th class="align-middle">Material</th>
-            <th *ngFor="let measure of item.measures">
-              {{ measure.name }}
+            <th *ngFor="let measure of item?.measures">
+              {{ measure?.name }}
             </th>
             <th class="align-middle">Peso KG</th>
             <th class="align-middle">Cantidad</th>
@@ -25,34 +25,34 @@
               {{ i + 1 }}
             </td>
             <td class="align-middle">
-              {{ item.geometry.name }}
+              {{ item?.geometry?.name }}
             </td>
             <td class="align-middle p-0">
-              <img [src]="item.geometry.image" />
+              <img [src]="item?.geometry?.image" />
             </td>
             <td class="align-middle">
-              {{ item.material.product.name }}
+              {{ item?.material?.product?.name }}
             </td>
             <td
               class="align-middle"
               *ngFor="let measure of item.measures; let j = index"
             >
-              {{ measure.value }}
+              {{ measure?.value }}
             </td>
             <td class="align-middle">
-              {{ item.weight_kg }}
+              {{ item?.weight_kg }}
             </td>
             <td class="align-middle">
-              {{ item.q }}
+              {{ item?.q }}
             </td>
             <td class="align-middle">
-              {{ item.weight_total }}
+              {{ item?.weight_total }}
             </td>
             <td class="align-middle">
-              ${{ item.value_kg | number : "1.2-2" }}
+              ${{ item?.value_kg | number : "1.2-2" }}
             </td>
             <td class="align-middle">
-              ${{ item.total_value | number : "1.2-2" }}
+              ${{ item?.total_value | number : "1.2-2" }}
             </td>
           </tr>
         </tbody>

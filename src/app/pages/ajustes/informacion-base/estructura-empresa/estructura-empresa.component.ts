@@ -54,7 +54,7 @@ export class EstructuraEmpresaComponent implements OnInit {
   private getDismissReason(reason: any) {
 
   }
-  grupoSelcted:any;
+  grupoSelcted: any;
   getDependencies(group_id) {
     this.grupoSelcted = group_id
     this.loading.dependencies = true;
@@ -66,7 +66,7 @@ export class EstructuraEmpresaComponent implements OnInit {
           this.getPosition(this.dependencies[0].value)
           this.dependencies[0].selected = true;
         }
-        else{
+        else {
           this.positions = []
         }
         this.loading.dependencies = false;
@@ -78,7 +78,7 @@ export class EstructuraEmpresaComponent implements OnInit {
       m.selected = m.value == value ? true : false;
     })
   }
-  dependenceSelected:any;
+  dependenceSelected: any;
   getPosition(dependency_id) {
     this.dependenceSelected = dependency_id
     this.loading.positions = true;
@@ -96,21 +96,21 @@ export class EstructuraEmpresaComponent implements OnInit {
     this.openConfirm(add)
   }
 
-  delete(tipo, id){
-    if(tipo == 'dependencias'){
+  delete(tipo, id) {
+    if (tipo == 'dependencias') {
       this._dependencies.delete(id).subscribe(r => {
         this.getDependencies(1)
         this.deleteSwal.show();
       })
     }
-    if(tipo == 'cargos'){
-      this._position.delete(id).subscribe(r =>{
+    if (tipo == 'cargos') {
+      this._position.delete(id).subscribe(r => {
         this.getDependencies(1)
         this.deleteSwal.show();
       })
     }
-    if(tipo == 'grupos'){
-      this._group.delete(id).subscribe(r =>{
+    if (tipo == 'grupos') {
+      this._group.delete(id).subscribe(r => {
         this.getGroups()
         this.deleteSwal.show();
       })
@@ -120,7 +120,6 @@ export class EstructuraEmpresaComponent implements OnInit {
   save() {
     if (this.tipo == 'dependencias') {
       let selected = this.grupos.find(r => r.selected == true);
-      console.warn(selected.value)
       let params: any = { group_id: selected.value, name: this.name }
       params ? params.id = this.id : ''
       params ? params.id = this.id : ''
@@ -129,7 +128,6 @@ export class EstructuraEmpresaComponent implements OnInit {
     }
     if (this.tipo == 'cargos') {
       let selected = this.dependencies.find(r => r.selected == true);
-      console.warn(selected.value)
       let params: any = { dependency_id: selected.value, name: this.name }
       params ? params.id = this.id : ''
       this.savePosition(params)

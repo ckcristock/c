@@ -142,21 +142,19 @@ export class InventarioDotacionComponent implements OnInit {
     let params = '';
     this.donwloading = true;
     this._dotation.DownloadInventoryDotation(this.firstDay, this.lastDay, params).subscribe((response: BlobPart) => {
-    // this._dotation.downloadDotations().subscribe((response: BlobPart) => {
-        let blob = new Blob([response], { type: 'application/excel' });
-        let link = document.createElement('a');
-        const filename = 'reporte_inventario';
-        link.href = window.URL.createObjectURL(blob);
-        link.download = `${filename}.xlsx`;
-        link.click();
-        this.donwloading = false;
-      }),
+      // this._dotation.downloadDotations().subscribe((response: BlobPart) => {
+      let blob = new Blob([response], { type: 'application/excel' });
+      let link = document.createElement('a');
+      const filename = 'reporte_inventario';
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${filename}.xlsx`;
+      link.click();
+      this.donwloading = false;
+    }),
       (error) => {
-        console.log('Error downloading the file');
         this.donwloading = false;
       },
       () => {
-        console.info('File downloaded successfully');
         this.donwloading = false;
       };
   }

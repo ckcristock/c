@@ -1,4 +1,4 @@
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { taxiHelper } from './taxi';
 import { hospedajeHelper } from './hospedaje';
 import { transporteHelper } from './trasporte';
@@ -16,7 +16,7 @@ export const functions = {
       arrival_date: data.arrival_date,
       n_nights: parseInt(data.n_nights),
 
-      });
+    });
     form.patchValue({
       other_expenses_cop: data.other_expenses_cop,
       other_expenses_usd: data.other_expenses_usd,
@@ -62,13 +62,13 @@ export const functions = {
       work_order_id: [''],
       observation: [''],
       travel: fb.group({
-        person_id: [''],
-        origin_id: [''],
-        destinity_id: [''],
-        travel_type: [''],
-        departure_date: [''],
-        arrival_date: [''],
-        n_nights: [''],
+        person_id: [null, Validators.required],
+        origin_id: [null, Validators.required],
+        destinity_id: [null, Validators.required],
+        travel_type: ['', Validators.required],
+        departure_date: ['', Validators.required],
+        arrival_date: ['', Validators.required],
+        n_nights: [null, Validators.required],
       }),
       hospedaje: fb.array([]),
       transporte: fb.array([]),

@@ -1,14 +1,18 @@
-<div *ngIf="data">
+<div *ngIf="data && !loading; else placeholder">
   <div class="card">
     <div class="card-body">
       <div class="card-title d-flex justify-content-between">
         <h4 class="text-primary">Legalizar viático</h4>
-        <mat-form-field class="col-md-3 pr-0 pb-0" appearance="outline">
-          <mat-label>Orden de trabajo</mat-label>
-          <mat-select>
-            <mat-option value="pendiente">Pendiente</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <div class="text-right">
+          <a
+            [routerLink]="[
+              '/manufactura/ordenes-produccion/ver/',
+              data.work_order_id
+            ]"
+            target="_blank"
+            >{{ data.work_order?.text }}</a
+          >
+        </div>
       </div>
       <hr class="line" />
       <div *ngIf="!loading">
@@ -42,8 +46,12 @@
         [disabled]="!validHotel"
         class="btn btn-primary btn-block"
       >
-        <i class="fas fa-file-download"></i> Descargar
+        Legalizar
       </button>
     </div>
   </div>
 </div>
+
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>

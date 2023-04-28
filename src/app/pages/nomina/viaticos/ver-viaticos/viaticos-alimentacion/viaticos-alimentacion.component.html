@@ -1,12 +1,7 @@
 <hr />
-<div class="text-center">
-  <h5>Alimentación</h5>
-</div>
+<h6>Alimentación</h6>
 <div class="rounded-top table-responsive">
-  <table
-    class="table table-bordered table-striped table-sm"
-    
-  >
+  <table class="table table-bordered table-striped table-sm">
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
         <th>Estadía</th>
@@ -20,24 +15,12 @@
     <tbody>
       <ng-container *ngIf="feedings.length">
         <tr *ngFor="let item of feedings; let i = index" class="text-center">
-          <td>
-            {{ item.type }}
-          </td>
-          <td>
-            {{ item.personType }}
-          </td>
-          <td>
-            {{ item.breakfast }}
-          </td>
-          <td>
-            {{ item.rate }}
-          </td>
-          <td>
-            {{ item.stay }}
-          </td>
-          <td class="text-right">
-            {{ item.total }}
-          </td>
+          <td>{{ item.type }}</td>
+          <td>{{ item.personType }}</td>
+          <td>{{ item.breakfast }}</td>
+          <td class="text-right">${{ item.rate | number : "1.2-2" }}</td>
+          <td>{{ item.stay }}</td>
+          <td class="text-right">${{ item.total | number : "1.2-2" }}</td>
         </tr>
       </ng-container>
     </tbody>

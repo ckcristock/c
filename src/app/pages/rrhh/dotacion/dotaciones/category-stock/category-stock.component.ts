@@ -29,7 +29,7 @@ export class CategoryStockComponent implements OnInit {
       this.matPanel = false;
     }
   }
-  nombre:string = '';
+  nombre: string = '';
   donwloading = false;
 
   firstDay: any;
@@ -43,7 +43,7 @@ export class CategoryStockComponent implements OnInit {
     this.Graficar()
   }
 
-  findName(){
+  findName() {
 
     this.tablestock.getData(1, this.nombre);
   }
@@ -63,8 +63,8 @@ export class CategoryStockComponent implements OnInit {
   public barChartLabels: Label[] = ['Categorías'];
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
-  public barChartData : ChartDataSets[] = [];
-  graphicData:any = {}
+  public barChartData: ChartDataSets[] = [];
+  graphicData: any = {}
 
   Graficar() {
 
@@ -82,15 +82,15 @@ export class CategoryStockComponent implements OnInit {
 
       }).subscribe((d: any) => {
 
-    let totals: any[] = d.data;
+        let totals: any[] = d.data;
 
-    if (totals) {
-      this.barChartData = totals.reduce((acc, el) => {
-        let daSet = {data: [ el.value], label: [el.name]}
-        return [ ...acc,daSet]
-      }, [])
-    }
-    })
+        if (totals) {
+          this.barChartData = totals.reduce((acc, el) => {
+            let daSet = { data: [el.value], label: [el.name] }
+            return [...acc, daSet]
+          }, [])
+        }
+      })
 
   }
 
@@ -103,21 +103,19 @@ export class CategoryStockComponent implements OnInit {
     let params = '';
     this.donwloading = true;
     this._dotation.DownloadInventoryDotation(this.firstDay, this.lastDay, params).subscribe((response: BlobPart) => {
-    // this._dotation.downloadDotations().subscribe((response: BlobPart) => {
-        let blob = new Blob([response], { type: 'application/excel' });
-        let link = document.createElement('a');
-        const filename = 'reporte_inventario';
-        link.href = window.URL.createObjectURL(blob);
-        link.download = `${filename}.xlsx`;
-        link.click();
-        this.donwloading = false;
-      }),
+      // this._dotation.downloadDotations().subscribe((response: BlobPart) => {
+      let blob = new Blob([response], { type: 'application/excel' });
+      let link = document.createElement('a');
+      const filename = 'reporte_inventario';
+      link.href = window.URL.createObjectURL(blob);
+      link.download = `${filename}.xlsx`;
+      link.click();
+      this.donwloading = false;
+    }),
       (error) => {
-        console.log('Error downloading the file');
         this.donwloading = false;
       },
       () => {
-        console.info('File downloaded successfully');
         this.donwloading = false;
       };
   }

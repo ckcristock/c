@@ -157,8 +157,8 @@ export class CerrarProcesoComponent implements OnInit {
         link.click();
         this.loading = false
       }),
-      error => { console.log('Error downloading the file'); this.loading = false },
-      () => { console.info('File downloaded successfully'); this.loading = false };
+      error => { this.loading = false },
+      () => { this.loading = false };
   }
   previsualizacion: any
   onFileChanged(event) {
@@ -211,8 +211,6 @@ export class CerrarProcesoComponent implements OnInit {
   getLegalDocument() {
     this._proceso.getFileToDownload(this.filtros.code).subscribe((file: any) => {
       this.legalDocument = file.data.file;
-      console.log(this.legalDocument);
-
     })
   }
 
@@ -230,16 +228,13 @@ export class CerrarProcesoComponent implements OnInit {
         this.historyInfo = res.data[0] ? res.data : undefined;
       }, () => -{}, () => {
         this.loadingHistory = false;
-        console.log(this.historyInfo);
       });
   }
 
 
   guardarFuncionario(persona) {
-    this.modalService.dismissAll(); 
+    this.modalService.dismissAll();
     let resp: { personId: any, memorandos: any[] } = { personId: { id: persona.value, name: persona.text }, memorandos: this.seleccionadas }
-    console.log(resp);
-
     let i = this.funcionarios.findIndex(funcionar => funcionar.personId.id === persona.value)
     i < 0 ? this.funcionarios.push(resp) : this.funcionarios[i] = resp;
     this.proceso.responsables = this.funcionarios;

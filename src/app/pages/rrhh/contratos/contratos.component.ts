@@ -41,7 +41,7 @@ export class ContratosComponent implements OnInit {
   contracts: any[] = [];
   groups: any[];
   loading = false;
-  minRenewalPeriod = { date:"", numDays: 0};
+  minRenewalPeriod = { date: "", numDays: 0 };
   listaTiposTurno: any = [];
   listaTurnos: any = [];
   contractsTrialPeriod: any = [];
@@ -129,7 +129,6 @@ export class ContratosComponent implements OnInit {
   getTurnTypes() {
     this.contractService.getTurnTypes().subscribe((res: any) => {
       this.listaTiposTurno = res.data;
-      console.log(this.listaTiposTurno)
     });
   }
 
@@ -149,11 +148,11 @@ export class ContratosComponent implements OnInit {
       //   });
       // });
       this.formContrato.get('turn_id').clearValidators();
-      this.formContrato.patchValue({turn_id: null})
+      this.formContrato.patchValue({ turn_id: null })
     }
   }
 
-  get turnSelected(){
+  get turnSelected() {
     return this.formContrato.get('turn_type').value;
   }
 
@@ -168,12 +167,12 @@ export class ContratosComponent implements OnInit {
   calcularFecha(event) {
     if (event.target.value != "") {
       let dateInicio = new Date(this.formContrato.get('date_of_admission').value);
-       dateInicio.setDate(dateInicio.getDate() - 1 + parseInt(event.target.value));
+      dateInicio.setDate(dateInicio.getDate() - 1 + parseInt(event.target.value));
       this.formContrato.get('date_end').setValue(dateInicio.toISOString().split('T')[0]);
       if (this.formContrato.controls.date_diff.hasError('min')) {
         this._swal.show({
           title: '',
-          text: ' La fecha de finalización debe ser posterior a '+this.minRenewalPeriod.date,
+          text: ' La fecha de finalización debe ser posterior a ' + this.minRenewalPeriod.date,
           icon: 'error',
           showCancel: false
         });
@@ -225,7 +224,6 @@ export class ContratosComponent implements OnInit {
     this.contractService.getAllContracts(params)
       .subscribe((res: any) => {
         this.contracts = res.data.data;
-        console.log(this.contracts)
         this.paginacion = res.data
         this.pagination.collectionSize = res.data.total;
         this.loading = false;
@@ -264,7 +262,6 @@ export class ContratosComponent implements OnInit {
   getWorkContractTypes() {
     this._workContractTypesService.getWorkContractTypes().subscribe((res: any) => {
       this.contractTypes = res.data;
-      console.log(this.contractTypes)
     });
   }
 
@@ -304,7 +301,7 @@ export class ContratosComponent implements OnInit {
     this.contractService.getContractsToExpire(this.paginationCV)
       .subscribe((res: any) => {
         this.contractsToExpire = res.data.data;
-        this.contractsToExpire.renewed = (res.data.data==1) || null;
+        this.contractsToExpire.renewed = (res.data.data == 1) || null;
         this.paginationCV.collectionSize = res.data.total;
         this.paginacion2 = res.data
         this.contractData = false
@@ -321,10 +318,8 @@ export class ContratosComponent implements OnInit {
       link.click();
     },
       (error) => {
-        console.log('Error downloading the file');
       },
       () => {
-        console.info('File downloaded successfully');
       })
   }
 
@@ -337,19 +332,19 @@ export class ContratosComponent implements OnInit {
 
   // Se toma la decisión de si se renueva al contraro o se liquida.
   makeChoice(employee, modal) {
-    if(employee.renewed==null || employee.renewed){
+    if (employee.renewed == null || employee.renewed) {
       (async () => {
         const { value: choice } = await Swal.fire({
-          title: (employee.renewed)?
+          title: (employee.renewed) ?
             `El contrato de ${employee.first_name + ' ' + employee.first_surname} ya presenta un proceso de renovación de contrato. Qué desea hacer?`
-            :`Seleccione qué acción se tomará sobre el contrato de ${employee.first_name + ' ' + employee.first_surname}.`,
+            : `Seleccione qué acción se tomará sobre el contrato de ${employee.first_name + ' ' + employee.first_surname}.`,
           icon: 'question',
           input: 'radio',
           inputOptions: {
-            'true': (employee.renewed)?'Ajustar condiciones':'Renovar',
+            'true': (employee.renewed) ? 'Ajustar condiciones' : 'Renovar',
             'false': 'Liquidar'
           },
-          footer: (employee.cantidad>0)?'Renovaciones previas: <strong>'+employee.cantidad+'</strong>':'',
+          footer: (employee.cantidad > 0) ? 'Renovaciones previas: <strong>' + employee.cantidad + '</strong>' : '',
           confirmButtonColor: this._swal.buttonColor.confirm,
           inputValidator: (value) => {
             if (!value) {
@@ -387,14 +382,16 @@ export class ContratosComponent implements OnInit {
               this.formContrato.addControl('id', this.fb.control(employee.process_id));
             }
             this.contractService.saveFinishContractConditions(this.formContrato.value).subscribe((res: any) => {
-              Swal.fire({ html: `El contrato será liquidado el día ${employee.date_end}.`,
-              confirmButtonColor: this._swal.buttonColor.confirm });
+              Swal.fire({
+                html: `El contrato será liquidado el día ${employee.date_end}.`,
+                confirmButtonColor: this._swal.buttonColor.confirm
+              });
               this.getContractsToExpire();
             });
           }
         }
       })()
-    }else{
+    } else {
       Swal.fire({
         title: '¡Atención!',
         text: "Este empleado ya presenta un proceso de preliquidación de contrato, ¿deseas renovarlo?",
@@ -405,7 +402,7 @@ export class ContratosComponent implements OnInit {
         confirmButtonText: 'Renovar contrato',
         cancelButtonText: 'Cancelar',
         reverseButtons: true,
-        footer: (employee.cantidad>0)?'Renovaciones previas: <strong>'+employee.cantidad+'</strong>':'',
+        footer: (employee.cantidad > 0) ? 'Renovaciones previas: <strong>' + employee.cantidad + '</strong>' : '',
       }).then((result) => {
         if (result.isConfirmed) {
           this.adjustRenewal(employee, modal);
@@ -414,16 +411,16 @@ export class ContratosComponent implements OnInit {
     }
   }
 
-  adjustRenewal(employee, modal){
+  adjustRenewal(employee, modal) {
     /**
      * Si ya existe un proceso de renovación, se trae la información previamente registrada,
      * de lo contrario, se trae la información del contrato vigente.
      */
-    let service = (employee.renewed)?
+    let service = (employee.renewed) ?
       this.contractService.getContractRevewal(employee.process_id)
-      :this.contractService.getContract(employee.id);
+      : this.contractService.getContract(employee.id);
     service.subscribe((res: any) => {
-      res.data['contract_id'] = (employee.renewed)?res.data.contract_id:res.data.id;
+      res.data['contract_id'] = (employee.renewed) ? res.data.contract_id : res.data.id;
       res.data['codigo'] = "CON" + res.data.contract_id;
       res.data['renewed'] = true;
       if (res.data.turn_type == "Fijo") {
@@ -445,7 +442,7 @@ export class ContratosComponent implements OnInit {
        *  y si el periodo es menor a un año, se procede a renovar por al menos un año.
        *  Lo mismo sucede si el periodo desde el contrato original ha sido menor de un año.
       */
-      if(res.data.date_diff >= 365 || employee.cantidad >= 3){
+      if (res.data.date_diff >= 365 || employee.cantidad >= 3) {
         res.data.date_diff = 365;
         let dateEnd = new Date(res.data.date_of_admission);
         dateEnd.setDate(dateEnd.getDate() - 1 + res.data.date_diff);
@@ -468,7 +465,7 @@ export class ContratosComponent implements OnInit {
         turn_type: ['', Validators.required],
         turn_id: ['', Validators.required],
         date_of_admission: ['', Validators.required],
-        date_end: ['',[Validators.min(res.data.date_end), Validators.required]],
+        date_end: ['', [Validators.min(res.data.date_end), Validators.required]],
         date_diff: ['', [Validators.min(res.data.date_diff), Validators.required]],
         old_date_end: ['', Validators.required],
         salary: ['', Validators.required]
@@ -479,14 +476,14 @@ export class ContratosComponent implements OnInit {
       );
       this.formContrato = this.fb.group(formVacio); */
 
-        this.formContrato.get('work_contract_type_id').valueChanges.subscribe(r => {
+      this.formContrato.get('work_contract_type_id').valueChanges.subscribe(r => {
         this.getTermsTypes(r);
-        if(r !== 2 ){
+        if (r !== 2) {
           this.formContrato.get('date_end').disable()
-        }else{
+        } else {
           this.formContrato.get('date_end').enable()
         }
-        })
+      })
 
 
 
@@ -494,7 +491,7 @@ export class ContratosComponent implements OnInit {
 
 
       // Si se va a modificar un proceso existente, se crea de nuevo el campo "id".
-      if (employee.renewed!=null) {
+      if (employee.renewed != null) {
         this.formContrato.addControl('id', this.fb.control(employee.process_id));
       }
       this.getDependenciesByGroup(res.data.group_id);
@@ -531,7 +528,7 @@ export class ContratosComponent implements OnInit {
           showCancel: false,
         })
       });
-    }else{
+    } else {
       this._swal.show({
         title: 'ERROR',
         text: 'Parte de la información suministrada no es correcta, por favor verifique e intente de nuevo.',

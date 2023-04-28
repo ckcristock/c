@@ -105,8 +105,6 @@ export class CiudadesComponent implements OnInit {
     this.loading = true;
     this._ciudades.getCities(params).subscribe((r: any) => {
       this.cities = r.data.data;
-      console.log(this.cities);
-
       this.loading = false;
       this.pagination.collectionSize = r.data.total;
     })
@@ -117,7 +115,6 @@ export class CiudadesComponent implements OnInit {
       this.modalService.dismissAll();
       this.form.reset();
       this.getCities();
-      console.log(r)
       this._swal.show({
         title: r.data,
         icon: 'success',

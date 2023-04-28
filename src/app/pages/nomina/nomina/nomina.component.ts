@@ -139,11 +139,7 @@ export class NominaComponent implements OnInit {
   }
 
   deletePagoNomina() {
-
-    console.log('no se puede borrar');
-
     this._payroll.deletePayroll().subscribe(r => {
-
     }, err => {
 
     })
@@ -168,12 +164,9 @@ export class NominaComponent implements OnInit {
       this.donwloadingExcNov = false;
     }),
       (error: any) => {
-        console.log(error);
-        console.log('Error downloading the file');
         this.donwloadingExcNov = false;
       },
       () => {
-        console.info('File downloaded successfully');
         this.donwloadingExcNov = false;
       };
   }
@@ -190,12 +183,12 @@ export class NominaComponent implements OnInit {
     this.donwloadingPdfNom = true;
 
     this._swal.show({
-        title: "",
-        text:
-          "Estamos descargando las colillas de pago, este proceso puede tardar algunos minutos.",
-        icon: "info",
-        showCancel: false,
-      })
+      title: "",
+      text:
+        "Estamos descargando las colillas de pago, este proceso puede tardar algunos minutos.",
+      icon: "info",
+      showCancel: false,
+    })
     this._payroll.dowloadPdfColillas(datos)
       .subscribe((res: BlobPart) => {
         let blob = new Blob([res], { type: ' application/pdf' });
@@ -209,22 +202,22 @@ export class NominaComponent implements OnInit {
         (err: any) => {
           this.donwloadingPdfNom = false
           this._swal
-                .show({
-                  title: "ERROR",
-                  text: "Intenta nuevamente.",
-                  icon: "error",
-                  showCancel: false
-                })
+            .show({
+              title: "ERROR",
+              text: "Intenta nuevamente.",
+              icon: "error",
+              showCancel: false
+            })
         },
         () => {
           this.donwloadingPdfNom = false
-           this._swal
-                .show({
-                  title: "Operación exitosa",
-                  text: "Colillas de pago descargadas correctamente",
-                  icon: "success",
-                  showCancel: false
-                })
+          this._swal
+            .show({
+              title: "Operación exitosa",
+              text: "Colillas de pago descargadas correctamente",
+              icon: "success",
+              showCancel: false
+            })
         });
   }
 
@@ -240,9 +233,7 @@ export class NominaComponent implements OnInit {
         link.download = `${filename}.xlsx`;
         link.click();
       }), (err: any) => {
-        console.log(err);
-        console.log('Error downloading the file');
-      }, () => console.info('File downloaded successfully');
+      }, () => { };
     this.donwloadingExNom = false;
   }
 
@@ -287,7 +278,6 @@ export class NominaComponent implements OnInit {
         })
       this.router.navigateByUrl('/nomina/historial-pagos')
     }).catch((err: any) => {
-      console.log(err);
     })
 
   }
@@ -321,8 +311,6 @@ export class NominaComponent implements OnInit {
           end: this.datePipe.transform(this.nomina.fin_periodo, 'yyyy-MM-dd'),
           ...this.nomina
         }
-
-    //console.log(params)
     await this._payroll.sendPayrollEmail(params).toPromise().then((res: any) => {
       this.sendingPayrollEmail = false;
       this._swal
@@ -332,7 +320,7 @@ export class NominaComponent implements OnInit {
           icon: "success",
           showCancel: false
         })
-        this.ngOnInit();
+      this.ngOnInit();
     })
   }
 }

@@ -1,4 +1,4 @@
-import { functionsApu} from './helper';
+import { functionsApu } from './helper';
 import {
   FormGroup,
   FormBuilder,
@@ -14,14 +14,14 @@ export const externalProccessesHelper = {
       let external_proccesses = form.get('external_proccesses') as FormArray;
       data.external.forEach((r) => {
         let group = fb.group({
-          description: [r.description],
-          name_description: [r.external.name],
-          unit_id: [r.unit_id],
-          unit_name: [r.unit.name],
-          q_unit: [r.q_unit],
-          q_total: [r.q_total],
-          unit_cost: [r.unit_cost],
-          total: [r.total]
+          description: [r?.description],
+          name_description: [r?.external?.name],
+          unit_id: [r?.unit_id],
+          unit_name: [r?.unit?.name],
+          q_unit: [r?.q_unit],
+          q_total: [r?.q_total],
+          unit_cost: [r?.unit_cost],
+          total: [r?.total]
         });
         this.subscribeExternalProcesses(group, form, external_proccesses);
         external_proccesses.push(group);
@@ -29,16 +29,16 @@ export const externalProccessesHelper = {
     }
   },
 
-  createExternalProccessesGroup(form:FormGroup, fb: FormBuilder, element) {
+  createExternalProccessesGroup(form: FormGroup, fb: FormBuilder, element) {
     let amount = form.get('amount').value;
     let external = fb.group({
-      description: [element.value],
-      name_description: [element.text],
-      unit_id: [element.unit_id],
-      unit_name: [element.unit.name],
+      description: [element?.value],
+      name_description: [element?.text],
+      unit_id: [element?.unit_id],
+      unit_name: [element?.unit?.name],
       q_unit: [0],
       q_total: [amount],
-      unit_cost: [element.unit_cost],
+      unit_cost: [element?.unit_cost],
       total: [0]
     });
     let list = form.get('external_proccesses') as FormArray;
@@ -46,7 +46,7 @@ export const externalProccessesHelper = {
     return external;
   },
 
-  subscribeExternalProcesses( external: FormGroup, form:FormGroup, list: FormArray){
+  subscribeExternalProcesses(external: FormGroup, form: FormGroup, list: FormArray) {
     external.get('q_unit').valueChanges.subscribe(value => {
       let q_total = external.get('q_total').value;
       let unit_cost = external.get('unit_cost').value;
@@ -81,14 +81,14 @@ export const externalProccessesHelper = {
     });
   },
 
-  subtotalExternalProcesses(list: FormArray, form: FormGroup){
+  subtotalExternalProcesses(list: FormArray, form: FormGroup) {
     setTimeout(() => {
       let total =
-      list.value.reduce(
-        (a, b) => {
-          return  a + b.total
-        },0
-      );
+        list.value.reduce(
+          (a, b) => {
+            return a + b.total
+          }, 0
+        );
       form.patchValue({
         external_proccesses_subtotal: total
       })

@@ -19,13 +19,11 @@ const routes: Routes = [
   { path: 'acta-recepcion/crear/:codigo/:compra', component: CrearActaRecepcionComponent },
   { path: 'acta-recepcion/ver/:id', component: VerActaRecepcionComponent },
   { path: 'acta-recepcion-aprobados', component: ActaRecepionAprobadosComponent },
-  {
-    path : 'acta-recepcion-acomodar/:tipo/:id/:lugar/:idLugar', component : AcomodarActaComponent,
-  },
+  { path: 'acta-recepcion-acomodar/:tipo/:id/:lugar/:idLugar', component: AcomodarActaComponent },
   { path: 'vencer', component: InventarioVencerComponent },
   { path: 'inventario-estibas/:id', component: InventarioEstibasComponent },
   { path: 'alistamiento', component: AlistamientoComponent },
-  { path: 'alistamiento/crear/:id/:tipo/:idc', component: AlistamientoCrearComponent},
+  { path: 'alistamiento/crear/:id/:tipo/:idc', component: AlistamientoCrearComponent },
   { path: 'remisiones', loadChildren: () => import('./remision/remision.module').then(m => m.RemisionModule) },
 
 ];

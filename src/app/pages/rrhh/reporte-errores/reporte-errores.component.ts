@@ -24,7 +24,7 @@ export class ReporteErroresComponent implements OnInit {
   paginationMaterial: any;
   orderObj: any;
   active_filters: boolean;
-  loading: boolean;
+  loading: boolean = false;
   permission: Permissions = {
     menu: 'Errores de asistencia',
     permissions: {
@@ -50,6 +50,7 @@ export class ReporteErroresComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.loading = true;
     if (this.permission.permissions.show) {
       this.createFormFilters();
       await this.getPeople();
@@ -72,7 +73,6 @@ export class ReporteErroresComponent implements OnInit {
   }
 
   paginate() {
-    this.loading = true;
     let params = {
       ...this.pagination,
       ...this.formFilters.value

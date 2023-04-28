@@ -7,14 +7,13 @@ import { environment } from 'src/environments/environment';
 })
 export class CerrarProcesoService {
 
-  constructor( private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  cerrarProceso(id, procesoData){
-    console.log(id)
+  cerrarProceso(id, procesoData) {
     return this.http.put(`${environment.base_url}/process/${id}`, procesoData);
   }
 
-  getFileToDownload(id){
+  getFileToDownload(id) {
     return this.http.get(`${environment.base_url}/legal_document/${id}`);
   }
 

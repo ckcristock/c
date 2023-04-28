@@ -40,8 +40,8 @@ export class SolicitudesCompraService {
     return this.http.post(`${environment.base_url}/save-quotation-purchase-request`, data);
   }
 
-  getQuotationPurchaserequest(id) {
-    return this.http.get(`${environment.base_url}/quotation-purchase-request/${id}`);
+  getQuotationPurchaserequest(id, type) {
+    return this.http.get(`${environment.base_url}/quotation-purchase-request/${id}/${type}`);
   }
 
   saveQuotationApproved(id) {

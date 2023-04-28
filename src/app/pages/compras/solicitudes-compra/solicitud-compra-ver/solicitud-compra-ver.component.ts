@@ -62,9 +62,9 @@ export class SolicitudCompraVerComponent implements OnInit {
   }
 
   //Modal aprobar cotizaciones
-  openModal2(content, id, size) {
+  openModal2(content, id, size, type) {
     this.quotationSelected = undefined;
-    this.getQuotationPurchaserequest(id);
+    this.getQuotationPurchaserequest(id, type);
     this._modal.open(content, size);
   }
 
@@ -233,9 +233,9 @@ export class SolicitudCompraVerComponent implements OnInit {
   }
 
   //funcion que trae todas las ctoizaciones de un producto especifico
-  getQuotationPurchaserequest(id) {
+  getQuotationPurchaserequest(id, type) {
     this.loadingQuotations = true;
-    this._solicitudesCompra.getQuotationPurchaserequest(id).subscribe((res: any) => {
+    this._solicitudesCompra.getQuotationPurchaserequest(id, type).subscribe((res: any) => {
       this.quotations = res.data;
       this.loadingQuotations = false;
     })

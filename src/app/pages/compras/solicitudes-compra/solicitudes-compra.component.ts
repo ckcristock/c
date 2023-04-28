@@ -15,7 +15,7 @@ import { DateAdapter } from 'saturn-datepicker';
 })
 export class SolicitudesCompraComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
-  solicitudesCompra: any[] = []; 
+  solicitudesCompra: any[] = [];
   loading = false;
   paginationMaterial: any;
   pagination: any = {
@@ -25,9 +25,10 @@ export class SolicitudesCompraComponent implements OnInit {
   formFilters: FormGroup;
   active_filters: boolean = false
   orderObj: any
-  datePipe =new DatePipe('es-CO');
+  datePipe = new DatePipe('es-CO');
   date: any;
   date2: any;
+  solicitudesCotizadas: any;
 
   constructor(
     private _solicitudesCompra: SolicitudesCompraService,
@@ -36,44 +37,44 @@ export class SolicitudesCompraComponent implements OnInit {
     private location: Location,
     private route: ActivatedRoute,
     private dateAdapter: DateAdapter<any>
-  ) { 
+  ) {
     this.dateAdapter.setLocale('es');
   }
 
   ngOnInit(): void {
-  this.createFormFilters();
-  this.route.queryParamMap.subscribe((params: any) => {
-    if (params.params.pageSize) {
-      this.pagination.pageSize = params.params.pageSize
-    } else {
-      this.pagination.pageSize = 10
-    }
-    if (params.params.pag) {
-      this.pagination.page = params.params.pag
-    } else {
-      this.pagination.page = 1
-    }
-    this.orderObj = { ...params.keys, ...params }
-    if (Object.keys(this.orderObj).length > 3) {
-      this.active_filters = true
-      const formValues = {};
-      for (const param in params) {
-        formValues[param] = params[param];
+    this.createFormFilters();
+    this.route.queryParamMap.subscribe((params: any) => {
+      if (params.params.pageSize) {
+        this.pagination.pageSize = params.params.pageSize
+      } else {
+        this.pagination.pageSize = 10
       }
-      this.formFilters.patchValue(formValues['params']);
-      let start_created_at = new Date(this.formFilters.controls.start_created_at.value)
-      let end_created_at = new Date(this.formFilters.controls.end_created_at.value)
-      start_created_at.setDate(start_created_at.getDate() + 1)
-      end_created_at.setDate(end_created_at.getDate() + 1)
-      this.date = { begin: start_created_at, end: end_created_at }
-      let start_expected_date = new Date(this.formFilters.controls.start_expected_date.value)
-      let end_expected_date = new Date(this.formFilters.controls.end_expected_date.value)
-      start_expected_date.setDate(start_expected_date.getDate() + 1)
-      end_expected_date.setDate(end_expected_date.getDate() + 1)
-      this.date2 = { begin: start_expected_date, end: end_expected_date }
-    }
-    this.getPurchaseRequest();
-  })
+      if (params.params.pag) {
+        this.pagination.page = params.params.pag
+      } else {
+        this.pagination.page = 1
+      }
+      this.orderObj = { ...params.keys, ...params }
+      if (Object.keys(this.orderObj).length > 3) {
+        this.active_filters = true
+        const formValues = {};
+        for (const param in params) {
+          formValues[param] = params[param];
+        }
+        this.formFilters.patchValue(formValues['params']);
+        let start_created_at = new Date(this.formFilters.controls.start_created_at.value)
+        let end_created_at = new Date(this.formFilters.controls.end_created_at.value)
+        start_created_at.setDate(start_created_at.getDate() + 1)
+        end_created_at.setDate(end_created_at.getDate() + 1)
+        this.date = { begin: start_created_at, end: end_created_at }
+        let start_expected_date = new Date(this.formFilters.controls.start_expected_date.value)
+        let end_expected_date = new Date(this.formFilters.controls.end_expected_date.value)
+        start_expected_date.setDate(start_expected_date.getDate() + 1)
+        end_expected_date.setDate(end_expected_date.getDate() + 1)
+        this.date2 = { begin: start_expected_date, end: end_expected_date }
+      }
+      this.getPurchaseRequest();
+    })
   }
 
 
@@ -94,10 +95,10 @@ export class SolicitudesCompraComponent implements OnInit {
   }
 
   createFormFilters() {
-    this.formFilters =this.fb.group({
+    this.formFilters = this.fb.group({
       status: '',
       code: '',
-      // work_order_id: '',      
+      // work_order_id: '',
       start_created_at: '',
       end_created_at: '',
       start_expected_date: '',
@@ -108,9 +109,9 @@ export class SolicitudesCompraComponent implements OnInit {
     ).subscribe(r => {
       this.getPurchaseRequest();
     })
-  } 
+  }
 
-  getPurchaseRequest(){
+  getPurchaseRequest() {
     this.loading = true;
     let params = {
       ...this.pagination,
@@ -118,8 +119,9 @@ export class SolicitudesCompraComponent implements OnInit {
     }
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/compras/solicitud', paramsurl.toString());
-    this._solicitudesCompra.getPurchaseRequest(params).subscribe((res: any) =>{
-      this.solicitudesCompra= res.data.data;
+    this._solicitudesCompra.getPurchaseRequest(params).subscribe((res: any) => {
+      this.solicitudesCompra = res.data.data
+
       this.loading = false;
       this.paginationMaterial = res.data
       if (this.paginationMaterial.last_page < this.pagination.page) {
@@ -128,6 +130,16 @@ export class SolicitudesCompraComponent implements OnInit {
         this.getPurchaseRequest()
       }
     });
+  }
+
+  count(productsPerRequest) {
+    let cont = 0
+    productsPerRequest.forEach(productPurchase => {
+      if (productPurchase.quotation.length > 0) {
+        cont++;
+      }
+    });
+    return cont;
   }
 
   selectedDate(fecha, type_date) {
@@ -158,4 +170,6 @@ export class SolicitudesCompraComponent implements OnInit {
     }
 
   }
+
+
 }

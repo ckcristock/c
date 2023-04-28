@@ -93,10 +93,10 @@ export class SolicitudCompraCrearComponent implements OnInit {
       id: (this.dataEdit && this.id ? this.dataEdit.id : ''),
       category_id: [(this.dataEdit ? this.dataEdit.category_id : null), Validators.required],
       expected_date: [(this.dataEdit ? this.dataEdit.expected_date : null), Validators.required],
-      observations: [(this.dataEdit ? this.dataEdit.observations : null), Validators.required],
+      observations: (this.dataEdit ? this.dataEdit.observations : null),
       code: [this.dataEdit ? this.dataEdit.code : this.datosCabecera.Codigo],
       format_code: [this.dataEdit ? this.dataEdit.format_code : this.datosCabecera.CodigoFormato],
-      products: this.fb.array([]),
+      products: this.fb.array([], Validators.required),
     })
     this.form.get('category_id').valueChanges.subscribe(v => {
       this.validateProducts();
@@ -222,12 +222,6 @@ export class SolicitudCompraCrearComponent implements OnInit {
   get expected_date_valid() {
     return (
       this.form.get('expected_date').invalid && this.form.get('expected_date').touched
-    );
-  }
-
-  get observations_valid() {
-    return (
-      this.form.get('observations').invalid && this.form.get('observations').touched
     );
   }
 

@@ -98,7 +98,7 @@
         </ng-container>
       </mat-expansion-panel>
     </mat-accordion>
-    
+
     <div class="alert alert-info" *ngIf="active_filters" role="alert">
       <strong
         >Hay filtros de búsqueda activos, para mostrar todos los resultados haz
@@ -121,8 +121,9 @@
             <!-- <th>Orden de producción</th> -->
             <th>Fecha solicitud</th>
             <th>Fecha esperada</th>
+            <th>Productos cotizados</th>
             <th>Estado</th>
-            
+
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
@@ -137,19 +138,35 @@
             </td>
             <td class="align-middle">
               {{ solicitud.quantity_of_products }}
-            </td>  
-            <!-- <td class="align-middle"></td> -->
+            </td>
+
             <td class="align-middle">
               {{ solicitud.created_at | date : "MMM d, y" }}
             </td>
-            
+
             <td class="align-middle">
               {{ solicitud.expected_date | date : "MMM d, y" }}
             </td>
             <td class="align-middle">
-              {{ solicitud.status }}
+              {{ count(solicitud.product_purchase_request) }} de
+              {{ solicitud.product_purchase_request.length }}
             </td>
-            
+            <td class="align-middle">
+              <span
+                class="badge"
+                [class]="
+                  solicitud.status == 'Aprobada'
+                    ? 'badge-success'
+                    : solicitud.status == 'Cotizada'
+                    ? 'badge-info'
+                    : solicitud.status == 'Pendiente'
+                    ? 'badge-warning'
+                    : 'badge-success'
+                "
+                >{{ solicitud.status | uppercase }}</span
+              >
+            </td>
+
             <td class="align-middle">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -160,13 +177,20 @@
                   <i class="mdi mdi-chevron-down"></i>
                 </button>
                 <div ngbDropdownMenu>
-                  
-                  <a type="button" class="dropdown-item text-success"
-                  [routerLink]="['ver', solicitud.id]"
+                  <a
+                    type="button"
+                    class="dropdown-item text-success"
+                    [routerLink]="['ver', solicitud.id]"
                     ><i class="fas fa-eye"></i> Ver</a
                   >
-                  <a type="button" class="dropdown-item text-info"
-                  [routerLink]="['editar', solicitud.id]"
+                  <a
+                    type="button"
+                    class="dropdown-item text-info"
+                    *ngIf="
+                      solicitud.status == 'Pendiente' ||
+                      solicitud.status == 'Cotizada'
+                    "
+                    [routerLink]="['editar', solicitud.id]"
                     ><i class="fas fa-edit"></i> Editar</a
                   >
                 </div>

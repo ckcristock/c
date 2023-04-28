@@ -165,7 +165,6 @@ export class VacantesComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    console.log(event)
     this.getJobs(event.pageIndex + 1)
   }
 
@@ -230,7 +229,6 @@ export class VacantesComponent implements OnInit {
     this.location.replaceState('/rrhh/vacantes', paramsurl);
     this._job.getJobs(params).subscribe((r: any) => {
       this.jobs = r.data.data;
-      console.log(r)
       this.paginacion = r.data
       this.loading = false;
       this.pagination.collectionSize = r.data.total

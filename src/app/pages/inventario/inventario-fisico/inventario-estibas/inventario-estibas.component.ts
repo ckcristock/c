@@ -49,10 +49,10 @@ export class InventarioEstibasComponent implements OnInit {
   public alertOption2: SweetAlertOptions = {};
   public alertOption3: SweetAlertOptions = {};
   public alertOptionGuardarSalir: SweetAlertOptions = {};
-  @ViewChild('confirmacionGuardar1') confirmacionGuardar1:SwalComponent;
-  @ViewChild('respuestaGuardarOk') respuestaGuardarOk:SwalComponent;
-  @ViewChild('respuestaGuardarError') respuestaGuardarError:SwalComponent;
-  @ViewChild('respuesTrabajando') respuesTrabajando:SwalComponent;
+  @ViewChild('confirmacionGuardar1') confirmacionGuardar1: SwalComponent;
+  @ViewChild('respuestaGuardarOk') respuestaGuardarOk: SwalComponent;
+  @ViewChild('respuestaGuardarError') respuestaGuardarError: SwalComponent;
+  @ViewChild('respuesTrabajando') respuesTrabajando: SwalComponent;
 
   public idInventarioParams;
 
@@ -138,7 +138,7 @@ export class InventarioEstibasComponent implements OnInit {
     let param: any = {};
     param.Id_Doc_Inventario_Fisico = this.route.snapshot.params['idInventarioEstiba'];
 
-    this.GetInventario(param).subscribe(async (res:any) => {
+    this.GetInventario(param).subscribe(async (res: any) => {
 
       if (res.Tipo == 'success') {
 
@@ -180,8 +180,8 @@ export class InventarioEstibasComponent implements OnInit {
 
   }
 
-  public GetInventario(p:any){
-    return this.http.get(environment.ruta + 'php/inventariofisico/estiba/get_inventario.php',{ params: p });
+  public GetInventario(p: any) {
+    return this.http.get(environment.ruta + 'php/inventariofisico/estiba/get_inventario.php', { params: p });
   }
 
   ConsultaCodigo(codigo) {
@@ -237,7 +237,7 @@ export class InventarioEstibasComponent implements OnInit {
     }
   }
 
-  public GetProductoEstiba(p:any){
+  public GetProductoEstiba(p: any) {
     return this.http.get(environment.ruta + 'php/inventariofisico/estiba/consulta_producto.php', { params: p });
   }
 
@@ -376,7 +376,7 @@ export class InventarioEstibasComponent implements OnInit {
     for (let producto = 0; producto < this.Producto_Barras['Lotes'].length - 1; producto++) {
 
       if (this.Producto_Barras['Lotes'][producto]['Lote'] == '' || this.Producto_Barras['Lotes'][producto]['Fecha_Vencimiento'] == ''
-      ){
+      ) {
         let swal = {
           icon: "error",
           title: "Existe un error  ",
@@ -387,10 +387,8 @@ export class InventarioEstibasComponent implements OnInit {
         return false;
       }
 
-      if(this.Producto_Barras['Lotes'][producto]['Codigo'] != '')
-      {
-        if (this.Producto_Barras['Lotes'][producto]['Cantidad_Encontrada'] <= 0 )
-        {
+      if (this.Producto_Barras['Lotes'][producto]['Codigo'] != '') {
+        if (this.Producto_Barras['Lotes'][producto]['Cantidad_Encontrada'] <= 0) {
           {
             let swal = {
               icon: "error",
@@ -407,8 +405,7 @@ export class InventarioEstibasComponent implements OnInit {
       }
 
 
-      if (this.Producto_Barras['Lotes'][producto]['Cantidad_Encontrada'] === '' || isNaN( this.Producto_Barras['Lotes'][producto]['Cantidad_Encontrada']) )
-      {
+      if (this.Producto_Barras['Lotes'][producto]['Cantidad_Encontrada'] === '' || isNaN(this.Producto_Barras['Lotes'][producto]['Cantidad_Encontrada'])) {
         {
           let swal = {
             icon: "error",
@@ -463,7 +460,7 @@ export class InventarioEstibasComponent implements OnInit {
       }
     });
   }
-  SaveLoteEstiba(data: FormData){
+  SaveLoteEstiba(data: FormData) {
     return this.http.post(environment.ruta + 'php/inventariofisico/estiba/agrega_productos.php', data);
   }
   editLote(pos, pos2) {
@@ -653,7 +650,7 @@ export class InventarioEstibasComponent implements OnInit {
     });
   }
 
-  saveLote(data: FormData){
+  saveLote(data: FormData) {
     return this.http.post(environment.ruta + 'php/inventariofisico/agrega_productos_barrido.php', data);
   }
 
@@ -707,7 +704,7 @@ export class InventarioEstibasComponent implements OnInit {
     });
   }
 
-  AjustarInventarioEstiba(data: FormData){
+  AjustarInventarioEstiba(data: FormData) {
     return this.http.post(environment.ruta + 'php/inventariofisico/estiba/ajustar_inventario.php', data);
   }
 
@@ -758,9 +755,7 @@ export class InventarioEstibasComponent implements OnInit {
   }
 
 
-  GestionarEstado(data:FormData){
-    console.log(data);
-
+  GestionarEstado(data: FormData) {
     return this.http.post(environment.ruta + 'php/inventariofisico/estiba/gestion_de_estado.php', data);
   }
 

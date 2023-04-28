@@ -110,12 +110,7 @@ export class CertificadoretencionComponent implements OnInit {
   }
 
   setQueryParams() {
-
     let params: any = {};
-
-    console.log(this.CertificadoRetencionModel.Cuentas);
-
-
     if (this.CertificadoRetencionModel.Fecha_Inicial != '') {
       params.Fecha_Inicial = this.CertificadoRetencionModel.Fecha_Inicial
     }

@@ -9,34 +9,33 @@ import { BoardContabilidadService } from '../board-contabilidad.service';
 })
 export class CardreportesComponent implements OnInit {
   @Input() Reportes;
-  private params:any='';
-  private subcripcion:any;
-  constructor( private contabiliad:BoardContabilidadService) { }
+  private params: any = '';
+  private subcripcion: any;
+  constructor(private contabiliad: BoardContabilidadService) { }
 
   ngOnInit() {
-    console.log(this.Reportes)
-    this.subcripcion=this.contabiliad.event.subscribe((data:any)=>{
-      this.params=data;
-     if(data==''){
-      this.contabiliad.ShowMessage([
-        "warning","Upss ! ", "Faltan datos para poder generar el reporte"
-      ]);
-      
-     }
+    this.subcripcion = this.contabiliad.event.subscribe((data: any) => {
+      this.params = data;
+      if (data == '') {
+        this.contabiliad.ShowMessage([
+          "warning", "Upss ! ", "Faltan datos para poder generar el reporte"
+        ]);
+
+      }
     });
   }
-  DescargasReporte(pos){
+  DescargasReporte(pos) {
     if (this.Reportes[pos].Ruta != '') {
-      if(this.params!=''){
-        window.open(this.Reportes[pos].Ruta+'?'+this.params+'&tipo='+this.Reportes[pos].Tipo, '_blank');
-      }else{
+      if (this.params != '') {
+        window.open(this.Reportes[pos].Ruta + '?' + this.params + '&tipo=' + this.Reportes[pos].Tipo, '_blank');
+      } else {
         this.contabiliad.ShowMessage([
-          "warning","Upss ! ", "Faltan datos para poder generar el reporte"
+          "warning", "Upss ! ", "Faltan datos para poder generar el reporte"
         ]);
       }
-    }else{
+    } else {
       this.contabiliad.ShowMessage([
-        "warning","En Desarrollo! ", "Este reporte está actualmente en desarrollo!"
+        "warning", "En Desarrollo! ", "Este reporte está actualmente en desarrollo!"
       ]);
     }
   }

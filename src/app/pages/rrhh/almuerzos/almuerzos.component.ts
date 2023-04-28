@@ -13,6 +13,7 @@ import { PersonService } from '../../ajustes/informacion-base/persons/person.ser
 import { MatAccordion } from '@angular/material/expansion';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from 'src/app/core/services/modal.service';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-almuerzos',
@@ -21,6 +22,7 @@ import { ModalService } from 'src/app/core/services/modal.service';
 })
 export class AlmuerzosComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
+  masks = consts;
   matPanel = false;
   openClose() {
     if (this.matPanel == false) {
@@ -251,7 +253,6 @@ export class AlmuerzosComponent implements OnInit {
     this.loading = true;
     this._almuerzo.getLunches(params).subscribe((r: any) => {
       this.lunches = r.data.data;
-      console.log(this.lunches);
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     })
@@ -262,7 +263,6 @@ export class AlmuerzosComponent implements OnInit {
     this.form.value.people_id.forEach(el => {
       this.personList.push(this.personControl(el, this.form.value.value));
     });
-    console.log(this.form.value);
     this._almuerzo.createLunch(this.form.value)
       .subscribe((r) => {
         //this.modal.hide();
@@ -343,11 +343,9 @@ export class AlmuerzosComponent implements OnInit {
       this.donwloading = false;
     }),
       (error) => {
-        console.log('Error downloading the file');
         this.donwloading = false;
       },
       () => {
-        console.info('File downloaded successfully');
         this.donwloading = false;
       };
   }

@@ -64,7 +64,7 @@ export class DotacionCrearComponent implements OnInit {
     this.createForm();
     this.getData();
   }
-  title:any;
+  title: any;
   closeResult = '';
   public openConfirm(confirm, titulo) {
     this.title = titulo
@@ -80,7 +80,7 @@ export class DotacionCrearComponent implements OnInit {
     this.Producto = {};
     this.getData();
     this.form.reset()
-    
+
   }
 
   createForm() {
@@ -105,8 +105,6 @@ export class DotacionCrearComponent implements OnInit {
   }
 
   editDotationProduct(producto) {
-    console.log("producto");
-    console.log(producto);
     this.Producto = { ...producto };
     // this.title = 'Editar Producto';
     this.form.patchValue({

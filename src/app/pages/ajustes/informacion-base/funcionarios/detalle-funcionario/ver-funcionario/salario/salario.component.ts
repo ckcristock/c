@@ -22,7 +22,7 @@ import { addDays } from '@fullcalendar/core';
 })
 
 
-export class SalarioComponent implements OnInit{
+export class SalarioComponent implements OnInit {
   @ViewChild('modal') modal: any;
   form: FormGroup;
   formHistoryContract: FormGroup;
@@ -88,7 +88,6 @@ export class SalarioComponent implements OnInit{
 
 
   printForm() {
-    console.log(this.formHistoryContract)
   }
 
 
@@ -178,7 +177,7 @@ export class SalarioComponent implements OnInit{
         icon: 'question',
       }).then(r => {
         if (r.isConfirmed) {
-          this._workContract.addContract(this.formHistoryContract.value).subscribe((response:any) =>{
+          this._workContract.addContract(this.formHistoryContract.value).subscribe((response: any) => {
             this._modal.close();
             this.getSalaryHistory();
             this._swal.show({
@@ -194,7 +193,7 @@ export class SalarioComponent implements OnInit{
       //peticion
     } else {
       this._swal.show({
-        title:"ERROR", icon:'error', text:"Porfavor llena todos los campos del formulario"
+        title: "ERROR", icon: 'error', text: "Porfavor llena todos los campos del formulario"
       })
     }
   }
@@ -235,7 +234,6 @@ export class SalarioComponent implements OnInit{
 
   getContractTerms(value) {
     this._workContractTypes.getContractTerms().subscribe((r: any) => {
-      console.log("Respuesta de getContractTerms:", r);
       this.contractTerms = []
       r.data.forEach(
         (contract_term: any) => contract_term.work_contract_types.forEach(
@@ -265,8 +263,8 @@ export class SalarioComponent implements OnInit{
           transport_assistance: this.salary_info?.transport_assistance
         })
         if (this.salary_info?.work_contract_type_id !== 2) {
-           this.form.get('date_end').disable();
-         }
+          this.form.get('date_end').disable();
+        }
         this.getContractTerms(this.salary_info?.work_contract_type_id)
       });
   }

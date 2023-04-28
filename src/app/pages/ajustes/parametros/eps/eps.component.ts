@@ -64,7 +64,7 @@ export class EpsComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.form.reset();
-    
+
   }
 
   openModal() {
@@ -128,7 +128,7 @@ export class EpsComponent implements OnInit {
               icon: 'success',
               showCancel: false,
               timer: 1000
-            })            
+            })
           })
       }
     })
@@ -140,7 +140,6 @@ export class EpsComponent implements OnInit {
     if (this.form.invalid) { return false; }
     this.epsService.createNewEps(this.form.value)
       .subscribe((res: any) => {
-        console.log(res)
         this.getAllEps();
         this.modalService.dismissAll();
         this._swal.show({

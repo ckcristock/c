@@ -70,50 +70,50 @@ export class AsignacionTurnosComponent implements OnInit {
     private _user: UserService,
     private route: ActivatedRoute,
     public router: Router,
-    ) {
-      this.user = _user.user;
-      this.dateAdapter.setLocale('es');
-      this.permission = this._permission.validatePermissions(this.permission);
-    }
+  ) {
+    this.user = _user.user;
+    this.dateAdapter.setLocale('es');
+    this.permission = this._permission.validatePermissions(this.permission);
+  }
 
-    ngOnInit(): void {
-      if (this.permission.permissions.show) {
-        this.createFormFilters();
+  ngOnInit(): void {
+    if (this.permission.permissions.show) {
+      this.createFormFilters();
 
-        this.route.queryParamMap.subscribe((params: any) => {
-          if (params.params.pageSize) {
-            this.pagination.pageSize = params.params.pageSize
-          } else {
-            this.pagination.pageSize = 10
-          }
-          if (params.params.pag) {
-            this.pagination.page = params.params.pag
-          } else {
-            this.pagination.page = 1
-          }
-          this.orderObj = { ...params.keys, ...params }
+      this.route.queryParamMap.subscribe((params: any) => {
+        if (params.params.pageSize) {
+          this.pagination.pageSize = params.params.pageSize
+        } else {
+          this.pagination.pageSize = 10
+        }
+        if (params.params.pag) {
+          this.pagination.page = params.params.pag
+        } else {
+          this.pagination.page = 1
+        }
+        this.orderObj = { ...params.keys, ...params }
 
-          if (Object.keys(this.orderObj).length > 2) {
-            this.active_filters = true
-            const formValues = {};
-            for (const param in params) {
-              formValues[param] = params[param];
-            }
-            this.formFilters.patchValue(formValues['params']);
+        if (Object.keys(this.orderObj).length > 2) {
+          this.active_filters = true
+          const formValues = {};
+          for (const param in params) {
+            formValues[param] = params[param];
           }
-        });//aqui
-        this.startWeek = moment().startOf('week').toDate()
-        this.endWeek = moment().endOf('week').toDate()
-        this.createFormFilters();
-        this.getTurns();
-        this.getGrpups();
-        this.getData();
+          this.formFilters.patchValue(formValues['params']);
+        }
+      });//aqui
+      this.startWeek = moment().startOf('week').toDate()
+      this.endWeek = moment().endOf('week').toDate()
+      this.createFormFilters();
+      this.getTurns();
+      this.getGrpups();
+      this.getData();
     } else {
       this.router.navigate(['/notautorized']);
     }
   }
 
-  openClose(){
+  openClose() {
     this.matPanel = !this.matPanel;
     this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
   }
@@ -167,7 +167,6 @@ export class AsignacionTurnosComponent implements OnInit {
 
   selectedDate(fecha) {
     this.loading = true
-
     if (fecha.value) {
       this.formFilters.patchValue({
         date_from: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
@@ -187,7 +186,6 @@ export class AsignacionTurnosComponent implements OnInit {
 
   getData() {  ///  rrhh/turnos/asignacion
     this.loading = true;
-
     let params = {
       ...this.pagination,
       ...this.formFilters.value
@@ -195,45 +193,42 @@ export class AsignacionTurnosComponent implements OnInit {
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/rrhh/turnos/asignacion', paramsurl.toString());
     const fecha_ini = this.formFilters.controls.date_from.value == ''
-                        //? moment().format('YYYY-MM-DD')
-                        ? moment().startOf('week')
-                        : this.formFilters.controls.date_from.value
+      //? moment().format('YYYY-MM-DD')
+      ? moment().startOf('week')
+      : this.formFilters.controls.date_from.value
     const fecha_fin = this.formFilters.controls.date_to.value == ''
-                        //? moment().format('YYYY-MM-DD')
-                        ? moment().endOf('week')
-                        : this.formFilters.controls.date_to.value
+      //? moment().format('YYYY-MM-DD')
+      ? moment().endOf('week')
+      : this.formFilters.controls.date_to.value
 
-    this._asignacion
-      .getPeople(fecha_ini, params)
-      .subscribe((r: any) => {
-        this.datosGenerales = r.data;
-        this.loading = false;
-        setTimeout(() => {
-          this.changeWeek.emit({
-            diaInicialSemana: fecha_ini,
-            diaFinalSemana: fecha_fin,
-          });
-          //this.changeWeek.emit();
-        }, 200);
-      });
+    this._asignacion.getPeople(fecha_ini, params).subscribe((r: any) => {
+      this.datosGenerales = r.data;
+      this.loading = false;
+      setTimeout(() => {
+        this.changeWeek.emit({
+          diaInicialSemana: fecha_ini,
+          diaFinalSemana: fecha_fin,
+        });
+        //this.changeWeek.emit();
+      }, 200);
+    });
   }
 
   getGrpups() {
     this._groups.getGroup().subscribe((r: any) => {
       this.groupList = r.data;
-      this.groupList.unshift({ value: 0, text: 'Todos' });
+      this.groupList.unshift({ value: '', text: 'Todos' });
     });
   }
   getDependencies(group_id) {
     this._dependencies.getDependencies({ group_id }).subscribe((r: any) => {
       this.dependencyList = r.data;
-      this.dependencyList.unshift({ value: 0, text: 'Todas' });
+      this.dependencyList.unshift({ value: '', text: 'Todas' });
     });
   }
   getTurns() {
     this._rotatingTurn.getAllSelect().subscribe((r: any) => {
       this.turns = r;
-      /* console.log(this.turns) */
     });
   }
 
@@ -242,17 +237,19 @@ export class AsignacionTurnosComponent implements OnInit {
    * El emiter lo anvía al padre
    */
   makeRequestBySemana() {
-    let semana = this.formFilters.get('week').value;
-    /* this.numeroSemana = moment(semana).week(); */
+    /* let semana = this.formFilters.get('week').value;
     this.diaInicialSemana = moment(semana).startOf('week');
     this.diaFinalSemana = moment(semana).endOf('week');
     this.startWeek = moment(semana).startOf('week').toDate()
     this.endWeek = moment(semana).endOf('week').toDate()
-      this.changeWeek.emit({diaInicialSemana:this.diaInicialSemana,
-    	diaFinalSemana:this.diaFinalSemana});
+    this.changeWeek.emit({
+      diaInicialSemana: this.diaInicialSemana,
+      diaFinalSemana: this.diaFinalSemana
+    }); */
+    this.getData()
   }
 
-  descargarInformeTurnos(turno) {}
+  descargarInformeTurnos(turno) { }
 
   /* getData() {  ///  rrhh/turnos/asignacion
     this.loading = true;

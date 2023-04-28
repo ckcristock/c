@@ -245,7 +245,6 @@ export class BoardJefeIngenieriaComponent implements OnInit, OnDestroy {
   formatter_person = (x: { text: string }) => x.text;
 
   assign() {
-    console.log(this.form_assign.value);
     if (!this.form_assign.valid) {
       this._swal.show({
         icon: 'error',

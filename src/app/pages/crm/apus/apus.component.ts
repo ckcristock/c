@@ -62,9 +62,9 @@ export class ApusComponent implements OnInit {
 
   masksInput = consts;
   ngOnInit(): void {
-    if (this.permission.permissions.show) {
+    if (this.permission?.permissions?.show) {
       this.createFormFilters();
-      this.route.queryParamMap
+      this.route?.queryParamMap
         .subscribe((params) => {
           this.orderObj = { ...params.keys, ...params };
           if (Object.keys(this.orderObj).length > 2) {

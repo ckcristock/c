@@ -22,10 +22,10 @@ export class ResponsablesNominaConfigComponent implements OnInit {
   form: FormGroup;
   loading: boolean = false;
   people: any = [];
-  model:any = {};
+  model: any = {};
   searchFailedName = false;
   searchingName = false;
-  dato:any = {};
+  dato: any = {};
 
   constructor(
     private _nominaService: NominaConfigService,
@@ -35,7 +35,7 @@ export class ResponsablesNominaConfigComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this._suscription = this.open.subscribe(()=>{
+    this._suscription = this.open.subscribe(() => {
       this._modal.open(this.modalResponsable, 'md', false)
     });
     this.createForm();
@@ -48,39 +48,39 @@ export class ResponsablesNominaConfigComponent implements OnInit {
     })
   }
 
-  formatterName = (responsable: {identifier: string, text: string}) => responsable.text;
+  formatterName = (responsable: { identifier: string, text: string }) => responsable.text;
 
   search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(200),
-    distinctUntilChanged(),
-    tap(() => {
-      this.searchingName = true;
-      this.searchFailedName = false;
-    }),
-    switchMap((term) =>
-      this._nominaService.getPeopleWithDni({ search: term }).pipe(
-        tap((res) => {
-          if (res.length==0) {
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      tap(() => {
+        this.searchingName = true;
+        this.searchFailedName = false;
+      }),
+      switchMap((term) =>
+        this._nominaService.getPeopleWithDni({ search: term }).pipe(
+          tap((res) => {
+            if (res.length == 0) {
+              this.searchFailedName = true;
+            }
+          }),
+          catchError(() => {
             this.searchFailedName = true;
-          }
-        }),
-        catchError(() => {
-          this.searchFailedName = true;
-          return of([]);
-        })
-      )
-    ),
-    tap(() => (this.searchingName = false))
-  );
+            return of([]);
+          })
+        )
+      ),
+      tap(() => (this.searchingName = false))
+    );
 
-  actualizar=(responsable, identifier)=>{
+  actualizar = (responsable, identifier) => {
     let data = {
       id: responsable.id,
       manager: identifier.identifier
     }
     this._nominaService.updateCreatePayrollManager(data)
-      .subscribe((res:any)=>{
+      .subscribe((res: any) => {
         this._swal.show({
           title: 'Responsable de Nómina',
           icon: 'success',
@@ -91,14 +91,13 @@ export class ResponsablesNominaConfigComponent implements OnInit {
       })
   }
 
-  save(){
+  save() {
     let params = {
       area: this.form.value.area,
       manager: this.form.value.manager.identifier,
     }
-    console.log(params);
     this._nominaService.updateCreatePayrollManager(params)
-      .subscribe((res:any)=>{
+      .subscribe((res: any) => {
         this._modal.close()
         this._swal.show({
           title: 'Responsable de Nómina',
@@ -108,7 +107,7 @@ export class ResponsablesNominaConfigComponent implements OnInit {
           timer: 1000
         })
         this.form.reset()
-      this.refresh.emit()
+        this.refresh.emit()
       })
   }
 

@@ -120,11 +120,11 @@ export class DescargoComponent implements OnInit {
   openModal() {
     this.modal.show();
   }
- /*  closeModal() {
-    this.modal.hide();
-    this.historyInfo = [];
-    this.formSeguimiento.reset();
-  } */
+  /*  closeModal() {
+     this.modal.hide();
+     this.historyInfo = [];
+     this.formSeguimiento.reset();
+   } */
 
   inputFormatBandListValue(value: any) {
     if (value.text)
@@ -167,8 +167,8 @@ export class DescargoComponent implements OnInit {
 
   createFormDocuments() {
     this.formDocumentos = this.fb.group({
-      motivo: ['', Validators.required],  
-      documento: ['', Validators.required]    
+      motivo: ['', Validators.required],
+      documento: ['', Validators.required]
     })
   }
 
@@ -225,7 +225,7 @@ export class DescargoComponent implements OnInit {
   getLegalDocument() {
     this._descargo.getFilesToDownload(this.filtros.code).subscribe((file: any) => {
       this.legalDocuments = file.data;
-      this.legalDocuments = this.legalDocuments.sort((a,b) => a.motivo > b.motivo ? 1 : -1);
+      this.legalDocuments = this.legalDocuments.sort((a, b) => a.motivo > b.motivo ? 1 : -1);
     })
   }
 
@@ -260,7 +260,7 @@ export class DescargoComponent implements OnInit {
 
   onSelect(event) {
     this.files.push(...event.addedFiles);
-    this.formDocumentos.get('documento').setValue(true) 
+    this.formDocumentos.get('documento').setValue(true)
   }
 
   onRemove(event) {
@@ -310,7 +310,7 @@ export class DescargoComponent implements OnInit {
             this.fileAnotacion = null;
             this.formSeguimiento.reset();
             this.getAnnotation();
-            this.modalService.dismissAll(); 
+            this.modalService.dismissAll();
             this.historyInfo = [];
             // this.seleccionadas = [];
             this._swal.show({
@@ -348,7 +348,7 @@ export class DescargoComponent implements OnInit {
     });
     setTimeout(() => {
       this._descargo.saveFiles(this.fileArr).subscribe((r: any) => {
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.getLegalDocument();
         this.files = [];
         this.fileArr = [];
@@ -509,8 +509,8 @@ export class DescargoComponent implements OnInit {
         link.click();
         this.loading = false
       }),
-      error => { console.log('Error downloading the file'); this.loading = false },
-      () => { console.info('File downloaded successfully'); this.loading = false };
+      error => { this.loading = false },
+      () => { this.loading = false };
   }
 
   downloadDocument(file) {
@@ -526,8 +526,8 @@ export class DescargoComponent implements OnInit {
         link.click();
         this.loading = false
       }),
-      error => { console.log('Error downloading the file'); this.loading = false },
-      () => { console.info('File downloaded successfully'); this.loading = false };
+      error => { this.loading = false },
+      () => { this.loading = false };
   }
 
 }

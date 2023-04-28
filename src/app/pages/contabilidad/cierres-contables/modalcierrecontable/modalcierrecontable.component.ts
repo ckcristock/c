@@ -73,7 +73,6 @@ export class ModalcierrecontableComponent implements OnInit, OnDestroy {
   }
 
   private openComprobantesCierreAnio(id, tipo) {
-    console.log('Sin ruta')
   }
 
   validarCierre() {

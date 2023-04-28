@@ -90,150 +90,155 @@
   </div>
   <div class="modal-body">
     <form #FormActividad="ngForm">
-      <mat-form-field class="col-md-6 pl-0" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          type="text"
-          placeholder="Ingresa el nombre"
-          [(ngModel)]="ActividadModel.Actividad_Recursos_Humanos"
-          name="name"
-          id="actividad"
-          autocomplete="off"
-          [readonly]="ver == 1"
-          required
-          minlength="0"
-          maxlength="30"
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-3 pl-0" appearance="outline">
-        <mat-label>Tipo</mat-label>
-        <mat-select
-          name="rrhh_activity_type_id"
-          id="tipo_actividad"
-          [disabled]="ver == 1"
-          [(ngModel)]="ActividadModel.Id_Tipo_Actividad_Recursos_Humanos"
-          required
+      <div class="row">
+        <mat-form-field class="col-md-6" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el nombre"
+            [(ngModel)]="ActividadModel.Actividad_Recursos_Humanos"
+            name="name"
+            id="actividad"
+            autocomplete="off"
+            [readonly]="ver == 1"
+            required
+            minlength="0"
+            maxlength="30"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select
+            name="rrhh_activity_type_id"
+            id="tipo_actividad"
+            [disabled]="ver == 1"
+            [(ngModel)]="ActividadModel.Id_Tipo_Actividad_Recursos_Humanos"
+            required
+          >
+            <mat-option
+              *ngFor="let item of TiposActividad"
+              [value]="item.value"
+            >
+              {{ item.text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field
+          class="col"
+          appearance="outline"
+          *ngIf="!ver && !editar"
         >
-          <mat-option *ngFor="let item of TiposActividad" [value]="item.value">
-            {{ item.text }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field
-        class="col-md-3 pl-0"
-        appearance="outline"
-        *ngIf="!ver && !editar"
-      >
-        <mat-label>Días</mat-label>
-        <mat-select
-          name="days"
-          required
-          [multiple]="true"
-          [(ngModel)]="ActividadModel.Days"
-        >
-          <mat-option *ngFor="let item of daysOfWeek" [value]="item.value">
-            {{ item.text }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="col-md-3 pl-0" appearance="outline">
-        <mat-label>Fecha de inicio</mat-label>
-        <input
-          matInput
-          type="date"
-          [(ngModel)]="ActividadModel.Fecha_Inicio"
-          name="date_start"
-          (change)="validarFechas()"
-          id="fechai"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-3 pl-0" appearance="outline">
-        <mat-label>Fecha de fin</mat-label>
-        <input
-          matInput
-          type="date"
-          [(ngModel)]="ActividadModel.Fecha_Fin"
-          (change)="validarFechas()"
-          name="date_end"
-          id="fechaf"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-3 pl-0" appearance="outline">
-        <mat-label>Hora de inicio</mat-label>
-        <input
-          matInput
-          type="time"
-          [(ngModel)]="ActividadModel.Hora_Inicio"
-          name="hour_start"
-          id="fechaf"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-3 pl-0" appearance="outline">
-        <mat-label>Hora de fin</mat-label>
-        <input
-          matInput
-          type="time"
-          [(ngModel)]="ActividadModel.Hora_Fin"
-          name="hour_end"
-          id="fechaf"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-3 pl-0" appearance="outline">
-        <mat-label>Detalles</mat-label>
-        <input
-          matInput
-          type="text"
-          [(ngModel)]="ActividadModel.Detalles"
-          name="description"
-          id="Detalles"
-          placeholder="Ingresa los detalles"
-          required
-        />
-      </mat-form-field>
-      <mat-form-field class="col-md-3 pl-0" appearance="outline">
-        <mat-label>Grupo</mat-label>
-        <mat-select
-          name="group_id"
-          required
-          [(ngModel)]="ActividadModel.Id_Grupo"
-          (selectionChange)="getDependencies($event.value)"
-        >
-          <mat-option *ngFor="let item of groups" [value]="item.value">
-            {{ item.text }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="col-md-3 pl-0" appearance="outline">
-        <mat-label>Dependencia</mat-label>
-        <mat-select
-          name="dependency_id"
-          required
-          [(ngModel)]="ActividadModel.Id_Dependencia"
-          (selectionChange)="Dependencia_Cargo($event.value)"
-        >
-          <mat-option *ngFor="let item of dependencies" [value]="item.value">
-            {{ item.text }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field class="col-md-3 pl-0" appearance="outline">
-        <mat-label>Funcionarios</mat-label>
-        <mat-select
-          name="people_id"
-          required
-          [(ngModel)]="ActividadModel.Funcionario_Asignado"
-          [multiple]="true"
-        >
-          <mat-option *ngFor="let item of Funcionarios" [value]="item.value">
-            {{ item.text }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+          <mat-label>Días</mat-label>
+          <mat-select
+            name="days"
+            required
+            [multiple]="true"
+            [(ngModel)]="ActividadModel.Days"
+          >
+            <mat-option *ngFor="let item of daysOfWeek" [value]="item.value">
+              {{ item.text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Fecha de inicio</mat-label>
+          <input
+            matInput
+            type="date"
+            [(ngModel)]="ActividadModel.Fecha_Inicio"
+            name="date_start"
+            (change)="validarFechas()"
+            id="fechai"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Fecha de fin</mat-label>
+          <input
+            matInput
+            type="date"
+            [(ngModel)]="ActividadModel.Fecha_Fin"
+            (change)="validarFechas()"
+            name="date_end"
+            id="fechaf"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Hora de inicio</mat-label>
+          <input
+            matInput
+            type="time"
+            [(ngModel)]="ActividadModel.Hora_Inicio"
+            name="hour_start"
+            id="fechaf"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Hora de fin</mat-label>
+          <input
+            matInput
+            type="time"
+            [(ngModel)]="ActividadModel.Hora_Fin"
+            name="hour_end"
+            id="fechaf"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Detalles</mat-label>
+          <input
+            matInput
+            type="text"
+            [(ngModel)]="ActividadModel.Detalles"
+            name="description"
+            id="Detalles"
+            placeholder="Ingresa los detalles"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Grupo</mat-label>
+          <mat-select
+            name="group_id"
+            required
+            [(ngModel)]="ActividadModel.Id_Grupo"
+            (selectionChange)="getDependencies($event.value)"
+          >
+            <mat-option *ngFor="let item of groups" [value]="item.value">
+              {{ item.text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Dependencia</mat-label>
+          <mat-select
+            name="dependency_id"
+            required
+            [(ngModel)]="ActividadModel.Id_Dependencia"
+            (selectionChange)="Dependencia_Cargo($event.value)"
+          >
+            <mat-option *ngFor="let item of dependencies" [value]="item.value">
+              {{ item.text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Funcionarios</mat-label>
+          <mat-select
+            name="people_id"
+            required
+            [(ngModel)]="ActividadModel.Funcionario_Asignado"
+            [multiple]="true"
+          >
+            <mat-option *ngFor="let item of Funcionarios" [value]="item.value">
+              {{ item.text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
       <div *ngIf="ver == 1">
         <h6 class="text center">Funcionarios asignados</h6>
         <div class="rounded-top table-responsive">

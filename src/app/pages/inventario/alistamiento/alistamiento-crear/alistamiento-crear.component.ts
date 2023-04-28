@@ -18,7 +18,7 @@ import { environment } from 'src/environments/environment';
 export class AlistamientoCrearComponent implements OnInit {
   public remision: any = [];
   public Paso: number;
-  public Leer_Estiba :boolean = true;
+  public Leer_Estiba: boolean = true;
   public Completo = false;
   public pos = 0;
   public pos1: number = 0;
@@ -29,10 +29,10 @@ export class AlistamientoCrearComponent implements OnInit {
   public destino: any = [];
   public habilitado: boolean = true;
   public Posicion: any[] = [];
-  public color = false ;
+  public color = false;
 
   /* TODO auth user */
-  public User: any = {Identificacion_Funcionario:'1'}
+  public User: any = { Identificacion_Funcionario: '1' }
   public Consulta1: any;
   public Consulta2: any;
   public Peso_Total_Remision: number = 0;
@@ -117,7 +117,7 @@ export class AlistamientoCrearComponent implements OnInit {
   nombreMapa = '';
 
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, 
+  constructor(private route: ActivatedRoute, private http: HttpClient,
     private router: Router,
   ) {
 
@@ -130,10 +130,10 @@ export class AlistamientoCrearComponent implements OnInit {
 
     let id = this.route.snapshot.params["id"];
     let tipo = this.route.snapshot.params["tipo"];
-    if(tipo == "Remision"){
-        this.buscarRem(id,tipo);
-    }else if(tipo=='Devolucion'){
-      this.buscarDevolucion(id,tipo);
+    if (tipo == "Remision") {
+      this.buscarRem(id, tipo);
+    } else if (tipo == 'Devolucion') {
+      this.buscarDevolucion(id, tipo);
     }
 
 
@@ -188,71 +188,14 @@ export class AlistamientoCrearComponent implements OnInit {
     }
   }
 
-    buscarRem(id,tipo){
-      this.http.get(environment.ruta + 'php/remision_nuevo/remision.php', {
-        params: { id: id }
-      }).subscribe((data: any) => {
-         console.log(data);
-        this.remision = data.Remision;
-        this.origen = data.Origen;
-        let mapaUrl = `${environment.ruta}IMAGENES/MAPABODEGA/${data.Origen.Mapa}`;
-        //Modal Mapa Bodega
-        console.log(mapaUrl);
-        this.alertOptionInventario = {
-          title: "Mapa de la Bodega",
-          text: "Ubicación de las Estibas",
-          imageUrl: mapaUrl,
-          imageWidth: 700,
-          width: 800,
-        }
-
-        this.categoria_origen = data.Categoria_Origen;
-        /*     if(data.Origen.Id_Bodega!='2' && data.Origen.Id_Bodega!='3' && !this.estado_balanza){
-              this.display_Interna='block'
-            }
-          */
-        this.validar(this.remision.Id_Remision,tipo)
-        this.productos = data.Productos;
-        this.destino = data.Destino;
-        this.Paso = parseInt(this.remision.Estado_Alistamiento);
-
-        this.Completo = true;
-        if (this.estado_balanza) {
-          if (this.Paso === 1) {
-            if (localStorage.getItem("combo")) {
-              this.balanza = JSON.parse(localStorage.getItem('combo'));
-              // console.log(this.balanza);
-
-              this.Consulta1 = timer( 600)
-                .subscribe(() => {
-                  console.log(222);
-                  
-                  this.http.get(environment.ruta + 'php/alistamiento/peso.php', { params: { balanza: this.balanza } }).subscribe((data: any) => {
-                    this.Peso = data.Peso;
-                    //// console.log(this.Peso);
-                    this.HablilitarPesoSiguiente(this.Peso)
-                  });
-                });
-            } else {
-              this.modalBodega.show();
-            }
-
-          }
-        }
-
-
-      });
-  }
-  buscarDevolucion(id,tipo){
-    this.http.get(environment.ruta + 'php/noconforme/devolucion_alistamiento.php', {
+  buscarRem(id, tipo) {
+    this.http.get(environment.ruta + 'php/remision_nuevo/remision.php', {
       params: { id: id }
     }).subscribe((data: any) => {
-      // console.log(data);
       this.remision = data.Remision;
       this.origen = data.Origen;
       let mapaUrl = `${environment.ruta}IMAGENES/MAPABODEGA/${data.Origen.Mapa}`;
       //Modal Mapa Bodega
-      console.log(mapaUrl);
       this.alertOptionInventario = {
         title: "Mapa de la Bodega",
         text: "Ubicación de las Estibas",
@@ -260,26 +203,26 @@ export class AlistamientoCrearComponent implements OnInit {
         imageWidth: 700,
         width: 800,
       }
+
+      this.categoria_origen = data.Categoria_Origen;
+      /*     if(data.Origen.Id_Bodega!='2' && data.Origen.Id_Bodega!='3' && !this.estado_balanza){
+            this.display_Interna='block'
+          }
+        */
+      this.validar(this.remision.Id_Remision, tipo)
+      this.productos = data.Productos;
       this.destino = data.Destino;
-
-     // this.categoria_origen = data.Categoria_Origen;
-
-      this.validar(this.remision.Id_Remision,tipo)
-     this.productos = data.Productos;
       this.Paso = parseInt(this.remision.Estado_Alistamiento);
 
       this.Completo = true;
- /*      if (this.estado_balanza) {
+      if (this.estado_balanza) {
         if (this.Paso === 1) {
           if (localStorage.getItem("combo")) {
             this.balanza = JSON.parse(localStorage.getItem('combo'));
-            // console.log(this.balanza);
-
-            this.Consulta1 = TimerObservable.create(0, 600).takeWhile(() => this.alive)
+            this.Consulta1 = timer(600)
               .subscribe(() => {
                 this.http.get(environment.ruta + 'php/alistamiento/peso.php', { params: { balanza: this.balanza } }).subscribe((data: any) => {
                   this.Peso = data.Peso;
-                  //// console.log(this.Peso);
                   this.HablilitarPesoSiguiente(this.Peso)
                 });
               });
@@ -289,17 +232,60 @@ export class AlistamientoCrearComponent implements OnInit {
 
         }
       }
- */
+
+
+    });
+  }
+  buscarDevolucion(id, tipo) {
+    this.http.get(environment.ruta + 'php/noconforme/devolucion_alistamiento.php', {
+      params: { id: id }
+    }).subscribe((data: any) => {
+      this.remision = data.Remision;
+      this.origen = data.Origen;
+      let mapaUrl = `${environment.ruta}IMAGENES/MAPABODEGA/${data.Origen.Mapa}`;
+      //Modal Mapa Bodega
+      this.alertOptionInventario = {
+        title: "Mapa de la Bodega",
+        text: "Ubicación de las Estibas",
+        imageUrl: mapaUrl,
+        imageWidth: 700,
+        width: 800,
+      }
+      this.destino = data.Destino;
+
+      // this.categoria_origen = data.Categoria_Origen;
+
+      this.validar(this.remision.Id_Remision, tipo)
+      this.productos = data.Productos;
+      this.Paso = parseInt(this.remision.Estado_Alistamiento);
+
+      this.Completo = true;
+      /*      if (this.estado_balanza) {
+             if (this.Paso === 1) {
+               if (localStorage.getItem("combo")) {
+                 this.balanza = JSON.parse(localStorage.getItem('combo'));
+
+                 this.Consulta1 = TimerObservable.create(0, 600).takeWhile(() => this.alive)
+                   .subscribe(() => {
+                     this.http.get(environment.ruta + 'php/alistamiento/peso.php', { params: { balanza: this.balanza } }).subscribe((data: any) => {
+                       this.Peso = data.Peso;
+                       this.HablilitarPesoSiguiente(this.Peso)
+                     });
+                   });
+               } else {
+                 this.modalBodega.show();
+               }
+
+             }
+           }
+      */
 
     });
 
   }
-  validar(remision,tipo) {
+  validar(remision, tipo) {
     let id = this.route.snapshot.params["id"];
-    // console.log(id);
     var local = JSON.parse(localStorage.getItem("Id_Remision"));
-    // // console.log(local);
-
     if (parseInt(JSON.parse(localStorage.getItem("Id_Remision"))) == parseInt(id) && localStorage.getItem("Lista_Producto_Inicial")) {
 
       this.Lista_Productos = JSON.parse(localStorage.getItem('Lista_Producto_Inicial'));
@@ -307,20 +293,15 @@ export class AlistamientoCrearComponent implements OnInit {
       this.Peso_Total_Remision = JSON.parse(localStorage.getItem('Peso_Total_Remision'));
 
     } else {
-      // console.log(this.remision.Id_Remision);
       localStorage.setItem('Id_Remision', JSON.stringify(remision));
       this.Peso_Total_Remision = 0
       this.pos = 0
       this.http.get(environment.ruta + 'php/alistamiento_nuevo/productos_remision.php', {
-        params: { id: id,tipo }
+        params: { id: id, tipo }
       }).subscribe((data: any) => {
         this.Lista_Productos = data.Productos;
-        console.log(data.Productos,'products');
-        console.log(this.Lista_Productos,'list');
-
         this.Peso_General = parseInt(data.Peso_General);
-        this.Tolerancia_Global = parseInt(data.Tolerancia_Global); // console.log(this.Lista_Productos);
-
+        this.Tolerancia_Global = parseInt(data.Tolerancia_Global);
         // localStorage.setItem('Lista_Producto_Inicial', JSON.stringify(this.Lista_Productos));
         localStorage.setItem('Tolerancia', JSON.stringify(this.Tolerancia_Global));
 
@@ -396,11 +377,8 @@ export class AlistamientoCrearComponent implements OnInit {
     localStorage.setItem('combo', JSON.stringify(this.balanza));
     this.Consulta1 = timer(0, 600)
       .subscribe(() => {
-        console.log('000');
-
         this.http.get(environment.ruta + 'php/alistamiento/peso.php', { params: { balanza: this.balanza } }).subscribe((data: any) => {
           this.Peso = data.Peso;
-          //// console.log(this.Peso);
           this.HablilitarPesoSiguiente(this.Peso)
         });
       });
@@ -413,21 +391,17 @@ export class AlistamientoCrearComponent implements OnInit {
   HablilitarSiguiente(codigo) {
     let longitud = this.Lista_Productos.length;
     longitud = longitud - 1;
-    // console.log(this.Lista_Productos);
-    //// console.log(this.pos);
-    console.log(this.pos,this.Lista_Productos);
-    
     if (this.Lista_Productos[this.pos]['Estiba_Validado']) {
-      
+
 
       if (this.Lista_Productos[this.pos]["Codigo_Validado"] === false) {
-        
+
         if (codigo != "") {
           this.Leer_Estiba = false;
           let tipo = this.route.snapshot.params["tipo"];
           let mod = tipo == 'Devolucion' ? 'Devolucion_Compra' : 'Remision';
 
-          this.http.get(environment.ruta + 'php/alistamiento_nuevo/consulta_codigo.php', { params: { codigo: codigo,mod, id: this.Lista_Productos[this.pos].Id_Producto } }).subscribe((data: any) => {
+          this.http.get(environment.ruta + 'php/alistamiento_nuevo/consulta_codigo.php', { params: { codigo: codigo, mod, id: this.Lista_Productos[this.pos].Id_Producto } }).subscribe((data: any) => {
 
             if (data) {
               (document.getElementById("fila" + this.pos) as HTMLInputElement).setAttribute("class", "label-success");
@@ -447,7 +421,7 @@ export class AlistamientoCrearComponent implements OnInit {
                 //this.Lista_Productos[this.pos]["Habilitado"]="false";
 
 
-                /* 
+                /*
                 this.Lista_Productos[this.pos]["Clase"] = "noblur"; */
                 localStorage.setItem('Lista_Producto_Inicial', JSON.stringify(this.Lista_Productos));
                 (document.getElementById("CodigoBarra") as HTMLInputElement).value = '';
@@ -469,15 +443,12 @@ export class AlistamientoCrearComponent implements OnInit {
 
     } else {
       this.Leer_Estiba = true;
-      console.log('leer', this.Leer_Estiba);
       this.http.get(environment.ruta + 'php/alistamiento_nuevo/consulta_codigo_estiba.php',
         { params: { codigo: codigo, id: this.Lista_Productos[this.pos].Id_Estiba } }).subscribe((data: any) => {
-          console.log('estiba',data);
           if (data) {
             this.Leer_Estiba = false;
-            console.log('leer', this.Leer_Estiba);
-            this.Lista_Productos.forEach((p,posicion)=>{
-              if(p.Id_Estiba == data.Id_Estiba ){
+            this.Lista_Productos.forEach((p, posicion) => {
+              if (p.Id_Estiba == data.Id_Estiba) {
                 p["Clase"] = "noblur";
                 p['Estiba_Validado'] = true;
                 p['Codigo_Barras_Ingresado'] = codigo;
@@ -486,13 +457,13 @@ export class AlistamientoCrearComponent implements OnInit {
               }
             })
 
-          }else{
+          } else {
             this.confirmacionSwal.title = "Error En Codigo Estiba";
             this.confirmacionSwal.text = "El codigo de barras de la estiba es incorrecto";
             this.confirmacionSwal.type = "error";
             this.confirmacionSwal.show();
           }
-          
+
         })
     }
 
@@ -506,9 +477,9 @@ export class AlistamientoCrearComponent implements OnInit {
       caption: 'test',
       thumb: environment.ruta + 'IMAGENES/PRODUCTOS/' + this.Lista_Productos[index].Imagen
     };
-  /*   this.albums.push(album); */
+    /*   this.albums.push(album); */
     // override the default config
-   /*  this._lightbox.open(this.albums, index); */
+    /*  this._lightbox.open(this.albums, index); */
 
 
   }
@@ -522,22 +493,15 @@ export class AlistamientoCrearComponent implements OnInit {
     this.Tolerancia_Global = parseInt(JSON.parse(localStorage.getItem('Tolerancia')));
     this.Consulta2 = timer(1000)
       .subscribe(() => {
-        console.log('1111');
-        
         this.http.get(environment.ruta + '/php/alistamiento/peso_total.php', { params: { balanza: this.balanza } }).subscribe((data: any) => {
           this.Peso = data.Peso;
-          //// console.log(this.Peso);
           this.PesoTotal(this.Peso)
         });
       });
   }
   PesoTotal(peso) {
     peso = parseInt(peso);
-    // console.log(this.Peso_Total_Remision);
-    // console.log(peso);
-    // console.log(this.Tolerancia_Global);
     if (peso != '') {
-
       if (peso >= this.Peso_Total_Remision && this.Contador1 === 3) {
         this.Peso_Total = peso;
         this.Contador1 = 0;
@@ -556,17 +520,9 @@ export class AlistamientoCrearComponent implements OnInit {
     }
   }
   HablilitarPesoSiguiente(peso) {
-
-
-
-    // // console.log(this.Lista_Productos[this.pos1]["Peso_Total"]);
     var longitud = this.Lista_Productos.length;
-    // console.log(this.Lista_Productos);
-
     if (longitud > this.pos1) {
-
       if (this.Lista_Productos[this.pos1]["Validado"] === false) {
-
         this.http.get(environment.ruta + 'php/alistamiento/consultar_peso.php', { params: { id: this.Lista_Productos[this.pos1].Id_Producto_Remision } }).subscribe((data: any) => {
 
           this.pesototal = data.Peso_Total;
@@ -589,9 +545,7 @@ export class AlistamientoCrearComponent implements OnInit {
             this.Contador = 0
             localStorage.setItem('Lista_Producto_Inicial', JSON.stringify(this.Lista_Productos));
           } else if (parseInt(peso) >= Rangoinferior && parseInt(peso) <= Rangosuperior) {
-            // console.log("peso Incorrecto");
             this.Contador += 1;
-            // console.log(this.Contador);
           } else {
             (document.getElementById("peso" + this.pos1) as HTMLInputElement).setAttribute("class", "label-danger");
             this.pos1 += this.pos1;
@@ -601,31 +555,22 @@ export class AlistamientoCrearComponent implements OnInit {
         });
 
 
-        //// console.log(Rangoinferior);
-        //// console.log(Rangosuperior);
-
-
       } else {
         (document.getElementById("peso" + this.pos1) as HTMLInputElement).setAttribute("class", "label-success");
       }
     }
-    //// console.log(this.Peso_Total_Remision);
   }
 
   HablilitarCantidadSiguiente(i, cant) {
     var longitud = this.Lista_Productos.length;
-    console.log('val',this.Lista_Productos[i]["Validado"]);
-
-
-
-      if (cant === this.Lista_Productos[i]["Cantidad"]) {
-        this.Lista_Productos[i]["Cantidad_Ingresada"] = cant;
-        this.Lista_Productos[i]["Validado"] = true;
-        this.Lista_Productos[i]["Mensaje"] = "Cantidad Correcta!";
-        (document.getElementById("canti" + i) as HTMLInputElement).setAttribute("class", "label-success");
-        this.pos1 += 1;
-        this.Contador = 0
-        localStorage.setItem('Lista_Producto_Inicial', JSON.stringify(this.Lista_Productos));
+    if (cant === this.Lista_Productos[i]["Cantidad"]) {
+      this.Lista_Productos[i]["Cantidad_Ingresada"] = cant;
+      this.Lista_Productos[i]["Validado"] = true;
+      this.Lista_Productos[i]["Mensaje"] = "Cantidad Correcta!";
+      (document.getElementById("canti" + i) as HTMLInputElement).setAttribute("class", "label-success");
+      this.pos1 += 1;
+      this.Contador = 0
+      localStorage.setItem('Lista_Producto_Inicial', JSON.stringify(this.Lista_Productos));
 
     } else {
       (document.getElementById("canti" + i) as HTMLInputElement).setAttribute("class", "label-danger");
@@ -684,8 +629,6 @@ export class AlistamientoCrearComponent implements OnInit {
 
   }
   GuardarFaseII(formulario: NgForm) {
-    //// console.log(formulario.value);
-    //// console.log(this.Lista_Productos);
     var tipo = this.route.snapshot.params["tipo"];
     var id = this.route.snapshot.params["id"];
     var idc = this.route.snapshot.params["idc"];
@@ -700,11 +643,11 @@ export class AlistamientoCrearComponent implements OnInit {
     datos.append("productos", prod);
     datos.append("peso", peso);
     this.http.post(environment.ruta + 'php/alistamiento_nuevo/guardar_fase2.php', datos).subscribe((data: any) => {
-      this.confirmacionSalir.title =  data.title;
+      this.confirmacionSalir.title = data.title;
       this.confirmacionSalir.text = data.mensaje;
       this.confirmacionSalir.icon = data.tipo;
       this.confirmacionSalir.fire();
-      if(data.tipo=='success'){
+      if (data.tipo == 'success') {
 
         window.open(environment.ruta + "/php/archivos/descarga_zebra.php?id=" + this.id_remi);
         localStorage.removeItem('Lista_Producto_Inicial');

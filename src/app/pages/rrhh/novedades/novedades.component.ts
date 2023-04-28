@@ -52,11 +52,9 @@ export class NovedadesComponent implements OnInit {
       this.donwloading = false;
     }),
       (error) => {
-        console.log('Error downloading the file');
         this.donwloading = false;
       },
       () => {
-        console.info('File downloaded successfully');
         this.donwloading = false;
       };
   }
@@ -100,7 +98,6 @@ export class NovedadesComponent implements OnInit {
     this._payroll.count(this.form.value)
       .subscribe((r: any) => {
         this.peopleCount = r.data
-        console.log(this.peopleCount)
         this.paylads = this.peopleCount.reduce(this.reducePayloads, [])
       })
   }
@@ -108,7 +105,6 @@ export class NovedadesComponent implements OnInit {
   getTypes() {
     this._payroll.getTypes().subscribe((res: any) => {
       this.types = res.data
-      console.log(this.types)
     })
   }
 

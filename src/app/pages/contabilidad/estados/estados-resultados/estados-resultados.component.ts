@@ -80,7 +80,6 @@ export class EstadosResultadosComponent implements OnInit {
 
   openNewTab(route) {
     if (Object.keys(this.EstResultadoModel).every(key => this.EstResultadoModel[key])) {
-      console.log(this.queryParams)
       const url = `${environment.base_url}${route}${this.queryParams}`
       window.open(url, '_blank');
     } else {

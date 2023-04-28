@@ -96,7 +96,6 @@ export class SemanasExtrasComponent implements OnInit {
   }
 
   makeHorario() {
-    console.log('prueba')
     this._swal
       .show({
         title: '¿Estás seguro(a)?',

@@ -28,164 +28,138 @@
       <div class="text-center">
         <h5>Información del viaje</h5>
       </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="row">
-            <div class="col-md-6" formGroupName="travel">
-              <ng-select
-                formControlName="person_id"
-                [items]="people"
-                bindLabel="text"
-                bindValue="value"
-                loadingText="loading "
-                appearance="outline"
-                [appendTo]="'body'"
-                placeholder="Funcionario"
-                ngDefaultControl
-              ></ng-select>
+      <ng-container formGroupName="travel">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-6">
+                <ng-select
+                  formControlName="person_id"
+                  [items]="people"
+                  bindLabel="text"
+                  bindValue="value"
+                  loadingText="loading "
+                  appearance="outline"
+                  [clearable]="false"
+                  [class.is-invalid]="
+                    form.controls.travel.get('person_id').invalid
+                  "
+                  [appendTo]="'body'"
+                  placeholder="Funcionario *"
+                  ngDefaultControl
+                ></ng-select>
+              </div>
+              <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>C.C</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  readonly
+                  [value]="func.identifier"
+                />
+              </mat-form-field>
+              <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>Cargo</mat-label>
+                <input matInput type="text" readonly [value]="func.position" />
+              </mat-form-field>
+              <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>N° pasaporte</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  readonly
+                  [value]="func.passport_number"
+                />
+              </mat-form-field>
+              <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>Visa americana</mat-label>
+                <input matInput type="text" readonly [value]="func.visa" />
+              </mat-form-field>
+              <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>Tipo</mat-label>
+                <input matInput type="text" readonly [value]="func.type" />
+              </mat-form-field>
             </div>
-            <mat-form-field class="col-md-6" appearance="outline">
-              <mat-label>C.C</mat-label>
-              <input
-                matInput
-                type="text"
-                readonly
-                [value]="func.identifier"
-                id="cc"
-                value="test"
-              />
-            </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
-              <mat-label>Cargo</mat-label>
-              <input
-                matInput
-                type="text"
-                readonly
-                [value]="func.position"
-                id="cargo"
-                value="test"
-              />
-            </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
-              <mat-label>N° pasaporte</mat-label>
-              <input
-                matInput
-                type="text"
-                readonly
-                [value]="func.passport_number"
-                id="passport"
-                value="test"
-              />
-            </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
-              <mat-label>Visa americana</mat-label>
-              <input
-                matInput
-                type="text"
-                readonly
-                [value]="func.visa"
-                id="visa"
-                value="test"
-              />
-            </mat-form-field>
-            <mat-form-field class="col-md-6" appearance="outline">
-              <mat-label>Tipo</mat-label>
-              <input
-                matInput
-                type="text"
-                readonly
-                [value]="func.type"
-                id="tipo"
-                value="test"
-              />
-            </mat-form-field>
           </div>
-        </div>
-        <div class="col-md-6">
-          <div class="row">
-            <div class="col-md-6 mb-4" formGroupName="travel">
-              <ng-select
-                formControlName="origin_id"
-                [items]="city"
-                bindLabel="text"
-                bindValue="value"
-                loadingText="loading"
-                appearance="outline"
-                [appendTo]="'body'"
-                placeholder="Origen"
-                ngDefaultControl
-              >
-              </ng-select>
-            </div>
-            <div class="col-md-6 mb-4" formGroupName="travel">
-              <ng-select
-                formControlName="destinity_id"
-                [items]="city"
-                bindLabel="text"
-                bindValue="value"
-                loadingText="loading"
-                appearance="outline"
-                [appendTo]="'body'"
-                placeholder="Destino"
-                ngDefaultControl
-              >
-              </ng-select>
-            </div>
-            <mat-form-field
-              class="col-md-6"
-              appearance="outline"
-              formGroupName="travel"
-            >
-              <mat-label>Tipo de viaje</mat-label>
-              <mat-select formControlName="travel_type" id="tipo_viaje">
-                <mat-option *ngFor="let o of origen" [value]="o">
-                  {{ o }}</mat-option
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <ng-select
+                  formControlName="origin_id"
+                  [items]="city"
+                  bindLabel="text"
+                  bindValue="value"
+                  loadingText="loading"
+                  appearance="outline"
+                  [clearable]="false"
+                  [class.is-invalid]="
+                    form.controls.travel.get('origin_id').invalid
+                  "
+                  [appendTo]="'body'"
+                  placeholder="Origen *"
+                  ngDefaultControl
                 >
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field
-              class="col-md-6"
-              appearance="outline"
-              formGroupName="travel"
-            >
-              <mat-label>Fecha de salida</mat-label>
-              <input
-                matInput
-                type="date"
-                formControlName="departure_date"
-                id="fecha_salida"
-                value="test"
-              />
-            </mat-form-field>
-            <mat-form-field
-              class="col-md-6"
-              appearance="outline"
-              formGroupName="travel"
-            >
-              <mat-label>Fecha de llegada</mat-label>
-              <input
-                matInput
-                type="date"
-                formControlName="arrival_date"
-                id="fecha_llegada"
-              />
-            </mat-form-field>
-            <mat-form-field
-              class="col-md-6"
-              appearance="outline"
-              formGroupName="travel"
-            >
-              <mat-label>N° días</mat-label>
-              <input
-                matInput
-                type="number"
-                formControlName="n_nights"
-                id="n_dias"
-              />
-            </mat-form-field>
+                </ng-select>
+              </div>
+              <div class="col-md-6 mb-4">
+                <ng-select
+                  formControlName="destinity_id"
+                  [items]="city"
+                  bindLabel="text"
+                  bindValue="value"
+                  loadingText="loading"
+                  appearance="outline"
+                  [clearable]="false"
+                  [class.is-invalid]="
+                    form.controls.travel.get('destinity_id').invalid
+                  "
+                  [appendTo]="'body'"
+                  placeholder="Destino *"
+                  ngDefaultControl
+                >
+                </ng-select>
+              </div>
+              <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>Tipo de viaje</mat-label>
+                <mat-select formControlName="travel_type" required>
+                  <mat-option *ngFor="let o of origen" [value]="o">
+                    {{ o }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>Fecha de salida</mat-label>
+                <input
+                  matInput
+                  type="date"
+                  formControlName="departure_date"
+                  required
+                />
+              </mat-form-field>
+              <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>Fecha de llegada</mat-label>
+                <input
+                  matInput
+                  type="date"
+                  formControlName="arrival_date"
+                  required
+                />
+              </mat-form-field>
+              <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>N° días</mat-label>
+                <input
+                  matInput
+                  appInputPositionInitial
+                  currencyMask
+                  [options]="masks.maskNumbers"
+                  formControlName="n_nights"
+                  required
+                />
+              </mat-form-field>
+            </div>
           </div>
         </div>
-      </div>
+      </ng-container>
       <!-- Termina información de viaje -->
       <!-- Comienza Hospedaje -->
       <hr />
@@ -199,72 +173,70 @@
         >
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
-              <th class="col-md-1 align-middle">Tipo</th>
-              <th class="col-md-2 align-middle">Hotel</th>
-              <th class="col-md-2 align-middle">Dirección</th>
-              <th class="col-md-1 align-middle">Teléfono</th>
-              <th class="col-md-1 align-middle">T. Alojam.</th>
-              <th class="col-md-1 align-middle">Tarifa</th>
-              <th class="col-md-1 align-middle"># Días</th>
-              <th class="col-md-1 align-middle">Desayuno</th>
-              <th class="col-md-1 align-middle">R. Pago</th>
-              <th class="col-md-1 align-middle">total</th>
+              <th>Destino</th>
+              <th>Hotel</th>
+              <th>Dirección</th>
+              <th>Teléfono</th>
+              <th>Acomodación</th>
+              <th>Tarifa</th>
+              <th># Días</th>
+              <th>Desayuno</th>
+              <th>Responsable</th>
+              <th>total</th>
             </tr>
           </thead>
           <tbody formArrayName="hospedaje">
             <ng-container>
-              <tr *ngFor="let item of hospedajeList.controls; let i = index">
-                <td [formGroupName]="i">
+              <tr
+                *ngFor="let item of hospedajeList.controls; let i = index"
+                [formGroupName]="i"
+                class="text-center"
+              >
+                <td>
                   <select
-                    name=""
                     class="form-control form-control-sm"
                     (change)="changeTipo($event.target.value, item)"
                     formControlName="tipo"
-                    id="tipo_hospedaje"
                   >
-                    <option *ngFor="let t of tipo" [value]="t">
-                      {{ t }}
+                    <option *ngFor="let tipo of tipos" [value]="tipo">
+                      {{ tipo }}
                     </option>
                   </select>
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <select
-                    name=""
                     class="form-control form-control-sm"
-                    id="hotel_hospedaje"
                     formControlName="hotel_id"
                     (change)="seleccionHotel($event, item)"
                   >
-                    <!-- vas a buscar las acomodaciones de ese hotel y vas a llenar el ngfor de las acomodaciones con ese array -->
                     <option
-                      *ngFor="let d of item['controls']['hoteles']['value']"
-                      [value]="d.id"
+                      *ngIf="item.get('tipo').value == 'Selecciona'"
+                      value=""
                     >
-                      {{ d.name }}
+                      Selecciona tipo
+                    </option>
+                    <option
+                      *ngFor="let hotel of item['controls']['hoteles']['value']"
+                      [value]="hotel.id"
+                    >
+                      {{ hotel.name | uppercase }}
                     </option>
                   </select>
                 </td>
-                <td [formGroupName]="i">
-                  <input
-                    type="text"
-                    formControlName="address"
-                    class="form-control form-control-sm"
-                    id="direccion_hospedaje"
-                  />
+                <td>
+                  {{
+                    item.get("address").value || "SELECCIONA HOTEL" | uppercase
+                  }}
                 </td>
-                <td [formGroupName]="i">
-                  <input
-                    formControlName="phone"
-                    type="text"
-                    class="form-control form-control-sm"
-                    id="tel_contacto_hospedaje"
-                  />
+                <td>
+                  {{
+                    item.get("phone").value || "SELECCIONA HOTEL" | uppercase
+                  }}
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <select
                     class="form-control form-control-sm"
                     formControlName="accommodation"
-                    id="tipo_acomodacion_hospedaje"
                   >
                     <option
                       *ngFor="
@@ -278,51 +250,43 @@
                     </option>
                   </select>
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <input
-                    type="number"
+                    currencyMask
+                    [options]="masks.maskCOP"
+                    appInputPosition
                     formControlName="rate"
                     class="form-control form-control-sm"
-                    id="tarifa_hospedaje"
                   />
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <input
-                    type="number"
+                    currencyMask
+                    [options]="masks.maskNumbers"
+                    appInputPositionInitial
                     formControlName="n_night"
                     class="form-control form-control-sm"
-                    id="n_noches_hospedajes"
                   />
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <select
                     formControlName="breakfast"
                     class="form-control form-control-sm"
-                    id="desayuno_hospedaje"
                   >
                     <option value="Si">Si</option>
                     <option value="No">No</option>
                   </select>
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <select
                     formControlName="who_cancels"
                     class="form-control form-control-sm"
-                    id="cancela_hotel_hospedaje"
                   >
                     <option value="agencia">Agencia</option>
                     <option value="viajero">Viajero</option>
                   </select>
                 </td>
-                <td [formGroupName]="i">
-                  <input
-                    type="number"
-                    readonly
-                    formControlName="total"
-                    class="form-control form-control-sm"
-                    id="total_hospedaje"
-                  />
-                </td>
+                <td>${{ item.get("total").value | number : "1.2-2" }}</td>
               </tr>
             </ng-container>
           </tbody>
@@ -332,6 +296,7 @@
         <div class="btn-group">
           <button
             class="btn btn-danger btn-sm"
+            type="button"
             (click)="deleteHospedaje($event.target.value)"
             placement="bottom"
             ngbTooltip="Borrar"
@@ -339,7 +304,8 @@
             <i class="fas fa-trash-alt"></i>
           </button>
           <button
-            class="btn btn-info btn-sm"
+            class="btn btn-primary btn-sm"
+            type="button"
             (click)="newHospedaje()"
             placement="bottom"
             ngbTooltip="Agregar"
@@ -369,59 +335,57 @@
           </thead>
           <tbody formArrayName="transporte">
             <ng-container>
-              <tr *ngFor="let item of transporteList.controls; let i = index">
-                <td [formGroupName]="i">
+              <tr
+                *ngFor="let item of transporteList.controls; let i = index"
+                [formGroupName]="i"
+              >
+                <td>
                   <select
-                    name=""
                     formControlName="type"
                     class="form-control form-control-sm"
-                    id="tipo_transporte"
                   >
                     <option *ngFor="let tipo of tipo_transporte" [value]="tipo">
                       {{ tipo }}
                     </option>
                   </select>
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <input
                     type="text"
                     formControlName="journey"
                     class="form-control form-control-sm"
-                    id="trayecto_transporte"
                   />
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <input
                     type="text"
                     formControlName="company"
                     class="form-control form-control-sm"
-                    id="empresa_transporte"
                   />
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <select
                     formControlName="ticket_payment"
                     class="form-control form-control-sm"
-                    id="pago_tiquete_transporte"
                   >
                     <option value="Agencia">Agencia</option>
                     <option value="Viajero">Viajero</option>
                   </select>
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <input
                     type="time"
                     formControlName="departure_date"
                     class="form-control form-control-sm"
-                    id="hora_salida_transporte"
                   />
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <input
-                    type="number"
+                    currencyMask
+                    [options]="masks.maskCOP"
+                    appInputPosition
                     formControlName="ticket_value"
                     class="form-control form-control-sm"
-                    id="valor_tiquete_transporte"
                   />
                 </td>
               </tr>
@@ -434,14 +398,16 @@
           <button
             class="btn btn-danger btn-sm"
             placement="bottom"
+            type="button"
             ngbTooltip="Borrar"
             (click)="deleteTransporte($event.target.value)"
           >
             <i class="fas fa-trash-alt"></i>
           </button>
           <button
-            class="btn btn-info btn-sm"
+            class="btn btn-primary btn-sm"
             placement="bottom"
+            type="button"
             ngbTooltip="Agregar"
             (click)="newTransporte()"
           >
@@ -470,26 +436,28 @@
           </thead>
           <tbody formArrayName="taxi">
             <ng-container>
-              <tr *ngFor="let item of taxiList.controls; let i = index">
-                <td [formGroupName]="i">
+              <tr
+                *ngFor="let item of taxiList.controls; let i = index"
+                [formGroupName]="i"
+                class="text-center"
+              >
+                <td>
                   <select
                     formControlName="journey_id"
                     class="form-control form-control-sm"
-                    id="trayecto_taxi"
                   >
                     <option
                       *ngFor="let route of item['value']['journey']"
                       [value]="route.id"
                     >
-                      {{ route.route }}
+                      {{ route.route | uppercase }}
                     </option>
                   </select>
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <select
                     formControlName="taxi_city_id"
                     class="form-control form-control-sm"
-                    id="ciudad_taxi"
                   >
                     <option
                       *ngFor="let taxi_city of item['value']['taxi_cities']"
@@ -499,40 +467,28 @@
                     </option>
                   </select>
                 </td>
-                <td [formGroupName]="i">
-                  <input
-                    type="text"
-                    readonly
-                    [value]="item['value']['city_selected']?.type"
-                    class="form-control form-control-sm"
-                    id="tarifa_taxi"
-                  />
+                <td>
+                  {{ item["value"]["city_selected"]?.type }}
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <input
-                    type="number"
+                    currencyMask
+                    [options]="masks.maskCOP"
+                    appInputPosition
                     formControlName="rate"
                     class="form-control form-control-sm"
-                    id="tarifa_taxi"
                   />
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <input
-                    type="number"
+                    currencyMask
+                    [options]="masks.maskNumbers"
+                    appInputPositionInitial
                     formControlName="journeys"
                     class="form-control form-control-sm"
-                    id="trayectos_taxi"
                   />
                 </td>
-                <td [formGroupName]="i">
-                  <input
-                    type="number"
-                    readonly
-                    formControlName="total"
-                    class="form-control form-control-sm"
-                    id="total_taxi"
-                  />
-                </td>
+                <td>${{ item.get("total").value | number : "1.2-2" }}</td>
               </tr>
             </ng-container>
           </tbody>
@@ -544,14 +500,16 @@
             class="btn btn-danger btn-sm"
             placement="bottom"
             ngbTooltip="Borrar"
+            type="button"
             (click)="deleteTaxi($event.target.value)"
           >
             <i class="fas fa-trash-alt"></i>
           </button>
           <button
-            class="btn btn-info btn-sm"
+            class="btn btn-primary btn-sm"
             placement="bottom"
             ngbTooltip="Agregar"
+            type="button"
             (click)="newTaxi()"
           >
             <i class="fas fa-plus"></i>
@@ -578,58 +536,48 @@
           </thead>
           <tbody formArrayName="feeding">
             <ng-container>
-              <tr *ngFor="let item of FeedingList.controls; let i = index">
-                <td [formGroupName]="i">
+              <tr
+                *ngFor="let item of FeedingList.controls; let i = index"
+                [formGroupName]="i"
+              >
+                <td>
                   <select
-                    name=""
                     formControlName="type"
                     class="form-control form-control-sm"
-                    id="alimentacion"
                   >
-                    <option *ngFor="let item of tipo" [value]="item">
+                    <option *ngFor="let item of tipos" [value]="item">
                       {{ item }}
                     </option>
                   </select>
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <select
                     formControlName="breakfast"
                     class="form-control form-control-sm"
-                    id="alojamiento_desayuno"
-                    value="test"
                   >
                     <option value="Si">Si</option>
                     <option value="No">No</option>
                   </select>
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <input
-                    type="number"
+                    currencyMask
+                    [options]="masks.maskCOP"
+                    appInputPosition
                     formControlName="rate"
                     class="form-control form-control-sm"
-                    id="tarifa_estadia"
-                    value="test"
                   />
                 </td>
-                <td [formGroupName]="i">
+                <td>
                   <input
-                    type="number"
+                    currencyMask
+                    [options]="masks.maskNumbers"
+                    appInputPositionInitial
                     formControlName="stay"
                     class="form-control form-control-sm"
-                    id="n_estadia"
-                    value="test"
                   />
                 </td>
-                <td [formGroupName]="i">
-                  <input
-                    type="number"
-                    readonly
-                    formControlName="total"
-                    class="form-control form-control-sm"
-                    id="total_estadia"
-                    value="test"
-                  />
-                </td>
+                <td>${{ item.get("total").value | number : "1.2-2" }}</td>
               </tr>
             </ng-container>
           </tbody>
@@ -641,14 +589,16 @@
             class="btn btn-danger btn-sm"
             placement="bottom"
             ngbTooltip="Borrar"
+            type="button"
             (click)="deleteFeeding($event.target.value)"
           >
             <i class="fas fa-trash-alt"></i>
           </button>
           <button
-            class="btn btn-info btn-sm"
+            class="btn btn-primary btn-sm"
             placement="bottom"
             ngbTooltip="Agregar"
+            type="button"
             (click)="newFeeding()"
           >
             <i class="fas fa-plus"></i>
@@ -686,50 +636,57 @@
             <tr class="text-center">
               <th class="align-middle col-2">Hospedaje</th>
               <td class="col-2">
-                {{ form.get("total_hotels_usd").value | currency }}
+                USD {{ form.get("total_hotels_usd").value | number : "1.2-2" }}
               </td>
               <td class="col-2">
-                {{ form.get("total_hotels_cop").value | number : "1.2-2" }}
+                ${{ form.get("total_hotels_cop").value | number : "1.2-2" }}
               </td>
             </tr>
 
             <tr class="text-center">
               <th class="align-middle">Transporte terrestre</th>
-              <td>{{ 0 | currency }}</td>
+              <td>USD {{ 0 | number : "1.2-2" }}</td>
               <td>
-                {{ form.get("total_transports_cop").value | number : "1.2-2" }}
+                ${{ form.get("total_transports_cop").value | number : "1.2-2" }}
               </td>
             </tr>
 
             <tr class="text-center">
               <th class="align-middle">Taxis</th>
-              <td>{{ form.get("total_taxis_usd").value | currency }}</td>
               <td>
-                {{ form.get("total_taxis_cop").value | number : "1.2-2" }}
+                USD {{ form.get("total_taxis_usd").value | number : "1.2-2" }}
+              </td>
+              <td>
+                ${{ form.get("total_taxis_cop").value | number : "1.2-2" }}
               </td>
             </tr>
 
             <tr class="text-center">
               <th class="align-middle">Alimentación</th>
               <td>
-                {{ form.get("total_feedings_usd").value | currency }}
+                USD
+                {{ form.get("total_feedings_usd").value | number : "1.2-2" }}
               </td>
               <td>
-                {{ form.get("total_feedings_cop").value | number : "1.2-2" }}
+                ${{ form.get("total_feedings_cop").value | number : "1.2-2" }}
               </td>
             </tr>
             <tr class="text-center">
               <th class="align-middle col-2">Lavanderia</th>
               <td class="col-2">
                 <input
-                  type="number"
+                  currencyMask
+                  [options]="masks.maskUSD"
+                  appInputPositionUsd
                   formControlName="total_laundry_usd"
                   class="form-control form-control-sm"
                 />
               </td>
               <td class="col-2">
                 <input
-                  type="number"
+                  currencyMask
+                  [options]="masks.maskCOP"
+                  appInputPosition
                   formControlName="total_laundry_cop"
                   class="form-control form-control-sm"
                 />
@@ -739,14 +696,18 @@
               <th class="align-middle">Sobre equipaje</th>
               <td>
                 <input
-                  type="number"
+                  currencyMask
+                  [options]="masks.maskUSD"
+                  appInputPositionUsd
                   formControlName="baggage_usd"
                   class="form-control form-control-sm"
                 />
               </td>
               <td>
                 <input
-                  type="number"
+                  currencyMask
+                  [options]="masks.maskCOP"
+                  appInputPosition
                   formControlName="baggage_cop"
                   class="form-control form-control-sm"
                 />
@@ -756,23 +717,27 @@
               <th class="align-middle">Otros gastos</th>
               <td>
                 <input
-                  type="number"
+                  currencyMask
+                  [options]="masks.maskUSD"
+                  appInputPositionUsd
                   formControlName="other_expenses_usd"
                   class="form-control form-control-sm"
                 />
               </td>
               <td>
                 <input
-                  type="number"
+                  currencyMask
+                  [options]="masks.maskCOP"
+                  appInputPosition
                   formControlName="other_expenses_cop"
                   class="form-control form-control-sm"
                 />
               </td>
             </tr>
             <tr class="text-center">
-              <th class="align-middle"><b>TOTAL</b></th>
-              <th>{{ form.get("total_usd").value | currency }}</th>
-              <th>{{ form.get("total_cop").value | number : "1.2-2" }}</th>
+              <th class="align-middle">TOTAL</th>
+              <th>USD {{ form.get("total_usd").value | number : "1.2-2" }}</th>
+              <th>${{ form.get("total_cop").value | number : "1.2-2" }}</th>
             </tr>
           </tbody>
         </table>

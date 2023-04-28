@@ -104,11 +104,11 @@ export class RemisionesComponent implements OnInit {
     this.dateAdapter.setLocale('es');
   }
   selectedDate(fecha) {
-    if (fecha.value){
+    if (fecha.value) {
       this.filtro_fecha =
-      this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd') +
-      ' - ' +
-      this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
+        this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd') +
+        ' - ' +
+        this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
     } else {
       this.filtro_fecha = ''
     }
@@ -117,17 +117,13 @@ export class RemisionesComponent implements OnInit {
   clearDate(event) {
     event.stopPropagation();
     this.filtro_fecha = '';
-}
+  }
   ngAfterViewInit() {
     var width = this.inputC.nativeElement.offsetWidth;
     var height = this.inputC.nativeElement.offsetHeight;
-    console.log('Width:' + width);
-    console.log('Height: ' + height);
   }
 
   ngOnInit() {
-
-    console.clear();
     this.user = JSON.parse(localStorage.getItem("User"));
     this.http.get(environment.ruta + 'php/remision/grafica_remisiones.php').subscribe((data: any) => {
 
@@ -144,8 +140,6 @@ export class RemisionesComponent implements OnInit {
       this.Facturadas = data.Tipo_Facturacion[0].Facturadas;
       this.Nofacturadas = data.Tipo_Facturacion[0].No_Facturadas;
       this.Noconforme = data.No_Conforme;
-      //// console.log(data);
-
     });
     this.ListarBorradores();
 
@@ -203,8 +197,6 @@ export class RemisionesComponent implements OnInit {
       queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     }
     this.http.get(environment.ruta + '/php/remision_nuevo/remisiones.php' + queryString).subscribe((data: any) => {
-      console.log(data);
-
       this.Cargando = false;
       this.Lista_Remisiones = data.remisiones;
       this.TotalItems = data.numReg;
@@ -215,8 +207,6 @@ export class RemisionesComponent implements OnInit {
       this.Anuladas = data.Anuladas;
       this.Facturadas = data.Tipo_Facturacion[0].Facturadas;
       this.Nofacturadas = data.Tipo_Facturacion[0].No_Facturadas;
-      //// console.log(data);
-
     });
   }
   EliminarBorrador(id) {
@@ -277,11 +267,9 @@ export class RemisionesComponent implements OnInit {
     } else {
       this.filtro_fecha = '';
     }
-    console.log(this.filtro_fecha)
     this.filtros();
   }
   dateRangeChanged2(event, tipo) {
-    // console.log(event);
     if (event.formatted != "") {
       if (tipo == 'remision') {
         this.fecha_informe = event.formatted;

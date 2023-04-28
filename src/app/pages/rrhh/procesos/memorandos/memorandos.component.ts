@@ -112,7 +112,7 @@ export class MemorandosComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.formLlamada.reset()
-    
+
   }
 
   openMotivo() {
@@ -212,7 +212,6 @@ export class MemorandosComponent implements OnInit {
     this.memorandosService.getMemorandumLimitated()
       .subscribe((res: any) => {
         this.typesLimitated = res.data;
-        console.log(this.typesLimitated)
       });
   }
 
@@ -225,8 +224,6 @@ export class MemorandosComponent implements OnInit {
     this.memorandosService.getMemorandumList(params)
       .subscribe((res: any) => {
         this.memorandums = res.data.data;
-        console.log(res.data);
-
         this.paginationMemorando.collectionSize = res.data.total;
         this.loading = false;
       })
@@ -248,7 +245,7 @@ export class MemorandosComponent implements OnInit {
     this.memorandosService.createNewMemorandum(this.formMemorando.value)
       .subscribe((res: any) => {
         //this.modalMemorando.hide();
-        this.modalService.dismissAll(); 
+        this.modalService.dismissAll();
         this.formMemorando.reset();
         this.person_selected = '';
         this.getMemorandumList();
@@ -263,9 +260,9 @@ export class MemorandosComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    * ! Pendiente de Back
-   * TODO 
+   * TODO
    */
   download(file) {
     this.memorandosService.download(file)
@@ -277,8 +274,8 @@ export class MemorandosComponent implements OnInit {
         link.click();
         this.loading = false
       }),
-      error => { console.log('Error downloading the file'); this.loading = false },
-      () => { console.info('File downloaded successfully'); this.loading = false };
+      error => { this.loading = false },
+      () => { this.loading = false };
   }
 
   aprobarMemorando(memorando, state) {
@@ -335,7 +332,6 @@ export class MemorandosComponent implements OnInit {
   onFileChanged(event) {
     if (event.target.files[0]) {
       let file = event.target.files[0];
-      console.log(file);
       const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
       if (!types.includes(file.type)) {
         this._swal.show({
@@ -383,7 +379,7 @@ export class MemorandosComponent implements OnInit {
           text: 'Este es el tercer llamado de atención del funcionario, por normatividad de la empresa se procede a generarlo como un memorando leve. ¿Estás seguro(a) de realizar este cambio?',
         }).then((result) => {
           if (result.isConfirmed) {
-            this.modalService.dismissAll(); 
+            this.modalService.dismissAll();
             //this.modalLlamada.hide();
             let details = this.formLlamada.value.reason;
             let level = 'Leve';
@@ -408,7 +404,7 @@ export class MemorandosComponent implements OnInit {
         this.memorandosService.createNewAttentionCall(this.formLlamada.value)
           .subscribe((res: any) => {
             //this.modalLlamada.hide();
-            this.modalService.dismissAll(); 
+            this.modalService.dismissAll();
             this.getMemorandumList();
             this.formLlamada.reset();
             this._swal.show({

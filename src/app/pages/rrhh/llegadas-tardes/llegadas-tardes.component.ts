@@ -126,7 +126,7 @@ export class LlegadasTardesComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.permission.permissions.show){
+    if (this.permission.permissions.show) {
       this.createFormFilters();
 
       this.route.queryParamMap.subscribe((params: any) => {
@@ -161,7 +161,7 @@ export class LlegadasTardesComponent implements OnInit {
         this.getStatisticsByDays();
       })
 
-    }else{
+    } else {
       this.router.navigate(['/notautorized']);
     }
   }
@@ -205,7 +205,7 @@ export class LlegadasTardesComponent implements OnInit {
       people_id: [''],
       date_from: [''],
       date_to: [''],
-      date: [{begin: new Date(2018, 7, 5), end: new Date(2018, 7, 25)}]
+      date: [{ begin: new Date(2018, 7, 5), end: new Date(2018, 7, 25) }]
     })
     this.formFilters.valueChanges.pipe(
       debounceTime(500),
@@ -246,11 +246,11 @@ export class LlegadasTardesComponent implements OnInit {
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/rrhh/llegadas-tarde', paramsurl.toString());
     const fecha_ini = this.formFilters.controls.date_from.value == ''
-                        ? moment().format('YYYY-MM-DD')
-                        : this.formFilters.controls.date_from.value
+      ? moment().format('YYYY-MM-DD')
+      : this.formFilters.controls.date_from.value
     const fecha_fin = this.formFilters.controls.date_to.value == ''
-                        ? moment().format('YYYY-MM-DD')
-                        : this.formFilters.controls.date_to.value
+      ? moment().format('YYYY-MM-DD')
+      : this.formFilters.controls.date_to.value
     this._lateArrivals
       .getLateArrivalsPaginated(fecha_ini, fecha_fin, params)
       .subscribe((res: any) => {
@@ -264,18 +264,18 @@ export class LlegadasTardesComponent implements OnInit {
           this.getLateArrivals()
         }
         this.transformData();
-    })
+      })
   }
 
   downloadLateArrivals() {
     let params = this.SetFiltros(this.pagination.page);
     this.donwloading = true;
     const fecha_ini = this.formFilters.controls.date_from.value == ''
-                        ? moment().format('YYYY-MM-DD')
-                        : this.formFilters.controls.date_from.value
+      ? moment().format('YYYY-MM-DD')
+      : this.formFilters.controls.date_from.value
     const fecha_fin = this.formFilters.controls.date_to.value == ''
-                        ? moment().format('YYYY-MM-DD')
-                        : this.formFilters.controls.date_to.value
+      ? moment().format('YYYY-MM-DD')
+      : this.formFilters.controls.date_to.value
     this._lateArrivals
       .downloadLateArrivals(fecha_ini, fecha_fin, params)
       .subscribe((response: BlobPart) => {
@@ -288,11 +288,9 @@ export class LlegadasTardesComponent implements OnInit {
         this.donwloading = false;
       }),
       (error) => {
-        console.log('Error downloading the file', error);
         this.donwloading = false;
       },
       () => {
-        console.info('File downloaded successfully');
         this.donwloading = false;
       };
   }
@@ -307,7 +305,7 @@ export class LlegadasTardesComponent implements OnInit {
   getCompanies() {
     //no necesito consultar las companies porque se encuentran en el servicio de user,
     //solo las formateo para que puedan ser mostradas en el select
-    this.companyList = this.user.person.companies.map((ele)=>({ value: ele.id, text: ele.short_name }))
+    this.companyList = this.user.person.companies.map((ele) => ({ value: ele.id, text: ele.short_name }))
     this.company_id = 1;
   }
 
@@ -355,21 +353,20 @@ export class LlegadasTardesComponent implements OnInit {
     let params: any = this.SetFiltros(this.pagination.page);
     params.type = 'diary';
     const fecha_ini = this.formFilters.controls.date_from.value == ''
-                        ? moment().format('YYYY-MM-DD')
-                        : this.formFilters.controls.date_from.value
+      ? moment().format('YYYY-MM-DD')
+      : this.formFilters.controls.date_from.value
     const fecha_fin = this.formFilters.controls.date_to.value == ''
-                        ? moment().format('YYYY-MM-DD')
-                        : this.formFilters.controls.date_to.value
+      ? moment().format('YYYY-MM-DD')
+      : this.formFilters.controls.date_to.value
     this._lateArrivals
       .getStatistcs(fecha_ini, fecha_fin, params)
       .subscribe((r: any) => {
-        if (r.data.lates.length>0) {
+        if (r.data.lates.length > 0) {
           this.dataDiary.total = r.data.lates.total;
           if (r.data.lates.time_diff_total != null) {
             this.dataDiary.time_diff_total = r.data.lates.time_diff_total;
           }
           this.dataDiary.percentage = r.data.percentage;
-          console.log('r', r);
           //let d = r.data?.lates?.allByDependency.reduce(
           let d = r.data.lates.reduce(
             (acc, el) => {
@@ -380,7 +377,6 @@ export class LlegadasTardesComponent implements OnInit {
             },
             { labels: [], datasets: [] }
           );
-          console.log('d', d);
           this.donutChart.datasets[0].data = d.datasets;
           this.donutChart.labels = d.labels;
         }

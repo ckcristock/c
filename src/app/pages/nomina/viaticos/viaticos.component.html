@@ -80,9 +80,9 @@
           <tr class="text-center text-uppercase">
             <th>Foto</th>
             <th>Funcionario</th>
-            <th>Func. Creó</th>
-            <th>F. Creación</th>
-            <th>F. Salida</th>
+            <th>Creador</th>
+            <th>Creación</th>
+            <th>Salida</th>
             <th># Días</th>
             <th>Total COP</th>
             <th>Total USD</th>
@@ -96,7 +96,7 @@
               <img
                 onerror="this.src='../../../../assets/images/noprofile.png'"
                 class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
-                src="{{ item.person.image | image : 'users' }}"
+                [src]="item.person.image | image : 'users'"
               />
             </td>
             <td>
@@ -176,7 +176,7 @@
                   >
                   <a
                     *ngIf="item.state != 'Inactivo'"
-                    (click)="changeState(item, 'Dehabilidato')"
+                    (click)="changeState(item, 'Inactivo')"
                     href="javascript:void(0)"
                     class="dropdown-item text-danger"
                   >

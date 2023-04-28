@@ -55,6 +55,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { InventarioEstibasComponent } from './inventario-fisico/inventario-estibas/inventario-estibas.component';
 import { ReconteoEstibaComponent } from './inventario-fisico/reconteo-estiba/reconteo-estiba.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { DirectivesModule } from 'src/app/core/directives/directives.module';
+import { NgxCurrencyModule } from 'ngx-currency';
 
 export const MY_FORMATS = {
   parse: {
@@ -113,7 +115,9 @@ export const MY_FORMATS = {
     MatButtonModule,
     NgbTooltipModule,
     NgbPopoverModule,
-    NgSelectModule
+    NgSelectModule,
+    DirectivesModule,
+    NgxCurrencyModule
   ],
   providers: [
     {

@@ -54,7 +54,6 @@ export class CajasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.permission)
     if (this.permission.permissions.show) {
       this.filtros.person_id = this.permission.permissions.show_all ? '' : this._user.user.person.id
       this.getPrettyCash();

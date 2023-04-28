@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
-import { User } from 'src/app/core/models/users.model';
-import { UserService } from 'src/app/core/services/user.service';
 import { ActaRecepcionService } from '../acta-recepcion.service';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-ver-acta-recepcion',
@@ -13,67 +13,69 @@ import { ActaRecepcionService } from '../acta-recepcion.service';
 })
 export class VerActaRecepcionComponent implements OnInit {
   @ViewChild('confirmacionSwal') confimracionSwal: any;
+  loading: boolean;
+  data: any[] = [];
+  user_id: any;
+  ActividadesActa: any[] = [];
+  id = this.route.snapshot.params["id"];
   datosCabecera = {
     Titulo: 'Acta de recepción',
     Fecha: '',
     Codigo: ''
   }
-  public Fecha = new Date();
-  public id = this.route.snapshot.params["id"];
-  public Datos: any = {};
-  public Productos: any[] = [];
-  public Facturas: any[] = [];
-  public user = { Identificacion_Funcionario: '1' };
-  public SubTotalFinal = 0;
-  public IvaFinal = 0;
-  public TotalFinal = 0;
-  public ActividadesActa: any[] = [];
-  public Tipo: string = "Bodega";
-  public userF: User;
-  public reducer_subt = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Subtotal);
-  public reducer_iva = (accumulator, currentValue) => accumulator + (parseFloat(currentValue.Subtotal) * (parseInt(currentValue.Impuesto) / 100));
+
+  reducer_subt = (accumulator, currentValue) => accumulator + parseFloat(currentValue.Subtotal);
+  reducer_iva = (accumulator, currentValue) => accumulator + (parseFloat(currentValue.Subtotal) * (parseInt(currentValue.Impuesto) / 100));
 
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
-    private _actaRecepcion: ActaRecepcionService
-  ) { }
+    private _actaRecepcion: ActaRecepcionService,
+    private _swal: SwalService,
+    private _user: UserService
+  ) {
+    this.user_id = _user.user.person.id;
+  }
 
   ngOnInit() {
     this.init();
   }
 
   init() {
-    let params: any = {};
-    params.id = this.id;
-    this._actaRecepcion.detalleActa(params).subscribe((data: any) => {
-      this.Datos = data.Datos2;
-      this.Productos = data.ProductosNuevo;
-      this.Facturas = data.Facturas;
-    });
-    this.getActividadesActa();
-  }
-
-  getActividadesActa() {
-    let params = {
-      id_acta: this.id
-    }
-    this._actaRecepcion.getActividadesActa(params).subscribe((data: any) => {
-      this.ActividadesActa = data.query_result;
+    this.loading = true;
+    let params: any = {
+      id: this.id
+    };
+    this._actaRecepcion.detalleActa(params).subscribe((res: any) => {
+      this.data = res.data;
+      this.loading = false;
+      this.datosCabecera.Codigo = res.data.Codigo;
+      this.datosCabecera.Fecha = res.data.Fecha_Creacion
     });
   }
 
   aprobarActa(id, Id_Bodega_Nuevo) {
-    let datos = new FormData();
-    datos.append('id', id);
-    datos.append('Id_Bodega_Nuevo', Id_Bodega_Nuevo);
-    datos.append('funcionario', this.user.Identificacion_Funcionario);
-    this.http.post(environment.ruta + 'php/actarecepcion_nuevo/aprobar_acta.php', datos).subscribe((data: any) => {
-      this.confimracionSwal.title = data.titulo;
-      this.confimracionSwal.text = data.mensaje;
-      this.confimracionSwal.icon = data.tipo;
-      this.confimracionSwal.fire();
-      this.init();
+    this._swal.show({
+      title: '¿Estás seguro(a)?',
+      text: 'Vamos a aprobar el acta de recepción ',
+      icon: 'question',
+    }).then(r => {
+      if (r.isConfirmed) {
+        let datos = new FormData();
+        datos.append('id', id);
+        datos.append('Id_Bodega_Nuevo', Id_Bodega_Nuevo);
+        datos.append('funcionario', this.user_id);
+        this.http.post(environment.base_url + '/php/actarecepcion_nuevo/aprobar_acta.php', datos).subscribe((data: any) => {
+          this._swal.show({
+            icon: 'success',
+            title: 'Operación exitosa',
+            text: data.mensaje,
+            showCancel: false,
+            timer: 1000
+          })
+          this.init();
+        })
+      }
     })
   }
 

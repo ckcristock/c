@@ -45,6 +45,7 @@
               bindValue="value"
               appearance="outline"
               [appendTo]="'body'"
+              [clearable]="false"
               placeholder="Funcionario"
               loadingText="loading "
               ngDefaultControl
@@ -81,7 +82,7 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th scope="col">Funcionario</th>
-            <th scope="col">Func. Creó</th>
+            <th scope="col">Creado por</th>
             <th scope="col">Valor</th>
             <th scope="col">¿Aplica?</th>
             <th scope="col">Fecha</th>
@@ -101,9 +102,9 @@
               {{ lunch.first_surname | titlecase }}
             </td>
             <td class="align-middle">{{ lunch.user }}</td>
-            <td class="align-middle">{{ lunch.value | currency }}</td>
+            <td class="align-middle">${{ lunch.value | number : "1.2-2" }}</td>
             <ng-container *ngIf="lunch.apply == null; else elseTemplate">
-              <td class="align-middle">Sin Validar</td>
+              <td class="align-middle">Sin validar</td>
             </ng-container>
             <ng-template #elseTemplate>
               <td class="align-middle">{{ lunch.apply }}</td>

@@ -17,7 +17,7 @@ import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swa
   styleUrls: ['./table-inventary.component.scss']
 })
 export class TableInventaryComponent implements OnInit {
-  @ViewChild('add', {read: TemplateRef}) add: TemplateRef<any>;
+  @ViewChild('add', { read: TemplateRef }) add: TemplateRef<any>;
   @ViewChild('tablestock') tablestock;
   @ViewChild('modalEntrega') modalEntrega: any;
   @ViewChild(MatAccordion) accordion: MatAccordion;
@@ -92,7 +92,7 @@ export class TableInventaryComponent implements OnInit {
     private modalService: NgbModal,
     private _person: PersonService,
     private _swal: SwalService,
-    ) {
+  ) {
 
   }
 
@@ -121,8 +121,6 @@ export class TableInventaryComponent implements OnInit {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    console.log(value)
-    console.log(tablestock)
     tablestock.search(value);
   }
   private getDismissReason(reason: any) {
@@ -218,10 +216,6 @@ export class TableInventaryComponent implements OnInit {
 
     let params = '';
     this.donwloading = true;
-
-    console.log(this.firstDay);
-    console.log(this.lastDay);
-
     this._dotation.downloadDeliveries(this.firstDay, this.lastDay, params).subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/excel' });
       let link = document.createElement('a');
@@ -232,11 +226,9 @@ export class TableInventaryComponent implements OnInit {
       this.donwloading = false;
     }),
       (error) => {
-        console.log('Error downloading the file');
         this.donwloading = false;
       },
       () => {
-        console.info('File downloaded successfully');
         this.donwloading = false;
       };
   }
@@ -256,7 +248,6 @@ export class TableInventaryComponent implements OnInit {
     }
     this.loading = true;
     this._dotation.getDotations(params).subscribe((r: any) => {
-      console.log(r)
       this.Lista_Dotaciones = r.data.data;
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
@@ -266,8 +257,6 @@ export class TableInventaryComponent implements OnInit {
 
   configEntrega(value: string) {
     // this.flagDotacionApp = value;
-    // console.log(this.flagDotacionApp);
-    //console.log(this.tablestock)
     this.tablestock.search(value);
     this.modalEntrega.show()
   }

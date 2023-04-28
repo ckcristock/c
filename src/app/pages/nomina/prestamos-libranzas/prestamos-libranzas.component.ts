@@ -102,8 +102,8 @@ export class PrestamosLibranzasComponent implements OnInit {
         link.click();
         this.loading = false
       }),
-      error => { console.log('Error downloading the file'); this.loading = false },
-      () => { console.info('File downloaded successfully'); this.loading = false };
+      error => { this.loading = false },
+      () => { this.loading = false };
   }
 
   downloadExcel(id) {
@@ -117,8 +117,8 @@ export class PrestamosLibranzasComponent implements OnInit {
         link.click();
         this.loading = false
       }),
-      error => { console.log('Error downloading the file'); this.loading = false },
-      () => { console.info('File downloaded successfully'); this.loading = false };
+      error => { this.loading = false },
+      () => { this.loading = false };
   }
 
   downloadPaz(id) {
@@ -132,7 +132,7 @@ export class PrestamosLibranzasComponent implements OnInit {
         link.click();
         this.loading = false
       }),
-      error => { console.log('Error downloading the file'); this.loading = false },
-      () => { console.info('File downloaded successfully'); this.loading = false };
+      error => { this.loading = false },
+      () => { this.loading = false };
   }
 }

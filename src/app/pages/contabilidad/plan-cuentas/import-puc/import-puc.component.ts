@@ -94,7 +94,6 @@ export class ImportPucComponent implements OnInit {
       })
       this._modal.close();
       this.reload.emit()
-      console.log(res)
     })
   }
 

@@ -201,7 +201,6 @@ export class MaterialesComponent implements OnInit {
 
   async getMaterial(material) {
     this.material = { ...material };
-    console.log(material)
     await this.getMaterialsIndex();
     let temp = this.allMaterialsIndex.filter(mat => mat.id == material.material_id);
     this.materialsIndex.push(temp[0])

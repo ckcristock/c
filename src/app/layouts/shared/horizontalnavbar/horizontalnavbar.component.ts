@@ -20,7 +20,7 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
   public innerWidth: any;
   // tslint:disable-next-line: max-line-length
   constructor(
-    private router: Router, 
+    private router: Router,
     private eventService: EventService,
     private userService: UserService,
     private el: ElementRef) {
@@ -37,7 +37,6 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
     this.innerWidth = window.innerWidth;
   }
   ngOnInit(): void {
-    //console.log(this.navItems)
     this.initialize();
     this.innerWidth = window.innerWidth;
     this.configData = {
@@ -76,17 +75,12 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
       }
 
     } else if (nextEl.id !== 'navmenu') {
-      console.log(parent)
     } else if (nextEl && nextEl.classList.contains('show')) {
       const parentEl = event.target.parentNode;
       if (parentEl) { parentEl.classList.remove('show'); }
       nextEl.classList.toggle('show');
     }
     return false;
-
-
-    /* console.log(event)
-     */
   }
 
   ngAfterViewInit() {

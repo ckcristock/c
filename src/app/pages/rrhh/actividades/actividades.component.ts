@@ -153,15 +153,12 @@ export class ActividadesComponent {
      }); */
     this.GetActividadesMes();
     //alert(`i'm here`);
-    // console.log(this.ActividadModel);
 
   }
 
   GetActividadesMes() {
     this._actividad.getActivities().subscribe((r: any) => {
       this.calendarEvents = r.data;
-      // console.log(this.calendarEvents);
-
     });
     this.DataActivities = [];
     this.Actividades = [];
@@ -367,7 +364,6 @@ export class ActividadesComponent {
   FuncionariosSelec(id) {
     this._actividad.getPeopleActivity(id).subscribe((r: any) => {
       this.FuncionariosSele = r.data;
-      console.log(this.FuncionariosSele);
       if (r.data) {
         this.ActividadModel.Funcionario_Asignado =
           this.FuncionariosSele.reduce((acc, el) => {
@@ -461,7 +457,6 @@ export class ActividadesComponent {
       inputPlaceholder: 'Seleccionar...',
     }).then((result) => {
       if (result.value) {
-        console.log(result.value);
         result.value == 'cancelDay' ? this.anularDia() : this.cancelCycle()
       }
     });
@@ -494,7 +489,6 @@ export class ActividadesComponent {
           },
           inputPlaceholder: 'Seleccionar...',
         }).then((result) => {
-          console.log(result)
           if (result.value) {
             this.accionEvento(result.value);
           }

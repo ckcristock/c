@@ -200,7 +200,6 @@ export class ModalprestamoylibranzacrearComponent implements OnInit, OnDestroy {
     });
   }
   save(form: NgForm) {
-    console.log(form)
     if (form.valid) {
       this.modelo.person_id = this.modelo.person.id;
       this.modelo.account_plain_id = this.modelo.account_plain_id.id;

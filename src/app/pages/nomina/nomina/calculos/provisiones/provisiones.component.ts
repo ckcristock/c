@@ -18,27 +18,26 @@ export class ProvisionesComponent implements OnInit {
   mostrarCalculo = false
   provisionesDatos: any
 
-  constructor( private _payrollProv : PayRollProvisionsService) { }
+  constructor(private _payrollProv: PayRollProvisionsService) { }
 
   ngOnInit(): void {
 
     this.funcionario = this.funcionarioProp;
     this.datosEmpresa = this.datosEmpresaProp;
     this.getProvisionesDatos();
-   
+
   }
 
-   getProvisionesDatos() {
+  getProvisionesDatos() {
     this._payrollProv.getProvisions({
-      pid:this.funcionario.id,
-      inicio:this.fechaInicio,
-      fin:this.fechaFin,
-      }).subscribe( r=> {
-        console.log(r,'asdasd');
-        this.provisionesDatos = r;
+      pid: this.funcionario.id,
+      inicio: this.fechaInicio,
+      fin: this.fechaFin,
+    }).subscribe(r => {
+      this.provisionesDatos = r;
       this.mostrarCalculo = true;
-        
-      })
+
+    })
   }
 
 }

@@ -115,7 +115,6 @@ export class CrearPresupuestoComponent implements OnInit {
   }
   async getIndirectCosts() {
     if (this.dataEdit) {
-      console.log(this.dataEdit)
       this.indirectCosts =
         this.dataEdit.indirect_costs.reduce((acc, el) => {
           return [...acc,
@@ -217,7 +216,6 @@ export class CrearPresupuestoComponent implements OnInit {
   }
 
   indirectCostPush(indirect, all = true) {
-    console.log('insertar', indirect)
     indirect.clear();
     this.indirectCosts.forEach((element) => {
       indirect.push(this.indirectCostgroup(element, this.fb, all));

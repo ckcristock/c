@@ -40,7 +40,6 @@ export class RemisionComponent implements OnInit {
     this.http.get(environment.ruta + 'php/remision/remision.php', {
       params: { id: this.id }
     }).subscribe((data: any) => {
-      console.log(data)
       this.remision = data.Remision;
       this.origen = data.Origen;
       this.destino = data.Destino;

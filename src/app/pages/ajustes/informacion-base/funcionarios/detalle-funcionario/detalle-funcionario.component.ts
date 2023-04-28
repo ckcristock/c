@@ -53,7 +53,6 @@ export class DetalleFuncionarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.activateRoute.snapshot.params.id;
-    console.log(this.id)
     this.getBasicData();
     this.data$ = this.basicDataService.datos$.subscribe(data => {
       this.getBasicData();

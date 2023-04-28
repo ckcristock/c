@@ -90,10 +90,6 @@ export class ModalproductoremisionnuevoComponent implements OnInit, OnDestroy, O
 
   ngOnInit() {
     this.openSubscription = this.AbrirModal.subscribe((data: any) => {
-
-      // console.log("modal");
-      // console.log(data);
-
       this.Tipo = data.tipo;
       if (data.tipo == 'Remision') {
         this.RemisionModel = data.remision_model;

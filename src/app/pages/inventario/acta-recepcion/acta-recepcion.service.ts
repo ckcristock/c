@@ -42,4 +42,8 @@ export class ActaRecepcionService {
   getActividadesActa(params = {}) {
     return this.http.get(`${environment.base_url}/php/actarecepcion/actividades_acta_recepcion_compra.php`, { params })
   }
+
+  codigoBarras(params = {}) {
+    return this.http.get(environment.base_url + '/php/actarecepcion/codigo_barrad.php', { params })
+  }
 }

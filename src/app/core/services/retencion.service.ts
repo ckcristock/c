@@ -8,10 +8,10 @@ import { environment } from 'src/environments/environment';
 })
 export class RetencionService {
 
-  constructor(private client:HttpClient)  { }
+  constructor(private client: HttpClient) { }
 
-  getRetencionesPorModalidad(p:any):Observable<any>{
-    return this.client.get(environment.ruta+'php/GENERALES/retenciones/get_retenciones_modalidad.php', {params:p});
+  getRetencionesPorModalidad(p: any): Observable<any> {
+    return this.client.get(environment.base_url + '/php/GENERALES/retenciones/get_retenciones_modalidad.php', { params: p });
   }
 
 }

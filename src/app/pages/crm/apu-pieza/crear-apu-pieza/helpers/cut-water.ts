@@ -14,19 +14,19 @@ export const cutWaterHelper = {
       let cut_water = form.get('cut_water') as FormArray;
       data.cutwater.forEach((r) => {
         let group = fb.group({
-          material_id: [r.material_id],
-          thickness_id: [r.thickness.id],
-          thickness_value: [r.thickness_value],
-          amount: [r.amount],
-          long: [r.long],
-          width: [r.width],
-          total_length: [r.total_length],
-          amount_cut: [r.amount_cut],
-          diameter: [r.diameter],
-          total_hole_perimeter: [r.total_hole_perimeter],
-          time: [r.time],
-          minute_value: [r.minute_value],
-          value: [r.value]
+          material_id: [r?.material_id],
+          thickness_id: [r?.thickness?.id],
+          thickness_value: [r?.thickness_value],
+          amount: [r?.amount],
+          long: [r?.long],
+          width: [r?.width],
+          total_length: [r?.total_length],
+          amount_cut: [r?.amount_cut],
+          diameter: [r?.diameter],
+          total_hole_perimeter: [r?.total_hole_perimeter],
+          time: [r?.time],
+          minute_value: [r?.minute_value],
+          value: [r?.value]
         });
         this.subscribesCutWater(group, cut_water, form, materials);
         cut_water.push(group);
@@ -79,7 +79,6 @@ export const cutWaterHelper = {
       let thickness_value = cut_water.get('thickness_value').value;
       let total_hole_perimeter = cut_water.get('total_hole_perimeter').value;
       let result = ((Number(total_hole_perimeter) + Number(value)) * Number(thickness_value)) / (60 * 100);
-      console.log('cambiando total')
       cut_water.patchValue({
         time: result.toFixed(7)
       })

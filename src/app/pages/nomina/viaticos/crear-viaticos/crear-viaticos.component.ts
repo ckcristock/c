@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import { OrdenesProduccionService } from 'src/app/pages/manufactura/services/ordenes-produccion.service';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { consts } from 'src/app/core/utils/consts';
 @Component({
   selector: 'app-crear-viaticos',
   templateUrl: './crear-viaticos.component.html',
@@ -30,10 +31,11 @@ export class CrearViaticosComponent implements OnInit {
   };
 
   origen = viaticos.origen;
+  masks = consts;
 
   // trayecto:any = ['Seleccione', 'Aeropuerto-Casa', 'Aeropuerto-Embajada', 'Aeropuerto-Maquinados', 'Aeropuerto-Terminal'];
   city: any = [];
-  tipo: any = ['Seleccione', 'Nacional', 'Internacional'];
+  tipos: any = ['Selecciona', 'Nacional', 'Internacional'];
   tipo_transporte: any = ['Ida', 'Vuelta'];
   hotels: any = [];
   hotels_inter: any = [];
@@ -85,14 +87,14 @@ export class CrearViaticosComponent implements OnInit {
 
   formatter = (x: any) => x.text;
 
-	search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
-		text$.pipe(
-			debounceTime(200),
-			distinctUntilChanged(),
-			map((term) =>
-				term.length < 2 ? [] : this.work_orders.filter((v) => v.text.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
-			),
-		);
+  search: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map((term) =>
+        term.length < 2 ? [] : this.work_orders.filter((v) => v.text.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
+      ),
+    );
 
   getPeople() {
     this._viatico.getPeople().subscribe((res: any) => {
@@ -109,16 +111,9 @@ export class CrearViaticosComponent implements OnInit {
       });
 
     this.form.get('travel').get('departure_date').valueChanges.subscribe(e => {
-      /* const date_end = moment(this.form.get('travel').get('departure_date').value, "YYYY-MM-DD");
-
-      console.log({ date_end, e });
-
-      console.log(moment(e, "YYYY-MM-DD").diff(date_end, 'days')); */
-
-
+      /* const date_end = moment(this.form.get('travel').get('departure_date').value, "YYYY-MM-DD"); */
     })
     this.form.get('travel').get('arrival_date').valueChanges.subscribe(e => {
-      console.log(e);
     })
   }
 
@@ -191,7 +186,7 @@ export class CrearViaticosComponent implements OnInit {
     this.actualizaTipAlojam(item)
   }
 
-  actualizaTipAlojam (item) {
+  actualizaTipAlojam(item) {
     item.get('accommodation').valueChanges.subscribe(r => {
       let rate = this.acomodation_for_hotel.find(e => e.id == r)
       item.patchValue({

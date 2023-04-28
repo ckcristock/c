@@ -148,7 +148,9 @@
               <td class="align-middle" *ngIf="checkPersona">
                 {{ person.name | titlecase }}
               </td>
-              <td class="align-middle">{{ person.n_document | number }}</td>
+              <td class="align-middle">
+                {{ person.n_document || "No disponible" }}
+              </td>
               <td class="align-middle" *ngIf="checkTercero">
                 {{
                   (person.third_party
@@ -158,13 +160,13 @@
                 }}
               </td>
               <td class="align-middle" *ngIf="checkTelefono">
-                {{ person.cell_phone }}
+                {{ person.cell_phone || "No disponible" }}
               </td>
               <td class="align-middle" *ngIf="checkEmail">
                 {{ person.email | lowercase }}
               </td>
               <td class="align-middle" *ngIf="checkCargo">
-                {{ person.position | capitalLetter }}
+                {{ (person.position | capitalLetter) || "No disponible" }}
               </td>
               <td class="p-0 align-middle">
                 <div ngbDropdown container="body" class="dropdown-primary">

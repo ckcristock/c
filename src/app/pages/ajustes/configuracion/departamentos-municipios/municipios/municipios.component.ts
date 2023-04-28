@@ -101,7 +101,6 @@ export class MunicipiosComponent implements OnInit {
   getDepartaments() {
     this.departamentoService.getDepartments().subscribe((res: any) => {
       this.dep = res.data
-      console.log(res)
     })
   }
 

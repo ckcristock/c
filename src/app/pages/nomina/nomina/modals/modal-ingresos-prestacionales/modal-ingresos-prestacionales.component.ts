@@ -31,7 +31,7 @@ export class ModalIngresosPrestacionalesComponent implements OnInit {
   }
   private getDismissReason(reason: any) {
     this.showData = false
-    
+
   }
 
   show(funcionario) {
@@ -42,7 +42,6 @@ export class ModalIngresosPrestacionalesComponent implements OnInit {
     //this.modal.show();
   }
   update() {
-    console.log('payyyyyyyyyyyy');
     this.updated.emit();
   }
 }

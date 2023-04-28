@@ -5,6 +5,7 @@ import { Observable, Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { RemisionModelNuevo } from "../RemisonModelNuevo";
 import { environment } from "src/environments/environment";
+import { RemisionnuevoService } from "../../services/remisionnuevo.service";
 
 @Component({
   selector: "app-remisioncrearnuevo",
@@ -17,10 +18,7 @@ export class RemisioncrearnuevoComponent implements OnInit {
   public Datos: any = {
     Titulo: "Nueva remisión",
     Fecha: new Date(),
-    Origen: "",
-    Origen_Grupo: "",
-    Destino: "",
-    DestinoContrato: "",
+    Codigo: ''
   };
   public Cliente: any = [];
   public ModeloRemision: RemisionModelNuevo = new RemisionModelNuevo(
@@ -33,19 +31,20 @@ export class RemisioncrearnuevoComponent implements OnInit {
   public Grupos: any = [];
   public Destino: any = [];
   public Meses: any = [];
-
-  //Contratos
-
   public Contratos: any = [];
+  public Bodegas_Nuevo: any = [];
+
   public ActualizarModelProductos: Subject<any> = new Subject();
   private EnviarPendientes: Subject<any> = new Subject();
 
-  public Bodegas_Nuevo: any = [];
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private _remisionNuevo: RemisionnuevoService
+  ) { }
 
   ngOnInit() {
     this.GetDatosIniciales();
-    for (let i = -1; i <= 18; i++) {
+    for (let i = 1; i <= 18; i++) {
       this.Meses.push({
         dia: i,
       });
@@ -62,8 +61,6 @@ export class RemisioncrearnuevoComponent implements OnInit {
 
 
   Cambiar_Remision() {
-
-
     this.ModeloRemision.Id_Destino = 0;
     if (this.ModeloRemision.Tipo == "Interna") {
       this.Destino = this.Datos_Iniciales.Punto;
@@ -94,19 +91,17 @@ export class RemisioncrearnuevoComponent implements OnInit {
   }
 
   EnviarModelo(flag = true) {
-
     let p = { modelo: this.ModeloRemision, actualizar_productos: flag };
     this.ActualizarModelProductos.next(p);
 
   }
-  ActualizarModelo(modelo: any) {
 
+  ActualizarModelo(modelo: any) {
     if (modelo.Tipo_Origen == 'Bodega') {
       this.ModeloRemision = modelo;
       this.getGrupos();
       this.Datos.Origen_Grupo = modelo.Grupo.Id_Grupo.toString();
     }
-
     if (this.ModeloRemision.Tipo == "Interna") {
       switch (this.ModeloRemision.Modelo) {
         case "Punto-Bodega":
@@ -187,10 +182,11 @@ export class RemisioncrearnuevoComponent implements OnInit {
       }, 100);
     }
   }
+
   GetDatosIniciales() {
     let params: any = {};
     params.id = environment.id_funcionario;
-    this.http.get(environment.ruta + 'php/remision_nuevo/get_datos_iniciales.php', { params: params }).subscribe((data: any) => {
+    this.http.get(environment.base_url + '/php/remision_nuevo/get_datos_iniciales.php', { params: params }).subscribe((data: any) => {
       this.Datos_Iniciales = data;
       this.Cliente = data.Clientes;
       this.Origen = data.Bodega;
@@ -223,7 +219,6 @@ export class RemisioncrearnuevoComponent implements OnInit {
 
     if (tipo == "Origen") {
       let pos = this.Origen.findIndex((x) => x.value === this.Datos.Origen);
-      console.log(pos);
       if (pos >= 0) {
         if (this.ModeloRemision.Tipo_Origen == "Bodega") {
           this.ModeloRemision.Id_Origen = this.Origen[pos].value.substr(2);

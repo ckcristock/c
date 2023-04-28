@@ -62,11 +62,11 @@ export class TableStockComponent implements OnInit {
   }
 
   constructor(
-    private _dotation: DotacionService, 
-    private _person: PersonService, 
+    private _dotation: DotacionService,
+    private _person: PersonService,
     private modalService: NgbModal,
     private _swal: SwalService,
-    ) { }
+  ) { }
 
   formatter4 = (x: { Nombres: string }) => x.Nombres;
   search4 = (text$: Observable<string>) =>
@@ -92,7 +92,7 @@ export class TableStockComponent implements OnInit {
     });
   }
   private getDismissReason(reason: any) {
-    
+
   }
 
   search(value = '') {
@@ -114,9 +114,7 @@ export class TableStockComponent implements OnInit {
     this.entrega ? params.entrega = true : '';
     this.loading = true;
     this._dotation.getStok(params).subscribe((r: any) => {
-      //console.log(r)
       this.Lista_Grupos_Inventario1 = r.data.data;
-      console.log(this.Lista_Grupos_Inventario1)
       this.pagination.collectionSize = r.data.total;
       this.loading = false;
     });
@@ -125,16 +123,13 @@ export class TableStockComponent implements OnInit {
   getPeople() {
     this._person.getAll({}).subscribe((res: any) => {
       this.people = res.data;
-      //console.log(this.people)
       this.people.unshift({ text: 'Todos', value: 0 });
-      //console.log(this.people)
     });
   }
 
   Lista_Empleados() {
     this._person.getPeopleIndex().subscribe((r: any) => {
       this.Empleados = r.data;
-      //console.log(this.Empleados)
     });
   }///FINAL LISTAR EMPLEADOS
 

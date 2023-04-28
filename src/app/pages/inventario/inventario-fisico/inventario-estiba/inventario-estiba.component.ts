@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InventarioFisicoModel } from 'src/app/core/models/InventarioFisicoModel';
-import { ToastService } from 'src/app/core/services/toast.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import Swal, { SweetAlertOptions } from 'sweetalert2';
@@ -17,10 +15,7 @@ import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
   styleUrls: ['./inventario-estiba.component.scss']
 })
 export class InventarioEstibaComponent implements OnInit {
-
-
-
-  public InventarioFisicoModel: InventarioFisicoModel = new InventarioFisicoModel();
+  public InventarioFisicoModel: any;
   public DatosEncabezado: any = {};
   public Funcionario_Digita: any = {};
   public Funcionario_Cuenta: any = {};
@@ -51,10 +46,10 @@ export class InventarioEstibaComponent implements OnInit {
   public alertOption2: SweetAlertOptions = {};
   public alertOption3: SweetAlertOptions = {};
   public alertOptionGuardarSalir: SweetAlertOptions = {};
-  @ViewChild('confirmacionGuardar1') confirmacionGuardar1:SwalComponent;
-  @ViewChild('respuestaGuardarOk') respuestaGuardarOk:SwalComponent;
-  @ViewChild('respuestaGuardarError') respuestaGuardarError:SwalComponent;
-  @ViewChild('respuesTrabajando') respuesTrabajando:SwalComponent;
+  @ViewChild('confirmacionGuardar1') confirmacionGuardar1: SwalComponent;
+  @ViewChild('respuestaGuardarOk') respuestaGuardarOk: SwalComponent;
+  @ViewChild('respuestaGuardarError') respuestaGuardarError: SwalComponent;
+  @ViewChild('respuesTrabajando') respuesTrabajando: SwalComponent;
 
   public idInventarioParams;
 
@@ -64,7 +59,7 @@ export class InventarioEstibaComponent implements OnInit {
 
 
   constructor(private _swalService: SwalService, private http: HttpClient,
-    private _toastService: ToastService, private inventariofisico: InventariofisicoService,
+    private inventariofisico: InventariofisicoService,
     public router: Router,
     private route: ActivatedRoute,) {
     this.alertOption1 = {
@@ -140,9 +135,9 @@ export class InventarioEstibaComponent implements OnInit {
     let params: any = {};
     params.Id_Doc_Inventario_Fisico = this.route.snapshot.params['idInventarioEstiba'];
 
-      this.http.get(environment.ruta + 'php/inventariofisico/estiba/get_inventario.php', {params}).subscribe(async (res: any) => {
+    this.http.get(environment.ruta + 'php/inventariofisico/estiba/get_inventario.php', { params }).subscribe(async (res: any) => {
 
-    // this.inventariofisico.GetInventario(param).subscribe(async (res) => {
+      // this.inventariofisico.GetInventario(param).subscribe(async (res) => {
 
       if (res.Tipo == 'success') {
 
@@ -191,9 +186,9 @@ export class InventarioEstibaComponent implements OnInit {
     let resultado = this.Productos.find(lote => lote.Codigo_Barras === codigo);
 
     if (!resultado) {
-    this.http.get(environment.ruta + 'php/inventariofisico/estiba/consulta_producto.php', { params}).subscribe((data: any) => {
+      this.http.get(environment.ruta + 'php/inventariofisico/estiba/consulta_producto.php', { params }).subscribe((data: any) => {
 
-      // this.inventariofisico.GetProductoEstiba(params).subscribe((data: any) => {
+        // this.inventariofisico.GetProductoEstiba(params).subscribe((data: any) => {
         if (data.Tipo == 'success') {
           this.Producto_Barras = data.Datos;
           this.Producto_Barras["Lotes"].push({
@@ -257,9 +252,7 @@ export class InventarioEstibaComponent implements OnInit {
     if (this.Producto_Barras["Lotes"].length > 1) {
       //recorremos los lotes menos el último que es el de insertar buscando coincidencias si la encuentra mande un mensaje de error!
       for (let index = 0; index < this.Producto_Barras['Lotes'].length - 1; index++) {
-
         if (this.Producto_Barras["Lotes"][pos].Lote == this.Producto_Barras['Lotes'][index].Lote && pos != index) {
-          console.log('encontre coincidencias', this.Producto_Barras['Lotes'][index].Lote);
           let swal = {
             icon: "error",
             title: "Error en referencia del Lote",
@@ -314,8 +307,6 @@ export class InventarioEstibaComponent implements OnInit {
         text: "Hay un error en la fecha de  vencimiento, por favor revise "
       };
       this._swalService.show(swal);
-      console.log('prod', this.Producto_Barras['Lotes'][pos]);
-
       this.Producto_Barras['Lotes'][pos]['Fecha_Vencimiento'] = '';
       this.Producto_Barras['Lotes'][pos]['Cantidad_Encontrada'] = '';
       this.Producto_Barras['Lotes'][pos]['Lote'] = '';
@@ -331,7 +322,6 @@ export class InventarioEstibaComponent implements OnInit {
   ValidarCantidad(pos) {
     //si en la lista de Lotes solo existe uno (el de ingresar nuevo ) no deja guardar lotes, debe ser agregado previamente a la lista pasando todas las validaciones
     if (this.Producto_Barras['Lotes'][pos].Codigo == 'Ingresa uno Nuevo ->' && this.Producto_Barras['Lotes'][pos].Cantidad_Encontrada == 0) {
-      console.log('es uno nuevo', this.Producto_Barras['Lotes'][pos]);
       let swal = {
         icon: "error",
         title: "Hay un error  ",
@@ -363,7 +353,7 @@ export class InventarioEstibaComponent implements OnInit {
     for (let producto = 0; producto < this.Producto_Barras['Lotes'].length - 1; producto++) {
 
       if (this.Producto_Barras['Lotes'][producto]['Lote'] == '' || this.Producto_Barras['Lotes'][producto]['Fecha_Vencimiento'] == ''
-      ){
+      ) {
         let swal = {
           icon: "error",
           title: "Existe un error  ",
@@ -372,10 +362,8 @@ export class InventarioEstibaComponent implements OnInit {
         this._swalService.show(swal);
         return false;
       }
-      if(this.Producto_Barras['Lotes'][producto]['Codigo'] != '')
-      {
-        if (this.Producto_Barras['Lotes'][producto]['Cantidad_Encontrada'] <= 0 )
-        {
+      if (this.Producto_Barras['Lotes'][producto]['Codigo'] != '') {
+        if (this.Producto_Barras['Lotes'][producto]['Cantidad_Encontrada'] <= 0) {
           {
             let swal = {
               icon: "error",
@@ -387,8 +375,7 @@ export class InventarioEstibaComponent implements OnInit {
           }
         }
       }
-      if (this.Producto_Barras['Lotes'][producto]['Cantidad_Encontrada'] === '' || isNaN( this.Producto_Barras['Lotes'][producto]['Cantidad_Encontrada']) )
-      {
+      if (this.Producto_Barras['Lotes'][producto]['Cantidad_Encontrada'] === '' || isNaN(this.Producto_Barras['Lotes'][producto]['Cantidad_Encontrada'])) {
         {
           let swal = {
             icon: "error",
@@ -409,9 +396,6 @@ export class InventarioEstibaComponent implements OnInit {
       };
       this._swalService.show(swal);
     } else {
-
-      //limpiamos el ultimo dato para que ingrese limpio
-      console.log(this.Producto_Barras['Lotes'][this.Producto_Barras['Lotes'].length - 1], ' cantidad ');
       let ultimo = (this.Producto_Barras['Lotes'].length) - 1;
       this.Producto_Barras['Lotes'][ultimo].Cantidad_Encontrada = '';
       this.Producto_Barras['Lotes'][ultimo].Lote = '';
@@ -439,7 +423,7 @@ export class InventarioEstibaComponent implements OnInit {
     });
   }
 
-  SaveLoteEstiba(data: FormData){
+  SaveLoteEstiba(data: FormData) {
     return this.http.post(environment.ruta + 'php/inventariofisico/estiba/agrega_productos.php', data);
   }
 
@@ -457,7 +441,7 @@ export class InventarioEstibaComponent implements OnInit {
 
       let fila = {
         Codigo: "Ingresa uno Nuevo ->",
-        Lote:'',
+        Lote: '',
         textencimiento: '',
         Cantidad_Encontrada: '',
         Cantidad_Inventario: 0,
@@ -479,13 +463,7 @@ export class InventarioEstibaComponent implements OnInit {
   }
 
   verModelos(pos, pos2) {
-    console.log(pos, pos2);
-
-    console.log(this.Productos[pos].Lotes[pos2]);
-
-    console.log('cantidad encontrada', this.Productos[pos].Lotes[pos2].Cantidad_Encontrada, 'Lote:', this.Productos[pos].Lotes[pos2].Lote, 'Fecha V', this.Productos[pos].Lotes[pos2].Fecha_Vencimiento);
     if (this.Productos[pos].Lotes[pos2].Lote == "" || this.Productos[pos].Lotes[pos2].Fecha_Vencimiento == "" || this.Productos[pos].Lotes[pos2].Cantidad_Encontrada == "", this.Productos[pos].Lotes[pos2].Cantidad_Encontrada == undefined, this.Productos[pos].Lotes[pos2].Cantidad_Encontrada == null) {
-      console.log('datos erroneos');
       return false;
     }
 
@@ -493,7 +471,6 @@ export class InventarioEstibaComponent implements OnInit {
 
     if (this.Productos[pos].Lotes[pos2].Lote != "" && this.Productos[pos].Lotes[pos2].Fecha_Vencimiento != "" && this.Productos[pos].Lotes[pos2].Cantidad_Encontrada >= 0) {
       this.Productos[pos].Lotes[pos2].AgregarLote = 'none';
-      console.log('entró');
       return false;
       //this.Productos[pos].Lotes[pos2].EditLote = false;
 
@@ -501,8 +478,6 @@ export class InventarioEstibaComponent implements OnInit {
   }
 
   reValidarFecha(producto, lote) {
-    console.log(this.Productos[producto].Lotes[lote], 'revalidar fecha');
-
     this.Fecha_Hoy = new Date();
     var dia = new Date(this.Fecha_Hoy.setDate(this.Fecha_Hoy.getDate() - 365));
     var fecha_limite = new Date(this.Fecha_Hoy.setDate(this.Fecha_Hoy.getDate() + 3650));
@@ -522,8 +497,6 @@ export class InventarioEstibaComponent implements OnInit {
       this.Producto_Barras[producto][lote].Fecha_Vencimiento = '';
     } else {
       //en caso contrario enfoque el siguiente campo para ser rellenado
-      console.log('fecha esta ok');
-
       //document.getElementById("Cantidad"+pos).focus();
     }
 
@@ -531,10 +504,7 @@ export class InventarioEstibaComponent implements OnInit {
   }
 
   reValidarLote(producto, lote) {
-    console.log(this.Productos[producto].Lotes[lote], 'revalidar lote');
-
     if (this.Productos[producto].Lotes[lote].Lote.length < 4) {
-
       let swal = {
         icon: "error",
         title: "Error en Lote",
@@ -545,21 +515,14 @@ export class InventarioEstibaComponent implements OnInit {
     } else {
       this.Productos[producto].Lotes[lote].Lote = this.Productos[producto].Lotes[lote].Lote.trim();
       this.Productos[producto].Lotes[lote].Lote = this.Productos[producto].Lotes[lote].Lote.toUpperCase();
-      console.log('Lote ok');
-
-
-
       return false;
-
     }
 
 
   }
   reValidarCantidad(producto, lote) {
-    console.log(this.Productos[producto].Lotes[lote], 'revalidar cantiadad');
     //si en la lista de Lotes solo existe uno (el de ingresar nuevo ) no deja guardar lotes, debe ser agregado previamente a la lista pasando todas las validaciones
     if (this.Productos[producto].Lotes[lote].Codigo == 'Ingresa uno Nuevo ->' && this.Productos[producto].Lotes[lote].Cantidad_Encontrada == 0) {
-      console.log('es uno nuevo', this.Productos[producto].Lotes[lote]);
       let swal = {
         icon: "error",
         title: "Hay un error  ",
@@ -582,8 +545,6 @@ export class InventarioEstibaComponent implements OnInit {
       return false
     }
     //si todo sale bien verifica si exite en la fila previamente
-    console.log(' cantidad correcta');
-
     this.reVerificarSiExisteEnFila(producto, lote);
 
   }
@@ -606,7 +567,6 @@ export class InventarioEstibaComponent implements OnInit {
           this.Productos[producto].Lotes[lote].Lote = '';
           this.Productos[producto].Lotes[lote].Fecha_Vencimiento = '';
           this.Productos[producto].Lotes[lote].Cantidad_Encontrada = '';
-          console.log('encontre coincidencias', this.Productos[producto].Lotes[index].Lote);
           let swal = {
             icon: "error",
             title: "Error en referencia del Lote",
@@ -628,7 +588,6 @@ export class InventarioEstibaComponent implements OnInit {
     let datos = new FormData();
     datos.append("Id_Doc_Inventario_Fisico", this.Model["Id_Doc_Inventario_Fisico"]);
     datos.append("Productos", productos);
-    console.log(datos, 'prueba datos');
     this.inventariofisico.saveLote(datos).subscribe((data: any) => {
       if (data.codigo == 'success') {
         this._swalService.show(data);
@@ -681,7 +640,7 @@ export class InventarioEstibaComponent implements OnInit {
   }
 
 
-  AjustarInventarioEstiba(data: FormData){
+  AjustarInventarioEstiba(data: FormData) {
     return this.http.post(environment.ruta + 'php/inventariofisico/estiba/ajustar_inventario.php', data);
   }
 
@@ -733,7 +692,7 @@ export class InventarioEstibaComponent implements OnInit {
 
   }
 
-  GestionarEstado(data:FormData){
+  GestionarEstado(data: FormData) {
     return this.http.post(environment.ruta + 'php/inventariofisico/estiba/gestion_de_estado.php', data);
   }
 

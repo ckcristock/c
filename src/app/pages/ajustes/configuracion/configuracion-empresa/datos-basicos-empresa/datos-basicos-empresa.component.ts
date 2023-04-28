@@ -86,7 +86,6 @@ export class DatosBasicosEmpresaComponent implements OnInit, DoCheck {
     this._configuracionEmpresaService.getCompanyData()
       .subscribe((res: any) => {
         this.company = res.data;
-        console.log(this.company)
         this.form.patchValue({
           id: this.company.id,
           social_reason: this.company.social_reason,

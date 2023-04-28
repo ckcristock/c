@@ -24,14 +24,14 @@ export class InventarioFisicoComponent implements OnInit {
   @ViewChild('actualizaSwal') private actualizaSwal: SwalComponent;
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   datePipe = new DatePipe('es-CO');
   public FiltrosTabla: any = {
@@ -97,7 +97,7 @@ export class InventarioFisicoComponent implements OnInit {
     //   if (res.Tipo == 'success') this.listaBodegas = res.Bodegas
     // })
     this.http
-      .get(environment.ruta + 'php/bodega_nuevo/get_bodegas.php')
+      .get(environment.base_url + '/php/bodega_nuevo/get_bodegas.php')
       .subscribe((data: any) => {
         if (data.Tipo == 'success') this.listaBodegas = data.Bodegas;
       });
@@ -131,7 +131,7 @@ export class InventarioFisicoComponent implements OnInit {
     this.http
       .get(
         environment.ruta +
-          'php/inventariofisico/estiba/documentos_terminados.php',
+        'php/inventariofisico/estiba/documentos_terminados.php',
         { params }
       )
       .subscribe((data: any) => {
@@ -197,7 +197,7 @@ export class InventarioFisicoComponent implements OnInit {
       this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd') +
       ' - ' +
       this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd');
-      this.ConsultaFiltrada();
+    this.ConsultaFiltrada();
   }
   date: { year: number; month: number };
 
@@ -220,7 +220,7 @@ export class InventarioFisicoComponent implements OnInit {
     return this.http
       .get(
         environment.ruta +
-          'php/inventariofisico/estiba/documentos_iniciados.php'
+        'php/inventariofisico/estiba/documentos_iniciados.php'
       )
       .subscribe((res: any) => {
         // this.inventariofisico.GetDocumentosIniciados().subscribe(res => {
@@ -248,11 +248,11 @@ export class InventarioFisicoComponent implements OnInit {
       // TODO funcionarios autorizados para realizar inventario
       // let funcionarios = this.globales.funcionarios_autorizados_inventario.split(',');
       let funcionarios = '31179925';
-     // let company_id = this.company_id;
+      // let company_id = this.company_id;
 
       if (funcionarios.indexOf(funcionario) >= 0) {
         this.router.navigate([url_api, id_modelo], {
-          queryParams: { func: '1',company_id : this.company_id },
+          queryParams: { func: '1', company_id: this.company_id },
         });
       } else {
         this.actualizaSwal.title = 'Sin autorización';
@@ -288,7 +288,7 @@ export class InventarioFisicoComponent implements OnInit {
     this.http
       .post(
         environment.ruta +
-          'php/inventariofisico/estiba/cambiar_estados_documentos.php',
+        'php/inventariofisico/estiba/cambiar_estados_documentos.php',
         data
       )
       .subscribe((res: any) => {

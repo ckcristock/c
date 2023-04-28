@@ -116,27 +116,26 @@
             >
           </mat-select>
         </mat-form-field>
-        <div class="col-md-6" [ngClass]="person_is_valid ? 'mb-0' : 'mb-4'">
+        <div class="col-md-6 mat-form-field-wrapper">
           <ng-select
             [items]="people"
             formControlName="person_id"
             appearance="outline"
             [appendTo]="'body'"
-            placeholder="Funcionario"
+            placeholder="Funcionario *"
+            [clearable]="false"
+            [class.is-invalid]="formLaboral.get('person_id').invalid"
             bindLabel="text"
             bindValue="value"
             ngDefaultControl
           >
           </ng-select>
-          <span class="ml-2" *ngIf="person_is_valid">
-            <small class="text-danger"><b> Campo obligatorio </b></small>
-          </span>
         </div>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Dirigido a</mat-label>
           <input
             matInput
-            type="text"
+            type="cel"
             placeholder="Ingresa hacia quién va dirigido"
             formControlName="addressee"
             autocomplete="off"
@@ -206,15 +205,15 @@
               >{{ item.name }}</mat-option
             >
           </mat-select>
-          <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
 
-        <div class="col-md-6" [ngClass]="person_is_valid2 ? 'mb-0' : 'mb-4'">
+        <div class="col-md-6 mat-form-field-wrapper">
           <ng-select
             [items]="people"
             formControlName="person_id"
             appearance="outline"
             [appendTo]="'body'"
+            [class.is-invalid]="formCesantias.get('person_id').invalid"
             placeholder="Funcionario *"
             [clearable]="false"
             bindLabel="text"
@@ -222,9 +221,6 @@
             ngDefaultControl
           >
           </ng-select>
-          <span class="ml-2" *ngIf="person_is_valid2">
-            <small class="text-danger"><b> Campo obligatorio </b></small>
-          </span>
         </div>
         <!-- <mat-form-field class="col" appearance="outline">
           <mat-label>Total o parcial</mat-label>

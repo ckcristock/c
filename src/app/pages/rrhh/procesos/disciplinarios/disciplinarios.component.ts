@@ -20,14 +20,14 @@ type Person = { value: number, text: string };
 export class DisciplinariosComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
   matPanel = false;
-  openClose(){
-    if (this.matPanel == false){
+  openClose() {
+    if (this.matPanel == false) {
       this.accordion.openAll()
       this.matPanel = true;
     } else {
       this.accordion.closeAll()
       this.matPanel = false;
-    }    
+    }
   }
   @ViewChild('modal') modal: any;
   @ViewChild('modalseguimiento') modalseguimiento: any;
@@ -59,7 +59,7 @@ export class DisciplinariosComponent implements OnInit {
   fileString: any = '';
   file: any = '';
   type: any = '';
-  collapsed:boolean[] = [];
+  collapsed: boolean[] = [];
 
 
   constructor(
@@ -76,7 +76,7 @@ export class DisciplinariosComponent implements OnInit {
     this.getPeople();
   }
   estadoFiltros = false;
-  mostrarFiltros(){
+  mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
 
@@ -147,7 +147,7 @@ export class DisciplinariosComponent implements OnInit {
       });
   }
 
-  
+
   aprobar(id) {
     this._swal.show({
       title: '¿Estás seguro(a)?',
@@ -155,20 +155,20 @@ export class DisciplinariosComponent implements OnInit {
       icon: 'question',
       showCancel: true
     })
-    .then((result) =>{
-      if (result.isConfirmed) {
-        this.disciplinarioService.approve({status: 'Aprobado'}, id).subscribe( (r:any) =>{
-          this._swal.show({
-            icon: 'success',
-            title: 'El proceso ha sido aprobado!',
-            text: '¡Aprobado!',
-            timer: 1000,
-            showCancel: false
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.disciplinarioService.approve({ status: 'Aprobado' }, id).subscribe((r: any) => {
+            this._swal.show({
+              icon: 'success',
+              title: 'El proceso ha sido aprobado!',
+              text: '¡Aprobado!',
+              timer: 1000,
+              showCancel: false
+            })
+            this.getDisciplinaryProcess();
           })
-          this.getDisciplinaryProcess();
-        })
-      }
-    })
+        }
+      })
   }
 
   onFileChanged(event) {
@@ -210,8 +210,8 @@ export class DisciplinariosComponent implements OnInit {
         link.click();
         this.loading = false
       }),
-      error => { console.log('Error downloading the file'); this.loading = false },
-      () => { console.info('File downloaded successfully'); this.loading = false };
+      error => { this.loading = false },
+      () => { this.loading = false };
   }
 
   download(file) {
@@ -224,8 +224,8 @@ export class DisciplinariosComponent implements OnInit {
         link.click();
         this.loading = false
       }),
-      error => { console.log('Error downloading the file'); this.loading = false },
-      () => { console.info('File downloaded successfully'); this.loading = false };
+      error => { this.loading = false },
+      () => { this.loading = false };
   }
 
   createNewProcess() {

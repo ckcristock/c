@@ -126,7 +126,6 @@ export class FuncionariosComponent implements OnInit {
         params[i] = this.filtros[i];
       }
     }
-    console.log(params)
     let queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     return queryString;
   }

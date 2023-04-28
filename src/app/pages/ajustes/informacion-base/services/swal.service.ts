@@ -38,9 +38,16 @@ export class SwalService {
       }
     }
   }
-  show({ title, text, icon, timer = 0, showCancel = true, confirmButtonColor = null
-
-  }, preConfirm?) {
+  show(
+    {
+      title,
+      text = '',
+      icon,
+      timer = 0,
+      showCancel = true,
+      confirmButtonColor = null,
+      html = ''
+    }, preConfirm?) {
     let swal: any = {
       title,
       text,
@@ -53,7 +60,8 @@ export class SwalService {
       confirmButtonText: showCancel ? '¡Sí, confirmar!' : 'OK',
       cancelButtonColor: this.buttonColor.cancel,
       cancelButtonText: 'Cancelar',
-      reverseButtons: true
+      reverseButtons: true,
+      html: html
 
     };
     if (preConfirm) {

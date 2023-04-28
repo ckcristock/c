@@ -20,19 +20,19 @@
               {{ i + 1 }}
             </td>
             <td>
-              {{ item.description }}
+              {{ item?.description }}
             </td>
             <td>
-              {{ item.unit.name }}
+              {{ item?.unit?.name }}
             </td>
             <td>
-              {{ item.q_unit }}
+              {{ item?.q_unit }}
             </td>
             <td>
-              {{ item.q_total }}
+              {{ item?.q_total }}
             </td>
-            <td>${{ item.unit_cost | number : "1.2-2" }}</td>
-            <td>${{ item.total | number : "1.2-2" }}</td>
+            <td>${{ item?.unit_cost | number : "1.2-2" }}</td>
+            <td>${{ item?.total | number : "1.2-2" }}</td>
           </tr>
         </ng-container>
       </ng-container>

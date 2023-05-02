@@ -45,7 +45,6 @@ export class SubcategoriasComponent implements OnInit {
   filters = {
     categoria: '',
     nombre: '',
-    separable: ''
   }
 
   permission: Permissions = {
@@ -144,14 +143,12 @@ export class SubcategoriasComponent implements OnInit {
     this.form = this.fb.group({
       Id_Subcategoria: [''],
       Nombre: ['', Validators.required],
-      Separable: ['', Validators.required],
       Id_Categoria_Nueva: [null, Validators.required],
       Fijo: [0],
       dynamic: this.fb.array([]),
     });
 
     this.form.get("Nombre")[(this.restriccionDesdeCatalogo) ? "disable" : "enable"]();
-    this.form.get("Separable")[(this.restriccionDesdeCatalogo) ? "disable" : "enable"]();
     this.form.get("Id_Categoria_Nueva")[(this.restriccionDesdeCatalogo) ? "disable" : "enable"]();
     this.form.get("Fijo")[(this.restriccionDesdeCatalogo) ? "disable" : "enable"]();
   }
@@ -162,6 +159,7 @@ export class SubcategoriasComponent implements OnInit {
       label: ['', Validators.required],
       type: ['', Validators.required],
       required: ['', Validators.required],
+      reception: []
     });
     return field;
   }
@@ -220,7 +218,6 @@ export class SubcategoriasComponent implements OnInit {
     this.form.patchValue({
       Id_Subcategoria: this.Subcategory.Id_Subcategoria,
       Nombre: this.Subcategory.Nombre,
-      Separable: this.Subcategory.Separable,
       Id_Categoria_Nueva: this.Subcategory.Id_Categoria_Nueva,
       Fijo: this.Subcategory.Fijo,
       /* Categorias: this.Subcategory.categories */

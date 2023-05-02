@@ -25,6 +25,7 @@
             appearance="outline"
             [class.is-invalid]="form.get('city_id').invalid"
             [appendTo]="'body'"
+            [clearable]="false"
             placeholder="Destino *"
             bindValue="value"
             loadingText="loading"
@@ -37,6 +38,7 @@
             formControlName="third_party_id"
             [items]="clients"
             bindLabel="text"
+            [clearable]="false"
             appearance="outline"
             [appendTo]="'body'"
             [class.is-invalid]="form.get('third_party_id').invalid"
@@ -235,7 +237,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskNumbers"
+                      [options]="masksMoney.maskNumbers2Decimal"
                       class="form-control form-control-sm"
                       id="costo_unitario_maquinas_herra"
                       formControlName="amount"
@@ -265,7 +267,7 @@
         </div>
       </ng-container>
       <div class="btn-group btn-block">
-        <button
+        <!-- <button
           class="btn btn-primary btn-sm"
           placement="bottom"
           type="button"
@@ -274,7 +276,7 @@
         >
           <i class="fas fa-plus"></i>
           Agregar item
-        </button>
+        </button> -->
         <button
           class="btn btn-info btn-sm"
           placement="bottom"
@@ -308,7 +310,15 @@
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
-                  <i class="fas fa-trash-alt"></i>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    placement="bottom"
+                    type="button"
+                    ngbTooltip="Borrar todo"
+                    (click)="deleteAllMachineTool()"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
                 </th>
               </tr>
             </thead>
@@ -356,7 +366,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskNumbers"
+                      [options]="masksMoney.maskNumbers2Decimal"
                       class="form-control form-control-sm"
                       id="costo_unitario_maquinas_herra"
                       formControlName="amount"
@@ -433,7 +443,15 @@
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
-                  <i class="fas fa-trash-alt"></i>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    placement="bottom"
+                    type="button"
+                    ngbTooltip="Borrar todo"
+                    (click)="deleteAllInternalProccess()"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
                 </th>
               </tr>
             </thead>
@@ -479,7 +497,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskNumbers"
+                      [options]="masksMoney.maskNumbers2Decimal"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_interno"
                       formControlName="amount"
@@ -556,7 +574,15 @@
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
-                  <i class="fas fa-trash-alt"></i>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    placement="bottom"
+                    type="button"
+                    ngbTooltip="Borrar todo"
+                    (click)="deleteAllExternalProccess()"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
                 </th>
               </tr>
             </thead>
@@ -604,7 +630,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskNumbers"
+                      [options]="masksMoney.maskNumbers2Decimal"
                       class="form-control form-control-sm"
                       id="q_unitaria_proceso_externo"
                       formControlName="amount"
@@ -719,7 +745,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskNumbers"
+                      [options]="masksMoney.maskNumbers2Decimal"
                       class="form-control form-control-sm"
                       id="q_unitaria_otros"
                       formControlName="amount"

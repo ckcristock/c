@@ -178,11 +178,21 @@ export class CrearApuPiezaComponent implements OnInit {
 
   buildConsecutivo(value, r, context = '') {
     let city = this.cities.find(x => x.value === value)
-    let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
-    this.datosCabecera.Codigo = con
-    this.form.patchValue({
-      code: con
-    })
+    if (city && !city.abbreviation) {
+      this.form.get('city_id').setValue(null);
+      this._swal.show({
+        icon: 'error',
+        title: 'Error',
+        text: 'El destino no tiene abreviatura.',
+        showCancel: false
+      })
+    } else {
+      let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
+      this.datosCabecera.Codigo = con
+      this.form.patchValue({
+        code: con
+      })
+    }
   }
 
   async getVariablesApu() {
@@ -487,6 +497,11 @@ export class CrearApuPiezaComponent implements OnInit {
     machineToolHelper.subtotalMachine(this.machineToolList, this.form);
   }
 
+  deleteAllMachineTool() {
+    this.machineToolList.clear()
+    machineToolHelper.subtotalMachine(this.machineToolList, this.form);
+  }
+
   /************** Maquinas Herramientas termina ****************/
 
   /************** Procesos Internos Inicia ****************/
@@ -519,6 +534,11 @@ export class CrearApuPiezaComponent implements OnInit {
     internalProccessesHelper.subtotalInternalProcesses(this.internalProccessList, this.form)
   }
 
+  deleteAllInternalProccess() {
+    this.internalProccessList.clear();
+    internalProccessesHelper.subtotalInternalProcesses(this.internalProccessList, this.form)
+  }
+
   /************** Procesos Internos Termina ****************/
 
   /************** Procesos Externos Inicia ****************/
@@ -548,6 +568,11 @@ export class CrearApuPiezaComponent implements OnInit {
 
   deleteExternalProccess(i) {
     this.externalProccessList.removeAt(i);
+    externalProccessesHelper.subtotalExternalProcesses(this.externalProccessList, this.form);
+  }
+
+  deleteAllExternalProccess() {
+    this.externalProccessList.clear();
     externalProccessesHelper.subtotalExternalProcesses(this.externalProccessList, this.form);
   }
 

@@ -26,10 +26,10 @@
             [class.is-invalid]="form.get('city_id').invalid"
             appearance="outline"
             [appendTo]="'body'"
+            [clearable]="false"
             placeholder="Destino *"
             bindValue="value"
             loadingText="loading"
-            ngDefaultControl
           >
           </ng-select>
         </div>
@@ -37,6 +37,7 @@
           <ng-select
             formControlName="third_party_id"
             [items]="clients"
+            [clearable]="false"
             bindLabel="text"
             appearance="outline"
             [class.is-invalid]="form.get('third_party_id').invalid"
@@ -730,7 +731,6 @@
                   </td>
                   <td class="text-center">
                     <button
-                      style="float: right"
                       class="btn btn-danger btn-sm"
                       placement="bottom"
                       type="button"
@@ -785,7 +785,15 @@
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
-                  <i class="fas fa-trash-alt"></i>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    placement="bottom"
+                    type="button"
+                    ngbTooltip="Borrar todo"
+                    (click)="deleteAllMachineTool()"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
                 </th>
               </tr>
             </thead>
@@ -873,7 +881,15 @@
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
-                  <i class="fas fa-trash-alt"></i>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    placement="bottom"
+                    type="button"
+                    ngbTooltip="Borrar todo"
+                    (click)="deleteAllInternalProccess()"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
                 </th>
               </tr>
             </thead>
@@ -961,7 +977,15 @@
                 <th class="align-middle">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
-                  <i class="fas fa-trash-alt"></i>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    placement="bottom"
+                    type="button"
+                    ngbTooltip="Borrar todo"
+                    (click)="deleteAllExternalProccess()"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
                 </th>
               </tr>
             </thead>
@@ -1003,7 +1027,6 @@
                   </td>
                   <td class="align-middle">
                     <button
-                      style="float: right"
                       class="btn btn-danger btn-sm"
                       placement="bottom"
                       type="button"
@@ -1116,7 +1139,6 @@
                   </td>
                   <td class="align-middle">
                     <button
-                      style="float: right"
                       class="btn btn-danger btn-sm"
                       placement="bottom"
                       type="button"

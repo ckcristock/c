@@ -51,17 +51,6 @@
               placeholder="Busca por nombre"
             />
           </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Separable?</mat-label>
-            <mat-select
-              [(ngModel)]="filters.separable"
-              (selectionChange)="getSubcategories()"
-            >
-              <mat-option value="">Todos</mat-option>
-              <mat-option value="Si">Sí</mat-option>
-              <mat-option value="No">No</mat-option>
-            </mat-select>
-          </mat-form-field>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
@@ -72,28 +61,20 @@
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
-            <th></th>
             <th>Nombre</th>
             <th>Categoría</th>
-            <th>¿Es Separable?</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
-          <tr
-            *ngFor="let item of Sucategories"
-            class="text-center"
-            [ngClass]="{
-              'text-danger': item.Activo == 0,
-              'font-weight-bold': item.Fijo == 1
-            }"
-          >
+          <tr *ngFor="let item of Sucategories" class="text-center">
             <td>
-              <span class="badge badge-dark" *ngIf="item.Fijo == 1">Fija</span>
+              {{ item.Nombre }}
+              <span class="badge badge-pill badge-info" *ngIf="item.Fijo == 1"
+                ><i class="fas fa-lock"></i
+              ></span>
             </td>
-            <td class="text-left">{{ item.Nombre }}</td>
-            <td class="text-left">{{ item.categoria }}</td>
-            <td>{{ item.Separable }}</td>
+            <td>{{ item.categoria }}</td>
             <td>
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -142,7 +123,6 @@
         </tbody>
       </table>
     </div>
-
     <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="pagination.collectionSize"
@@ -151,9 +131,6 @@
       (pageChange)="getSubcategories($event)"
       aria-label="Default pagination"
       maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
       rotate="true"
       ellipses="false"
       boundaryLinks="true"
@@ -181,14 +158,6 @@
 
   <div class="modal-body">
     <form [formGroup]="form">
-      <!-- <input
-        name="company_id"
-        type="hidden"
-        placeholder=""
-        class="form-control"
-        [(ngModel)]="company_id"
-      /> -->
-
       <div class="row">
         <mat-form-field class="col" appearance="outline">
           <mat-label>Nombre</mat-label>
@@ -200,44 +169,32 @@
             required
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>¿Es separable?</mat-label>
-          <mat-select formControlName="Separable" matInput required>
-            <mat-option value="Si">Sí</mat-option>
-            <mat-option value="No">No</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="row">
         <div class="col mat-form-field-wrapper">
           <ng-select
             appearance="outline"
             [appendTo]="'body'"
-            placeholder="Categorías asociadas"
+            placeholder="Categoría asociada *"
             formControlName="Id_Categoria_Nueva"
             bindLabel="text"
+            [class.is-invalid]="form.get('Id_Categoria_Nueva').invalid"
             bindValue="value"
+            [clearale]="false"
             [items]="categorias_filtro"
-            [multiple]="false"
             loadingText="loading"
-            ngDefaultControl
           ></ng-select>
         </div>
-      </div>
-      <div
-        class="row justify-content-center"
-        *ngIf="permission.permissions.approve_product_categories"
-      >
-        <div class="col-auto">
+        <div
+          class="col mt-2"
+          *ngIf="permission.permissions.approve_product_categories"
+        >
           <mat-slide-toggle color="primary" formControlName="Fijo">
             Categoría fija
           </mat-slide-toggle>
         </div>
       </div>
+      <hr />
       <div class="row d-flex justify-content-between">
-        <div class="col-md-6">
-          <span class="text-primary">Campos de la subcategoría</span>
-        </div>
+        <div class="col-md-6">Campos adicionales</div>
         <div class="col-md-6 text-right">
           <div class="btn-group rounded w-sm-100 mat-form-field-wrapper">
             <button
@@ -245,21 +202,19 @@
               class="btn btn-primary btn-sm"
               (click)="newField()"
             >
-              <i class="fa fa-plus"></i>
+              <i class="fa fa-plus"></i> Agregar
             </button>
           </div>
         </div>
       </div>
-
-      <hr class="line" />
-      <div class="row" formArrayName="dynamic">
+      <div formArrayName="dynamic">
         <ng-container *ngIf="fieldDinamic.controls.length; else sinDatos">
           <ng-container
             *ngFor="let item of fieldDinamic.controls; let i = index"
           >
-            <div class="col-md-11" [formGroupName]="i">
+            <div [formGroupName]="i">
               <div class="row">
-                <mat-form-field class="col-4" appearance="outline">
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Nombre</mat-label>
                   <input
                     matInput
@@ -270,7 +225,7 @@
                     required
                   />
                 </mat-form-field>
-                <mat-form-field class="col-4" appearance="outline">
+                <mat-form-field class="col-md-3" appearance="outline">
                   <mat-label>Tipo</mat-label>
                   <mat-select formControlName="type" required>
                     <mat-option value="number">Number</mat-option>
@@ -278,24 +233,30 @@
                     <mat-option value="date">Date</mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field class="col-4" appearance="outline">
+                <mat-form-field class="col-md-3" appearance="outline">
                   <mat-label>Requerido</mat-label>
                   <mat-select formControlName="required" required>
                     <mat-option value="Si">Sí</mat-option>
                     <mat-option value="No">No</mat-option>
                   </mat-select>
                 </mat-form-field>
-              </div>
-            </div>
-            <div class="col-md-1 d-flex justify-content-end align-items-center">
-              <div class="btn-group rounded w-sm-100 mat-form-field-wrapper">
-                <button
-                  type="button"
-                  class="btn btn-danger btn-sm"
-                  (click)="deleteField(i, item)"
-                >
-                  <i class="fas fa-trash-alt"></i>
-                </button>
+                <div class="col mt-2">
+                  <mat-checkbox
+                    matTooltip="Marca esta casilla si el campo es requerido solo cuando el producto se reciba en un acta de recepción"
+                    color="primary"
+                    formControlName="reception"
+                    >Recepcion</mat-checkbox
+                  >
+                </div>
+                <div class="col mt-2">
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteField(i, item)"
+                  >
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </ng-container>
@@ -328,9 +289,7 @@
 </ng-template>
 
 <ng-template #sinDatos>
-  <div class="col-12">
-    <div class="alert alert-warning text-center" role="alert">
-      Sin datos agregados
-    </div>
+  <div class="alert alert-warning text-center" role="alert">
+    Sin datos agregados
   </div>
 </ng-template>

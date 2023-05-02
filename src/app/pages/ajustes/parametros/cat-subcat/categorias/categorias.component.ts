@@ -33,10 +33,10 @@ export class CategoriasComponent implements OnInit {
   title: string = "";
 
   @Input()
-  set reloadCategories(param:{evento: Event,filtro?:string | ''}) {
+  set reloadCategories(param: { evento: Event, filtro?: string | '' }) {
     if (param.evento) {
-      this.restriccionDesdeCatalogo=true;
-      this.filters.nombre=param.filtro;
+      this.restriccionDesdeCatalogo = true;
+      this.filters.nombre = param.filtro;
       this.getCategories();
     }
   }
@@ -68,7 +68,6 @@ export class CategoriasComponent implements OnInit {
   filters = {
     nombre: '',
     compraInternacional: '',
-    separacionCategorias: ''
   }
   form: FormGroup;
   visible: boolean = true;
@@ -115,7 +114,7 @@ export class CategoriasComponent implements OnInit {
       this.createForm();
     } else {
       this.EditarCategoria(data);
-      this.visible=(data.Fijo==0);
+      this.visible = (data.Fijo == 0);
     }
     this._modalCat.open(content, 'lg');
   }
@@ -125,24 +124,23 @@ export class CategoriasComponent implements OnInit {
       Id_Categoria_Nueva: [''],
       Nombre: ['', Validators.required],
       Compra_Internacional: ['', Validators.required],
-      Aplica_Separacion_Categorias: ['', Validators.required],
       /* Subcategorias: [[], Validators.required] */
       Fijo: [0],
       dynamic: this.fb.array([]),
     });
 
-    this.form.get("Nombre")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
-    this.form.get("Compra_Internacional")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
-    this.form.get("Aplica_Separacion_Categorias")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
-    this.form.get("Fijo")[(this.restriccionDesdeCatalogo)?"disable":"enable"]();
+    this.form.get("Nombre")[(this.restriccionDesdeCatalogo) ? "disable" : "enable"]();
+    this.form.get("Compra_Internacional")[(this.restriccionDesdeCatalogo) ? "disable" : "enable"]();
+    this.form.get("Fijo")[(this.restriccionDesdeCatalogo) ? "disable" : "enable"]();
   }
 
   dinamicFields() {
     let field = this.fb.group({
       id: [''],
-      label: ['',Validators.required],
-      type: ['',Validators.required],
-      required: ['',Validators.required],
+      label: ['', Validators.required],
+      type: ['', Validators.required],
+      required: ['', Validators.required],
+      reception: []
     });
     return field;
   }
@@ -188,7 +186,7 @@ export class CategoriasComponent implements OnInit {
   }
 
   saveCategory() {
-    if(this.form.valid){
+    if (this.form.valid) {
       /* let datos = {
         modulo: 'Categoria',
         datos: this.form.value,
@@ -232,7 +230,6 @@ export class CategoriasComponent implements OnInit {
       Id_Categoria_Nueva: this.Categoria.Id_Categoria_Nueva,
       Nombre: this.Categoria.Nombre,
       Compra_Internacional: this.Categoria.Compra_Internacional,
-      Aplica_Separacion_Categorias: this.Categoria.Aplica_Separacion_Categorias,
       Fijo: this.Categoria.Fijo
       /* Subcategorias: this.Categoria.subcategories */
     });

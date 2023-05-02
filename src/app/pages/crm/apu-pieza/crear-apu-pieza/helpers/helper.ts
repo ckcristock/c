@@ -249,16 +249,20 @@ export const functionsApu = {
       });
     });
     group.get('administrative_percentage').valueChanges.subscribe(value => {
-      let total_direct_cost = group.get('total_direct_cost');
-      group.patchValue({
-        administrative_value: Math.round((total_direct_cost?.value * (value / 100)))
-      });
+      setInterval(() => {
+        let total_direct_cost = group.get('total_direct_cost');
+        group.patchValue({
+          administrative_value: Math.round((total_direct_cost?.value * (value / 100)))
+        });
+      }, 500);
     });
     group.get('unforeseen_percentage').valueChanges.subscribe(value => {
-      let total_direct_cost = group.get('total_direct_cost');
-      group.patchValue({
-        unforeseen_value: Math.round(((value / 100) * total_direct_cost?.value))
-      });
+      setInterval(() => {
+        let total_direct_cost = group.get('total_direct_cost');
+        group.patchValue({
+          unforeseen_value: Math.round(((value / 100) * total_direct_cost?.value))
+        });
+      }, 500);
     });
     group.get('administrative_unforeseen_subtotal').valueChanges.subscribe(value => {
       let amount = group.get('amount');
@@ -393,12 +397,14 @@ export const functionsApu = {
   },
 
   sumarAmindImpr(form: FormGroup) {
-    let forma = form.value;
-    let resultAminImp =
-      forma?.direct_costs_indirect_costs_total + forma?.administrative_value +
-      forma?.unforeseen_value;
-    form.patchValue({
-      administrative_unforeseen_subtotal: resultAminImp
-    })
+    setInterval(() => {
+      let forma = form.value;
+      let resultAminImp =
+        forma?.direct_costs_indirect_costs_total + forma?.administrative_value +
+        forma?.unforeseen_value;
+      form.patchValue({
+        administrative_unforeseen_subtotal: resultAminImp
+      })
+    }, 1000);
   }
 };

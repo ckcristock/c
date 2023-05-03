@@ -10,6 +10,7 @@ import swal from 'sweetalert2';
 import { UserService } from 'src/app/core/services/user.service';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { Permissions } from 'src/app/core/interfaces/permissions-interface';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-plan-cuentas',
@@ -25,6 +26,7 @@ export class PlanCuentasComponent implements OnInit {
   public pageSize = 20;
   public TotalItems: number;
   public page = 1;
+  masks = consts;
 
   //Variables para filtros
   public filtro_codigo: any = '';

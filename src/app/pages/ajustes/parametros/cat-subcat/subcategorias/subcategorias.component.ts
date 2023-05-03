@@ -159,7 +159,7 @@ export class SubcategoriasComponent implements OnInit {
       label: ['', Validators.required],
       type: ['', Validators.required],
       required: ['', Validators.required],
-      reception: []
+      reception: [0]
     });
     return field;
   }
@@ -228,6 +228,7 @@ export class SubcategoriasComponent implements OnInit {
         label: element.label,
         type: element.type,
         required: element.required,
+        reception: element.reception
       });
       this.fieldDinamic.push(group);
     });
@@ -235,30 +236,25 @@ export class SubcategoriasComponent implements OnInit {
 
   SaveSubcategory() {
     if (this.form.valid) {
-      /* if (this.form.get('Id_Subcategoria').value) {
-        this._subcategory
-          .update(this.form.value, this.Subcategory.Id_Subcategoria)
-          .subscribe((r: any) => {
+      let bool = this.form.value.Id_Subcategoria ? true : false
+      this._swalService.show({
+        icon: 'question',
+        title: '¿Estás seguro(a)?',
+        text: 'Vamos a ' + (bool ? 'editar' : 'crear') + ' la categoría.'
+      }).then(r => {
+        if (r.isConfirmed) {
+          this._subcategory.save(this.form.value).subscribe((r: any) => {
             this.dataClear();
             this._swalService.show({
               icon: 'success',
-              title: 'Subcategoria actualizada con éxito',
+              title: 'Subcategoria ' + (bool ? 'editada' : 'creada') + ' con éxito',
               text: '',
               showCancel: false,
               timer: 1000
             });
           });
-      } else { */
-      this._subcategory.save(this.form.value).subscribe((r: any) => {
-        this.dataClear();
-        this._swalService.show({
-          icon: 'success',
-          title: 'Subcategoria guardada con éxito',
-          text: '',
-          showCancel: false,
-          timer: 1000
-        });
-      });
+        }
+      })
       //}
     } else {
       this._swalService.show({

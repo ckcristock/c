@@ -51,6 +51,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { MatButtonModule, MatCheckboxModule, MatIconModule, MatTooltip, MatTooltipModule } from '@angular/material';
 import { ImportPucComponent } from './plan-cuentas/import-puc/import-puc.component';
 import { ImportInitialBalancesComponent } from './plan-cuentas/import-initial-balances/import-initial-balances.component';
+import { NgxCurrencyModule } from 'ngx-currency';
+import { DirectivesModule } from 'src/app/core/directives/directives.module';
 
 export const MY_FORMATS = {
   parse: {
@@ -119,7 +121,9 @@ export const MY_FORMATS = {
     MatIconModule,
     MatTooltipModule,
     NgbTooltipModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    NgxCurrencyModule,
+    DirectivesModule
   ],
   providers: [
     Globales,

@@ -172,15 +172,14 @@
         <div class="col mat-form-field-wrapper">
           <ng-select
             appearance="outline"
+            [clearale]="false"
             [appendTo]="'body'"
             placeholder="Categoría asociada *"
             formControlName="Id_Categoria_Nueva"
             bindLabel="text"
             [class.is-invalid]="form.get('Id_Categoria_Nueva').invalid"
             bindValue="value"
-            [clearale]="false"
             [items]="categorias_filtro"
-            loadingText="loading"
           ></ng-select>
         </div>
         <div
@@ -272,12 +271,7 @@
     >
       Cancelar
     </button>
-    <button
-      type="button"
-      (click)="SaveSubcategory()"
-      class="btn btn-primary"
-      [disabled]="form.invalid"
-    >
+    <button type="button" (click)="SaveSubcategory()" class="btn btn-primary">
       Guardar
     </button>
   </div>

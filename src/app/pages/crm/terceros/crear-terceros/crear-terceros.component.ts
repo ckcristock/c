@@ -10,6 +10,7 @@ import { functionsUtils } from '../../../../core/utils/functionsUtils';
 import { ValidatorsService } from '../../../ajustes/informacion-base/services/reactive-validation/validators.service';
 import { MatHorizontalStepper } from '@angular/material/stepper';
 import { DomSanitizer } from '@angular/platform-browser';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-crear-terceros',
@@ -28,6 +29,7 @@ export class CrearTercerosComponent implements OnInit {
   }
 
   form: FormGroup;
+  masks = consts;
   //floatLabelControl = new FormControl('nacional');
   date: Date = new Date();
   id: number;
@@ -58,11 +60,11 @@ export class CrearTercerosComponent implements OnInit {
     retefuente: 0
   }
   pagos: any = [
-    { clave: 'De Contado', valor: '1' },
-    { clave: '30 Días', valor: '2' },
-    { clave: '60 Días', valor: '3' },
-    { clave: '90 Días', valor: '4' },
-    { clave: '120 Días', valor: '5' },
+    { clave: 'De contado', valor: '1' },
+    { clave: '30 días', valor: '2' },
+    { clave: '60 días', valor: '3' },
+    { clave: '90 días', valor: '4' },
+    { clave: '120 días', valor: '5' },
   ];
   file: any = '';
   fileString: any = '';
@@ -94,21 +96,16 @@ export class CrearTercerosComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.createForm();
     this.getZones();
+    await this.getAccountPlan();
     this.getTypeDocuments();
     await this.getFields();
     await this.getCountriesWith();
     this.getWinningLists();
     this.getCiiuCodeLists();
     this.getDianAddress();
-    this.getAccountPlan();
     this.getTitle();
     this.getRegimeType();
     this.getFiscalResponsibility();
-    //this.getCiiu();
-    //this.getDepartments();
-    //this.getCountries();
-    //this.getMunicipalitites();
-
   }
 
   async reloadData() {
@@ -130,7 +127,6 @@ export class CrearTercerosComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
-      /* Inicia Datos Básicos */
       id: [''],
       document_type: ['', this._validators.required],
       nit: ['', this._validators.required],
@@ -157,10 +153,6 @@ export class CrearTercerosComponent implements OnInit {
       municipality_id: ['', this._validators.required],
       country_id: ['', this._validators.required],
       image: [''],
-      /* Termina Datos Básicos */
-      /* Inicia Datos Comerciales */
-      //winning_list_id: [''],
-      //apply_iva: [''],
       contact_payments: [''],
       phone_payments: [''],
       email_payments: ['', Validators.email],
@@ -174,7 +166,6 @@ export class CrearTercerosComponent implements OnInit {
       reteica_percentage: [0],
       retefuente_account_id: [''],
       retefuente_percentage: [0],
-      //g_contribut: [''],
       reteiva_account_id: [''],
       reteiva_percentage: [0],
       condition_payment: [''],
@@ -186,7 +177,6 @@ export class CrearTercerosComponent implements OnInit {
       rut: [''],
       typeRut: [''],
       typeImage: [''],
-      /* Termina Datos Comerciales */
       person: this.fb.array([])
     });
     this.valueChanges();
@@ -384,8 +374,8 @@ export class CrearTercerosComponent implements OnInit {
     })
   }
 
-  getAccountPlan() {
-    this._terceros.getAccountPlan().subscribe((r: any) => {
+  async getAccountPlan() {
+    await this._terceros.getAccountPlan().toPromise().then((r: any) => {
       this.accountPlan = r.data;
     })
   }
@@ -536,8 +526,6 @@ export class CrearTercerosComponent implements OnInit {
         department_id: this.third.department_id,
         municipality_id: this.third.municipality_id,
         country_id: this.third.country_id,
-        //winning_list_id: this.third.winning_list_id,
-        //apply_iva: this.third.apply_iva,
         contact_payments: this.third.contact_payments,
         phone_payments: this.third.phone_payments,
         email_payments: this.third.email_payments,
@@ -547,10 +535,9 @@ export class CrearTercerosComponent implements OnInit {
         withholding_agent: this.third.withholding_agent,
         withholding_oninvoice: this.third.withholding_oninvoice,
         reteica_type: this.third.reteica_type,
-        reteica_account_id: this.third.reteica_account_id,
-        retefuente_account_id: this.third.retefuente_account_id,
-        //g_contribut: this.third.g_contribut,
-        reteiva_account_id: this.third.reteiva_account_id,
+        reteica_account_id: this.accountPlan.find(x => x.id == this.third.reteica_account_id),
+        retefuente_account_id: this.accountPlan.find(x => x.id == this.third.retefuente_account_id),
+        reteiva_account_id: this.accountPlan.find(x => x.id == this.third.reteiva_account_id),
         condition_payment: this.third.condition_payment,
         assigned_space: this.third.assigned_space,
         fiscal_responsibility: this.third.fiscal_responsibility,
@@ -640,6 +627,7 @@ export class CrearTercerosComponent implements OnInit {
   }
 
   saveInformation() {
+    console.log(this.form.value)
     let image = this.fileString;
     let rut = this.rutString;
     let typeRut = this.typeRut;

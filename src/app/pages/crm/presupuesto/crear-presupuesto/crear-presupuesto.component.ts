@@ -96,12 +96,30 @@ export class CrearPresupuestoComponent implements OnInit {
   }
 
   buildConsecutivo(value, r, context = '') {
-    let city = this.cities.find(x => x.value === value)
-    let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
-    this.datosCabecera.Codigo = con
-    this.forma.patchValue({
-      code: con
-    })
+    if (r.data.city) {
+      let city = this.cities.find(x => x.value === value)
+      if (city && !city.abbreviation) {
+        this.forma.get('destinity_id').setValue(null);
+        this._swal.show({
+          icon: 'error',
+          title: 'Error',
+          text: 'El destino no tiene abreviatura.',
+          showCancel: false
+        })
+      } else {
+        let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
+        this.datosCabecera.Codigo = con
+        this.forma.patchValue({
+          code: con
+        })
+      }
+    } else {
+      let con = this._consecutivos.construirConsecutivo(r.data);
+      this.datosCabecera.Codigo = con
+      this.forma.patchValue({
+        code: con
+      })
+    }
   }
 
   async getBases() {

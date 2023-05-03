@@ -177,17 +177,25 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   buildConsecutivo(value, r, context = '') {
-    let city = this.cities.find(x => x.value === value)
-    if (city && !city.abbreviation) {
-      this.form.get('city_id').setValue(null);
-      this._swal.show({
-        icon: 'error',
-        title: 'Error',
-        text: 'El destino no tiene abreviatura.',
-        showCancel: false
-      })
+    if (r.data.city) {
+      let city = this.cities.find(x => x.value === value)
+      if (city && !city.abbreviation) {
+        this.form.get('city_id').setValue(null);
+        this._swal.show({
+          icon: 'error',
+          title: 'Error',
+          text: 'El destino no tiene abreviatura.',
+          showCancel: false
+        })
+      } else {
+        let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
+        this.datosCabecera.Codigo = con
+        this.form.patchValue({
+          code: con
+        })
+      }
     } else {
-      let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
+      let con = this._consecutivos.construirConsecutivo(r.data);
       this.datosCabecera.Codigo = con
       this.form.patchValue({
         code: con

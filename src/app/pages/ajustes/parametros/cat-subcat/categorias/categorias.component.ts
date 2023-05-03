@@ -140,7 +140,7 @@ export class CategoriasComponent implements OnInit {
       label: ['', Validators.required],
       type: ['', Validators.required],
       required: ['', Validators.required],
-      reception: []
+      reception: [0]
     });
     return field;
   }
@@ -187,39 +187,31 @@ export class CategoriasComponent implements OnInit {
 
   saveCategory() {
     if (this.form.valid) {
-      /* let datos = {
-        modulo: 'Categoria',
-        datos: this.form.value,
-        subcategorias: this.form.get('Subcategorias').value
-      }
-      this.http
-        .post(
-          environment.ruta + 'php/categoria_nueva/guardar_categoria_nueva.php',
-          datos
-        ) */
-
-      this._categorias.saveCategoria(this.form.value)
-        .subscribe((res: any) => {
-          this._swal.show({
-            icon: 'success',
-            title: 'Categoría creada con éxito',
-            text: res.data,
-            timer: 1000,
-            showCancel: false
-          })
-          this.form.reset();
-          this.fieldDinamic.clear();
-          this.getCategories(this.pagination.page);
-          this._modalCat.close();
-        });
-      this.getCategories();
-    } else {
+      let bool = this.form.value.Id_Categoria_Nueva ? true : false
       this._swal.show({
-        icon: 'error',
-        title: 'Validación no superada',
-        text: 'Por favor verifique de nuevo la información.',
-        showCancel: false
-      });
+        icon: 'question',
+        title: '¿Estás seguro(a)?',
+        text: 'Vamos a ' + (bool ? 'editar' : 'crear') + ' la categoría.'
+      }).then(r => {
+        if (r.isConfirmed) {
+          this._categorias.saveCategoria(this.form.value)
+            .subscribe((res: any) => {
+              this._modalCat.close();
+              this.form.reset();
+              this.fieldDinamic.clear();
+              this._swal.show({
+                icon: 'success',
+                title: 'Categoría ' + (bool ? 'editada' : 'creada') + ' con éxito.',
+                text: '',
+                timer: 1000,
+                showCancel: false
+              })
+              this.getCategories(this.pagination.page);
+            });
+        }
+      })
+    } else {
+      this._swal.incompleteError();
     }
   }
 
@@ -240,6 +232,7 @@ export class CategoriasComponent implements OnInit {
         label: element.label,
         type: element.type,
         required: element.required,
+        reception: element.reception
       });
       this.fieldDinamic.push(group);
     });

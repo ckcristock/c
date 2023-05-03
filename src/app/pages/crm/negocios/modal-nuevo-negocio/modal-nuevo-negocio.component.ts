@@ -121,25 +121,37 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this._consecutivos.getConsecutivo('businesses').subscribe((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
       this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
-      this.construirConsecutivo(r);
+      this.construirConsecutivo(this.form.get('city_id').value, r)
+      this.form.get('city_id').valueChanges.subscribe(value => {
+        this.construirConsecutivo(value, r)
+      });
     })
   }
 
-  construirConsecutivo(r) {
-    let con = this._consecutivos.construirConsecutivo(r.data);
-    this.datosCabecera.Codigo = con
-    this.form.patchValue({
-      code: con
-    })
+  construirConsecutivo(value, r, context = '') {
     if (r.data.city) {
-      this.form.get('city_id').valueChanges.subscribe(value => {
-        let city = this.cities.find(x => x.value === value)
-        let con = this._consecutivos.construirConsecutivo(r.data, city.abbreviation);
+      let city = this.cities.find(x => x.value === value);
+      if (city && !city.abbreviation) {
+        this.form.get('city_id').setValue(null);
+        this._swal.show({
+          icon: 'error',
+          title: 'Error',
+          text: 'El destino no tiene abreviatura.',
+          showCancel: false
+        })
+      } else {
+        let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation);
         this.datosCabecera.Codigo = con
         this.form.patchValue({
           code: con
         })
-      });
+      }
+    } else {
+      let con = this._consecutivos.construirConsecutivo(r.data);
+      this.datosCabecera.Codigo = con
+      this.form.patchValue({
+        code: con
+      })
     }
   }
 

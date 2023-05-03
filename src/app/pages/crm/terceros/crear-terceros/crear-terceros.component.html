@@ -1,16 +1,6 @@
 <div class="card">
   <div class="card-body">
-    <!-- <div class="row card-title d-flex justify-content-between">
-      <div class="col-md-6 px-0">
-        <img src="../../../../../assets/images/logo2.png" class="img-fluid" />
-      </div>
-      <div class="col-md-6 px-0 text-md-right text-center">
-        <h4 class="text-primary">{{ title }}</h4>
-        <strong> {{ date | date : "longDate" }} </strong>
-      </div>
-    </div>
-    <hr class="line" />-->
-    <ng-container *ngIf="!loading; else notDataLoading">
+    <ng-container *ngIf="!loading; else placeholder">
       <form [formGroup]="form">
         <mat-horizontal-stepper #stepper [linear]="false">
           <mat-step>
@@ -132,10 +122,13 @@
                 <mat-icon matSuffix>person_search</mat-icon>
                 <mat-error> Campo <strong>obligatorio</strong> </mat-error>
               </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
+              <mat-form-field
+                class="col"
+                appearance="outline"
+                *ngIf="form.get('person_type').value != 'juridico'"
+              >
                 <mat-label>Tipo de documento</mat-label>
                 <mat-select
-                  [disabled]="form.get('person_type').value == 'juridico'"
                   formControlName="document_type"
                   required
                   (selectionChange)="personType()"
@@ -505,7 +498,7 @@
                     >
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field class="col-md-3" appearance="outline">
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Animo lucro</mat-label>
                   <mat-select formControlName="encourage_profit">
                     <mat-option value="Si">Sí</mat-option>
@@ -518,8 +511,9 @@
                     bindLabel="text"
                     bindValue="value"
                     groupBy="title"
-                    placeholder="Actividad económica"
+                    placeholder="Actividad económica "
                     appearance="outline"
+                    [clearable]="false"
                     formControlName="ciiu_code_id"
                     class="mt-1"
                     [appendTo]="'body'"
@@ -527,37 +521,34 @@
                   </ng-select>
                   <!-- <small>Actividad económica</small> -->
                 </div>
-                <mat-form-field class="col-md-3" appearance="outline">
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Agente de retención</mat-label>
                   <mat-select formControlName="withholding_agent">
                     <mat-option value="Si">Sí</mat-option>
                     <mat-option value="No">No</mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field class="col-md-2" appearance="outline">
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>¿Retención en factura?</mat-label>
                   <mat-select formControlName="withholding_oninvoice">
                     <mat-option value="Si">Sí</mat-option>
                     <mat-option value="No">No</mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field class="col-md-2" appearance="outline">
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Tipo reteica</mat-label>
                   <mat-select formControlName="withholding_oninvoice">
                     <mat-option value="No">No</mat-option>
-                    <mat-option value="Supera Base">Supera Base</mat-option>
+                    <mat-option value="Supera Base">Supera base</mat-option>
                     <mat-option value="Permanente">Permanente</mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field
-                  class="col-lg-2 col-md-3 col-sm-4"
-                  appearance="outline"
-                >
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Cuenta reteica</mat-label>
                   <input
                     matInput
                     type="text"
-                    placeholder="Ingrese cuenta reteica"
+                    placeholder="Busca por cuenta reteica"
                     [ngbTypeahead]="search"
                     [inputFormatter]="inputFormatListValue"
                     [resultFormatter]="resultFormatListValue"
@@ -565,11 +556,8 @@
                     formControlName="reteica_account_id"
                   />
                 </mat-form-field>
-                <mat-form-field
-                  class="col-lg-1 col-md-2 col-sm-3"
-                  appearance="outline"
-                >
-                  <mat-label>%</mat-label>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Porcentaje reteica</mat-label>
                   <input
                     matInput
                     type="number"
@@ -580,15 +568,12 @@
                     readonly
                   />
                 </mat-form-field>
-                <mat-form-field
-                  class="col-lg-2 col-md-3 col-sm-4"
-                  appearance="outline"
-                >
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Cuenta retefuente</mat-label>
                   <input
                     matInput
                     type="text"
-                    placeholder="Ingrese cuenta retefuente"
+                    placeholder="Busca por cuenta retefuente"
                     [ngbTypeahead]="search"
                     [inputFormatter]="inputFormatListValue"
                     [resultFormatter]="resultFormatListValue"
@@ -596,11 +581,8 @@
                     formControlName="retefuente_account_id"
                   />
                 </mat-form-field>
-                <mat-form-field
-                  class="col-lg-1 col-md-2 col-sm-3"
-                  appearance="outline"
-                >
-                  <mat-label>%</mat-label>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Porcentaje retefuente</mat-label>
                   <input
                     matInput
                     type="number"
@@ -618,15 +600,12 @@
                     <mat-option value="No">No</mat-option>
                   </mat-select>
                 </mat-form-field> -->
-                <mat-form-field
-                  class="col-lg-2 col-md-3 col-sm-4"
-                  appearance="outline"
-                >
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Cuenta reteiva</mat-label>
                   <input
                     matInput
                     type="text"
-                    placeholder="Ingrese cuenta reteiva"
+                    placeholder="Busca por cuenta reteiva"
                     [ngbTypeahead]="search"
                     [inputFormatter]="inputFormatListValue"
                     [resultFormatter]="resultFormatListValue"
@@ -634,11 +613,8 @@
                     formControlName="reteiva_account_id"
                   />
                 </mat-form-field>
-                <mat-form-field
-                  class="col-lg-1 col-md-2 col-sm-3"
-                  appearance="outline"
-                >
-                  <mat-label>%</mat-label>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Porcentaje reteiva</mat-label>
                   <input
                     matInput
                     type="number"
@@ -649,7 +625,7 @@
                     readonly
                   />
                 </mat-form-field>
-                <mat-form-field class="col-md-3" appearance="outline">
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Condición de pago</mat-label>
                   <mat-select formControlName="condition_payment">
                     <mat-option *ngFor="let item of pagos" [value]="item.valor"
@@ -657,34 +633,29 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field
-                  class="col-lg-2 col-md-3 col-sm-4"
-                  appearance="outline"
-                >
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Cupo asignado</mat-label>
                   <input
                     matInput
-                    type="text"
+                    currencyMask
+                    [options]="masks.maskCOP"
+                    appInputPosition
                     placeholder="Ingrese el cupo"
                     formControlName="assigned_space"
                   />
                 </mat-form-field>
-                <mat-form-field
-                  class="col-lg-2 col-md-3 col-sm-4"
-                  appearance="outline"
-                >
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Descuento pronto pago</mat-label>
                   <input
                     matInput
-                    type="number"
+                    currencyMask
+                    [options]="masks.maskPorcentaje"
+                    appInputPositionInitial
                     placeholder="Ingrese el desc."
                     formControlName="discount_prompt_payment"
                   />
                 </mat-form-field>
-                <mat-form-field
-                  class="col-lg-2 col-md-3 col-sm-4"
-                  appearance="outline"
-                >
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Descuento en días</mat-label>
                   <input
                     matInput
@@ -693,7 +664,7 @@
                     formControlName="discount_days"
                   />
                 </mat-form-field>
-                <mat-form-field class="col-md-2" appearance="outline">
+                <mat-form-field class="col" appearance="outline">
                   <mat-label>Estado</mat-label>
                   <mat-select formControlName="state">
                     <mat-option value="Activo">Activo</mat-option>
@@ -890,10 +861,10 @@
           </mat-step>
         </mat-horizontal-stepper>
       </form>
+      <button class="btn btn-block btn-primary" (click)="saveInformation()">
+        Guardar
+      </button>
     </ng-container>
-    <button class="btn btn-block btn-primary" (click)="saveInformation()">
-      Guardar
-    </button>
   </div>
 </div>
 <ng-template #notData>
@@ -902,8 +873,8 @@
   </div>
 </ng-template>
 
-<ng-template #notDataLoading>
-  <app-not-data [loading]="loading"></app-not-data>
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
 </ng-template>
 
 <div class="row">

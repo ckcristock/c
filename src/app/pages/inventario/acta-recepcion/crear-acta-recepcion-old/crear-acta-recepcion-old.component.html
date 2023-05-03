@@ -1,0 +1,518 @@
+<div class="card">
+  <div class="card-body">
+    <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+    <hr class="line" />
+    <form #FormActa="ngForm">
+      <input type="hidden" name="Tipo" [(ngModel)]="encabezado.Tipo" />
+      <input
+        type="hidden"
+        name="Id_Orden_Compra"
+        [(ngModel)]="encabezado.Id_Orden_Compra"
+      />
+      <input
+        type="hidden"
+        name="Id_Proveedor"
+        [(ngModel)]="encabezado.Id_Proveedor"
+      />
+      <input
+        type="hidden"
+        name="Identificacion_Funcionario"
+        [(ngModel)]="user.Identificacion_Funcionario"
+      />
+      <input
+        *ngIf="id_no_conforme != ''"
+        type="hidden"
+        name="Id_No_Conforme"
+        [(ngModel)]="id_no_conforme"
+      />
+      <input
+        type="hidden"
+        id="Id_Bodega_Nuevo"
+        name="Id_Bodega_Nuevo"
+        [(ngModel)]="encabezado.Id_Bodega_Nuevo"
+      />
+      <h6>Bodega: {{ encabezado.Nombre_Bodega | titlecase }}</h6>
+      <h6>Facturas</h6>
+      <ng-container *ngFor="let item of Facturas; let i = index">
+        <div class="row">
+          <mat-form-field class="col custom" appearance="outline">
+            <mat-label>Factura #{{ i + 1 }}</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Ingresa la factura"
+              [(ngModel)]="item.Factura"
+              name="Factura{{ i }}"
+              id="Factura{{ i }}"
+              (change)="addFactura(i, $event)"
+              [required]="item.Required"
+              class="text-uppercase"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <mat-form-field class="col custom" appearance="outline">
+            <mat-label>Fecha #{{ i + 1 }}</mat-label>
+            <input
+              matInput
+              [(ngModel)]="item.Fecha_Factura"
+              type="date"
+              name="Fecha_Factura{{ i }}"
+              id="Fecha_Factura{{ i }}"
+              (change)="addFactura(i, $event)"
+              [required]="item.Required"
+              autocomplete="off"
+            />
+          </mat-form-field>
+          <div class="col-md-2">
+            <input
+              hidden
+              #photoInput
+              type="file"
+              accept="application/pdf"
+              name="Archivo_Factura{{ i }}"
+              id="Archivo_Factura{{ i }}"
+              (change)="addFactura(i, $event)"
+              [required]="item.Required"
+            />
+            <!-- <div class="col-md-12 text-center">
+              <small *ngIf="photoPreview" class="text-success"
+                >Imagen cargada</small
+              >
+            </div> -->
+            <button
+              type="button"
+              class="btn btn-info btn-block mt-1"
+              style="height: 37px"
+              (click)="photoInput.click()"
+            >
+              Cargar archivo
+            </button>
+          </div>
+          <div class="col-md-2 mt-1">
+            <ng-template #popContent>
+              <div *ngIf="item.Retenciones.length == 0">
+                No se han aplicado retenciones
+              </div>
+              <div *ngIf="item.Retenciones.length > 0">
+                <div *ngFor="let rt of item.Retenciones">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <small>{{ rt.Nombre | capitalLetter }}</small>
+                    </div>
+                    <div>
+                      <small
+                        >${{
+                          rt.Valor == "" ? "0" : (rt.Valor | number : "1.2-2")
+                        }}</small
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #popTitle>Retenciones factura {{ i + 1 }}</ng-template>
+            <button
+              type="button"
+              style="height: 37px"
+              class="btn btn-warning btn-block"
+              [ngbPopover]="popContent"
+              [popoverTitle]="popTitle"
+            >
+              Retenciones
+            </button>
+          </div>
+        </div>
+      </ng-container>
+      <div class="row">
+        <mat-form-field
+          class="col-md-12 mat-form-field-no-padding textarea"
+          appearance="outline"
+        >
+          <mat-label>Descripción</mat-label>
+          <textarea
+            matInput
+            rows="5"
+            name="Observaciones"
+            placeholder="Digite detalles importantes de la orden de compra"
+            [cdkTextareaAutosize]="true"
+          ></textarea>
+        </mat-form-field>
+      </div>
+      <ng-container *ngIf="Lista_Productos.length > 0">
+        <div class="rounded-top table-responsive">
+          <table class="table table-bordered table-striped table-sm">
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th *ngIf="id_no_conforme"></th>
+                <th>Imagen</th>
+                <th colspan="2">Nombre</th>
+                <th>Subcategoria</th>
+                <th>Peso</th>
+                <th>Embalaje</th>
+                <th>Cantidad</th>
+                <th>Costo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of Lista_Productos; let i = index">
+                <tr
+                  class="text-center"
+                  [ngClass]="{
+                    'label-danger': item.producto[0].Eliminado == 'Si',
+                    'label-success': item.producto[0].Eliminado == 'No'
+                  }"
+                >
+                  <!-- <td *ngIf="id_no_conforme">
+                    <a
+                      class="btn"
+                      (click)="MarcarNoConforme(i)"
+                      style="cursor: pointer"
+                      ><i
+                        class="fa"
+                        [ngClass]="{
+                          'fa-trash text-danger': item.Eliminado == 'No',
+                          'fa-check-square text-white': item.Eliminado == 'Si'
+                        }"
+                      ></i
+                    ></a>
+                  </td> -->
+                  <td class="p-0">
+                    <img
+                      onerror="this.src='../../../../assets/images/product.jpg'"
+                      [src]="item.producto[0].Foto"
+                      class="img-fluid img-product mx-auto"
+                    />
+                  </td>
+                  <td colspan="2">
+                    <i
+                      *ngIf="item.Diferente"
+                      class="fa fa-exclamation-circle text-danger"
+                      title="Cambia la Presentacion respecto al producto de la Orden"
+                    ></i>
+                    <strong> {{ item.producto[0].Nombre_Comercial }}</strong>
+                  </td>
+                  <td class="p-0">
+                    <mat-form-field class="pb-0" appearance="outline">
+                      <mat-label>Subcategoria</mat-label>
+                      <select
+                        name="Id_Subcategoria{{ i }}"
+                        [(ngModel)]="item.producto[0].Id_Subcategoria"
+                        matNativeControl
+                        id="Id_Categoria{{ i }}"
+                        [disabled]="item.producto[0].Disabled"
+                        required
+                      >
+                        <optgroup
+                          *ngFor="let categoria of Subcategoria"
+                          [label]="categoria.Categoria_Nueva"
+                        >
+                          <option
+                            *ngFor="let subcateg of categoria.Subcategorias"
+                            [value]="subcateg.Id_Subcategoria"
+                          >
+                            {{ subcateg.Nombre_Subcategoria }}
+                          </option>
+                        </optgroup>
+                      </select>
+                    </mat-form-field>
+                  </td>
+                  <td class="p-0">
+                    <mat-form-field class="pb-0" appearance="outline">
+                      <mat-label>Peso</mat-label>
+                      <input
+                        matInput
+                        type="text"
+                        name="Peso{{ i }}"
+                        id="Peso{{ i }}"
+                        placeholder="Peso regular"
+                        [(ngModel)]="item.producto[0].Peso"
+                        [disabled]="item.Disabled"
+                        required
+                      />
+                    </mat-form-field>
+                  </td>
+                  <td>{{ item.producto[0].Embalaje }}</td>
+                  <td>
+                    <strong>{{ item.producto[0].CantidadProducto }}</strong>
+                  </td>
+                  <td class="text-right">
+                    <strong
+                      >${{ item.producto[0].CostoProducto | number : "1.2-2" }}
+                    </strong>
+                  </td>
+                </tr>
+                <tr class="text-uppercase table-info text-center">
+                  <th>Cantidad</th>
+                  <th>Precio</th>
+                  <th colspan="2">IVA</th>
+                  <th>SubTotal</th>
+                  <th>Factura</th>
+                  <th>No Conformidad</th>
+                  <th>Cumple</th>
+                </tr>
+                <tr *ngFor="let item of item.producto; let j = index">
+                  <td>
+                    <input
+                      (change)="
+                        capturarDigitacion(i, j, item.Id_Producto + j + i);
+                        AgregarLote(i, j, item.Id_Producto + j + i);
+                        CalcularRetencionesProveedor()
+                      "
+                      name="Cantidad{{ item.Id_Producto + j + i }}"
+                      [(ngModel)]="item.Cantidad"
+                      placeholder="Cantidad"
+                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masks.maskNumbers"
+                      appInputPositionInitial
+                      id="Cantidad{{ item.Id_Producto + j + i }}"
+                      [disabled]="item.Disabled"
+                      [required]="item.Required"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      (blur)="
+                        capturarDigitacion(i, j, item.Id_Producto + j + i);
+                        AgregarLote(i, j, item.Id_Producto + j + i);
+                        CalcularRetencionesProveedor()
+                      "
+                      class="form-control form-control-sm"
+                      currencyMask
+                      [options]="masks.maskCOP"
+                      appInputPosition
+                      name="Precio{{ item.Id_Producto + j + i }}"
+                      placeholder="Precio"
+                      [(ngModel)]="item.Precio"
+                      id="Precio{{ item.Id_Producto + j + i }}"
+                      [disabled]="item.Disabled"
+                      [required]="item.Required"
+                    />
+                  </td>
+                  <td colspan="2">
+                    <select
+                      class="form-control form-control-sm"
+                      name="Impuesto{{ item.Id_Producto + j + i }}"
+                      id="Impuesto{{ item.Id_Producto + j + i }}"
+                      (change)="
+                        capturarDigitacion(i, j, item.Id_Producto + j + i)
+                      "
+                      [(ngModel)]="item.Impuesto"
+                    >
+                      <option
+                        *ngFor="let impuesto of Impuesto; let i = index"
+                        [value]="impuesto.Valor"
+                      >
+                        {{ impuesto.Valor }}
+                      </option>
+                    </select>
+                  </td>
+                  <td>
+                    <input
+                      class="form-control form-control-sm"
+                      placeholder="Subtotal"
+                      currencyMask
+                      [options]="masks.maskCOP"
+                      appInputPosition
+                      name="Subtotal{{ item.Id_Producto + j + i }}"
+                      id="Subtotal{{ item.Id_Producto + j + i }}"
+                      [(ngModel)]="item.Subtotal"
+                      readonly
+                    />
+                  </td>
+                  <td>
+                    <select
+                      name="Factura{{ item.Id_Producto + j + i }}"
+                      id="Factura{{ item.Id_Producto + j + i }}"
+                      class="form-control form-control-sm"
+                      [disabled]="item.Disabled"
+                      [(ngModel)]="item.Factura"
+                      (change)="
+                        capturarDigitacion(i, j, item.Id_Producto + j + i);
+                        CalcularRetencionesProveedor()
+                      "
+                      [required]="item.Required"
+                    >
+                      <option *ngIf="Facturas.length > 2" value="" selected>
+                        Seleccione
+                      </option>
+                      <ng-container *ngFor="let item of Facturas">
+                        <option
+                          *ngIf="item.Factura != '' && item.Fecha_Factura != ''"
+                          [value]="item.Factura"
+                        >
+                          {{ item.Factura | uppercase }}
+                        </option>
+                      </ng-container>
+                    </select>
+                  </td>
+                  <td>
+                    <select
+                      (change)="
+                        noConforme(
+                          i,
+                          item.Id_Producto + j + i,
+                          $event.target.value
+                        )
+                      "
+                      class="form-control form-control-sm"
+                      id="noconformidad{{ item.Id_Producto + j + i }}"
+                      [disabled]="item.Disabled"
+                    >
+                      <option value="">Sin no conformidad</option>
+                      <option
+                        *ngFor="let item of NoConformes; let i = index"
+                        [value]="item.Id_Causal_No_Conforme"
+                      >
+                        {{ item.Nombre }}
+                      </option>
+                    </select>
+                    <input
+                      type="number"
+                      placeholder="Cant. No Conforme"
+                      class="form-control form-control-sm"
+                      (change)="
+                        capturarNoConforme(i, j, item.Id_Producto + j + i)
+                      "
+                      name="Cantidad_No_Conforme{{ item.Id_Producto + j + i }}"
+                      ngModel
+                      id="Cantidad_No_Conforme{{ item.Id_Producto + j + i }}"
+                      style="display: none"
+                    />
+                  </td>
+                  <td>
+                    <select
+                      name="Cumple{{ item.Id_Producto + j + i }}"
+                      id="Cumple{{ item.Id_Producto + j + i }}"
+                      [(ngModel)]="item.Cumple"
+                      class="form-control form-control-sm"
+                    >
+                      <option value="Si">Si</option>
+                      <option value="No">No</option>
+                    </select>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="Codigo_barras">
+        <div class="row">
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Escanea el código de barras del producto</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="Escanea el código de barras del producto"
+              #codigoBarras
+              (change)="consultarCodigoBarras($event, codigoBarras)"
+              autocomplete="off"
+            />
+            <mat-icon matSuffix><i class="fas fa-barcode"></i></mat-icon>
+          </mat-form-field>
+        </div>
+      </ng-container>
+      <app-list-items
+        [title1]="'SUBTOTAL'"
+        [var1]="Subtotal_Final"
+        [type1]="'cop'"
+        [title2]="'Iva'"
+        [var2]="Iva_Final"
+        [type2]="'cop'"
+        [title3]="'Retenciones'"
+        [var3]="Retenciones_Totales"
+        [type3]="'cop'"
+        [title4]="'Total'"
+        [var4]="Total_Final"
+        [type4]="'cop'"
+      >
+      </app-list-items>
+      <button
+        type="button"
+        [swal]="confirmacionGuardar"
+        [disabled]="!FormActa.valid"
+        class="btn btn-primary btn-block mt-3"
+      >
+        Generar
+      </button>
+    </form>
+  </div>
+</div>
+
+<swal #confirmacionSwal title="" text="" html="" icon=""></swal>
+<swal #confirmacionGuardar [swalOptions]="alertOption"></swal>
+
+<!-- <app-modal-basic
+  #ModalRetenciones
+  [dialogClass]="'modal-dialog'"
+  hideFooter="true"
+>
+  <div class="app-modal-header">
+    <h4 class="modal-title">Retenciones {{ Nombre_Factura_Seleccionada }}</h4>
+    <button
+      type="button"
+      class="close basic-close"
+      (click)="ModalRetenciones.hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div>
+      <a href="javascript:;" (click)="AgregarRetencion()">
+        <i class="fa fa-plus-square"></i> Agregar retención
+      </a>
+    </div>
+  </div>
+  <div
+    class="app-modal-body"
+    style="height: 220px; overflow-y: auto; overflow-x: hidden"
+  >
+    <div class="row" style="padding: 0 20px">
+      <div class="col-md-12 contenido add-retenciones-container">
+        <table class="table invoice-detail-table tabla">
+          <tbody>
+            <tr>
+              <td>Tipo de Retención</td>
+              <td style="width: 110px">Valor</td>
+              <td style="width: 10px"></td>
+            </tr>
+            <tr
+              *ngFor="let item of RetencionesFacturaSeleccionada; let i = index"
+              id="fila{{ i }}"
+            >
+              <td>
+                <select
+                  name="Retencion{{ i }}"
+                  id="Retencion{{ i }}"
+                  class="form-control form-control-sm"
+                  [(ngModel)]="item.Id_Retencion"
+                  (change)="ValidatebeforeAdd(item, i)"
+                >
+                  <option value="">Tipo de Retención</option>
+                  <option
+                    *ngFor="let item of ListaRetenciones; let j = index"
+                    [value]="item.Id_Retencion"
+                  >
+                    {{ item.Nombre }}
+                  </option>
+                </select>
+              </td>
+              <td>
+                <label for="">{{
+                  item.Valor == "" ? "0" : (item.Valor | customcurrency)
+                }}</label>
+              </td>
+              <td>
+                <a href="javascript:;" (click)="EliminarRetencion(i)">
+                  <span>
+                    <i class="fa fa-trash-o"></i>
+                  </span>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</app-modal-basic> -->

@@ -57,6 +57,7 @@ import { ReconteoEstibaComponent } from './inventario-fisico/reconteo-estiba/rec
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
 import { NgxCurrencyModule } from 'ngx-currency';
+import { CrearActaRecepcionOldComponent } from './acta-recepcion/crear-acta-recepcion-old/crear-acta-recepcion-old.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -87,6 +88,7 @@ export const MY_FORMATS = {
     //InventarioEstibaComponent,
     InventarioEstibasComponent,
     ReconteoEstibaComponent,
+    CrearActaRecepcionOldComponent,
   ],
   imports: [
     CommonModule,

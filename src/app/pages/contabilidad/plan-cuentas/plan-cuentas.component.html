@@ -274,7 +274,7 @@
         type="hidden"
       />
       <div class="row">
-        <mat-form-field class="col-md-6" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Nombre</mat-label>
           <input
             matInput
@@ -336,6 +336,21 @@
             <mat-option value="D">Débito</mat-option>
             <mat-option value="C" selected>Crédito</mat-option>
           </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Porcentaje</mat-label>
+          <input
+            matInput
+            ngModel
+            currencyMask
+            [options]="masks.maskPorcentaje"
+            appInputPositionInitial
+            placeholder="Ingresa el porcentaje"
+            name="Porcentaje"
+            id="Porcentaje"
+            autocomplete="off"
+            required
+          />
         </mat-form-field>
       </div>
       <!-- <hr class="mt-0" />
@@ -647,7 +662,7 @@
     <div class="modal-body">
       <form #FormEditarPlan="ngForm">
         <div class="row">
-          <mat-form-field class="col-md-6" appearance="outline">
+          <mat-form-field class="col" appearance="outline">
             <mat-label>Nombre</mat-label>
             <input
               matInput
@@ -711,6 +726,22 @@
               <mat-option value="D">Débito</mat-option>
               <mat-option value="C">Crédito</mat-option>
             </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col" appearance="outline">
+            <mat-label>Porcentaje</mat-label>
+            <input
+              matInput
+              ngModel
+              currencyMask
+              [options]="masks.maskPorcentaje"
+              appInputPositionInitial
+              [(ngModel)]="PlanCuentaModel.Porcentaje"
+              placeholder="Ingresa el porcentaje"
+              name="Porcentaje"
+              id="Porcentaje_Editar"
+              autocomplete="off"
+              required
+            />
           </mat-form-field>
         </div>
         <!-- <hr class="mt-0" />

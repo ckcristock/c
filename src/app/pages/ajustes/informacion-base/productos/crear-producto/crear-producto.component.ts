@@ -130,7 +130,9 @@ export class CrearProductoComponent implements OnInit {
     this._producto.getVariablesCat(value).subscribe((res: any) => {
       this.category_variables.clear();
       res.data.forEach(element => {
-        this.category_variables.push(this.addVariables(element))
+        if (!element.reception) {
+          this.category_variables.push(this.addVariables(element))
+        }
       });
     })
   }
@@ -139,7 +141,9 @@ export class CrearProductoComponent implements OnInit {
     await this._producto.getVariablesSubCat(value).toPromise().then((res: any) => {
       this.subcategory_variables.clear();
       res.data.forEach(element => {
-        this.subcategory_variables.push(this.addVariables(element))
+        if (!element.reception) {
+          this.subcategory_variables.push(this.addVariables(element))
+        }
       });
     })
   }

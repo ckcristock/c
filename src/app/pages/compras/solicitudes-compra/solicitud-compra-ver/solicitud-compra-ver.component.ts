@@ -9,7 +9,7 @@ import { consts } from 'src/app/core/utils/consts';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 
 
 @Component({
@@ -31,6 +31,7 @@ export class SolicitudCompraVerComponent implements OnInit {
   id_producto: any;
   loadingQuotations: boolean;
   quotationSelected: number;
+  activities: any[] = [];
 
 
   constructor(
@@ -210,6 +211,7 @@ export class SolicitudCompraVerComponent implements OnInit {
     this.loading = true;
     this._solicitudesCompra.getDataPurchaseRequest(this.id).subscribe((res: any) => {
       this.solicitud = res.data;
+      this.activities = res.data.activity
       console.log(this.solicitud)
       this.datosCabecera = {
         Fecha: res.data.created_at,

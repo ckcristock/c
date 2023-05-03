@@ -13,13 +13,39 @@
           <hr class="line" />
 
           <ul class="list-group list-group-flush">
-            <li class="list-group-item px-0">
+            <li class="list-group-item px-0"
+            *ngFor="let activity of activities">
               <div class="d-flex w-100 justify-content-between">
                 <div>
-                  <h6 class="mb-0">
                     <!-- faltan las actividades -->
+                    <h6 class="mb-0">
+                      <span
+                        class="badge"
+                        [class]="
+                          activity.status== 'Creación'
+                            ? 'badge-info'
+                            : activity.status == 'Edición'
+                            ? 'badge-warning'
+                            : activity.status == 'Edición' ||
+                              activity.status == 'Cotización'
+                            ? 'badge-warning'
+                            : activity.status == 'Aprobación'
+                            ? 'badge-success '
+                            : activity.status == 'Compra'
+                            ? 'badge-primary '
+                            : ''
+                        "
+                      >
+                        {{ activity.status }}</span
+                      >
+                    </h6>
+                    <p class="mb-1">{{ activity.details }}</p>
+                    <small>{{ activity.date }}</small>
+                    <small class="d-block">{{
+                      activity.person.full_names
+                    }}</small>
                     <span class="badge"> </span>
-                  </h6>
+                  
                 </div>
                 <!--  falta poner la imagen del funcionario  -->
                 <img
@@ -195,7 +221,9 @@
                 </tr>
               </tbody>
               <tfoot>
-                <tr class="table-warning">
+                <tr class="table-warning" *ngIf="
+                solicitud.quotation_purchase_request.length > 0 ||
+                solicitud.status == 'Pendiente'">
                   <th
                     colspan="6"
                     class="text-right text-uppercase align-middle"
@@ -214,10 +242,7 @@
 
                       <div
                         ngbDropdownMenu
-                        *ngIf="
-                          solicitud.quotation_purchase_request.length > 0 ||
-                          solicitud.status == 'Pendiente'
-                        "
+                        
                       >
                         <a
                           class="dropdown-item text-info"

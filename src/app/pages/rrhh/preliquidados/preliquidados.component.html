@@ -32,7 +32,8 @@
               <ng-option value="">Todos</ng-option>
               </ng-select>
             </div>
-            <mat-form-field class="col" appearance="outline">
+            <!-- ESTO NO SE NECESITARIA POR QUE LA PAGINACION YA LO TRAE -->
+            <!-- <mat-form-field class="col" appearance="outline">
               <mat-label>Items por página</mat-label>
               <mat-select
                 [(ngModel)]="pageSize"
@@ -44,11 +45,20 @@
                 <mat-option [value]="50">50 items por página</mat-option>
                 <mat-option [value]="100">100 items por página</mat-option>
               </mat-select>
-            </mat-form-field>
+            </mat-form-field> -->
           </ng-container>
         </div>
       </mat-expansion-panel>
     </mat-accordion>
+    <div class="alert alert-info" *ngIf="active_filters" role="alert">
+      <strong
+        >Hay filtros de búsqueda activos, para mostrar todos los resultados haz
+        click
+      </strong>
+      <a href="javascript: void(0)" (click)="resetFiltros()" class="alert-link"
+        >aquí</a
+      >
+    </div>
     <div
       class="row d-flex align-items-stretch"
       *ngIf="!loading && listPreliquidados.length > 0; else notData"
@@ -124,7 +134,18 @@
       boundaryLinks="true"
     >
     </ngb-pagination> -->
-    <ngb-pagination
+    <mat-paginator
+      *ngIf="paginationMaterial"
+      [length]="paginationMaterial.total"
+      [pageSize]="paginationMaterial.per_page"
+      [pageIndex]="paginationMaterial.current_page - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+    <!-- // este no va -->
+    <!-- <ngb-pagination
       class="d-flex justify-content-center pagination-rounded pagination-sm"
       [collectionSize]="collectionSize"
       [(page)]="page"
@@ -135,7 +156,7 @@
       ellipses="false"
       boundaryLinks="true"
     >
-    </ngb-pagination>
+    </ngb-pagination> -->
   </div>
 </div>
 <ng-template #notData>

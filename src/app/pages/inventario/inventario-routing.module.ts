@@ -11,12 +11,14 @@ import { InventarioVencerComponent } from './inventario-vencer/inventario-vencer
 import { AlistamientoComponent } from './alistamiento/alistamiento.component';
 import { AlistamientoCrearComponent } from './alistamiento/alistamiento-crear/alistamiento-crear.component';
 import { InventarioEstibasComponent } from './inventario-fisico/inventario-estibas/inventario-estibas.component';
+import { CrearActaRecepcionOldComponent } from './acta-recepcion/crear-acta-recepcion-old/crear-acta-recepcion-old.component';
 
 const routes: Routes = [
   { path: 'inventario', component: InventarioComponent },
   { path: 'inventario-fisico', component: InventarioFisicoComponent },
   { path: 'acta-recepcion', component: ActaRecepcionComponent },
   { path: 'acta-recepcion/crear/:codigo/:compra', component: CrearActaRecepcionComponent },
+  { path: 'acta-recepcion/crear-old/:codigo/:compra', component: CrearActaRecepcionOldComponent },
   { path: 'acta-recepcion/ver/:id', component: VerActaRecepcionComponent },
   { path: 'acta-recepcion-aprobados', component: ActaRecepionAprobadosComponent },
   { path: 'acta-recepcion-acomodar/:tipo/:id/:lugar/:idLugar', component: AcomodarActaComponent },

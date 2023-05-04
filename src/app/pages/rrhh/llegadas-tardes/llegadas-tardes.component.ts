@@ -312,7 +312,7 @@ export class LlegadasTardesComponent implements OnInit {
   getGroup() {
     this._grups.getGroup().subscribe((r: any) => {
       this.groupList = r.data;
-      this.groupList.unshift({ value: 0, text: 'Todos' });
+      this.groupList.unshift({ value: '', text: 'Todos' });
       this.group_id = 0;
       this.getDependencies(0);
     });
@@ -321,7 +321,7 @@ export class LlegadasTardesComponent implements OnInit {
   getDependencies(group_id) {
     this._dependencies.getDependencies({ group_id }).subscribe((r: any) => {
       this.dependencyList = r.data;
-      this.dependencyList.unshift({ value: 0, text: 'Todos' });
+      this.dependencyList.unshift({ value: '', text: 'Todos' });
       this.dependency_id = 0;
     });
   }

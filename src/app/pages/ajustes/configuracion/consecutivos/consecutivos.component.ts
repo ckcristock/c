@@ -31,7 +31,7 @@ export class ConsecutivosComponent implements OnInit {
   form: FormGroup;
   loading: boolean;
   paginationMaterial: any;
-  id:number;
+  id: number;
   titulo_consecutivo: string;
   orderObj: any
   consecutivos: any[] = [];
@@ -62,9 +62,9 @@ export class ConsecutivosComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.permission.permissions.show) {
-      this.today_.anio = this.today.toLocaleDateString('es', {year: '2-digit'})
-      this.today_.mes = this.today.toLocaleDateString('es', {month: '2-digit'})
-      this.today_.dia = this.today.toLocaleDateString('es', {day: '2-digit'})
+      this.today_.anio = this.today.toLocaleDateString('es', { year: '2-digit' })
+      this.today_.mes = this.today.toLocaleDateString('es', { month: '2-digit' })
+      this.today_.dia = this.today.toLocaleDateString('es', { day: '2-digit' })
       this.createFormFilters();
       this.route.queryParamMap.subscribe((params: any) => {
         if (params.params.pageSize) {
@@ -130,7 +130,7 @@ export class ConsecutivosComponent implements OnInit {
     this.consecutivo_numero = item.Consecutivo.toString().padStart(item.longitud, 0)
     this._modal.open(content)
     this.form = this.fb.group({
-      Prefijo: [item.Prefijo, [Validators.required, Validators.minLength(2), Validators.maxLength(3)]],
+      Prefijo: [item.Prefijo, [Validators.required, Validators.minLength(2), Validators.maxLength(6)]],
       longitud: [item.longitud, [Validators.required, Validators.pattern("^[0-9]*$"),]],
       format_code: [item.format_code],
       Anio: [item.Anio, Validators.required],
@@ -144,7 +144,7 @@ export class ConsecutivosComponent implements OnInit {
   }
 
   saveConsecutivo() {
-    if (!this.form.valid){
+    if (!this.form.valid) {
       this._swal.show({
         icon: 'error',
         title: 'Error',
@@ -152,7 +152,7 @@ export class ConsecutivosComponent implements OnInit {
         showCancel: false
       })
     } else {
-      this._consecutivo.guardarConsecutivo(this.form.value, this.id).subscribe((r:any) => {
+      this._consecutivo.guardarConsecutivo(this.form.value, this.id).subscribe((r: any) => {
         this._swal.show({
           icon: 'success',
           title: 'Correcto',

@@ -249,7 +249,7 @@ export const functionsApu = {
       });
     });
     group.get('administrative_percentage').valueChanges.subscribe(value => {
-      setInterval(() => {
+      setTimeout(() => {
         let total_direct_cost = group.get('total_direct_cost');
         group.patchValue({
           administrative_value: Math.round((total_direct_cost?.value * (value / 100)))
@@ -257,7 +257,7 @@ export const functionsApu = {
       }, 500);
     });
     group.get('unforeseen_percentage').valueChanges.subscribe(value => {
-      setInterval(() => {
+      setTimeout(() => {
         let total_direct_cost = group.get('total_direct_cost');
         group.patchValue({
           unforeseen_value: Math.round(((value / 100) * total_direct_cost?.value))
@@ -397,7 +397,7 @@ export const functionsApu = {
   },
 
   sumarAmindImpr(form: FormGroup) {
-    setInterval(() => {
+    setTimeout(() => {
       let forma = form.value;
       let resultAminImp =
         forma?.direct_costs_indirect_costs_total + forma?.administrative_value +

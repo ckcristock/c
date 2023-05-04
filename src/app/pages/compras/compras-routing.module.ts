@@ -12,16 +12,17 @@ import { SolicitudCompraVerComponent } from './solicitudes-compra/solicitud-comp
 const routes: Routes = [
   { path: 'compra-nacional', component: CompraNacionalComponent },
   { path: 'crear-nacional', component: CrearCompraNacionalComponent },
+  { path: 'crear-nacional/:solicitud_id', component: CrearCompraNacionalComponent },
   { path: 'ver-nacional/:id', component: VerCompraNacionalComponent },
   { path: 'solicitud', component: SolicitudesCompraComponent },
   { path: 'solicitud/crear', component: SolicitudCompraCrearComponent },
   { path: 'solicitud/editar/:id', component: SolicitudesCompraEditarComponent },
-  { path: 'solicitud/ver/:id' , component: SolicitudCompraVerComponent},
-  
+  { path: 'solicitud/ver/:id', component: SolicitudCompraVerComponent },
+
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ComprasRoutingModule {}
+export class ComprasRoutingModule { }
 

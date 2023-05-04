@@ -132,14 +132,19 @@ export class SolicitudesCompraComponent implements OnInit {
     });
   }
 
-  count(productsPerRequest) {
+  count(solicitud) {
     let cont = 0
-    productsPerRequest.forEach(productPurchase => {
-      if (productPurchase.quotation.length > 0) {
-        cont++;
-      }
-    });
-    return cont;
+    if (solicitud.product_purchase_request.length > 0 && solicitud.quotation_purchase_request.length == 0) {
+      solicitud.product_purchase_request.forEach(productPurchase => {
+        if (productPurchase.quotation.length > 0) {
+          cont++;
+        }
+      });
+      return cont;
+    } else if (solicitud.quotation_purchase_request.length > 0) {
+      cont = solicitud.product_purchase_request.length
+      return cont;
+    }
   }
 
   selectedDate(fecha, type_date) {

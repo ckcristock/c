@@ -81,7 +81,7 @@ export class SolicitudCompraCrearComponent implements OnInit {
           this.products.value.forEach(product => {
             this.productDelete.push(product.id)
           });
-          
+
           this.products.clear();
         }
       })
@@ -183,15 +183,15 @@ export class SolicitudCompraCrearComponent implements OnInit {
         if (result.isConfirmed) {
           const data = {
             ...this.form.value,
-            products_delete : this.productDelete
+            products_delete: this.productDelete
           };
           this._solicitudesCompra.savePurchaseRequest(data).subscribe(r => {
             this._swal.show({
-              title: 'Tarea completada con éxito!',
-              text: 'Solicitud de compra creada',
+              title: '!Tarea completada con éxito!',
+              text: 'Solicitud de compra ' + (this.form.value.id ? 'actualizada' : 'creada') + 'con éxito.',
               icon: 'success',
               showCancel: false,
-              timer: 3000
+              timer: 1000
             })
 
             this.router.navigateByUrl('/compras/solicitud')
@@ -200,9 +200,8 @@ export class SolicitudCompraCrearComponent implements OnInit {
         } else {
           this._swal.show({
             icon: 'error',
-            title: '¡Solicitud Cancelada!',
+            title: '¡Solicitud cancelada!',
             text: 'La solicitud no ha sido registrada correctamente',
-            timer: 3000,
             showCancel: false
           })
         }

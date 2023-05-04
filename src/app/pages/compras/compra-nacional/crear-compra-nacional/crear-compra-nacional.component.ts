@@ -14,6 +14,7 @@ import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecu
 import { Observable, OperatorFunction, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { CompraNacionalService } from '../compra-nacional.service';
+import { SolicitudesCompraService } from '../../solicitudes-compra/solicitudes-compra.service';
 @Component({
   selector: 'app-crear-compra-nacional',
   templateUrl: './crear-compra-nacional.component.html',
@@ -56,16 +57,19 @@ export class CrearCompraNacionalComponent implements OnInit {
     public _consecutivos: ConsecutivosService,
     public _swal: SwalService,
     public _compra: CompraNacionalService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _solicitud: SolicitudesCompraService
   ) {
     this.user = this._user?.user?.person?.id;
-    this.id = this.route?.snapshot?.params['id'];
   }
 
   async ngOnInit() {
-    //this.getRotativosCompra(params);
-    //this.pushCompra();
-    //let params = this.route.snapshot.queryParams;
+    this.route.paramMap.subscribe(params => {
+      this.id = params.get('solicitud_id');
+      if (this.id) {
+        this.getSolicitud(this.id)
+      }
+    })
     this.loading = true;
     this.createForm();
     this.createFormCategories();
@@ -75,6 +79,12 @@ export class CrearCompraNacionalComponent implements OnInit {
     this.getProveedores();
     await this.getCategories();
     this.loading = false;
+  }
+
+  getSolicitud(id) {
+    this._solicitud.getDataPurchaseRequest(id).subscribe((res: any) => {
+      console.log(res);
+    })
   }
 
   async getCategories() {

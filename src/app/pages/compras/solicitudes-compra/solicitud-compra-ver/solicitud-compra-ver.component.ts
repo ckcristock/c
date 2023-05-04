@@ -104,11 +104,6 @@ export class SolicitudCompraVerComponent implements OnInit {
     }
   }
 
-  //Boton brayan pruebas
-  printForm() {
-    console.log(this.formCotizacionRegular)
-  }
-
   //Funcion que trae los proveedores al formulario de cargar cotizaciones
   getProveedores() {
     this._proveedor.getThirdPartyProvider({}).subscribe((res: any) => {

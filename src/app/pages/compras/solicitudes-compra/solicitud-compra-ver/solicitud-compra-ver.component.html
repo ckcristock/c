@@ -6,46 +6,46 @@
     <!-- Historial  -->
     <div class="col-md-3">
       <div class="card">
-        <div class="card-body">
+        <div class="card-body card-body-edit">
           <div class="card-title">
-            <h5 class="text-primary">Seguimiento</h5>
+            <h6 class="text-primary">Seguimiento</h6>
           </div>
           <hr class="line" />
 
           <ul class="list-group list-group-flush">
-            <li class="list-group-item px-0"
-            *ngFor="let activity of activities">
+            <li
+              class="list-group-item px-0"
+              *ngFor="let activity of activities"
+            >
               <div class="d-flex w-100 justify-content-between">
                 <div>
-                    <!-- faltan las actividades -->
-                    <h6 class="mb-0">
-                      <span
-                        class="badge"
-                        [class]="
-                          activity.status== 'Creación'
-                            ? 'badge-info'
-                            : activity.status == 'Edición'
-                            ? 'badge-warning'
-                            : activity.status == 'Edición' ||
-                              activity.status == 'Cotización'
-                            ? 'badge-warning'
-                            : activity.status == 'Aprobación'
-                            ? 'badge-success '
-                            : activity.status == 'Compra'
-                            ? 'badge-primary '
-                            : ''
-                        "
-                      >
-                        {{ activity.status }}</span
-                      >
-                    </h6>
-                    <p class="mb-1">{{ activity.details }}</p>
-                    <small>{{ activity.date }}</small>
-                    <small class="d-block">{{
-                      activity.person.full_names
-                    }}</small>
-                    <span class="badge"> </span>
-                  
+                  <!-- faltan las actividades -->
+                  <h6 class="mb-0">
+                    <span
+                      class="badge"
+                      [class]="
+                        activity.status == 'Creación'
+                          ? 'badge-info'
+                          : activity.status == 'Edición'
+                          ? 'badge-warning'
+                          : activity.status == 'Cotización'
+                          ? 'badge-danger'
+                          : activity.status == 'Aprobación'
+                          ? 'badge-success '
+                          : activity.status == 'Compra'
+                          ? 'badge-primary '
+                          : ''
+                      "
+                    >
+                      {{ activity.status }}</span
+                    >
+                  </h6>
+                  <p class="mb-1">{{ activity.details }}</p>
+                  <small>{{ activity.date }}</small>
+                  <small class="d-block">{{
+                    activity.person.full_names
+                  }}</small>
+                  <span class="badge"> </span>
                 </div>
                 <!--  falta poner la imagen del funcionario  -->
                 <img
@@ -64,6 +64,27 @@
         <div class="card-body">
           <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
           <hr class="line" />
+          <div class="d-flex justify-content-end">
+            <div class="btn-group" role="group" aria-label="Button group">
+              <button
+                type="button"
+                class="btn btn-sm btn-info"
+                *ngIf="
+                  solicitud.status == 'Pendiente' ||
+                  solicitud.status == 'Cotizada'
+                "
+                [routerLink]="['/compras/solicitud/editar', solicitud.id]"
+              >
+                <i class="fas fa-edit"></i> Editar
+              </button>
+              <button
+                class="btn btn-sm btn-success"
+                [routerLink]="['/compras/crear-nacional', id]"
+              >
+                <i class="fas fa-shopping-cart"></i> Realizar orden
+              </button>
+            </div>
+          </div>
           <!-- Tablas con información -->
           <div class="rounded-top table-responsive mt-2">
             <table class="table table-bordered table-striped table-sm">
@@ -208,12 +229,6 @@
                           >
                             <i class="fas fa-eye"></i> Ver
                           </a>
-                          <a
-                            class="dropdown-item text-success"
-                            href="javascript: void(0);"
-                          >
-                            <i class="fas fa-shopping-cart"></i> Realizar orden
-                          </a>
                         </ng-container>
                       </div>
                     </div>
@@ -221,9 +236,13 @@
                 </tr>
               </tbody>
               <tfoot>
-                <tr class="table-warning" *ngIf="
-                solicitud.quotation_purchase_request.length > 0 ||
-                solicitud.status == 'Pendiente'">
+                <tr
+                  class="table-warning"
+                  *ngIf="
+                    solicitud.quotation_purchase_request.length > 0 ||
+                    solicitud.status == 'Pendiente'
+                  "
+                >
                   <th
                     colspan="6"
                     class="text-right text-uppercase align-middle"
@@ -240,10 +259,7 @@
                         <i class="mdi mdi-chevron-down"></i>
                       </button>
 
-                      <div
-                        ngbDropdownMenu
-                        
-                      >
+                      <div ngbDropdownMenu>
                         <a
                           class="dropdown-item text-info"
                           href="javascript: void(0);"
@@ -281,12 +297,6 @@
                             "
                           >
                             <i class="fas fa-eye"></i> Ver
-                          </a>
-                          <a
-                            class="dropdown-item text-success"
-                            href="javascript: void(0);"
-                          >
-                            <i class="fas fa-shopping-cart"></i> Realizar orden
                           </a>
                         </ng-container>
                       </div>
@@ -337,9 +347,6 @@
   </div>
 
   <div class="modal-body">
-    <button type="button" class="btn btn-primary" (click)="printForm()">
-      Print
-    </button>
     <ngb-tabset>
       <ng-container [formGroup]="formCotizacionRegular">
         <ng-container formArrayName="items">
@@ -375,6 +382,7 @@
                     <button
                       mat-icon-button
                       matSuffix
+                      matTooltip="Crear nuevo tercero"
                       (click)="redirectTercero()"
                     >
                       <mat-icon>add</mat-icon>

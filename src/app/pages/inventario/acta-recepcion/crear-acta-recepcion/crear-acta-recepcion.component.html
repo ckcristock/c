@@ -1,0 +1,188 @@
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+
+<ng-container *ngIf="!loading; else placeholder">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+          <hr class="line" />
+          <ng-container [formGroup]="form">
+            <!-- SECCION DE FACTURAS -->
+            <ng-container formArrayName="invoices">
+              <div class="row card-title d-flex justify-content-between">
+                <div class="col-md-6 px-0">
+                  <h6 class="text-primary">
+                    Facturas
+                  </h6>
+                </div>
+                <div class="col-md-6 px-0 text-right">
+                  <div class="btn-group rounded w-sm-100">
+                    <button class="btn btn-primary btn-sm" type="button" (click)="addInvoice()">
+                      <!-- //este boton debe tener un ngIf de permisos  -->
+                      <i class="fa fa-plus"></i> Agregar
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <ng-container *ngFor="let invoice of invoices.controls; let i =index;" >
+                <div class="row">
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>Numero de factura</mat-label>
+                    <input
+                      matInput
+                      type="text"
+                      placeholder="Ingresa la factura"
+                      [formControlName]="Factura"
+                      required
+                      autocomplete="off"
+                    />
+                  </mat-form-field>
+                  <mat-form-field class="col" appearance="outline">
+                    <mat-label>Fecha</mat-label>
+                    <input
+                      matInput
+                      [matDatepicker]="picker"
+                      placeholder="Elije la fecha"
+                      required
+                      [formControlName]="Fecha_factura"
+                      readonly
+                      autocomplete="off"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <!-- <mat-error *ngIf="expected_date_valid">
+                      Campo obligatorio
+                    </mat-error> -->
+                  </mat-form-field>
+
+                  <div class="form-group text-center col">
+                  <div class="custom-input-file ">
+                    <input
+                          type="file"
+                          #fileInput
+                          id="importFile"
+                          accept=".pdf"
+                          class="input-file"
+
+                        />
+                        <!-- (change)="onFileChanged($event, i)" -->
+                        Cargar factura
+                      </div>
+                      <!-- <div class="col-md-12 text-center">
+                        <small *ngIf="item.get('file').value" class="text-success"
+                          >Cotización cargada exitosamente</small
+                        >
+                      </div> -->
+                    </div>
+                    <mat-form-field class="col" appearance="outline">
+                      <mat-label>Retenciones</mat-label>
+                      <input
+                        matInput
+                        type="text"
+                        placeholder="Ingresa la factura"
+                        [formControlName]="retencion"
+                        required
+                        autocomplete="off"
+                      />
+                    </mat-form-field>
+                    <div class="col">
+                    <button
+                        type="button align-center"
+                        (click)="removeInvoice(i)"
+                        class="btn btn-danger btn-sm"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                </div>
+              </ng-container>
+
+              <!-- <ng-container
+                *ngIf="
+                  invoices.controls.length > 0;
+                  else notDataInfo
+                "
+              >
+              <div class="row">
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Factura</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  placeholder="Ingresa en numero de factura"
+                  formControlName="Factura"
+                  required
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Fecha</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="picker"
+                  placeholder="Elije la fecha"
+                  required
+                  [min]="today"
+                  formControlName="Fecha_Factura"
+                  readonly
+                  autocomplete="off"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                 <mat-error *ngIf="expected_date_valid">
+                  Campo obligatorio
+                </mat-error>
+              </mat-form-field>
+              <div class="form-group text-center col-md-12">
+                <div class="custom-input-file col-md-12">
+                  <input
+                    type="file"
+                    #fileInput
+                    id="importFile"
+                    accept=".pdf"
+                    class="input-file"
+                    (change)="onFileChanged($event, i)"
+                  />
+                  Cargar factura
+                </div>
+                <div class="col-md-12 text-center">
+                  <small *ngIf="item.get('file').value" class="text-success"
+                    >Factura cargada exitosamente</small
+                  >
+                </div>
+              </div>
+            </div>
+            </ng-container> -->
+
+
+
+
+              <!-- Tabla para facturas -> muchos items que se recorren, vas a tener un boton de agregar general y un boton de eliminar para cada factura, vas a tener el input para el nombre, otro para la fecha, este preferiblemente con datepicker de angular, otro para cargar archivo, tal como lo venimos llevando en todo el software, y que tenga restriccion de tipo de archivo, solo pdf o imgen (png, jpg, jpge), y que muestre cuando el archivo esté cargado, adicional habrá un campo para retenciones pero no tiene importancia -->
+            </ng-container>
+            <!-- SECCION DE productos -->
+            <ng-container formArrayName="products">
+              <!-- tabla para productos -> inicialmente se van a listar los productos de la orden de compra, con imagen, y con campos para la cantidad, el iva y los precios (precio total, precio iva, subtotal sin iva), habrá un checkbox para seleccionar los productos que se ingresan, y habrá una comparativa con la informacion que viene de la orden de compra, muestras un icon de un alert o de un ! con un tooltip donde describa que el campo es diferente a la orden de compra  -->
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+<ng-template #notDataInfo>
+  <div class="alert alert-warning" role="alert">No hay nada aquí</div>
+</ng-template>

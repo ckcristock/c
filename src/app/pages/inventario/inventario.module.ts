@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { MyDateRangePickerModule } from 'mydaterangepicker';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ComponentsModule } from '../../components/components.module';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
@@ -94,6 +94,7 @@ export const MY_FORMATS = {
     CommonModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     InventarioRoutingModule,
     ComponentsModule,
     MyDateRangePickerModule,

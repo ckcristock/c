@@ -39,12 +39,12 @@
       <mat-expansion-panel class="mat-elevation-z0">
         <div class="row">
           <mat-form-field class="col" appearance="outline">
-            <mat-label>Código</mat-label>
+            <mat-label>Talla</mat-label>
             <input
               matInput
               type="text"
-              placeholder="Busca por código"
-              [(ngModel)]="filtro_codigo"
+              placeholder="Busca por talla"
+              [(ngModel)]="filtro_talla"
               (input)="filtros()"
             />
           </mat-form-field>
@@ -87,6 +87,7 @@
           <tr class="text-center text-uppercase">
             <!-- <th>Código</th> -->
             <th>Nombre</th>
+            <th>Talla</th>
             <th>Calidad</th>
             <th>Tipo</th>
             <th>Costo</th>
@@ -100,6 +101,7 @@
           >
             <!-- <td class="align-middle">{{ inventario.code }}</td> -->
             <td class="align-middle">{{ inventario.name }}</td>
+            <td class="align-middle">{{ inventario.size || "No tiene" }}</td>
             <td class="align-middle">{{ inventario.status }}</td>
             <td class="align-middle">{{ inventario.type }}</td>
             <td class="text-right align-middle">

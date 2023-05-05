@@ -330,11 +330,9 @@ export class LlegadasTardesComponent implements OnInit {
     let params = this.SetFiltros(this.pagination.page);
     let fecha_inicio = moment().subtract(15, 'days').format('YYYY-MM-DD');
     let fecha_final = moment().format('YYYY-MM-DD');
-    this._lateArrivals
-      .getStatistcs(fecha_inicio, fecha_final, params)
-      .subscribe((r: any) => {
-        this.getLast15Days(r.data.lates);
-      });
+    this._lateArrivals.getStatistcs(fecha_inicio, fecha_final, params).subscribe((r: any) => {
+      this.getLast15Days(r.data.lates);
+    });
   }
 
   getLast15Days(lates: any[]) {
@@ -350,37 +348,33 @@ export class LlegadasTardesComponent implements OnInit {
   }
 
   getStatisticsByDays() {
-    let params: any = this.SetFiltros(this.pagination.page);
-    params.type = 'diary';
+    let params =
+      { type: 'diary' };
     const fecha_ini = this.formFilters.controls.date_from.value == ''
       ? moment().format('YYYY-MM-DD')
       : this.formFilters.controls.date_from.value
     const fecha_fin = this.formFilters.controls.date_to.value == ''
       ? moment().format('YYYY-MM-DD')
       : this.formFilters.controls.date_to.value
-    this._lateArrivals
-      .getStatistcs(fecha_ini, fecha_fin, params)
-      .subscribe((r: any) => {
-        if (r.data.lates.length > 0) {
-          this.dataDiary.total = r.data.lates.total;
-          if (r.data.lates.time_diff_total != null) {
-            this.dataDiary.time_diff_total = r.data.lates.time_diff_total;
-          }
-          this.dataDiary.percentage = r.data.percentage;
-          //let d = r.data?.lates?.allByDependency.reduce(
-          let d = r.data.lates.reduce(
-            (acc, el) => {
-              return {
-                labels: [...acc.labels, el.day],
-                datasets: [...acc.datasets, el.total],
-              };
-            },
-            { labels: [], datasets: [] }
-          );
-          this.donutChart.datasets[0].data = d.datasets;
-          this.donutChart.labels = d.labels;
-        }
-      });
+
+    this._lateArrivals.getStatistcs(fecha_ini, fecha_fin, params).subscribe((r: any) => {
+      this.dataDiary.total = r.data.lates.total;
+      this.dataDiary.time_diff_total = r.data.lates.time_diff_total;
+      this.dataDiary.percentage = r.data.percentage;
+
+      let d = r.data.allByDependency.reduce(
+        (acc, el) => {
+          return {
+            labels: [...acc.labels, el.name],
+            datasets: [...acc.datasets, el.total],
+          };
+        },
+        { labels: [], datasets: [] }
+      );
+
+      this.donutChart.datasets[0].data = d.datasets;
+      this.donutChart.labels = d.labels;
+    });
   }
 
   transformData() {

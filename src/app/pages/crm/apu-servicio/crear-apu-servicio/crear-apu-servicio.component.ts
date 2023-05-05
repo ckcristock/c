@@ -85,7 +85,6 @@ export class CrearApuServicioComponent implements OnInit {
     this.getPeople();
     this.getTravelExpenseEstimation();
     await this.getCities();
-    this.validateData();
     this.reload = false
   }
 
@@ -308,7 +307,7 @@ export class CrearApuServicioComponent implements OnInit {
         .show({
           text: `Vamos a ${this.id && this.title == 'Editar servicio' ? 'editar' : 'crear'} un servicio`,
           title: '¿Estás seguro(a)?',
-          icon: 'warning',
+          icon: 'question',
         })
         .then((r) => {
           if (r.isConfirmed) {

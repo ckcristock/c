@@ -37,7 +37,9 @@ export class CrearApuPiezaComponent implements OnInit {
   @Input('id') id;
   @Input('data') data;
   @Input('title') title = 'Crear pieza';
+  @Input('preData') preData = undefined;
   @Output() obtenerDato = new EventEmitter;
+  @Output() saveForAddToSet = new EventEmitter;
   pageYoffset = 0;
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYoffset = window.pageYOffset;
@@ -116,6 +118,13 @@ export class CrearApuPiezaComponent implements OnInit {
     this.validateData();
     this.getConsecutivo();
     await this.getVariablesApu();
+    if (this.preData) {
+      this.form.patchValue({
+        city_id: this.preData.city_id,
+        third_party_id: this.preData.third_party_id,
+        line: this.preData.line,
+      })
+    }
     this.loading = false;
   }
 
@@ -133,7 +142,6 @@ export class CrearApuPiezaComponent implements OnInit {
     this.getCommercialMaterials();
     this.getMaterialsFull();
     await this.getCutLaserMaterial();
-    this.validateData();
     this.getConsecutivo();
     await this.getVariablesApu();
     this.reload = false
@@ -308,6 +316,7 @@ export class CrearApuPiezaComponent implements OnInit {
     help.functionsApu.listerTotalDirectCost(this.form);
   }
   planos: any[] = [];
+
   validateData() {
     if (this.data) {
       help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries, this.materials, this.cutLaserMaterials, this.commercialMaterials);
@@ -682,7 +691,12 @@ export class CrearApuPiezaComponent implements OnInit {
               );
             } else {
               this._apuPieza.save(this.form.value).subscribe(
-                (res: any) => this.showSuccess(),
+                (res: any) => {
+                  if (this.preData) {
+                    this.saveForAddToSet.emit(res.data)
+                  }
+                  this.showSuccess()
+                },
                 (err) => this.showError(err)
               );
             }
@@ -699,7 +713,9 @@ export class CrearApuPiezaComponent implements OnInit {
       showCancel: false,
       timer: 1000
     });
-    this.router.navigateByUrl('/crm/apus');
+    if (!this.preData) {
+      this.router.navigateByUrl('/crm/apus');
+    }
   }
   showError(err) {
     this._swal.show({

@@ -33,4 +33,9 @@ export class ModalService {
   openScrollableContent(content) {
     this.modalService.open(content, { scrollable: true, size: 'lg' });
   }
+
+  /* fullScreenScrollBar(content) {
+    this.modalService.open(content, { size: 'fullscreen' });
+  } */
+
 }

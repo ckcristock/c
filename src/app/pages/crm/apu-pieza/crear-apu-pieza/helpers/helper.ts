@@ -54,7 +54,9 @@ export const functionsApu = {
       cut_laser_subtotal: data?.cut_laser_subtotal,
       machine_tools_subtotal: data?.machine_tools_subtotal,
       internal_proccesses_subtotal: data?.internal_proccesses_subtotal,
-      external_proccesses_subtotal: data?.external_proccesses_subtotal
+      external_proccesses_subtotal: data?.external_proccesses_subtotal,
+      set_name: data?.set_name,
+      machine_name: data?.machine_name
     });
     materiaHelper.createFillInMateria(form, fb, data, geometriesList, commercialMaterials);
     materialsHelper.createFillInMaterials(form, fb, data);
@@ -85,7 +87,7 @@ export const functionsApu = {
 
   createForm(fb: FormBuilder, calculationBase, user_id) {
     let group = fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.maxLength(191)]],
       city_id: [null, Validators.required],
       person_id: [user_id],
       third_party_id: [null, Validators.required],
@@ -136,7 +138,9 @@ export const functionsApu = {
       sale_price_usd_withholding_total: [0],
       sale_value_usd_unit: [0],
       format_code: [''],
-      code: ['']
+      code: [''],
+      set_name: ['', Validators.maxLength(255)],
+      machine_name: ['', Validators.maxLength(255)]
     });
     this.subscribes(group)
     return group;

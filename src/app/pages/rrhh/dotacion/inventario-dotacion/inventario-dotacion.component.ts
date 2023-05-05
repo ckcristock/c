@@ -50,6 +50,7 @@ export class InventarioDotacionComponent implements OnInit {
   public filtro_nombre: string = '';
   public filtro_calidad: string = '';
   public filtro_tipo: string = '';
+  public filtro_talla: string = '';
   public nombreGrupo: any;
 
   // public nombreGrupo = '';
@@ -68,7 +69,7 @@ export class InventarioDotacionComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.ListaInventario(1);
+    this.ListaInventario();
     this.listarGrupo();
     this.Graficar()
   }
@@ -163,7 +164,7 @@ export class InventarioDotacionComponent implements OnInit {
   mostrarFiltros() {
     this.estadoFiltros = !this.estadoFiltros
   }
-  ListaInventario(page) {
+  ListaInventario(page = 1) {
     this.pagination.page = page;
     let params = this.route.snapshot.queryParams;
     let queryString = '';
@@ -175,6 +176,7 @@ export class InventarioDotacionComponent implements OnInit {
       this.filtro_nombre = params.nombre ? params.nombre : '';
       this.filtro_calidad = params.calidad ? params.calidad : '';
       this.filtro_tipo = params.tipo ? params.tipo : '';
+      this.filtro_talla = params.talla ? params.talla : '';
 
       queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
     }
@@ -246,6 +248,9 @@ export class InventarioDotacionComponent implements OnInit {
     if (this.filtro_tipo != "") {
       params.tipo = this.filtro_tipo;
     }
+    if (this.filtro_talla != "") {
+      params.talla = this.filtro_talla;
+    }
 
     let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
@@ -280,6 +285,9 @@ export class InventarioDotacionComponent implements OnInit {
     }
     if (this.filtro_tipo != "") {
       params.tipo = this.filtro_tipo;
+    }
+    if (this.filtro_talla != "") {
+      params.tipo = this.filtro_talla;
     }
 
     let queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');

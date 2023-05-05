@@ -131,7 +131,7 @@
           >
             <!-- <span class="dot" [class]="horario.colors.leave"></span> -->
             <span class="custom-label"
-              >{{ horario.working_hours | number : "1.2-2" }} Hrs
+              >{{ convertHours(horario.working_hours) }}
             </span>
           </div>
         </td>
@@ -140,7 +140,7 @@
   </table>
 </div>
 <div class="alert alert-info text-center" role="alert">
-  Total horas trabajadas: {{ horas | number : "1.2-2" }}
+  Total horas trabajadas: {{ convertHours(horas) }}
 </div>
 
 <ng-template #notHour2>

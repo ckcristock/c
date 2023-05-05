@@ -21,6 +21,7 @@ import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecu
 import { UserService } from 'src/app/core/services/user.service';
 import { consts } from 'src/app/core/utils/consts';
 import { ViewportScroller } from '@angular/common';
+import { ModalService } from 'src/app/core/services/modal.service';
 interface ApuPart {
   name: string;
   id: number;
@@ -96,6 +97,7 @@ export class CrearApuConjuntoComponent implements OnInit {
     private _units: UnidadesMedidasService,
     public _consecutivos: ConsecutivosService,
     private _user: UserService,
+    private _modal: ModalService,
     private scroll: ViewportScroller,
   ) {
     this.user_id = _user.user.person.id
@@ -156,6 +158,28 @@ export class CrearApuConjuntoComponent implements OnInit {
           this.buildConsecutivo(value, r, 'editar')
         }); */
       }
+    })
+  }
+  preDataSend = {};
+  openModal(content) {
+    /* if (this.form.valid) {
+      this._modal.open(content, 'xl')
+    } else {
+      this.form.markAllAsTouched();
+      this.scroll.scrollToPosition([0, 0]);
+    } */
+    this.preDataSend = {
+      city_id: this.form.get('city_id').value,
+      third_party_id: this.form.get('third_party_id').value,
+      line: this.form.get('line').value,
+    }
+    this._modal.open(content, 'xl')
+  }
+
+  addFromPart(apu) {
+    this._modal.close();
+    this._apuConjunto.getApuPartToAdd(apu.id).subscribe((res: any) => {
+      this.getApus(res.data)
     })
   }
 
@@ -350,10 +374,9 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   getApus(e: any[]) {
-
     let item = this.form.get('list_pieces_sets') as FormArray
     e.forEach(apu => {
-      const exist = item.value.some(x => (x.apu_part_id == apu.apu_id && x.apu_type == apu.type)) //valida que no exista esa pieza en la lista, pero no funcioanria
+      const exist = item.value.some(x => (x.apu_part_id == apu.apu_id && x.apu_type == apu.type))
       !exist ? item.push(this.piecesSetsControl(apu)) :
         this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
     });

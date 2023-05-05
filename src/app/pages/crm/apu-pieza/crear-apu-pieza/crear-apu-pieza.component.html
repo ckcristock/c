@@ -2,13 +2,13 @@
   <app-placeholder-form></app-placeholder-form>
 </ng-template>
 <form [formGroup]="form" *ngIf="!loading; else placeholder">
-  <div class="card">
+  <div [class]="preData ? '' : 'card'">
     <div class="card-body">
       <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
       <hr class="line" />
       <div class="row">
-        <mat-form-field class="col-md-3" appearance="outline">
-          <mat-label>Nombre</mat-label>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Nombre pieza</mat-label>
           <input
             matInput
             type="text"
@@ -18,7 +18,27 @@
             required
           />
         </mat-form-field>
-        <div class="col-md-3 mat-form-field-wrapper">
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Conjunto</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa el conjunto"
+            formControlName="set_name"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-md-4" appearance="outline">
+          <mat-label>Máquina</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Ingresa la máquina"
+            formControlName="machine_name"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <div class="col mat-form-field-wrapper">
           <ng-select
             formControlName="city_id"
             [items]="cities"
@@ -33,7 +53,7 @@
           >
           </ng-select>
         </div>
-        <div class="col-md-3 mat-form-field-wrapper">
+        <div class="col mat-form-field-wrapper">
           <ng-select
             formControlName="third_party_id"
             [items]="clients"
@@ -49,7 +69,7 @@
           >
           </ng-select>
         </div>
-        <mat-form-field class="col-md-2" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Línea</mat-label>
           <input
             matInput
@@ -60,7 +80,7 @@
             formControlName="line"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-1" appearance="outline">
+        <mat-form-field class="col" appearance="outline">
           <mat-label>Cantidad</mat-label>
           <input
             matInput
@@ -1469,7 +1489,11 @@
           </div>
         </div>
       </div>
-      <button class="btn btn-block btn-primary" (click)="save()">
+      <button
+        *ngIf="!preData"
+        class="btn btn-block btn-primary"
+        (click)="save()"
+      >
         Guardar
       </button>
     </div>

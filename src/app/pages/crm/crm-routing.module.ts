@@ -35,6 +35,7 @@ const routes: Routes = [
   // { path: 'apu/apu-pieza', component: ApuPiezaComponent },
   { path: 'negocios', component: NegociosComponent },
   { path: 'negocios/crear', component: ModalNuevoNegocioComponent },
+  { path: 'negocios/editar/:id', component: ModalNuevoNegocioComponent },
   { path: 'negocios/:id', component: VerNegocioComponent },
 
   { path: 'apu/apu-pieza', component: ApuPiezaComponent },

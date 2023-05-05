@@ -108,6 +108,7 @@ export class FuncionariosComponent implements OnInit {
     for (let i in this.filtros) {
       this.filtros[i] = ''
     }
+    this.filtros.status = 'Activo'
     this.filtrosActivos = false
     this.getPeople()
   }

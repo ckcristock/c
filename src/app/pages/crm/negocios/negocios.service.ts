@@ -43,6 +43,10 @@ export class NegociosService {
     return this.http.get(`${this.url}/third-party-person-for-third/${id}`,);
   }
 
+  getThirdPartyPersonIndex() {
+    return this.http.get(`${this.url}/third-party-person-index`,);
+  }
+
   getCountries() {
     return this.http.get(`${this.url}/countries-with-departments`)
   }
@@ -69,6 +73,10 @@ export class NegociosService {
 
   newBusinessQuotation(data) {
     return this.http.post(`${this.url}/new-business-quotation`, data);
+  }
+
+  updateBasicData(data) {
+    return this.http.post(`${this.url}/update-basic-data-business`, data);
   }
 
   newBusinessApu(data) {

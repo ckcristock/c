@@ -43,22 +43,26 @@
         <table class="table table-borderless text-center text-uppercase">
           <thead>
             <tr class="table-secondary">
-              <th scope="row">Nombre</th>
+              <th scope="row">Cliente</th>
+              <th scope="row">Nombre pieza</th>
+              <th scope="row">Conjunto</th>
+              <th scope="row">Máquina</th>
               <th scope="row">Destino</th>
               <th scope="row">Quién elabora</th>
-              <th scope="row">Cliente</th>
               <th scope="row">Línea</th>
               <th scope="row">Cantidad</th>
             </tr>
           </thead>
           <tbody>
             <tr>
+              <td>{{ data?.thirdparty?.name }}</td>
               <td>{{ data?.name }}</td>
-              <td>{{ data?.city.name }}</td>
+              <td>{{ data.set_name || "Sin información" }}</td>
+              <td>{{ data.machine_name || "Sin información" }}</td>
+              <td>{{ data?.city?.name }}</td>
               <td>
                 {{ data?.person?.first_name }} {{ data?.person?.first_surname }}
               </td>
-              <td>{{ data?.thirdparty?.name }}</td>
               <td>{{ data?.line }}</td>
               <td>
                 {{ data?.amount }}

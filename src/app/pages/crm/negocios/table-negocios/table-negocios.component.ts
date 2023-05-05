@@ -11,8 +11,7 @@ export class TableNegociosComponent implements OnInit {
 
   @Input("negocios") negocios: any[]
   @Input("loading") loading: any
-  @Input("pagination") pagination: any
-  @Input("paginacion") paginacion: any
+  @Input("paginationMaterial") paginationMaterial: any
   @Output() getNegocios = new EventEmitter<string>();
   @Output() handlePageEvent = new EventEmitter<string>();
 

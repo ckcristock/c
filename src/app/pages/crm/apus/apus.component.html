@@ -34,18 +34,18 @@
             >
               <i class="fa fa-plus"></i> Servicio
             </button>
-            <button class="btn btn-info btn-sm" (click)="openClose2()">
+            <button
+              class="btn btn-info btn-sm"
+              (click)="matPanelFiltros.toggle()"
+            >
               <i class="fas fa-sliders-h"></i> Filtros
             </button>
-            <!--  <button class="btn btn-secondary btn-sm" (click)="openClose()">
-            <i class="fas fa-eye"></i>
-          </button> -->
           </div>
         </div>
       </div>
       <hr class="line" />
       <mat-accordion multi #secondAccordion="matAccordion">
-        <mat-expansion-panel class="mat-elevation-z0">
+        <mat-expansion-panel #matPanelFiltros class="mat-elevation-z0">
           <div class="row">
             <ng-container [formGroup]="form_filters">
               <mat-form-field appearance="outline" class="col">
@@ -341,10 +341,11 @@
         </table>
       </div>
       <mat-paginator
-        *ngIf="paginacion"
-        [length]="paginacion?.total"
-        [pageSize]="paginacion?.per_page"
-        [pageIndex]="paginacion?.current_page - 1"
+        *ngIf="paginationMaterial"
+        [length]="paginationMaterial.total"
+        [pageSize]="paginationMaterial.per_page"
+        [pageIndex]="paginationMaterial.current_page - 1"
+        [pageSizeOptions]="[5, 10, 25, 100]"
         (page)="handlePageEvent($event)"
         aria-label="Select page"
       >

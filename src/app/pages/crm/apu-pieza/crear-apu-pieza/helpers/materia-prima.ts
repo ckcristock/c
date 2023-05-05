@@ -142,7 +142,7 @@ export const materiaHelper = {
         })
       });
       group.patchValue({
-        value_kg: data.kg_value
+        value_kg: data?.kg_value
       })
     });
     group.get('value_kg').valueChanges.subscribe(value => {

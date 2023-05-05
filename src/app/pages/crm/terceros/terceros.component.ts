@@ -11,6 +11,7 @@ import { debounceTime, filter, pairwise } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
 import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 import { PermissionService } from 'src/app/core/services/permission.service';
+import { PaginatorService } from 'src/app/core/services/paginator.service';
 
 
 @Component({
@@ -32,10 +33,10 @@ export class TercerosComponent implements OnInit {
   parametro: string = '';
   loading: boolean = false;
   thirdParties: any[] = [];
+  paginationMaterial: any;
   pagination: any = {
-    page: 1,
-    pageSize: 10,
-    collectionSize: 0
+    page: '',
+    pageSize: '',
   }
   permission: Permissions = {
     menu: 'Terceros',
@@ -67,6 +68,7 @@ export class TercerosComponent implements OnInit {
     private _swal: SwalService,
     private _permission: PermissionService,
     private _user: UserService,
+    private _paginator: PaginatorService
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
     this.permission = this._permission.validatePermissions(this.permission)
@@ -80,24 +82,29 @@ export class TercerosComponent implements OnInit {
           this.selectedCampos.push(this.listaCampos[i].value)
         }
       }
-      this.route.queryParamMap
-        .subscribe((params) => {
-          this.orderObj = { ...params.keys, ...params }
-          if (Object.keys(this.orderObj).length > 2) {
-            this.filtrosActivos = true
-            const formValues = {};
-            for (const param in params) {
-              formValues[param] = params[param];
-            }
-            this.form_filters.patchValue(formValues['params']);
-          }
-          if (this.orderObj.params.pag) {
-            this.getThirdParties(this.orderObj.params.pag);
-          } else {
-            this.getThirdParties()
-          }
+      this.route.queryParamMap.subscribe((params: any) => {
+        if (params.params.pageSize) {
+          this.pagination.pageSize = params.params.pageSize
+        } else {
+          this.pagination.pageSize = 10
         }
-        );
+        if (params.params.pag) {
+          this.pagination.page = params.params.pag
+        } else {
+          this.pagination.page = 1
+        }
+        this.orderObj = { ...params.keys, ...params }
+        if (Object.keys(this.orderObj).length > 3) {
+          this.filtrosActivos = true
+          const formValues = {};
+          for (const param in params) {
+            formValues[param] = params[param];
+          }
+          this.form_filters.patchValue(formValues['params']);
+        }
+        this.getThirdParties()
+      }
+      );
     } else {
       this.router.navigate(['/notauthorized'])
     }
@@ -124,48 +131,42 @@ export class TercerosComponent implements OnInit {
     let position = event.source._keyManager._activeItemIndex
     this.listaCampos[position].selected ? this.listaCampos[position].selected = false : this.listaCampos[position].selected = true
   }
-
-  SetFiltros(paginacion) {
-    let params = new HttpParams;
-    params = params.set('pag', paginacion)
-    for (const controlName in this.form_filters.controls) {
-      const control = this.form_filters.get(controlName);
-      if (control.value) {
-        params = params.set(controlName, control.value);
-      }
-    }
-    return params;
-  }
   openClose() {
     this.matPanel = !this.matPanel;
     this.matPanel ? this.firstAccordion.openAll() : this.firstAccordion.closeAll();
   }
 
+  SetFiltros(paginacion) {
+    return this._paginator.SetFiltros(paginacion, this.pagination, this.form_filters)
+  }
+
   resetFiltros() {
-    for (const controlName in this.form_filters.controls) {
-      this.form_filters.get(controlName).setValue('');
-    }
+    this._paginator.resetFiltros(this.form_filters)
     this.filtrosActivos = false
   }
 
-  paginacion: any
   handlePageEvent(event: PageEvent) {
-    this.getThirdParties(event.pageIndex + 1)
+    this._paginator.handlePageEvent(event, this.pagination)
+    this.getThirdParties()
   }
 
-  getThirdParties(page = 1) {
-    this.pagination.page = page;
-    let params = {
-      ...this.pagination, ...this.form_filters.value
-    }
+  getThirdParties() {
     this.loading = true;
+    let params = {
+      ...this.pagination,
+      ...this.form_filters.value
+    }
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/crm/terceros', paramsurl.toString());
     this._tercerosService.getThirdParties(params).subscribe((r: any) => {
-      this.thirdParties = r.data.data;
-      this.paginacion = r.data
-      this.pagination.collectionSize = r.data.total;
       this.loading = false;
+      this.thirdParties = r.data.data;
+      this.paginationMaterial = r.data
+      if (this.paginationMaterial.last_page < this.pagination.page) {
+        this.paginationMaterial.current_page = 1
+        this.pagination.page = 1
+        this.getThirdParties()
+      }
     });
   }
 

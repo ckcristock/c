@@ -14,14 +14,11 @@
         </div>
         <div class="col-md-6 px-0 text-right">
           <div class="btn-group rounded w-sm-100">
-            <button
-              class="btn btn-primary btn-sm"
-              [routerLink]="['crear']"
-            >
+            <button class="btn btn-primary btn-sm" [routerLink]="['crear']">
               <i class="fa fa-plus"></i> Agregar
             </button>
             <ng-container *ngIf="this.active == 1">
-              <button class="btn btn-info btn-sm" (click)="openClose()">
+              <button class="btn btn-info btn-sm" (click)="matPanel.toggle()">
                 <i class="fas fa-sliders-h"></i> Filtros
               </button>
             </ng-container>
@@ -29,8 +26,8 @@
         </div>
       </div>
       <hr class="line" />
-      <mat-accordion multi>
-        <mat-expansion-panel class="mat-elevation-z0">
+      <mat-accordion>
+        <mat-expansion-panel #matPanel class="mat-elevation-z0">
           <form [formGroup]="formFiltersBusiness">
             <div class="row">
               <mat-form-field class="col" appearance="outline">
@@ -101,8 +98,7 @@
             </div>
             <app-table-negocios
               [negocios]="business"
-              [pagination]="paginationBusiness"
-              [paginacion]="paginacion"
+              [paginationMaterial]="paginationMaterial"
               (getNegocios)="getNegocios($event)"
               (handlePageEvent)="handlePageEvent($event)"
               [loading]="loading"
@@ -123,12 +119,16 @@
           </a>
           <ng-template ngbNavContent>
             <div
-              class="row mt-3" style="font-size: 0.7rem;"
+              class="row mt-3"
+              style="font-size: 0.7rem"
               *ngIf="!loading && business.length > 0; else notData"
             >
               <div class="col-lg">
                 <h6>
-                  <span class="badge badge-danger badge-pill position-absolute" style="top: -0.3rem; right: -0.3rem;">
+                  <span
+                    class="badge badge-danger badge-pill position-absolute"
+                    style="top: -0.3rem; right: -0.3rem"
+                  >
                     {{ negocios_primera_etapa.length }}
                   </span>
                 </h6>
@@ -168,7 +168,10 @@
               <div class="col-lg">
                 <div class="card bg-light">
                   <h6>
-                    <span class="badge badge-danger badge-pill position-absolute" style="top: -0.3rem; right: -0.3rem;">
+                    <span
+                      class="badge badge-danger badge-pill position-absolute"
+                      style="top: -0.3rem; right: -0.3rem"
+                    >
                       {{ negocios_segunda_etapa.length }}
                     </span>
                   </h6>
@@ -207,7 +210,10 @@
               <div class="col-lg">
                 <div class="card bg-light">
                   <h6>
-                    <span class="badge badge-danger badge-pill position-absolute" style="top: -0.3rem; right: -0.3rem;">
+                    <span
+                      class="badge badge-danger badge-pill position-absolute"
+                      style="top: -0.3rem; right: -0.3rem"
+                    >
                       {{ negocios_tercera_etapa.length }}
                     </span>
                   </h6>
@@ -246,7 +252,10 @@
               <div class="col-lg">
                 <div class="card bg-light">
                   <h6>
-                    <span class="badge badge-danger badge-pill position-absolute" style="top: -0.3rem; right: -0.3rem;">
+                    <span
+                      class="badge badge-danger badge-pill position-absolute"
+                      style="top: -0.3rem; right: -0.3rem"
+                    >
                       {{ negocios_cuarta_etapa.length }}
                     </span>
                   </h6>
@@ -285,7 +294,10 @@
               <div class="col-lg">
                 <div class="card bg-light">
                   <h6>
-                    <span class="badge badge-danger badge-pill position-absolute" style="top: -0.3rem; right: -0.3rem;">
+                    <span
+                      class="badge badge-danger badge-pill position-absolute"
+                      style="top: -0.3rem; right: -0.3rem"
+                    >
                       {{ negocios_quinta_etapa.length }}
                     </span>
                   </h6>
@@ -320,7 +332,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </ng-template>
         </li>
@@ -344,7 +355,9 @@
         ></div>
       </div> -->
       <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{ neg.code }}</a>
-      <div><span>{{ neg.date | date : "mediumDate" }}</span></div>
+      <div>
+        <span>{{ neg.date | date : "mediumDate" }}</span>
+      </div>
       <div>
         <h5 class="font-size-16">
           <a class="text-dark">{{
@@ -366,11 +379,6 @@
   </div>
 </ng-template>
 
-<!-- <app-modal-nuevo-negocio
-  (updated)="getNegocios()"
-  #modalNuevoNegocio
-></app-modal-nuevo-negocio> -->
-
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
@@ -378,23 +386,3 @@
 <ng-template #noPermissions>
   <app-no-permissions></app-no-permissions>
 </ng-template>
-<!-- <ng-template ng-label-tmp let-item="item">
-  <span>{{
-    item.first_name
-      ? item.first_name + " " + item.first_surname
-      : item.social_reason
-  }}</span>
-</ng-template>
-<ng-template
-  ng-option-tmp
-  let-item="item"
-  let-search="searchTerm"
-  let-index="index"
->
-  <span>{{
-    item.first_name
-      ? item.first_name + " " + item.first_surname
-      : item.social_reason
-  }}</span>
-</ng-template>
- -->

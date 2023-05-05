@@ -11,14 +11,13 @@ import { ModalService } from 'src/app/core/services/modal.service';
 import { PermissionService } from 'src/app/core/services/permission.service';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { QuotationService } from './quotation.service';
+import { PaginatorService } from 'src/app/core/services/paginator.service';
 
 @Component({
   selector: 'app-cotizacion',
   templateUrl: './cotizacion.component.html',
   styleUrls: ['./cotizacion.component.scss']
 })
-
-
 
 export class CotizacionComponent implements OnInit {
   @ViewChild(MatAccordion) accordion: MatAccordion;
@@ -47,10 +46,10 @@ export class CotizacionComponent implements OnInit {
     description: '',
     status: '',
   }
+  paginationMaterial: any;
   pagination: any = {
-    page: 1,
-    pageSize: 10,
-    collectionSize: 0
+    page: '',
+    pageSize: '',
   }
   permission: Permissions = {
     menu: 'Cotizaciones',
@@ -68,7 +67,8 @@ export class CotizacionComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private _permission: PermissionService,
-    private dateAdapter: DateAdapter<any>
+    private dateAdapter: DateAdapter<any>,
+    private _paginator: PaginatorService
   ) {
     this.dateAdapter.setLocale('es');
     this.paginator.itemsPerPageLabel = "Items por página:";
@@ -78,26 +78,30 @@ export class CotizacionComponent implements OnInit {
   ngOnInit(): void {
     if (this.permission.permissions.show) {
       this.createFormFilters();
-      this.route.queryParamMap
-        .subscribe((params) => {
-          this.orderObj = { ...params.keys, ...params }
-          if (Object.keys(this.orderObj).length > 2) {
-            this.filtrosActivos = true
-            const formValues = {};
-            for (const param in params) {
-              formValues[param] = params[param];
-            }
-            this.form_filters.patchValue(formValues['params']);
-          }
-          if (this.orderObj.params.pag) {
-            this.getQuotation(this.orderObj.params.pag);
-            this.getQuotationsCards();
-          } else {
-            this.getQuotation();
-            this.getQuotationsCards();
-          }
+      this.route.queryParamMap.subscribe((params: any) => {
+        if (params.params.pageSize) {
+          this.pagination.pageSize = params.params.pageSize
+        } else {
+          this.pagination.pageSize = 10
         }
-        );
+        if (params.params.pag) {
+          this.pagination.page = params.params.pag
+        } else {
+          this.pagination.page = 1
+        }
+        this.orderObj = { ...params.keys, ...params }
+        if (Object.keys(this.orderObj).length > 3) {
+          this.filtrosActivos = true
+          const formValues = {};
+          for (const param in params) {
+            formValues[param] = params[param];
+          }
+          this.form_filters.patchValue(formValues['params']);
+        }
+        this.getQuotation();
+        this.getQuotationsCards();
+      }
+      );
     } else {
       this.router.navigate(['/notauthorized'])
     }
@@ -121,7 +125,6 @@ export class CotizacionComponent implements OnInit {
         date_end: ''
       })
     }
-    /* this.getQuotation(); */
   }
 
   createFormFilters() {
@@ -139,14 +142,11 @@ export class CotizacionComponent implements OnInit {
       debounceTime(500),
     ).subscribe(r => {
       this.getQuotation();
-      //this.getQuotationsCards();
     })
   }
 
   resetFiltros() {
-    for (const controlName in this.form_filters.controls) {
-      this.form_filters.get(controlName).setValue('');
-    }
+    this._paginator.resetFiltros(this.form_filters);
     this.filtrosActivos = false
   }
 
@@ -162,7 +162,8 @@ export class CotizacionComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    this.getQuotation(event.pageIndex + 1)
+    this._paginator.handlePageEvent(event, this.pagination)
+    this.getQuotation()
   }
 
   closeList() {
@@ -189,7 +190,7 @@ export class CotizacionComponent implements OnInit {
             showCancel: false,
             timer: 1000
           })
-          this.getQuotation(1, id);
+          this.getQuotation(id);
 
           this.getQuotationsCards();
         })
@@ -198,36 +199,31 @@ export class CotizacionComponent implements OnInit {
   }
 
   SetFiltros(paginacion) {
-    let params = new HttpParams;
-    params = params.set('pag', paginacion)
-    for (const controlName in this.form_filters.controls) {
-      const control = this.form_filters.get(controlName);
-      if (control.value) {
-        params = params.set(controlName, control.value);
-      }
-    }
-    return params;
+    return this._paginator.SetFiltros(paginacion, this.pagination, this.form_filters);
   }
 
-  getQuotation(page = 1, id = null) {
-    this.pagination.page = page;
-    let params = {
-      ...this.pagination, ...this.form_filters.value
-    }
+  getQuotation(id = null) {
     this.loading = true;
+    let params = {
+      ...this.pagination,
+      ...this.form_filters.value
+    }
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/crm/cotizacion', paramsurl.toString());
-    this._quotations.getQuotations(params)
-      .subscribe((res: any) => {
-        this.quotations = res.data.data;
-        this.paginacion = res.data
-        this.pagination.collectionSize = res.data.total;
-        this.loading = false;
-        if (this.view_list) {
-          this.openList(id)
-        }
+    this._quotations.getQuotations(params).subscribe((res: any) => {
+      this.quotations = res.data.data;
+      this.loading = false;
+      this.paginationMaterial = res.data
+      if (this.paginationMaterial.last_page < this.pagination.page) {
+        this.paginationMaterial.current_page = 1
+        this.pagination.page = 1
+        this.getQuotation()
+      }
+      if (this.view_list) {
+        this.openList(id)
+      }
 
-      })
+    })
 
   }
 

@@ -162,18 +162,17 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
   preDataSend = {};
   openModal(content) {
-    /* if (this.form.valid) {
+    if (this.form.valid) {
+      this.preDataSend = {
+        city_id: this.form.get('city_id').value,
+        third_party_id: this.form.get('third_party_id').value,
+        line: this.form.get('line').value,
+      }
       this._modal.open(content, 'xl')
     } else {
       this.form.markAllAsTouched();
       this.scroll.scrollToPosition([0, 0]);
-    } */
-    this.preDataSend = {
-      city_id: this.form.get('city_id').value,
-      third_party_id: this.form.get('third_party_id').value,
-      line: this.form.get('line').value,
     }
-    this._modal.open(content, 'xl')
   }
 
   addFromPart(apu) {

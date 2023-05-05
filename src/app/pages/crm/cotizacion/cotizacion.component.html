@@ -326,10 +326,11 @@
           </table>
         </div>
         <mat-paginator
-          *ngIf="paginacion"
-          [length]="paginacion.total"
-          [pageSize]="paginacion.per_page"
-          [pageIndex]="paginacion.current_page - 1"
+          *ngIf="paginationMaterial"
+          [length]="paginationMaterial.total"
+          [pageSize]="paginationMaterial.per_page"
+          [pageIndex]="paginationMaterial.current_page - 1"
+          [pageSizeOptions]="[5, 10, 25, 100]"
           (page)="handlePageEvent($event)"
           aria-label="Select page"
         >

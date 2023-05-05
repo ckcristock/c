@@ -85,6 +85,26 @@
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
+                <mat-label>Conjunto</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="set_name"
+                  placeholder="Busca por conjunto"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Máquina</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="machine_name"
+                  placeholder="Busca por máquina"
+                  autocomplete="off"
+                />
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
                 <mat-label>Ciudad</mat-label>
                 <input
                   matInput
@@ -185,9 +205,11 @@
             <tr class="text-center text-uppercase">
               <th>Código</th>
               <th *ngIf="checkFecha">Fecha</th>
-              <th *ngIf="checkNombre">Nombre</th>
-              <th *ngIf="checkDestino">Ciudad</th>
               <th *ngIf="checkCliente">Cliente</th>
+              <th *ngIf="checkNombre">Nombre</th>
+              <th>Conjunto</th>
+              <th>Máquina</th>
+              <th *ngIf="checkDestino">Ciudad</th>
               <th *ngIf="checkLinea">Linea</th>
               <th *ngIf="checkTipo">Tipo</th>
               <th>Descripción</th>
@@ -200,14 +222,16 @@
               <td class="align-middle" *ngIf="checkFecha">
                 {{ item?.created_at | date : "MMM d, y" }}
               </td>
+              <td class="align-middle" *ngIf="checkCliente">
+                {{ item?.third_party?.full_name | titlecase }}
+              </td>
               <td class="align-middle" *ngIf="checkNombre">
                 {{ item?.name | capitalLetter }}
               </td>
+              <td>{{ item?.set_name || "Sin información" }}</td>
+              <td>{{ item?.machine_name || "Sin información" }}</td>
               <td class="align-middle" *ngIf="checkDestino">
                 {{ item?.city.name | capitalLetter }}
-              </td>
-              <td class="align-middle" *ngIf="checkCliente">
-                {{ item?.third_party?.full_name | titlecase }}
               </td>
               <td class="align-middle" *ngIf="checkLinea">
                 {{ item?.line | capitalLetter }}

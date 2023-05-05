@@ -48,7 +48,9 @@ export const functionsApuService = {
       unforeseen_percentage: data.unforeseen_percentage,
       unforeseen_value: data.unforeseen_value,
       utility_percentage: data.utility_percentage,
-      trm: data.trm
+      trm: data.trm,
+      set_name: data?.set_name,
+      machine_name: data?.machine_name
     });
     cmoHelper.createFillIncmo(form, fb, data, profiles, cities);
     mpmCalculateLaborHelper.createFillInMpm(form, fb, data, profiles, cities)
@@ -105,7 +107,9 @@ export const functionsApuService = {
       c_vd_calculate_labor: fb.array([]),
       c_me_calculate_labor: fb.array([]),
       format_code: [''],
-      code: ['']
+      code: [''],
+      set_name: ['', Validators.maxLength(255)],
+      machine_name: ['', Validators.maxLength(255)]
     });
     this.subscribes(group)
     return group;

@@ -7,8 +7,8 @@
       <tr class="text-center text-uppercase">
         <th>Foto</th>
         <th>Código</th>
-        <th>Nombre</th>
         <th>Tercero</th>
+        <th>Nombre</th>
         <th>Presupuesto</th>
         <th>Cotización</th>
         <th>Fecha entrega</th>
@@ -26,10 +26,10 @@
           />
         </td>
         <td class="align-middle" scope="row">{{ neg.code | uppercase }}</td>
-        <td class="align-middle" scope="row">{{ neg.name | capitalLetter }}</td>
         <td class="align-middle">
           {{ neg.third_party.full_name | titlecase }}
         </td>
+        <td class="align-middle" scope="row">{{ neg.name | capitalLetter }}</td>
         <td class="align-middle">
           $ {{ neg.budget_value || 0 | number : "1.2-2" }}
         </td>
@@ -67,13 +67,14 @@
               >
                 <i class="fas fa-eye"></i> Ver</a
               >
-              <!-- <a
-                class="dropdown-item  text-warning "
+              <a
+                class="dropdown-item text-info"
                 href="javascript: void(0);"
+                [routerLink]="['/crm/negocios/editar', neg.id]"
                 (click)="nextState(neg.status, neg.id)"
               >
-                <i class="fas fa-forward"></i> Siguiente etapa</a
-              > -->
+                <i class="fas fa-edit"></i> Editar</a
+              >
             </div>
           </div>
         </td>

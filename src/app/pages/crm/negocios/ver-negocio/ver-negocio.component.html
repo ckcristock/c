@@ -24,16 +24,15 @@
                 (negocio?.third_party.social_reason
                   ? negocio?.third_party.social_reason
                   : negocio?.third_party.full_name
-                ) | capitalLetter
+                ) | titlecase
               }}
             </h6>
             <small>
-              <p>
+              <p class="mb-0">
                 {{ negocio?.third_party_person.name | titlecase }} <br />
                 {{ negocio?.date | date | uppercase }} <br />
                 {{ negocio?.name | uppercase }} <br />
                 <!-- {{ negocio?.country.name | uppercase }} -->
-                <br />
               </p>
             </small>
             <mat-form-field class="pb-0" appearance="outline">

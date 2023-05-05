@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { UserService } from 'src/app/core/services/user.service';
@@ -28,6 +28,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
   today = new Date().toISOString().slice(0, 10);
   companies: any[];
   id;
+  business_id: any;
   contacts: any[];
   form: FormGroup;
   formFiltersBudgets: FormGroup;
@@ -38,6 +39,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
   apuSelected: any[] = [];
   quotations: any[] = [];
   budgets: any[] = [];
+  loading: boolean = false;
   cities: any[] = [];
   people: any[] = []
   countries: any[];
@@ -56,6 +58,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
   constructor(
     private _modal: ModalService,
     private fb: FormBuilder,
+    private route: ActivatedRoute,
     private _negocios: NegociosService,
     private _quotation: QuotationService,
     private _swal: SwalService,
@@ -76,7 +79,16 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this.getCompanies();
     this.getCities();
     this.getPeople();
-    this.getConsecutivo();
+    this.getContacts();
+    this.route.paramMap.subscribe(params => {
+      this.business_id = params.get('id');
+      if (this.business_id) {
+        this.getBusiness(this.business_id);
+      }
+    })
+    if (!this.business_id) {
+      this.getConsecutivo();
+    }
   }
 
   async reloadData() {
@@ -89,7 +101,29 @@ export class ModalNuevoNegocioComponent implements OnInit {
 
   openModal() {
     //this._modal.open(this.newBusiness, 'xl')
+  }
 
+  getBusiness(id) {
+    this.loading = true;
+    this._negocios.getBusiness(id).subscribe((res: any) => {
+      this.form.patchValue({
+        id: res.data.id,
+        name: res.data.name,
+        description: res.data.description,
+        third_party_id: res.data.third_party_id,
+        third_party_person_id: res.data.third_party_person_id,
+        city_id: res.data.city_id,
+        date: res.data.date,
+        person_id: res.data.person_id,
+        format_code: res.data.formmat_code,
+        code: res.data.code
+      })
+      this.datosCabecera.Codigo = res.data.code;
+      this.datosCabecera.CodigoFormato = res.data.format_code;
+      this.datosCabecera.Fecha = res.data.created_at;
+      this.datosCabecera.Titulo = 'Editar negocio'
+      this.loading = false;
+    })
   }
 
   getApus(e: any[]) {
@@ -123,7 +157,9 @@ export class ModalNuevoNegocioComponent implements OnInit {
       this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
       this.construirConsecutivo(this.form.get('city_id').value, r)
       this.form.get('city_id').valueChanges.subscribe(value => {
-        this.construirConsecutivo(value, r)
+        if (!this.business_id) {
+          this.construirConsecutivo(value, r)
+        }
       });
     })
   }
@@ -164,6 +200,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
 
   createForm() {
     this.form = this.fb.group({
+      id: [],
       name: ['', Validators.required],
       description: [''],
       third_party_id: [null, Validators.required],
@@ -177,7 +214,6 @@ export class ModalNuevoNegocioComponent implements OnInit {
     });
 
     this.form.get('third_party_id').valueChanges.subscribe(value => {
-      this.getContacts(value);
       this.getBudgets(1, value);
       this.getQuotations(1, value);
       this.form.get('third_party_person_id').reset()
@@ -238,8 +274,8 @@ export class ModalNuevoNegocioComponent implements OnInit {
     );
   }
 
-  getContacts(id) {
-    this._negocios.getThirdPartyPersonForThird(id).subscribe((resp: any) => {
+  getContacts() {
+    this._negocios.getThirdPartyPersonIndex().subscribe((resp: any) => {
       this.contacts = resp.data;
     });
   }
@@ -325,32 +361,28 @@ export class ModalNuevoNegocioComponent implements OnInit {
     if (this.form.valid) {
       this._swal.show({
         title: '¿Estás seguro(a)?',
-        text: 'Vamos a guardar la cotización',
+        text: 'Vamos a ' + (this.form.value.id ? 'editar' : 'crear') + ' el negocio',
         icon: 'question',
         showCancel: true,
       }).then((r) => {
         if (r.isConfirmed) {
-          this.form.addControl('budgets', this.fb.control(this.budgetsSelected));
-          this.form.addControl('quotations', this.fb.control(this.quotationSelected));
-          this.form.addControl('apu', this.fb.control(this.apuSelected));
-          /* this.budgetsSelected.reduce((a, b) => {
-            return this.form.addControl('budget_value', this.fb.control(a + b.total_cop))
-          }, 0)
-          this.quotationSelected.reduce((a, b) => {
-            return this.form.addControl('quotation_value', this.fb.control(a + b.total_cop))
-          }, 0) */
-          this._negocios.saveNeg(this.form.value).subscribe(r => {
-            this.form.reset();
-            this.budgetsSelected = [];
-            this.quotationSelected = [];
-            this.budgets = [];
-            this.quotations = [];
-            this.router.navigateByUrl('/crm/negocios')
-            //this.getNegocios();
-          });
-          //this.addEventToHistory('Negocio Creado');
+          if (this.form.value.id) {
+            this._negocios.updateBasicData(this.form.value).subscribe((res: any) => {
+              this.swalAlert();
+              this.router.navigateByUrl('/crm/negocios')
+            })
+          } else {
+            this.form.addControl('budgets', this.fb.control(this.budgetsSelected));
+            this.form.addControl('quotations', this.fb.control(this.quotationSelected));
+            this.form.addControl('apu', this.fb.control(this.apuSelected));
+            this._negocios.saveNeg(this.form.value).subscribe(r => {
+              this.swalAlert();
+              this.router.navigateByUrl('/crm/negocios')
+            });
+          }
         }
       })
+
     } else {
       this.form.markAllAsTouched()
       this._swal.show({
@@ -361,6 +393,16 @@ export class ModalNuevoNegocioComponent implements OnInit {
       })
     }
 
+  }
+
+  swalAlert() {
+    this._swal.show({
+      icon: 'success',
+      title: 'Operación exitosa',
+      text: 'Se ha ' + (this.business_id ? 'actualizado' : 'creado') + ' el negocio',
+      timer: 1000,
+      showCancel: false
+    })
   }
 
 }

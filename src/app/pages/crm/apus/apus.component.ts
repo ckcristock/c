@@ -104,7 +104,9 @@ export class ApusComponent implements OnInit {
       client: '',
       line: '',
       type: '',
-      description: ''
+      description: '',
+      set_name: '',
+      machine_name: ''
     })
     this.form_filters.valueChanges.pipe(
       debounceTime(500),

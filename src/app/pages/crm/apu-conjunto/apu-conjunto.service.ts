@@ -11,50 +11,50 @@ export class ApuConjuntoService {
 
   constructor(private http: HttpClient) { }
 
-  getIndirectCosts(){
+  getIndirectCosts() {
     return this.http.get(`${environment.base_url}/indirect-cost`);
   }
 
-  getPeopleXSelect( params = {} ) {
-    return this.http.get(`${environment.base_url}/peopleSelects`, {params});
+  getPeopleXSelect(params = {}) {
+    return this.http.get(`${environment.base_url}/peopleSelects`, { params });
   }
 
   getCities() {
     return this.http.get(`${environment.base_url}/municipalities`);
   }
 
-  getClient(){
+  getClient() {
     return this.http.get(`${environment.base_url}/thirdPartyClient`);
   }
 
-  getApuParts( params = {} ){
-    return this.http.get(`${environment.base_url}/apu-parts-list`, {params});
+  getApuParts(params = {}) {
+    return this.http.get(`${environment.base_url}/apu-parts-list`, { params });
   }
-  findApuParts( params = {} ){
-    return this.http.get(`${environment.base_url}/apu-parts-find`, {params});
-  }
-
-  getApuSetList( params = {} ){
-    return this.http.get(`${environment.base_url}/apu-sets-list`, {params});
+  findApuParts(params = {}) {
+    return this.http.get(`${environment.base_url}/apu-parts-find`, { params });
   }
 
-  getApuSets( params = {} ){
-    return this.http.get(`${environment.base_url}/apu-sets`, {params});
+  getApuSetList(params = {}) {
+    return this.http.get(`${environment.base_url}/apu-sets-list`, { params });
   }
 
-  getApuSet(id:any){
+  getApuSets(params = {}) {
+    return this.http.get(`${environment.base_url}/apu-sets`, { params });
+  }
+
+  getApuSet(id: any) {
     return this.http.get(`${environment.base_url}/apu-sets/${id}`);
   }
 
-  save(data:any){
+  save(data: any) {
     return this.http.post(`${environment.base_url}/apu-sets`, data);
   }
 
-  update(data:any, id:any){
+  update(data: any, id: any) {
     return this.http.put(`${environment.base_url}/apu-sets/${id}`, data);
   }
 
-  activateOrInactivate( data:any ){
+  activateOrInactivate(data: any) {
     return this.http.put(`${environment.base_url}/apu-set-activate-Inactive`, data);
   }
 
@@ -65,6 +65,10 @@ export class ApuConjuntoService {
 
   deleteFile(id) {
     return this.http.get(`${environment.base_url}/apu-set-delete-file/${id}`);
+  }
+
+  getApuPartToAdd(id) {
+    return this.http.get(`${environment.base_url}/get-apu-part-to-add-in-set/${id}`);
   }
 
 }

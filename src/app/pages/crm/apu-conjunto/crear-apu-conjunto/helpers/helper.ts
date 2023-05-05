@@ -10,7 +10,7 @@ export const functionsApuConjunto = {
     retefuente_percentage: []
   },
 
-  fillInForm(form: FormGroup, data, fb: FormBuilder, apuParts:Array<any>) {
+  fillInForm(form: FormGroup, data, fb: FormBuilder, apuParts: Array<any>) {
     form.patchValue({
       name: data.name,
       city_id: data.city.id,
@@ -34,7 +34,9 @@ export const functionsApuConjunto = {
       total_direct_cost: data.total_direct_cost,
       machine_tools_subtotal: data.machine_tools_subtotal,
       internal_processes_subtotal: data.internal_processes_subtotal,
-      external_processes_subtotal: data.external_processes_subtotal
+      external_processes_subtotal: data.external_processes_subtotal,
+      set_name: data?.set_name,
+      machine_name: data?.machine_name
     });
     piecesSetsHelper.createFillInPiecesSets(form, fb, data)
     machineToolHelper.createFillInMachineTools(form, fb, data);
@@ -45,7 +47,7 @@ export const functionsApuConjunto = {
     this.subscribes(form)
   },
 
-  fillInIndirectCost(form: FormGroup, fb: FormBuilder, data){
+  fillInIndirectCost(form: FormGroup, fb: FormBuilder, data) {
     if (data.indirect) {
       let indirect_cost = form.get('indirect_cost') as FormArray;
       data.indirect.forEach(element => {
@@ -65,7 +67,7 @@ export const functionsApuConjunto = {
       name: ['', Validators.required],
       city_id: [null, Validators.required],
       person_id: [user_id],
-      third_party_id:[null, Validators.required],
+      third_party_id: [null, Validators.required],
       line: ['', Validators.required],
       files: [''],
       observation: [''],
@@ -95,13 +97,15 @@ export const functionsApuConjunto = {
       trm: [calculationBase.trm.value],
       sale_price_usd_withholding_total: [0],
       format_code: [''],
-      code: ['']
+      code: [''],
+      set_name: ['', Validators.maxLength(255)],
+      machine_name: ['', Validators.maxLength(255)]
     });
     this.subscribes(group)
     return group;
   },
 
-  indirectCostOp(indirect:FormGroup, form:FormGroup){
+  indirectCostOp(indirect: FormGroup, form: FormGroup) {
     let list = form.get('indirect_cost') as FormArray;
     indirect.get('percentage').valueChanges.subscribe(value => {
       let total_direct_cost = form.get('total_direct_cost');
@@ -122,16 +126,16 @@ export const functionsApuConjunto = {
     });
   },
 
-  cityRetention(group: FormGroup, cities:Array<any>){
+  cityRetention(group: FormGroup, cities: Array<any>) {
     group.get('city_id').valueChanges.subscribe(value => {
       let data = cities.find(c => c.value == value);
       if (data) {
         let admin_unforeseen_utility_subtotal = group.get('admin_unforeseen_utility_subtotal');
         let result = (typeof admin_unforeseen_utility_subtotal.value == 'number' && typeof data.percentage_product == 'number'
-        ?
-        admin_unforeseen_utility_subtotal.value / ( 1 - (data.percentage_product / 100))
-        :
-        0);
+          ?
+          admin_unforeseen_utility_subtotal.value / (1 - (data.percentage_product / 100))
+          :
+          0);
         group.patchValue({ sale_price_cop_withholding_total: Math.round(result) })
       }
     });
@@ -140,8 +144,8 @@ export const functionsApuConjunto = {
       let data = cities.find(c => c.value == city.value);
       if (data) {
         let result = (typeof data.percentage_product == 'number'
-        &&
-        typeof value == 'number' ? value / ( 1 - (data.percentage_product / 100)) : 0);
+          &&
+          typeof value == 'number' ? value / (1 - (data.percentage_product / 100)) : 0);
         group.patchValue({
           sale_price_cop_withholding_total: Math.round(result)
         });
@@ -149,7 +153,7 @@ export const functionsApuConjunto = {
     });
   },
 
-  subscribes(group: FormGroup, clients:Array<any>){
+  subscribes(group: FormGroup, clients: Array<any>) {
     group.get('indirect_cost_total').valueChanges.subscribe(value => {
       let total_direct_cost = group.get('total_direct_cost');
       let result = (typeof total_direct_cost.value == 'number' && typeof value == 'number' ? (total_direct_cost.value + value) : 0)
@@ -202,7 +206,7 @@ export const functionsApuConjunto = {
     });
     group.get('trm').valueChanges.subscribe(value => {
       let sale_price_cop_withholding_total = group.get('sale_price_cop_withholding_total');
-      let result = (typeof sale_price_cop_withholding_total.value == 'number' && typeof value == 'number' ?(sale_price_cop_withholding_total.value / value) : 0)
+      let result = (typeof sale_price_cop_withholding_total.value == 'number' && typeof value == 'number' ? (sale_price_cop_withholding_total.value / value) : 0)
       group.patchValue({ sale_price_usd_withholding_total: Math.round(result) })
     });
     group.get('direct_costs_indirect_costs_total').valueChanges.subscribe(value => {
@@ -216,49 +220,49 @@ export const functionsApuConjunto = {
       let direct_costs_indirect_costs_total = group.get('direct_costs_indirect_costs_total');
       let unforeseen_value = group.get('unforeseen_value');
       let result = (typeof direct_costs_indirect_costs_total.value == 'number'
-      &&
-      typeof unforeseen_value.value == 'number'
-      &&
-      typeof value == 'number' ?
-      (direct_costs_indirect_costs_total.value + unforeseen_value.value + value):
-      0)
+        &&
+        typeof unforeseen_value.value == 'number'
+        &&
+        typeof value == 'number' ?
+        (direct_costs_indirect_costs_total.value + unforeseen_value.value + value) :
+        0)
       group.patchValue({ administrative_unforeseen_subtotal: result });
     });
     group.get('unforeseen_value').valueChanges.subscribe(value => {
       let direct_costs_indirect_costs_total = group.get('direct_costs_indirect_costs_total');
       let administrative_value = group.get('administrative_value');
       let result = (typeof direct_costs_indirect_costs_total.value == 'number'
-      &&
-      typeof administrative_value.value == 'number'
-      && typeof value == 'number' ? (direct_costs_indirect_costs_total.value + administrative_value.value + value)
-      : 0)
+        &&
+        typeof administrative_value.value == 'number'
+        && typeof value == 'number' ? (direct_costs_indirect_costs_total.value + administrative_value.value + value)
+        : 0)
       group.patchValue({ administrative_unforeseen_subtotal: result });
     });
   },
 
-  subtotalIndirectCost(list: FormArray, form:FormGroup){
+  subtotalIndirectCost(list: FormArray, form: FormGroup) {
     setTimeout(() => {
       let total =
-      list.value.reduce(
-        (a, b) => {
-          return  a + b.value
-        },0
-      );
+        list.value.reduce(
+          (a, b) => {
+            return a + b.value
+          }, 0
+        );
       form.patchValue({
         indirect_cost_total: total
       })
     }, 100);
   },
 
-  sumarTotalDirectCost(form: FormGroup){
+  sumarTotalDirectCost(form: FormGroup) {
     setTimeout(() => {
       let forma = form.value;
       let result =
-      parseFloat(forma.list_pieces_sets_subtotal) +
-      parseFloat(forma.machine_tools_subtotal) +
-      parseFloat(forma.internal_processes_subtotal) +
-      parseFloat(forma.external_processes_subtotal) +
-      parseFloat(forma.others_subtotal);
+        parseFloat(forma.list_pieces_sets_subtotal) +
+        parseFloat(forma.machine_tools_subtotal) +
+        parseFloat(forma.internal_processes_subtotal) +
+        parseFloat(forma.external_processes_subtotal) +
+        parseFloat(forma.others_subtotal);
       form.patchValue({
         total_direct_cost: result
       });
@@ -286,10 +290,10 @@ export const functionsApuConjunto = {
     });
   },
 
-  sumarDirectCostIndirectCost(form:FormGroup){
+  sumarDirectCostIndirectCost(form: FormGroup) {
     let forma = form.value;
     let result =
-    forma.indirect_cost_total + forma.total_direct_cost;
+      forma.indirect_cost_total + forma.total_direct_cost;
     form.patchValue({
       direct_costs_indirect_costs_total: result
     })

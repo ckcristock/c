@@ -46,4 +46,8 @@ export class ActaRecepcionService {
   codigoBarras(params = {}) {
     return this.http.get(environment.base_url + '/php/actarecepcion/codigo_barrad.php', { params })
   }
+
+  save(data:any){
+    return this.http.post(`${environment.base_url}/php/bodega_nuevo/guardar_acta_recepciond`, data)
+  }
 }

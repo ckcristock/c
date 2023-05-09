@@ -22,6 +22,7 @@ export class CrearActaRecepcionComponent implements OnInit {
     CodigoFormato: ''
   }
   form: FormGroup;
+  ordenCompra: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -46,6 +47,8 @@ export class CrearActaRecepcionComponent implements OnInit {
 
   getActaRecepcion(params) {
     this._actaRecepcion.getActaRecepcionCompra(params).subscribe((res: any) => {
+      this.ordenCompra = res.data;
+      console.log(this.ordenCompra)
       res.data.products.forEach(element => {
         this.addProducts(element)
       });
@@ -70,9 +73,11 @@ export class CrearActaRecepcionComponent implements OnInit {
   // Esto es lo que va a la tabla de 'acta_recepcion'
   createForm() {
     this.form = this.fb.group({
-      invoices: this.fb.array([]),
-      products: this.fb.array([]),
+      Id_Acta_Recepcion: [null],
       Observaciones: '',
+      Codigo: '',
+      invoices: this.fb.array([]),
+      products_acta: this.fb.array([]),
     });
 
   }
@@ -81,13 +86,14 @@ export class CrearActaRecepcionComponent implements OnInit {
     return this.form.get('invoices') as FormArray;
   }
 
-  get products() {
-    return this.form.get('products') as FormArray;
+  get products_acta() {
+    return this.form.get('products_acta') as FormArray;
   }
 
   // Esto es lo que va a la tabla facturas_acta_recepcion
   addInvoice() {
     this.invoices.push(this.fb.group({
+      Id_Factura_Acta_Recepcion: [null],
       Archivo_Factura: ['', Validators.required],
       Factura: ['', Validators.required],
       Fecha_Factura: ['', Validators.required],
@@ -97,14 +103,21 @@ export class CrearActaRecepcionComponent implements OnInit {
 
   // esto va a la tabla de productos_acta_recepcion
   addProducts(element) {
-    this.products.push(this.fb.group({
-      Cantidad: ['1', Validators.min(1)],
+    this.products_acta.push(this.fb.group({
+      Id_Producto_Acta_Recepcion:[null],
+      Cantidad: [0, Validators.min(0)], //  falta crear un validador de checkbox
       Subtotal: '',
-      Impuesto: '',
-      Precio: '',
+      Iva: '',
+      Total: '',
       imagen: [element?.product?.Imagen],
       nombre: [element?.product?.Nombre_Comercial],
-      unidad: [element?.product?.unit?.name]
+      unidad: [element?.product?.unit?.name],
+      cantidad_: [element?.Cantidad],
+      subtotal_: [element?.Subtotal],
+      iva_: [element?.Valor_Iva],
+      total_: [element?.Total],
+      Id_Producto: [element?.product.Id_Producto],
+
       // con imagen, y con campos para la cantidad, el iva y los precios (precio total, precio iva, subtotal sin iva),
       // Subtotal, Impuesto, Precio, Cantidad, Unidad
     }));
@@ -125,6 +138,7 @@ export class CrearActaRecepcionComponent implements OnInit {
         if (result.isConfirmed) {
           const data = {
             ...this.form.value,
+            ...this.ordenCompra
           };
           this._actaRecepcion.save(data).subscribe(r => {
             this._swal.show({
@@ -141,8 +155,8 @@ export class CrearActaRecepcionComponent implements OnInit {
         } else {
           this._swal.show({
             icon: 'error',
-            title: '¡Solicitud cancelada!',
-            text: 'La solicitud no ha sido registrada correctamente',
+            title: '¡creación de acta cancelada!',
+            text: 'El acta no ha sido registrada correctamente',
             showCancel: false
           })
         }
@@ -156,13 +170,13 @@ export class CrearActaRecepcionComponent implements OnInit {
   onFileChanged(event, i) {
     if (event.target.files.length == 1) {
       let file = event.target.files[0];
-      const types = ['application/pdf']
+      const types = ['application/pdf', 'image/png', 'image/jpeg', 'image/jpg']
       if (!types.includes(file.type)) {
         this._swal.show({
           icon: 'error',
           title: 'Error de archivo',
           showCancel: false,
-          text: 'El tipo de archivo no es válido'
+          text: 'Solo se permiten archivos PDF, PNG, JPG y JPEG'
         });
         return null
       }
@@ -174,6 +188,10 @@ export class CrearActaRecepcionComponent implements OnInit {
       });
 
     }
+  }
+
+  printform(){
+    console.log(this.form.value)
   }
 
 }

@@ -48,6 +48,6 @@ export class ActaRecepcionService {
   }
 
   save(data:any){
-    return this.http.post(`${environment.base_url}/php/bodega_nuevo/guardar_acta_recepciond`, data)
+    return this.http.post(`${environment.base_url}/php/bodega_nuevo/guardar_acta_recepciond.php`, data)
   }
 }

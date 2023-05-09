@@ -1,7 +1,6 @@
 <ng-template #placeholder>
   <app-placeholder-form></app-placeholder-form>
 </ng-template>
-
 <ng-container *ngIf="!loading; else placeholder">
   <div class="row">
     <div class="col">
@@ -9,6 +8,13 @@
         <div class="card-body">
           <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
           <hr class="line" />
+          <button
+                            type="button"
+                            (click)="printform()"
+                            class="btn btn-info btn-sm"
+                          >
+                            form
+                          </button>
           <ng-container [formGroup]="form">
             <!-- SECCION DE FACTURAS -->
             <ng-container formArrayName="invoices">
@@ -54,45 +60,45 @@
                         <td class="p-0">{{ i + 1 }}</td>
                         <td class="p-0">
                           <!-- <mat-form-field class="col" appearance="outline"> -->
-                            <input
-                              type="text"
-                              placeholder="Ingresa el número de factura*"
-                              formControlName="Factura"
-                              required
-                              autocomplete="off"
-                              class="w-100 border-0"
-                              style="border: 0"
-                            />
+                          <input
+                            type="text"
+                            placeholder="Ingresa el número de factura*"
+                            formControlName="Factura"
+                            required
+                            autocomplete="off"
+                            class="w-100 border-0 color-transparent"
+                          />
                           <!-- </mat-form-field> -->
                         </td>
                         <td class="p-0">
                           <!-- <mat-form-field class="col" appearance="outline"> -->
-                            <input
-                              [matDatepicker]="picker"
-                              placeholder="Elije la fecha*"
-                              formControlName="Fecha_Factura"
-                              readonly
-                              autocomplete="off"
-                              class="border-0"
-                              style="border: 0"
-                            />
-                            <mat-datepicker-toggle
-                              matSuffix
-                              [for]="picker"
-                            ></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
+                          <input
+                            [matDatepicker]="picker"
+                            placeholder="Elije la fecha*"
+                            formControlName="Fecha_Factura"
+                            readonly
+                            autocomplete="off"
+                            class="border-0 color-transparent"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
 
                           <!-- </mat-form-field> -->
                         </td>
 
-                        <td class="p-0 d-flex align-items-center justify-content-center">
-                          <div class="form-group text-center col">
+                        <td
+                          class="p-0 d-flex align-items-center justify-content-center"
+                        >
+                          <div class="form-group mb-0 text-center col">
                             <div class="custom-input-file">
                               <input
                                 type="file"
                                 #fileInput
                                 id="importFile"
-                                accept=".pdf"
+                                accept=".pdf,.png,.jpg,.jpeg"
                                 class="input-file"
                                 (change)="onFileChanged($event, i)"
                               />
@@ -136,7 +142,7 @@
               -->
             </ng-container>
             <!-- SECCION DE productos -->
-            <ng-container formArrayName="products">
+            <ng-container formArrayName="products_acta">
               <div class="row card-title d-flex justify-content-between">
                 <div class="col-md-12 px-0">
                   <h6 class="text-primary">Productos</h6>
@@ -149,6 +155,7 @@
                         <th></th>
                         <th>Imagen</th>
                         <th>Producto</th>
+                        <th>Factura</th>
                         <th>Cantidad</th>
                         <th>Unidad</th>
                         <th>Subtotal</th>
@@ -158,70 +165,103 @@
                     </thead>
                     <tbody>
                       <tr
-                        *ngFor="let product of products.controls; let i = index"
+                        *ngFor="let product of products_acta.controls; let i = index"
                         [formGroupName]="i"
                         class="text-center"
                       >
                         <td>
-                          <mat-checkbox></mat-checkbox>
+                          <mat-checkbox color="primary"></mat-checkbox>
                         </td>
-                        <td class="align-middle">
-                          {{ product.get("imagen").value }}
+                        <td class="align-middle p-0">
+                          <img
+                            [src]="product.get('imagen').value"
+                            onerror="this.src='../../../../assets/images/product.jpg'"
+                            class="d-block mx-auto img-fluid img-product"
+                          />
                         </td>
                         <td class="align-middle">
                           {{ product.get("nombre").value | uppercase }}
                         </td>
                         <td>
-
+                          <select class="w-100 border-0 color-transparent">
+                            <option value="">Selecciona una factura</option>
+                            <option
+                              *ngFor="let item of invoices.value"
+                              [value]="item.Factura"
+                            >
+                              {{ item.Factura }}
+                            </option>
+                          </select>
+                        </td>
+                        <td>
                           <input
-                          type="text"
-                          formControlName="Cantidad"
-                          currencyMask
-                          [options]="mask.maskNumbers"
-                          appInputPositionInitial
-                          class="w-100 border-0"
-                          style="border: 0"
-
-                        />
-
+                            type="text"
+                            formControlName="Cantidad"
+                            currencyMask
+                            [options]="mask?.maskNumbers"
+                            appInputPositionInitial
+                            class="w-100 border-0 color-transparent"
+                            [matTooltip]="
+                              product.get('Cantidad')?.value !==
+                              product.get('cantidad_').value
+                                ? 'El valor es diferente al de la orden de compra'
+                                : null
+                            "
+                          />
+                          <!--  -->
                         </td>
-                        <td>{{ product.get("unidad").value | titlecase}}</td>
+                        <td>{{ product.get("unidad").value | titlecase }}</td>
                         <td>
-                            <input
-
-                              placeholder="Ingresa un valor"
-                              currencyMask
-                              appInputPosition
-                              [options]="mask.maskCOP"
-                              formControlName="Subtotal"
-                              autocomplete="off"
-                              class="w-100 border-0"
-                              style="border: 0"
-                            />
-                        </td>
-                        <td>
-                            <input
-                              placeholder="Ingresa un valor"
-                              currencyMask
-                              appInputPosition
-                              [options]="mask.maskCOP"
-                              formControlName="Impuesto"
-                              autocomplete="off"
-                              class="w-100 border-0"
-                              style="border: 0"
-                            />
+                          <input
+                            placeholder="Ingresa un valor"
+                            currencyMask
+                            appInputPosition
+                            [options]="mask?.maskCOP"
+                            formControlName="Subtotal"
+                            autocomplete="off"
+                            class="w-100 border-0 color-transparent"
+                            [matTooltip]="
+                              product.get('Subtotal')?.value !==
+                              product.get('subtotal_').value
+                                ? 'El valor es diferente al de la orden de compra'
+                                : null
+                            "
+                          />
                         </td>
                         <td>
-                            <input
-                              placeholder="Ingresa un valor"
-                              currencyMask
-                              appInputPosition
-                              [options]="mask.maskCOP"
-                              formControlName="Precio"
-                              autocomplete="off"
-                              class="w-100 border-0"
-                              style="border: 0"
-                            />
+                          <input
+                            placeholder="Ingresa un valor"
+                            currencyMask
+                            appInputPosition
+                            [options]="mask?.maskCOP"
+                            formControlName="Iva"
+                            autocomplete="off"
+                            class="w-100 border-0 color-transparent"
+                            [matTooltip]="
+                              product.get('Iva')?.value !==
+                              product.get('iva_').value
+                                ? 'El valor es diferente al de la orden de compra'
+                                : null
+                            "
+                          />
+                        </td>
+
+                        <td>
+                          <input
+                            placeholder="Ingresa un valor"
+                            currencyMask
+                            appInputPosition
+                            [options]="mask?.maskCOP"
+                            formControlName="Total"
+                            autocomplete="off"
+                            class="w-100 border-0 color-transparent"
+                            [matTooltip]="
+                            product.get('Total')?.value !==
+                            product.get('total_').value
+                              ? 'El valor es diferente al de la orden de compra'
+                              : null
+                          "
+                          />
                         </td>
                       </tr>
                     </tbody>
@@ -230,30 +270,30 @@
               </div>
               <!-- tabla para productos -> inicialmente se van a listar los productos de la orden de compra, con imagen, y con campos para la cantidad, el iva y los precios (precio total, precio iva, subtotal sin iva), habrá un checkbox para seleccionar los productos que se ingresan, y habrá una comparativa con la informacion que viene de la orden de compra, muestras un icon de un alert o de un ! con un tooltip donde describa que el campo es diferente a la orden de compra  -->
             </ng-container>
-            <mat-form-field
-            class="col-md-12 mat-form-field-no-padding textarea"
-            appearance="outline"
-          >
-            <mat-label>Observaciones</mat-label>
-            <textarea
-              matInput
-              placeholder="Ingresa las observaciones"
-              rows="5"
-              formControlName="Observaciones"
-              [cdkTextareaAutosize]="true"
-            ></textarea>
-
-          </mat-form-field>
+            <div class="row">
+              <mat-form-field
+                class="col-md-12 mat-form-field-no-padding textarea"
+                appearance="outline"
+              >
+                <mat-label>Observaciones</mat-label>
+                <textarea
+                  matInput
+                  placeholder="Ingresa las observaciones"
+                  rows="5"
+                  formControlName="Observaciones"
+                  [cdkTextareaAutosize]="true"
+                ></textarea>
+              </mat-form-field>
+            </div>
             <button
-            class="btn btn-block btn-primary"
-            type="submit"
-            form="form"
-            (click)="save()"
-            [disabled]="!form.valid"
-          >
-
-            Guardar
-          </button>
+              class="btn btn-block btn-primary"
+              type="submit"
+              form="form"
+              (click)="saveActa()"
+              [disabled]="!form.valid"
+            >
+              Guardar
+            </button>
           </ng-container>
         </div>
       </div>

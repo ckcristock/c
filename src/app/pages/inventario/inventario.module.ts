@@ -58,6 +58,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { CrearActaRecepcionOldComponent } from './acta-recepcion/crear-acta-recepcion-old/crear-acta-recepcion-old.component';
+import { MatTooltipModule } from '@angular/material';
 
 export const MY_FORMATS = {
   parse: {
@@ -120,7 +121,8 @@ export const MY_FORMATS = {
     NgbPopoverModule,
     NgSelectModule,
     DirectivesModule,
-    NgxCurrencyModule
+    NgxCurrencyModule,
+    MatTooltipModule
   ],
   providers: [
     {

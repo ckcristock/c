@@ -136,7 +136,6 @@ export class SolicitudCompraCrearComponent implements OnInit {
   formatter = (x: any) => x.name;
 
   addProduct(prod, edit, $event = undefined, input = undefined) {
-    console.log(this.products.value, prod, edit)
     if (!this.products.value.some(x => x.product_id == (edit ? prod.product_id : prod.Id_Producto))) {
       let product = this.fb.group({
         id: [edit ? prod.id : ''],
@@ -196,7 +195,6 @@ export class SolicitudCompraCrearComponent implements OnInit {
 
             this.router.navigateByUrl('/compras/solicitud')
           })
-          console.log(this.form.value)
         } else {
           this._swal.show({
             icon: 'error',

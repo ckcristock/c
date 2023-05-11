@@ -59,7 +59,7 @@ export class CrearApuServicioComponent implements OnInit {
     private _user: UserService,
     private scroll: ViewportScroller,
   ) {
-    this.user_id = _user.user.person.id
+    this.user_id = _user?.user?.person?.id
   }
 
   async ngOnInit() {
@@ -89,8 +89,8 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   async getBases() {
-    await this._calculationBase.getAll().toPromise().then((r: any) => {
-      this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
+    await this._calculationBase?.getAll().toPromise().then((r: any) => {
+      this.calculationBase = r.data?.reduce((acc, el) => ({ ...acc, [el?.concept]: el }), {})
       /* if (this.dataEdit) {
         this.calculationBase.trm.value = this.dataEdit.trm
       } */
@@ -99,54 +99,54 @@ export class CrearApuServicioComponent implements OnInit {
 
 
   createForm() {
-    this.form = help.functionsApuService.createForm(this.fb, this.clients, this.user_id, this.calculationBase);
+    this.form = help.functionsApuService?.createForm(this.fb, this.clients, this.user_id, this.calculationBase);
   }
 
   validateData() {
     if (this.data) {
       setTimeout(() => {
-        help.functionsApuService.fillInForm(this.form, this.data, this.fb, this.profiles, this.cities);
+        help.functionsApuService?.fillInForm(this.form, this.data, this.fb, this.profiles, this.cities);
       }, 1200);
     }
   }
 
   getPeople() {
-    this._apuService.getPeopleXSelect().subscribe((r: any) => {
-      this.people = r.data;
+    this._apuService?.getPeopleXSelect()?.subscribe((r: any) => {
+      this.people = r?.data;
     })
   }
 
   getProfileName(item) {
-    return this.profiles.find(x => x.id == item.value.apu_profile_id)?.profile
+    return this.profiles?.find(x => x?.id == item?.value?.apu_profile_id)?.profile
   }
 
   getProfiles() {
-    this._apuService.getProfiles().subscribe((r: any) => {
-      this.profiles = r.data;
+    this._apuService?.getProfiles()?.subscribe((r: any) => {
+      this.profiles = r?.data;
     })
   }
 
   async getCities() {
-    await this._apuService.getCities().toPromise().then((r: any) => {
-      this.cities = r.data;
-      help.functionsApuService.cityRetention(this.form, this.cities);
+    await this._apuService?.getCities()?.toPromise()?.then((r: any) => {
+      this.cities = r?.data;
+      help.functionsApuService?.cityRetention(this.form, this.cities);
     })
   }
 
   getClients() {
-    this._apuService.getClient().subscribe((r: any) => {
-      this.clients = r.data;
+    this._apuService?.getClient()?.subscribe((r: any) => {
+      this.clients = r?.data;
     })
   }
 
   getTravelExpenseEstimation() {
-    this._apuService.getTravelExpenseEstimation().subscribe((r: any) => {
-      this.tEestimations = r.data;
+    this._apuService?.getTravelExpenseEstimation()?.subscribe((r: any) => {
+      this.tEestimations = r?.data;
     })
   }
 
   cmoControl(): FormGroup { // cmo = Calculo Mano Obra
-    let group = help.cmoHelper.createcmoGroup(
+    let group = help?.cmoHelper?.createcmoGroup(
       this.form,
       this.fb,
       this.profiles,
@@ -156,36 +156,36 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   get cmoList() {
-    return this.form.get('calculate_labor') as FormArray
+    return this.form?.get('calculate_labor') as FormArray
   }
 
   newCmoList() {
-    if (this.form.get('city_id').invalid) {
-      this.form.get('city_id').markAsTouched()
-      this.scroll.scrollToPosition([0, 0]);
+    if (this.form?.get('city_id')?.invalid) {
+      this.form?.get('city_id')?.markAsTouched()
+      this.scroll?.scrollToPosition([0, 0]);
       return null
     }
-    this.cmoList.push(this.cmoControl());
+    this.cmoList?.push(this.cmoControl());
   }
 
   deleteCmoList(i) {
-    this.cmoList.removeAt(i);
+    this.cmoList?.removeAt(i);
   }
 
   mpMCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
-    let group = help.mpmCalculateLaborHelper.createMpmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+    let group = help?.mpmCalculateLaborHelper?.createMpmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
       this.cities);
     return group;
   }
 
   get mpMCalculateLaborList() {
-    return this.form.get('mpm_calculate_labor') as FormArray
+    return this.form?.get('mpm_calculate_labor') as FormArray
   }
 
   newmpMCalculateLaborList() {
-    if (this.form.get('city_id').invalid) {
-      this.form.get('city_id').markAsTouched()
-      this.scroll.scrollToPosition([0, 0]);
+    if (this.form?.get('city_id')?.invalid) {
+      this.form?.get('city_id')?.markAsTouched()
+      this.scroll?.scrollToPosition([0, 0]);
       return null
     }
     this.mpMCalculateLaborList.push(this.mpMCalculateLaborControl());

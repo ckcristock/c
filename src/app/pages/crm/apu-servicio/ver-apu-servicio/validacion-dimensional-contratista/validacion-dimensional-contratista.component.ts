@@ -20,7 +20,7 @@ export class ValidacionDimensionalContratistaComponent implements OnInit {
   }
 
   getDesplazamiento(value) {
-    return this.desplazamientos.find(x => x.value == value).text
+    return this.desplazamientos?.find(x => x?.value == value)?.text
   }
 
 }

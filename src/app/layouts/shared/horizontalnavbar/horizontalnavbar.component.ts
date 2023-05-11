@@ -1,5 +1,5 @@
 import { style } from '@angular/animations';
-import { Component, OnInit, AfterViewInit, Input, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input, HostListener, ViewChild, ElementRef, ViewContainerRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { UserService } from 'src/app/core/services/user.service';
 
@@ -23,9 +23,10 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
     private router: Router,
     private eventService: EventService,
     private userService: UserService,
-    private el: ElementRef) {
+    private el: ElementRef,
+    private viewContainerRef: ViewContainerRef
+  ) {
     this.navItems = userService.user.menu;
-
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.activateMenu();
@@ -43,28 +44,26 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
       suppressScrollX: true,
       wheelSpeed: 0.3
     };
-
   }
 
+  resetStyles() {
+    this.ngOnInit()
+  }
 
   /**
    * On menu click
    */
   onMenuClick(event: any) {
-
+    console.log('holi')
     const nextEl = event.target.nextSibling;
-    const parent = event.target.parentNode;
-
     if (this.innerWidth < 990) {
       if (event.target.nextSibling.id != 'navmenu') {
         let p = event.target.nextSibling.style.display
         if (p == null || p == '' || p == 'none') {
           event.target.nextSibling.style.display = 'block'
-          //event.target.parentElement.style.display = 'block'
           event.target.parentElement.parentElement.style.display = 'block'
         } else {
           event.target.nextSibling.style.display = 'none'
-
         }
       } else {
         if (event.target.nextSibling.style.display == "block") {
@@ -73,11 +72,13 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
           event.target.nextSibling.style.display = 'block'
         }
       }
-
     } else if (nextEl.id !== 'navmenu') {
     } else if (nextEl && nextEl.classList.contains('show')) {
       const parentEl = event.target.parentNode;
-      if (parentEl) { parentEl.classList.remove('show'); }
+      if (parentEl) {
+        parentEl.classList.remove('show');
+        parentEl.style.display = 'none'
+      }
       nextEl.classList.toggle('show');
     }
     return false;
@@ -112,7 +113,6 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
    * Activates the menu
    */
   private activateMenu() {
-
     const resetParent = (el: any) => {
       const parent = el.parentElement;
       if (parent) {

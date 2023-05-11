@@ -4,13 +4,13 @@
       <ul class="navbar-nav mx-auto">
         <ng-container *ngFor="let item of navItems">
           <div *ngIf="item.name != 'Tablero'">
-            <hr class="dividerNav"/>
+            <hr class="dividerNav" />
           </div>
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle arrow-none px-2"
               href="javascript: void(0);"
-              (click)="item.name == 'Tablero' ? hideMenu($event) : onMenuClick($event)"
+              (click)="item.name == 'Tablero' ? hideMenu($event) : ''"
               [routerLink]="item.name == 'Tablero' ? '/' : item.link"
               id="topnav-components"
               role="button"

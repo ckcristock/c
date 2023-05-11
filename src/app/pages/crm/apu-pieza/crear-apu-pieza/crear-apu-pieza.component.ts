@@ -42,7 +42,7 @@ export class CrearApuPiezaComponent implements OnInit {
   @Output() saveForAddToSet = new EventEmitter;
   pageYoffset = 0;
   @HostListener('window:scroll', ['$event']) onScroll(event) {
-    this.pageYoffset = window.pageYOffset;
+    this.pageYoffset = window?.pageYOffset;
   }
   form: FormGroup;
   date: Date = new Date();
@@ -95,7 +95,7 @@ export class CrearApuPiezaComponent implements OnInit {
     private scroll: ViewportScroller,
     private _user: UserService
   ) {
-    this.user_id = _user.user.person.id
+    this.user_id = _user?.user?.person?.id
   }
 
   async ngOnInit() {
@@ -119,10 +119,10 @@ export class CrearApuPiezaComponent implements OnInit {
     this.getConsecutivo();
     await this.getVariablesApu();
     if (this.preData) {
-      this.form.patchValue({
-        city_id: this.preData.city_id,
-        third_party_id: this.preData.third_party_id,
-        line: this.preData.line,
+      this.form?.patchValue({
+        city_id: this.preData?.city_id,
+        third_party_id: this.preData?.third_party_id,
+        line: this.preData?.line,
       })
     }
     this.loading = false;
@@ -155,7 +155,7 @@ export class CrearApuPiezaComponent implements OnInit {
 
   getCommercialMaterials() {
     this._rawMaterialMaterials.getRawMaterialMaterialsIndex().subscribe((res: any) => {
-      this.commercialMaterials = res.data
+      this.commercialMaterials = res?.data
     })
   }
 
@@ -163,15 +163,15 @@ export class CrearApuPiezaComponent implements OnInit {
     if (!this.data) {
       return null
     }
-    (this.data && this.data.other && this.data.other.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
+    (this.data && this.data?.other && this.data?.other?.length < 0 ? this.otherCollapsed = false : this.otherCollapsed = true);
   }
   getConsecutivo() {
     this._consecutivos.getConsecutivo('apu_parts').subscribe((r: any) => {
       this.datosCabecera.CodigoFormato = r?.data?.format_code
       this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
       if (this.title !== 'Editar pieza') {
-        this.buildConsecutivo(this.form.get('city_id').value, r)
-        this.form.get('city_id').valueChanges.subscribe(value => {
+        this.buildConsecutivo(this.form.get('city_id')?.value, r)
+        this.form.get('city_id')?.valueChanges.subscribe(value => {
           this.buildConsecutivo(value, r)
         });
       } else {
@@ -179,16 +179,16 @@ export class CrearApuPiezaComponent implements OnInit {
         this.form.patchValue({
           code: this.data?.code
         })
-        this.form.get('city_id').disable()
+        this.form.get('city_id')?.disable()
       }
     })
   }
 
   buildConsecutivo(value, r, context = '') {
     if (r.data.city) {
-      let city = this.cities.find(x => x.value === value)
-      if (city && !city.abbreviation) {
-        this.form.get('city_id').setValue(null);
+      let city = this.cities?.find(x => x?.value === value)
+      if (city && !city?.abbreviation) {
+        this.form.get('city_id')?.setValue(null);
         this._swal.show({
           icon: 'error',
           title: 'Error',
@@ -196,7 +196,7 @@ export class CrearApuPiezaComponent implements OnInit {
           showCancel: false
         })
       } else {
-        let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
+        let con = this._consecutivos.construirConsecutivo(r?.data, city?.abbreviation, context);
         this.datosCabecera.Codigo = con
         this.form.patchValue({
           code: con
@@ -213,19 +213,19 @@ export class CrearApuPiezaComponent implements OnInit {
 
   async getVariablesApu() {
     await this._externos.getExternos().toPromise().then((res: any) => {
-      this.procesos_externos = res.data
+      this.procesos_externos = res?.data
     })
     await this._maquinas.getMaquinas().toPromise().then((res: any) => {
-      this.maquinas_herramientas = res.data
+      this.maquinas_herramientas = res?.data
     })
     await this._internos.getExternos().toPromise().then((res: any) => {
-      this.procesos_internos = res.data
+      this.procesos_internos = res?.data
     })
   }
 
   async getBases() {
     await this._calculationBase.getAll().toPromise().then((r: any) => {
-      this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
+      this.calculationBase = r?.data?.reduce((acc, el) => ({ ...acc, [el?.concept]: el }), {})
       /* if (this.dataEdit) {
         this.calculationBase.trm.value = this.dataEdit.trm
       } */
@@ -234,8 +234,8 @@ export class CrearApuPiezaComponent implements OnInit {
 
   onSelect(event) {
     const types = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf']
-    event.addedFiles.forEach(file => {
-      if (!types.includes(file.type)) {
+    event?.addedFiles?.forEach(file => {
+      if (!types?.includes(file?.type)) {
         this._swal.show({
           icon: 'error',
           title: 'Error de archivo',
@@ -246,65 +246,65 @@ export class CrearApuPiezaComponent implements OnInit {
       }
     })
 
-    this.files.push(...event.addedFiles);
+    this.files?.push(...event?.addedFiles);
   }
 
   onRemove(event) {
-    this.files.splice(this.files.indexOf(event), 1);
+    this.files?.splice(this.files?.indexOf(event), 1);
   }
 
   getPeople() {
     this._apuPieza.getPeopleXSelect().subscribe((r: any) => {
-      this.people = r.data;
+      this.people = r?.data;
     })
   }
 
   async getCities() {
     await this._apuPieza.getCities().toPromise().then((r: any) => {
-      this.cities = r.data;
-      help.functionsApu.cityRetention(this.form, this.cities);
+      this.cities = r?.data;
+      help.functionsApu?.cityRetention(this.form, this.cities);
     })
   }
 
   async getCutLaserMaterial() {
     await this._apuPieza.cutLaserMaterial().toPromise().then((r: any) => {
-      this.cutLaserMaterials = r.data;
+      this.cutLaserMaterials = r?.data;
     })
   }
 
   getClients() {
     this._apuPieza.getClient().subscribe((r: any) => {
-      this.clients = r.data;
+      this.clients = r?.data;
     });
   }
 
   getGeometries() {
     this._apuPieza.getGeometries().subscribe((r: any) => {
-      this.geometries = r.data;
+      this.geometries = r?.data;
     })
   }
 
   getMaterials() {
     this._apuPieza.getMaterials().subscribe((r: any) => {
-      this.materials = r.data;
+      this.materials = r?.data;
     })
   }
 
   getUnits() {
     this._units.selectUnits().subscribe((r: any) => {
-      this.units = r.data;
+      this.units = r?.data;
     })
   }
 
   getThicknesses() {
     this._apuPieza.getThicknesses().subscribe((r: any) => {
-      this.thicknesses = r.data;
+      this.thicknesses = r?.data;
     })
   }
 
   getIndirectCosts() {
     this._apuPieza.getIndirectCosts().subscribe((r: any) => {
-      this.indirectCosts = r.data;
+      this.indirectCosts = r?.data;
       if (!this.data) {
         this.indirectCostPush();
       }
@@ -313,14 +313,14 @@ export class CrearApuPiezaComponent implements OnInit {
 
   createForm() {
     this.form = help.functionsApu.createForm(this.fb, this.calculationBase, this.user_id);
-    help.functionsApu.listerTotalDirectCost(this.form);
+    help.functionsApu?.listerTotalDirectCost(this.form);
   }
   planos: any[] = [];
 
   validateData() {
     if (this.data) {
       help.functionsApu.fillInForm(this.form, this.data, this.fb, this.geometries, this.materials, this.cutLaserMaterials, this.commercialMaterials);
-      this.planos = this.data.files
+      this.planos = this.data?.files
     }
   }
 
@@ -335,22 +335,22 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   get materiaList() {
-    return this.form.get('materia_prima') as FormArray;
+    return this.form?.get('materia_prima') as FormArray;
   }
 
   newMateria() {
-    if (this.form.valid) {
+    if (this.form?.valid) {
       let materia = this.materiaList;
-      materia.push(this.basicControl())
+      materia?.push(this.basicControl())
     } else {
-      this.form.markAllAsTouched();
-      this.scroll.scrollToPosition([0, 0]);
+      this.form?.markAllAsTouched();
+      this.scroll?.scrollToPosition([0, 0]);
     }
   }
 
   deleteMateria(i) {
-    this.materiaList.removeAt(i);
-    materiaHelper.subtotalMateria(this.materiaList, this.form);
+    this.materiaList?.removeAt(i);
+    materiaHelper?.subtotalMateria(this.materiaList, this.form);
   }
   /************** Materia Prima Fin ****************/
 
@@ -451,12 +451,12 @@ export class CrearApuPiezaComponent implements OnInit {
 
   machineSet(item, event) {
     let machine_item = item as FormGroup;
-    this.maquinas_herramientas.forEach(element => {
-      if (element.value == event.target.value) {
+    this.maquinas_herramientas?.forEach(element => {
+      if (element?.value == event?.target?.value) {
         let machine = element
         machine_item.patchValue({
-          unit_id: machine.unit.id,
-          unit_cost: machine.unit_cost
+          unit_id: machine?.unit?.id,
+          unit_cost: machine?.unit_cost
         })
         /* machine_item.controls.unit_id.disable()
         machine_item.controls.unit_cost.disable() */
@@ -466,12 +466,12 @@ export class CrearApuPiezaComponent implements OnInit {
 
   internalSet(item, event) {
     let internal_item = item as FormGroup;
-    this.procesos_internos.forEach(element => {
-      if (element.value == event.target.value) {
+    this.procesos_internos?.forEach(element => {
+      if (element?.value == event?.target?.value) {
         let internal = element
-        internal_item.patchValue({
-          unit_id: internal.unit.id,
-          unit_cost: internal.unit_cost
+        internal_item?.patchValue({
+          unit_id: internal?.unit?.id,
+          unit_cost: internal?.unit_cost
         })
         /* internal_item.controls.unit_id.disable()
         internal_item.controls.unit_cost.disable() */
@@ -480,12 +480,12 @@ export class CrearApuPiezaComponent implements OnInit {
   }
   externalSet(item, event) {
     let external_item = item as FormGroup;
-    this.procesos_externos.forEach(element => {
-      if (element.value == event.target.value) {
+    this.procesos_externos?.forEach(element => {
+      if (element?.value == event?.target?.value) {
         let external = element
-        external_item.patchValue({
-          unit_id: external.unit.id,
-          unit_cost: external.unit_cost
+        external_item?.patchValue({
+          unit_id: external?.unit?.id,
+          unit_cost: external?.unit_cost
         })
         /* external_item.controls.unit_id.disable()
         external_item.controls.unit_cost.disable() */
@@ -493,15 +493,13 @@ export class CrearApuPiezaComponent implements OnInit {
     });
   }
 
-
-
   async newMachineTool() {
-    if (this.form.valid) {
+    if (this.form?.valid) {
       let maquinas_herramientas_aux = Array.from(this.maquinas_herramientas);
       let machine = this.machineToolList;
-      const results = maquinas_herramientas_aux.filter(({ value: id1 }) => !machine.value.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
+      const results = maquinas_herramientas_aux?.filter(({ value: id1 }) => !machine?.value?.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
       results.forEach(element => {
-        machine.push(this.machineToolsControl(element))
+        machine?.push(this.machineToolsControl(element))
       });
     } else {
       this.form.markAllAsTouched();
@@ -510,13 +508,13 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   deleteMachineTool(i) {
-    this.machineToolList.removeAt(i);
-    machineToolHelper.subtotalMachine(this.machineToolList, this.form);
+    this.machineToolList?.removeAt(i);
+    machineToolHelper?.subtotalMachine(this.machineToolList, this.form);
   }
 
   deleteAllMachineTool() {
-    this.machineToolList.clear()
-    machineToolHelper.subtotalMachine(this.machineToolList, this.form);
+    this.machineToolList?.clear()
+    machineToolHelper?.subtotalMachine(this.machineToolList, this.form);
   }
 
   /************** Maquinas Herramientas termina ****************/
@@ -524,7 +522,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Procesos Internos Inicia ****************/
 
   internalProccessesControl(element): FormGroup {
-    let group = help.internalProccessesHelper.createInternalProccessesGroup(this.form, this.fb, element);
+    let group = help?.internalProccessesHelper?.createInternalProccessesGroup(this.form, this.fb, element);
     return group;
   }
 
@@ -533,27 +531,27 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   newInternalProccesses() { //!
-    if (this.form.valid) {
+    if (this.form?.valid) {
       let procesos_internos_aux = Array.from(this.procesos_internos);
       let internalProccess = this.internalProccessList;
-      const results = procesos_internos_aux.filter(({ value: id1 }) => !internalProccess.value.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
-      results.forEach(element => {
-        internalProccess.push(this.internalProccessesControl(element))
+      const results = procesos_internos_aux?.filter(({ value: id1 }) => !internalProccess?.value?.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
+      results?.forEach(element => {
+        internalProccess?.push(this.internalProccessesControl(element))
       });
     } else {
-      this.form.markAllAsTouched();
-      this.scroll.scrollToPosition([0, 0]);
+      this.form?.markAllAsTouched();
+      this.scroll?.scrollToPosition([0, 0]);
     }
   }
 
   deleteInternalProccess(i) {
-    this.internalProccessList.removeAt(i);
-    internalProccessesHelper.subtotalInternalProcesses(this.internalProccessList, this.form)
+    this.internalProccessList?.removeAt(i);
+    internalProccessesHelper?.subtotalInternalProcesses(this.internalProccessList, this.form)
   }
 
   deleteAllInternalProccess() {
-    this.internalProccessList.clear();
-    internalProccessesHelper.subtotalInternalProcesses(this.internalProccessList, this.form)
+    this.internalProccessList?.clear();
+    internalProccessesHelper?.subtotalInternalProcesses(this.internalProccessList, this.form)
   }
 
   /************** Procesos Internos Termina ****************/
@@ -561,7 +559,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Procesos Externos Inicia ****************/
 
   externalProccessesControl(element): FormGroup {
-    let group = help.externalProccessesHelper.createExternalProccessesGroup(this.form, this.fb, element);
+    let group = help?.externalProccessesHelper?.createExternalProccessesGroup(this.form, this.fb, element);
     return group;
   }
 
@@ -570,27 +568,27 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   newExternalProccesses() {
-    if (this.form.valid) {
+    if (this.form?.valid) {
       let procesos_externos_aux = Array.from(this.procesos_externos);
       let exteranlProccess = this.externalProccessList;
-      const results = procesos_externos_aux.filter(({ value: id1 }) => !exteranlProccess.value.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
-      results.forEach(element => {
-        exteranlProccess.push(this.externalProccessesControl(element))
+      const results = procesos_externos_aux?.filter(({ value: id1 }) => !exteranlProccess?.value?.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
+      results?.forEach(element => {
+        exteranlProccess?.push(this.externalProccessesControl(element))
       });
     } else {
-      this.form.markAllAsTouched();
-      this.scroll.scrollToPosition([0, 0]);
+      this.form?.markAllAsTouched();
+      this.scroll?.scrollToPosition([0, 0]);
     }
   }
 
   deleteExternalProccess(i) {
-    this.externalProccessList.removeAt(i);
-    externalProccessesHelper.subtotalExternalProcesses(this.externalProccessList, this.form);
+    this.externalProccessList?.removeAt(i);
+    externalProccessesHelper?.subtotalExternalProcesses(this.externalProccessList, this.form);
   }
 
   deleteAllExternalProccess() {
-    this.externalProccessList.clear();
-    externalProccessesHelper.subtotalExternalProcesses(this.externalProccessList, this.form);
+    this.externalProccessList?.clear();
+    externalProccessesHelper?.subtotalExternalProcesses(this.externalProccessList, this.form);
   }
 
   /************** Procesos Externos termina ****************/
@@ -598,7 +596,7 @@ export class CrearApuPiezaComponent implements OnInit {
   /************** Otros Inicia ****************/
 
   othersControl(): FormGroup {
-    let group = help.othersHelper.createOthersGroup(this.form, this.fb);
+    let group = help?.othersHelper?.createOthersGroup(this.form, this.fb);
     return group;
   }
 
@@ -607,19 +605,19 @@ export class CrearApuPiezaComponent implements OnInit {
   }
 
   newOthersList() {
-    if (this.form.valid) {
+    if (this.form?.valid) {
       let others = this.othersList;
-      others.push(this.othersControl())
+      others?.push(this.othersControl())
     } else {
-      this.form.markAllAsTouched();
-      this.scroll.scrollToPosition([0, 0]);
+      this.form?.markAllAsTouched();
+      this.scroll?.scrollToPosition([0, 0]);
     }
 
   }
 
   deleteOthers(i) {
-    this.othersList.removeAt(i);
-    othersHelper.subtotalOthers(this.othersList, this.form);
+    this.othersList?.removeAt(i);
+    othersHelper?.subtotalOthers(this.othersList, this.form);
   }
 
   /************** Otros Termina ****************/
@@ -630,24 +628,24 @@ export class CrearApuPiezaComponent implements OnInit {
 
   indirectCostPush() {
     let indirect_cost = this.form.get('indirect_cost') as FormArray;
-    indirect_cost.clear();
-    this.indirectCosts.forEach(element => {
-      indirect_cost.push(this.indirectCostgroup(element, this.fb, this.form));
+    indirect_cost?.clear();
+    this.indirectCosts?.forEach(element => {
+      indirect_cost?.push(this.indirectCostgroup(element, this.fb, this.form));
     });
   }
 
   indirectCostgroup(element, fb: FormBuilder, form: FormGroup) {
     let group = fb.group({
-      name: [element.text],
-      percentage: [element.percentage],
+      name: [element?.text],
+      percentage: [element?.percentage],
       value: [0]
     });
-    help.functionsApu.indirectCostOp(group, form);
+    help.functionsApu?.indirectCostOp(group, form);
     return group;
   }
 
   save() {
-    if (this.form.invalid) {
+    if (this.form?.invalid) {
       this._swal.show({
         icon: 'error',
         title: 'ERROR',

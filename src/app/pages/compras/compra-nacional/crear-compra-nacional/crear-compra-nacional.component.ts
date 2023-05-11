@@ -215,7 +215,7 @@ export class CrearCompraNacionalComponent implements OnInit {
       let cantidad = prod.get('Cantidad');
       let impuesto_id = prod.get('impuesto_id');
       let impuesto = this.Impuestos.find(x => x.Id_Impuesto == impuesto_id.value);
-      let valorIva = (value * cantidad.value * impuesto.Valor / 100);
+      let valorIva = (value * cantidad.value * impuesto?.Valor / 100);
       let subtotal = (value * cantidad.value);
       let total = valorIva + subtotal;
       prod.patchValue({

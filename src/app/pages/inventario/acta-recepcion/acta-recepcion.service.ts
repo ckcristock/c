@@ -47,7 +47,13 @@ export class ActaRecepcionService {
     return this.http.get(environment.base_url + '/php/actarecepcion/codigo_barrad.php', { params })
   }
 
-  save(data:any){
+  save(data: any) {
     return this.http.post(`${environment.base_url}/php/bodega_nuevo/guardar_acta_recepciond.php`, data)
   }
+
+  validate(id: any) {
+    return this.http.get(`${environment.base_url}/validate-acta-history/${id}`)
+  }
+
+
 }

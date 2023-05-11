@@ -9,12 +9,12 @@
           <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
           <hr class="line" />
           <button
-                            type="button"
-                            (click)="printform()"
-                            class="btn btn-info btn-sm"
-                          >
-                            form
-                          </button>
+            type="button"
+            (click)="printform()"
+            class="btn btn-info btn-sm"
+          >
+            form
+          </button>
           <ng-container [formGroup]="form">
             <!-- SECCION DE FACTURAS -->
             <ng-container formArrayName="invoices">
@@ -57,9 +57,8 @@
                         *ngFor="let invoice of invoices.controls; let i = index"
                         class="text-center"
                       >
-                        <td class="p-0">{{ i + 1 }}</td>
-                        <td class="p-0">
-                          <!-- <mat-form-field class="col" appearance="outline"> -->
+                        <td class="align-middle p-0">{{ i + 1 }}</td>
+                        <td class="align-middle p-0">
                           <input
                             type="text"
                             placeholder="Ingresa el número de factura*"
@@ -68,10 +67,8 @@
                             autocomplete="off"
                             class="w-100 border-0 color-transparent"
                           />
-                          <!-- </mat-form-field> -->
                         </td>
-                        <td class="p-0">
-                          <!-- <mat-form-field class="col" appearance="outline"> -->
+                        <td class="align-middle p-0">
                           <input
                             [matDatepicker]="picker"
                             placeholder="Elije la fecha*"
@@ -85,14 +82,15 @@
                             [for]="picker"
                           ></mat-datepicker-toggle>
                           <mat-datepicker #picker></mat-datepicker>
-
-                          <!-- </mat-form-field> -->
                         </td>
 
                         <td
                           class="p-0 d-flex align-items-center justify-content-center"
                         >
-                          <div class="form-group mb-0 text-center col">
+                          <div
+                            class="form-group mb-0 text-center col"
+                            *ngIf="!invoice.get('Archivo_Factura').value"
+                          >
                             <div class="custom-input-file">
                               <input
                                 type="file"
@@ -112,8 +110,16 @@
                               >
                             </div>
                           </div>
+                          <div *ngIf="invoice.get('Archivo_Factura').value">
+                            <a
+                              [href]="invoice.get('Archivo_Factura').value"
+                              target="_blank"
+                            >
+                              Factura
+                            </a>
+                          </div>
                         </td>
-                        <td class="p-0">
+                        <td class="align-middle p-0">
                           <!-- <input
                             type="text"
                             placeholder="Retenciones"
@@ -124,6 +130,7 @@
                         </td>
                         <td>
                           <button
+                            *ngIf="!invoice.get('Archivo_Factura').value"
                             type="button"
                             (click)="removeInvoice(i)"
                             class="btn btn-danger btn-sm"
@@ -145,9 +152,56 @@
             <ng-container formArrayName="products_acta">
               <div class="row card-title d-flex justify-content-between">
                 <div class="col-md-12 px-0">
-                  <h6 class="text-primary">Productos</h6>
+                  <h6 class="text-primary">Productos recibidos</h6>
+                </div>
+                <div
+                  class="rounded-top table-responsive mt-2"
+                  *ngIf="history != null; else notDataInfo"
+                >
+                  <table class="table table-bordered table-striped table-sm">
+                    <thead class="bg-light">
+                      <tr class="text-center text-uppercase">
+                        <th>Imagen</th>
+                        <th>Producto</th>
+                        <th>Factura</th>
+                        <th>Cantidad</th>
+                        <th>Unidad</th>
+                        <th>Subtotal</th>
+                        <th>Iva</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        *ngFor="let product of history.products"
+                        class="text-center"
+                      >
+                        <td class="align-middle p-0">
+                          <img
+                            [src]="product?.product?.Imagen"
+                            onerror="this.src='../../../../assets/images/product.jpg'"
+                            class="d-block mx-auto img-fluid img-product"
+                          />
+                        </td>
+                        <td>
+                          {{ product?.product?.Nombre_Comercial | uppercase }}
+                        </td>
+                        <td>{{ product?.factura?.Factura | uppercase }}</td>
+                        <td>{{ product?.Cantidad | number }}</td>
+                        <td>
+                          {{ product?.product?.unit?.name | titlecase }}
+                        </td>
+                        <td>$ {{ product?.Subtotal | number : "1.2-2" }}</td>
+                        <td>$ {{ product?.Impuesto | number : "1.2-2" }}</td>
+                        <td>$ {{ product?.Precio | number : "1.2-2" }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
 
+                <div class="col-md-12 px-0">
+                  <h6 class="text-primary">Productos por verificar</h6>
+                </div>
                 <div class="rounded-top table-responsive mt-2">
                   <table class="table table-bordered table-striped table-sm">
                     <thead class="bg-light">
@@ -165,12 +219,18 @@
                     </thead>
                     <tbody>
                       <tr
-                        *ngFor="let product of products_acta.controls; let i = index"
+                        *ngFor="
+                          let product of products_acta.controls;
+                          let i = index
+                        "
                         [formGroupName]="i"
                         class="text-center"
                       >
                         <td>
-                          <mat-checkbox color="primary"></mat-checkbox>
+                          <mat-checkbox
+                            color="primary"
+                            formControlName="toAdd"
+                          ></mat-checkbox>
                         </td>
                         <td class="align-middle p-0">
                           <img
@@ -211,6 +271,7 @@
                           <!--  -->
                         </td>
                         <td>{{ product.get("unidad").value | titlecase }}</td>
+                        <!-- Costo agregado por el usuario -->
                         <td>
                           <input
                             placeholder="Ingresa un valor"
@@ -228,6 +289,7 @@
                             "
                           />
                         </td>
+
                         <td>
                           <input
                             placeholder="Ingresa un valor"
@@ -256,11 +318,11 @@
                             autocomplete="off"
                             class="w-100 border-0 color-transparent"
                             [matTooltip]="
-                            product.get('Total')?.value !==
-                            product.get('total_').value
-                              ? 'El valor es diferente al de la orden de compra'
-                              : null
-                          "
+                              product.get('Total')?.value !==
+                              product.get('total_').value
+                                ? 'El valor es diferente al de la orden de compra'
+                                : null
+                            "
                           />
                         </td>
                       </tr>

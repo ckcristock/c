@@ -6,6 +6,8 @@ import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecu
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { consts } from 'src/app/core/utils/consts';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
+import { AbstractControl } from '@angular/forms';
+
 
 @Component({
   selector: 'app-crear-acta-recepcion',
@@ -23,6 +25,7 @@ export class CrearActaRecepcionComponent implements OnInit {
   }
   form: FormGroup;
   ordenCompra: any[] = [];
+  history: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,21 +37,59 @@ export class CrearActaRecepcionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loading = true
+
     this.createForm();
-    this.route.paramMap.subscribe(params => {
+    console.log(this.invoices.controls);
+    this.route.paramMap.subscribe(async params => {
       let p = {
-        codigo: params.get('codigo'),
+        id: params.get('id'),
         compra: params.get('compra')
       }
-      this.getActaRecepcion(p);
+      await this.getActaRecepcion(p);
+      await this.validate(params.get('id'))
       this.getConsecutivo();
+      this.loading = false
     })
   }
 
-  getActaRecepcion(params) {
-    this._actaRecepcion.getActaRecepcionCompra(params).subscribe((res: any) => {
+  async validate(id) {
+    await this._actaRecepcion.validate(id).toPromise().then((res: any) => {
+      this.history = res.data;
+      this.form.patchValue({
+        Id_Acta_Recepcion: (this.history ? this.history.Id_Acta_Recepcion : ''),
+        Observaciones: [this.history ? this.history.Observaciones : ''],
+        Codigo: [this.history ? this.history.Codigo : ''],
+      })
+      if (res.data?.facturas.length > 0) {
+        res.data.facturas.forEach(invoice => {
+          this.addInvoice(invoice)
+        });
+      }
+      if (res.data?.products.length > 0) {
+        let indexArray: any[] = [];
+        this.products_acta.value.forEach((product, index) => {
+          let exist = this.history.products.some(v => v.Id_Producto == product.Id_Producto);
+          if (exist) {
+            indexArray.push(index)
+          }
+        });
+        indexArray.sort((a, b) => b - a)
+        indexArray.forEach(element => {
+          this.products_acta.removeAt(element)
+        });
+        /* res.data.products.forEach(product => {
+          this.addProducts(product)
+        }); */
+      }
+    })
+  }
+
+
+  async getActaRecepcion(params) {
+    await this._actaRecepcion.getActaRecepcionCompra(params).toPromise().then((res: any) => {
       this.ordenCompra = res.data;
-      console.log(this.ordenCompra)
+
       res.data.products.forEach(element => {
         this.addProducts(element)
       });
@@ -58,24 +99,24 @@ export class CrearActaRecepcionComponent implements OnInit {
   getConsecutivo() {
     this._consecutivos.getConsecutivo('acta_recepcion').toPromise().then((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
-      let con = this._consecutivos.construirConsecutivo(r.data);
-      this.datosCabecera.Codigo = con
-      // if (!this.dataEdit && !this.id) {
-      //   this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
-      //   let con = this._consecutivos.construirConsecutivo(r.data);
-      //   this.datosCabecera.Codigo = con
-      // } else {
-      //   this.datosCabecera.Codigo = this.dataEdit.code
-      // }
+
+      if (!this.history) {
+        this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
+        let con = this._consecutivos.construirConsecutivo(r.data);
+        this.datosCabecera.Codigo = con
+      } else {
+        this.datosCabecera.Codigo = this.history.Codigo
+      }
     })
   }
+
 
   // Esto es lo que va a la tabla de 'acta_recepcion'
   createForm() {
     this.form = this.fb.group({
-      Id_Acta_Recepcion: [null],
-      Observaciones: '',
-      Codigo: '',
+      Id_Acta_Recepcion: (''),
+      Observaciones: [''],
+      Codigo: [''],
       invoices: this.fb.array([]),
       products_acta: this.fb.array([]),
     });
@@ -91,24 +132,36 @@ export class CrearActaRecepcionComponent implements OnInit {
   }
 
   // Esto es lo que va a la tabla facturas_acta_recepcion
-  addInvoice() {
+  addInvoice(invoice = null) {
     this.invoices.push(this.fb.group({
-      Id_Factura_Acta_Recepcion: [null],
-      Archivo_Factura: ['', Validators.required],
-      Factura: ['', Validators.required],
-      Fecha_Factura: ['', Validators.required],
+      Id_Factura_Acta_Recepcion: [invoice ? invoice.Id_Factura_Acta_Recepcion : '', Validators.required],
+      Archivo_Factura: [invoice ? invoice.Archivo_Factura : '', Validators.required],
+      Factura: [invoice ? invoice.Factura : '', Validators.required],
+      Fecha_Factura: [invoice ? invoice.Fecha_Factura : '', Validators.required],
       //retencion: ['', Validators.required],
     }));
   }
 
   // esto va a la tabla de productos_acta_recepcion
   addProducts(element) {
-    this.products_acta.push(this.fb.group({
-      Id_Producto_Acta_Recepcion:[null],
-      Cantidad: [0, Validators.min(0)], //  falta crear un validador de checkbox
-      Subtotal: '',
-      Iva: '',
-      Total: '',
+    let add = this.fb.group({
+      Id_Producto_Acta_Recepcion: [element.Id_Producto_Acta_Recepcion ? element.Id_Producto_Acta_Recepcion : null],
+      Cantidad: [{
+        value: 0,
+        disabled: true
+      }], //  falta crear un validador de checkbox
+      Subtotal: [{
+        value: 0,
+        disabled: true
+      }],
+      Iva: [{
+        value: 0,
+        disabled: true
+      }],
+      Total: [{
+        value: 0,
+        disabled: true
+      }],
       imagen: [element?.product?.Imagen],
       nombre: [element?.product?.Nombre_Comercial],
       unidad: [element?.product?.unit?.name],
@@ -117,11 +170,34 @@ export class CrearActaRecepcionComponent implements OnInit {
       iva_: [element?.Valor_Iva],
       total_: [element?.Total],
       Id_Producto: [element?.product.Id_Producto],
-
+      toAdd: [element.Id_Producto_Acta_Recepcion ? true : false]
       // con imagen, y con campos para la cantidad, el iva y los precios (precio total, precio iva, subtotal sin iva),
       // Subtotal, Impuesto, Precio, Cantidad, Unidad
-    }));
+    })
+
+    const fields = ['Subtotal', 'Cantidad', 'Iva', 'Total'];
+    add.get('toAdd').valueChanges.subscribe(value => {
+      if (value) {
+        fields.forEach(field => add.get(field).enable());
+        fields.forEach(field => add.get(field).setValidators([Validators.required]));
+
+      } else {
+        fields.forEach(field => add.get(field).disable());
+        fields.forEach(field => add.get(field).clearValidators());
+        add.patchValue({
+          Cantidad: 0,
+          Subtotal: 0,
+          Iva: 0,
+          Total: 0
+        });
+      }
+      fields.forEach(field => add.get(field).updateValueAndValidity());
+    })
+
+    this.products_acta.push(add);
   }
+
+
 
   removeInvoice(index: number) {
     this.invoices.removeAt(index);
@@ -136,7 +212,13 @@ export class CrearActaRecepcionComponent implements OnInit {
         showCancel: true
       }).then(result => {
         if (result.isConfirmed) {
+          let newArray = Array.from(this.products_acta.value).filter((product: any) =>
+            product.toAdd == true
+          );
+
+          //sacar los que no esten marcados
           const data = {
+            selected_products: newArray,
             ...this.form.value,
             ...this.ordenCompra
           };
@@ -151,7 +233,6 @@ export class CrearActaRecepcionComponent implements OnInit {
 
             this.router.navigateByUrl('/inventario/acta-recepcion')
           })
-          console.log(this.form.value)
         } else {
           this._swal.show({
             icon: 'error',
@@ -190,7 +271,7 @@ export class CrearActaRecepcionComponent implements OnInit {
     }
   }
 
-  printform(){
+  printform() {
     console.log(this.form.value)
   }
 

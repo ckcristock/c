@@ -1,0 +1,371 @@
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<ng-container *ngIf="!loading; else placeholder">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+          <hr class="line" />
+          <button
+            type="button"
+            (click)="printform()"
+            class="btn btn-info btn-sm"
+          >
+            form
+          </button>
+          <ng-container [formGroup]="form">
+            <!-- SECCION DE FACTURAS -->
+            <ng-container formArrayName="invoices">
+              <div class="row card-title d-flex justify-content-between">
+                <div class="col-md-6 px-0">
+                  <h6 class="text-primary">Facturas</h6>
+                </div>
+                <div class="col-md-6 px-0 text-right">
+                  <div class="btn-group rounded w-sm-100">
+                    <button
+                      class="btn btn-primary btn-sm"
+                      type="button"
+                      (click)="addInvoice()"
+                    >
+                      <!-- //este boton debe tener un ngIf de permisos  -->
+                      <i class="fa fa-plus"></i> Agregar
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <ng-container
+                *ngIf="invoices.controls.length > 0; else notDataInfo"
+              >
+                <div class="rounded-top table-responsive">
+                  <table class="table table-bordered table-striped table-sm">
+                    <thead class="bg-light">
+                      <tr class="text-center text-uppercase">
+                        <th>#</th>
+                        <th>Número factura</th>
+                        <th>Fecha</th>
+                        <th>Archivo</th>
+                        <th>Retenciones</th>
+                        <th><i class="mdi mdi-chevron-down"></i></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        [formGroupName]="i"
+                        *ngFor="let invoice of invoices.controls; let i = index"
+                        class="text-center"
+                      >
+                        <td class="align-middle p-0">{{ i + 1 }}</td>
+                        <td class="align-middle p-0">
+                          <input
+                            type="text"
+                            placeholder="Ingresa el número de factura*"
+                            formControlName="Factura"
+                            required
+                            autocomplete="off"
+                            class="w-100 border-0 color-transparent"
+                          />
+                        </td>
+                        <td class="align-middle p-0">
+                          <input
+                            [matDatepicker]="picker"
+                            placeholder="Elije la fecha*"
+                            formControlName="Fecha_Factura"
+                            readonly
+                            autocomplete="off"
+                            class="border-0 color-transparent"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </td>
+
+                        <td
+                          class="p-0 d-flex align-items-center justify-content-center"
+                        >
+                          <div
+                            class="form-group mb-0 text-center col"
+                            *ngIf="!invoice.get('Archivo_Factura').value"
+                          >
+                            <div class="custom-input-file">
+                              <input
+                                type="file"
+                                #fileInput
+                                id="importFile"
+                                accept=".pdf,.png,.jpg,.jpeg"
+                                class="input-file"
+                                (change)="onFileChanged($event, i)"
+                              />
+                              Cargar factura
+                            </div>
+                            <div class="text-center">
+                              <small
+                                *ngIf="invoice.get('Archivo_Factura').value"
+                                class="text-success"
+                                >Cotización cargada exitosamente</small
+                              >
+                            </div>
+                          </div>
+                          <div *ngIf="invoice.get('Archivo_Factura').value">
+                            <a
+                              [href]="invoice.get('Archivo_Factura').value"
+                              target="_blank"
+                            >
+                              Factura
+                            </a>
+                          </div>
+                        </td>
+                        <td class="align-middle p-0">
+                          <!-- <input
+                            type="text"
+                            placeholder="Retenciones"
+                            formControlName="retencion"
+                            required
+                            autocomplete="off"
+                          /> -->
+                        </td>
+                        <td>
+                          <button
+                            *ngIf="!invoice.get('Archivo_Factura').value"
+                            type="button"
+                            (click)="removeInvoice(i)"
+                            class="btn btn-danger btn-sm"
+                          >
+                            <i class="fas fa-trash-alt"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </ng-container>
+
+              <!-- Tabla para facturas -> muchos items que se recorren, vas a tener un boton de agregar general y un boton de eliminar para cada factura, vas a tener el input para el nombre, otro para la fecha, este preferiblemente con datepicker de angular, otro para cargar archivo, tal como lo venimos llevando en todo el software, y que tenga restriccion de tipo de archivo, solo pdf o imgen (png, jpg, jpge), y que muestre cuando el archivo esté cargado, adicional habrá un campo para retenciones pero no tiene importancia
+
+              -->
+            </ng-container>
+            <!-- SECCION DE productos -->
+            <ng-container formArrayName="products_acta">
+              <div class="row card-title d-flex justify-content-between">
+                <div class="col-md-12 px-0">
+                  <h6 class="text-primary">Productos recibidos</h6>
+                </div>
+                <div
+                  class="rounded-top table-responsive mt-2"
+                  *ngIf="history != null; else notDataInfo"
+                >
+                  <table class="table table-bordered table-striped table-sm">
+                    <thead class="bg-light">
+                      <tr class="text-center text-uppercase">
+                        <th>Imagen</th>
+                        <th>Producto</th>
+                        <th>Factura</th>
+                        <th>Cantidad</th>
+                        <th>Unidad</th>
+                        <th>Subtotal</th>
+                        <th>Iva</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        *ngFor="let product of history.products"
+                        class="text-center"
+                      >
+                        <td class="align-middle p-0">
+                          <img
+                            [src]="product?.product?.Imagen"
+                            onerror="this.src='../../../../assets/images/product.jpg'"
+                            class="d-block mx-auto img-fluid img-product"
+                          />
+                        </td>
+                        <td>
+                          {{ product?.product?.Nombre_Comercial | uppercase }}
+                        </td>
+                        <td>{{ product?.factura?.Factura | uppercase }}</td>
+                        <td>{{ product?.Cantidad | number }}</td>
+                        <td>
+                          {{ product?.product?.unit?.name | titlecase }}
+                        </td>
+                        <td>$ {{ product?.Subtotal | number : "1.2-2" }}</td>
+                        <td>$ {{ product?.Impuesto | number : "1.2-2" }}</td>
+                        <td>$ {{ product?.Precio | number : "1.2-2" }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="col-md-12 px-0">
+                  <h6 class="text-primary">Productos por verificar</h6>
+                </div>
+                <div class="rounded-top table-responsive mt-2">
+                  <table class="table table-bordered table-striped table-sm">
+                    <thead class="bg-light">
+                      <tr class="text-center text-uppercase">
+                        <th></th>
+                        <th>Imagen</th>
+                        <th>Producto</th>
+                        <th>Factura</th>
+                        <th>Cantidad</th>
+                        <th>Unidad</th>
+                        <th>Subtotal</th>
+                        <th>Iva</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        *ngFor="
+                          let product of products_acta.controls;
+                          let i = index
+                        "
+                        [formGroupName]="i"
+                        class="text-center"
+                      >
+                        <td>
+                          <mat-checkbox
+                            color="primary"
+                            formControlName="toAdd"
+                          ></mat-checkbox>
+                        </td>
+                        <td class="align-middle p-0">
+                          <img
+                            [src]="product.get('imagen').value"
+                            onerror="this.src='../../../../assets/images/product.jpg'"
+                            class="d-block mx-auto img-fluid img-product"
+                          />
+                        </td>
+                        <td class="align-middle">
+                          {{ product.get("nombre").value | uppercase }}
+                        </td>
+                        <td>
+                          <select class="w-100 border-0 color-transparent">
+                            <option value="">Selecciona una factura</option>
+                            <option
+                              *ngFor="let item of invoices.value"
+                              [value]="item.Factura"
+                            >
+                              {{ item.Factura }}
+                            </option>
+                          </select>
+                        </td>
+                        <td>
+                          <input
+                            type="text"
+                            formControlName="Cantidad"
+                            currencyMask
+                            [options]="mask?.maskNumbers"
+                            appInputPositionInitial
+                            class="w-100 border-0 color-transparent"
+                            [matTooltip]="
+                              product.get('Cantidad')?.value !==
+                              product.get('cantidad_').value
+                                ? 'El valor es diferente al de la orden de compra'
+                                : null
+                            "
+                          />
+                          <!--  -->
+                        </td>
+                        <td>{{ product.get("unidad").value | titlecase }}</td>
+                        <!-- Costo agregado por el usuario -->
+                        <td>
+                          <input
+                            placeholder="Ingresa un valor"
+                            currencyMask
+                            appInputPosition
+                            [options]="mask?.maskCOP"
+                            formControlName="Subtotal"
+                            autocomplete="off"
+                            class="w-100 border-0 color-transparent"
+                            [matTooltip]="
+                              product.get('Subtotal')?.value !==
+                              product.get('subtotal_').value
+                                ? 'El valor es diferente al de la orden de compra'
+                                : null
+                            "
+                          />
+                        </td>
+
+                        <td>
+                          <input
+                            placeholder="Ingresa un valor"
+                            currencyMask
+                            appInputPosition
+                            [options]="mask?.maskCOP"
+                            formControlName="Iva"
+                            autocomplete="off"
+                            class="w-100 border-0 color-transparent"
+                            [matTooltip]="
+                              product.get('Iva')?.value !==
+                              product.get('iva_').value
+                                ? 'El valor es diferente al de la orden de compra'
+                                : null
+                            "
+                          />
+                        </td>
+
+                        <td>
+                          <input
+                            placeholder="Ingresa un valor"
+                            currencyMask
+                            appInputPosition
+                            [options]="mask?.maskCOP"
+                            formControlName="Total"
+                            autocomplete="off"
+                            class="w-100 border-0 color-transparent"
+                            [matTooltip]="
+                              product.get('Total')?.value !==
+                              product.get('total_').value
+                                ? 'El valor es diferente al de la orden de compra'
+                                : null
+                            "
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- tabla para productos -> inicialmente se van a listar los productos de la orden de compra, con imagen, y con campos para la cantidad, el iva y los precios (precio total, precio iva, subtotal sin iva), habrá un checkbox para seleccionar los productos que se ingresan, y habrá una comparativa con la informacion que viene de la orden de compra, muestras un icon de un alert o de un ! con un tooltip donde describa que el campo es diferente a la orden de compra  -->
+            </ng-container>
+            <div class="row">
+              <mat-form-field
+                class="col-md-12 mat-form-field-no-padding textarea"
+                appearance="outline"
+              >
+                <mat-label>Observaciones</mat-label>
+                <textarea
+                  matInput
+                  placeholder="Ingresa las observaciones"
+                  rows="5"
+                  formControlName="Observaciones"
+                  [cdkTextareaAutosize]="true"
+                ></textarea>
+              </mat-form-field>
+            </div>
+            <button
+              class="btn btn-block btn-primary"
+              type="submit"
+              form="form"
+              (click)="saveActa()"
+              [disabled]="!form.valid"
+            >
+              Guardar
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+<ng-template #notDataInfo>
+  <div class="alert alert-warning" role="alert">No hay nada aquí</div>
+</ng-template>

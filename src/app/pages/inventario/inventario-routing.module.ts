@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'inventario', component: InventarioComponent },
   { path: 'inventario-fisico', component: InventarioFisicoComponent },
   { path: 'acta-recepcion', component: ActaRecepcionComponent },
-  { path: 'acta-recepcion/crear/:codigo/:compra', component: CrearActaRecepcionComponent },
+  { path: 'acta-recepcion/crear/:id/:compra', component: CrearActaRecepcionComponent },
   { path: 'acta-recepcion/crear-old/:codigo/:compra', component: CrearActaRecepcionOldComponent },
   { path: 'acta-recepcion/ver/:id', component: VerActaRecepcionComponent },
   { path: 'acta-recepcion-aprobados', component: ActaRecepionAprobadosComponent },

@@ -110,7 +110,11 @@
                       <a
                         class="dropdown-item text-info"
                         href=""
-                        [routerLink]="['crear', item.Codigo, 'Nacional']"
+                        [routerLink]="[
+                          'crear',
+                          item.Id_Orden_Compra_Nacional,
+                          'Nacional'
+                        ]"
                       >
                         <i class="fas fa-check"></i> Realizar</a
                       >
@@ -337,7 +341,7 @@
                 </td>
                 <td>{{ item.Fecha_Anulacion | date }}</td>
                 <td>{{ item.causal.Nombre }}</td>
-                <td>{{ item.third.full_name }}</td>
+                <td>{{ item.third?.full_name }}</td>
                 <td>
                   <div ngbDropdown container="body" class="dropdown-primary">
                     <button

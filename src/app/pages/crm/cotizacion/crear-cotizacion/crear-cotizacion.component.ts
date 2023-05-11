@@ -75,6 +75,7 @@ export class CrearCotizacionComponent implements OnInit {
     this.getTRM();
     this.createForm();
     this.getThirdParties();
+    this.getContacts();
     this.getBudgets();
     await this.getCities();
     if (this.path != 'crear') {
@@ -92,6 +93,7 @@ export class CrearCotizacionComponent implements OnInit {
       this.getQuotation(this.id)
     }
     this.getThirdParties();
+    this.getContacts();
     await this.getCities();
     this.reload = false
   }
@@ -116,7 +118,7 @@ export class CrearCotizacionComponent implements OnInit {
   }
   contacts: any[];
   getContacts() {
-    this._negocios.getThirdPartyPersonForThird(this.form.value.customer_id).subscribe((resp: any) => {
+    this._negocios.getThirdPartyPersonIndex().subscribe((resp: any) => {
       this.contacts = resp.data;
     });
   }
@@ -223,8 +225,8 @@ export class CrearCotizacionComponent implements OnInit {
       total_cop: 0,
       total_usd: 0,
       commercial_terms: [null, Validators.required],
-      legal_requirements: [null, Validators.required],
-      technical_requirements: [null, Validators.required],
+      legal_requirements: [null],
+      technical_requirements: [null],
       unit_value_prorrateado_cop: 0,
       unit_value_prorrateado_usd: 0,
       format_code: [''],

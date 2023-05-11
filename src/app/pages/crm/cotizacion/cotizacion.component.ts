@@ -54,7 +54,8 @@ export class CotizacionComponent implements OnInit {
   permission: Permissions = {
     menu: 'Cotizaciones',
     permissions: {
-      show: true
+      show: true,
+      approve: true,
     }
   };
   constructor(

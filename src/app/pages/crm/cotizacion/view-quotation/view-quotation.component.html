@@ -6,11 +6,41 @@
     <div class="card-body" #printPDF>
       <app-cabecera [datosCabecera]="headerData"></app-cabecera>
       <hr class="line" />
-      <div class="d-flex justify-content-end mb-2">
+      <div class="d-flex justify-content-between mb-2">
+        <div>
+          <span
+            class="badge"
+            [class]="
+              quotation.status == 'Pendiente'
+                ? 'badge-info'
+                : quotation.status == 'Aprobada'
+                ? 'badge-primary'
+                : quotation.status == 'No aprobada'
+                ? 'badge-warning'
+                : quotation.status == 'Anulada'
+                ? 'badge-danger'
+                : 'badge-dark'
+            "
+            >{{ quotation.status | uppercase }}</span
+          >
+        </div>
         <div class="btn-group rounded w-sm-100">
+          <button
+            class="btn btn-primary btn-sm"
+            type="button"
+            *ngIf="
+              quotation.status != 'Anulada' &&
+              this.permission.permissions.approve &&
+              quotation.status != 'Aprobada'
+            "
+            (click)="updateStatus('Aprobada', quotation.id)"
+          >
+            <i class="fas fa-thumbs-up"></i> Aprobar
+          </button>
           <button
             class="btn btn-info btn-sm"
             type="button"
+            *ngIf="quotation.status != 'Aprobada'"
             [routerLink]="['/crm/cotizacion/editar', quotation.id]"
           >
             <i class="fas fa-edit"></i> Editar
@@ -25,6 +55,7 @@
           <button
             type="button"
             (click)="download()"
+            *ngIf="quotation.status == 'Aprobada'"
             class="btn btn-danger btn-sm"
           >
             <span

@@ -8,14 +8,14 @@
           <button
             class="btn btn-info btn-sm"
             type="button"
-            [routerLink]="['/crm/apu/editar-apu-servicio/', data.id]"
+            [routerLink]="['/crm/apu/editar-apu-servicio/', data?.id]"
           >
             <i class="fas fa-edit"></i> Editar
           </button>
           <button
             class="btn btn-success btn-sm"
             type="button"
-            [routerLink]="['/crm/apu/copiar-apu-servicio/', data.id]"
+            [routerLink]="['/crm/apu/copiar-apu-servicio/', data?.id]"
           >
             <i class="fas fa-copy"></i> Copiar
           </button>
@@ -47,20 +47,20 @@
           </thead>
           <tbody>
             <tr>
-              <td>{{ data.thirdparty.name }}</td>
-              <td>{{ data.name }}</td>
-              <td>{{ data.set_name || "Sin información" }}</td>
-              <td>{{ data.machine_name || "Sin información" }}</td>
-              <td>{{ data.city.name }}</td>
-              <td>{{ data.person.name }}</td>
-              <td>{{ data.line }}</td>
+              <td>{{ data?.thirdparty?.name }}</td>
+              <td>{{ data?.name }}</td>
+              <td>{{ data?.set_name || "Sin información" }}</td>
+              <td>{{ data?.machine_name || "Sin información" }}</td>
+              <td>{{ data?.city?.name }}</td>
+              <td>{{ data?.person?.name }}</td>
+              <td>{{ data?.line }}</td>
             </tr>
             <tr class="text-left">
               <th colspan="100%">Observaciones</th>
             </tr>
             <tr class="text-left">
               <td colspan="100%">
-                {{ data.observation || "No existen observaciones" }}
+                {{ data?.observation || "No existen observaciones" }}
               </td>
             </tr>
           </tbody>
@@ -71,9 +71,9 @@
   <mat-accordion multi>
     <mat-expansion-panel
       [expanded]="
-        data.dimensional_validation.length > 0 ||
-        data.assemblies_start_up.length > 0 ||
-        data.accompaniments.length > 0
+        data?.dimensional_validation?.length > 0 ||
+        data?.assemblies_start_up?.length > 0 ||
+        data?.accompaniments?.length > 0
       "
       class="mat-elevation-z0 border-radius-panel"
     >
@@ -81,58 +81,58 @@
         <mat-panel-title> MAQMO </mat-panel-title>
       </mat-expansion-panel-header>
       <div class="card-body">
-        <ng-container *ngIf="data.dimensional_validation.length > 0">
+        <ng-container *ngIf="data?.dimensional_validation?.length > 0">
           <h5 class="mt-2 text-center">Validación dimensional</h5>
           <hr class="line" />
           <h6>Cálculo de mano de obra</h6>
           <app-validacion-dimensional
-            [data]="data.dimensional_validation"
-            [subtotal_labor]="data.subtotal_labor"
-            [subtotal_travel_expense]="data.subtotal_travel_expense"
+            [data]="data?.dimensional_validation"
+            [subtotal_labor]="data?.subtotal_labor"
+            [subtotal_travel_expense]="data?.subtotal_travel_expense"
             [subtotal_dimensional_validation]="
-              data.subtotal_dimensional_validation
+              data?.subtotal_dimensional_validation
             "
           ></app-validacion-dimensional>
           <hr />
         </ng-container>
-        <ng-container *ngIf="data.assemblies_start_up.length > 0">
+        <ng-container *ngIf="data?.assemblies_start_up?.length > 0">
           <h5 class="text-center">Montaje de equipos</h5>
           <hr class="line" />
           <h6>Cálculo de mano de obra</h6>
           <app-montaje-puesta-marcha
-            [data]="data.assemblies_start_up"
-            [subtotal_labor_mpm]="data.subtotal_labor_mpm"
-            [subtotal_travel_expense_mpm]="data.subtotal_travel_expense_mpm"
+            [data]="data?.assemblies_start_up"
+            [subtotal_labor_mpm]="data?.subtotal_labor_mpm"
+            [subtotal_travel_expense_mpm]="data?.subtotal_travel_expense_mpm"
             [subtotal_assembly_commissioning]="
-              data.subtotal_assembly_commissioning
+              data?.subtotal_assembly_commissioning
             "
           ></app-montaje-puesta-marcha>
           <hr />
         </ng-container>
-        <ng-container *ngIf="data.accompaniments.length > 0">
+        <ng-container *ngIf="data?.accompaniments?.length > 0">
           <h5 class="text-center">Acompañamiento y puesta en marcha</h5>
           <hr class="line" />
           <h6>Cálculo de mano de obra</h6>
           <app-acompanamiento
-            [data]="data.accompaniments"
-            [subtotal_labor_apm]="data.subtotal_labor_apm"
-            [subtotal_travel_expense_apm]="data.subtotal_travel_expense_apm"
-            [subtotal_accompaniment]="data.subtotal_accompaniment"
+            [data]="data?.accompaniments"
+            [subtotal_labor_apm]="data?.subtotal_labor_apm"
+            [subtotal_travel_expense_apm]="data?.subtotal_travel_expense_apm"
+            [subtotal_accompaniment]="data?.subtotal_accompaniment"
           ></app-acompanamiento>
           <hr />
         </ng-container>
         <app-list-items
           title1="SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA"
-          [var1]="data.general_subtotal_travel_expense_labor"
+          [var1]="data?.general_subtotal_travel_expense_labor"
           type1="cop"
         ></app-list-items>
       </div>
     </mat-expansion-panel>
     <mat-expansion-panel
       [expanded]="
-        data.dimensional_validation_c.length > 0 ||
-        data.assemblies_start_up_c.length > 0 ||
-        data.accompaniments_c.length > 0
+        data?.dimensional_validation_c?.length > 0 ||
+        data?.assemblies_start_up_c?.length > 0 ||
+        data?.accompaniments_c?.length > 0
       "
       class="mat-elevation-z0 border-radius-panel"
     >
@@ -140,44 +140,46 @@
         <mat-panel-title> CONTRATISTAS </mat-panel-title>
       </mat-expansion-panel-header>
       <div class="card-body">
-        <ng-container *ngIf="data.dimensional_validation_c.length > 0">
+        <ng-container *ngIf="data?.dimensional_validation_c?.length > 0">
           <h5 class="mt-2 text-center">Validación dimensional</h5>
           <hr class="line" />
           <h6>Cálculo de mano de obra</h6>
           <app-validacion-dimensional-contratista
-            [data]="data.dimensional_validation_c"
-            [subtotal_travel_expense_vd_c]="data.subtotal_travel_expense_vd_c"
+            [data]="data?.dimensional_validation_c"
+            [subtotal_travel_expense_vd_c]="data?.subtotal_travel_expense_vd_c"
             [subtotal_dimensional_validation_c]="
-              data.subtotal_dimensional_validation_c
+              data?.subtotal_dimensional_validation_c
             "
           ></app-validacion-dimensional-contratista>
           <hr />
         </ng-container>
-        <ng-container *ngIf="data.assemblies_start_up_c.length > 0">
+        <ng-container *ngIf="data?.assemblies_start_up_c?.length > 0">
           <h5 class="text-center">Montaje de equipos</h5>
           <hr class="line" />
           <h6>Cálculo de mano de obra</h6>
           <app-montaje-equipos-contratista
-            [data]="data.assemblies_start_up_c"
-            [subtotal_travel_expense_me_c]="data.subtotal_travel_expense_me_c"
-            [subtotal_assembly_c]="data.subtotal_assembly_c"
+            [data]="data?.assemblies_start_up_c"
+            [subtotal_travel_expense_me_c]="data?.subtotal_travel_expense_me_c"
+            [subtotal_assembly_c]="data?.subtotal_assembly_c"
           ></app-montaje-equipos-contratista>
           <hr />
         </ng-container>
-        <ng-container *ngIf="data.accompaniments_c.length > 0">
+        <ng-container *ngIf="data?.accompaniments_c?.length > 0">
           <h5 class="text-center">Acompañamiento y puesta en marcha</h5>
           <hr class="line" />
           <h6>Cálculo de mano de obra</h6>
           <app-acompanamiento-contratista
-            [data]="data.accompaniments_c"
-            [subtotal_travel_expense_apm_c]="data.subtotal_travel_expense_apm_c"
-            [subtotal_accompaniment_c]="data.subtotal_accompaniment_c"
+            [data]="data?.accompaniments_c"
+            [subtotal_travel_expense_apm_c]="
+              data?.subtotal_travel_expense_apm_c
+            "
+            [subtotal_accompaniment_c]="data?.subtotal_accompaniment_c"
           ></app-acompanamiento-contratista>
           <hr />
         </ng-container>
         <app-list-items
           title1="SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA"
-          [var1]="data.general_subtotal_travel_expense_labor_c"
+          [var1]="data?.general_subtotal_travel_expense_labor_c"
           type1="cop"
         ></app-list-items>
       </div>
@@ -197,7 +199,7 @@
                 <th colspan="2">Subtotal maqmo</th>
                 <td class="text-right">
                   ${{
-                    data.general_subtotal_travel_expense_labor
+                    data?.general_subtotal_travel_expense_labor
                       | number : "1.2-2"
                   }}
                 </td>
@@ -206,7 +208,7 @@
                 <th colspan="2">Subtotal contratistas</th>
                 <td class="text-right">
                   ${{
-                    data.general_subtotal_travel_expense_labor_c
+                    data?.general_subtotal_travel_expense_labor_c
                       | number : "1.2-2"
                   }}
                 </td>
@@ -214,42 +216,42 @@
               <tr>
                 <th colspan="2">Maqmo + Contratistas</th>
                 <th class="text-right">
-                  ${{ data.total_unit_cost | number : "1.2-2" }}
+                  ${{ data?.total_unit_cost | number : "1.2-2" }}
                 </th>
               </tr>
               <tr>
                 <th class="text-left">Administrativos</th>
                 <td class="text-right">
-                  {{ data.administrative_percentage }}%
+                  {{ data?.administrative_percentage }}%
                 </td>
                 <td class="text-right">
-                  ${{ data.administrative_value | number : "1.2-2" }}
+                  ${{ data?.administrative_value | number : "1.2-2" }}
                 </td>
               </tr>
               <tr>
                 <th class="text-left">Imprevistos</th>
-                <td class="text-right">{{ data.unforeseen_percentage }}%</td>
+                <td class="text-right">{{ data?.unforeseen_percentage }}%</td>
                 <td class="text-right">
-                  ${{ data.unforeseen_value | number : "1.2-2" }}
+                  ${{ data?.unforeseen_value | number : "1.2-2" }}
                 </td>
               </tr>
               <tr>
                 <th class="text-left" colspan="2">Subtotal A + I</th>
                 <td class="text-right">
                   ${{
-                    data.subtotal_administrative_unforeseen | number : "1.2-2"
+                    data?.subtotal_administrative_unforeseen | number : "1.2-2"
                   }}
                 </td>
               </tr>
               <tr>
                 <th class="text-left" colspan="2">Utilidad</th>
-                <td class="text-right">{{ data.utility_percentage }}%</td>
+                <td class="text-right">{{ data?.utility_percentage }}%</td>
               </tr>
               <tr>
                 <th class="text-left" colspan="2">SubTotal A + I + U</th>
                 <td class="text-right">
                   ${{
-                    data.subtotal_administrative_unforeseen_utility
+                    data?.subtotal_administrative_unforeseen_utility
                       | number : "1.2-2"
                   }}
                 </td>
@@ -260,13 +262,13 @@
                 </th>
                 <th class="text-right">
                   ${{
-                    data.sale_price_cop_withholding_total | number : "1.2-2"
+                    data?.sale_price_cop_withholding_total | number : "1.2-2"
                   }}
                 </th>
               </tr>
               <tr>
                 <th class="text-left" colspan="2">TRM</th>
-                <td class="text-right">${{ data.trm | number : "1.2-2" }}</td>
+                <td class="text-right">${{ data?.trm | number : "1.2-2" }}</td>
               </tr>
               <tr>
                 <th class="text-left" colspan="2">
@@ -274,7 +276,9 @@
                 </th>
                 <th class="text-right">
                   USD
-                  {{ data.sale_price_usd_withholding_total | number : "1.2-2" }}
+                  {{
+                    data?.sale_price_usd_withholding_total | number : "1.2-2"
+                  }}
                 </th>
               </tr>
             </tbody>

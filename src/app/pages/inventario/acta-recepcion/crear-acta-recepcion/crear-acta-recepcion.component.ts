@@ -27,6 +27,14 @@ export class CrearActaRecepcionComponent implements OnInit {
   ordenCompra: any[] = [];
   history: any;
 
+  get invoices() {
+    return this.form.get('invoices') as FormArray;
+  }
+
+  get products_acta() {
+    return this.form.get('products_acta') as FormArray;
+  }
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -123,23 +131,23 @@ export class CrearActaRecepcionComponent implements OnInit {
 
   }
 
-  get invoices() {
-    return this.form.get('invoices') as FormArray;
-  }
 
-  get products_acta() {
-    return this.form.get('products_acta') as FormArray;
-  }
 
   // Esto es lo que va a la tabla facturas_acta_recepcion
   addInvoice(invoice = null) {
-    this.invoices.push(this.fb.group({
-      Id_Factura_Acta_Recepcion: [invoice ? invoice.Id_Factura_Acta_Recepcion : '', Validators.required],
+    let addFactura = this.fb.group({
+      Id_Factura_Acta_Recepcion: [invoice ? invoice.Id_Factura_Acta_Recepcion : ''],
       Archivo_Factura: [invoice ? invoice.Archivo_Factura : '', Validators.required],
       Factura: [invoice ? invoice.Factura : '', Validators.required],
       Fecha_Factura: [invoice ? invoice.Fecha_Factura : '', Validators.required],
       //retencion: ['', Validators.required],
-    }));
+    });
+    if (invoice && invoice.Id_Factura_Acta_Recepcion) {
+      Object.keys(addFactura.controls).forEach(controlName => {
+        addFactura.get(controlName).disable();
+      })
+    }
+    this.invoices.push(addFactura);
   }
 
   // esto va a la tabla de productos_acta_recepcion
@@ -219,19 +227,25 @@ export class CrearActaRecepcionComponent implements OnInit {
           //sacar los que no esten marcados
           const data = {
             selected_products: newArray,
-            ...this.form.value,
+            ...this.form.getRawValue(),
             ...this.ordenCompra
           };
-          this._actaRecepcion.save(data).subscribe(r => {
-            this._swal.show({
-              title: '!Tarea completada con éxito!',
-              text: 'Acta de recepción creada con éxito.',
-              icon: 'success',
-              showCancel: false,
-              timer: 1000
-            })
+          this._actaRecepcion.save(data).subscribe((r: any) => {
+            if (r.status) {
+              this._swal.show({
+                title: '!Tarea completada con éxito!',
+                text: 'Acta de recepción creada con éxito.',
+                icon: 'success',
+                showCancel: false,
+                timer: 1000
+              })
 
-            this.router.navigateByUrl('/inventario/acta-recepcion')
+              this.router.navigateByUrl('/inventario/acta-recepcion')
+            } else {
+              this._swal.hardError()
+            }
+          }, (error) => {
+            this._swal.hardError()
           })
         } else {
           this._swal.show({
@@ -274,5 +288,7 @@ export class CrearActaRecepcionComponent implements OnInit {
   printform() {
     console.log(this.form.value)
   }
+
+
 
 }

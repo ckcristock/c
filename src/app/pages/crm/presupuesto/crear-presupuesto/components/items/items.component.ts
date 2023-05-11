@@ -331,7 +331,7 @@ export class ItemsComponent implements OnInit {
     }
     return this.fb.group({
       id: ((edit && apu?.id) ? apu.id : ''),
-      type: ((apu?.type == 'P' || apu?.type == 'C') ? 'P' : 'S'),
+      type: ((apu?.type == 'P' || apu?.type == 'C') ? 'P' : 'P'),
       description,
       apu_id: [(apu ? apu.apu_id : ''), Validators.required],
       cuantity: edit ? apu.cuantity : 0,

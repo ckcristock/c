@@ -10,6 +10,7 @@
         <th class="align-middle">Cantidad</th>
         <th class="align-middle">Costo Unitario</th>
         <th class="align-middle">Total</th>
+        <th><i class="mdi mdi-chevron-down"></i></th>
       </tr>
     </thead>
     <tbody>
@@ -20,7 +21,13 @@
               {{ i + 1 }}
             </td>
             <td>
-              {{ item.apu_type }}
+              {{
+                item.apu_type == "C"
+                  ? "Conjunto"
+                  : item.apu_type == "P"
+                  ? "Pieza"
+                  : ""
+              }}
             </td>
             <td *ngIf="item.apu_type == 'C'">
               {{ item.apuset.name }}
@@ -39,6 +46,13 @@
             </td>
             <td>${{ item.unit_cost | number : "1.2-2" }}</td>
             <td>${{ item.total | number : "1.2-2" }}</td>
+            <td>
+              <i
+                class="fas fa-eye text-primary"
+                role="button"
+                (click)="openInNewTab(item)"
+              ></i>
+            </td>
           </tr>
         </ng-container>
       </ng-container>

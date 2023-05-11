@@ -5,8 +5,10 @@ import { MatAccordion, PageEvent } from '@angular/material';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { DatePipe, Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DateAdapter } from 'saturn-datepicker';
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
+import { PermissionService } from 'src/app/core/services/permission.service';
 
 @Component({
   selector: 'app-solicitudes-compra',
@@ -29,52 +31,66 @@ export class SolicitudesCompraComponent implements OnInit {
   date: any;
   date2: any;
   solicitudesCotizadas: any;
+  permission: Permissions = {
+    menu: 'Solicitudes de compra',
+    permissions: {
+      show: true,
+      add: true
+    }
+  };
 
   constructor(
     private _solicitudesCompra: SolicitudesCompraService,
     private _paginator: PaginatorService,
     private fb: FormBuilder,
     private location: Location,
+    private router: Router,
+    private _permission: PermissionService,
     private route: ActivatedRoute,
     private dateAdapter: DateAdapter<any>
   ) {
     this.dateAdapter.setLocale('es');
+    this.permission = this._permission.validatePermissions(this.permission);
   }
 
   ngOnInit(): void {
-    this.createFormFilters();
-    this.route.queryParamMap.subscribe((params: any) => {
-      if (params.params.pageSize) {
-        this.pagination.pageSize = params.params.pageSize
-      } else {
-        this.pagination.pageSize = 10
-      }
-      if (params.params.pag) {
-        this.pagination.page = params.params.pag
-      } else {
-        this.pagination.page = 1
-      }
-      this.orderObj = { ...params.keys, ...params }
-      if (Object.keys(this.orderObj).length > 3) {
-        this.active_filters = true
-        const formValues = {};
-        for (const param in params) {
-          formValues[param] = params[param];
+    if (this.permission.permissions.show) {
+      this.createFormFilters();
+      this.route.queryParamMap.subscribe((params: any) => {
+        if (params.params.pageSize) {
+          this.pagination.pageSize = params.params.pageSize
+        } else {
+          this.pagination.pageSize = 10
         }
-        this.formFilters.patchValue(formValues['params']);
-        let start_created_at = new Date(this.formFilters.controls.start_created_at.value)
-        let end_created_at = new Date(this.formFilters.controls.end_created_at.value)
-        start_created_at.setDate(start_created_at.getDate() + 1)
-        end_created_at.setDate(end_created_at.getDate() + 1)
-        this.date = { begin: start_created_at, end: end_created_at }
-        let start_expected_date = new Date(this.formFilters.controls.start_expected_date.value)
-        let end_expected_date = new Date(this.formFilters.controls.end_expected_date.value)
-        start_expected_date.setDate(start_expected_date.getDate() + 1)
-        end_expected_date.setDate(end_expected_date.getDate() + 1)
-        this.date2 = { begin: start_expected_date, end: end_expected_date }
-      }
-      this.getPurchaseRequest();
-    })
+        if (params.params.pag) {
+          this.pagination.page = params.params.pag
+        } else {
+          this.pagination.page = 1
+        }
+        this.orderObj = { ...params.keys, ...params }
+        if (Object.keys(this.orderObj).length > 3) {
+          this.active_filters = true
+          const formValues = {};
+          for (const param in params) {
+            formValues[param] = params[param];
+          }
+          this.formFilters.patchValue(formValues['params']);
+          let start_created_at = new Date(this.formFilters.controls.start_created_at.value)
+          let end_created_at = new Date(this.formFilters.controls.end_created_at.value)
+          start_created_at.setDate(start_created_at.getDate() + 1)
+          end_created_at.setDate(end_created_at.getDate() + 1)
+          this.date = { begin: start_created_at, end: end_created_at }
+          let start_expected_date = new Date(this.formFilters.controls.start_expected_date.value)
+          let end_expected_date = new Date(this.formFilters.controls.end_expected_date.value)
+          start_expected_date.setDate(start_expected_date.getDate() + 1)
+          end_expected_date.setDate(end_expected_date.getDate() + 1)
+          this.date2 = { begin: start_expected_date, end: end_expected_date }
+        }
+        this.getPurchaseRequest();
+      })
+    } else {
+      this.router.navigate(['/notauthorized'])
+    }
   }
 
 

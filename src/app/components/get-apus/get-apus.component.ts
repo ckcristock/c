@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ModalBasicComponent } from '../modal-basic/modal-basic.component';
-import { Router } from '@angular/router';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Location, PlatformLocation } from '@angular/common';
+import { DatePipe, PlatformLocation } from '@angular/common';
 import { ApusService } from 'src/app/pages/crm/apus/apus.service';
-import { combineLatest, from, zip } from 'rxjs';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { debounceTime } from 'rxjs/operators';
+import { ModalService } from 'src/app/core/services/modal.service';
+import { PageEvent } from '@angular/material';
+import { PaginatorService } from 'src/app/core/services/paginator.service';
 
 @Component({
   selector: 'app-get-apus',
@@ -17,66 +18,88 @@ export class GetApusComponent implements OnInit {
   @ViewChild('modal') modal: any;
   @Output('sendApus') sendApus = new EventEmitter()
   loading = false;
-  apus: any[] = []
-  state = []
+  apus: any[] = [];
+  state: any[] = [];
+  datePipe = new DatePipe('es-CO');
+  date: any;
+  form_filters: FormGroup;
+  paginationMaterial: any;
   pagination = {
     page: 1,
-    pageSize: 10,
-    collectionSize: 0
-  }
-  filtros: any = {
-    code: '',
-    date_one: '',
-    date_two: '',
-    name: '',
-    city: '',
-    client: '',
-    line: '',
-    type: '',
-    description: ''
+    pageSize: 100,
   }
   public href: string = "";
-
-  constructor(
-    //private _apus: ApusService,
-    private router: Router,
-    private modalService: NgbModal,
-    private platformLocation: PlatformLocation,
-    private _apu: ApusService,
-    private _swal: SwalService
-  ) { }
-  ngOnInit(): void {
-    this.href = (this.platformLocation as any).location.origin
-  }
-
   closeResult = '';
   multiple: boolean = true;
-  public openConfirm(multiple = true) {
+
+  constructor(
+    private platformLocation: PlatformLocation,
+    private _apu: ApusService,
+    private _swal: SwalService,
+    private _modal: ModalService,
+    private fb: FormBuilder,
+    private _paginator: PaginatorService,
+  ) { }
+  ngOnInit(): void {
+    this.href = (this.platformLocation as any).location.origin;
+  }
+
+  openConfirm(multiple = true) {
+    this.createFormFilters();
     this.loading = true;
     this.state = []
     this.multiple = multiple;
+    this.getApus();
+    this._modal.open(this.modal, 'xl');
+  }
+
+  selectedDate(fecha) {
+    if (fecha.value) {
+      this.form_filters.patchValue({
+        date_one: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
+        date_two: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+      })
+    } else {
+      this.form_filters.patchValue({
+        date_one: '',
+        date_two: ''
+      })
+    }
+    this.getApus();
+  }
+
+  createFormFilters() {
+    this.form_filters = this.fb.group({
+      code: '',
+      date_one: '',
+      date_two: '',
+      name: '',
+      city: '',
+      client: '',
+      line: '',
+      type: '',
+      description: '',
+      set_name: '',
+      machine_name: ''
+    })
+    this.form_filters.valueChanges.pipe(
+      debounceTime(500),
+    ).subscribe(r => {
+      this.getApus();
+    })
+  }
+
+  handlePageEvent(event: PageEvent) {
+    this._paginator.handlePageEvent(event, this.pagination)
     this.getApus()
-    this.modalService.open(this.modal, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  private getDismissReason(reason: any) {
-
   }
 
-  show() {
+  getApus() {
     this.loading = true;
-    this.state = []
-    this.modal.show();
-    this.getApus()
-  }
-
-  getApus(page = 1) {
-    this.pagination.page = page;
     let params = {
-      ...this.pagination, ...this.filter, ...this.filtros
+      ...this.pagination,
+      ...this.filter,
+      ...this.form_filters.value
     }
     this._apu.getApus(params).subscribe((r: any) => {
       this.apus = r.data.data
@@ -87,14 +110,17 @@ export class GetApusComponent implements OnInit {
           }
         });
       });
-      this.pagination.collectionSize = r.data.total;
+      this.paginationMaterial = r.data
+      if (this.paginationMaterial.last_page < this.pagination.page) {
+        this.paginationMaterial.current_page = 1
+        this.pagination.page = 1
+        this.getApus()
+      }
       this.loading = false;
     })
   }
 
   openNewTab(type, id) {
-    /*  *ngIf="apu.type=='apu_part'">
-                                <a [routerLink]="['crm/apu/ver-apu-pieza',1]"  */
     let uri = ''
     switch (type) {
       case 'P':
@@ -156,6 +182,6 @@ export class GetApusComponent implements OnInit {
 
   send() {
     this.sendApus.emit(this.state)
-    this.modalService.dismissAll();
+    this._modal.close();
   }
 }

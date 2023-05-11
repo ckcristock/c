@@ -6,12 +6,10 @@
     <!-- Historial  -->
     <div class="col-md-3">
       <div class="card">
-        <div class="card-body card-body-edit">
-          <div class="card-title">
-            <h6 class="text-primary">Seguimiento</h6>
-          </div>
-          <hr class="line" />
-
+        <div class="card-header">
+          <h6 class="text-primary">Seguimiento</h6>
+        </div>
+        <div class="card-body pt-0 card-body-edit">
           <ul class="list-group list-group-flush">
             <li
               class="list-group-item px-0"
@@ -47,10 +45,10 @@
                   }}</small>
                   <span class="badge"> </span>
                 </div>
-                <!--  falta poner la imagen del funcionario  -->
                 <img
+                  [src]="activity.person.image"
+                  onerror="this.src='../../../../../assets/images/noprofile.png'"
                   class="d-block img-thumbnail rounded-circle img-fluid header-profile-user"
-                  [src]="'../../../../../assets/images/noprofile.png'"
                 />
               </div>
             </li>
@@ -70,18 +68,11 @@
                 type="button"
                 class="btn btn-sm btn-info"
                 *ngIf="
-                  solicitud.status == 'Pendiente' ||
-                  solicitud.status == 'Cotizada'
+                  solicitud.status == 'Pendiente' && permission.permissions.add
                 "
                 [routerLink]="['/compras/solicitud/editar', solicitud.id]"
               >
                 <i class="fas fa-edit"></i> Editar
-              </button>
-              <button
-                class="btn btn-sm btn-success"
-                [routerLink]="['/compras/crear-nacional', id]"
-              >
-                <i class="fas fa-shopping-cart"></i> Realizar orden
               </button>
             </div>
           </div>
@@ -90,10 +81,10 @@
             <table class="table table-bordered table-striped table-sm">
               <thead class="bg-light">
                 <tr class="text-center text-uppercase">
-                  <th style="text-align: center">Funcionario que solicita</th>
-                  <th style="text-align: center">Area o departamento</th>
-                  <th style="text-align: center">Fecha de solicitud</th>
-                  <th style="text-align: center">Fecha Probable de Entrega</th>
+                  <th>Funcionario que solicita</th>
+                  <th>Area o departamento</th>
+                  <th>Fecha de solicitud</th>
+                  <th>Fecha Probable de Entrega</th>
                 </tr>
               </thead>
               <tbody>
@@ -324,6 +315,34 @@
               </tbody>
             </table>
           </div>
+          <ng-container *ngIf="solicitud.status == 'Aprobada'">
+            <h6>Crear orden de compra</h6>
+            <div class="row">
+              <ng-container *ngFor="let order of orders">
+                <div class="col-lg-4 d-flex align-items-stretch">
+                  <div class="card bg-light w-100">
+                    <div class="card-body pb-0">
+                      <h6 class="text-primary">
+                        {{ order[0]?.third_party?.full_name | uppercase }}
+                      </h6>
+                      <ng-container *ngFor="let product of order">
+                        <div>- {{ product?.product_info?.name }}</div>
+                      </ng-container>
+                    </div>
+                    <div class="card-footer">
+                      <button
+                        class="btn btn-primary btn-block"
+                        type="button"
+                        (click)="sendOrder(order)"
+                      >
+                        Crear orden de compra
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
           <!-- Fin tablas con información -->
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,7 +12,7 @@ import { CategoriasService } from 'src/app/pages/ajustes/parametros/cat-subcat/c
 import { consts } from 'src/app/core/utils/consts';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 import { Observable, OperatorFunction, of } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, filter, map, switchMap, tap } from 'rxjs/operators';
 import { CompraNacionalService } from '../compra-nacional.service';
 import { SolicitudesCompraService } from '../../solicitudes-compra/solicitudes-compra.service';
 @Component({
@@ -45,6 +45,9 @@ export class CrearCompraNacionalComponent implements OnInit {
     Fecha: this.today,
   };
 
+  currentState$: Observable<any>;
+  detailProduct: any;
+
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
@@ -61,15 +64,10 @@ export class CrearCompraNacionalComponent implements OnInit {
     private _solicitud: SolicitudesCompraService
   ) {
     this.user = this._user?.user?.person?.id;
+    this.detailProduct = this.router.getCurrentNavigation()?.extras?.state;
   }
 
   async ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      this.id = params.get('solicitud_id');
-      if (this.id) {
-        this.getSolicitud(this.id)
-      }
-    })
     this.loading = true;
     this.createForm();
     this.createFormCategories();
@@ -78,13 +76,88 @@ export class CrearCompraNacionalComponent implements OnInit {
     this.getImpuestos();
     this.getProveedores();
     await this.getCategories();
+    if (this.detailProduct?.orderDetails) {
+      let orderDetails = this.detailProduct?.orderDetails
+      this.getSolicitud(orderDetails)
+    }
     this.loading = false;
   }
 
-  getSolicitud(id) {
-    this._solicitud.getDataPurchaseRequest(id).subscribe((res: any) => {
-      console.log(res);
+  getSolicitud(orderDetails) {
+    this.formCategories.patchValue({
+      category_id: orderDetails?.queryParams?.data?.category_id
     })
+    console.log(orderDetails);
+    this.formCompra.patchValue({
+      Fecha_Entrega_Probable: orderDetails?.queryParams?.data?.expected_date,
+      Id_Proveedor: orderDetails?.queryParams?.products[0]?.third_party_id,
+    })
+    orderDetails?.queryParams?.products.forEach(product => {
+      let prod = this.fb.group({
+        Id_Producto_Orden_Compra_Nacional: [''],
+        Nombre_Comercial: [product?.product_info?.product?.Nombre_Comercial],
+        Embalaje_id: [product?.product_info?.product?.Embalaje_id],
+        Embalaje_nombre: [product?.product_info?.product?.packaging?.name],
+        Presentacion: [product?.product_info?.product?.Presentacion],
+        Id_Producto: [product?.product_info?.product?.Id_Producto],
+        Cantidad: [product?.product_info?.ammount, Validators.min(1)],
+        Costo: [(product?.total_price / product?.product_info?.ammount), Validators.min(1)],
+        impuesto_id: [product?.product_info?.product?.impuesto_id, Validators.required],
+        Total: [0],
+        Subtotal: [0],
+        Valor_Iva: [0],
+      })
+      this.subscribeProductsForm(prod)
+      this.products.push(prod)
+    })
+
+  }
+
+  addProduct(product, $event, input) {
+    if (!this.products?.value?.some(x => x.Id_Producto == product.Id_Producto)) {
+      let prod = this.fb.group({
+        Id_Producto_Orden_Compra_Nacional: [''],
+        Nombre_Comercial: [product?.Nombre_Comercial],
+        Embalaje_id: [product?.Embalaje_id],
+        Embalaje_nombre: [product?.packaging?.name],
+        Presentacion: [product?.Presentacion],
+        Id_Producto: [product?.Id_Producto],
+        Cantidad: [1, Validators.min(1)],
+        Costo: [product?.Precio, Validators.min(1)],
+        impuesto_id: [product?.impuesto_id, Validators.required],
+        Total: [0],
+        Subtotal: [0],
+        Valor_Iva: [0],
+      })
+      this.subscribeProductsForm(prod)
+      this.products.push(prod)
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'Elemento duplicado',
+        text: 'Ya has agregado este producto',
+        showCancel: false
+      })
+    }
+    $event.preventDefault();
+    input.value = '';
+  }
+
+  createForm() {
+    this.formCompra = this.fb.group({
+      Id_Orden_Compra_Nacional: [null],
+      Fecha_Entrega_Probable: ['', Validators.required],
+      Identificacion_Funcionario: [this.user],
+      Id_Bodega_Nuevo: ['', Validators.required],
+      Id_Proveedor: [null, Validators.required],
+      Tipo: ['Recurrente'],
+      Observaciones: [''],
+      Subtotal: [0],
+      Iva: [0],
+      Total: [0],
+      format_code: [''],
+      Productos: this.fb.array([], [Validators.required]),
+    });
   }
 
   async getCategories() {
@@ -151,35 +224,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     })
   }
 
-  addProduct(product, $event, input) {
-    if (!this.products?.value?.some(x => x.Id_Producto == product.Id_Producto)) {
-      let prod = this.fb.group({
-        Id_Producto_Orden_Compra_Nacional: [''],
-        Nombre_Comercial: [product?.Nombre_Comercial],
-        Embalaje_id: [product?.Embalaje_id],
-        Embalaje_nombre: [product?.packaging?.name],
-        Presentacion: [product?.Presentacion],
-        Id_Producto: [product?.Id_Producto],
-        Cantidad: [1, Validators.min(1)],
-        Costo: [product?.Precio, Validators.min(1)],
-        impuesto_id: [product?.impuesto_id, Validators.required],
-        Total: [0],
-        Subtotal: [0],
-        Valor_Iva: [0],
-      })
-      this.subscribeProductsForm(prod)
-      this.products.push(prod)
-    } else {
-      this._swal.show({
-        icon: 'error',
-        title: 'Elemento duplicado',
-        text: 'Ya has agregado este producto',
-        showCancel: false
-      })
-    }
-    $event.preventDefault();
-    input.value = '';
-  }
+
 
   subscribeProductsForm(prod) {
     let total = prod?.get('Total');
@@ -277,22 +322,7 @@ export class CrearCompraNacionalComponent implements OnInit {
     })
   }
 
-  createForm() {
-    this.formCompra = this.fb.group({
-      Id_Orden_Compra_Nacional: [null],
-      Fecha_Entrega_Probable: ['', Validators.required],
-      Identificacion_Funcionario: [this.user],
-      Id_Bodega_Nuevo: ['', Validators.required],
-      Id_Proveedor: [null, Validators.required],
-      Tipo: ['Recurrente'],
-      Observaciones: [''],
-      Subtotal: [0],
-      Iva: [0],
-      Total: [0],
-      format_code: [''],
-      Productos: this.fb.array([], [Validators.required]),
-    });
-  }
+
 
   get products(): FormArray {
     return this.formCompra.get('Productos') as FormArray;

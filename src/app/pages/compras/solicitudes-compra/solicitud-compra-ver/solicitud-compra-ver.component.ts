@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, NavigationStart, Router } from '@angular/router';
 import { SolicitudesCompraService } from '../solicitudes-compra.service';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -9,8 +9,10 @@ import { consts } from 'src/app/core/utils/consts';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
-
-
+import { Permissions } from 'src/app/core/interfaces/permissions-interface';
+import { PermissionService } from 'src/app/core/services/permission.service';
+import { Observable, from } from 'rxjs';
+import { filter, groupBy, map, mergeMap, toArray } from 'rxjs/operators';
 
 @Component({
   selector: 'app-solicitud-compra-ver',
@@ -32,7 +34,13 @@ export class SolicitudCompraVerComponent implements OnInit {
   loadingQuotations: boolean;
   quotationSelected: number;
   activities: any[] = [];
-
+  permission: Permissions = {
+    menu: 'Solicitudes de compra',
+    permissions: {
+      show: true,
+      add: true
+    }
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -41,17 +49,18 @@ export class SolicitudCompraVerComponent implements OnInit {
     private fb: FormBuilder,
     private _proveedor: TercerosService,
     private router: Router,
+    private _permission: PermissionService,
     private _consecutivos: ConsecutivosService,
     private _swal: SwalService,
-
-  ) { }
+  ) {
+    this.permission = this._permission.validatePermissions(this.permission);
+  }
 
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
       this.getData();
-
     })
   }
   //Modal de cargar cotizaciones
@@ -109,7 +118,6 @@ export class SolicitudCompraVerComponent implements OnInit {
     this._proveedor.getThirdPartyProvider({}).subscribe((res: any) => {
       this.proveedores = res.data;
       this.filteredProveedor = res.data.slice();
-      console.log(this.proveedores)
     });
   }
 
@@ -200,14 +208,13 @@ export class SolicitudCompraVerComponent implements OnInit {
 
     }
   }
-
+  appstate$: Observable<object>;
   //Funcion que trae la informacion del la solicitud a la tabla del componente ver
   getData() {
     this.loading = true;
     this._solicitudesCompra.getDataPurchaseRequest(this.id).subscribe((res: any) => {
       this.solicitud = res.data;
       this.activities = res.data.activity
-      console.log(this.solicitud)
       this.datosCabecera = {
         Fecha: res.data.created_at,
         Codigo: res.data.code,
@@ -215,7 +222,16 @@ export class SolicitudCompraVerComponent implements OnInit {
         CodigoFormato: res.data.format_code
       }
       this.loading = false;
-
+      if (res.data.status == 'Aprobada') {
+        this.validateOrders(res.data)
+        this.appstate$ = this.router.events.pipe(
+          filter(e => e instanceof NavigationStart),
+          map(() => {
+            const currentState = this.router.getCurrentNavigation();
+            return currentState.extras.state;
+          })
+        );
+      }
     });
   }
 
@@ -224,9 +240,40 @@ export class SolicitudCompraVerComponent implements OnInit {
     return this.formCotizacionRegular.get('items') as FormArray;
   }
 
+  orders: any[] = [];
+  validateOrders(data) {
+    let orders: any[] = [];
+    if (data.product_purchase_request.length > 0) {
+      data.product_purchase_request.forEach(product => {
+        product.quotation.forEach(quotation => {
+          if (quotation.status == 'Aprobada') {
+            quotation.product_info = product
+            orders.push(quotation)
+          }
+        });
+      });
+    }
+    from(orders).pipe(
+      groupBy(order => order.third_party_id),
+      mergeMap(group => group.pipe(toArray()))
+    ).subscribe(result => this.orders.push(result))
+    console.log(this.orders)
+  }
+
   //Funcion que selecciona una cotizacion especifica al hacer clic en  el radio button
   selectedQuotation(id) {
     this.quotationSelected = id;
+  }
+
+  sendOrder(order) {
+    let params = {
+      products: order,
+      data: this.solicitud,
+    }
+    let objToSend: NavigationExtras = {
+      queryParams: params
+    };
+    this.router.navigate(['/compras/crear-nacional'], { state: { orderDetails: objToSend } });
   }
 
   //funcion que trae todas las ctoizaciones de un producto especifico

@@ -82,7 +82,7 @@ export class CotizacionComponent implements OnInit {
         if (params.params.pageSize) {
           this.pagination.pageSize = params.params.pageSize
         } else {
-          this.pagination.pageSize = 10
+          this.pagination.pageSize = 100
         }
         if (params.params.pag) {
           this.pagination.page = params.params.pag

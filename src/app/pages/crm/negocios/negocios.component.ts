@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Negocio } from './negocio.interface';
 import { NegociosService } from './negocios.service';
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { MatPaginatorIntl, PageEvent } from '@angular/material';
@@ -20,8 +20,9 @@ import { PaginatorService } from 'src/app/core/services/paginator.service';
 export class NegociosComponent implements OnInit {
   form: FormGroup;
   formFiltersBusiness: FormGroup;
+  datePipe = new DatePipe('es-CO');
   business: any[] = [];
-
+  date: any;
   negocios_quinta_etapa: Negocio[];
   negocios_cuarta_etapa: Negocio[];
   negocios_tercera_etapa: Negocio[];
@@ -76,7 +77,7 @@ export class NegociosComponent implements OnInit {
         if (params.params.pageSize) {
           this.pagination.pageSize = params.params.pageSize
         } else {
-          this.pagination.pageSize = 10
+          this.pagination.pageSize = 100
         }
         if (params.params.pag) {
           this.pagination.page = params.params.pag
@@ -92,6 +93,11 @@ export class NegociosComponent implements OnInit {
           }
           this.formFiltersBusiness.patchValue(formValues['params']);
         }
+        let date_one = new Date(this.formFiltersBusiness.controls.date_start.value)
+        let date_two = new Date(this.formFiltersBusiness.controls.date_end.value)
+        date_one.setDate(date_one.getDate() + 1)
+        date_two.setDate(date_two.getDate() + 1)
+        this.date = { begin: date_one, end: date_two }
         await this.getNegocios();
       }
       );
@@ -121,12 +127,27 @@ export class NegociosComponent implements OnInit {
       code: '',
       name: '',
       company_name: '',
-      date: '',
+      date_start: '',
+      date_end: '',
       status: '',
     });
     this.formFiltersBusiness.valueChanges.pipe(debounceTime(500)).subscribe(r => {
       this.getNegocios()
     })
+  }
+
+  selectedDate(fecha) {
+    if (fecha.value) {
+      this.formFiltersBusiness.patchValue({
+        date_start: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
+        date_end: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+      })
+    } else {
+      this.formFiltersBusiness.patchValue({
+        date_start: '',
+        date_end: ''
+      });
+    }
   }
 
   changeUrl(url) {

@@ -26,12 +26,12 @@ export const piecesSetsHelper = {
     }
   },
 
-  createPiecesSetsGroup(form: FormGroup, fb: FormBuilder, item) {
+  createPiecesSetsGroup(form: FormGroup, fb: FormBuilder, item, unitPieza) {
     let setpartlist = fb.group({
       apu_type: (item ? item.type : 'P'),
       apu_part_id: (item ? item.apu_id : 0),
       apu_set_child_id: (item ? item.apu_id : 0),
-      unit_id: [''],
+      unit_id: [unitPieza],
       amount: [0],
       unit_cost: (item ? item.unit_cost : 0),
       total: [0],

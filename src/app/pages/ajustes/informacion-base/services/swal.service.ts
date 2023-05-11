@@ -56,7 +56,7 @@ export class SwalService {
       allowOutsideClick: true,
       allowEscapeKey: true,
       showCancelButton: showCancel,
-      confirmButtonColor: confirmButtonColor || this.buttonColor.confirm,
+      confirmButtonColor: icon == 'error' ? this.buttonColor.cancel : (confirmButtonColor || this.buttonColor.confirm),
       confirmButtonText: showCancel ? '¡Sí, confirmar!' : 'OK',
       cancelButtonColor: this.buttonColor.cancel,
       cancelButtonText: 'Cancelar',

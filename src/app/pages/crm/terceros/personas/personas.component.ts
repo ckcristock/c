@@ -79,7 +79,7 @@ export class PersonasComponent implements OnInit {
           if (params.params.pageSize) {
             this.pagination.pageSize = params.params.pageSize
           } else {
-            this.pagination.pageSize = 10
+            this.pagination.pageSize = 100
           }
           if (params.params.pag) {
             this.pagination.page = params.params.pag
@@ -232,24 +232,28 @@ export class PersonasComponent implements OnInit {
     if (this.form.valid) {
       this._terceros.addThirdPartyPerson(this.form.value)
         .subscribe((res: any) => {
-          this._swal.show({
-            title: res.data,
-            icon: 'success',
-            text: '',
-            timer: 1000,
-            showCancel: false
-          })
-          this.getPerson();
-          this.modalService.dismissAll();
+          if (res.status) {
+            this._swal.show({
+              title: res.data,
+              icon: 'success',
+              text: '',
+              timer: 1000,
+              showCancel: false
+            })
+            this.getPerson();
+            this.modalService.dismissAll();
+          } else {
+            this._swal.show({
+              title: 'Error',
+              icon: 'error',
+              text: res.err,
+              showCancel: false
+            })
+          }
         });
     } else {
       this.form.touched
-      this._swal.show({
-        icon: 'error',
-        title: 'Tuvimos un problema',
-        text: 'Revisa toda la información ingresada y vuelve a intentarlo',
-        showCancel: false
-      })
+      this._swal.incompleteError()
     }
   }
 

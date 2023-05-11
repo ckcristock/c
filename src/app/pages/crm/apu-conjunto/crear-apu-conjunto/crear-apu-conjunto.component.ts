@@ -208,10 +208,12 @@ export class CrearApuConjuntoComponent implements OnInit {
       })
     }
   }
-
+  unitPiezaId: any;
   getUnits() {
     this._units.selectUnits().subscribe((r: any) => {
       this.units = r.data;
+      let pieza = this.units.find(x => x.text == 'Pieza')
+      this.unitPiezaId = pieza.value
     })
   }
 
@@ -462,7 +464,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   piecesSetsControl(item): FormGroup {
-    let group = help.piecesSetsHelper.createPiecesSetsGroup(this.form, this.fb, item);
+    let group = help.piecesSetsHelper.createPiecesSetsGroup(this.form, this.fb, item, this.unitPiezaId);
     return group;
   }
 

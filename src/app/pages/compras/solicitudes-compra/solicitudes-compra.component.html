@@ -13,8 +13,11 @@
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-primary btn-sm" [routerLink]="['crear']">
-            <!-- //este boton debe tener un ngIf de permisos  -->
+          <button
+            class="btn btn-primary btn-sm"
+            *ngIf="permission.permissions.add"
+            [routerLink]="['crear']"
+          >
             <i class="fa fa-plus"></i> Agregar
           </button>
           <button class="btn btn-info btn-sm" (click)="matPanel.toggle()">
@@ -128,7 +131,6 @@
           </tr>
         </thead>
         <tbody>
-          <!-- *nfor -->
           <tr *ngFor="let solicitud of solicitudesCompra" class="text-center">
             <td class="align-middle">
               {{ solicitud.code }}
@@ -188,8 +190,8 @@
                     type="button"
                     class="dropdown-item text-info"
                     *ngIf="
-                      solicitud.status == 'Pendiente' ||
-                      solicitud.status == 'Cotizada'
+                      solicitud.status == 'Pendiente' &&
+                      permission.permissions.add
                     "
                     [routerLink]="['editar', solicitud.id]"
                     ><i class="fas fa-edit"></i> Editar</a

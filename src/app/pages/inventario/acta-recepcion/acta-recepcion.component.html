@@ -108,6 +108,7 @@
                         <i class="fas fa-eye"></i> Ver</a
                       >
                       <a
+                        *ngIf="!item.acta"
                         class="dropdown-item text-info"
                         href=""
                         [routerLink]="[
@@ -116,15 +117,27 @@
                           'Nacional'
                         ]"
                       >
-                        <i class="fas fa-check"></i> Realizar</a
+                        <i class="fas fa-plus"></i> Crear</a
                       >
                       <a
+                        *ngIf="item.acta != null"
+                        class="dropdown-item text-info"
+                        href=""
+                        [routerLink]="[
+                          'crear',
+                          item.Id_Orden_Compra_Nacional,
+                          'Nacional'
+                        ]"
+                      >
+                        <i class="fas fa-edit"></i>Editar</a
+                      >
+                      <!-- <a
                         class="dropdown-item text-info"
                         href=""
                         [routerLink]="['crear-old', item.Codigo, 'Nacional']"
                       >
                         <i class="fas fa-check"></i> Realizar old</a
-                      >
+                      > -->
                     </div>
                   </div>
                 </td>

@@ -65,7 +65,7 @@
                             formControlName="Factura"
                             required
                             autocomplete="off"
-                            class="w-100 border-0 color-transparent"
+                            class="w-100 border-0 color-transparent text-center"
                           />
                         </td>
                         <td class="align-middle p-0">
@@ -84,12 +84,12 @@
                           <mat-datepicker #picker></mat-datepicker>
                         </td>
 
-                        <td
-                          class="p-0 d-flex align-items-center justify-content-center"
-                        >
+                        <td class="align-middle p-0">
                           <div
                             class="form-group mb-0 text-center col"
-                            *ngIf="!invoice.get('Archivo_Factura').value"
+                            *ngIf="
+                              !invoice.get('Id_Factura_Acta_Recepcion').value
+                            "
                           >
                             <div class="custom-input-file">
                               <input
@@ -110,13 +110,17 @@
                               >
                             </div>
                           </div>
-                          <div *ngIf="invoice.get('Archivo_Factura').value">
+                          <div
+                            *ngIf="
+                              invoice.get('Id_Factura_Acta_Recepcion').value
+                            "
+                          >
                             <a
                               [href]="invoice.get('Archivo_Factura').value"
-                              target="_blank"
+                              target="_blank "
                             >
-                              Factura
-                            </a>
+                              Factura</a
+                            >
                           </div>
                         </td>
                         <td class="align-middle p-0">
@@ -130,10 +134,12 @@
                         </td>
                         <td>
                           <button
-                            *ngIf="!invoice.get('Archivo_Factura').value"
                             type="button"
                             (click)="removeInvoice(i)"
                             class="btn btn-danger btn-sm"
+                            *ngIf="
+                              !invoice.get('Id_Factura_Acta_Recepcion').value
+                            "
                           >
                             <i class="fas fa-trash-alt"></i>
                           </button>
@@ -154,10 +160,9 @@
                 <div class="col-md-12 px-0">
                   <h6 class="text-primary">Productos recibidos</h6>
                 </div>
-                <div
-                  class="rounded-top table-responsive mt-2"
-                  *ngIf="history != null; else notDataInfo"
-                >
+              </div>
+              <ng-container *ngIf="history != null; else notDataInfo">
+                <div class="rounded-top table-responsive mt-2">
                   <table class="table table-bordered table-striped table-sm">
                     <thead class="bg-light">
                       <tr class="text-center text-uppercase">
@@ -198,138 +203,138 @@
                     </tbody>
                   </table>
                 </div>
-
-                <div class="col-md-12 px-0">
-                  <h6 class="text-primary">Productos por verificar</h6>
-                </div>
-                <div class="rounded-top table-responsive mt-2">
-                  <table class="table table-bordered table-striped table-sm">
-                    <thead class="bg-light">
-                      <tr class="text-center text-uppercase">
-                        <th></th>
-                        <th>Imagen</th>
-                        <th>Producto</th>
-                        <th>Factura</th>
-                        <th>Cantidad</th>
-                        <th>Unidad</th>
-                        <th>Subtotal</th>
-                        <th>Iva</th>
-                        <th>Total</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        *ngFor="
-                          let product of products_acta.controls;
-                          let i = index
-                        "
-                        [formGroupName]="i"
-                        class="text-center"
-                      >
-                        <td>
-                          <mat-checkbox
-                            color="primary"
-                            formControlName="toAdd"
-                          ></mat-checkbox>
-                        </td>
-                        <td class="align-middle p-0">
-                          <img
-                            [src]="product.get('imagen').value"
-                            onerror="this.src='../../../../assets/images/product.jpg'"
-                            class="d-block mx-auto img-fluid img-product"
-                          />
-                        </td>
-                        <td class="align-middle">
-                          {{ product.get("nombre").value | uppercase }}
-                        </td>
-                        <td>
-                          <select class="w-100 border-0 color-transparent">
-                            <option value="">Selecciona una factura</option>
-                            <option
-                              *ngFor="let item of invoices.value"
-                              [value]="item.Factura"
-                            >
-                              {{ item.Factura }}
-                            </option>
-                          </select>
-                        </td>
-                        <td>
-                          <input
-                            type="text"
-                            formControlName="Cantidad"
-                            currencyMask
-                            [options]="mask?.maskNumbers"
-                            appInputPositionInitial
-                            class="w-100 border-0 color-transparent"
-                            [matTooltip]="
-                              product.get('Cantidad')?.value !==
-                              product.get('cantidad_').value
-                                ? 'El valor es diferente al de la orden de compra'
-                                : null
-                            "
-                          />
-                          <!--  -->
-                        </td>
-                        <td>{{ product.get("unidad").value | titlecase }}</td>
-                        <!-- Costo agregado por el usuario -->
-                        <td>
-                          <input
-                            placeholder="Ingresa un valor"
-                            currencyMask
-                            appInputPosition
-                            [options]="mask?.maskCOP"
-                            formControlName="Subtotal"
-                            autocomplete="off"
-                            class="w-100 border-0 color-transparent"
-                            [matTooltip]="
-                              product.get('Subtotal')?.value !==
-                              product.get('subtotal_').value
-                                ? 'El valor es diferente al de la orden de compra'
-                                : null
-                            "
-                          />
-                        </td>
-
-                        <td>
-                          <input
-                            placeholder="Ingresa un valor"
-                            currencyMask
-                            appInputPosition
-                            [options]="mask?.maskCOP"
-                            formControlName="Iva"
-                            autocomplete="off"
-                            class="w-100 border-0 color-transparent"
-                            [matTooltip]="
-                              product.get('Iva')?.value !==
-                              product.get('iva_').value
-                                ? 'El valor es diferente al de la orden de compra'
-                                : null
-                            "
-                          />
-                        </td>
-
-                        <td>
-                          <input
-                            placeholder="Ingresa un valor"
-                            currencyMask
-                            appInputPosition
-                            [options]="mask?.maskCOP"
-                            formControlName="Total"
-                            autocomplete="off"
-                            class="w-100 border-0 color-transparent"
-                            [matTooltip]="
-                              product.get('Total')?.value !==
-                              product.get('total_').value
-                                ? 'El valor es diferente al de la orden de compra'
-                                : null
-                            "
-                          />
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+              </ng-container>
+              <div class="col-md-12 px-0">
+                <h6 class="text-primary">Productos por verificar</h6>
               </div>
+              <div class="rounded-top table-responsive mt-2">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th></th>
+                      <th>Imagen</th>
+                      <th>Producto</th>
+                      <th>Factura</th>
+                      <th>Cantidad</th>
+                      <th>Unidad</th>
+                      <th>Subtotal</th>
+                      <th>Iva</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let product of products_acta.controls;
+                        let i = index
+                      "
+                      [formGroupName]="i"
+                      class="text-center"
+                    >
+                      <td>
+                        <mat-checkbox
+                          color="primary"
+                          formControlName="toAdd"
+                        ></mat-checkbox>
+                      </td>
+                      <td class="align-middle p-0">
+                        <img
+                          [src]="product.get('imagen').value"
+                          onerror="this.src='../../../../assets/images/product.jpg'"
+                          class="d-block mx-auto img-fluid img-product"
+                        />
+                      </td>
+                      <td class="align-middle">
+                        {{ product.get("nombre").value | uppercase }}
+                      </td>
+                      <td>
+                        <select class="w-100 border-0 color-transparent">
+                          <option value="">Selecciona una factura</option>
+                          <option
+                            *ngFor="let item of invoices.value"
+                            [value]="item.Factura"
+                          >
+                            {{ item.Factura }}
+                          </option>
+                        </select>
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          formControlName="Cantidad"
+                          currencyMask
+                          [options]="mask?.maskNumbers"
+                          appInputPositionInitial
+                          class="w-100 border-0 color-transparent"
+                          [matTooltip]="
+                            product.get('Cantidad')?.value !==
+                            product.get('cantidad_').value
+                              ? 'El valor es diferente al de la orden de compra'
+                              : null
+                          "
+                        />
+                        <!--  -->
+                      </td>
+                      <td>{{ product.get("unidad").value | titlecase }}</td>
+                      <!-- Costo agregado por el usuario -->
+                      <td>
+                        <input
+                          placeholder="Ingresa un valor"
+                          currencyMask
+                          appInputPosition
+                          [options]="mask?.maskCOP"
+                          formControlName="Subtotal"
+                          autocomplete="off"
+                          class="w-100 border-0 color-transparent"
+                          [matTooltip]="
+                            product.get('Subtotal')?.value !==
+                            product.get('subtotal_').value
+                              ? 'El valor es diferente al de la orden de compra'
+                              : null
+                          "
+                        />
+                      </td>
+
+                      <td>
+                        <input
+                          placeholder="Ingresa un valor"
+                          currencyMask
+                          appInputPosition
+                          [options]="mask?.maskCOP"
+                          formControlName="Iva"
+                          autocomplete="off"
+                          class="w-100 border-0 color-transparent"
+                          [matTooltip]="
+                            product.get('Iva')?.value !==
+                            product.get('iva_').value
+                              ? 'El valor es diferente al de la orden de compra'
+                              : null
+                          "
+                        />
+                      </td>
+
+                      <td>
+                        <input
+                          placeholder="Ingresa un valor"
+                          currencyMask
+                          appInputPosition
+                          [options]="mask?.maskCOP"
+                          formControlName="Total"
+                          autocomplete="off"
+                          class="w-100 border-0 color-transparent"
+                          [matTooltip]="
+                            product.get('Total')?.value !==
+                            product.get('total_').value
+                              ? 'El valor es diferente al de la orden de compra'
+                              : null
+                          "
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
               <!-- tabla para productos -> inicialmente se van a listar los productos de la orden de compra, con imagen, y con campos para la cantidad, el iva y los precios (precio total, precio iva, subtotal sin iva), habrá un checkbox para seleccionar los productos que se ingresan, y habrá una comparativa con la informacion que viene de la orden de compra, muestras un icon de un alert o de un ! con un tooltip donde describa que el campo es diferente a la orden de compra  -->
             </ng-container>
             <div class="row">

@@ -48,6 +48,8 @@ export class VerNegocioComponent implements OnInit {
   form_filters_budget: FormGroup;
   form_filters_quotations: FormGroup;
   form_notes: FormGroup;
+  editNoteForm: FormGroup;
+  editNoteBool: boolean;
   constructor(
     private ruta: ActivatedRoute,
     private _negocio: NegociosService,
@@ -82,6 +84,64 @@ export class VerNegocioComponent implements OnInit {
       }
     }, Promise.resolve());
     this.addApu()
+  }
+
+
+  editNote(item) {
+    this.editNoteBool = true;
+    item.hide = true;
+    this.editNoteForm = this.fb.group({
+      id: item.id,
+      person_id: item.person_id,
+      note: [item.note, [Validators.required, Validators.maxLength(500)]],
+      business_id: item.business_id
+    });
+  }
+
+  cancelEdit(item) {
+    this.editNoteBool = false;
+    item.hide = false;
+    this.editNoteForm.reset();
+  }
+
+  editNoteSave(item) {
+    if (this.editNoteForm.valid) {
+      this._swal.show({
+        icon: 'question',
+        title: '¿Estás seguro(a)?',
+        text: 'Vamos a editar esta nota.'
+      }).then(r => {
+        if (r.isConfirmed) {
+          this._negocio.newNote(this.editNoteForm.value).subscribe(
+            (res: any) => {
+              if (res.status) {
+                this.editNoteForm.patchValue({
+                  note: ''
+                })
+                this._swal.show({
+                  icon: 'success',
+                  title: res.data,
+                  text: '',
+                  showCancel: false,
+                  timer: 1000
+                })
+                this.cancelEdit(item);
+                this._negocio.getNotes(this.filtros.id).subscribe((res: any) => {
+                  this.negocio.notes = res.data[0]
+                })
+              }
+            }
+          )
+        }
+      })
+    } else {
+      this._swal.show({
+        icon: 'error',
+        title: 'ERROR',
+        text: 'No puedes publicar una nota vacía o con más de 500 caracteres',
+        showCancel: false
+      })
+    }
   }
 
   addApu() {
@@ -167,22 +227,32 @@ export class VerNegocioComponent implements OnInit {
 
   saveNote() {
     if (this.form_notes.valid) {
-      this._negocio.newNote(this.form_notes.value).subscribe(
-        (res: any) => {
-          this.form_notes.patchValue({
-            note: ''
-          })
-          this._swal.show({
-            icon: 'success',
-            title: res.data,
-            text: '',
-            showCancel: false,
-            timer: 1000
-          })
+      this._swal.show({
+        icon: 'question',
+        title: '¿Estás seguro(a)?',
+        text: 'Vamos a guardar esta nota.'
+      }).then(r => {
+        if (r.isConfirmed) {
+          this._negocio.newNote(this.form_notes.value).subscribe(
+            (res: any) => {
+              if (res.status) {
+                this.form_notes.patchValue({
+                  note: ''
+                })
+                this._swal.show({
+                  icon: 'success',
+                  title: res.data,
+                  text: '',
+                  showCancel: false,
+                  timer: 1000
+                })
+                this._negocio.getNotes(this.filtros.id).subscribe((res: any) => {
+                  this.negocio.notes = res.data[0]
+                })
+              }
+            }
+          )
         }
-      )
-      this._negocio.getNotes(this.filtros.id).subscribe((res: any) => {
-        this.negocio.notes = res.data[0]
       })
     } else {
       this._swal.show({
@@ -192,8 +262,9 @@ export class VerNegocioComponent implements OnInit {
         showCancel: false
       })
     }
-
   }
+
+
 
   openConfirm(confirm) {
     this._modal.open(confirm, 'xl')

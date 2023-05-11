@@ -53,7 +53,7 @@
                 countrySelected = country.id
               "
             >
-              {{ country.name }}
+              {{ country.name | uppercase }}
               <span ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -136,7 +136,7 @@
                 departmentSelected = state.id
               "
             >
-              {{ state.name }}
+              {{ state.name | uppercase }}
               <span ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -217,7 +217,7 @@
               class="list-group-item d-flex justify-content-between align-items-center rounded"
               (click)="selected(municipalities, municipality.id)"
             >
-              {{ municipality.name }}
+              {{ municipality.name | uppercase }}
               <span ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle
@@ -261,7 +261,16 @@
 <ng-template #add let-modal>
   <div class="modal-header">
     <h4 class="text-primary modal-title">
-      {{ operation | titlecase }} {{ tipo }}
+      {{ operation | titlecase }}
+      {{
+        tipo == "municipios"
+          ? "municipio"
+          : tipo == "departamentos"
+          ? "departamento"
+          : tipo == "paises"
+          ? "país"
+          : ""
+      }}
     </h4>
     <button
       type="button"
@@ -289,7 +298,7 @@
                   *ngFor="let item of countries"
                   [value]="item.id"
                   (click)="selected(countries, item.id)"
-                  >{{ item.name }}</mat-option
+                  >{{ item.name | uppercase }}</mat-option
                 >
               </mat-select>
             </mat-form-field>
@@ -300,7 +309,7 @@
               <mat-label>Departamentos</mat-label>
               <mat-select formControlName="department_id" required>
                 <mat-option *ngFor="let item of states" [(value)]="item.id"
-                  >{{ item.name }}
+                  >{{ item.name | uppercase }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -308,7 +317,9 @@
               <mat-label>% de retención de productos</mat-label>
               <input
                 matInput
-                type="number"
+                currencyMask
+                [options]="masks.maskPorcentaje"
+                appInputPositionInitial
                 placeholder="Ingresa el porcentaje"
                 formControlName="percentage_product"
                 autocomplete="off"
@@ -319,7 +330,9 @@
               <mat-label>% de retención de servicios</mat-label>
               <input
                 matInput
-                type="number"
+                currencyMask
+                [options]="masks.maskPorcentaje"
+                appInputPositionInitial
                 placeholder="Ingresa el porcentaje"
                 formControlName="percentage_service"
                 autocomplete="off"
@@ -333,6 +346,7 @@
                 type="text"
                 placeholder="Ingresa la abreviatura"
                 formControlName="abbreviation"
+                class="text-uppercase"
                 autocomplete="off"
                 required
               />
@@ -344,6 +358,7 @@
               matInput
               type="text"
               autocomplete="off"
+              class="text-uppercase"
               formControlName="dane_code"
               placeholder="Ingrese el codigo DANE"
               required
@@ -358,6 +373,7 @@
             type="text"
             autocomplete="off"
             formControlName="dian_code"
+            class="text-uppercase"
             placeholder="Ingrese el codigo DIAN"
             required
           />
@@ -368,6 +384,7 @@
             matInput
             type="text"
             autocomplete="off"
+            class="text-uppercase"
             formControlName="name"
             placeholder="Ingrese el nombre"
             required

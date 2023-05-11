@@ -8,73 +8,123 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="modal.dismiss('Cross click')"
+      (click)="_modal.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
     <div class="row">
-      <mat-form-field class="col" appearance="outline">
-        <mat-label>Nombre</mat-label>
-        <input
-          matInput
-          type="text"
-          [(ngModel)]="filtros.name"
-          placeholder="Busca por nombre"
-          (input)="getApus()"
-          name="name"
-          autocomplete="off"
-        />
-      </mat-form-field>
-      <mat-form-field class="col" appearance="outline">
-        <mat-label>Cliente</mat-label>
-        <input
-          matInput
-          type="text"
-          [(ngModel)]="filtros.client"
-          placeholder="Busca por cliente"
-          (input)="getApus()"
-          name="client"
-          autocomplete="off"
-        />
-      </mat-form-field>
-      <mat-form-field class="col" appearance="outline">
-        <mat-label>Línea</mat-label>
-        <input
-          matInput
-          type="text"
-          [(ngModel)]="filtros.line"
-          placeholder="Busca por línea"
-          (input)="getApus()"
-          name="line"
-          autocomplete="off"
-        />
-      </mat-form-field>
-      <mat-form-field class="col" appearance="outline">
-        <mat-label>Ciudad</mat-label>
-        <input
-          matInput
-          type="text"
-          [(ngModel)]="filtros.city"
-          (input)="getApus()"
-          placeholder="Busca por ciudad"
-          autocomplete="off"
-        />
-      </mat-form-field>
-      <mat-form-field class="col" appearance="outline">
-        <mat-label>Tipo</mat-label>
-        <mat-select
-          name="type"
-          [(ngModel)]="filtros.type"
-          (selectionChange)="getApus()"
-        >
-          <mat-option value="">Todos</mat-option>
-          <mat-option value="Pieza">Pieza</mat-option>
-          <mat-option value="Conjunto">Conjunto</mat-option>
-          <mat-option value="Servicio">Servicio</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <ng-container [formGroup]="form_filters">
+        <mat-form-field appearance="outline" class="col">
+          <mat-label>Rango de fechas</mat-label>
+          <input
+            matInput
+            [satDatepicker]="picker"
+            [value]="date"
+            (dateChange)="selectedDate($event)"
+            name="daterange"
+            autocomplete="off"
+          />
+          <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+          <sat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></sat-datepicker-toggle>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Código</mat-label>
+          <input
+            matInput
+            type="text"
+            placeholder="Busca por código"
+            formControlName="code"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="name"
+            placeholder="Busca por nombre"
+            name="name"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Conjunto</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="set_name"
+            placeholder="Busca por conjunto"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Máquina</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="machine_name"
+            placeholder="Busca por máquina"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Ciudad</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="city"
+            placeholder="Busca por ciudad"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Cliente</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="client"
+            placeholder="Busca por cliente"
+            autocomplete="off"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Línea</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="line"
+            placeholder="Busca por línea"
+            name="line"
+            autocomplete="off"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select name="type" formControlName="type">
+            <mat-option value="">Todos</mat-option>
+            <mat-option value="Pieza">Pieza</mat-option>
+            <mat-option value="Conjunto">Conjunto</mat-option>
+            <mat-option value="Servicio">Servicio</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Descripción</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="description"
+            placeholder="Busca por descripción"
+            autocomplete="off"
+          />
+        </mat-form-field>
+      </ng-container>
     </div>
     <ng-container *ngIf="apus.length && !loading; else notData">
       <div class="rounded-top table-responsive">
@@ -141,26 +191,19 @@
         </table>
       </div>
     </ng-container>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize"
-      [pageSize]="pagination.pageSize"
-      [(page)]="pagination.page"
-      (pageChange)="getApus($event)"
-      aria-label="Default pagination"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
+    <mat-paginator
+      *ngIf="paginationMaterial"
+      [length]="paginationMaterial.total"
+      [pageSize]="paginationMaterial.per_page"
+      [pageIndex]="paginationMaterial.current_page - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
     >
-    </ngb-pagination>
+    </mat-paginator>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-danger"
-      (click)="modal.dismiss('Cross click')"
-    >
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
       Cancelar
     </button>
     <button type="button" (click)="send()" class="btn btn-primary">

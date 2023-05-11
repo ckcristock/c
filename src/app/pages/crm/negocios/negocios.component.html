@@ -60,6 +60,33 @@
                   placeholder="Busca por empresa"
                 />
               </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Etapa</mat-label>
+                <mat-select formControlName="status">
+                  <mat-option value="">Todas</mat-option>
+                  <mat-option value="Prospección">Prospección</mat-option>
+                  <mat-option value="Presupuesto">Presupuesto</mat-option>
+                  <mat-option value="Cotización">Cotización</mat-option>
+                  <mat-option value="Negociación">Negociación</mat-option>
+                  <mat-option value="Adjudicación">Adjudicación</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="col">
+                <mat-label>Fecha de entrega</mat-label>
+                <input
+                  matInput
+                  [satDatepicker]="picker"
+                  [value]="date"
+                  (dateChange)="selectedDate($event)"
+                  name="daterange"
+                  autocomplete="off"
+                />
+                <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+                <sat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"
+                ></sat-datepicker-toggle>
+              </mat-form-field>
             </div>
           </form>
         </mat-expansion-panel>

@@ -7,6 +7,7 @@ import { MunicipiosService } from '../departamentos-municipios/municipios/munici
 import { MatTableDataSource } from '@angular/material';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-localidades',
@@ -18,6 +19,7 @@ export class LocalidadesComponent implements OnInit {
   countries: any[] = [];
   states: any[] = [];
   form: FormGroup;
+  masks = consts;
   municipalities: any[] = [];
   filtro_pais: any = {
     name: ''
@@ -93,7 +95,7 @@ export class LocalidadesComponent implements OnInit {
 
   openModal(tipo, add) {
     this.createModal(tipo)
-    this.operation = 'guardar';
+    this.operation = 'Agregar';
     this.tipo = tipo;
     this.openConfirm(add)
   }
@@ -112,7 +114,7 @@ export class LocalidadesComponent implements OnInit {
       department_id: modelo.department_id
     })
     this.tipo = tipo
-    this.operation = 'editar';
+    this.operation = 'Editar';
     this.openConfirm(add)
   }
 
@@ -215,38 +217,36 @@ export class LocalidadesComponent implements OnInit {
   saveCountry(params) {
     this._countries.createCountry(params).subscribe((r: any) => {
       if (r.status == false) {
-        this.getSwal('Error en País', r.err, 'error', false);
+        this.getSwal('Error', r.err, 'error', false);
       } else {
-        this.getSwal('País', r.data, 'success', false);
+        this.getSwal('Operación exitosa', r.data, 'success', false);
+        this.getCountries()
+        this._modal.close();
       }
-      this.getCountries()
-      this._modal.close();
     })
   }
 
   saveState(params) {
     this._state.setDepartment(params).subscribe((r: any) => {
       if (r.status == false) {
-        this.getSwal('Error en Departamento', r.err, 'error', false);
+        this.getSwal('Error', r.err, 'error', false);
       } else {
-        this.getSwal('Departamento', r.data, 'success', false);
+        this.getSwal('Operación exitosa', r.data, 'success', false);
+        this.getStates(params.country_id);
+        this._modal.close();
       }
-      this.getStates(params.country_id);
-      this.getSwal('Departamento/Estado', r.data, 'success', false);
-      this._modal.close();
     })
   }
 
   saveMunicipality(params: any) {
     this._municipality.createNewMunicipality(params).subscribe((r: any) => {
       if (r.status == false) {
-        this.getSwal('Error en Municipio', r.err, 'error', false);
+        this.getSwal('Error', r.err, 'error', false);
       } else {
-        this.getSwal('Municipio agregado', r.data, 'success', false);
+        this.getMunicipalities(params.department_id);
+        this.getSwal('Operación exitosa', r.data, 'success', false);
+        this._modal.close();
       }
-      this.getMunicipalities(params.department_id);
-      this.getSwal('Municipio agregado', r.data, 'success', false);
-      this._modal.close();
     })
   }
 }

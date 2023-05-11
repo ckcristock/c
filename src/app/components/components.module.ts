@@ -16,7 +16,7 @@ import { NotDataComponent } from './not-data/not-data.component';
 import { ApplicantComponent } from './applicant/applicant.component';
 import { GetApusComponent } from './get-apus/get-apus.component';
 import { CabeceraComponent } from './cabecera/cabecera.component';
-import { MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatNativeDateModule, MatRadioModule, MatSelectModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatDatepickerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatNativeDateModule, MatPaginatorModule, MatRadioModule, MatSelectModule } from '@angular/material';
 import { NoPermissionsComponent } from './no-permissions/no-permissions.component';
 import { PlaceholderFormComponent } from './placeholder-form/placeholder-form.component';
 import { ReloadButtonComponent } from './reload-button/reload-button.component';
@@ -93,7 +93,8 @@ export const MY_FORMATS = {
     MatNativeDateModule,
     SatDatepickerModule,
     SatNativeDateModule,
-    MatRadioModule
+    MatRadioModule,
+    MatPaginatorModule
   ],
   providers: [
     {

@@ -7,7 +7,7 @@
     <hr class="line" />
     <form [formGroup]="form">
       <div class="row">
-        <mat-form-field class="col-md-4" appearance="outline">
+        <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Nombre conjunto</mat-label>
           <input
             matInput
@@ -17,7 +17,7 @@
             formControlName="name"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-4" appearance="outline">
+        <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Conjunto</mat-label>
           <input
             matInput
@@ -27,7 +27,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col-md-4" appearance="outline">
+        <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Máquina</mat-label>
           <input
             matInput
@@ -37,7 +37,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <div class="col mat-form-field-wrapper">
+        <div class="col-md-6 mat-form-field-wrapper">
           <ng-select
             formControlName="city_id"
             [items]="cities"
@@ -53,7 +53,7 @@
           >
           </ng-select>
         </div>
-        <div class="col mat-form-field-wrapper">
+        <div class="col-md-6 mat-form-field-wrapper">
           <ng-select
             formControlName="third_party_id"
             [items]="clients"
@@ -69,7 +69,7 @@
           >
           </ng-select>
         </div>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Línea</mat-label>
           <input
             matInput
@@ -601,7 +601,7 @@
                 <th class="align-middle">Descripción</th>
                 <th class="align-middle">Unidad</th>
                 <th class="align-middle col-1">Cantidad</th>
-                <th class="align-middle">Costo Unitario</th>
+                <th class="align-middle col-1">Costo Unitario</th>
                 <th class="align-middle">Total</th>
                 <th class="align-middle">
                   <button
@@ -667,15 +667,16 @@
                     />
                   </td>
                   <td class="align-middle">
-                    ${{ item.value.unit_cost | number : "1.2-2" }}
-                    <!-- <input
+                    <!-- ${{ item.value.unit_cost | number : "1.2-2" }} -->
+                    <input
                       currencyMask
                       appInputPosition
                       [options]="masksMoney.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_externo"
+                      style="width: 8rem"
                       formControlName="unit_cost"
-                    /> -->
+                    />
                   </td>
                   <td class="align-middle">
                     ${{ item.value.total | number : "1.2-2" }}

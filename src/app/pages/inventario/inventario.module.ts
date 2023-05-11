@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { MyDateRangePickerModule } from 'mydaterangepicker';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ComponentsModule } from '../../components/components.module';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
@@ -58,6 +58,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { CrearActaRecepcionOldComponent } from './acta-recepcion/crear-acta-recepcion-old/crear-acta-recepcion-old.component';
+import { MatTooltipModule } from '@angular/material';
 
 export const MY_FORMATS = {
   parse: {
@@ -94,6 +95,7 @@ export const MY_FORMATS = {
     CommonModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     InventarioRoutingModule,
     ComponentsModule,
     MyDateRangePickerModule,
@@ -119,7 +121,8 @@ export const MY_FORMATS = {
     NgbPopoverModule,
     NgSelectModule,
     DirectivesModule,
-    NgxCurrencyModule
+    NgxCurrencyModule,
+    MatTooltipModule
   ],
   providers: [
     {

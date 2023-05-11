@@ -25,7 +25,8 @@ export class SolicitudCompraCrearComponent implements OnInit {
   searchFailed: boolean;
   masks = consts;
   path: string;
-  today = new Date()
+  today = new Date();
+  productDelete: any[] = [];
   datosCabecera = {
     Titulo: '',
     Fecha: '',
@@ -163,7 +164,9 @@ export class SolicitudCompraCrearComponent implements OnInit {
   get products() {
     return this.form.get('products') as FormArray;
   }
-  productDelete: any[] = [];
+
+
+
   deleteProduct(index: number) {
     if (this.dataEdit && this.id) {
       this.productDelete.push(this.products.value[index].id);

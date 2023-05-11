@@ -45,7 +45,7 @@
               bindLabel="text"
               appearance="outline"
               [clearable]="false"
-              [class.is-invalid]="form.get('city_id').invalid"
+              [class.is-invalid]="form?.get('city_id')?.invalid"
               [appendTo]="'body'"
               placeholder="Destino *"
               bindValue="value"
@@ -61,7 +61,7 @@
               bindLabel="text"
               appearance="outline"
               [clearable]="false"
-              [class.is-invalid]="form.get('third_party_id').invalid"
+              [class.is-invalid]="form?.get('third_party_id')?.invalid"
               [appendTo]="'body'"
               placeholder="Cliente *"
               bindValue="value"
@@ -99,9 +99,9 @@
     <mat-accordion multi>
       <mat-expansion-panel
         [expanded]="
-          cmoList.controls.length > 0 ||
-          mpMCalculateLaborList.controls.length > 0 ||
-          apMCalculateLaborList.controls.length > 0
+          cmoList?.controls?.length > 0 ||
+          mpMCalculateLaborList?.controls?.length > 0 ||
+          apMCalculateLaborList?.controls?.length > 0
         "
         class="mat-elevation-z0 border-radius-panel"
       >
@@ -127,7 +127,7 @@
               </div>
             </div>
           </div>
-          <ng-container *ngIf="cmoList.controls.length; else notData">
+          <ng-container *ngIf="cmoList?.controls?.length; else notData">
             <div class="rounded-top table-responsive">
               <table
                 class="table table-bordered table-striped table-sm table-text-small"
@@ -174,7 +174,7 @@
                 </thead>
                 <ng-container formArrayName="calculate_labor">
                   <ng-container
-                    *ngFor="let item of cmoList.controls; let i = index"
+                    *ngFor="let item of cmoList?.controls; let i = index"
                   >
                     <ng-container [formGroupName]="i">
                       <tbody>
@@ -186,15 +186,18 @@
                             <select
                               class="form-control form-control-sm form-control-edit form-width"
                               formControlName="apu_profile_id"
+                              [class.is-invalid]="
+                                item?.get('apu_profile_id')?.invalid
+                              "
                             >
                               <option value="" disabled selected hidden>
                                 Selecciona
                               </option>
                               <option
                                 *ngFor="let item of profiles"
-                                [value]="item.id"
+                                [value]="item?.id"
                               >
-                                {{ item.profile }}
+                                {{ item?.profile }}
                               </option>
                             </select>
                           </td>
@@ -208,9 +211,9 @@
                               </option>
                               <option
                                 *ngFor="let item of desplazamientos"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -218,7 +221,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 3.4rem"
                               formControlName="people_number"
@@ -228,7 +231,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
                               formControlName="days_number_displacement"
@@ -245,9 +248,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -255,7 +258,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
                               formControlName="hours_displacement"
@@ -263,13 +266,13 @@
                           </td>
                           <td class="px-2">
                             ${{
-                              item.controls.hours_value_displacement.value
+                              item?.controls?.hours_value_displacement?.value
                                 | number : "1.2-2"
                             }}
                           </td>
                           <td class="px-2">
                             ${{
-                              item.controls.total_value_displacement.value
+                              item?.controls?.total_value_displacement?.value
                                 | number : "1.2-2"
                             }}
                           </td>
@@ -277,7 +280,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
                               formControlName="days_number_ordinary"
@@ -294,9 +297,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -304,7 +307,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
                               formControlName="hours_ordinary"
@@ -312,13 +315,13 @@
                           </td>
                           <td class="px-2">
                             ${{
-                              item.controls.hours_value_ordinary.value
+                              item?.controls?.hours_value_ordinary?.value
                                 | number : "1.2-2"
                             }}
                           </td>
                           <td class="px-2">
                             ${{
-                              item.controls.total_value_ordinary.value
+                              item?.controls?.total_value_ordinary?.value
                                 | number : "1.2-2"
                             }}
                           </td>
@@ -326,7 +329,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
                               formControlName="days_number_festive"
@@ -343,9 +346,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -353,7 +356,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
                               formControlName="hours_festive"
@@ -361,19 +364,19 @@
                           </td>
                           <td class="px-2">
                             ${{
-                              item.controls.hours_value_festive.value
+                              item?.controls?.hours_value_festive?.value
                                 | number : "1.2-2"
                             }}
                           </td>
                           <td class="px-2">
                             ${{
-                              item.controls.total_value_festive.value
+                              item?.controls?.total_value_festive?.value
                                 | number : "1.2-2"
                             }}
                           </td>
                           <td class="px-2">
                             ${{
-                              item.controls.salary_value.value
+                              item?.controls?.salary_value?.value
                                 | number : "1.2-2"
                             }}
                           </td>
@@ -396,20 +399,20 @@
               </table>
             </div>
           </ng-container>
-          <ng-container *ngIf="cmoList.controls.length">
+          <ng-container *ngIf="cmoList?.controls?.length">
             <app-list-items
               title1="SUBTOTAL MANO DE OBRA"
-              [var1]="this.form.get('subtotal_labor').value"
+              [var1]="this?.form?.get('subtotal_labor')?.value"
               type1="cop"
               mt="mt-2"
             ></app-list-items>
           </ng-container>
-          <ng-container *ngIf="cmoList.controls.length">
+          <ng-container *ngIf="cmoList?.controls?.length">
             <h6>Viáticos</h6>
             <ng-container formArrayName="calculate_labor">
               <div class="row">
                 <ng-container
-                  *ngFor="let item of cmoList.controls; let i = index"
+                  *ngFor="let item of cmoList?.controls; let i = index"
                 >
                   <ng-container [formGroupName]="i">
                     <div class="col-md-4">
@@ -447,17 +450,18 @@
                               <tr [formGroupName]="j">
                                 <td class="text-center">
                                   {{
-                                    item.controls.description.value | uppercase
+                                    item?.controls?.description?.value
+                                      | uppercase
                                   }}
                                 </td>
                                 <td class="text-center">
-                                  {{ item.controls.unit.value | uppercase }}
+                                  {{ item?.controls?.unit?.value | uppercase }}
                                 </td>
                                 <td>
                                   <input
                                     currencyMask
                                     appInputPositionInitial
-                                    [options]="masksMoney.maskNumbers3Decimal"
+                                    [options]="masksMoney?.maskNumbers3Decimal"
                                     placeholder="Cantidad"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="amount"
@@ -467,19 +471,19 @@
                                   <input
                                     currencyMask
                                     appInputPosition
-                                    [options]="masksMoney.maskCOP"
+                                    [options]="masksMoney?.maskCOP"
                                     placeholder="Valor unitario"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="unit_value"
                                   />
                                   <!-- ${{
-                                    item.controls.unit_value.value
+                                    item?.controls?.unit_value?.value
                                       | number : "1.2-2"
                                   }} -->
                                 </td>
                                 <td class="text-right">
                                   ${{
-                                    item.controls.total_value.value
+                                    item?.controls?.total_value?.value
                                       | number : "1.2-2"
                                   }}
                                 </td>
@@ -499,7 +503,8 @@
                               class="text-right pr-0"
                             >
                               ${{
-                                item.controls.subtotal.value | number : "1.2-2"
+                                item?.controls?.subtotal?.value
+                                  | number : "1.2-2"
                               }}
                             </th>
                           </tr>
@@ -512,10 +517,10 @@
             </ng-container>
             <app-list-items
               title1="SUBTOTAL VIÁTICOS"
-              [var1]="this.form.get('subtotal_travel_expense').value"
+              [var1]="this?.form?.get('subtotal_travel_expense')?.value"
               type1="cop"
               title2="SUBTOTAL VALIDACIÓN DIMENSIONAL"
-              [var2]="this.form.get('subtotal_dimensional_validation').value"
+              [var2]="this?.form?.get('subtotal_dimensional_validation')?.value"
               type2="cop"
               mt="mt-2"
             ></app-list-items>
@@ -541,7 +546,7 @@
           </div>
           <!-- mpm es porque antes era montaje y puesta en marcha pero ahora es montaje de equipos -->
           <ng-container
-            *ngIf="mpMCalculateLaborList.controls.length; else notData"
+            *ngIf="mpMCalculateLaborList?.controls?.length; else notData"
           >
             <div class="rounded-top table-responsive">
               <table
@@ -584,7 +589,7 @@
                 <ng-container formArrayName="mpm_calculate_labor">
                   <ng-container
                     *ngFor="
-                      let item of mpMCalculateLaborList.controls;
+                      let item of mpMCalculateLaborList?.controls;
                       let i = index
                     "
                   >
@@ -604,9 +609,9 @@
                               </option>
                               <option
                                 *ngFor="let item of profiles"
-                                [value]="item.id"
+                                [value]="item?.id"
                               >
-                                {{ item.profile }}
+                                {{ item?.profile }}
                               </option>
                             </select>
                           </td>
@@ -620,9 +625,9 @@
                               </option>
                               <option
                                 *ngFor="let item of desplazamientos"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -630,7 +635,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 3.4rem"
                               formControlName="people_number"
@@ -640,7 +645,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
                               formControlName="days_number_displacement"
@@ -657,9 +662,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -667,7 +672,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
                               formControlName="hours_displacement"
@@ -675,13 +680,13 @@
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.hours_value_displacement.value
+                              item?.controls?.hours_value_displacement?.value
                                 | number : "1.2-2"
                             }}
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.total_value_displacement.value
+                              item?.controls?.total_value_displacement?.value
                                 | number : "1.2-2"
                             }}
                           </td>
@@ -689,7 +694,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
                               formControlName="days_number_ordinary"
@@ -706,9 +711,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -716,7 +721,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
                               formControlName="hours_ordinary"
@@ -724,13 +729,13 @@
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.hours_value_ordinary.value
+                              item?.controls?.hours_value_ordinary?.value
                                 | number : "1.2-2"
                             }}
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.total_value_ordinary.value
+                              item?.controls?.total_value_ordinary?.value
                                 | number : "1.2-2"
                             }}
                           </td>
@@ -738,7 +743,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
                               formControlName="days_number_festive"
@@ -755,9 +760,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -765,7 +770,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
                               formControlName="hours_festive"
@@ -773,19 +778,19 @@
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.hours_value_festive.value
+                              item?.controls?.hours_value_festive?.value
                                 | number : "1.2-2"
                             }}
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.total_value_festive.value
+                              item?.controls?.total_value_festive?.value
                                 | number : "1.2-2"
                             }}
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.salary_value.value
+                              item?.controls?.salary_value?.value
                                 | number : "1.2-2"
                             }}
                           </td>
@@ -806,21 +811,21 @@
               </table>
             </div>
           </ng-container>
-          <ng-container *ngIf="mpMCalculateLaborList.controls.length">
+          <ng-container *ngIf="mpMCalculateLaborList?.controls?.length">
             <app-list-items
               title1="SUBTOTAL MANO DE OBRA"
-              [var1]="this.form.get('subtotal_labor_mpm').value"
+              [var1]="this?.form?.get('subtotal_labor_mpm')?.value"
               type1="cop"
               mt="mt-2"
             ></app-list-items>
           </ng-container>
-          <ng-container *ngIf="mpMCalculateLaborList.controls.length">
+          <ng-container *ngIf="mpMCalculateLaborList?.controls?.length">
             <h6>Viáticos</h6>
             <ng-container formArrayName="mpm_calculate_labor">
               <div class="row">
                 <ng-container
                   *ngFor="
-                    let item of mpMCalculateLaborList.controls;
+                    let item of mpMCalculateLaborList?.controls;
                     let i = index
                   "
                 >
@@ -860,17 +865,18 @@
                               <tr [formGroupName]="j">
                                 <td class="text-center">
                                   {{
-                                    item.controls.description.value | uppercase
+                                    item?.controls?.description?.value
+                                      | uppercase
                                   }}
                                 </td>
                                 <td class="text-center">
-                                  {{ item.controls.unit.value | uppercase }}
+                                  {{ item?.controls?.unit?.value | uppercase }}
                                 </td>
                                 <td>
                                   <input
                                     currencyMask
                                     appInputPositionInitial
-                                    [options]="masksMoney.maskNumbers3Decimal"
+                                    [options]="masksMoney?.maskNumbers3Decimal"
                                     placeholder="Cantidad"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="amount"
@@ -880,19 +886,19 @@
                                   <input
                                     currencyMask
                                     appInputPosition
-                                    [options]="masksMoney.maskCOP"
+                                    [options]="masksMoney?.maskCOP"
                                     placeholder="Valor unitario"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="unit_value"
                                   />
                                   <!-- ${{
-                                    item.controls.unit_value.value
+                                    item?.controls?.unit_value?.value
                                       | number : "1.2-2"
                                   }} -->
                                 </td>
                                 <td class="text-right">
                                   ${{
-                                    item.controls.total_value.value
+                                    item?.controls?.total_value?.value
                                       | number : "1.2-2"
                                   }}
                                 </td>
@@ -912,7 +918,8 @@
                               class="text-right pr-0"
                             >
                               ${{
-                                item.controls.subtotal.value | number : "1.2-2"
+                                item?.controls?.subtotal?.value
+                                  | number : "1.2-2"
                               }}
                             </th>
                           </tr>
@@ -925,13 +932,13 @@
             </ng-container>
           </ng-container>
 
-          <ng-container *ngIf="mpMCalculateLaborList.controls.length">
+          <ng-container *ngIf="mpMCalculateLaborList?.controls?.length">
             <app-list-items
               title1="SUBTOTAL VIÁTICOS"
-              [var1]="this.form.get('subtotal_travel_expense_mpm').value"
+              [var1]="this?.form?.get('subtotal_travel_expense_mpm')?.value"
               type1="cop"
               title2="SUBTOTAL MONTAJE EQUIPOS"
-              [var2]="this.form.get('subtotal_assembly_commissioning').value"
+              [var2]="this?.form?.get('subtotal_assembly_commissioning')?.value"
               type2="cop"
               mt="mt-2"
             ></app-list-items>
@@ -957,7 +964,7 @@
           </div>
           <!-- mpm es porque antes era montaje y puesta en marcha pero ahora es montaje de equipos -->
           <ng-container
-            *ngIf="apMCalculateLaborList.controls.length; else notData"
+            *ngIf="apMCalculateLaborList?.controls?.length; else notData"
           >
             <div class="rounded-top table-responsive">
               <table
@@ -1000,7 +1007,7 @@
                 <ng-container formArrayName="apm_calculate_labor">
                   <ng-container
                     *ngFor="
-                      let item of apMCalculateLaborList.controls;
+                      let item of apMCalculateLaborList?.controls;
                       let i = index
                     "
                   >
@@ -1020,9 +1027,9 @@
                               </option>
                               <option
                                 *ngFor="let item of profiles"
-                                [value]="item.id"
+                                [value]="item?.id"
                               >
-                                {{ item.profile }}
+                                {{ item?.profile }}
                               </option>
                             </select>
                           </td>
@@ -1036,9 +1043,9 @@
                               </option>
                               <option
                                 *ngFor="let item of desplazamientos"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -1046,7 +1053,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 3.4rem"
                               formControlName="people_number"
@@ -1056,7 +1063,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
                               formControlName="days_number_displacement"
@@ -1073,9 +1080,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -1083,7 +1090,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
                               formControlName="hours_displacement"
@@ -1091,13 +1098,13 @@
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.hours_value_displacement.value
+                              item?.controls?.hours_value_displacement?.value
                                 | number : "1.2-2"
                             }}
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.total_value_displacement.value
+                              item?.controls?.total_value_displacement?.value
                                 | number : "1.2-2"
                             }}
                           </td>
@@ -1105,7 +1112,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
                               formControlName="days_number_ordinary"
@@ -1122,9 +1129,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -1132,7 +1139,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
                               formControlName="hours_ordinary"
@@ -1140,13 +1147,13 @@
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.hours_value_ordinary.value
+                              item?.controls?.hours_value_ordinary?.value
                                 | number : "1.2-2"
                             }}
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.total_value_ordinary.value
+                              item?.controls?.total_value_ordinary?.value
                                 | number : "1.2-2"
                             }}
                           </td>
@@ -1154,7 +1161,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.5rem"
                               formControlName="days_number_festive"
@@ -1171,9 +1178,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -1181,7 +1188,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               style="width: 2.6rem"
                               formControlName="hours_festive"
@@ -1189,19 +1196,19 @@
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.hours_value_festive.value
+                              item?.controls?.hours_value_festive?.value
                                 | number : "1.2-2"
                             }}
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.total_value_festive.value
+                              item?.controls?.total_value_festive?.value
                                 | number : "1.2-2"
                             }}
                           </td>
                           <td class="text-right px-2">
                             ${{
-                              item.controls.salary_value.value
+                              item?.controls?.salary_value?.value
                                 | number : "1.2-2"
                             }}
                           </td>
@@ -1222,22 +1229,22 @@
               </table>
             </div>
           </ng-container>
-          <ng-container *ngIf="apMCalculateLaborList.controls.length">
+          <ng-container *ngIf="apMCalculateLaborList?.controls?.length">
             <app-list-items
               title1="SUBTOTAL MANO DE OBRA"
-              [var1]="this.form.get('subtotal_labor_apm').value"
+              [var1]="this?.form?.get('subtotal_labor_apm')?.value"
               type1="cop"
               mt="mt-2"
             ></app-list-items>
           </ng-container>
 
-          <ng-container *ngIf="apMCalculateLaborList.controls.length">
+          <ng-container *ngIf="apMCalculateLaborList?.controls?.length">
             <h6>Viáticos</h6>
             <ng-container formArrayName="apm_calculate_labor">
               <div class="row">
                 <ng-container
                   *ngFor="
-                    let item of apMCalculateLaborList.controls;
+                    let item of apMCalculateLaborList?.controls;
                     let i = index
                   "
                 >
@@ -1277,17 +1284,18 @@
                               <tr [formGroupName]="j">
                                 <td class="text-center">
                                   {{
-                                    item.controls.description.value | uppercase
+                                    item?.controls?.description?.value
+                                      | uppercase
                                   }}
                                 </td>
                                 <td class="text-center">
-                                  {{ item.controls.unit.value | uppercase }}
+                                  {{ item?.controls?.unit?.value | uppercase }}
                                 </td>
                                 <td>
                                   <input
                                     currencyMask
                                     appInputPositionInitial
-                                    [options]="masksMoney.maskNumbers3Decimal"
+                                    [options]="masksMoney?.maskNumbers3Decimal"
                                     placeholder="Cantidad"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="amount"
@@ -1297,19 +1305,19 @@
                                   <input
                                     currencyMask
                                     appInputPosition
-                                    [options]="masksMoney.maskCOP"
+                                    [options]="masksMoney?.maskCOP"
                                     placeholder="Valor unitario"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="unit_value"
                                   />
                                   <!-- ${{
-                                    item.controls.unit_value.value
+                                    item?.controls?.unit_value?.value
                                       | number : "1.2-2"
                                   }} -->
                                 </td>
                                 <td class="text-right">
                                   ${{
-                                    item.controls.total_value.value
+                                    item?.controls?.total_value?.value
                                       | number : "1.2-2"
                                   }}
                                 </td>
@@ -1329,7 +1337,8 @@
                               class="text-right pr-0"
                             >
                               ${{
-                                item.controls.subtotal.value | number : "1.2-2"
+                                item?.controls?.subtotal?.value
+                                  | number : "1.2-2"
                               }}
                             </th>
                           </tr>
@@ -1342,13 +1351,13 @@
             </ng-container>
           </ng-container>
 
-          <ng-container *ngIf="apMCalculateLaborList.controls.length">
+          <ng-container *ngIf="apMCalculateLaborList?.controls?.length">
             <app-list-items
               title1="SUBTOTAL VIÁTICOS"
-              [var1]="this.form.get('subtotal_travel_expense_apm').value"
+              [var1]="this?.form?.get('subtotal_travel_expense_apm')?.value"
               type1="cop"
               title2="SUBTOTAL ACOMPAÑAMIENTO"
-              [var2]="this.form.get('subtotal_accompaniment').value"
+              [var2]="this?.form?.get('subtotal_accompaniment')?.value"
               type2="cop"
               mt="mt-2"
             ></app-list-items>
@@ -1357,7 +1366,7 @@
           <app-list-items
             title1="SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA"
             [var1]="
-              this.form.get('general_subtotal_travel_expense_labor').value
+              this?.form?.get('general_subtotal_travel_expense_labor')?.value
             "
             type1="cop"
             mt="mt-2"
@@ -1366,9 +1375,9 @@
       </mat-expansion-panel>
       <mat-expansion-panel
         [expanded]="
-          cVdCalculateLaborList.controls.length > 0 ||
-          cMeCalculateLaborList.controls.length > 0 ||
-          cApMCalculateLaborList.controls.length > 0
+          cVdCalculateLaborList?.controls?.length > 0 ||
+          cMeCalculateLaborList?.controls?.length > 0 ||
+          cApMCalculateLaborList?.controls?.length > 0
         "
         class="mat-elevation-z0 border-radius-panel"
       >
@@ -1395,7 +1404,7 @@
             </div>
           </div>
           <ng-container
-            *ngIf="cVdCalculateLaborList.controls.length; else notData"
+            *ngIf="cVdCalculateLaborList?.controls?.length; else notData"
           >
             <div class="rounded-top table-responsive">
               <table
@@ -1431,7 +1440,7 @@
                 <ng-container formArrayName="c_vd_calculate_labor">
                   <ng-container
                     *ngFor="
-                      let item of cVdCalculateLaborList.controls;
+                      let item of cVdCalculateLaborList?.controls;
                       let i = index
                     "
                   >
@@ -1451,9 +1460,9 @@
                               </option>
                               <option
                                 *ngFor="let item of profiles"
-                                [value]="item.id"
+                                [value]="item?.id"
                               >
-                                {{ item.profile }}
+                                {{ item?.profile }}
                               </option>
                             </select>
                           </td>
@@ -1467,9 +1476,9 @@
                               </option>
                               <option
                                 *ngFor="let item of desplazamientos"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -1477,7 +1486,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="people_number"
                             />
@@ -1486,7 +1495,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_displacement"
                             />
@@ -1501,9 +1510,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -1511,7 +1520,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_displacement"
                             />
@@ -1520,7 +1529,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_ordinary"
                             />
@@ -1535,9 +1544,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -1545,7 +1554,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_ordinary"
                             />
@@ -1554,7 +1563,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_festive"
                             />
@@ -1569,9 +1578,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -1579,7 +1588,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_festive"
                             />
@@ -1601,13 +1610,13 @@
               </table>
             </div>
           </ng-container>
-          <ng-container *ngIf="cVdCalculateLaborList.controls.length">
+          <ng-container *ngIf="cVdCalculateLaborList?.controls?.length">
             <h6>Viáticos</h6>
             <ng-container formArrayName="c_vd_calculate_labor">
               <div class="row">
                 <ng-container
                   *ngFor="
-                    let item of cVdCalculateLaborList.controls;
+                    let item of cVdCalculateLaborList?.controls;
                     let i = index
                   "
                 >
@@ -1647,17 +1656,18 @@
                               <tr [formGroupName]="j">
                                 <td class="text-center">
                                   {{
-                                    item.controls.description.value | uppercase
+                                    item?.controls?.description?.value
+                                      | uppercase
                                   }}
                                 </td>
                                 <td class="text-center">
-                                  {{ item.controls.unit.value | uppercase }}
+                                  {{ item?.controls?.unit?.value | uppercase }}
                                 </td>
                                 <td>
                                   <input
                                     currencyMask
                                     appInputPositionInitial
-                                    [options]="masksMoney.maskNumbers3Decimal"
+                                    [options]="masksMoney?.maskNumbers3Decimal"
                                     placeholder="Cantidad"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="amount"
@@ -1667,7 +1677,7 @@
                                   <input
                                     currencyMask
                                     appInputPosition
-                                    [options]="masksMoney.maskCOP"
+                                    [options]="masksMoney?.maskCOP"
                                     placeholder="Valor unitario"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="unit_value"
@@ -1675,7 +1685,7 @@
                                 </td>
                                 <td class="text-right">
                                   ${{
-                                    item.controls.total_value.value
+                                    item?.controls?.total_value?.value
                                       | number : "1.2-2"
                                   }}
                                 </td>
@@ -1695,7 +1705,8 @@
                               class="text-right pr-0"
                             >
                               ${{
-                                item.controls.subtotal.value | number : "1.2-2"
+                                item?.controls?.subtotal?.value
+                                  | number : "1.2-2"
                               }}
                             </th>
                           </tr>
@@ -1707,13 +1718,15 @@
               </div>
             </ng-container>
           </ng-container>
-          <ng-container *ngIf="cVdCalculateLaborList.controls.length">
+          <ng-container *ngIf="cVdCalculateLaborList?.controls?.length">
             <app-list-items
               title1="SUBTOTAL VIÁTICOS"
-              [var1]="this.form.get('subtotal_travel_expense_vd_c').value"
+              [var1]="this?.form?.get('subtotal_travel_expense_vd_c')?.value"
               type1="cop"
               title2="SUBTOTAL VALIDACIÓN DIMENSIONAL"
-              [var2]="this.form.get('subtotal_dimensional_validation_c').value"
+              [var2]="
+                this?.form?.get('subtotal_dimensional_validation_c')?.value
+              "
               type2="cop"
               mt="mt-2"
             ></app-list-items>
@@ -1738,7 +1751,7 @@
             </div>
           </div>
           <ng-container
-            *ngIf="cMeCalculateLaborList.controls.length; else notData"
+            *ngIf="cMeCalculateLaborList?.controls?.length; else notData"
           >
             <div class="rounded-top table-responsive">
               <table
@@ -1774,7 +1787,7 @@
                 <ng-container formArrayName="c_me_calculate_labor">
                   <ng-container
                     *ngFor="
-                      let item of cMeCalculateLaborList.controls;
+                      let item of cMeCalculateLaborList?.controls;
                       let i = index
                     "
                   >
@@ -1794,9 +1807,9 @@
                               </option>
                               <option
                                 *ngFor="let item of profiles"
-                                [value]="item.id"
+                                [value]="item?.id"
                               >
-                                {{ item.profile }}
+                                {{ item?.profile }}
                               </option>
                             </select>
                           </td>
@@ -1810,9 +1823,9 @@
                               </option>
                               <option
                                 *ngFor="let item of desplazamientos"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -1820,7 +1833,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="people_number"
                             />
@@ -1829,7 +1842,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_displacement"
                             />
@@ -1844,9 +1857,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -1854,7 +1867,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_displacement"
                             />
@@ -1863,7 +1876,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_ordinary"
                             />
@@ -1878,9 +1891,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -1888,7 +1901,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_ordinary"
                             />
@@ -1897,7 +1910,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_festive"
                             />
@@ -1912,9 +1925,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -1922,7 +1935,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_festive"
                             />
@@ -1944,13 +1957,13 @@
               </table>
             </div>
           </ng-container>
-          <ng-container *ngIf="cMeCalculateLaborList.controls.length">
+          <ng-container *ngIf="cMeCalculateLaborList?.controls?.length">
             <h6>Viáticos</h6>
             <ng-container formArrayName="c_me_calculate_labor">
               <div class="row">
                 <ng-container
                   *ngFor="
-                    let item of cMeCalculateLaborList.controls;
+                    let item of cMeCalculateLaborList?.controls;
                     let i = index
                   "
                 >
@@ -1990,17 +2003,18 @@
                               <tr [formGroupName]="j">
                                 <td class="text-center">
                                   {{
-                                    item.controls.description.value | uppercase
+                                    item?.controls?.description?.value
+                                      | uppercase
                                   }}
                                 </td>
                                 <td class="text-center">
-                                  {{ item.controls.unit.value | uppercase }}
+                                  {{ item?.controls?.unit?.value | uppercase }}
                                 </td>
                                 <td>
                                   <input
                                     currencyMask
                                     appInputPositionInitial
-                                    [options]="masksMoney.maskNumbers3Decimal"
+                                    [options]="masksMoney?.maskNumbers3Decimal"
                                     placeholder="Cantidad"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="amount"
@@ -2010,7 +2024,7 @@
                                   <input
                                     currencyMask
                                     appInputPosition
-                                    [options]="masksMoney.maskCOP"
+                                    [options]="masksMoney?.maskCOP"
                                     placeholder="Valor unitario"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="unit_value"
@@ -2018,7 +2032,7 @@
                                 </td>
                                 <td class="text-right">
                                   ${{
-                                    item.controls.total_value.value
+                                    item?.controls?.total_value?.value
                                       | number : "1.2-2"
                                   }}
                                 </td>
@@ -2038,7 +2052,8 @@
                               class="text-right pr-0"
                             >
                               ${{
-                                item.controls.subtotal.value | number : "1.2-2"
+                                item?.controls?.subtotal?.value
+                                  | number : "1.2-2"
                               }}
                             </th>
                           </tr>
@@ -2050,13 +2065,13 @@
               </div>
             </ng-container>
           </ng-container>
-          <ng-container *ngIf="cMeCalculateLaborList.controls.length">
+          <ng-container *ngIf="cMeCalculateLaborList?.controls?.length">
             <app-list-items
               title1="SUBTOTAL VIÁTICOS"
-              [var1]="this.form.get('subtotal_travel_expense_me_c').value"
+              [var1]="this?.form?.get('subtotal_travel_expense_me_c')?.value"
               type1="cop"
               title2="SUBTOTAL MONTAJE EQUIPOS"
-              [var2]="this.form.get('subtotal_assembly_c').value"
+              [var2]="this?.form?.get('subtotal_assembly_c')?.value"
               type2="cop"
               mt="mt-2"
             ></app-list-items>
@@ -2082,7 +2097,7 @@
           </div>
           <!-- mpm es porque antes era montaje y puesta en marcha pero ahora es montaje de equipos -->
           <ng-container
-            *ngIf="cApMCalculateLaborList.controls.length; else notData"
+            *ngIf="cApMCalculateLaborList?.controls?.length; else notData"
           >
             <div class="rounded-top table-responsive">
               <table
@@ -2118,7 +2133,7 @@
                 <ng-container formArrayName="c_apm_calculate_labor">
                   <ng-container
                     *ngFor="
-                      let item of cApMCalculateLaborList.controls;
+                      let item of cApMCalculateLaborList?.controls;
                       let i = index
                     "
                   >
@@ -2138,9 +2153,9 @@
                               </option>
                               <option
                                 *ngFor="let item of profiles"
-                                [value]="item.id"
+                                [value]="item?.id"
                               >
-                                {{ item.profile }}
+                                {{ item?.profile }}
                               </option>
                             </select>
                           </td>
@@ -2154,9 +2169,9 @@
                               </option>
                               <option
                                 *ngFor="let item of desplazamientos"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -2164,7 +2179,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="people_number"
                             />
@@ -2173,7 +2188,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_displacement"
                             />
@@ -2188,9 +2203,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -2198,7 +2213,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_displacement"
                             />
@@ -2207,7 +2222,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_ordinary"
                             />
@@ -2222,9 +2237,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -2232,7 +2247,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_ordinary"
                             />
@@ -2241,7 +2256,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="days_number_festive"
                             />
@@ -2256,9 +2271,9 @@
                               </option>
                               <option
                                 *ngFor="let item of jornadas"
-                                [value]="item.value"
+                                [value]="item?.value"
                               >
-                                {{ item.text }}
+                                {{ item?.text }}
                               </option>
                             </select>
                           </td>
@@ -2266,7 +2281,7 @@
                             <input
                               currencyMask
                               appInputPositionInitial
-                              [options]="masksMoney.maskNumbers"
+                              [options]="masksMoney?.maskNumbers"
                               class="form-control form-control-sm form-control-edit"
                               formControlName="hours_festive"
                             />
@@ -2288,13 +2303,13 @@
               </table>
             </div>
           </ng-container>
-          <ng-container *ngIf="cApMCalculateLaborList.controls.length">
+          <ng-container *ngIf="cApMCalculateLaborList?.controls?.length">
             <h6>Viáticos</h6>
             <ng-container formArrayName="c_apm_calculate_labor">
               <div class="row">
                 <ng-container
                   *ngFor="
-                    let item of cApMCalculateLaborList.controls;
+                    let item of cApMCalculateLaborList?.controls;
                     let i = index
                   "
                 >
@@ -2334,17 +2349,18 @@
                               <tr [formGroupName]="j">
                                 <td class="text-center">
                                   {{
-                                    item.controls.description.value | uppercase
+                                    item?.controls?.description?.value
+                                      | uppercase
                                   }}
                                 </td>
                                 <td class="text-center">
-                                  {{ item.controls.unit.value | uppercase }}
+                                  {{ item?.controls?.unit?.value | uppercase }}
                                 </td>
                                 <td>
                                   <input
                                     currencyMask
                                     appInputPositionInitial
-                                    [options]="masksMoney.maskNumbers3Decimal"
+                                    [options]="masksMoney?.maskNumbers3Decimal"
                                     placeholder="Cantidad"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="amount"
@@ -2354,7 +2370,7 @@
                                   <input
                                     currencyMask
                                     appInputPosition
-                                    [options]="masksMoney.maskCOP"
+                                    [options]="masksMoney?.maskCOP"
                                     placeholder="Valor unitario"
                                     class="form-control form-control-sm form-control-travel"
                                     formControlName="unit_value"
@@ -2362,7 +2378,7 @@
                                 </td>
                                 <td class="text-right">
                                   ${{
-                                    item.controls.total_value.value
+                                    item?.controls?.total_value?.value
                                       | number : "1.2-2"
                                   }}
                                 </td>
@@ -2382,7 +2398,8 @@
                               class="text-right pr-0"
                             >
                               ${{
-                                item.controls.subtotal.value | number : "1.2-2"
+                                item?.controls?.subtotal?.value
+                                  | number : "1.2-2"
                               }}
                             </th>
                           </tr>
@@ -2394,13 +2411,13 @@
               </div>
             </ng-container>
           </ng-container>
-          <ng-container *ngIf="cApMCalculateLaborList.controls.length">
+          <ng-container *ngIf="cApMCalculateLaborList?.controls?.length">
             <app-list-items
               title1="SUBTOTAL VIÁTICOS"
-              [var1]="this.form.get('subtotal_travel_expense_apm_c').value"
+              [var1]="this?.form?.get('subtotal_travel_expense_apm_c')?.value"
               type1="cop"
               title2="SUBTOTAL ACOMPAÑAMIENTO"
-              [var2]="this.form.get('subtotal_accompaniment_c').value"
+              [var2]="this?.form?.get('subtotal_accompaniment_c')?.value"
               type2="cop"
               mt="mt-2"
             ></app-list-items>
@@ -2409,7 +2426,7 @@
           <app-list-items
             title1="SUBTOTAL GENERAL VIÁTICOS + MANO DE OBRA"
             [var1]="
-              this.form.get('general_subtotal_travel_expense_labor_c').value
+              this?.form?.get('general_subtotal_travel_expense_labor_c')?.value
             "
             type1="cop"
             mt="mt-2"
@@ -2429,8 +2446,8 @@
                   <td colspan="2">Subtotal maqmo</td>
                   <td class="text-right">
                     ${{
-                      this.form.get("general_subtotal_travel_expense_labor")
-                        .value | number : "1.2-2"
+                      this?.form?.get("general_subtotal_travel_expense_labor")
+                        ?.value | number : "1.2-2"
                     }}
                   </td>
                 </tr>
@@ -2438,8 +2455,8 @@
                   <td colspan="2">Subtotal contratistas</td>
                   <td class="text-right">
                     ${{
-                      this.form.get("general_subtotal_travel_expense_labor_c")
-                        .value | number : "1.2-2"
+                      this?.form?.get("general_subtotal_travel_expense_labor_c")
+                        ?.value | number : "1.2-2"
                     }}
                   </td>
                 </tr>
@@ -2447,7 +2464,8 @@
                   <th colspan="2">Maqmo + Contratistas</th>
                   <th class="text-right">
                     ${{
-                      this.form.get("total_unit_cost").value | number : "1.2-2"
+                      this?.form?.get("total_unit_cost")?.value
+                        | number : "1.2-2"
                     }}
                   </th>
                 </tr>
@@ -2457,14 +2475,14 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskPorcentaje"
+                      [options]="masksMoney?.maskPorcentaje"
                       class="form-control form-control-sm"
                       formControlName="administrative_percentage"
                     />
                   </td>
                   <td class="col-3 text-right">
                     ${{
-                      form.controls.administrative_value.value
+                      form?.controls?.administrative_value?.value
                         | number : "1.2-2"
                     }}
                   </td>
@@ -2475,14 +2493,14 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskPorcentaje"
+                      [options]="masksMoney?.maskPorcentaje"
                       class="form-control form-control-sm"
                       formControlName="unforeseen_percentage"
                     />
                   </td>
                   <td class="col-3 text-right">
                     ${{
-                      form.controls.unforeseen_value.value | number : "1.2-2"
+                      form?.controls?.unforeseen_value?.value | number : "1.2-2"
                     }}
                   </td>
                 </tr>
@@ -2490,7 +2508,7 @@
                   <td class="col-9" colspan="2">Subtotal A + I</td>
                   <td class="col-3 text-right">
                     ${{
-                      form.controls.subtotal_administrative_unforeseen.value
+                      form?.controls?.subtotal_administrative_unforeseen?.value
                         | number : "1.2-2"
                     }}
                   </td>
@@ -2501,7 +2519,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskPorcentaje"
+                      [options]="masksMoney?.maskPorcentaje"
                       class="form-control form-control-sm"
                       formControlName="utility_percentage"
                     />
@@ -2511,8 +2529,8 @@
                   <td class="col-9" colspan="2">SubTotal A + I + U</td>
                   <td class="col-3 text-right">
                     ${{
-                      form.controls.subtotal_administrative_unforeseen_utility
-                        .value | number : "1.2-2"
+                      form?.controls?.subtotal_administrative_unforeseen_utility
+                        ?.value | number : "1.2-2"
                     }}
                   </td>
                 </tr>
@@ -2523,7 +2541,7 @@
                   <th class="col-3 align-middle text-right">
                     $
                     {{
-                      form.get("sale_price_cop_withholding_total").value
+                      form?.get("sale_price_cop_withholding_total")?.value
                         | number : "1.2-2"
                     }}
                   </th>
@@ -2534,7 +2552,7 @@
                     <input
                       currencyMask
                       appInputPosition
-                      [options]="masksMoney.maskCOP"
+                      [options]="masksMoney?.maskCOP"
                       class="form-control form-control-sm"
                       formControlName="trm"
                     />
@@ -2547,7 +2565,7 @@
                   <th class="col-3 align-middle text-right">
                     USD
                     {{
-                      form.get("sale_price_usd_withholding_total").value
+                      form?.get("sale_price_usd_withholding_total")?.value
                         | number : "1.2-2"
                     }}
                   </th>

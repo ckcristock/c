@@ -135,7 +135,7 @@
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
               <th *ngIf="checkPersona">Nombre</th>
-              <th *ngIf="checkPersona">Documento</th>
+              <!-- <th *ngIf="checkPersona">Documento</th> -->
               <th *ngIf="checkTercero">Tercero</th>
               <th *ngIf="checkTelefono">Celular</th>
               <th *ngIf="checkEmail">Email</th>
@@ -148,9 +148,9 @@
               <td class="align-middle" *ngIf="checkPersona">
                 {{ person.name | titlecase }}
               </td>
-              <td class="align-middle">
+              <!-- <td class="align-middle">
                 {{ person.n_document || "No disponible" }}
-              </td>
+              </td> -->
               <td class="align-middle" *ngIf="checkTercero">
                 {{
                   (person.third_party

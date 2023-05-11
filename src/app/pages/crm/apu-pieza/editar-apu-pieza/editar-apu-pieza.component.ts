@@ -14,17 +14,17 @@ export class EditarApuPiezaComponent implements OnInit {
   constructor(
     private actRoute: ActivatedRoute,
     private _apuPieza: ApuPiezaService
-    ) { }
+  ) { }
 
   async ngOnInit(): Promise<void> {
-    this.id = this.actRoute.snapshot.params.id;
+    this.id = this.actRoute?.snapshot?.params?.id;
     await this.getData();
     this.loading = false;
   }
 
-  async getData(){
-    await this._apuPieza.getApuPart(this.id).toPromise().then((r:any) => {
-      this.data = r.data;
+  async getData() {
+    await this._apuPieza?.getApuPart(this.id).toPromise().then((r: any) => {
+      this.data = r?.data;
     })
   }
 

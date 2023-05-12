@@ -41,6 +41,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
   budgets: any[] = [];
   loading: boolean = false;
   cities: any[] = [];
+  types: any[] = [];
   people: any[] = []
   countries: any[];
   paginationBudgets: any = {
@@ -79,6 +80,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this.getCompanies();
     this.getCities();
     this.getPeople();
+    this.getTypes();
     this.getContacts();
     this.route.paramMap.subscribe(params => {
       this.business_id = params.get('id');
@@ -91,10 +93,17 @@ export class ModalNuevoNegocioComponent implements OnInit {
     }
   }
 
+  getTypes() {
+    this._negocios.indexType().subscribe((res: any) => {
+      this.types = res.data;
+    })
+  }
+
   async reloadData() {
     this.reload = true;
     this.getCompanies();
     this.getCities();
+    this.getTypes();
     await this.getPeople();
     this.reload = false
   }
@@ -115,6 +124,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
         city_id: res.data.city_id,
         date: res.data.date,
         person_id: res.data.person_id,
+        business_type_id: res.data.business_type_id,
         format_code: res.data.formmat_code,
         code: res.data.code
       })
@@ -210,6 +220,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
       date: ['', Validators.required],
       person_id: [this.id],
       format_code: [''],
+      business_type_id: [''],
       code: ['']
     });
 

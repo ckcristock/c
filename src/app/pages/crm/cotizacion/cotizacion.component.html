@@ -278,16 +278,20 @@
                       <a
                         class="dropdown-item text-info"
                         href="javascript: void(0);"
-                        *ngIf="item.status != 'Aprobada'"
+                        *ngIf="item.status == 'Pendiente'"
                         [routerLink]="['editar', item.id]"
                         ><i class="fas fa-edit"></i> Editar</a
                       >
-                      <!-- <a
-                        class="dropdown-item text-secondary"
+                      <a
+                        class="dropdown-item text-warning"
                         href="javascript: void(0);"
-                        (click)="comments_quotation(comments, item.id)"
-                        ><i class="fas fa-comment"></i> Comentarios</a
-                      > -->
+                        *ngIf="
+                          item.status == 'Aprobada' &&
+                          this.permission.permissions.approve
+                        "
+                        (click)="updateStatus('Pendiente', item.id)"
+                        ><i class="fas fa-clock"></i> Pendiente</a
+                      >
                       <a
                         class="dropdown-item text-success"
                         href="javascript: void(0);"

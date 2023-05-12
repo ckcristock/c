@@ -41,7 +41,8 @@ export class DatosBasicosComponent implements OnInit {
     image: '',
     visa: '',
     passport_number: '',
-    title: ''
+    title: '',
+    signature: ''
   }
   data: any;
   fileString: any = '';
@@ -52,7 +53,8 @@ export class DatosBasicosComponent implements OnInit {
     private modalService: NgbModal,
     private _swal: SwalService,
   ) { }
-  person: Person
+  person: Person;
+  titleFile = 'Selecciona imagen';
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params.id;
     this.getBasicsData();
@@ -84,6 +86,7 @@ export class DatosBasicosComponent implements OnInit {
     this.loading = true;
     this.basicDataService.getBasicsData(this.id)
       .subscribe((res: any) => {
+        console.log(res.data)
         this.funcionario = res.data;
         this.loading = false;
         this.form.patchValue({
@@ -102,9 +105,11 @@ export class DatosBasicosComponent implements OnInit {
           visa: this.funcionario?.visa,
           passport_number: this.funcionario?.passport_number,
           title: this.funcionario?.title,
+          signature: this.funcionario?.signature,
         })
         this.file = this.funcionario?.image
         this.fileString = this.funcionario?.image
+        this.funcionario?.signature ? this.titleFile = 'El funcionario ya tiene firma cargada' : 'Selecciona imagen'
       })
   }
 
@@ -132,6 +137,64 @@ export class DatosBasicosComponent implements OnInit {
       visa: [''],
       passport_number: [''],
       title: [''],
+      signature: []
+    });
+  }
+
+  onFileChangedSignature(event) {
+    if (event.target.files.length == 1) {
+      let file = event.target.files[0];
+      const maxWidth = 546;
+      let maxHeight = 100;
+      this.validarDimensionesImagen(file, maxWidth, maxHeight)
+        .then(() => {
+          const types = ['image/png', 'image/jpeg', 'image/jpg']
+          if (!types.includes(file.type)) {
+            this._swal.show({
+              icon: 'error',
+              title: 'Error de archivo',
+              showCancel: false,
+              text: 'El tipo de archivo no es válido'
+            });
+            return null
+          }
+          this.titleFile = event.target.files[0].name
+          functionsUtils.fileToBase64(file).subscribe((base64) => {
+            this.form.patchValue({
+              signature: base64
+            })
+          });
+        })
+        .catch((error: string) => {
+          console.error(error);
+          this._swal.show({
+            icon: 'error',
+            title: 'Error de archivo',
+            showCancel: false,
+            text: 'La imagen no tiene las dimensiones solicitadas (546px de ancho por 100px de alto)'
+          });
+        });
+
+    }
+  }
+
+  validarDimensionesImagen(file: File, maxWidth: number, maxHeight: number): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        const img = new Image();
+        img.onload = () => {
+          const width = img.width;
+          const height = img.height;
+          if (width == maxWidth && height == maxHeight) {
+            resolve();
+          } else {
+            reject(`Las dimensiones de la imagen deben ser iguales a ${maxWidth}x${maxHeight}`);
+          }
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
     });
   }
 
@@ -200,16 +263,44 @@ export class DatosBasicosComponent implements OnInit {
   }
 
   onFileChanged(event) {
-    if (event.target.files[0]) {
+    if (event.target.files.length == 1) {
       let file = event.target.files[0];
-      var reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onload = (event) => {
-        this.fileString = (<FileReader>event.target).result;
-      };
-      functionsUtils.fileToBase64(file).subscribe((base64) => {
-        this.file = base64;
-      });
+      let maxWidth = 800;
+      let maxHeight = 800;
+      this.validarDimensionesImagen(file, maxWidth, maxHeight)
+        .then(() => {
+          console.log('llego aqui?')
+          const types = ['image/png', 'image/jpeg', 'image/jpg']
+          if (!types.includes(file.type)) {
+            this._swal.show({
+              icon: 'error',
+              title: 'Error de archivo',
+              showCancel: false,
+              text: 'El tipo de archivo no es válido'
+            });
+            return null
+          }
+          var reader = new FileReader();
+          reader.readAsDataURL(event.target.files[0]);
+          reader.onload = (event) => {
+            this.fileString = (<FileReader>event.target).result;
+          };
+          functionsUtils.fileToBase64(file).subscribe((base64) => {
+            this.form.patchValue({
+              image: base64
+            })
+            this.file = base64
+          });
+        })
+        .catch((error: string) => {
+          console.error(error);
+          this._swal.show({
+            icon: 'error',
+            title: 'Error de archivo',
+            showCancel: false,
+            text: 'La imagen no tiene las dimensiones solicitadas (800px de ancho por 800px de alto)'
+          });
+        });
     }
   }
 

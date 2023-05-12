@@ -8,7 +8,6 @@
   </div>
   <div class="col-md-2 px-0 text-right">
     <div class="btn-group rounded w-sm-100">
-
       <button
         *ngIf="funcionario.status == 'Activo'"
         type="button"
@@ -84,14 +83,14 @@
                 </strong>
                 <app-datos-basicos></app-datos-basicos>
               </div>
-              <!-- <div class="card-footer">
+              <div class="card-footer">
                 <img
                   [src]="funcionario.signature"
-                  onerror="this.src='../../../../assets/images/not-available.png'"
-                  class="mt-4 img-fluid signature-image"
+                  onerror="this.src='../../../../assets/images/sinfirma.png'"
+                  class="img-fluid signature-image"
                   one
                 />
-              </div> -->
+              </div>
             </ng-container>
           </div>
           <div class="card">
@@ -240,5 +239,3 @@
   (reload)="recargarDatos()"
   #modalPreliquidar
 ></app-modal-preliquidar>
-
-

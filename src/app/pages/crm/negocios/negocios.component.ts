@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Negocio } from './negocio.interface';
 import { NegociosService } from './negocios.service';
@@ -11,6 +11,7 @@ import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 import { PermissionService } from 'src/app/core/services/permission.service';
 import { HttpParams } from '@angular/common/http';
 import { PaginatorService } from 'src/app/core/services/paginator.service';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-negocios',
@@ -22,13 +23,22 @@ export class NegociosComponent implements OnInit {
   formFiltersBusiness: FormGroup;
   datePipe = new DatePipe('es-CO');
   business: any[] = [];
+  types: any[] = [];
   date: any;
   negocios_quinta_etapa: Negocio[];
   negocios_cuarta_etapa: Negocio[];
   negocios_tercera_etapa: Negocio[];
   negocios_segunda_etapa: Negocio[];
   negocios_primera_etapa: Negocio[];
-
+  formType: FormGroup;
+  bussinesTypes: any[] = [];
+  loadingType: boolean;
+  titleType = 'Nuevo';
+  paginationTypes = {
+    page: 1,
+    pageSize: 10,
+    collectionSize: 0
+  }
   filtrosActivos: boolean = false
   orderObj: any
   loading: boolean;
@@ -62,6 +72,7 @@ export class NegociosComponent implements OnInit {
     private router: Router,
     private location: Location,
     private _modal: ModalService,
+    private _swal: SwalService,
     private paginator: MatPaginatorIntl,
     private _permission: PermissionService,
     private _paginator: PaginatorService
@@ -73,6 +84,7 @@ export class NegociosComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     if (this.permission.permissions.show) {
       this.createFormFiltersBusiness();
+      this.getTypes();
       await this.route.queryParamMap.subscribe(async (params: any) => {
         if (params.params.pageSize) {
           this.pagination.pageSize = params.params.pageSize
@@ -130,6 +142,7 @@ export class NegociosComponent implements OnInit {
       date_start: '',
       date_end: '',
       status: '',
+      business_type_id: '',
     });
     this.formFiltersBusiness.valueChanges.pipe(debounceTime(500)).subscribe(r => {
       this.getNegocios()
@@ -156,6 +169,79 @@ export class NegociosComponent implements OnInit {
 
   openConfirm(confirm) {
     this._modal.open(confirm, 'xl')
+  }
+
+  openModal(content) {
+    this._modal.open(content, 'md');
+    this.createFormType();
+    this.paginateType();
+  }
+
+  createFormType() {
+    this.formType = this.fb.group({
+      id: [''],
+      name: ['', Validators.required]
+    })
+    this.formType.get('name').valueChanges.subscribe(r => {
+      if (!r) {
+        this.formType.reset();
+        this.titleType = 'Nuevo'
+      }
+    })
+  }
+
+  getTypes() {
+    this._negocios.indexType().subscribe((res: any) => {
+      this.types = res.data;
+    })
+  }
+
+  paginateType(page = 1) {
+    this.paginationTypes.page = page;
+    this.loadingType = true;
+    this._negocios.paginateType(this.paginationTypes).subscribe((res: any) => {
+      this.bussinesTypes = res.data.data;
+      this.paginationTypes.collectionSize = res.data.total;
+      this.loadingType = false;
+    })
+  }
+
+  editTypes(item) {
+    this.titleType = 'Editar'
+    this.formType.patchValue({
+      ...item
+    })
+  }
+
+  saveType() {
+    if (this.formType.valid) {
+      this._swal.show({
+        icon: 'question',
+        title: '¿Estás seguro(a)?',
+        text: this.titleType == 'Nuevo' ? 'Vamos a agregar un nuevo tipo' : 'Vamos a editar el tipo',
+      }).then(r => {
+        if (r.isConfirmed) {
+          this._negocios.storeType(this.formType.value).subscribe((res: any) => {
+            if (res.status) {
+              this._swal.show({
+                icon: 'success',
+                title: res.data,
+                text: '',
+                showCancel: false,
+                timer: 1000
+              })
+              this.formType.reset();
+              this.paginateType();
+              this.titleType = 'Nuevo'
+            } else {
+              this._swal.hardError()
+            }
+          })
+        }
+      })
+    } else {
+      this._swal.incompleteError()
+    }
   }
 
   async getNegocios() {

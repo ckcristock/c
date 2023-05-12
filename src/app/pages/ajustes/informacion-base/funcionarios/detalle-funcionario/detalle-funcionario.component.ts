@@ -19,6 +19,7 @@ import { UserService } from 'src/app/core/services/user.service';
 export class DetalleFuncionarioComponent implements OnInit {
   habilitado = true;
   components = 'informacion';
+  loading: boolean;
   id: any;
   active = 1;
   data$: any;
@@ -69,8 +70,6 @@ export class DetalleFuncionarioComponent implements OnInit {
     this.components = componente;
   }
 
-
-
   recargarDatos() {
     this.getUser();
     this.getBasicData();
@@ -109,11 +108,12 @@ export class DetalleFuncionarioComponent implements OnInit {
   }
 
   getBasicData() {
-    this.detalleService.getBasicData(this.id)
-      .subscribe((res: any) => {
-        this.funcionario = res.data;
-        this.url = this.ruta + '/filemanager/filemanager/dialog.php?type=0&car=rrhh%2Ffuncionarios%2F' + this.funcionario.identifier
-      });
+    this.loading = true
+    this.detalleService.getBasicData(this.id).subscribe((res: any) => {
+      this.funcionario = res.data;
+      this.loading = false
+      this.url = this.ruta + '/filemanager/filemanager/dialog.php?type=0&car=rrhh%2Ffuncionarios%2F' + this.funcionario.identifier
+    });
   }
 
   ngOnDestroy(): void {

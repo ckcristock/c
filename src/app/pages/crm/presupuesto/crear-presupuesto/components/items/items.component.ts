@@ -113,8 +113,9 @@ export class ItemsComponent implements OnInit {
     )
     const value_cop = item.get('value_cop')
     const subItems = item.get('subItems') as FormArray
-    if (!this.dataEdit) {
+    if (!itemToAdd) {
       this.addSubItem(item);
+      console.log('holi')
     }
     value_cop.valueChanges.subscribe(r => {
       let total = 0;

@@ -32,6 +32,7 @@ export class TasksComponent implements OnInit {
   finalizado: any[] = [];
   archivadas: any[] = [];
   tasks: any[] = [];
+  titleType = 'Nuevo';
   asignadas: any[] = [];
   taskTypes: any[] = [];
   loadingPendientes: boolean;
@@ -94,21 +95,45 @@ export class TasksComponent implements OnInit {
   }
 
   saveType() {
-    this._task.saveType(this.formTypes.value).subscribe((res:any) => {
+    if (this.formTypes.valid) {
       this._swal.show({
-        title: 'Agregado con éxito',
-        icon: 'success',
-        text: '',
-        showCancel: false,
-        timer: 1000
+        icon: 'question',
+        title: '¿Estás seguro(a)?',
+        text: this.titleType == 'Nuevo' ? 'Vamos a agregar un nuevo tipo' : 'Vamos a editar el tipo',
+      }).then(r => {
+        if (r.isConfirmed) {
+          this._task.saveType(this.formTypes.value).subscribe((res: any) => {
+            if (res.status) {
+              this._swal.show({
+                title: res.data,
+                icon: 'success',
+                text: '',
+                showCancel: false,
+                timer: 1000
+              })
+              this.paginateTypes();
+              this.formTypes.reset();
+              this.titleType = 'Nuevo'
+            }
+          })
+
+        }
       })
-      this.paginateTypes();
-      this.formTypes.reset()
+    } else {
+      this._swal.incompleteError()
+    }
+  }
+
+  editTypes(item) {
+    this.titleType = 'Editar'
+    this.formTypes.patchValue({
+      ...item
     })
   }
 
   openModalTypes(content) {
     this.formTypes = this.fb.group({
+      id: [''],
       name: ['', Validators.required]
     })
     this._modal.open(content, 'sm')

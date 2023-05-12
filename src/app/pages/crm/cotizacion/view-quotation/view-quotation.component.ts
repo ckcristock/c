@@ -15,6 +15,8 @@ export class ViewQuotationComponent implements OnInit {
   id: number;
   quotation: any;
   loading: boolean;
+  creator: any;
+  approve: any;
   public headerData: any = {
     Titulo: 'Cotización',
     Codigo: '',
@@ -52,6 +54,8 @@ export class ViewQuotationComponent implements OnInit {
       this.headerData.Fecha = res.data.created_at;
       this.headerData.CodigoFormato = res.data.format_code;
       this.loading = false;
+      this.creator = res?.data?.activities?.find(x => x?.status == 'Creación')?.person;
+      this.approve = res?.data?.activities?.filter(x => x?.status == 'Aprobación')[0]?.person
     })
   }
 

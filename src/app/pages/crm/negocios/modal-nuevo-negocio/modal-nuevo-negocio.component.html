@@ -80,7 +80,7 @@
             >
             </ng-select>
           </div>
-          <mat-form-field class="col" appearance="outline">
+          <mat-form-field class="col-md-6" appearance="outline">
             <mat-label>Nombre de la solicitud</mat-label>
             <input
               matInput
@@ -93,23 +93,14 @@
               required
             />
           </mat-form-field>
-          <!-- <div class="col mb-4">
-            <ng-select
-              [items]="countries"
-              formControlName="country_id"
-              placeholder="País *"
-              (change)="filterDepartments($event.value)"
-              [clearable]="false"
-              [class.is-invalid]="form.get('country_id').invalid"
-              bindLabel="text"
-              [appendTo]="'body'"
-              appearance="outline"
-              bindValue="value"
-              ngDefaultControl
-              notFoundText="No hay registros"
-            >
-            </ng-select>
-          </div> -->
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="business_type_id">
+              <mat-option *ngFor="let item of types" [value]="item.value">{{
+                item.text
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
           <mat-form-field
             class="col-md-12 mat-form-field-no-padding textarea"

@@ -110,6 +110,21 @@ export class NegociosService {
   changeStatusQyB(data) {
     return this.http.post(`${this.url}/change-status-in-business`, data)
   }
+
+  paginateType(params = {}) {
+    return this.http.get(`${environment.base_url}/bussines-type-paginate`, { params })
+  }
+
+  indexType() {
+    return this.http.get(`${environment.base_url}/business-type`)
+  }
+
+  storeType(data) {
+    return this.http.post(`${environment.base_url}/business-type`, data)
+  }
+
+
+
   /* createTask(data) {
     //TODO backend
     return of(

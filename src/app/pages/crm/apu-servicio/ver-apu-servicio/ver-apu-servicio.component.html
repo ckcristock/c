@@ -75,6 +75,11 @@
         data?.assemblies_start_up?.length > 0 ||
         data?.accompaniments?.length > 0
       "
+      *ngIf="
+        data?.dimensional_validation?.length > 0 ||
+        data?.assemblies_start_up?.length > 0 ||
+        data?.accompaniments?.length > 0
+      "
       class="mat-elevation-z0 border-radius-panel"
     >
       <mat-expansion-panel-header class="custom-panel-header">
@@ -130,6 +135,11 @@
     </mat-expansion-panel>
     <mat-expansion-panel
       [expanded]="
+        data?.dimensional_validation_c?.length > 0 ||
+        data?.assemblies_start_up_c?.length > 0 ||
+        data?.accompaniments_c?.length > 0
+      "
+      *ngIf="
         data?.dimensional_validation_c?.length > 0 ||
         data?.assemblies_start_up_c?.length > 0 ||
         data?.accompaniments_c?.length > 0

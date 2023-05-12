@@ -14,15 +14,13 @@
             id="image"
             name="image"
             class="input-file"
-            formControlName="image"
-            [class.is-invalid]="image_valid"
             (change)="onFileChanged($event)"
             accept="image/*"
           />
           Cargar imagen
         </div>
         <div class="text-center">
-          <ng-container *ngIf="image_valid">
+          <ng-container *ngIf="form.get('image').invalid">
             <small class="text-danger"> Imagen es obligatoria </small>
           </ng-container>
         </div>
@@ -50,7 +48,8 @@
         (change)="validarCedula($event)"
         name="document"
         class="numberInput"
-        autocomplete="off" required
+        autocomplete="off"
+        required
       />
       <mat-icon matSuffix>badge</mat-icon>
       <mat-error *ngIf="identifier_valid"
@@ -71,7 +70,8 @@
         formControlName="first_name"
         [class.is-invalid]="first_name_valid"
         name="first-name"
-        autocomplete="off" required
+        autocomplete="off"
+        required
       />
       <mat-icon matSuffix>looks_one</mat-icon>
       <mat-error *ngIf="first_name_valid"
@@ -111,7 +111,8 @@
         formControlName="first_surname"
         [class.is-invalid]="first_surname_valid"
         name="first_surname"
-        autocomplete="off" required
+        autocomplete="off"
+        required
       />
       <mat-icon matSuffix>looks_one</mat-icon>
       <mat-error *ngIf="first_surname_valid">
@@ -145,7 +146,8 @@
         formControlName="email"
         [class.is-invalid]="email_valid"
         name="email"
-        autocomplete="off" required
+        autocomplete="off"
+        required
       />
       <mat-icon matSuffix>email</mat-icon>
       <mat-error *ngIf="first_surname_valid">
@@ -163,7 +165,8 @@
         matInput
         type="date"
         placeholder="Selecciona la fecha de nacimiento"
-        formControlName="birth_date" required
+        formControlName="birth_date"
+        required
       />
       <!-- <mat-icon matSuffix>event</mat-icon> -->
       <mat-error *ngIf="birth_date_valid">
@@ -184,7 +187,8 @@
         formControlName="place_of_birth"
         [class.is-invalid]="place_of_birth_valid"
         name="city"
-        autocomplete="off" required
+        autocomplete="off"
+        required
       />
       <mat-icon matSuffix>location_city</mat-icon>
       <mat-error *ngIf="place_of_birth_valid">
@@ -207,7 +211,8 @@
         formControlName="address"
         [class.is-invalid]="direction_valid"
         name="direction"
-        autocomplete="off" required
+        autocomplete="off"
+        required
       />
       <mat-icon matSuffix>home_filled</mat-icon>
       <mat-error *ngIf="direction_valid">
@@ -221,7 +226,11 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="col">
       <mat-label>Género</mat-label>
-      <mat-select [class.is-invalid]="gener_valid" formControlName="gener" required>
+      <mat-select
+        [class.is-invalid]="gener_valid"
+        formControlName="gener"
+        required
+      >
         <mat-option value="Masculino">Masculino</mat-option>
         <mat-option value="Femenino">Femenino</mat-option>
       </mat-select>
@@ -246,7 +255,6 @@
       />
       <mat-icon matSuffix>flight_takeoff</mat-icon>
     </mat-form-field>
-
   </div>
 
   <div class="row">
@@ -259,7 +267,8 @@
         formControlName="phone"
         [class.is-invalid]="phone_valid"
         name="phone"
-        autocomplete="off" required
+        autocomplete="off"
+        required
       />
       <mat-icon matSuffix>phone</mat-icon>
       <mat-error *ngIf="phone_valid">
@@ -280,7 +289,8 @@
         formControlName="cell_phone"
         [class.is-invalid]="cell_phone_valid"
         name="cell-phone"
-        autocomplete="off" required
+        autocomplete="off"
+        required
       />
       <mat-icon matSuffix>phone_iphone</mat-icon>
       <mat-error *ngIf="cell_phone_valid">
@@ -317,7 +327,8 @@
       <mat-label>Estado civil</mat-label>
       <mat-select
         [class.is-invalid]="marital_status_valid"
-        formControlName="marital_status" required
+        formControlName="marital_status"
+        required
       >
         <mat-option *ngFor="let estado of estados" [value]="estado.valor">
           {{ estado.clave }}
@@ -345,7 +356,8 @@
         formControlName="number_of_children"
         [class.is-invalid]="number_of_children_valid"
         name="children"
-        autocomplete="off" required
+        autocomplete="off"
+        required
       />
       <mat-icon matSuffix>escalator_warning</mat-icon>
       <mat-error *ngIf="number_of_children_valid">
@@ -361,7 +373,11 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="col">
       <mat-label>Nivel académico</mat-label>
-      <mat-select [class.is-invalid]="degree_valid" formControlName="degree" required>
+      <mat-select
+        [class.is-invalid]="degree_valid"
+        formControlName="degree"
+        required
+      >
         <mat-option *ngFor="let grado of instruccion" [value]="grado.valor">
           {{ grado.clave }}
         </mat-option>
@@ -385,7 +401,8 @@
         formControlName="title"
         [class.is-invalid]="title_valid"
         name="children"
-        autocomplete="off" required
+        autocomplete="off"
+        required
       />
       <mat-icon matSuffix>verified</mat-icon>
       <mat-error *ngIf="title_valid">
@@ -405,8 +422,31 @@
       </mat-select>
       <mat-icon matSuffix>flight</mat-icon>
     </mat-form-field>
+    <div class="col">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="inputGroupFileAddon01"
+            >Firma del funcionario</span
+          >
+        </div>
+        <div class="custom-file">
+          <input
+            type="file"
+            class="custom-file-input"
+            id="inputGroupFile01"
+            accept=".png,.jpg,.jpeg"
+            (change)="onFileChangedSignature($event)"
+            aria-describedby="inputGroupFileAddon01"
+          />
+          <label class="custom-file-label" for="inputGroupFile01">{{
+            titleFile
+          }}</label>
+        </div>
+      </div>
+      <small>La imagen debe ser de 546px de ancho por 100px de alto</small>
+    </div>
     <div class="col-12 d-flex justify-content-end">
-        <button type="submit" class="btn btn-sm btn-primary">Siguiente</button>
+      <button type="submit" class="btn btn-sm btn-primary">Siguiente</button>
     </div>
   </div>
 </form>

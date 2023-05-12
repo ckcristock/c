@@ -17,6 +17,9 @@
             <button class="btn btn-primary btn-sm" [routerLink]="['crear']">
               <i class="fa fa-plus"></i> Agregar
             </button>
+            <button class="btn btn-warning btn-sm" (click)="openModal(addType)">
+              <i class="fa fa-plus"></i> Tipos
+            </button>
             <ng-container *ngIf="this.active == 1">
               <button class="btn btn-info btn-sm" (click)="matPanel.toggle()">
                 <i class="fas fa-sliders-h"></i> Filtros
@@ -86,6 +89,15 @@
                   matSuffix
                   [for]="picker"
                 ></sat-datepicker-toggle>
+              </mat-form-field>
+              <mat-form-field class="col" appearance="outline">
+                <mat-label>Tipo</mat-label>
+                <mat-select formControlName="business_type_id">
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option *ngFor="let item of types" [value]="item.value">{{
+                    item.text
+                  }}</mat-option>
+                </mat-select>
               </mat-form-field>
             </div>
           </form>
@@ -367,6 +379,93 @@
     </div>
   </div>
 </ng-container>
+
+<ng-template #addType let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Tipos de negocio</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <ng-container [formGroup]="formType">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>{{ titleType }} tipo</mat-label>
+          <input
+            matInput
+            formControlName="name"
+            placeholder="Ingresa el nombre"
+            type="text"
+            autocomplete="off"
+            required
+          />
+          <button mat-icon-button matSuffix (click)="saveType()">
+            <mat-icon>save</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </ng-container>
+    <ng-container
+      *ngIf="!loadingType && bussinesTypes.length > 0; else notDataTypes"
+    >
+      <div class="rounded-top table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <td>Nombre</td>
+              <td>Fecha creación</td>
+              <th><i class="mdi mdi-chevron-down"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of bussinesTypes" class="text-center">
+              <td>{{ item.name | uppercase }}</td>
+              <td>{{ item.created_at | date }}</td>
+              <td>
+                <a
+                  class="text-info"
+                  (click)="editTypes(item)"
+                  href="javascript: void(0);"
+                >
+                  <i class="fas fa-edit"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ngb-pagination
+        class="d-flex justify-content-center pagination-rounded pagination-sm"
+        [collectionSize]="paginationTypes.collectionSize"
+        [pageSize]="paginationTypes.pageSize"
+        [(page)]="paginationTypes.page"
+        (pageChange)="paginateTypes($event)"
+        maxSize="5"
+        rotate="true"
+        ellipses="false"
+        boundaryLinks="true"
+      >
+      </ngb-pagination>
+    </ng-container>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #notDataTypes>
+  <app-not-data [loading]="loadingType"></app-not-data>
+</ng-template>
 
 <ng-template #NegocioContent let-neg="neg">
   <div class="card task-box">

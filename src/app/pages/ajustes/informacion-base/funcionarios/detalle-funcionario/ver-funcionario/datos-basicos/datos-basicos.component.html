@@ -290,6 +290,31 @@
               />
               <mat-icon matSuffix>verified</mat-icon>
             </mat-form-field>
+            <div class="col-12">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupFileAddon01"
+                    >Firma del funcionario</span
+                  >
+                </div>
+                <div class="custom-file">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="inputGroupFile01"
+                    accept=".png,.jpg,.jpeg"
+                    (change)="onFileChangedSignature($event)"
+                    aria-describedby="inputGroupFileAddon01"
+                  />
+                  <label class="custom-file-label" for="inputGroupFile01">{{
+                    titleFile
+                  }}</label>
+                </div>
+              </div>
+              <small
+                >La imagen debe ser de 546px de ancho por 100px de alto</small
+              >
+            </div>
           </div>
         </div>
       </div>

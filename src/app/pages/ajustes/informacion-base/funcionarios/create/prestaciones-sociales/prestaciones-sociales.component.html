@@ -1,6 +1,6 @@
 <form [formGroup]="formPrestation" (ngSubmit)="save()">
   <div class="row">
-    <div class="col-md-3" [ngClass]="eps_id_invalid ? 'mb-0' : 'mb-4'">
+    <div class="col-md-6" [ngClass]="eps_id_invalid ? 'mb-0' : 'mb-4'">
       <ng-select
         formControlName="eps_id"
         appearance="outline"
@@ -19,7 +19,10 @@
         <small class="text-danger"><b> EPS obligatoria </b></small>
       </span>
     </div>
-    <div class="col-md-3" [ngClass]="compensation_fund_id_invalid ? 'mb-0' : 'mb-4'">
+    <div
+      class="col-md-6"
+      [ngClass]="compensation_fund_id_invalid ? 'mb-0' : 'mb-4'"
+    >
       <ng-select
         formControlName="compensation_fund_id"
         appearance="outline"
@@ -40,7 +43,10 @@
         </small>
       </span>
     </div>
-    <div class="col-md-3" [ngClass]="severance_fund_id_invalid ? 'mb-0' : 'mb-4'">
+    <div
+      class="col-md-6"
+      [ngClass]="severance_fund_id_invalid ? 'mb-0' : 'mb-4'"
+    >
       <ng-select
         formControlName="severance_fund_id"
         appearance="outline"
@@ -62,7 +68,7 @@
         </small>
       </span>
     </div>
-    <div class="col-md-3" [ngClass]="pension_fund_id_invalid ? 'mb-0' : 'mb-4'">
+    <div class="col-md-6" [ngClass]="pension_fund_id_invalid ? 'mb-0' : 'mb-4'">
       <ng-select
         formControlName="pension_fund_id"
         appearance="outline"
@@ -84,7 +90,7 @@
         </small>
       </span>
     </div>
-    <div class="col-md-3" [ngClass]="arl_id_invalid ? 'mb-0' : 'mb-4'">
+    <div class="col-md-6" [ngClass]="arl_id_invalid ? 'mb-0' : 'mb-4'">
       <ng-select
         formControlName="arl_id"
         appearance="outline"
@@ -108,13 +114,16 @@
     </div>
     <div class="col-md-12">
       <div class="d-flex justify-content-between">
-        <button type="button" class="btn btn-sm btn-primary" (click)="previus()">
+        <button
+          type="button"
+          class="btn btn-sm btn-primary"
+          (click)="previus()"
+        >
           Anterior
         </button>
         <button type="submit" class="btn btn-sm btn-primary">Siguiente</button>
       </div>
     </div>
-
   </div>
 </form>
 

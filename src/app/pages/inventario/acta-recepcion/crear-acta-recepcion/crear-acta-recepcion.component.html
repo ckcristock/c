@@ -65,6 +65,7 @@
                             formControlName="Factura"
                             required
                             autocomplete="off"
+                            [readonly]="invoice.get('Id_Factura_Acta_Recepcion').value"
                             class="w-100 border-0 color-transparent text-center"
                           />
                         </td>
@@ -75,6 +76,7 @@
                             formControlName="Fecha_Factura"
                             readonly
                             autocomplete="off"
+                            [readonly]="invoice.get('Id_Factura_Acta_Recepcion').value"
                             class="border-0 color-transparent"
                           />
                           <mat-datepicker-toggle
@@ -248,7 +250,7 @@
                         {{ product.get("nombre").value | uppercase }}
                       </td>
                       <td>
-                        <select class="w-100 border-0 color-transparent">
+                        <select class="w-100 border-0 color-transparent"  formControlName="Factura">
                           <option value="">Selecciona una factura</option>
                           <option
                             *ngFor="let item of invoices.value"

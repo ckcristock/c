@@ -120,6 +120,8 @@ export class CrearActaRecepcionComponent implements OnInit {
 
 
   // Esto es lo que va a la tabla de 'acta_recepcion'
+
+
   createForm() {
     this.form = this.fb.group({
       Id_Acta_Recepcion: (''),
@@ -127,8 +129,13 @@ export class CrearActaRecepcionComponent implements OnInit {
       Codigo: [''],
       invoices: this.fb.array([]),
       products_acta: this.fb.array([]),
-    });
+    }, { validators: this.validateCheckbox });
+  }
 
+  validateCheckbox(group: FormGroup) {
+    const products_acta = group.get('products_acta') as FormArray;
+    const isChecked = products_acta.controls.some(control => control.get('toAdd').value === true);
+    return isChecked ? null : { noChecked: true };
   }
 
 
@@ -142,11 +149,12 @@ export class CrearActaRecepcionComponent implements OnInit {
       Fecha_Factura: [invoice ? invoice.Fecha_Factura : '', Validators.required],
       //retencion: ['', Validators.required],
     });
-    if (invoice && invoice.Id_Factura_Acta_Recepcion) {
-      Object.keys(addFactura.controls).forEach(controlName => {
-        addFactura.get(controlName).disable();
-      })
-    }
+    // if (invoice && invoice.Id_Factura_Acta_Recepcion) {
+    //   Object.keys(addFactura.controls).forEach(controlName => {
+    //     addFactura.get(controlName).disable();
+    //   })
+    // }
+
     this.invoices.push(addFactura);
   }
 
@@ -154,6 +162,10 @@ export class CrearActaRecepcionComponent implements OnInit {
   addProducts(element) {
     let add = this.fb.group({
       Id_Producto_Acta_Recepcion: [element.Id_Producto_Acta_Recepcion ? element.Id_Producto_Acta_Recepcion : null],
+      Factura: [{
+        value: '',
+        disabled: true
+      }],
       Cantidad: [{
         value: 0,
         disabled: true
@@ -183,16 +195,18 @@ export class CrearActaRecepcionComponent implements OnInit {
       // Subtotal, Impuesto, Precio, Cantidad, Unidad
     })
 
-    const fields = ['Subtotal', 'Cantidad', 'Iva', 'Total'];
+    const fields = ['Factura','Subtotal', 'Cantidad', 'Iva', 'Total'];
     add.get('toAdd').valueChanges.subscribe(value => {
       if (value) {
         fields.forEach(field => add.get(field).enable());
-        fields.forEach(field => add.get(field).setValidators([Validators.required]));
-
+          // fields.forEach(field => add.get(field).setValidators(Validators.compose([Validators.required, Validators.minLength(1)])));
+          fields.forEach(field => add.get(field).setValidators([Validators.required]));
       } else {
         fields.forEach(field => add.get(field).disable());
-        fields.forEach(field => add.get(field).clearValidators());
+        //fields.forEach(field => add.get(field).clearValidators());
+        fields.forEach(field => add.get(field).setValidators(null));
         add.patchValue({
+          Factura: '',
           Cantidad: 0,
           Subtotal: 0,
           Iva: 0,
@@ -227,9 +241,11 @@ export class CrearActaRecepcionComponent implements OnInit {
           //sacar los que no esten marcados
           const data = {
             selected_products: newArray,
+            Observaciones_acta: this.form.get('Observaciones').value,
             ...this.form.getRawValue(),
             ...this.ordenCompra
           };
+
           this._actaRecepcion.save(data).subscribe((r: any) => {
             if (r.status) {
               this._swal.show({
@@ -239,7 +255,6 @@ export class CrearActaRecepcionComponent implements OnInit {
                 showCancel: false,
                 timer: 1000
               })
-
               this.router.navigateByUrl('/inventario/acta-recepcion')
             } else {
               this._swal.hardError()

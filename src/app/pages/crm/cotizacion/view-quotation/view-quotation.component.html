@@ -2,209 +2,303 @@
   <app-placeholder-form></app-placeholder-form>
 </ng-template>
 <ng-container *ngIf="!loading && quotation; else placeholder">
-  <div class="card">
-    <div class="card-body" #printPDF>
-      <app-cabecera [datosCabecera]="headerData"></app-cabecera>
-      <hr class="line" />
-      <div class="d-flex justify-content-between mb-2">
-        <div>
-          <span
-            class="badge"
-            [class]="
-              quotation.status == 'Pendiente'
-                ? 'badge-info'
-                : quotation.status == 'Aprobada'
-                ? 'badge-primary'
-                : quotation.status == 'No aprobada'
-                ? 'badge-warning'
-                : quotation.status == 'Anulada'
-                ? 'badge-danger'
-                : 'badge-dark'
-            "
-            >{{ quotation.status | uppercase }}</span
-          >
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="text-primary">Seguimiento</h6>
         </div>
-        <div class="btn-group rounded w-sm-100">
-          <button
-            class="btn btn-primary btn-sm"
-            type="button"
-            *ngIf="
-              quotation.status != 'Anulada' &&
-              this.permission.permissions.approve &&
-              quotation.status != 'Aprobada'
-            "
-            (click)="updateStatus('Aprobada', quotation.id)"
-          >
-            <i class="fas fa-thumbs-up"></i> Aprobar
-          </button>
-          <button
-            class="btn btn-info btn-sm"
-            type="button"
-            *ngIf="quotation.status != 'Aprobada'"
-            [routerLink]="['/crm/cotizacion/editar', quotation.id]"
-          >
-            <i class="fas fa-edit"></i> Editar
-          </button>
-          <button
-            class="btn btn-primary btn-sm"
-            type="button"
-            [routerLink]="['/crm/cotizacion/copiar', quotation.id]"
-          >
-            <i class="fas fa-copy"></i> Copiar
-          </button>
-          <button
-            type="button"
-            (click)="download()"
-            *ngIf="quotation.status == 'Aprobada'"
-            class="btn btn-danger btn-sm"
-          >
-            <span
-              ><i
-                class="fas"
-                [class]="
-                  !donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'
-                "
-              ></i>
-              {{ !donwloading ? "Descargar" : "Descargando" }}</span
+        <div class="card-body pt-0 card-body-edit">
+          <ul class="list-group list-group-flush">
+            <li
+              class="list-group-item px-0"
+              *ngFor="let activity of quotation.activities"
             >
-          </button>
+              <div class="d-flex w-100 justify-content-between">
+                <div>
+                  <h6 class="mb-0">
+                    <span
+                      class="badge"
+                      [class]="
+                        activity.status == 'Creación'
+                          ? 'badge-info'
+                          : activity.status == 'Edición'
+                          ? 'badge-warning'
+                          : activity.status == 'Anulación'
+                          ? 'badge-danger'
+                          : activity.status == 'Aprobación'
+                          ? 'badge-success '
+                          : activity.status == 'Devuelta'
+                          ? 'badge-primary '
+                          : ''
+                      "
+                    >
+                      {{ activity.status }}</span
+                    >
+                  </h6>
+                  <p class="mb-1">{{ activity.title }}</p>
+                  <small>{{ activity.created_at | date }}</small>
+                  <small class="d-block">{{
+                    activity.person.full_names
+                  }}</small>
+                </div>
+                <img
+                  class="d-block img-thumbnail rounded-circle img-fluid header-profile-user"
+                  [src]="activity.person.image"
+                  onerror="this.src='../../../../../assets/images/noprofile.png'"
+                />
+              </div>
+            </li>
+          </ul>
         </div>
-      </div>
-      <div class="rounded-top table-responsive mt-2">
-        <table class="table table-borderless text-center text-uppercase">
-          <thead>
-            <tr class="table-secondary">
-              <th scope="row">Nombre</th>
-              <th scope="row">Destino</th>
-              <th scope="row">Cliente</th>
-              <th scope="row">Contacto</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ quotation.description }}</td>
-              <td>{{ quotation.municipality.name }}</td>
-              <td>
-                {{ quotation.client.full_name }}
-              </td>
-              <td>{{ quotation.third_person.name }}</td>
-            </tr>
-            <tr class="text-left">
-              <th colspan="100%">Observaciones</th>
-            </tr>
-            <tr class="text-left">
-              <td colspan="100%">
-                {{ quotation.observation || "No existen observaciones" }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-body">
-      <div class="rounded-top table-responsive">
-        <table class="table table-bordered table-striped table-sm">
-          <thead class="bg-light">
-            <tr class="text-center text-uppercase">
-              <th rowspan="2">#</th>
-              <th rowspan="2" class="col-md-7">Descripción</th>
-              <th rowspan="2">Cantidad</th>
-              <th colspan="2">Valor unitario</th>
-              <th colspan="2">Valor total</th>
-            </tr>
-            <tr class="text-center text-uppercase">
-              <th>COP sin iva</th>
-              <th>USD</th>
-              <th>COP sin iva</th>
-              <th>USD</th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngFor="let item of quotation.items; let i = index">
-              <tr>
-                <td class="text-center">{{ i + 1 }}</td>
-                <td>
-                  <div [ngClass]="'alert-p-0'" [innerHTML]="item.name"></div>
-                </td>
-                <td class="text-center">{{ item.cuantity }}</td>
-                <td class="text-right">
-                  ${{ item.value_cop | number : "1.2-2" }}
-                </td>
-                <td class="text-right">
-                  ${{ item.total_cop | number : "1.2-2" }}
-                </td>
-                <td class="text-right">
-                  USD{{ item.value_usd | number : "1.2-2" }}
-                </td>
-                <td class="text-right">
-                  USD{{ item.total_usd | number : "1.2-2" }}
-                </td>
-              </tr>
-              <ng-container *ngIf="item.sub_items.length > 0">
+    <div class="col-md-9">
+      <div class="card">
+        <div class="card-body" #printPDF>
+          <app-cabecera [datosCabecera]="headerData"></app-cabecera>
+          <hr class="line" />
+          <div class="d-flex justify-content-between mb-2">
+            <div>
+              <span
+                class="badge"
+                [class]="
+                  quotation.status == 'Pendiente'
+                    ? 'badge-info'
+                    : quotation.status == 'Aprobada'
+                    ? 'badge-primary'
+                    : quotation.status == 'No aprobada'
+                    ? 'badge-warning'
+                    : quotation.status == 'Anulada'
+                    ? 'badge-danger'
+                    : 'badge-dark'
+                "
+                >{{ quotation.status | uppercase }}</span
+              >
+            </div>
+            <div class="btn-group rounded w-sm-100">
+              <button
+                class="btn btn-primary btn-sm"
+                type="button"
+                *ngIf="
+                  quotation.status != 'Anulada' &&
+                  this.permission.permissions.approve &&
+                  quotation.status != 'Aprobada'
+                "
+                (click)="updateStatus('Aprobada', quotation.id)"
+              >
+                <i class="fas fa-thumbs-up"></i> Aprobar
+              </button>
+              <button
+                class="btn btn-info btn-sm"
+                type="button"
+                *ngIf="quotation.status == 'Pendiente'"
+                [routerLink]="['/crm/cotizacion/editar', quotation.id]"
+              >
+                <i class="fas fa-edit"></i> Editar
+              </button>
+              <button
+                class="btn btn-primary btn-sm"
+                type="button"
+                [routerLink]="['/crm/cotizacion/copiar', quotation.id]"
+              >
+                <i class="fas fa-copy"></i> Copiar
+              </button>
+              <button
+                type="button"
+                (click)="download()"
+                *ngIf="quotation.status == 'Aprobada'"
+                class="btn btn-danger btn-sm"
+              >
+                <span
+                  ><i
+                    class="fas"
+                    [class]="
+                      !donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'
+                    "
+                  ></i>
+                  {{ !donwloading ? "Descargar" : "Descargando" }}</span
+                >
+              </button>
+            </div>
+          </div>
+          <div class="rounded-top table-responsive mt-2">
+            <table class="table table-borderless text-center text-uppercase">
+              <thead>
+                <tr class="table-secondary">
+                  <th scope="row">Nombre</th>
+                  <th scope="row">Destino</th>
+                  <th scope="row">Cliente</th>
+                  <th scope="row">Contacto</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ quotation.description }}</td>
+                  <td>{{ quotation.municipality.name }}</td>
+                  <td>
+                    {{ quotation.client.full_name }}
+                  </td>
+                  <td>{{ quotation.third_person.name }}</td>
+                </tr>
+                <tr class="text-left">
+                  <th colspan="100%">Observaciones</th>
+                </tr>
+                <tr class="text-left">
+                  <td colspan="100%">
+                    {{ quotation.observation || "No existen observaciones" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th rowspan="2">#</th>
+                  <th rowspan="2" class="col-md-7">Descripción</th>
+                  <th rowspan="2">Cantidad</th>
+                  <th colspan="2">Valor unitario</th>
+                  <th colspan="2">Valor total</th>
+                </tr>
+                <tr class="text-center text-uppercase">
+                  <th>COP sin iva</th>
+                  <th>USD</th>
+                  <th>COP sin iva</th>
+                  <th>USD</th>
+                </tr>
+              </thead>
+              <tbody>
                 <ng-container
-                  *ngFor="let sub_item of item.sub_items; let y = index"
+                  *ngFor="let item of quotation.items; let i = index"
                 >
                   <tr>
-                    <td class="text-center">{{ i + 1 }}.{{ y + 1 }}</td>
+                    <td class="text-center">{{ i + 1 }}</td>
                     <td>
                       <div
                         [ngClass]="'alert-p-0'"
-                        [innerHTML]="sub_item.description"
+                        [innerHTML]="item.name"
                       ></div>
                     </td>
-                    <td class="text-center">{{ sub_item.cuantity }}</td>
+                    <td class="text-center">{{ item.cuantity }}</td>
                     <td class="text-right">
-                      ${{ sub_item.value_cop | number : "1.2-2" }}
+                      ${{ item.value_cop | number : "1.2-2" }}
                     </td>
                     <td class="text-right">
-                      ${{ sub_item.total_cop | number : "1.2-2" }}
+                      ${{ item.total_cop | number : "1.2-2" }}
                     </td>
                     <td class="text-right">
-                      USD{{ sub_item.value_usd | number : "1.2-2" }}
+                      USD{{ item.value_usd | number : "1.2-2" }}
                     </td>
                     <td class="text-right">
-                      USD{{ sub_item.total_usd | number : "1.2-2" }}
+                      USD{{ item.total_usd | number : "1.2-2" }}
                     </td>
                   </tr>
+                  <ng-container *ngIf="item.sub_items.length > 0">
+                    <ng-container
+                      *ngFor="let sub_item of item.sub_items; let y = index"
+                    >
+                      <tr>
+                        <td class="text-center">{{ i + 1 }}.{{ y + 1 }}</td>
+                        <td>
+                          <div
+                            [ngClass]="'alert-p-0'"
+                            [innerHTML]="sub_item.description"
+                          ></div>
+                        </td>
+                        <td class="text-center">{{ sub_item.cuantity }}</td>
+                        <td class="text-right">
+                          ${{ sub_item.value_cop | number : "1.2-2" }}
+                        </td>
+                        <td class="text-right">
+                          ${{ sub_item.total_cop | number : "1.2-2" }}
+                        </td>
+                        <td class="text-right">
+                          USD{{ sub_item.value_usd | number : "1.2-2" }}
+                        </td>
+                        <td class="text-right">
+                          USD{{ sub_item.total_usd | number : "1.2-2" }}
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </ng-container>
                 </ng-container>
-              </ng-container>
-            </ng-container>
-          </tbody>
-        </table>
+              </tbody>
+            </table>
+          </div>
+          <app-list-items
+            title1="VALOR TOTAL SIN IVA"
+            [var1]="quotation.total_cop"
+            type1="cop"
+            title2="TOTAL USD"
+            [var2]="quotation.total_usd"
+            type2="usd"
+          >
+          </app-list-items>
+        </div>
       </div>
-      <app-list-items
-        title1="VALOR TOTAL SIN IVA"
-        [var1]="quotation.total_cop"
-        type1="cop"
-        title2="TOTAL USD"
-        [var2]="quotation.total_usd"
-        type2="usd"
-      >
-      </app-list-items>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-body">
-      <div
-        class="alert alert-light alert-custom-quotation pb-0"
-        [innerHTML]="quotation.commercial_terms"
-        role="alert"
-        [ngClass]="'alert-p-0'"
-      ></div>
-      <div
-        class="alert alert-light alert-custom-quotation pb-0"
-        [innerHTML]="quotation.legal_requirements"
-        role="alert"
-        [ngClass]="'alert-p-0'"
-      ></div>
-      <div
-        class="alert alert-light alert-custom-quotation pb-0"
-        [innerHTML]="quotation.technical_requirements"
-        role="alert"
-        [ngClass]="'alert-p-0'"
-      ></div>
+      <div class="card">
+        <div class="card-body">
+          <div
+            *ngIf="quotation.commercial_terms"
+            class="alert alert-light alert-custom-quotation pb-0 mb-0"
+            [innerHTML]="quotation.commercial_terms"
+            role="alert"
+            [ngClass]="'alert-p-0'"
+          ></div>
+          <div
+            *ngIf="quotation.legal_requirements"
+            class="alert alert-light alert-custom-quotation pb-0 mb-0"
+            [innerHTML]="quotation.legal_requirements"
+            role="alert"
+            [ngClass]="'alert-p-0'"
+          ></div>
+          <div
+            *ngIf="quotation.technical_requirement"
+            class="alert alert-light alert-custom-quotation pb-0 mb-0"
+            [innerHTML]="quotation.technical_requirements"
+            role="alert"
+            [ngClass]="'alert-p-0'"
+          ></div>
+          <div class="rounded-top table-responsive">
+            <table class="table table-borderless text-center text-uppercase">
+              <thead>
+                <tr>
+                  <td class="p-0">
+                    <img
+                      class="img-fluid img-firma"
+                      [src]="creator.signature"
+                      onerror="this.src='../../../../../assets/images/sinfirma.png'"
+                    />
+                  </td>
+                  <td class="p-0">
+                    <img
+                      class="img-fluid img-firma"
+                      [src]="approve.signature"
+                      onerror="this.src='../../../../../assets/images/sinfirma.png'"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th>{{ creator.full_names }}</th>
+                  <th>{{ approve.full_names }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Creación</th>
+                  <th scope="row">Aprobación</th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </ng-container>

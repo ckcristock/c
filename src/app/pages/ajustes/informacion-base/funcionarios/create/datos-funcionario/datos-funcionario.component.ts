@@ -22,6 +22,7 @@ export class DatosFuncionarioComponent implements OnInit {
   tipoSangre = consts.bloodType;
   estados = consts.maritalStatus;
   instruccion = consts.degree;
+  titleFile = 'Selecciona imagen'
   $person: Subscription;
   documenttypes: any[];
   form: FormGroup;
@@ -103,6 +104,7 @@ export class DatosFuncionarioComponent implements OnInit {
       title: ['', this._valid.required],
       passport_number: [''],
       visa: [''],
+      signature: [''],
     });
   }
 
@@ -198,27 +200,116 @@ export class DatosFuncionarioComponent implements OnInit {
 
   save() {
     //this.form.markAllAsTouched();
-    if (this.form.invalid) { return false; }
-
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this._swal.incompleteError();
+      return false;
+    }
     this.person = { ...this.person, ...this.form.value };
-    this.person.image = this.file;
+    //this.person.image = this.file;
     this._person.person.next(this.person);
     this.siguiente.emit({});
   }
 
   onFileChanged(event) {
-    if (event.target.files[0]) {
+    if (event.target.files.length == 1) {
       let file = event.target.files[0];
-      var reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onload = (event) => {
-        this.fileString = (<FileReader>event.target).result;
-      };
-      functionsUtils.fileToBase64(file).subscribe((base64) => {
-        this.file = base64
-      });
+      let maxWidth = 800;
+      let maxHeight = 800;
+      this.validarDimensionesImagen(file, maxWidth, maxHeight)
+        .then(() => {
+          console.log('llego aqui?')
+          const types = ['image/png', 'image/jpeg', 'image/jpg']
+          if (!types.includes(file.type)) {
+            this._swal.show({
+              icon: 'error',
+              title: 'Error de archivo',
+              showCancel: false,
+              text: 'El tipo de archivo no es válido'
+            });
+            return null
+          }
+          var reader = new FileReader();
+          reader.readAsDataURL(event.target.files[0]);
+          reader.onload = (event) => {
+            this.fileString = (<FileReader>event.target).result;
+          };
+          functionsUtils.fileToBase64(file).subscribe((base64) => {
+            this.form.patchValue({
+              image: base64
+            })
+            this.file = base64
+          });
+        })
+        .catch((error: string) => {
+          console.error(error);
+          this._swal.show({
+            icon: 'error',
+            title: 'Error de archivo',
+            showCancel: false,
+            text: 'La imagen no tiene las dimensiones solicitadas (800px de ancho por 800px de alto)'
+          });
+        });
     }
   }
+
+  onFileChangedSignature(event) {
+    if (event.target.files.length == 1) {
+      let file = event.target.files[0];
+      const maxWidth = 546;
+      let maxHeight = 100;
+      this.validarDimensionesImagen(file, maxWidth, maxHeight)
+        .then(() => {
+          const types = ['image/png', 'image/jpeg', 'image/jpg']
+          if (!types.includes(file.type)) {
+            this._swal.show({
+              icon: 'error',
+              title: 'Error de archivo',
+              showCancel: false,
+              text: 'El tipo de archivo no es válido'
+            });
+            return null
+          }
+          this.titleFile = event.target.files[0].name
+          functionsUtils.fileToBase64(file).subscribe((base64) => {
+            this.form.patchValue({
+              signature: base64
+            })
+          });
+        })
+        .catch((error: string) => {
+          console.error(error);
+          this._swal.show({
+            icon: 'error',
+            title: 'Error de archivo',
+            showCancel: false,
+            text: 'La imagen no tiene las dimensiones solicitadas (546px de ancho por 100px de alto)'
+          });
+        });
+
+    }
+  }
+
+  validarDimensionesImagen(file: File, maxWidth: number, maxHeight: number): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        const img = new Image();
+        img.onload = () => {
+          const width = img.width;
+          const height = img.height;
+          if (width == maxWidth && height == maxHeight) {
+            resolve();
+          } else {
+            reject(`Las dimensiones de la imagen deben ser iguales a ${maxWidth}x${maxHeight}`);
+          }
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   ngOnDestroy(): void {
     this.$person.unsubscribe();
   }

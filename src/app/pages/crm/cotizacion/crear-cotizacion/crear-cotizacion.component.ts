@@ -170,40 +170,44 @@ export class CrearCotizacionComponent implements OnInit {
   getQuotation(id) {
     this.loading = true;
     this._quotation.getQuotation(id).subscribe((res: any) => {
-      this.quotation = res.data;
-      /* this.headerData.Codigo = 'COT' + res.data.id
-      this.headerData.Fecha = res.data.created_at */
-      this.loading = false;
-      this.form.patchValue({
-        id: this.path == 'editar' ? res.data.id : '',
-        money_type: res.data.money_type,
-        date: res.data.date,
-        customer_id: res.data.customer_id,
-        third_party_person_id: res.data.third_party_person_id,
-        destinity_id: res.data.destinity_id,
-        trm: res.data.trm,
-        description: res.data.description,
-        included: res.data.included,
-        budget: res.data.budget,
-        budget_id: res.data.budget_id,
-        observation: res.data.observation,
-        items: res.data.items,
-        total_cop: res.data.total_cop,
-        total_usd: res.data.total_usd,
-        commercial_terms: res.data.commercial_terms,
-        legal_requirements: res.data.legal_requirements,
-        technical_requirements: res.data.technical_requirements
-      })
-      this.getContacts()
-      if (res.data.included) {
-        this.form.get('included').disable()
-        this.form.get('budget').disable()
+      if (res.data.status == 'Pendiente') {
+        this.quotation = res.data;
+        /* this.headerData.Codigo = 'COT' + res.data.id
+        this.headerData.Fecha = res.data.created_at */
+        this.loading = false;
+        this.form.patchValue({
+          id: this.path == 'editar' ? res.data.id : '',
+          money_type: res.data.money_type,
+          date: res.data.date,
+          customer_id: res.data.customer_id,
+          third_party_person_id: res.data.third_party_person_id,
+          destinity_id: res.data.destinity_id,
+          trm: res.data.trm,
+          description: res.data.description,
+          included: res.data.included,
+          budget: res.data.budget,
+          budget_id: res.data.budget_id,
+          observation: res.data.observation,
+          items: res.data.items,
+          total_cop: res.data.total_cop,
+          total_usd: res.data.total_usd,
+          commercial_terms: res.data.commercial_terms,
+          legal_requirements: res.data.legal_requirements,
+          technical_requirements: res.data.technical_requirements
+        })
+        this.getContacts()
+        if (res.data.included) {
+          this.form.get('included').disable()
+          this.form.get('budget').disable()
+        }
+        res.data.items.forEach(element => {
+          const action = element.sub_items.length > 0 ? 'subitems' : 'withSub';
+          let cat = element.quotationitemable_type == 'App\\Models\\Budget' ? 'budget' : 'apu';
+          this.itemsQuotation.addItems(element, action, cat, true);
+        });
+      } else {
+        this.router.navigate(['/notauthorized'])
       }
-      res.data.items.forEach(element => {
-        const action = element.sub_items.length > 0 ? 'subitems' : 'withSub';
-        let cat = element.quotationitemable_type == 'App\\Models\\Budget' ? 'budget' : 'apu';
-        this.itemsQuotation.addItems(element, action, cat, true);
-      });
     })
   }
 

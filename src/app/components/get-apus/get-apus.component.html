@@ -8,7 +8,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="modal.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -185,7 +185,7 @@
                       class="dropdown-item text-success"
                       (click)="openNewTab(apu.type, apu.apu_id)"
                     >
-                      <i class="far fa-eye"></i> Ver
+                      <i class="fas fa-eye"></i> Ver
                     </a>
                   </div>
                 </div>
@@ -207,7 +207,7 @@
     </mat-paginator>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="modal.close()">
       Cancelar
     </button>
     <button type="button" (click)="send()" class="btn btn-primary">

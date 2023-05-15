@@ -9,56 +9,38 @@ import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swa
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/person.service';
+import { ModalNoCloseService } from 'src/app/core/services/modal-no-close.service';
 @Component({
   selector: 'app-ver-negocio',
   templateUrl: './ver-negocio.component.html',
   styleUrls: ['./ver-negocio.component.scss'],
 })
 export class VerNegocioComponent implements OnInit {
-  @ViewChild('modalCotizaciones') modalCotizaciones: any;
   @ViewChild('apus') apus: any
   active = 1;
   loading: boolean;
   contactos: any[];
   negocio: any;
   person_id;
-  people: any[] = []
-  presupuestos: any[];
-  presupuestosSeleccionados: any[] = [];
   cotizaciones: any;
-  cotizacionesSeleccionadas: any[] = [];
   apuSelected: any[] = [];
   business_budget_id: any = '';
   qr;
-  loadingBudgets: boolean;
-  loadingQuotation: boolean;
   filtros = {
     id: '',
   };
-  paginationQuotations: any = {
-    page: 1,
-    pageSize: 10,
-    collectionSize: 0
-  }
-  paginationBudgets: any = {
-    page: 1,
-    pageSize: 10,
-    collectionSize: 0
-  }
-  form_filters_budget: FormGroup;
-  form_filters_quotations: FormGroup;
+  preDataSend = {};
+
   form_notes: FormGroup;
   editNoteForm: FormGroup;
   editNoteBool: boolean;
   constructor(
     private ruta: ActivatedRoute,
     private _negocio: NegociosService,
-    private _modal: ModalService,
+    private _modal: ModalNoCloseService,
     private _sanitizer: DomSanitizer,
-    private _quotation: QuotationService,
     private _user: UserService,
     private _swal: SwalService,
-    private _person: PersonService,
     private fb: FormBuilder,
     private router: Router
   ) {
@@ -68,10 +50,7 @@ export class VerNegocioComponent implements OnInit {
 
   ngOnInit(): void {
     this.getBussines();
-    this.createFormFiltersBudgets();
-    this.createFormFiltersQuotations();
     this.createFormNotes();
-    this.getPeople();
   }
 
   async getApus(e: any[]) {
@@ -86,6 +65,13 @@ export class VerNegocioComponent implements OnInit {
     this.addApu()
   }
 
+  openModal(content) {
+    this.preDataSend = {
+      city_id: this.negocio.city_id,
+      third_party_id: this.negocio.third_party_id,
+    }
+    this._modal.openNoClose(content, 'xl')
+  }
 
   editNote(item) {
     this.editNoteBool = true;
@@ -179,44 +165,6 @@ export class VerNegocioComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  getPeople() {
-    this._person.getPeopleIndex().subscribe((res: any) => {
-      this.people = res.data
-      this.people.unshift({ text: 'Todos ', value: '' });
-    })
-  }
-
-  createFormFiltersBudgets() {
-    this.form_filters_budget = this.fb.group({
-      code: '',
-      date: '',
-      customer: '',
-      municipality_id: '',
-      line: '',
-      person_id: ''
-    })
-    this.form_filters_budget.valueChanges.pipe(
-      debounceTime(500),
-    ).subscribe(r => {
-      this.getPresupuestos();
-    })
-  }
-
-  createFormFiltersQuotations() {
-    this.form_filters_quotations = this.fb.group({
-      city: '',
-      code: '',
-      client: '',
-      description: '',
-      line: '',
-    })
-    this.form_filters_quotations.valueChanges.pipe(
-      debounceTime(500),
-    ).subscribe(r => {
-      this.getQuotations();
-    })
-  }
-
   createFormNotes() {
     this.form_notes = this.fb.group({
       person_id: [this.person_id],
@@ -264,10 +212,8 @@ export class VerNegocioComponent implements OnInit {
     }
   }
 
-
-
   openConfirm(confirm) {
-    this._modal.open(confirm, 'xl')
+    this._modal.openNoClose(confirm, 'xl')
   }
 
   changeStatusInBusiness(status, item, label) {
@@ -308,106 +254,4 @@ export class VerNegocioComponent implements OnInit {
     })
     this.business_budget_id = this.ruta.snapshot.params.id;
   }
-
-  getPresupuestos(page = 1) {
-    this.presupuestosSeleccionados = []
-    this.paginationBudgets.page = page;
-    let params = {
-      ...this.paginationBudgets,
-      ...this.form_filters_budget.value,
-      third_party_id: this.negocio.third_party_id
-    }
-    this.loadingBudgets = true;
-    this._negocio.getBudgets(params).subscribe((resp: any) => {
-      this.presupuestos = resp.data.data;
-      this.paginationBudgets.collectionSize = resp.data.total;
-      this.loadingBudgets = false
-    });
-  }
-
-  guardarPresupuesto(id, total_cop?) {
-    if (this.presupuestosSeleccionados.includes(id))
-      this.presupuestosSeleccionados = this.presupuestosSeleccionados.filter(
-        (pres) => pres !== id
-      );
-    else this.presupuestosSeleccionados.push({
-      budget_id: id,
-      business_budget_id: this.ruta.snapshot.params.id,
-      total_cop: total_cop
-    });
-  }
-
-  guardarCotizacion(id, total_cop) {
-    if (this.cotizacionesSeleccionadas.includes(id))
-      this.cotizacionesSeleccionadas = this.cotizacionesSeleccionadas.filter(
-        (cot) => cot !== id
-      );
-    else this.cotizacionesSeleccionadas.push({
-      quotation_id: id,
-      business_id: this.ruta.snapshot.params.id,
-      total_cop: total_cop
-    });
-  }
-
-  quotations: any[] = []
-  getQuotations(page = 1) {
-    this.cotizacionesSeleccionadas = []
-    this.paginationQuotations.page = page;
-    let params = {
-      ...this.paginationQuotations,
-      ...this.form_filters_quotations.value,
-      third_party_id: this.negocio.third_party_id
-    }
-    this.loadingQuotation = true;
-    this._quotation.getQuotations(params).subscribe((res: any) => {
-      this.quotations = res.data.data;
-      this.loadingQuotation = false;
-      this.paginationQuotations.collectionSize = res.data.total;
-    })
-  }
-
-  addCotizacion() {
-    let data = {
-      business_id: this.filtros.id,
-      quotations: this.cotizacionesSeleccionadas,
-      person_id: this.person_id
-    }
-    this._negocio.newBusinessQuotation(data).subscribe(data => {
-      this.getBussines();
-      this.getQuotations();
-      this._modal.close();
-      this.cotizacionesSeleccionadas = [];
-    });
-  }
-
-
-
-  obtenerContactos(thirdCompany: string) {
-    let params = {
-      third: thirdCompany,
-    };
-
-    this._negocio.getThirdPartyPerson(params).subscribe((resp: any) => {
-      this.contactos = resp.data;
-    });
-  }
-
-  saveBudget() {
-    let data = {
-      business_id: this.filtros.id,
-      budgets: this.presupuestosSeleccionados,
-      person_id: this.person_id
-    }
-    this._negocio.newBusinessBudget(data).subscribe(data => {
-      this.getBussines();
-      this.getPresupuestos();
-      this._modal.close();
-      this.presupuestosSeleccionados = [];
-    });
-  }
-
-  closeModalCotizaciones() {
-    this.negocio.cotizaciones = this.cotizacionesSeleccionadas;
-  }
-
 }

@@ -70,7 +70,9 @@ export const MY_FORMATS = {
     MatExpansionModule,
     NgxCurrencyModule,
   ],
-  exports: [],
+  exports: [
+    CrearCotizacionComponent
+  ],
   providers: [
     NumberPipePipe,
     {

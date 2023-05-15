@@ -38,18 +38,6 @@
             >
             </ng-select>
           </div>
-
-          <!-- <mat-form-field class="col" appearance="outline">
-            <mat-label>Fecha de entrega</mat-label>
-            <input
-              matInput
-              type="date"
-              [min]="today"
-              formControlName="date"
-              required
-              autocomplete="off"
-            />
-          </mat-form-field> -->
           <mat-form-field class="col-md-6" appearance="outline">
             <mat-label>Fecha de entrega</mat-label>
             <input
@@ -123,406 +111,230 @@
           <div class="mt-3">
             <div class="row">
               <div class="col-md mb-3">
-                <h6>Presupuestos disponibles</h6>
+                <h6>Presupuestos</h6>
               </div>
               <div class="col-md mb-3 text-right">
                 <div class="btn-group rounded w-sm-100">
                   <button
-                    class="btn btn-primary btn-sm"
-                    type="button"
-                    (click)="openNewTab('/crm/presupuesto/crear')"
+                    class="text-center btn btn-info btn-sm"
+                    role="button"
+                    (click)="modalBuscarPresupuesto.openModal()"
                   >
-                    <i class="fa fa-plus"></i> Nuevo
+                    <i class="fa fa-search"></i> Buscar
                   </button>
                   <button
-                    class="btn btn-info btn-sm"
-                    (click)="openClose(matPanelPresupuesto)"
+                    class="text-center btn btn-primary btn-sm"
+                    role="button"
+                    (click)="openModal(addPresupuesto)"
                   >
-                    <i class="fas fa-sliders-h"></i> Filtros
+                    <i class="fa fa-plus"></i> Agregar
                   </button>
                 </div>
               </div>
             </div>
-            <mat-expansion-panel
-              #matPanelPresupuesto="matExpansionPanel"
-              class="mat-elevation-z0"
-            >
-              <div class="row">
-                <ng-container [formGroup]="formFiltersBudgets">
-                  <div class="col-md-3 mat-form-field-wrapper">
-                    <ng-select
-                      [items]="people"
-                      formControlName="person_id"
-                      bindLabel="text"
-                      appearance="outline"
-                      [appendTo]="'body'"
-                      [clearable]="false"
-                      placeholder="Quién elabora"
-                      bindValue="value"
-                    >
-                    </ng-select>
-                  </div>
-                  <mat-form-field class="col" appearance="outline">
-                    <mat-label>Código</mat-label>
-                    <input
-                      type="text"
-                      matInput
-                      placeholder="Busca por código"
-                      formControlName="code"
-                      autocomplete="off"
-                    />
-                  </mat-form-field>
-                  <!-- <mat-form-field class="col" appearance="outline">
-                    <mat-label>Cliente</mat-label>
-                    <input
-                      type="text"
-                      matInput
-                      placeholder="Busca por cliente"
-                      formControlName="customer"
-                      autocomplete="off"
-                    />
-                  </mat-form-field> -->
-                  <mat-form-field class="col" appearance="outline">
-                    <mat-label>Destino</mat-label>
-                    <input
-                      type="text"
-                      matInput
-                      placeholder="Busca por destino"
-                      formControlName="municipality_id"
-                      autocomplete="off"
-                    />
-                  </mat-form-field>
-                  <mat-form-field class="col" appearance="outline">
-                    <mat-label>Línea</mat-label>
-                    <input
-                      type="text"
-                      matInput
-                      placeholder="Busca por línea"
-                      formControlName="line"
-                      autocomplete="off"
-                    />
-                  </mat-form-field>
-                </ng-container>
-              </div>
-            </mat-expansion-panel>
             <ng-container
-              *ngIf="!loadingBudgets && budgets.length > 0; else notDataBudgets"
+              *ngIf="budgetsSelected.length > 0; else notDataBudgets"
             >
-              <ng-container *ngIf="budgets.length > 0; else notDataAd">
-                <div class="rounded-top table-responsive mt-2">
-                  <table
-                    class="table table-bordered table-striped table-sm"
-                    style="font-size: smaller"
-                  >
-                    <thead class="bg-light">
-                      <tr class="text-center text-uppercase">
-                        <td></td>
-                        <th>Código</th>
-                        <th>Fecha</th>
-                        <th>Destino</th>
-                        <th>Linea</th>
-                        <th>Quien elabora</th>
-                        <th>Total COP</th>
-                        <th>Total USD</th>
-                        <th><i class="mdi mdi-chevron-down"></i></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        *ngFor="let item of budgets"
-                        class="text-center"
-                        [ngClass]="{
-                          'text-danger font-weight-bold':
-                            item.state == 'Inactivo'
-                        }"
-                      >
-                        <td class="pb-0">
-                          <mat-checkbox
-                            color="primary"
-                            (change)="guardarPresupuesto($event, item)"
-                          ></mat-checkbox>
-                        </td>
-                        <td class="align-middle">
-                          {{ item.code | uppercase }}
-                        </td>
-                        <td class="align-middle">
-                          {{ item.created_at | date : "MMM d, y" }}
-                        </td>
-                        <td class="align-middle">
-                          {{ item.destiny.name | capitalLetter }}
-                        </td>
-                        <td class="align-middle">
-                          {{ item.line | capitalLetter }}
-                        </td>
-                        <td class="align-middle">
-                          {{ item.user.person.first_name | titlecase }}
-                          {{ item.user.person.first_surname | titlecase }}
-                        </td>
-                        <td class="align-middle">
-                          ${{ item.total_cop | number : "1.2-2" }}
-                        </td>
-                        <td class="align-middle">
-                          USD {{ item.total_usd | number : "1.2-2" }}
-                        </td>
-                        <td class="align-middle">
-                          <div
-                            ngbDropdown
-                            container="body"
-                            class="d-inline-block dropdown-primary"
+              <div class="rounded-top table-responsive mt-2">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Código</th>
+                      <th>Fecha</th>
+                      <th>Destino</th>
+                      <th>Linea</th>
+                      <th>Quien elabora</th>
+                      <th>Total COP</th>
+                      <th>Total USD</th>
+                      <th><i class="mdi mdi-chevron-down"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let item of budgetsSelected"
+                      class="text-center"
+                      [ngClass]="{
+                        'text-danger font-weight-bold': item.state == 'Inactivo'
+                      }"
+                    >
+                      <td class="align-middle">
+                        {{ item.code | uppercase }}
+                      </td>
+                      <td class="align-middle">
+                        {{ item.created_at | date : "MMM d, y" }}
+                      </td>
+                      <td class="align-middle">
+                        {{ item.destiny.name | capitalLetter }}
+                      </td>
+                      <td class="align-middle">
+                        {{ item.line | capitalLetter }}
+                      </td>
+                      <td class="align-middle">
+                        {{ item.user.person.first_name | titlecase }}
+                        {{ item.user.person.first_surname | titlecase }}
+                      </td>
+                      <td class="align-middle">
+                        ${{ item.total_cop | number : "1.2-2" }}
+                      </td>
+                      <td class="align-middle">
+                        USD {{ item.total_usd | number : "1.2-2" }}
+                      </td>
+                      <td class="align-middle">
+                        <div
+                          ngbDropdown
+                          container="body"
+                          class="d-inline-block dropdown-primary"
+                        >
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-primary btn-sm"
+                            type="button"
+                            id="dropdownBasic1"
                           >
-                            <button
-                              ngbDropdownToggle
-                              class="btn btn-primary btn-sm"
-                              type="button"
-                              id="dropdownBasic1"
+                            <i class="mdi mdi-chevron-down"></i>
+                          </button>
+                          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <a
+                              class="dropdown-item text-success"
+                              href="javascript: void(0);"
+                              (click)="
+                                openNewTab('/crm/presupuesto/ver', item.id);
+                                _modal.close()
+                              "
                             >
-                              <i class="mdi mdi-chevron-down"></i>
-                            </button>
-                            <div
-                              ngbDropdownMenu
-                              aria-labelledby="dropdownBasic1"
+                              <i class="fas fa-eye"></i> Ver
+                            </a>
+                            <a
+                              class="dropdown-item text-info"
+                              href="javascript: void(0);"
+                              (click)="
+                                openNewTab('/crm/presupuesto/editar', item.id);
+                                _modal.close()
+                              "
                             >
-                              <a
-                                class="dropdown-item text-success"
-                                href="javascript: void(0);"
-                                (click)="
-                                  openNewTab('/crm/presupuesto/ver', item.id);
-                                  _modal.close()
-                                "
-                              >
-                                <i class="far fa-eye"></i> Ver
-                              </a>
-                              <a
-                                class="dropdown-item text-info"
-                                href="javascript: void(0);"
-                                (click)="
-                                  openNewTab(
-                                    '/crm/presupuesto/editar',
-                                    item.id
-                                  );
-                                  _modal.close()
-                                "
-                              >
-                                <i class="fas fa-edit"></i> Editar
-                              </a>
-                            </div>
+                              <i class="fas fa-edit"></i> Editar
+                            </a>
                           </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <ngb-pagination
-                  class="d-flex justify-content-center pagination-rounded pagination-sm"
-                  [collectionSize]="paginationBudgets.collectionSize"
-                  [pageSize]="paginationBudgets.pageSize"
-                  [(page)]="paginationBudgets.page"
-                  (pageChange)="getBudgets($event)"
-                  maxSize="5"
-                  rotate="true"
-                  ellipses="false"
-                  boundaryLinks="true"
-                >
-                </ngb-pagination>
-              </ng-container>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </ng-container>
           </div>
           <hr />
           <div class="mt-3">
             <div class="row">
               <div class="col-md mb-3">
-                <h6>Cotizaciones disponibles</h6>
+                <h6>Cotizaciones</h6>
               </div>
               <div class="col-md mb-3 text-right">
                 <div class="btn-group rounded w-sm-100">
                   <button
-                    class="btn btn-primary btn-sm"
-                    (click)="openNewTab('/crm/cotizacion/crear')"
+                    class="text-center btn btn-info btn-sm"
+                    role="button"
+                    (click)="modalBuscarCotizacion.openModal()"
                   >
-                    <i class="fa fa-plus"></i> Nuevo
+                    <i class="fa fa-search"></i> Buscar
                   </button>
                   <button
-                    class="btn btn-info btn-sm"
-                    (click)="openClose(matPanelCotizaciones)"
+                    class="text-center btn btn-primary btn-sm"
+                    role="button"
+                    (click)="openModal(addCotizacion)"
                   >
-                    <i class="fas fa-sliders-h"></i> Filtros
+                    <i class="fa fa-plus"></i> Agregar
                   </button>
                 </div>
               </div>
             </div>
-            <mat-expansion-panel
-              #matPanelCotizaciones="matExpansionPanel"
-              class="mat-elevation-z0"
-            >
-              <div class="row">
-                <ng-container [formGroup]="form_filters_quotations">
-                  <mat-form-field class="col" appearance="outline">
-                    <mat-label>Ciudad</mat-label>
-                    <input
-                      type="text"
-                      matInput
-                      formControlName="city"
-                      autocomplete="off"
-                      placeholder="Busca por ciudad"
-                    />
-                  </mat-form-field>
-                  <mat-form-field class="col" appearance="outline">
-                    <mat-label>Código</mat-label>
-                    <input
-                      type="text"
-                      matInput
-                      formControlName="code"
-                      autocomplete="off"
-                      placeholder="Busca por código"
-                    />
-                  </mat-form-field>
-                  <mat-form-field class="col" appearance="outline">
-                    <mat-label>Línea</mat-label>
-                    <input
-                      type="text"
-                      matInput
-                      formControlName="line"
-                      autocomplete="off"
-                      placeholder="Busca por línea"
-                    />
-                  </mat-form-field>
-                  <!-- <mat-form-field class="col" appearance="outline">
-                    <mat-label>Cliente</mat-label>
-                    <input
-                      type="text"
-                      matInput
-                      formControlName="client"
-                      autocomplete="off"
-                      placeholder="Busca por cliente"
-                    />
-                  </mat-form-field> -->
-                  <mat-form-field class="col" appearance="outline">
-                    <mat-label>Descripción</mat-label>
-                    <input
-                      type="text"
-                      matInput
-                      formControlName="description"
-                      autocomplete="off"
-                      placeholder="Busca por descripción"
-                    />
-                  </mat-form-field>
-                </ng-container>
-              </div>
-            </mat-expansion-panel>
             <ng-container
               *ngIf="
-                !loadingQuotations && quotations.length > 0;
+                !loadingQuotations && quotationSelected.length > 0;
                 else notDataQuotations
               "
             >
-              <ng-container *ngIf="quotations.length > 0; else notDataAd">
-                <div class="rounded-top table-responsive mt-2">
-                  <table
-                    class="table table-bordered table-striped table-sm"
-                    style="font-size: smaller"
-                  >
-                    <thead class="bg-light">
-                      <tr class="text-center text-uppercase">
-                        <th></th>
-                        <th>Código</th>
-                        <th>Fecha</th>
-                        <th>Descripción</th>
-                        <th>Destino</th>
-                        <th>Total COP</th>
-                        <th>Total USD</th>
-                        <th><i class="mdi mdi-chevron-down"></i></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let item of quotations" class="text-center">
-                        <td class="pb-0">
-                          <mat-checkbox
-                            color="primary"
-                            (change)="guardarCotizacion($event, item)"
-                          ></mat-checkbox>
-                        </td>
-                        <td class="align-middle">
-                          {{ item.code | uppercase }}
-                        </td>
-                        <td class="align-middle">
-                          {{ item.created_at | date : "MMM d, y" }}
-                        </td>
-                        <td>{{ item.description | capitalLetter }}</td>
-                        <td>{{ item.municipality.name | capitalLetter }}</td>
-                        <td class="align-middle">
-                          ${{ item.total_cop | number : "1.2-2" }}
-                        </td>
-                        <td class="align-middle">
-                          USD {{ item.total_usd | number : "1.2-2" }}
-                        </td>
-                        <td>
-                          <div
-                            ngbDropdown
-                            container="body"
-                            class="dropdown-primary"
+              <div class="rounded-top table-responsive mt-2">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Código</th>
+                      <th>Fecha</th>
+                      <th>Descripción</th>
+                      <th>Destino</th>
+                      <th>Total COP</th>
+                      <th>Total USD</th>
+                      <th><i class="mdi mdi-chevron-down"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let item of quotationSelected"
+                      class="text-center"
+                    >
+                      <td class="align-middle">
+                        {{ item.code | uppercase }}
+                      </td>
+                      <td class="align-middle">
+                        {{ item.created_at | date : "MMM d, y" }}
+                      </td>
+                      <td>{{ item.description | capitalLetter }}</td>
+                      <td>{{ item.municipality.name | capitalLetter }}</td>
+                      <td class="align-middle">
+                        ${{ item.total_cop | number : "1.2-2" }}
+                      </td>
+                      <td class="align-middle">
+                        USD {{ item.total_usd | number : "1.2-2" }}
+                      </td>
+                      <td>
+                        <div
+                          ngbDropdown
+                          container="body"
+                          class="dropdown-primary"
+                        >
+                          <button
+                            ngbDropdownToggle
+                            class="btn btn-primary btn-sm"
+                            type="button"
                           >
-                            <button
-                              ngbDropdownToggle
-                              class="btn btn-primary btn-sm"
-                              type="button"
+                            <i class="mdi mdi-chevron-down"></i>
+                          </button>
+                          <div ngbDropdownMenu>
+                            <a
+                              class="dropdown-item text-success"
+                              href="javascript: void(0);"
+                              (click)="
+                                openNewTab('/crm/cotizacion/ver/', item.id);
+                                _modal.close()
+                              "
                             >
-                              <i class="mdi mdi-chevron-down"></i>
-                            </button>
-                            <div ngbDropdownMenu>
-                              <a
-                                class="dropdown-item text-success"
-                                href="javascript: void(0);"
-                                (click)="
-                                  openNewTab('/crm/cotizacion/ver/', item.id);
-                                  _modal.close()
-                                "
-                              >
-                                <i class="fas fa-eye"></i> Ver</a
-                              >
-                              <a
-                                class="dropdown-item text-primary"
-                                href="javascript: void(0);"
-                                (click)="
-                                  openNewTab(
-                                    '/crm/cotizacion/copiar/',
-                                    item.id
-                                  );
-                                  _modal.close()
-                                "
-                                ><i class="fas fa-copy"></i> Copiar</a
-                              >
-                              <a
-                                class="dropdown-item text-info"
-                                href="javascript: void(0);"
-                                (click)="
-                                  openNewTab(
-                                    '/crm/cotizacion/editar/',
-                                    item.id
-                                  );
-                                  _modal.close()
-                                "
-                                ><i class="fas fa-edit"></i> Editar</a
-                              >
-                            </div>
+                              <i class="fas fa-eye"></i> Ver</a
+                            >
+                            <a
+                              class="dropdown-item text-primary"
+                              href="javascript: void(0);"
+                              (click)="
+                                openNewTab('/crm/cotizacion/copiar/', item.id);
+                                _modal.close()
+                              "
+                              ><i class="fas fa-copy"></i> Copiar</a
+                            >
+                            <a
+                              class="dropdown-item text-info"
+                              href="javascript: void(0);"
+                              (click)="
+                                openNewTab('/crm/cotizacion/editar/', item.id);
+                                _modal.close()
+                              "
+                              ><i class="fas fa-edit"></i> Editar</a
+                            >
                           </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <ngb-pagination
-                  class="d-flex justify-content-center pagination-rounded pagination-sm"
-                  [collectionSize]="paginationQuotations.collectionSize"
-                  [pageSize]="paginationQuotations.pageSize"
-                  [(page)]="paginationQuotations.page"
-                  (pageChange)="getQuotations($event)"
-                  maxSize="5"
-                  rotate="true"
-                  ellipses="false"
-                  boundaryLinks="true"
-                >
-                </ngb-pagination>
-              </ng-container>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </ng-container>
           </div>
           <hr />
@@ -533,14 +345,28 @@
               </div>
               <div class="col-md mb-3 text-right">
                 <div class="btn-group rounded w-sm-100">
+                  <button class="btn btn-info btn-sm" (click)="findApus()">
+                    <i class="fas fa-search"></i> Buscar
+                  </button>
                   <button
                     class="btn btn-primary btn-sm"
-                    (click)="openNewTab('/crm/apus')"
+                    (click)="openModal(addAPUPieza)"
                   >
-                    <i class="fa fa-plus"></i> Nuevo
+                    <i class="fa fa-plus"></i> Pieza
                   </button>
-                  <button class="btn btn-warning btn-sm" (click)="findApus()">
-                    <i class="fas fa-plus"></i> Agregar
+                  <button
+                    class="btn btn-primary btn-sm"
+                    type="button"
+                    (click)="openModal(addAPUConjunto)"
+                  >
+                    <i class="fa fa-plus"></i> Conjunto
+                  </button>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    type="button"
+                    (click)="openModal(addAPUServicio)"
+                  >
+                    <i class="fa fa-plus"></i> Servicio
                   </button>
                 </div>
               </div>
@@ -594,7 +420,7 @@
                                 )
                               "
                             >
-                              <i class="far fa-eye"></i> Ver
+                              <i class="fas fa-eye"></i> Ver
                             </a>
                             <a
                               *ngIf="item.type == 'P'"
@@ -607,7 +433,7 @@
                                 )
                               "
                             >
-                              <i class="far fa-eye"></i> Ver
+                              <i class="fas fa-eye"></i> Ver
                             </a>
                             <a
                               *ngIf="item.type == 'C'"
@@ -620,7 +446,7 @@
                                 )
                               "
                             >
-                              <i class="far fa-eye"></i> Ver
+                              <i class="fas fa-eye"></i> Ver
                             </a>
                             <a
                               *ngIf="item.type == 'S'"
@@ -714,17 +540,6 @@
                 </table>
               </div>
             </ng-container>
-            <ng-template #alertAPU>
-              <div class="alert alert-warning" role="alert">
-                Ningún APU agregado a este negocio
-              </div>
-            </ng-template>
-            <mat-expansion-panel
-              #matPanelAPU="matExpansionPanel"
-              class="mat-elevation-z0"
-            >
-              FILTROS
-            </mat-expansion-panel>
           </div>
         </ng-container>
       </ng-container>
@@ -739,31 +554,215 @@
   </div>
 </ng-container>
 
-<ng-template #notDataAd>
+<app-get-apus #apus (sendApus)="getApus($event)"> </app-get-apus>
+
+<ng-template #alertAPU>
   <div class="alert alert-warning" role="alert">
-    {{
-      form.controls.third_party_id.valid &&
-      (quotations.length || budgets.length)
-        ? "No hemos encontrado información para este cliente"
-        : "Selecciona un cliente para listar la información"
-    }}
+    Aún no has agregado APU a este negocio.
   </div>
 </ng-template>
 
-<app-get-apus #apus (sendApus)="getApus($event)"> </app-get-apus>
-
 <ng-template #notDataBudgets>
-  <app-not-data [loading]="loadingBudgets"></app-not-data>
+  <div class="alert alert-warning" role="alert">
+    Aún no has agregado presupuestos a este negocio.
+  </div>
 </ng-template>
 
 <ng-template #notDataQuotations>
-  <app-not-data [loading]="loadingQuotations"></app-not-data>
+  <div class="alert alert-warning" role="alert">
+    Aún no has agregado cotizaciones a este negocio.
+  </div>
+</ng-template>
+
+<ng-template #addAPUPieza let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Agregar APU Pieza</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-crear-apu-pieza
+      #crearApuPieza
+      [preData]="preDataSend"
+      (saveForAddToSet)="addApuPieza($event)"
+    ></app-crear-apu-pieza>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="crearApuPieza.save()"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #addAPUConjunto let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Agregar APU Conjunto</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-crear-apu-conjunto
+      #crearApuConjunto
+      [preData]="preDataSend"
+    ></app-crear-apu-conjunto>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="crearApuConjunto.save()"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #addAPUServicio let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Agregar APU Servicio</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-crear-apu-servicio
+      #crearApuServicio
+      [preData]="preDataSend"
+    ></app-crear-apu-servicio>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="crearApuServicio.save()"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #addCotizacion let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Agregar cotización</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-crear-cotizacion
+      [preData]="preDataSend"
+      #crearCotizacion
+    ></app-crear-cotizacion>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="crearCotizacion.save()"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #addPresupuesto let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Agregar presupuesto</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-crear-presupuesto
+      [preData]="preDataSend"
+      #crearPresupuesto
+      (saveForAddToSet)="addNewBudget($event)"
+    ></app-crear-presupuesto>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="crearPresupuesto.save()"
+    >
+      Guardar
+    </button>
+  </div>
 </ng-template>
 
 <app-reload-button
   [reload]="reload"
   (reloadData)="reloadData()"
 ></app-reload-button>
+
+<app-modal-buscar-presupuesto
+  [third_party_id]="form.get('third_party_id').value"
+  #modalBuscarPresupuesto
+  [business_id]="''"
+  [person_id]="id"
+  (update)="addBudget($event)"
+  [create]="true"
+></app-modal-buscar-presupuesto>
+
+<app-modal-buscar-cotizacion
+  [third_party_id]="form.get('third_party_id').value"
+  #modalBuscarCotizacion
+  [business_id]=""
+  [person_id]="id"
+  (update)="addQuotation($event)"
+  [create]="true"
+></app-modal-buscar-cotizacion>
 
 <!-- <div class="row">
           <ng-container [formGroup]="form_filters_quotations">

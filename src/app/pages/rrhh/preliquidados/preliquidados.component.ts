@@ -84,7 +84,7 @@ export class PreliquidadosComponent implements OnInit {
       this.getPreliquidadosList();
       this.responsable = this._user.user;
     })
-      
+
   }
 
   handlePageEvent(event: PageEvent) {
@@ -92,7 +92,7 @@ export class PreliquidadosComponent implements OnInit {
     this.getPreliquidados();
   }
 
-  resetFiltros() { 
+  resetFiltros() {
     this._paginator.resetFiltros(this.formFilters)
     this.active_filters = false
   }
@@ -100,7 +100,7 @@ export class PreliquidadosComponent implements OnInit {
   SetFiltros(paginacion) {
     return this._paginator.SetFiltros(paginacion, this.pagination, this.formFilters)
   }
-    //ok
+  //ok
   createForm() {
     this.formFilters = this.fb.group({
       person_id: ''
@@ -157,8 +157,8 @@ export class PreliquidadosComponent implements OnInit {
               created_at: new Date(created_at_timestamp).toISOString()
             }
           }))),
-        ).subscribe(sortedData =>  this.listPreliquidados = sortedData);
-        
+        ).subscribe(sortedData => this.listPreliquidados = sortedData);
+
         this.loading = false;
         this.paginationMaterial = res.data
         if (this.paginationMaterial.last_page < this.pagination.page) {
@@ -271,6 +271,8 @@ export class PreliquidadosComponent implements OnInit {
                 timer: 1000
               });
             });
+          } else {
+            this._swal.hardError();
           }
         })
       }

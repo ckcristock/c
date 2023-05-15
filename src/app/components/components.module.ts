@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { UiModule } from '../shared/ui/ui.module';
-import { NgbAccordionModule, NgbAlertModule, NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAccordionModule, NgbAlertModule, NgbDropdownModule, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalBasicComponent } from './modal-basic/modal-basic.component';
 import { BuildingComponent } from './building/building.component';
 import { RestorePasswordComponent } from './restore-password/restore-password.component';
@@ -94,7 +94,8 @@ export const MY_FORMATS = {
     SatDatepickerModule,
     SatNativeDateModule,
     MatRadioModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    NgbModule
   ],
   providers: [
     {

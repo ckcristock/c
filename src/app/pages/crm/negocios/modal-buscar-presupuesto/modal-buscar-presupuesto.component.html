@@ -1,0 +1,200 @@
+<ng-template #modal let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">
+      Seleccionar presupuestos disponibles
+    </h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <ng-container [formGroup]="form_filters_budget">
+        <div class="col-md-3 mat-form-field-wrapper">
+          <ng-select
+            [items]="people"
+            formControlName="person_id"
+            bindLabel="text"
+            appearance="outline"
+            [appendTo]="'body'"
+            [clearable]="false"
+            placeholder="Quién elabora"
+            bindValue="value"
+          >
+          </ng-select>
+        </div>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Código</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por código"
+            formControlName="code"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Fecha</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por fecha"
+            formControlName="date"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Cliente</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por cliente"
+            formControlName="customer"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Destino</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por destino"
+            formControlName="municipality_id"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Línea</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder="Busca por línea"
+            formControlName="line"
+          />
+        </mat-form-field>
+      </ng-container>
+    </div>
+    <div
+      class="rounded-top table-responsive"
+      *ngIf="!loadingBudgets && presupuestos.length > 0; else notDataBudgets"
+    >
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th></th>
+            <th>Código</th>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Destino</th>
+            <th>Linea</th>
+            <th>Quien elabora</th>
+            <th>Total COP</th>
+            <th>Total USD</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let item of presupuestos"
+            class="text-center"
+            [ngClass]="{
+              'text-danger font-weight-bold': item.state == 'Inactivo'
+            }"
+          >
+            <td class="pb-0">
+              <mat-checkbox
+                color="primary"
+                (change)="guardarPresupuesto(item)"
+                [id]="item.id"
+              ></mat-checkbox>
+            </td>
+            <td class="align-middle">
+              {{ item.code | uppercase }}
+            </td>
+            <td class="align-middle">
+              {{ item.created_at | date : "MMM d, y" }}
+            </td>
+            <td class="align-middle">{{ item.customer.name | titlecase }}</td>
+            <td class="align-middle">
+              {{ item.destiny.name | capitalLetter }}
+            </td>
+            <td class="align-middle">{{ item.line | capitalLetter }}</td>
+            <td class="align-middle">
+              {{ item.user.person.first_name | titlecase }}
+              {{ item.user.person.first_surname | titlecase }}
+            </td>
+            <td class="align-middle">
+              ${{ item.total_cop | number : "1.2-2" }}
+            </td>
+            <td class="align-middle">
+              ${{ item.total_usd | number : "1.2-2" }}
+            </td>
+            <td class="align-middle">
+              <div
+                ngbDropdown
+                container="body"
+                class="d-inline-block dropdown-primary"
+              >
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm"
+                  type="button"
+                  id="dropdownBasic1"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <a
+                    class="dropdown-item text-success"
+                    href="javascript: void(0);"
+                    (click)="openNewTab('/crm/presupuesto/ver', item.id)"
+                  >
+                    <i class="fas fa-eye"></i> Ver
+                  </a>
+                  <a
+                    class="dropdown-item text-info"
+                    href="javascript: void(0);"
+                    (click)="openNewTab('/crm/presupuesto/editar', item.id)"
+                  >
+                    <i class="fas fa-edit"></i> Editar
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ngb-pagination
+      class="d-flex justify-content-center pagination-rounded pagination-sm mb-0"
+      [collectionSize]="paginationBudgets.collectionSize"
+      [pageSize]="paginationBudgets.pageSize"
+      [(page)]="paginationBudgets.page"
+      (pageChange)="getPresupuestos($event)"
+      maxSize="5"
+      rotate="true"
+      ellipses="false"
+      boundaryLinks="true"
+    >
+    </ngb-pagination>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="modal.dismiss('Cross click')"
+    >
+      Cancelar
+    </button>
+
+    <button type="submit " class="btn btn-primary" (click)="saveBudget()">
+      {{ create ? "Agregar" : "Guardar" }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #notDataBudgets>
+  <app-not-data [loading]="loadingBudgets"></app-not-data>
+</ng-template>

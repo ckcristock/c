@@ -17,16 +17,16 @@ export class ApuPiezaService {
     return this.http.get(`${environment.base_url}/municipalities`);
   }
 
-  getGeometries() {
-    return this.http.get(`${environment.base_url}/geometry`);
+  getGeometries(params = {}) {
+    return this.http.get(`${environment.base_url}/geometry`, { params });
   }
 
-  getMaterials() {
-    return this.http.get(`${environment.base_url}/materials`);
+  getMaterials(params = {}) {
+    return this.http.get(`${environment.base_url}/materials`, { params });
   }
 
   getClient(params = {}) {
-    return this.http.get(`${environment.base_url}/thirdPartyClient`, {params});
+    return this.http.get(`${environment.base_url}/thirdPartyClient`, { params });
   }
 
   getIndirectCosts() {
@@ -49,19 +49,19 @@ export class ApuPiezaService {
     return this.http.get(`${environment.base_url}/apu-parts`, { params });
   }
 
-  cutLaserMaterial(){
-    return this.http.get(`${environment.base_url}/cut-laser-material`);
+  cutLaserMaterial(params = {}) {
+    return this.http.get(`${environment.base_url}/cut-laser-material`, { params });
   }
 
-  activateOrInactivate( data ){
+  activateOrInactivate(data) {
     return this.http.put(`${environment.base_url}/apu-part-activate-Inactive`, data);
   }
 
-  getThicknesses(){
+  getThicknesses() {
     return this.http.get(`${environment.base_url}/thicknesses`);
   }
 
-  getMaterialThickness(){
+  getMaterialThickness() {
     return this.http.get(`${environment.base_url}/material-thickness`);
   }
 

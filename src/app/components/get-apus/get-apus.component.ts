@@ -7,6 +7,7 @@ import { debounceTime } from 'rxjs/operators';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { PageEvent } from '@angular/material';
 import { PaginatorService } from 'src/app/core/services/paginator.service';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-get-apus',
@@ -15,7 +16,7 @@ import { PaginatorService } from 'src/app/core/services/paginator.service';
 })
 export class GetApusComponent implements OnInit {
   @Input('filter') filter: any;
-  @ViewChild('modal') modal: any;
+  @ViewChild('modal') modalView: any;
   @Output('sendApus') sendApus = new EventEmitter()
   loading = false;
   apus: any[] = [];
@@ -39,18 +40,19 @@ export class GetApusComponent implements OnInit {
     private _modal: ModalService,
     private fb: FormBuilder,
     private _paginator: PaginatorService,
+    private modalService: NgbModal
   ) { }
   ngOnInit(): void {
     this.href = (this.platformLocation as any).location.origin;
   }
-
+  modalRef: NgbModalRef;
   openConfirm(multiple = true) {
     this.createFormFilters();
     this.loading = true;
     this.state = []
     this.multiple = multiple;
     this.getApus();
-    this._modal.open(this.modal, 'xl');
+    this.modalRef = this.modalService.open(this.modalView, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true });
   }
 
   selectedDate(fecha) {
@@ -181,7 +183,8 @@ export class GetApusComponent implements OnInit {
   }
 
   send() {
-    this.sendApus.emit(this.state)
-    this._modal.close();
+    this.sendApus.emit(this.state);
+    this.modalRef.dismiss();
+    //this.modalView.close();
   }
 }

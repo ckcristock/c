@@ -27,6 +27,7 @@ import {
 import { UserService } from 'src/app/core/services/user.service';
 import { MaterialesService } from 'src/app/pages/ajustes/parametros/apu/materiales/materiales.service';
 import { MaterialesMateriaPrimaService } from 'src/app/pages/ajustes/parametros/apu/materiales-materia-prima/materiales-materia-prima.service';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-crear-apu-pieza',
@@ -147,15 +148,25 @@ export class CrearApuPiezaComponent implements OnInit {
     this.reload = false
   }
 
-  getMaterialsFull() {
-    this._materials.getMaterialsIndex().subscribe((res: any) => {
-      this.materialsIndex = res.data
+  getMaterialsFull(event: any = '') {
+    let params = {
+      limit: true,
+      name: event.term ?? ''
+    }
+    this._materials.getMaterialsIndex(params).subscribe((res: any) => {
+      this.materialsIndex = res.data;
+      this.materialsIndex.unshift({ text: 'Busca y selecciona', id: '' })
     })
   }
 
-  getCommercialMaterials() {
-    this._rawMaterialMaterials.getRawMaterialMaterialsIndex().subscribe((res: any) => {
+  getCommercialMaterials(event: any = '') {
+    let params = {
+      limit: true,
+      name: event.term ?? ''
+    }
+    this._rawMaterialMaterials.getRawMaterialMaterialsIndex(params).subscribe((res: any) => {
       this.commercialMaterials = res?.data
+      this.commercialMaterials.unshift({ text: 'Busca y selecciona', id: '' })
     })
   }
 
@@ -266,11 +277,6 @@ export class CrearApuPiezaComponent implements OnInit {
     })
   }
 
-  async getCutLaserMaterial() {
-    await this._apuPieza.cutLaserMaterial().toPromise().then((r: any) => {
-      this.cutLaserMaterials = r?.data;
-    })
-  }
 
   getClients() {
     this._apuPieza.getClient().subscribe((r: any) => {
@@ -278,15 +284,35 @@ export class CrearApuPiezaComponent implements OnInit {
     });
   }
 
-  getGeometries() {
-    this._apuPieza.getGeometries().subscribe((r: any) => {
+  getGeometries(event: any = '') {
+    let params = {
+      limit: true,
+      name: event.term ?? ''
+    }
+    this._apuPieza.getGeometries(params).subscribe((r: any) => {
       this.geometries = r?.data;
+      this.geometries.unshift({ text: 'Busca y selecciona', value: '' })
+    })
+  }
+  async getCutLaserMaterial(event: any = '') {
+    let params = {
+      limit: true,
+      name: event.term ?? ''
+    }
+    await this._apuPieza.cutLaserMaterial(params).toPromise().then((r: any) => {
+      this.cutLaserMaterials = r?.data;
+      this.cutLaserMaterials.unshift({ name: 'Busca y selecciona', id: '' })
     })
   }
 
-  getMaterials() {
-    this._apuPieza.getMaterials().subscribe((r: any) => {
+  getMaterials(event: any = '') {
+    let params = {
+      limit: true,
+      name: event.term ?? ''
+    }
+    this._apuPieza.getMaterials(params).subscribe((r: any) => {
       this.materials = r?.data;
+      this.materials.unshift({ text: 'Busca y selecciona', id: '' })
     })
   }
 

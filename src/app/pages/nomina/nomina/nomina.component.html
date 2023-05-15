@@ -110,7 +110,7 @@
                   !donwloadingExNom ? 'fas fa-table' : 'fa-spinner fa-spin'
                 "
               ></i>
-               {{ !donwloadingExNom ? "Resumen de nómina" : "Descargando" }}
+              {{ !donwloadingExNom ? "Resumen de nómina" : "Descargando" }}
             </span>
             <span class="d-inline d-xl-none d-lg-none d-md-none">
               <i
@@ -133,19 +133,23 @@
               ><i
                 class="fas fa-bell"
                 [class]="
-                  !donwloadingExcNov ? 'fas fa-file-excel' : 'fa-spinner fa-spin'
+                  !donwloadingExcNov
+                    ? 'fas fa-file-excel'
+                    : 'fa-spinner fa-spin'
                 "
-              ></i
-              > {{
+              ></i>
+              {{
                 !donwloadingExNom ? "Resumen de novedades" : "Descargando"
               }}</span
             >
             <span class="d-inline d-xl-none d-lg-none d-md-none">
               <i
-              class="fas fa-bell"
-              [class]="
-                !donwloadingExcNov ? 'fas fa-file-excel' : 'fa-spinner fa-spin'
-              "
+                class="fas fa-bell"
+                [class]="
+                  !donwloadingExcNov
+                    ? 'fas fa-file-excel'
+                    : 'fa-spinner fa-spin'
+                "
               ></i>
             </span>
           </button>
@@ -170,10 +174,10 @@
             >
             <span class="d-inline d-xl-none d-lg-none d-md-none">
               <i
-              class="fas"
-              [class]="
-                !donwloadingPdfNom ? 'fas fa-download' : 'fa-spinner fa-spin'
-              "
+                class="fas"
+                [class]="
+                  !donwloadingPdfNom ? 'fas fa-download' : 'fa-spinner fa-spin'
+                "
               ></i>
             </span>
           </button>
@@ -193,18 +197,16 @@
                     : 'fa-spinner fa-spin'
                 "
               ></i>
-              {{
-                !sendingPayrollEmail ? "Notificar vía email" : "Enviando"
-              }}
+              {{ !sendingPayrollEmail ? "Notificar vía email" : "Enviando" }}
             </span>
             <span class="d-inline d-xl-none d-lg-none d-md-none">
               <i
-              class="fas"
-              [class]="
-                !sendingPayrollEmail
-                  ? 'fas fa-mail-bulk'
-                  : 'fa-spinner fa-spin'
-              "
+                class="fas"
+                [class]="
+                  !sendingPayrollEmail
+                    ? 'fas fa-mail-bulk'
+                    : 'fa-spinner fa-spin'
+                "
               ></i>
             </span>
           </button>
@@ -214,12 +216,11 @@
         <div class="col d-flex align-items-stretch">
           <button class="btn btn-primary btn-sm btn-block">
             <span class="d-none d-xl-inline d-lg-inline d-md-inline">
-            <i class="fas fa-umbrella"></i> Archivo seguridad social
-          </span>
-          <span class="d-inline d-xl-none d-lg-none d-md-none">
-            <i class="fas fa-umbrella"
-            ></i>
-          </span>
+              <i class="fas fa-umbrella"></i> Archivo seguridad social
+            </span>
+            <span class="d-inline d-xl-none d-lg-none d-md-none">
+              <i class="fas fa-umbrella"></i>
+            </span>
           </button>
         </div>
 
@@ -227,12 +228,11 @@
         <div class="col d-flex align-items-stretch">
           <button class="btn btn-primary btn-sm btn-block">
             <span class="d-none d-xl-inline d-lg-inline d-md-inline">
-            <i class="fas fa-piggy-bank"></i> Archivo pago bancos
-          </span>
-          <span class="d-inline d-xl-none d-lg-none d-md-none">
-            <i class="fas fa-piggy-bank"
-            ></i>
-          </span>
+              <i class="fas fa-piggy-bank"></i> Archivo pago bancos
+            </span>
+            <span class="d-inline d-xl-none d-lg-none d-md-none">
+              <i class="fas fa-piggy-bank"></i>
+            </span>
           </button>
         </div>
         <!-- <div class="col">
@@ -433,7 +433,7 @@
         class="btn btn-primary btn-block"
         (click)="postPagoNomina()"
       >
-        <i class="far fa-save"></i>
+        <i class="fas fa-save"></i>
         Guardar
       </button>
     </div>

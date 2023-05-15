@@ -25,6 +25,7 @@ import localeEs from '@angular/common/locales/es';
 import { DatePipe, registerLocaleData } from '@angular/common';
 import { MatPaginatorIntl } from '@angular/material';
 import { getEspañolPaginatorIntl } from './core/utils/español-paginator-intl';
+import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 registerLocaleData(localeEs, 'es');
 
 @NgModule({
@@ -38,6 +39,8 @@ registerLocaleData(localeEs, 'es');
     LayoutsModule,
     NgSelectModule,
     FormsModule,
+    NgbModule,
+    NgbModalModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

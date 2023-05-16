@@ -59,6 +59,7 @@
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
+                <mat-label>Fecha</mat-label>
                 <input
                   matInput
                   (dateChange)="dateChange($event)"
@@ -185,7 +186,7 @@
                 {{ item.created_at | date : "MMM d, y" }}
               </td>
               <td *ngIf="checkCliente" class="align-middle">
-                {{ item.customer.name | titlecase }}
+                {{ item.customer.name | uppercase }}
               </td>
               <td *ngIf="checkDestino" class="align-middle">
                 {{ item.destiny.name | capitalLetter }}

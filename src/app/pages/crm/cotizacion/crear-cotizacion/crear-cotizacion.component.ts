@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { of, Observable, Subject, concat, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap, tap, map, catchError, filter } from 'rxjs/operators';
@@ -24,6 +24,8 @@ import { consts } from 'src/app/core/utils/consts';
 export class CrearCotizacionComponent implements OnInit {
   @ViewChild('itemsQuotation') itemsQuotation;
   @ViewChild('modalBudgets') modalBudgets;
+  @Input('preData') preData = undefined;
+  @Output() saveForBusiness = new EventEmitter;
   public datos: any = {
     Titulo: 'Nueva cotización',
     Fecha: new Date()
@@ -65,7 +67,6 @@ export class CrearCotizacionComponent implements OnInit {
     this.path = this.route.snapshot.url[0].path;
   }
 
-
   async ngOnInit() {
     this.loadingView = true;
     this.route.params.subscribe(params => {
@@ -78,8 +79,15 @@ export class CrearCotizacionComponent implements OnInit {
     this.getContacts();
     this.getBudgets();
     await this.getCities();
-    if (this.path != 'crear') {
+    if (this.path != 'crear' && !this.preData) {
       this.getQuotation(this.id)
+    }
+    if (this.preData) {
+      this.form?.patchValue({
+        destinity_id: this.preData?.city_id,
+        customer_id: this.preData?.third_party_id,
+        third_party_person_id: this.preData?.third_party_person_id,
+      })
     }
     this.loadingView = false
     await this.getConsecutivo();
@@ -368,13 +376,17 @@ export class CrearCotizacionComponent implements OnInit {
         if (r.isConfirmed) {
           this._quotation.save(this.form.getRawValue()).subscribe((res: any) => {
             this._swal.show({
-              title: res.data,
+              title: 'Operación exitosa',
               icon: 'success',
               text: '',
               showCancel: false,
               timer: 1000
             })
-            this.router.navigate(['/crm/cotizacion'])
+            if (this.preData) {
+              this.saveForBusiness.emit(res.data)
+            } else {
+              this.router.navigate(['/crm/cotizacion'])
+            }
           });
         }
       })

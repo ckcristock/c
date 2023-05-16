@@ -25,9 +25,9 @@ export class GetApusComponent implements OnInit {
   date: any;
   form_filters: FormGroup;
   paginationMaterial: any;
-  pagination = {
+  pagination: any = {
     page: 1,
-    pageSize: 100,
+    pageSize: localStorage.getItem('paginationItemsAPU') || 100,
   }
   public href: string = "";
   closeResult = '';
@@ -92,7 +92,8 @@ export class GetApusComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination)
+    this._paginator.handlePageEvent(event, this.pagination);
+    localStorage.setItem('paginationItemsAPU', this.pagination.pageSize);
     this.getApus()
   }
 

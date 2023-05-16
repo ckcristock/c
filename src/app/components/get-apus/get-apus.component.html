@@ -16,7 +16,7 @@
   <div class="modal-body">
     <div class="row">
       <ng-container [formGroup]="form_filters">
-        <mat-form-field appearance="outline" class="col">
+        <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Rango de fechas</mat-label>
           <input
             matInput
@@ -32,7 +32,7 @@
             [for]="picker"
           ></sat-datepicker-toggle>
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Código</mat-label>
           <input
             matInput
@@ -42,7 +42,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Nombre</mat-label>
           <input
             matInput
@@ -53,7 +53,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Conjunto</mat-label>
           <input
             matInput
@@ -63,7 +63,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Máquina</mat-label>
           <input
             matInput
@@ -73,7 +73,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Ciudad</mat-label>
           <input
             matInput
@@ -83,7 +83,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Cliente</mat-label>
           <input
             matInput
@@ -93,7 +93,7 @@
             autocomplete="off"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-3" appearance="outline">
           <mat-label>Línea</mat-label>
           <input
             matInput
@@ -159,12 +159,14 @@
                 {{ apu.created_at | date : "MMM d, y" }}
               </td>
               <td class="align-middle">
-                {{ apu.third_party?.full_name | titlecase }}
+                {{ apu.third_party?.full_name | uppercase }}
               </td>
               <td class="align-middle">{{ apu.name | capitalLetter }}</td>
-              <td>{{ item?.set_name || "Sin información" }}</td>
-              <td>{{ item?.machine_name || "Sin información" }}</td>
-              <td class="align-middle">{{ apu.city?.name | capitalLetter }}</td>
+              <td>{{ item?.set_name || "Sin información" | capitalLetter }}</td>
+              <td>
+                {{ item?.machine_name || "Sin información" | capitalLetter }}
+              </td>
+              <td class="align-middle">{{ apu.city?.name | uppercase }}</td>
               <td class="align-middle">{{ apu.line | capitalLetter }}</td>
               <td class="align-middle">{{ apu.type_name | capitalLetter }}</td>
               <td class="align-middle">

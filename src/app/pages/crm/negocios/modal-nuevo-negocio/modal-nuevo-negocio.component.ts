@@ -81,15 +81,41 @@ export class ModalNuevoNegocioComponent implements OnInit {
   }
 
   addBudget(e) {
+    let cont = 0;
     e.forEach(element => {
-      this.budgetsSelected.push(element)
+      if (!this.budgetsSelected.some(bud => bud.id == element.id)) {
+        this.budgetsSelected.push(element)
+      } else {
+        cont++;
+      }
     });
+    if (cont > 0) {
+      this._swal.show({
+        icon: 'info',
+        title: 'Alerta',
+        text: 'Algunos presupuestos no fueron agregados porque ya se encuentran en la lista.',
+        showCancel: false
+      })
+    }
   }
 
   addQuotation(e) {
+    let cont = 0;
     e.forEach(element => {
-      this.quotationSelected.push(element)
+      if (!this.quotationSelected.some(quot => quot.id == element.id)) {
+        this.quotationSelected.push(element)
+      } else {
+        cont++;
+      }
     });
+    if (cont > 0) {
+      this._swal.show({
+        icon: 'info',
+        title: 'Alerta',
+        text: 'Algunas cotizaciones no fueron agregadas porque ya se encuentran en la lista.',
+        showCancel: false
+      })
+    }
   }
 
   async getTypes() {
@@ -111,6 +137,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
       text: 'Llenar',
       city_id: this.form.get('city_id').value,
       third_party_id: this.form.get('third_party_id').value,
+      third_party_person_id: this.form.get('third_party_person_id').value,
     }
     this._modal.openNoClose(content, 'xl')
   }
@@ -140,11 +167,21 @@ export class ModalNuevoNegocioComponent implements OnInit {
   }
 
   getApus(e: any[]) {
+    let cont = 0;
     e.forEach(apu => {
-      const exist = this.apuSelected.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
-      !exist ?
-        this.apuSelected.push(apu) :
-        this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
+      if (!this.apuSelected.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))) {
+        this.apuSelected.push(apu)
+      } else {
+        cont++;
+      }
+      if (cont > 0) {
+        this._swal.show({
+          icon: 'info',
+          title: 'Alerta',
+          text: 'Algunos APU no fueron agregados porque ya se encuentran en la lista.',
+          showCancel: false
+        })
+      }
     });
   }
 
@@ -162,6 +199,16 @@ export class ModalNuevoNegocioComponent implements OnInit {
   deleteApu(item) {
     let id = this.apuSelected.indexOf(item)
     this.apuSelected.splice(id, 1)
+  }
+
+  deleteBudget(item) {
+    let id = this.budgetsSelected.indexOf(item)
+    this.budgetsSelected.splice(id, 1)
+  }
+
+  deleteQuotation(item) {
+    let id = this.quotationSelected.indexOf(item)
+    this.quotationSelected.splice(id, 1)
   }
 
   getConsecutivo() {
@@ -303,10 +350,31 @@ export class ModalNuevoNegocioComponent implements OnInit {
     })
   }
 
+  addNewAPUConjunto(apu) {
+    this._modal.close();
+    this._apuConjunto.getApuSetToAdd(apu.id).subscribe((res: any) => {
+      this.getApus(res.data)
+    })
+  }
+
+  addNewAPUServicio(apu) {
+    this._modal.close();
+    this._apuConjunto.getApuServiceToAdd(apu.id).subscribe((res: any) => {
+      this.getApus(res.data)
+    })
+  }
+
   addNewBudget(pre) {
     this._modal.close();
     this._budget.getBudgetToAdd(pre.id).subscribe((res: any) => {
       this.budgetsSelected.push(res.data)
+    })
+  }
+
+  addNewQuotation(quot) {
+    this._modal.close();
+    this._quotation.getQuotationToAdd(quot.id).subscribe((res: any) => {
+      this.quotationSelected.push(res.data)
     })
   }
 

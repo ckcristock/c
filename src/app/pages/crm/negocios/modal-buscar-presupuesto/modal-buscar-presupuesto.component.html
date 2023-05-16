@@ -16,7 +16,7 @@
   <div class="modal-body">
     <div class="row">
       <ng-container [formGroup]="form_filters_budget">
-        <div class="col-md-3 mat-form-field-wrapper">
+        <div class="col-md-4 mat-form-field-wrapper">
           <ng-select
             [items]="people"
             formControlName="person_id"
@@ -29,7 +29,7 @@
           >
           </ng-select>
         </div>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-4" appearance="outline">
           <mat-label>Código</mat-label>
           <input
             type="text"
@@ -41,13 +41,20 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Fecha</mat-label>
           <input
-            type="text"
             matInput
+            (dateChange)="dateChange($event)"
+            (dateInput)="dateChange($event)"
+            [ngModelOptions]="{ standalone: true }"
+            [matDatepicker]="picker"
             placeholder="Busca por fecha"
-            formControlName="date"
           />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-4" appearance="outline">
           <mat-label>Cliente</mat-label>
           <input
             type="text"
@@ -56,7 +63,7 @@
             formControlName="customer"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-4" appearance="outline">
           <mat-label>Destino</mat-label>
           <input
             type="text"
@@ -65,7 +72,7 @@
             formControlName="municipality_id"
           />
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
+        <mat-form-field class="col-md-4" appearance="outline">
           <mat-label>Línea</mat-label>
           <input
             type="text"
@@ -106,8 +113,8 @@
             <td class="pb-0">
               <mat-checkbox
                 color="primary"
-                (change)="guardarPresupuesto(item)"
-                [id]="item.id"
+                (change)="guardarPresupuesto(item, $event)"
+                [(ngModel)]="item.selected"
               ></mat-checkbox>
             </td>
             <td class="align-middle">
@@ -116,7 +123,7 @@
             <td class="align-middle">
               {{ item.created_at | date : "MMM d, y" }}
             </td>
-            <td class="align-middle">{{ item.customer.name | titlecase }}</td>
+            <td class="align-middle">{{ item.customer.name | uppercase }}</td>
             <td class="align-middle">
               {{ item.destiny.name | capitalLetter }}
             </td>
@@ -167,18 +174,16 @@
         </tbody>
       </table>
     </div>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm mb-0"
-      [collectionSize]="paginationBudgets.collectionSize"
-      [pageSize]="paginationBudgets.pageSize"
-      [(page)]="paginationBudgets.page"
-      (pageChange)="getPresupuestos($event)"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
+    <mat-paginator
+      *ngIf="paginationMaterial"
+      [length]="paginationMaterial.total"
+      [pageSize]="paginationMaterial.per_page"
+      [pageIndex]="paginationMaterial.current_page - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
     >
-    </ngb-pagination>
+    </mat-paginator>
   </div>
   <div class="modal-footer">
     <button

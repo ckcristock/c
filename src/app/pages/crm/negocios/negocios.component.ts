@@ -21,10 +21,13 @@ import { SwalService } from '../../ajustes/informacion-base/services/swal.servic
 export class NegociosComponent implements OnInit {
   form: FormGroup;
   formFiltersBusiness: FormGroup;
+  formFiltersGeneralView: FormGroup;
   datePipe = new DatePipe('es-CO');
+  today = new Date();
   business: any[] = [];
   types: any[] = [];
   date: any;
+  dateGeneralView: any;
   negocios_quinta_etapa: Negocio[];
   negocios_cuarta_etapa: Negocio[];
   negocios_tercera_etapa: Negocio[];
@@ -84,12 +87,13 @@ export class NegociosComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     if (this.permission.permissions.show) {
       this.createFormFiltersBusiness();
+      this.createFormFiltersGeneralView();
       this.getTypes();
       await this.route.queryParamMap.subscribe(async (params: any) => {
         if (params.params.pageSize) {
           this.pagination.pageSize = params.params.pageSize
         } else {
-          this.pagination.pageSize = 100
+          this.pagination.pageSize = localStorage.getItem('paginationItemsBusiness') || 100
         }
         if (params.params.pag) {
           this.pagination.page = params.params.pag
@@ -110,6 +114,12 @@ export class NegociosComponent implements OnInit {
         date_one.setDate(date_one.getDate() + 1)
         date_two.setDate(date_two.getDate() + 1)
         this.date = { begin: date_one, end: date_two }
+
+        let date_oneGV = new Date()
+        let date_twoGV = new Date(date_oneGV.getFullYear(), date_oneGV.getMonth() - 1, date_oneGV.getDate());
+        date_oneGV.setDate(date_one.getDate() + 1)
+        date_twoGV.setDate(date_two.getDate() + 1)
+        this.dateGeneralView = { begin: date_oneGV, end: date_twoGV }
         await this.getNegocios();
       }
       );
@@ -130,7 +140,8 @@ export class NegociosComponent implements OnInit {
   paginacion: any
 
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination)
+    this._paginator.handlePageEvent(event, this.pagination);
+    localStorage.setItem('paginationItemsBusiness', this.pagination.pageSize)
     this.getNegocios()
   }
 
@@ -149,6 +160,16 @@ export class NegociosComponent implements OnInit {
     })
   }
 
+  createFormFiltersGeneralView() {
+    this.formFiltersGeneralView = this.fb.group({
+      date_start: '',
+      date_end: ''
+    })
+    this.formFiltersGeneralView.valueChanges.pipe(debounceTime(500)).subscribe(r => {
+      this.getGeneralView()
+    })
+  }
+
   selectedDate(fecha) {
     if (fecha.value) {
       this.formFiltersBusiness.patchValue({
@@ -157,6 +178,20 @@ export class NegociosComponent implements OnInit {
       })
     } else {
       this.formFiltersBusiness.patchValue({
+        date_start: '',
+        date_end: ''
+      });
+    }
+  }
+
+  selectedDateGV(fecha) {
+    if (fecha.value) {
+      this.formFiltersGeneralView.patchValue({
+        date_start: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
+        date_end: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+      })
+    } else {
+      this.formFiltersGeneralView.patchValue({
         date_start: '',
         date_end: ''
       });
@@ -292,7 +327,7 @@ export class NegociosComponent implements OnInit {
   }
 
   private getLists() {
-    setTimeout(() => {
+    /* setTimeout(() => {
       this.negocios_primera_etapa = this.business.filter(
         (t) => t.status === 'Prospección'
       );
@@ -308,8 +343,73 @@ export class NegociosComponent implements OnInit {
       this.negocios_quinta_etapa = this.business.filter(
         (t) => t.status === 'Adjudicación'
       );
-    }, 1000);
+    }, 1000); */
+  }
+  generalView: any = [];
+  prospectingStage = {
+    budget_value: 0,
+    quotation_value: 0
+  };
+  budgetStage = {
+    budget_value: 0,
+    quotation_value: 0
+  };
+  quotationStage = {
+    budget_value: 0,
+    quotation_value: 0
+  };
+  negotiationStage = {
+    budget_value: 0,
+    quotation_value: 0
+  };
+  awardStage = {
+    budget_value: 0,
+    quotation_value: 0
+  };
 
+  loadingGeneralView: boolean;
+  getGeneralView() {
+
+    this.loadingGeneralView = true;
+    this._negocios.getGeneralView(this.formFiltersGeneralView.value).subscribe((res: any) => {
+      this.generalView = res.data;
+      this.negocios_primera_etapa = res.data.filter(
+        (t) => t.status === 'Prospección'
+      );
+      this.negocios_segunda_etapa = res.data.filter(
+        (t) => t.status === 'Presupuesto'
+      );
+      this.negocios_tercera_etapa = res.data.filter(
+        (t) => t.status === 'Cotización'
+      );
+      this.negocios_cuarta_etapa = res.data.filter(
+        (t) => t.status === 'Negociación'
+      );
+      this.negocios_quinta_etapa = res.data.filter(
+        (t) => t.status === 'Adjudicación'
+      );
+      this.negocios_primera_etapa.forEach((element: any) => {
+        this.prospectingStage.budget_value += element.budget_value;
+        this.prospectingStage.quotation_value += element.quotation_value;
+      });
+      this.negocios_segunda_etapa.forEach((element: any) => {
+        this.budgetStage.budget_value += element.budget_value;
+        this.budgetStage.quotation_value += element.quotation_value;
+      });
+      this.negocios_tercera_etapa.forEach((element: any) => {
+        this.quotationStage.budget_value += element.budget_value;
+        this.quotationStage.quotation_value += element.quotation_value;
+      });
+      this.negocios_cuarta_etapa.forEach((element: any) => {
+        this.negotiationStage.budget_value += element.budget_value;
+        this.negotiationStage.quotation_value += element.quotation_value;
+      });
+      this.negocios_quinta_etapa.forEach((element: any) => {
+        this.awardStage.budget_value += element.budget_value;
+        this.awardStage.quotation_value += element.quotation_value;
+      });
+      this.loadingGeneralView = false;
+    })
   }
 
   calcularTotal() {

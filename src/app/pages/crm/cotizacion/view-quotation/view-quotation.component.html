@@ -160,7 +160,10 @@
       </div>
       <div class="card">
         <div class="card-body">
-          <div class="rounded-top table-responsive">
+          <div
+            class="rounded-top table-responsive"
+            *ngIf="quotation.items.length > 0; else notItems"
+          >
             <table class="table table-bordered table-striped table-sm">
               <thead class="bg-light">
                 <tr class="text-center text-uppercase">
@@ -308,8 +311,13 @@
     </div>
   </div>
 </ng-container>
+
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #notItems>
+  <div class="alert alert-warning" role="alert">Cotización sin items</div>
 </ng-template>
 
 <ng-template #notDataActivities>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { ApuServicioService } from '../apu-servicio.service';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
@@ -20,6 +20,8 @@ export class CrearApuServicioComponent implements OnInit {
   @Input('id') id;
   @Input('data') data: any;
   @Input('title') title = 'Crear servicio';
+  @Input('preData') preData = undefined;
+  @Output() saveForBusiness = new EventEmitter;
   form: FormGroup;
   date: Date = new Date();
   loading: boolean = true;
@@ -74,6 +76,12 @@ export class CrearApuServicioComponent implements OnInit {
     await this.getCities();
     this.validateData();
     await this.getConsecutivo();
+    if (this.preData) {
+      this.form?.patchValue({
+        city_id: this.preData?.city_id,
+        third_party_id: this.preData?.third_party_id,
+      })
+    }
     this.loading = false;
   }
 
@@ -318,7 +326,12 @@ export class CrearApuServicioComponent implements OnInit {
               );
             } else {
               this._apuService.save(this.form.value).subscribe(
-                (res: any) => this.showSuccess(),
+                (res: any) => {
+                  if (this.preData) {
+                    this.saveForBusiness.emit(res.data)
+                  }
+                  this.showSuccess()
+                },
                 (err) => this.showError(err)
               );
             }
@@ -335,7 +348,9 @@ export class CrearApuServicioComponent implements OnInit {
       showCancel: false,
       timer: 1000
     });
-    this.router.navigateByUrl('/crm/apus');
+    if (!this.preData) {
+      this.router.navigateByUrl('/crm/apus');
+    }
   }
   showError(err) {
     this._swal.show({

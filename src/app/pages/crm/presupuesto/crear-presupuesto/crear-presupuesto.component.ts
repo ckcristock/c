@@ -21,7 +21,7 @@ export class CrearPresupuestoComponent implements OnInit {
   @Input('dataEdit') dataEdit;
   @Input('title') title = 'Nuevo presupuesto';
   @Input('preData') preData = undefined;
-  @Output() saveForAddToSet = new EventEmitter;
+  @Output() saveForBusiness = new EventEmitter;
 
   indirectCosts: any = [];
   custumer$: Observable<any>;
@@ -311,7 +311,7 @@ export class CrearPresupuestoComponent implements OnInit {
     const data = this.forma.value;
     this._budget.save({ data }).subscribe((res: any) => {
       if (this.preData) {
-        this.saveForAddToSet.emit(res.data)
+        this.saveForBusiness.emit(res.data)
       }
     })
   }

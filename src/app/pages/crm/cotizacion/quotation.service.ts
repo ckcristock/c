@@ -43,4 +43,8 @@ export class QuotationService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json')
     return this.http.get(`${environment.base_url}/quotation/pdf/${id}`, { headers, responseType: 'blob' as 'json' });
   }
+
+  getQuotationToAdd(id) {
+    return this.http.get(`${environment.base_url}/get-quotation-to-add/${id}`);
+  }
 }

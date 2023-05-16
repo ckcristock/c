@@ -20,7 +20,7 @@
       <form [formGroup]="form" novalidate>
         <div class="row">
           <mat-slide-toggle
-            *ngIf="path == 'crear' && !form.get('included').value"
+            *ngIf="(path == 'crear' || preData) && !form.get('included').value"
             color="primary"
             class="col-md-4 mb-3"
             (change)="openBudgets($event)"
@@ -138,7 +138,12 @@
           formControlName="legal_requirements"
         ></ckeditor>
       </form>
-      <button type="button" class="btn btn-primary btn-block" (click)="save()">
+      <button
+        *ngIf="!preData"
+        type="button"
+        class="btn btn-primary btn-block"
+        (click)="save()"
+      >
         Guardar
       </button>
     </div>

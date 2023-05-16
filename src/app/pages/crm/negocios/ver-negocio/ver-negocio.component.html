@@ -15,7 +15,7 @@
             />
           </div>
 
-          <div class="col-md-3">
+          <div class="col-md-4">
             <span class="badge badge-pill badge-primary">{{
               negocio?.code | uppercase
             }}</span>
@@ -24,18 +24,29 @@
                 (negocio?.third_party.social_reason
                   ? negocio?.third_party.social_reason
                   : negocio?.third_party.full_name
-                ) | titlecase
+                ) | uppercase
               }}
             </h6>
-            <small>
-              <p class="mb-0">
-                {{ negocio?.third_party_person.name | titlecase }} <br />
-                {{ negocio?.date | date | uppercase }} <br />
-                {{ negocio?.name | uppercase }} <br />
-                <!-- {{ negocio?.country.name | uppercase }} -->
-              </p>
-            </small>
-            <div>TIPO: {{ negocio?.type?.name | uppercase }}</div>
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th>Persona</th>
+                  <td>{{ negocio?.third_party_person.name | titlecase }}</td>
+                </tr>
+                <tr>
+                  <th>Fecha</th>
+                  <td>{{ negocio?.date | date }}</td>
+                </tr>
+                <tr>
+                  <th>Nombre</th>
+                  <td>{{ negocio?.name | uppercase }}</td>
+                </tr>
+                <tr>
+                  <th>Tipo</th>
+                  <td>{{ negocio?.type?.name | uppercase }}</td>
+                </tr>
+              </tbody>
+            </table>
             <mat-form-field class="pb-0" appearance="outline">
               <mat-label>Etapa</mat-label>
               <mat-select
@@ -50,7 +61,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="col-md-5 mt-3">
+          <div class="col-md-4 mt-3">
             <h6>Detalles:</h6>
             <p>
               <small>{{
@@ -645,14 +656,6 @@
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
 
-<app-modal-buscar-cotizacion
-  [third_party_id]="negocio?.third_party_id"
-  #modalBuscarCotizacion
-  [business_id]="filtros?.id"
-  [person_id]="person_id"
-  (update)="getBussines()"
-></app-modal-buscar-cotizacion>
-
 <app-modal-buscar-presupuesto
   [third_party_id]="negocio?.third_party_id"
   #modalBuscarPresupuesto
@@ -660,6 +663,14 @@
   [person_id]="person_id"
   (update)="getBussines()"
 ></app-modal-buscar-presupuesto>
+
+<app-modal-buscar-cotizacion
+  [third_party_id]="negocio?.third_party_id"
+  #modalBuscarCotizacion
+  [business_id]="filtros?.id"
+  [person_id]="person_id"
+  (update)="getBussines()"
+></app-modal-buscar-cotizacion>
 
 <ng-template #addAPUPieza let-modal>
   <div class="modal-header">
@@ -678,7 +689,7 @@
     <app-crear-apu-pieza
       #crearApuPieza
       [preData]="preDataSend"
-      (saveForAddToSet)="addFromPart($event)"
+      (saveForAddToSet)="addNewApuPieza($event)"
     ></app-crear-apu-pieza>
   </div>
   <div class="modal-footer">
@@ -712,7 +723,7 @@
     <app-crear-apu-conjunto
       #crearApuConjunto
       [preData]="preDataSend"
-      (saveForAddToSet)="addFromPart($event)"
+      (saveForBusiness)="addNewAPUConjunto($event)"
     ></app-crear-apu-conjunto>
   </div>
   <div class="modal-footer">
@@ -746,7 +757,7 @@
     <app-crear-apu-servicio
       #crearApuServicio
       [preData]="preDataSend"
-      (saveForAddToSet)="addFromPart($event)"
+      (saveForBusiness)="addNewAPUServicio($event)"
     ></app-crear-apu-servicio>
   </div>
   <div class="modal-footer">
@@ -777,7 +788,11 @@
     </button>
   </div>
   <div class="modal-body">
-    <app-crear-cotizacion #crearCotizacion></app-crear-cotizacion>
+    <app-crear-cotizacion
+      [preData]="preDataSend"
+      #crearCotizacion
+      (saveForBusiness)="addNewQuotation($event)"
+    ></app-crear-cotizacion>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="_modal.close()">
@@ -807,7 +822,11 @@
     </button>
   </div>
   <div class="modal-body">
-    <app-crear-presupuesto #crearPresupuesto></app-crear-presupuesto>
+    <app-crear-presupuesto
+      [preData]="preDataSend"
+      #crearPresupuesto
+      (saveForBusiness)="addNewBudget($event)"
+    ></app-crear-presupuesto>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="_modal.close()">

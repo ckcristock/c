@@ -16,6 +16,21 @@
   <div class="modal-body">
     <div class="row">
       <ng-container [formGroup]="form_filters_quotations">
+        <mat-form-field appearance="outline" class="col">
+          <mat-label>Rango de fechas</mat-label>
+          <input
+            matInput
+            [satDatepicker]="picker"
+            (dateChange)="selectedDate($event)"
+            name="daterange"
+            autocomplete="off"
+          />
+          <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+          <sat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></sat-datepicker-toggle>
+        </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Ciudad</mat-label>
           <input
@@ -34,16 +49,6 @@
             formControlName="code"
             autocomplete="off"
             placeholder="Busca por código"
-          />
-        </mat-form-field>
-        <mat-form-field class="col" appearance="outline">
-          <mat-label>Línea</mat-label>
-          <input
-            type="text"
-            matInput
-            formControlName="line"
-            autocomplete="off"
-            placeholder="Busca por línea"
           />
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
@@ -90,8 +95,8 @@
             <td class="pb-0">
               <mat-checkbox
                 color="primary"
-                (change)="guardarCotizacion(item)"
-                [id]="item.id"
+                (change)="guardarCotizacion(item, $event)"
+                [(ngModel)]="item.selected"
               ></mat-checkbox>
             </td>
             <td>
@@ -103,7 +108,7 @@
                 (item.client.social_reason
                   ? item.client.social_reason
                   : item.client.full_name
-                ) | titlecase
+                ) | uppercase
               }}
             </td>
             <td>{{ item.municipality.name | capitalLetter }}</td>
@@ -145,18 +150,16 @@
         </tbody>
       </table>
     </div>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="paginationQuotations.collectionSize"
-      [pageSize]="paginationQuotations.pageSize"
-      [(page)]="paginationQuotations.page"
-      (pageChange)="getQuotations($event)"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
+    <mat-paginator
+      *ngIf="paginationMaterial"
+      [length]="paginationMaterial.total"
+      [pageSize]="paginationMaterial.per_page"
+      [pageIndex]="paginationMaterial.current_page - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
     >
-    </ngb-pagination>
+    </mat-paginator>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="_modal.close()">

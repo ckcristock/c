@@ -6,6 +6,9 @@ import { debounceTime } from 'rxjs/operators';
 import { QuotationService } from '../../cotizacion/quotation.service';
 import { Router } from '@angular/router';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { DatePipe } from '@angular/common';
+import { PageEvent } from '@angular/material';
+import { PaginatorService } from 'src/app/core/services/paginator.service';
 
 @Component({
   selector: 'app-modal-buscar-cotizacion',
@@ -21,12 +24,13 @@ export class ModalBuscarCotizacionComponent implements OnInit {
   @Output('update') update = new EventEmitter();
   form_filters_quotations: FormGroup;
   loadingQuotation: boolean;
+  datePipe = new DatePipe('es-CO');
   quotations: any[] = [];
   cotizacionesSeleccionadas: any[] = [];
-  paginationQuotations: any = {
-    page: 1,
-    pageSize: 10,
-    collectionSize: 0
+  paginationMaterial: any;
+  pagination: any = {
+    page: '',
+    pageSize: localStorage.getItem('paginationItemsQuotation') || 100,
   }
   constructor(
     private _modal: ModalService,
@@ -35,6 +39,7 @@ export class ModalBuscarCotizacionComponent implements OnInit {
     private _quotation: QuotationService,
     private _swal: SwalService,
     private router: Router,
+    private _paginator: PaginatorService
   ) { }
 
   ngOnInit(): void {
@@ -42,6 +47,7 @@ export class ModalBuscarCotizacionComponent implements OnInit {
 
   openModal() {
     if (this.third_party_id) {
+      this.cotizacionesSeleccionadas = []
       this._modal.open(this.modal, 'xl');
       this.createFormFiltersQuotations();
       this.getQuotations();
@@ -55,13 +61,21 @@ export class ModalBuscarCotizacionComponent implements OnInit {
     }
   }
 
+  handlePageEvent(event: PageEvent) {
+    this._paginator.handlePageEvent(event, this.pagination);
+    localStorage.setItem('paginationItemsQuotation', this.pagination.pageSize);
+    this.getQuotations()
+  }
+
   createFormFiltersQuotations() {
     this.form_filters_quotations = this.fb.group({
+      date: '',
+      date_start: '',
+      date_end: '',
       city: '',
       code: '',
       client: '',
       description: '',
-      line: '',
     })
     this.form_filters_quotations.valueChanges.pipe(
       debounceTime(500),
@@ -70,37 +84,65 @@ export class ModalBuscarCotizacionComponent implements OnInit {
     })
   }
 
-  getQuotations(page = 1) {
-    this.cotizacionesSeleccionadas = []
-    this.paginationQuotations.page = page;
+  selectedDate(fecha) {
+    if (fecha.value) {
+      this.form_filters_quotations.patchValue({
+        date_start: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
+        date_end: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+      })
+    } else {
+      this.form_filters_quotations.patchValue({
+        date_start: '',
+        date_end: ''
+      })
+    }
+  }
+
+  getQuotations() {
+    this.loadingQuotation = true;
     let params = {
-      ...this.paginationQuotations,
+      ...this.pagination,
       ...this.form_filters_quotations.value,
       third_party_id: this.third_party_id
     }
-    this.loadingQuotation = true;
     this._quotation.getQuotations(params).subscribe((res: any) => {
       this.quotations = res.data.data;
+      this.quotations.forEach(quot => {
+        this.cotizacionesSeleccionadas.forEach(cot => {
+          if ((this.create ? cot.id : cot.quotation_id) == quot.id) {
+            quot.selected = true
+          }
+        });
+      });
+      this.paginationMaterial = res.data
+      if (this.paginationMaterial.last_page < this.pagination.page) {
+        this.paginationMaterial.current_page = 1
+        this.pagination.page = 1
+        this.getQuotations()
+      }
       this.loadingQuotation = false;
-      this.paginationQuotations.collectionSize = res.data.total;
     })
   }
 
-  guardarCotizacion(item) {
-    if (this.cotizacionesSeleccionadas.includes(item.id)) {
-      this.cotizacionesSeleccionadas = this.cotizacionesSeleccionadas.filter(
-        (cot) => cot !== item.id
-      );
-    }
-    else {
-      if (!this.create) {
-        this.cotizacionesSeleccionadas.push({
-          quotation_id: item.id,
-          business_id: this.business_id,
-          total_cop: item.total_cop
-        });
-      } else {
-        this.cotizacionesSeleccionadas.push(item)
+  guardarCotizacion(item, event) {
+    const index = this.cotizacionesSeleccionadas.findIndex(x => ((this.create ? x.id : x.quotation_id) === item.id));
+    if (item.selected) {
+      if (index === -1) {
+        if (!this.create) {
+          this.cotizacionesSeleccionadas.push({
+            quotation_id: item.id,
+            business_id: this.business_id,
+            total_cop: item.total_cop
+          });
+        } else {
+          this.cotizacionesSeleccionadas.push(item)
+        }
+        item.selected = true
+      }
+    } else {
+      if (index !== -1) {
+        this.cotizacionesSeleccionadas.splice(index, 1);
+        item.selected = false
       }
     }
   }
@@ -119,11 +161,17 @@ export class ModalBuscarCotizacionComponent implements OnInit {
             quotations: this.cotizacionesSeleccionadas,
             person_id: this.person_id
           }
-          this._negocio.newBusinessQuotation(data).subscribe(data => {
+          this._negocio.newBusinessQuotation(data).subscribe((res: any) => {
             this.update.emit();
             this.getQuotations();
             this._modal.close();
             this.cotizacionesSeleccionadas = [];
+            this._swal.show({
+              icon: 'success',
+              title: 'Cotizaciones agregadas',
+              text: res.data,
+              showCancel: false
+            })
           });
         }
       })

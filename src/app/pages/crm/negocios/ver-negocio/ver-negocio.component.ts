@@ -1,15 +1,14 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NegociosService } from '../negocios.service';
-import { ModalService } from 'src/app/core/services/modal.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { QuotationService } from '../../cotizacion/quotation.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
-import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/person.service';
 import { ModalNoCloseService } from 'src/app/core/services/modal-no-close.service';
+import { ApuConjuntoService } from '../../apu-conjunto/apu-conjunto.service';
+import { QuotationService } from '../../cotizacion/quotation.service';
+import { BudgetService } from '../../presupuesto/budget.service';
 @Component({
   selector: 'app-ver-negocio',
   templateUrl: './ver-negocio.component.html',
@@ -42,7 +41,10 @@ export class VerNegocioComponent implements OnInit {
     private _user: UserService,
     private _swal: SwalService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private _apuConjunto: ApuConjuntoService,
+    private _quotation: QuotationService,
+    private _budget: BudgetService,
   ) {
     this.filtros.id = this.ruta.snapshot.params.id;
     this.person_id = this._user.user.person.id
@@ -54,21 +56,40 @@ export class VerNegocioComponent implements OnInit {
   }
 
   async getApus(e: any[]) {
+    let cont = 0;
     await e.forEach(apu => {
       const exist = this.negocio['apus'].some(x => (x.apuable_id == apu.apu_id && x.apuable.typeapu_name == apu.type_name))
       if (!exist) {
         this.apuSelected.push(apu)
       } else {
-        this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
+        cont++;
       }
     }, Promise.resolve());
-    this.addApu()
+    if (cont > 0) {
+      this._swal.show({
+        icon: 'error',
+        title: 'Error',
+        text: e.length == cont ? 'No hay nada nuevo para agregar' : 'Ya agregaste alguno(s) de los APU seleccionados, agregaremos los demas',
+        showCancel: false
+      }).then(r => {
+        if (r.isConfirmed) {
+          if (this.apuSelected.length > 0) {
+            this.addApu()
+          }
+        }
+      })
+    } else {
+      this.addApu()
+    }
+
   }
 
   openModal(content) {
     this.preDataSend = {
-      city_id: this.negocio.city_id,
-      third_party_id: this.negocio.third_party_id,
+      text: 'Llenar',
+      city_id: this.negocio?.city_id,
+      third_party_id: this.negocio?.third_party_id,
+      third_party_person_id: this.negocio?.third_party_person_id,
     }
     this._modal.openNoClose(content, 'xl')
   }
@@ -131,18 +152,28 @@ export class VerNegocioComponent implements OnInit {
   }
 
   addApu() {
-    let data = {
-      business_id: this.filtros.id,
-      apus: this.apuSelected,
-      person_id: this.person_id
-    }
-    this._negocio.newBusinessApu(data).subscribe(data => {
-      this.getBussines();
-      this.apuSelected = [];
-    });
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      text: 'Agregaremos ' + this.apuSelected.length + ' APU a este negocio.'
+    }).then(r => {
+      if (r.isConfirmed) {
+        let data = {
+          business_id: this.filtros.id,
+          apus: this.apuSelected,
+          person_id: this.person_id
+        }
+        this._negocio.newBusinessApu(data).subscribe(data => {
+          this.getBussines();
+          this.apuSelected = [];
+        });
+      }
+    })
+
   }
 
   findApus() {
+    this.apuSelected = [];
     this.apus.openConfirm()
   }
 
@@ -253,5 +284,79 @@ export class VerNegocioComponent implements OnInit {
       this.loading = false;
     })
     this.business_budget_id = this.ruta.snapshot.params.id;
+  }
+
+  addNewApuPieza(apu) {
+    this._modal.close();
+    this._apuConjunto.getApuPartToAdd(apu.id).subscribe((res: any) => {
+      this.getApus(res.data)
+    })
+  }
+
+  addNewAPUConjunto(apu) {
+    this._modal.close();
+    this._apuConjunto.getApuSetToAdd(apu.id).subscribe((res: any) => {
+      this.getApus(res.data)
+    })
+  }
+
+  addNewAPUServicio(apu) {
+    this._modal.close();
+    this._apuConjunto.getApuServiceToAdd(apu.id).subscribe((res: any) => {
+      this.getApus(res.data)
+    })
+  }
+  addNewQuotation(quot) {
+    this._modal.close();
+    this._quotation.getQuotationToAdd(quot.id).subscribe((res: any) => {
+      this.cotizacionesSeleccionadas.push({
+        quotation_id: res.data.id,
+        business_id: this.filtros.id,
+        total_cop: res.data.total_cop
+      });
+      let data = {
+        business_id: this.filtros.id,
+        quotations: this.cotizacionesSeleccionadas,
+        person_id: this.person_id
+      }
+      this._negocio.newBusinessQuotation(data).subscribe((res: any) => {
+        this.getBussines();
+        this.cotizacionesSeleccionadas = [];
+        this._swal.show({
+          icon: 'success',
+          title: 'Cotizaciones agregadas',
+          text: res.data,
+          showCancel: false
+        })
+      });
+    })
+  }
+
+  presupuestosSeleccionados: any[] = [];
+  cotizacionesSeleccionadas: any[] = [];
+  addNewBudget(pre) {
+    this._modal.close();
+    this._budget.getBudgetToAdd(pre.id).subscribe((res: any) => {
+      this.presupuestosSeleccionados.push({
+        budget_id: res.data.id,
+        business_budget_id: this.filtros.id,
+        total_cop: res.data.total_cop
+      });
+      let data = {
+        business_id: this.filtros.id,
+        budgets: this.presupuestosSeleccionados,
+        person_id: this.person_id
+      }
+      this._negocio.newBusinessBudget(data).subscribe((res: any) => {
+        this.getBussines();
+        this.presupuestosSeleccionados = [];
+        this._swal.show({
+          icon: 'success',
+          title: 'Presupuestos agregados',
+          text: res.data,
+          showCancel: false
+        })
+      });
+    })
   }
 }

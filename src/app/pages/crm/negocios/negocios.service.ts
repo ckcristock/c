@@ -123,37 +123,8 @@ export class NegociosService {
     return this.http.post(`${environment.base_url}/business-type`, data)
   }
 
-
-
-  /* createTask(data) {
-    //TODO backend
-    return of(
-      tareas.push(data)
-    )
-  } */
-
-  /* editTask(index, data) {
-    return of(
-      tareas[index] = data
-    )
-  } */
-
-  /* addEventToHistroy(event) {
-    let item = {
-      icon: '',
-      title: '',
-      created_at: '2020-11-2',
-      person: {
-        full_name: 'Marcos Fuentes',
-        image: ''
-      },
-      description: 'Creacion del negocio',
-    };
-
-    return of(
-      history.push(item)
-    )
-  } */
-
+  getGeneralView(params = {}) {
+    return this.http.get(`${environment.base_url}/general-view-business`, { params })
+  }
 
 }

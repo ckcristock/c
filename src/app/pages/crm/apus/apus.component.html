@@ -223,15 +223,17 @@
                 {{ item?.created_at | date : "MMM d, y" }}
               </td>
               <td class="align-middle" *ngIf="checkCliente">
-                {{ item?.third_party?.full_name | titlecase }}
+                {{ item?.third_party?.full_name | uppercase }}
               </td>
               <td class="align-middle" *ngIf="checkNombre">
                 {{ item?.name | capitalLetter }}
               </td>
-              <td>{{ item?.set_name || "Sin información" }}</td>
-              <td>{{ item?.machine_name || "Sin información" }}</td>
+              <td>{{ item?.set_name || "Sin información" | capitalLetter }}</td>
+              <td>
+                {{ item?.machine_name || "Sin información" | capitalLetter }}
+              </td>
               <td class="align-middle" *ngIf="checkDestino">
-                {{ item?.city.name | capitalLetter }}
+                {{ item?.city.name | uppercase }}
               </td>
               <td class="align-middle" *ngIf="checkLinea">
                 {{ item?.line | capitalLetter }}

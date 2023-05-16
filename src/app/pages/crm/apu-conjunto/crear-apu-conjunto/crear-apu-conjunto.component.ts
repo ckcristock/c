@@ -22,6 +22,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import { consts } from 'src/app/core/utils/consts';
 import { ViewportScroller } from '@angular/common';
 import { ModalService } from 'src/app/core/services/modal.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 interface ApuPart {
   name: string;
   id: number;
@@ -36,7 +37,10 @@ export class CrearApuConjuntoComponent implements OnInit {
   @Input('id') id;
   @Input('data') data: any;
   @Input('title') title = 'Crear conjunto';
+  @ViewChild('addAPU') addAPUModal: any;
   @Output() obtenerDato = new EventEmitter;
+  @Input('preData') preData = undefined;
+  @Output() saveForBusiness = new EventEmitter;
   pageYoffset = 0;
   @HostListener('window:scroll', ['$event']) onScroll(event) {
     this.pageYoffset = window.pageYOffset;
@@ -75,6 +79,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   peopleInput$ = new Subject<string>();
   minLengthTerm = 3;
   searching: boolean;
+  modalRef: NgbModalRef;
   searchFailed: boolean;
   searchingSet: boolean;
   searchFailedSet: boolean;
@@ -98,6 +103,7 @@ export class CrearApuConjuntoComponent implements OnInit {
     public _consecutivos: ConsecutivosService,
     private _user: UserService,
     private _modal: ModalService,
+    private modalService: NgbModal,
     private scroll: ViewportScroller,
   ) {
     this.user_id = _user.user.person.id
@@ -120,6 +126,12 @@ export class CrearApuConjuntoComponent implements OnInit {
     this.loadPeople();
     this.getVariablesApu();
     await this.getConsecutivo();
+    if (this.preData) {
+      this.form?.patchValue({
+        city_id: this.preData?.city_id,
+        third_party_id: this.preData?.third_party_id,
+      })
+    }
     this.loading = false
   }
 
@@ -161,6 +173,7 @@ export class CrearApuConjuntoComponent implements OnInit {
     })
   }
   preDataSend = {};
+
   openModal(content) {
     if (this.form.valid) {
       this.preDataSend = {
@@ -168,7 +181,7 @@ export class CrearApuConjuntoComponent implements OnInit {
         third_party_id: this.form.get('third_party_id').value,
         line: this.form.get('line').value,
       }
-      this._modal.open(content, 'xl')
+      this.modalRef = this.modalService.open(this.addAPUModal, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true });
     } else {
       this.form.markAllAsTouched();
       this.scroll.scrollToPosition([0, 0]);
@@ -176,7 +189,7 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
 
   addFromPart(apu) {
-    this._modal.close();
+    this.modalRef.dismiss();
     this._apuConjunto.getApuPartToAdd(apu.id).subscribe((res: any) => {
       this.getApus(res.data)
     })
@@ -698,6 +711,9 @@ export class CrearApuConjuntoComponent implements OnInit {
                   if (!res.status) {
                     this.showError(res)
                   } else {
+                    if (this.preData) {
+                      this.saveForBusiness.emit(res.data)
+                    }
                     this.showSuccess()
                   }
                 },
@@ -727,7 +743,9 @@ export class CrearApuConjuntoComponent implements OnInit {
       showCancel: false,
       timer: 1000
     });
-    this.router.navigateByUrl('/crm/apus');
+    if (!this.preData) {
+      this.router.navigateByUrl('/crm/apus');
+    }
   }
   showError(err) {
     this._swal.show({

@@ -39,4 +39,8 @@ export class BudgetService {
     return this.http.get(`${environment.base_url}/budgets-download-intern/${id}`, { headers, responseType: 'blob' as 'json' });
   }
 
+  getBudgetToAdd(id) {
+    return this.http.get(`${environment.base_url}/get-budget-to-add/${id}`);
+  }
+
 }

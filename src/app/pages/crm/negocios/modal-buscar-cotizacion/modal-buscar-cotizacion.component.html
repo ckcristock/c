@@ -1,0 +1,176 @@
+<ng-template #modal let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">
+      Seleccionar cotizaciones disponibles
+    </h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <ng-container [formGroup]="form_filters_quotations">
+        <mat-form-field appearance="outline" class="col">
+          <mat-label>Rango de fechas</mat-label>
+          <input
+            matInput
+            [satDatepicker]="picker"
+            (dateChange)="selectedDate($event)"
+            name="daterange"
+            autocomplete="off"
+          />
+          <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+          <sat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></sat-datepicker-toggle>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Ciudad</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="city"
+            autocomplete="off"
+            placeholder="Busca por ciudad"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Código</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="code"
+            autocomplete="off"
+            placeholder="Busca por código"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Cliente</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="client"
+            autocomplete="off"
+            placeholder="Busca por cliente"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Descripción</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="description"
+            autocomplete="off"
+            placeholder="Busca por descripción"
+          />
+        </mat-form-field>
+      </ng-container>
+    </div>
+    <div
+      class="rounded-top table-responsive"
+      *ngIf="!loadingQuotation && quotations.length > 0; else notDataQuotations"
+    >
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th></th>
+            <th>Código</th>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Destino</th>
+            <th>Total COP</th>
+            <th>Total USD</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of quotations" class="text-center">
+            <td class="pb-0">
+              <mat-checkbox
+                color="primary"
+                (change)="guardarCotizacion(item, $event)"
+                [(ngModel)]="item.selected"
+              ></mat-checkbox>
+            </td>
+            <td>
+              {{ item.code | uppercase }}
+            </td>
+            <td>{{ item.created_at | date : "MMM d, y" }}</td>
+            <td>
+              {{
+                (item.client.social_reason
+                  ? item.client.social_reason
+                  : item.client.full_name
+                ) | uppercase
+              }}
+            </td>
+            <td>{{ item.municipality.name | capitalLetter }}</td>
+            <td>${{ item.total_cop | number : "1.2-2" }}</td>
+            <td>${{ item.total_usd | number : "1.2-2" }}</td>
+            <td>
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item text-success"
+                    href="javascript: void(0);"
+                    (click)="openNewTab('/crm/cotizacion/ver/', item.id)"
+                  >
+                    <i class="fas fa-eye"></i> Ver</a
+                  >
+                  <a
+                    class="dropdown-item text-primary"
+                    href="javascript: void(0);"
+                    (click)="openNewTab('/crm/cotizacion/copiar/', item.id)"
+                    ><i class="fas fa-copy"></i> Copiar</a
+                  >
+                  <a
+                    class="dropdown-item text-info"
+                    href="javascript: void(0);"
+                    (click)="openNewTab('/crm/cotizacion/editar/', item.id)"
+                    ><i class="fas fa-edit"></i> Editar</a
+                  >
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <mat-paginator
+      *ngIf="paginationMaterial"
+      [length]="paginationMaterial.total"
+      [pageSize]="paginationMaterial.per_page"
+      [pageIndex]="paginationMaterial.current_page - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cancelar
+    </button>
+    <button type="button" (click)="addCotizacion()" class="btn btn-primary">
+      {{ create ? "Agregar" : "Guardar" }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #notDataQuotations>
+  <app-not-data [loading]="loadingQuotation"></app-not-data>
+</ng-template>

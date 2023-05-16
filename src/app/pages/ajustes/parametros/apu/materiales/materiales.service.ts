@@ -7,25 +7,25 @@ import { environment } from 'src/environments/environment';
 })
 export class MaterialesService {
 
-  constructor( private http: HttpClient ) { }
+  constructor(private http: HttpClient) { }
 
-  getMaterials( params = {} ){
-    return this.http.get(`${environment.base_url}/paginateMaterial`, {params});
+  getMaterials(params = {}) {
+    return this.http.get(`${environment.base_url}/paginateMaterial`, { params });
   }
 
-  getMaterialsIndex() {
-    return this.http.get(`${environment.base_url}/get-materials`);
+  getMaterialsIndex(params = {}) {
+    return this.http.get(`${environment.base_url}/get-materials`, { params });
   }
 
-  getThicknesses(){
+  getThicknesses() {
     return this.http.get(`${environment.base_url}/thicknesses`);
   }
 
-  save( data:any ){
+  save(data: any) {
     return this.http.post(`${environment.base_url}/materials`, data);
   }
 
-  update( data, id ){
+  update(data, id) {
     return this.http.put(`${environment.base_url}/materials/${id}`, data);
   }
 

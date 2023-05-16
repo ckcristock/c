@@ -126,7 +126,6 @@
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
-                <th>Código</th>
                 <th>Funcionario</th>
                 <th>Documento</th>
                 <!--  <th>Cargo</th> -->
@@ -143,7 +142,6 @@
                 *ngFor="let contract of contracts; let i = index"
                 class="text-center"
               >
-                <td class="align-middle">{{ contract.code }}</td>
                 <td class="align-middle">
                   <strong>
                     {{ contract.first_name | titlecase }}
@@ -151,7 +149,7 @@
                   </strong>
                 </td>
                 <td class="align-middle">
-                  {{ contract.identifier | number: '1.0-0' }}
+                  {{ contract.identifier | number : "1.0-0" }}
                 </td>
                 <!-- <td>
                   <img
@@ -197,7 +195,7 @@
 
                           "
                         >
-                          <i class="far fa-eye"></i> Ver</a
+                          <i class="fas fa-eye"></i> Ver</a
                         > -->
                       <a
                         type="button"
@@ -221,9 +219,11 @@
                         type="button"
                         class="dropdown-item text-warning"
                         *ngIf="contract.status == 'Activo'"
-                        (click)="modalPreliquidar.openModal(); funcionario = contract"
+                        (click)="
+                          modalPreliquidar.openModal(); funcionario = contract
+                        "
                       >
-                      <i class="fas fa-money-bill"></i> Preliquidar
+                        <i class="fas fa-money-bill"></i> Preliquidar
                       </a>
                     </div>
                   </div>
@@ -385,13 +385,11 @@
             placeholder="Término del contrato"
             required
           >
-
             <mat-option
               *ngFor="let contractType of contractTypes"
               [value]="contractType.id"
               >{{ contractType.name }}</mat-option
             >
-
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
@@ -401,9 +399,8 @@
             placeholder="Tipo de contrato"
             required
           >
-            <mat-option *ngFor="let term of terms"
-            [value]="term.id"
-            >{{term.name}}
+            <mat-option *ngFor="let term of terms" [value]="term.id"
+              >{{ term.name }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -419,13 +416,13 @@
             (selectionChange)="getDependenciesByGroup($event.value)"
             required
           >
-          <mat-select-filter
-                    *ngIf="selectGroups.focused"
-                    [placeholder]="'Buscar'"
-                    [array]="groups"
-                    [displayMember]="'text'"
-                    (filteredReturn)="filteredGroups = $event"
-                  ></mat-select-filter>
+            <mat-select-filter
+              *ngIf="selectGroups.focused"
+              [placeholder]="'Buscar'"
+              [array]="groups"
+              [displayMember]="'text'"
+              (filteredReturn)="filteredGroups = $event"
+            ></mat-select-filter>
             <mat-option *ngFor="let group of groups" [value]="group.value">{{
               group.text
             }}</mat-option>
@@ -441,12 +438,12 @@
             (selectionChange)="getPositionsByDependency($event.value)"
           >
             <mat-select-filter
-            *ngIf="selectDependencies.focused"
-            [placeholder]="'Buscar'"
-            [array]="dependencies"
-            [displayMember]="'text'"
-            (filteredReturn)="filteredDependencies = $event"
-          ></mat-select-filter>
+              *ngIf="selectDependencies.focused"
+              [placeholder]="'Buscar'"
+              [array]="dependencies"
+              [displayMember]="'text'"
+              (filteredReturn)="filteredDependencies = $event"
+            ></mat-select-filter>
             <mat-option
               *ngFor="let dependency of filteredDependencies"
               [value]="dependency.value"
@@ -465,14 +462,14 @@
             placeholder="Posición"
             required
           >
-          <mat-select-filter
-                    *ngIf="selectPositions.focused"
-                    [placeholder]="'Buscar'"
-                    [array]="positions"
-                    [displayMember]="'text'"
-                    (filteredReturn)="filteredPosition = $event"
-          ></mat-select-filter>
-          <mat-option
+            <mat-select-filter
+              *ngIf="selectPositions.focused"
+              [placeholder]="'Buscar'"
+              [array]="positions"
+              [displayMember]="'text'"
+              (filteredReturn)="filteredPosition = $event"
+            ></mat-select-filter>
+            <mat-option
               *ngFor="let position of filteredPosition"
               [value]="position.value"
               >{{ position.text }}</mat-option
@@ -482,7 +479,6 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Salario</mat-label>
           <input
-
             class="text-right"
             formControlName="salary"
             matInput
@@ -496,9 +492,7 @@
       </div>
       <div class="row">
         <mat-form-field class="col" appearance="outline">
-          <mat-label for="Aplica_Separacion_Categorias"
-            >Turno</mat-label
-          >
+          <mat-label for="Aplica_Separacion_Categorias">Turno</mat-label>
           <mat-select
             formControlName="turn_type"
             placeholder="Tipos de turno"
@@ -512,8 +506,14 @@
             >
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col" appearance="outline" *ngIf="turnSelected == 'Fijo'">
-          <mat-label for="Aplica_Separacion_Categorias">Turno asignado</mat-label>
+        <mat-form-field
+          class="col"
+          appearance="outline"
+          *ngIf="turnSelected == 'Fijo'"
+        >
+          <mat-label for="Aplica_Separacion_Categorias"
+            >Turno asignado</mat-label
+          >
           <mat-select formControlName="turn_id" placeholder="Turno" required>
             <mat-option *ngFor="let turno of listaTurnos" [value]="turno.id">{{
               turno.name | uppercase
@@ -551,7 +551,11 @@
             La fecha de finalización debe ser posterior a <strong>{{ dateMin }}</strong>
           </mat-error> -->
         </mat-form-field>
-         <mat-form-field class="col-4" appearance="outline" *ngIf="formContrato.get('date_end').enabled">
+        <mat-form-field
+          class="col-4"
+          appearance="outline"
+          *ngIf="formContrato.get('date_end').enabled"
+        >
           <mat-label>Fecha de finalización</mat-label>
           <input
             matInput

@@ -38,14 +38,6 @@ export class CotizacionComponent implements OnInit {
   count_anulada = 0;
   orderObj: any
   paginacion: any
-  filters = {
-    date: '',
-    city: '',
-    code: '',
-    client: '',
-    description: '',
-    status: '',
-  }
   paginationMaterial: any;
   pagination: any = {
     page: '',
@@ -83,7 +75,7 @@ export class CotizacionComponent implements OnInit {
         if (params.params.pageSize) {
           this.pagination.pageSize = params.params.pageSize
         } else {
-          this.pagination.pageSize = 100
+          this.pagination.pageSize = localStorage.getItem('paginationItemsQuotation') || 100
         }
         if (params.params.pag) {
           this.pagination.page = params.params.pag
@@ -163,7 +155,8 @@ export class CotizacionComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination)
+    this._paginator.handlePageEvent(event, this.pagination);
+    localStorage.setItem('paginationItemsQuotation', this.pagination.pageSize);
     this.getQuotation()
   }
 

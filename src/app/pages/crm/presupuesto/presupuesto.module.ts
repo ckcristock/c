@@ -52,7 +52,10 @@ import { MatDatepickerModule } from "@angular/material";
     MatPaginatorModule,
     MatDatepickerModule
   ],
-  exports: [AutoFocusDirectiveDirective],
+  exports: [
+    AutoFocusDirectiveDirective,
+    CrearPresupuestoComponent
+  ],
 })
 
 export class PresupuestoModule { }

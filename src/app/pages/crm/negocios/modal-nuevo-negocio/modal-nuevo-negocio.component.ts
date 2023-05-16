@@ -9,6 +9,9 @@ import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/pe
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { QuotationService } from '../../cotizacion/quotation.service';
 import { NegociosService } from '../negocios.service';
+import { ModalNoCloseService } from 'src/app/core/services/modal-no-close.service';
+import { ApuConjuntoService } from '../../apu-conjunto/apu-conjunto.service';
+import { BudgetService } from '../../presupuesto/budget.service';
 
 @Component({
   selector: 'app-modal-nuevo-negocio',
@@ -31,9 +34,6 @@ export class ModalNuevoNegocioComponent implements OnInit {
   business_id: any;
   contacts: any[];
   form: FormGroup;
-  formFiltersBudgets: FormGroup;
-  loadingBudgets: boolean;
-  loadingQuotations: boolean;
   budgetsSelected: any[] = [];
   quotationSelected: any[] = [];
   apuSelected: any[] = [];
@@ -41,31 +41,21 @@ export class ModalNuevoNegocioComponent implements OnInit {
   budgets: any[] = [];
   loading: boolean = false;
   cities: any[] = [];
+  preDataSend = {};
   types: any[] = [];
-  people: any[] = []
   countries: any[];
-  paginationBudgets: any = {
-    page: 1,
-    pageSize: 10,
-    collectionSize: 0
-  }
-  paginationQuotations: any = {
-    page: 1,
-    pageSize: 10,
-    collectionSize: 0
-  }
-  form_filters_quotations: FormGroup;
   reload: boolean;
   constructor(
-    private _modal: ModalService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private _negocios: NegociosService,
     private _quotation: QuotationService,
+    private _budget: BudgetService,
     private _swal: SwalService,
     private _user: UserService,
-    private _person: PersonService,
     private router: Router,
+    private _apuConjunto: ApuConjuntoService,
+    private _modal: ModalNoCloseService,
     public _consecutivos: ConsecutivosService,
   ) {
     this.id = this._user.user.person.id;
@@ -75,11 +65,8 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this.datosCabecera.Fecha = new Date().toString();
     this.datosCabecera.Titulo = 'Nuevo negocio';
     this.createForm();
-    this.createFormFiltersBudgets();
-    this.createFormFiltersQuotations();
     this.getCompanies();
     this.getCities();
-    this.getPeople();
     this.getTypes();
     this.getContacts();
     this.route.paramMap.subscribe(params => {
@@ -93,8 +80,46 @@ export class ModalNuevoNegocioComponent implements OnInit {
     }
   }
 
-  getTypes() {
-    this._negocios.indexType().subscribe((res: any) => {
+  addBudget(e) {
+    let cont = 0;
+    e.forEach(element => {
+      if (!this.budgetsSelected.some(bud => bud.id == element.id)) {
+        this.budgetsSelected.push(element)
+      } else {
+        cont++;
+      }
+    });
+    if (cont > 0) {
+      this._swal.show({
+        icon: 'info',
+        title: 'Alerta',
+        text: 'Algunos presupuestos no fueron agregados porque ya se encuentran en la lista.',
+        showCancel: false
+      })
+    }
+  }
+
+  addQuotation(e) {
+    let cont = 0;
+    e.forEach(element => {
+      if (!this.quotationSelected.some(quot => quot.id == element.id)) {
+        this.quotationSelected.push(element)
+      } else {
+        cont++;
+      }
+    });
+    if (cont > 0) {
+      this._swal.show({
+        icon: 'info',
+        title: 'Alerta',
+        text: 'Algunas cotizaciones no fueron agregadas porque ya se encuentran en la lista.',
+        showCancel: false
+      })
+    }
+  }
+
+  async getTypes() {
+    await this._negocios.indexType().toPromise().then((res: any) => {
       this.types = res.data;
     })
   }
@@ -103,13 +128,18 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this.reload = true;
     this.getCompanies();
     this.getCities();
-    this.getTypes();
-    await this.getPeople();
+    await this.getTypes();
     this.reload = false
   }
 
-  openModal() {
-    //this._modal.open(this.newBusiness, 'xl')
+  openModal(content) {
+    this.preDataSend = {
+      text: 'Llenar',
+      city_id: this.form.get('city_id').value,
+      third_party_id: this.form.get('third_party_id').value,
+      third_party_person_id: this.form.get('third_party_person_id').value,
+    }
+    this._modal.openNoClose(content, 'xl')
   }
 
   getBusiness(id) {
@@ -137,11 +167,21 @@ export class ModalNuevoNegocioComponent implements OnInit {
   }
 
   getApus(e: any[]) {
+    let cont = 0;
     e.forEach(apu => {
-      const exist = this.apuSelected.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
-      !exist ?
-        this.apuSelected.push(apu) :
-        this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
+      if (!this.apuSelected.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))) {
+        this.apuSelected.push(apu)
+      } else {
+        cont++;
+      }
+      if (cont > 0) {
+        this._swal.show({
+          icon: 'info',
+          title: 'Alerta',
+          text: 'Algunos APU no fueron agregados porque ya se encuentran en la lista.',
+          showCancel: false
+        })
+      }
     });
   }
 
@@ -159,6 +199,16 @@ export class ModalNuevoNegocioComponent implements OnInit {
   deleteApu(item) {
     let id = this.apuSelected.indexOf(item)
     this.apuSelected.splice(id, 1)
+  }
+
+  deleteBudget(item) {
+    let id = this.budgetsSelected.indexOf(item)
+    this.budgetsSelected.splice(id, 1)
+  }
+
+  deleteQuotation(item) {
+    let id = this.quotationSelected.indexOf(item)
+    this.quotationSelected.splice(id, 1)
   }
 
   getConsecutivo() {
@@ -201,13 +251,6 @@ export class ModalNuevoNegocioComponent implements OnInit {
     }
   }
 
-  async getPeople() {
-    await this._person.getPeopleIndex().toPromise().then((res: any) => {
-      this.people = res.data
-      this.people.unshift({ text: 'Todos ', value: '' });
-    })
-  }
-
   createForm() {
     this.form = this.fb.group({
       id: [],
@@ -225,48 +268,9 @@ export class ModalNuevoNegocioComponent implements OnInit {
     });
 
     this.form.get('third_party_id').valueChanges.subscribe(value => {
-      this.getBudgets(1, value);
-      this.getQuotations(1, value);
       this.form.get('third_party_person_id').reset()
     })
   }
-
-  createFormFiltersQuotations() {
-    this.form_filters_quotations = this.fb.group({
-      city: '',
-      code: '',
-      client: '',
-      description: '',
-      line: '',
-    })
-    this.form_filters_quotations.valueChanges.pipe(
-      debounceTime(500),
-    ).subscribe(r => {
-      this.getQuotations();
-    })
-  }
-
-  /* getCountries() {
-    this._negocios.getCountries().subscribe((data: any) => {
-      this.countries = data.data;
-    });
-  } */
-
-  /* filterDepartments(id) {
-    this.cities = []
-    this.countries.forEach(country => {
-      if (country.id == id) {
-        country.departments.forEach(department => {
-          department.municipalities.forEach(municipality => {
-            this.cities.push(municipality)
-          });
-        });
-      }
-    });
-    this.cities.sort((a, b) =>
-      ('' + a.text).localeCompare(b.text)
-    )
-  } */
 
   async getCities() {
     await this._negocios.getMunicipalities().toPromise().then((r: any) => {
@@ -289,83 +293,6 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this._negocios.getThirdPartyPersonIndex().subscribe((resp: any) => {
       this.contacts = resp.data;
     });
-  }
-
-  createFormFiltersBudgets() {
-    this.formFiltersBudgets = this.fb.group({
-      code: '',
-      date: '',
-      customer: '',
-      municipality_id: '',
-      line: '',
-      person_id: ''
-    })
-    this.formFiltersBudgets.valueChanges
-      .pipe(debounceTime(500)).subscribe(r => this.getBudgets())
-  }
-
-  getBudgets(page = 1, id = '') {
-    this.loadingBudgets = true
-    this.budgetsSelected = []
-    this.paginationBudgets.page = page;
-    let params = {
-      ...this.paginationBudgets,
-      ...this.formFiltersBudgets.value,
-      third_party_id: id
-    }
-    this._negocios.getBudgets(params).subscribe((resp: any) => {
-      this.budgets = resp.data.data;
-      this.loadingBudgets = false
-      this.paginationBudgets.collectionSize = resp.data.total;
-    });
-  }
-
-  getQuotations(page = 1, id = '') {
-    this.quotationSelected = []
-    this.loadingQuotations = true
-    this.paginationQuotations.page = page;
-    let params = {
-      ...this.paginationQuotations,
-      ...this.form_filters_quotations.value,
-      third_party_id: id
-    }
-    this._quotation.getQuotations(params).subscribe((res: any) => {
-      this.quotations = res.data.data;
-      this.loadingQuotations = false;
-      this.paginationQuotations.collectionSize = res.data.total;
-    })
-  }
-  // if (this.budgetsSelected.includes(value)) {
-  //   this.budgetsSelected = this.budgetsSelected.filter(
-  //     (data) => data !== value
-  //     );
-  //   return;
-  // }
-  // this.budgetsSelected.push(value);
-  // return;
-
-  guardarPresupuesto(event, item) {
-    if (event.checked) {
-      this.budgetsSelected.push((item));
-    } else {
-      this.budgetsSelected = this.budgetsSelected.filter((selected) => {
-        return selected.id !== event.source.id
-      });
-    }
-
-  }
-  guardarCotizacion(event, item) {
-    if (event.checked) {
-      this.quotationSelected.push(item);
-    } else {
-      this.quotationSelected = this.quotationSelected.filter((selected) => {
-        return selected.id !== event.source.id
-      });
-    }
-  }
-
-  openClose(matPanel) {
-    matPanel.toggle();
   }
 
   saveBusiness() {
@@ -413,6 +340,41 @@ export class ModalNuevoNegocioComponent implements OnInit {
       text: 'Se ha ' + (this.business_id ? 'actualizado' : 'creado') + ' el negocio',
       timer: 1000,
       showCancel: false
+    })
+  }
+
+  addApuPieza(apu) {
+    this._modal.close();
+    this._apuConjunto.getApuPartToAdd(apu.id).subscribe((res: any) => {
+      this.getApus(res.data)
+    })
+  }
+
+  addNewAPUConjunto(apu) {
+    this._modal.close();
+    this._apuConjunto.getApuSetToAdd(apu.id).subscribe((res: any) => {
+      this.getApus(res.data)
+    })
+  }
+
+  addNewAPUServicio(apu) {
+    this._modal.close();
+    this._apuConjunto.getApuServiceToAdd(apu.id).subscribe((res: any) => {
+      this.getApus(res.data)
+    })
+  }
+
+  addNewBudget(pre) {
+    this._modal.close();
+    this._budget.getBudgetToAdd(pre.id).subscribe((res: any) => {
+      this.budgetsSelected.push(res.data)
+    })
+  }
+
+  addNewQuotation(quot) {
+    this._modal.close();
+    this._quotation.getQuotationToAdd(quot.id).subscribe((res: any) => {
+      this.quotationSelected.push(res.data)
     })
   }
 

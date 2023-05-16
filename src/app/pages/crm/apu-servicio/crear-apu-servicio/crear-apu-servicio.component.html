@@ -2576,7 +2576,11 @@
         </div>
       </div>
     </div>
-    <button class="btn btn-block btn-primary mb-3" (click)="save()">
+    <button
+      class="btn btn-block btn-primary mb-3"
+      *ngIf="!preData"
+      (click)="save()"
+    >
       Guardar
     </button>
   </form>

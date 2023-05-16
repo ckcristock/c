@@ -13,7 +13,8 @@ import {
   NgbTooltipModule,
   NgbTypeaheadModule,
   NgbPopoverModule,
-  NgbCarouselModule
+  NgbCarouselModule,
+  NgbModule
 } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -94,6 +95,10 @@ import { MontajeEquiposContratistaComponent } from './apu-servicio/ver-apu-servi
 import { ValidacionDimensionalContratistaComponent } from './apu-servicio/ver-apu-servicio/validacion-dimensional-contratista/validacion-dimensional-contratista.component';
 import { NgxCurrencyModule } from "ngx-currency";
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
+import { ModalBuscarPresupuestoComponent } from './negocios/modal-buscar-presupuesto/modal-buscar-presupuesto.component';
+import { ModalBuscarCotizacionComponent } from './negocios/modal-buscar-cotizacion/modal-buscar-cotizacion.component';
+import { CotizacionModule } from './cotizacion/cotizacion.module';
+import { PresupuestoModule } from './presupuesto/presupuesto.module';
 
 export const MY_FORMATS = {
   parse: {
@@ -155,6 +160,8 @@ export const MY_FORMATS = {
     AcompanamientoContratistaComponent,
     MontajeEquiposContratistaComponent,
     ValidacionDimensionalContratistaComponent,
+    ModalBuscarPresupuestoComponent,
+    ModalBuscarCotizacionComponent,
   ],
   providers: [
     {
@@ -214,7 +221,10 @@ export const MY_FORMATS = {
     MatBottomSheetModule,
     MatSelectFilterModule,
     NgbCarouselModule,
-    NgxCurrencyModule
+    NgxCurrencyModule,
+    CotizacionModule,
+    PresupuestoModule,
+    NgbModule
   ]
 })
 export class CrmModule { }

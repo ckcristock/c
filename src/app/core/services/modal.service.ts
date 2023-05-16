@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
 @Injectable({
   providedIn: 'root'
 })
@@ -9,6 +9,7 @@ export class ModalService {
 
   constructor(
     private modalService: NgbModal,
+    /* private activeModal: NgbActiveModal, */
     config: NgbModalConfig,
   ) {
     config.backdrop = true;
@@ -21,6 +22,11 @@ export class ModalService {
     this.modalService.dismissAll();
     /* this.modalRef.dismiss(this.modalRef); */
   }
+
+  /*  closeOne() {
+     this.activeModal.close();
+   } */
+
   openSm(content) {
     this.modalService.open(content, { size: 'sm' });
   }

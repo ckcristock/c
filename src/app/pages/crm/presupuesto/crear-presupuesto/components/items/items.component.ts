@@ -231,7 +231,8 @@ export class ItemsComponent implements OnInit {
     this.forma.patchValue({ itemsTodelete: this.itemsTodelete })
 
     this.items.removeAt(pos)
-    this.recalculateTotals()
+    this.recalculateTotals();
+    this.updateTotals('value_cop', 'total_cop');
   }
 
   recalculateTotals() {

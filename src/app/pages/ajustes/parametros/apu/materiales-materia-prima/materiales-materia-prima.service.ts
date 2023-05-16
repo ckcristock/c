@@ -15,15 +15,15 @@ export class MaterialesMateriaPrimaService {
     return this.http.get(`${environment.base_url}/paginateRawMaterialMaterial`, { params });
   }
 
-  getRawMaterialMaterialsIndex() {
-    return this.http.get(`${environment.base_url}/raw-material-material`);
+  getRawMaterialMaterialsIndex(params = {}) {
+    return this.http.get(`${environment.base_url}/raw-material-material`, { params });
   }
 
-  save( data:any ){
+  save(data: any) {
     return this.http.post(`${environment.base_url}/raw-material-material`, data);
   }
 
-  update( data, id ){
+  update(data, id) {
     return this.http.put(`${environment.base_url}/raw-material-material/${id}`, data);
   }
 }

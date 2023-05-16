@@ -176,45 +176,45 @@
                       {{ i + 1 }}
                     </td>
                     <td class="align-middle">
-                      <select
-                        name=""
-                        class="form-control form-control-sm form-control-edit"
+                      <ng-select
                         formControlName="geometry_id"
+                        [items]="geometries"
+                        bindLabel="text"
+                        [class.is-invalid]="item.get('geometry_id')?.invalid"
+                        appearance="outline"
+                        class="in-table"
+                        [appendTo]="'body'"
+                        [clearable]="false"
+                        notFoundText="Sin resultados"
+                        bindValue="value"
+                        (search)="getGeometries($event)"
+                        loadingText="loading"
                       >
-                        <option value="" disabled selected hidden>
-                          Selecciona
-                        </option>
-                        <option
-                          *ngFor="let item of geometries"
-                          [value]="item?.value"
-                        >
-                          {{ item?.text }}
-                        </option>
-                      </select>
+                      </ng-select>
                     </td>
                     <td class="align-middle p-0">
                       <img
                         [src]="item?.controls?.image?.value"
                         class="img-fluid img-geometry"
-                        onerror="this.src='../../../../../assets/images/nofound.png'"
+                        onerror="this.src='../../../../../assets/images/product.jpg'"
                       />
                     </td>
                     <td class="align-middle">
-                      <select
-                        name=""
-                        class="form-control form-control-sm form-control-edit"
+                      <ng-select
                         formControlName="material_id"
+                        [items]="commercialMaterials"
+                        bindLabel="text"
+                        [class.is-invalid]="item.get('material_id')?.invalid"
+                        appearance="outline"
+                        class="in-table"
+                        [appendTo]="'body'"
+                        [clearable]="false"
+                        notFoundText="Sin resultados"
+                        bindValue="id"
+                        (search)="getCommercialMaterials($event)"
+                        loadingText="loading"
                       >
-                        <option value="" disabled selected hidden>
-                          Selecciona
-                        </option>
-                        <option
-                          *ngFor="let item of commercialMaterials"
-                          [value]="item?.id"
-                        >
-                          {{ item?.text }}
-                        </option>
-                      </select>
+                      </ng-select>
                     </td>
                     <ng-container formArrayName="measures">
                       <ng-container
@@ -318,22 +318,21 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <select
-                      name=""
-                      class="form-control form-control-sm form-control-edit"
-                      id="material_materiales"
+                    <ng-select
                       formControlName="material_id"
+                      [items]="materialsIndex"
+                      bindLabel="text"
+                      [class.is-invalid]="item.get('material_id')?.invalid"
+                      appearance="outline"
+                      class="in-table"
+                      [appendTo]="'body'"
+                      [clearable]="false"
+                      notFoundText="Sin resultados"
+                      bindValue="id"
+                      (search)="getMaterialsFull($event)"
+                      loadingText="loading"
                     >
-                      <option value="" disabled selected hidden>
-                        Selecciona
-                      </option>
-                      <option
-                        *ngFor="let item of materialsIndex"
-                        [value]="item?.id"
-                      >
-                        {{ item?.text }}
-                      </option>
-                    </select>
+                    </ng-select>
                   </td>
                   <td class="align-middle">
                     <select
@@ -353,7 +352,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney?.maskNumbers"
+                      [options]="masksMoney?.maskNumbers2Decimal"
                       class="form-control form-control-sm form-control-edit"
                       id="q_unitaria_materiales"
                       formControlName="q_unit"
@@ -459,20 +458,21 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <select
-                      name=""
-                      class="form-control form-control-sm form-control-edit"
-                      style="width: 9rem"
-                      id="material_corte_agua"
+                    <ng-select
                       formControlName="material_id"
+                      [items]="materials"
+                      bindLabel="text"
+                      [class.is-invalid]="item.get('material_id')?.invalid"
+                      appearance="outline"
+                      class="in-table"
+                      [appendTo]="'body'"
+                      [clearable]="false"
+                      notFoundText="Sin resultados"
+                      bindValue="id"
+                      (search)="getMaterials($event)"
+                      loadingText="loading"
                     >
-                      <option value="" disabled selected hidden>
-                        Selecciona
-                      </option>
-                      <option *ngFor="let item of materials" [value]="item?.id">
-                        {{ item?.text }}
-                      </option>
-                    </select>
+                    </ng-select>
                   </td>
                   <td class="align-middle">
                     <select
@@ -495,7 +495,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney?.maskNumbers"
+                      [options]="masksMoney?.maskNumbers3Decimal"
                       class="form-control form-control-sm form-control-edit"
                       id="cantidad_corte_agua"
                       formControlName="amount"
@@ -505,7 +505,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney?.maskNumbers"
+                      [options]="masksMoney?.maskNumbers3Decimal"
                       class="form-control form-control-sm form-control-edit"
                       id="largo_corte_agua"
                       formControlName="long"
@@ -515,7 +515,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney?.maskNumbers"
+                      [options]="masksMoney?.maskNumbers3Decimal"
                       class="form-control form-control-sm form-control-edit"
                       id="ancho_corte_agua"
                       formControlName="width"
@@ -528,7 +528,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney?.maskNumbers"
+                      [options]="masksMoney?.maskNumbers3Decimal"
                       class="form-control form-control-sm form-control-edit"
                       id="cantidad_corte_corte_agua"
                       formControlName="amount_cut"
@@ -538,7 +538,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney?.maskNumbers"
+                      [options]="masksMoney?.maskNumbers3Decimal"
                       class="form-control form-control-sm form-control-edit"
                       id="diametro_corte_corte_agua"
                       formControlName="diameter"
@@ -651,23 +651,23 @@
                     {{ i + 1 }}
                   </td>
                   <td class="text-center">
-                    <select
-                      name=""
-                      class="form-control form-control-sm form-control-edit"
-                      id="material_corte_laser"
-                      style="width: 9rem"
+                    <ng-select
                       formControlName="cut_laser_material_id"
+                      [items]="cutLaserMaterials"
+                      bindLabel="name"
+                      [class.is-invalid]="
+                        item.get('cut_laser_material_id')?.invalid
+                      "
+                      appearance="outline"
+                      class="in-table"
+                      [appendTo]="'body'"
+                      [clearable]="false"
+                      notFoundText="Sin resultados"
+                      bindValue="id"
+                      (search)="getCutLaserMaterial($event)"
+                      loadingText="loading"
                     >
-                      <option value="" disabled selected hidden>
-                        Selecciona
-                      </option>
-                      <option
-                        *ngFor="let item of cutLaserMaterials"
-                        [value]="item?.id"
-                      >
-                        {{ item?.name }}
-                      </option>
-                    </select>
+                    </ng-select>
                   </td>
                   <td class="text-center">
                     <select
@@ -689,7 +689,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney?.maskNumbers"
+                      [options]="masksMoney?.maskNumbers3Decimal"
                       class="form-control form-control-sm form-control-edit"
                       id="cantidad_corte_laser"
                       formControlName="sheets_amount"
@@ -699,7 +699,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney?.maskNumbers"
+                      [options]="masksMoney?.maskNumbers3Decimal"
                       class="form-control form-control-sm form-control-edit"
                       id="largo_corte_laser"
                       formControlName="long"
@@ -709,7 +709,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney?.maskNumbers"
+                      [options]="masksMoney?.maskNumbers3Decimal"
                       class="form-control form-control-sm form-control-edit"
                       id="ancho_corte_laser"
                       formControlName="width"
@@ -722,7 +722,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney?.maskNumbers"
+                      [options]="masksMoney?.maskNumbers3Decimal"
                       class="form-control form-control-sm form-control-edit"
                       id="cantidad_agujeros_corte_laser"
                       formControlName="amount_holes"
@@ -732,7 +732,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney?.maskNumbers"
+                      [options]="masksMoney?.maskNumbers3Decimal"
                       class="form-control form-control-sm form-control-edit"
                       id="diametro_corte_corte_laser"
                       formControlName="diameter"
@@ -1155,7 +1155,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney?.maskNumbers"
+                      [options]="masksMoney?.maskNumbers2Decimal"
                       class="form-control form-control-sm"
                       id="q_unitaria_otros"
                       formControlName="q_unit"

@@ -89,7 +89,7 @@ export class PresupuestosComponent implements OnInit {
         if (params.params.pageSize) {
           this.pagination.pageSize = params.params.pageSize
         } else {
-          this.pagination.pageSize = 100
+          this.pagination.pageSize = localStorage.getItem('paginationItemsBudget') || 100
         }
         if (params.params.pag) {
           this.pagination.page = params.params.pag
@@ -157,7 +157,8 @@ export class PresupuestosComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination)
+    this._paginator.handlePageEvent(event, this.pagination);
+    localStorage.setItem('paginationItemsBudget', this.pagination.pageSize)
     this.getBudgets()
   }
 

@@ -2,6 +2,7 @@ import { PlatformLocation } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime } from 'rxjs/operators';
 import { ModalNoCloseService } from 'src/app/core/services/modal-no-close.service';
 import { ModalService } from 'src/app/core/services/modal.service';
@@ -23,6 +24,7 @@ export class GetBudgetsComponent implements OnInit {
   people: any[] = [];
   dateMat = '';
   form_filters: FormGroup;
+  modalRef: NgbModalRef;
   pagination = {
     page: 1,
     pageSize: 10,
@@ -37,13 +39,22 @@ export class GetBudgetsComponent implements OnInit {
     private _swal: SwalService,
     private fb: FormBuilder,
     private _person: PersonService,
+    private modalService: NgbModal
   ) { }
+
   ngOnInit(): void {
     this.href = (this.platformLocation as any).location.origin;
   }
 
   openModal() {
-    this._modal.openNoClose(this.modal, 'xl');
+    this.modalRef = this.modalService.open(this.modal,
+      {
+        ariaLabelledBy: 'modal-basic-title',
+        size: 'xl',
+        scrollable: true,
+        backdrop: 'static',
+        keyboard: false,
+      });
     this.createFormFilters();
     this.getBudgets();
     this.getPeople();
@@ -106,7 +117,8 @@ export class GetBudgetsComponent implements OnInit {
 
   send() {
     this.sendBudget.emit(this.selectedOption)
-    this._modal.close();
+    this.modalRef.dismiss();
+    //this._modal.close();
   }
 
 }

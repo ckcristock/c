@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApuPiezaService } from '../../apu-pieza/apu-pieza.service';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { concat, Observable, of, Subject } from 'rxjs';
@@ -20,6 +20,8 @@ export class CrearPresupuestoComponent implements OnInit {
   @Input('id') id;
   @Input('dataEdit') dataEdit;
   @Input('title') title = 'Nuevo presupuesto';
+  @Input('preData') preData = undefined;
+  @Output() saveForBusiness = new EventEmitter;
 
   indirectCosts: any = [];
   custumer$: Observable<any>;
@@ -64,6 +66,13 @@ export class CrearPresupuestoComponent implements OnInit {
     await this.getIndirectCosts();
     await this.getCities();
     this.getConsecutivo();
+    if (this.preData) {
+      console.log(this.preData)
+      this.forma?.patchValue({
+        destinity_id: this.preData?.city_id,
+        customer_id: this.preData?.third_party_id,
+      })
+    }
     this.loading = false;
   }
 
@@ -291,14 +300,20 @@ export class CrearPresupuestoComponent implements OnInit {
           icon: 'success',
           showCancel: false
         })
-        this.router.navigate(['crm/presupuesto'])
+        if (!this.preData) {
+          this.router.navigate(['crm/presupuesto'])
+        }
       }
     })
   }
 
   saveData = () => {
     const data = this.forma.value;
-    this._budget.save({ data }).subscribe(r => { })
+    this._budget.save({ data }).subscribe((res: any) => {
+      if (this.preData) {
+        this.saveForBusiness.emit(res.data)
+      }
+    })
   }
 
   updateData = () => {

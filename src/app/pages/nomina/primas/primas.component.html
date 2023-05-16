@@ -7,16 +7,17 @@
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
           <button
-           class="btn btn-sm btn-primary"
-           *ngIf="habilitarPagar"
-           (click)="openConfirm()"
-           ><i class="fas fa-money-bill"></i> Generar prima
+            class="btn btn-sm btn-primary"
+            *ngIf="habilitarPagar"
+            (click)="openConfirm()"
+          >
+            <i class="fas fa-money-bill"></i> Generar prima
           </button>
         </div>
       </div>
     </div>
     <hr class="line" />
-    <ng-container *ngIf="!habilitarPagar" >
+    <ng-container *ngIf="!habilitarPagar">
       <div class="alert alert-danger text-center" role="alert">
         Solo podrá pagar primas en los meses de Junio y en Diciembre
       </div>
@@ -43,7 +44,7 @@
             <td>{{ item.payment_date }}</td>
             <td>{{ item.payer_fullname }}</td>
             <td class="text-capitalize">{{ item.status }}</td>
-            <td>$ {{ item.total_bonuses | currency: "":"" }}</td>
+            <td>$ {{ item.total_bonuses | currency : "" : "" }}</td>
             <td>{{ item.total_employees }}</td>
             <td>
               <button
@@ -53,7 +54,7 @@
                 ngbTooltip="Ver"
               >
                 <span aria-hidden="true">
-                  <i class="far fa-eye fa-sm"></i>
+                  <i class="fas fa-eye fa-sm"></i>
                 </span>
               </button>
             </td>
@@ -73,7 +74,6 @@
       [(page)]="pagination.page"
       aria-label="Default pagination"
     >
-
     </ngb-pagination>
   </div>
 </div>

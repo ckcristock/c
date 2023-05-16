@@ -1,5 +1,8 @@
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
 <div class="card">
-  <div class="card-body" *ngIf="data && !loading; else notData2">
+  <div class="card-body" *ngIf="data && !loading; else placeholder">
     <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
     <hr class="line" />
     <div class="d-flex justify-content-end mb-2">
@@ -125,8 +128,4 @@
 
 <ng-template #notData>
   <div class="alert alert-warning" role="alert">¡Aquí no hay datos!</div>
-</ng-template>
-
-<ng-template #notData2>
-  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

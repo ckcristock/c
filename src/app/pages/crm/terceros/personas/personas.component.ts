@@ -79,7 +79,7 @@ export class PersonasComponent implements OnInit {
           if (params.params.pageSize) {
             this.pagination.pageSize = params.params.pageSize
           } else {
-            this.pagination.pageSize = 100
+            this.pagination.pageSize = localStorage.getItem('paginationItemsThirdPartyPeople') || 100
           }
           if (params.params.pag) {
             this.pagination.page = params.params.pag
@@ -181,7 +181,8 @@ export class PersonasComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination)
+    this._paginator.handlePageEvent(event, this.pagination);
+    localStorage.setItem('paginationItemsThirdPartyPeople', this.pagination.pageSize)
     this.getPerson()
   }
 

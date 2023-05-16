@@ -4,11 +4,11 @@
     <i class="fas fa-plus"></i>
   </button>
 </div>
-<div class="rounded-top table-responsive" *ngIf="!loading && bonu.length > 0; else notData">
-  <table
-    class="table table-bordered table-striped table-sm"
-    
-  >
+<div
+  class="rounded-top table-responsive"
+  *ngIf="!loading && bonu.length > 0; else notData"
+>
+  <table class="table table-bordered table-striped table-sm">
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
         <th scope="col">Tipo de bono</th>
@@ -30,7 +30,7 @@
             *ngIf="bon.status == 1"
             (click)="anular(bon, 0)"
           >
-            <i class="far fa-trash-alt"></i>
+            <i class="fas fa-trash-alt"></i>
           </button>
         </td>
       </tr>
@@ -58,7 +58,8 @@
           <mat-label>Tipo de bono</mat-label>
           <mat-select
             (selectionChange)="getBonusList($event.value)"
-            id="type_of_bonus" required
+            id="type_of_bonus"
+            required
           >
             <mat-option
               *ngFor="let bonusType of bonusTypes"
@@ -106,13 +107,9 @@
             required
             autocomplete="off"
           />
-          <mat-error  *ngIf="value_valid">
-            Campo obligatorio
-          </mat-error>
+          <mat-error *ngIf="value_valid"> Campo obligatorio </mat-error>
         </mat-form-field>
-        
       </div>
-      
     </form>
   </div>
   <div class="modal-footer">
@@ -137,4 +134,3 @@
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
-

@@ -156,11 +156,11 @@
                   (person.third_party
                     ? person.third_party.full_name
                     : "Sin tercero"
-                  ) | titlecase
+                  ) | uppercase
                 }}
               </td>
               <td class="align-middle" *ngIf="checkTelefono">
-                {{ person.cell_phone || "No disponible" }}
+                {{ person.cell_phone || "N.D" }}
               </td>
               <td class="align-middle" *ngIf="checkEmail">
                 {{ person.email | lowercase }}

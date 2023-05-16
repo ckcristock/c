@@ -29,6 +29,7 @@ export class UserService {
   guardarLocalStorage(token: string) {
     localStorage.setItem('token', token);
   }
+
   validarToken(): Observable<boolean> {
     return this.http.get(`${base_url}/auth/renew`, {}).pipe(
       map((resp: any) => {
@@ -47,7 +48,6 @@ export class UserService {
 
   logout() {
     localStorage.removeItem('token');
-
     this.router.navigateByUrl('/login');
     window.location.reload();
   }

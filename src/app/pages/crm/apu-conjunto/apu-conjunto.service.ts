@@ -71,4 +71,12 @@ export class ApuConjuntoService {
     return this.http.get(`${environment.base_url}/get-apu-part-to-add-in-set/${id}`);
   }
 
+  getApuSetToAdd(id) {
+    return this.http.get(`${environment.base_url}/get-apu-set-to-add/${id}`);
+  }
+
+  getApuServiceToAdd(id) {
+    return this.http.get(`${environment.base_url}/get-apu-service-to-add/${id}`);
+  }
+
 }

@@ -9,47 +9,51 @@
           <h6 class="text-primary">Seguimiento</h6>
         </div>
         <div class="card-body pt-0 card-body-edit">
-          <ul class="list-group list-group-flush">
-            <li
-              class="list-group-item px-0"
-              *ngFor="let activity of quotation.activities"
-            >
-              <div class="d-flex w-100 justify-content-between">
-                <div>
-                  <h6 class="mb-0">
-                    <span
-                      class="badge"
-                      [class]="
-                        activity.status == 'Creación'
-                          ? 'badge-info'
-                          : activity.status == 'Edición'
-                          ? 'badge-warning'
-                          : activity.status == 'Anulación'
-                          ? 'badge-danger'
-                          : activity.status == 'Aprobación'
-                          ? 'badge-success '
-                          : activity.status == 'Devuelta'
-                          ? 'badge-primary '
-                          : ''
-                      "
-                    >
-                      {{ activity.status }}</span
-                    >
-                  </h6>
-                  <p class="mb-1">{{ activity.title }}</p>
-                  <small>{{ activity.created_at | date }}</small>
-                  <small class="d-block">{{
-                    activity.person.full_names
-                  }}</small>
+          <ng-container
+            *ngIf="quotation?.activities?.length > 0; else notDataActivities"
+          >
+            <ul class="list-group list-group-flush">
+              <li
+                class="list-group-item px-0"
+                *ngFor="let activity of quotation?.activities"
+              >
+                <div class="d-flex w-100 justify-content-between">
+                  <div>
+                    <h6 class="mb-0">
+                      <span
+                        class="badge"
+                        [class]="
+                          activity?.status == 'Creación'
+                            ? 'badge-info'
+                            : activity?.status == 'Edición'
+                            ? 'badge-warning'
+                            : activity?.status == 'Anulación'
+                            ? 'badge-danger'
+                            : activity?.status == 'Aprobación'
+                            ? 'badge-success '
+                            : activity?.status == 'Devuelta'
+                            ? 'badge-primary '
+                            : ''
+                        "
+                      >
+                        {{ activity?.status }}</span
+                      >
+                    </h6>
+                    <p class="mb-1">{{ activity?.title }}</p>
+                    <small>{{ activity?.created_at | date }}</small>
+                    <small class="d-block">{{
+                      activity?.person?.full_names
+                    }}</small>
+                  </div>
+                  <img
+                    class="d-block img-thumbnail rounded-circle img-fluid header-profile-user"
+                    [src]="activity?.person?.image"
+                    onerror="this.src='../../../../../assets/images/noprofile.png'"
+                  />
                 </div>
-                <img
-                  class="d-block img-thumbnail rounded-circle img-fluid header-profile-user"
-                  [src]="activity.person.image"
-                  onerror="this.src='../../../../../assets/images/noprofile.png'"
-                />
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </ng-container>
         </div>
       </div>
     </div>
@@ -156,7 +160,10 @@
       </div>
       <div class="card">
         <div class="card-body">
-          <div class="rounded-top table-responsive">
+          <div
+            class="rounded-top table-responsive"
+            *ngIf="quotation.items.length > 0; else notItems"
+          >
             <table class="table table-bordered table-striped table-sm">
               <thead class="bg-light">
                 <tr class="text-center text-uppercase">
@@ -269,30 +276,32 @@
             <table class="table table-borderless text-center text-uppercase">
               <thead>
                 <tr>
-                  <td class="p-0">
+                  <td class="p-0" *ngIf="creator">
                     <img
                       class="img-fluid img-firma"
-                      [src]="creator.signature"
+                      [src]="creator?.signature"
                       onerror="this.src='../../../../../assets/images/sinfirma.png'"
                     />
                   </td>
-                  <td class="p-0">
+                  <td class="p-0" *ngIf="approve">
                     <img
                       class="img-fluid img-firma"
-                      [src]="approve.signature"
+                      [src]="approve?.signature"
                       onerror="this.src='../../../../../assets/images/sinfirma.png'"
                     />
                   </td>
                 </tr>
                 <tr>
-                  <th>{{ creator.full_names }}</th>
-                  <th>{{ approve.full_names }}</th>
+                  <th *ngIf="creator">{{ creator?.full_names }}</th>
+                  <th *ngIf="approve">
+                    {{ approve?.full_names || "Sin aprobación" }}
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">Creación</th>
-                  <th scope="row">Aprobación</th>
+                  <th *ngIf="creator" scope="row">Creación</th>
+                  <th *ngIf="approve" scope="row">Aprobación</th>
                 </tr>
               </tbody>
             </table>
@@ -302,6 +311,15 @@
     </div>
   </div>
 </ng-container>
+
 <ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #notItems>
+  <div class="alert alert-warning" role="alert">Cotización sin items</div>
+</ng-template>
+
+<ng-template #notDataActivities>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

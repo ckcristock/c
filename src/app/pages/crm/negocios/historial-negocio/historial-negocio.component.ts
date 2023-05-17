@@ -18,35 +18,35 @@ export class HistorialNegocioComponent implements OnInit {
 
   getHistorial(id) {
     this.loading = true
-    this._negocio.getHistory(id).subscribe((res: any) => {
-      let history = res.data.history;
-      let timeline = res.data.timeline;
+    this._negocio?.getHistory(id)?.subscribe((res: any) => {
+      let history = res?.data?.history;
+      let timeline = res?.data?.timeline;
       let historyAndTimeline = [];
-      history.forEach(function (h) {
+      history?.forEach(function (h) {
         let newObject = {
-          icon: h.icon,
-          title: h.title,
-          description: h.description,
-          created_at: h.created_at,
+          icon: h?.icon,
+          title: h?.title,
+          description: h?.description,
+          created_at: h?.created_at,
           person: {
-            image: h.person.image
+            image: h?.person?.image
           }
         };
-        historyAndTimeline.push(newObject);
+        historyAndTimeline?.push(newObject);
       });
-      timeline.forEach(function (t) {
+      timeline?.forEach(function (t) {
         let newObject = {
-          icon: t.icon,
-          title: t.title,
-          description: t.description,
-          created_at: t.created_at,
+          icon: t?.icon,
+          title: t?.title,
+          description: t?.description,
+          created_at: t?.created_at,
           person: {
-            image: t.person.image
+            image: t?.person?.image
           }
         };
-        historyAndTimeline.push(newObject);
+        historyAndTimeline?.push(newObject);
       });
-      historyAndTimeline.sort((a, b) => Date.parse(a.created_at) - Date.parse(b.created_at)).reverse();
+      historyAndTimeline?.sort((a, b) => Date?.parse(a?.created_at) - Date?.parse(b?.created_at))?.reverse();
       this.historial = historyAndTimeline;
       this.loading = false
     });

@@ -180,7 +180,7 @@ export class PresupuestosComponent implements OnInit {
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/crm/presupuesto', paramsurl.toString());
     this._budget.getAllPaginate(params).subscribe((r: any) => {
-      this.budgets = r.data.data
+      this.budgets = r?.data?.data
       this.loading = false;
       this.paginationMaterial = r.data
       if (this.paginationMaterial.last_page < this.pagination.page) {

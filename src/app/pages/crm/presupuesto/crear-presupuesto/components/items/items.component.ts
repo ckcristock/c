@@ -45,7 +45,7 @@ export class ItemsComponent implements OnInit {
 
   fillData() {
     if (this.dataEdit) {
-      this.dataEdit.items.forEach(item => {
+      this.dataEdit.items?.forEach(item => {
         let itemGroup = this.addItems(item)
         /*  item.subitems.forEach(subItem =>{
            this.addSubItem(itemGroup)
@@ -56,19 +56,19 @@ export class ItemsComponent implements OnInit {
   count = 0;
   subscribeRetention() {
     this.forma.get('destinity_id').valueChanges.subscribe(value => {
-      let data = this.cities.find(c => c.value == value);
+      let data = this.cities?.find(c => c?.value == value);
       if (data) {
-        this.forma.controls.items['controls'].forEach((item) => {
-          item.controls.subItems.controls.forEach((subitem) => {
-            let subtotal = subitem.value.subTotal
-            if (subitem.value.type == 'S') {
-              let retention = (subtotal / ((100 - data.percentage_service) * 0.01)) - subtotal
-              subitem.patchValue({
+        this.forma.controls.items['controls']?.forEach((item) => {
+          item?.controls?.subItems?.controls?.forEach((subitem) => {
+            let subtotal = subitem?.value?.subTotal
+            if (subitem?.value?.type == 'S') {
+              let retention = (subtotal / ((100 - data?.percentage_service) * 0.01)) - subtotal
+              subitem?.patchValue({
                 retention: retention
               })
-            } else if (subitem.value.type == 'P') {
-              let retention = (subtotal / ((100 - data.percentage_product) * 0.01)) - subtotal
-              subitem.patchValue({
+            } else if (subitem?.value?.type == 'P') {
+              let retention = (subtotal / ((100 - data?.percentage_product) * 0.01)) - subtotal
+              subitem?.patchValue({
                 retention: retention
               })
             }
@@ -90,38 +90,37 @@ export class ItemsComponent implements OnInit {
           prorrateo: false
         },
         subItems: this.fb.array([]),
-        id: itemToAdd ? itemToAdd.id : '',
-        name: itemToAdd ? itemToAdd.name : 'ITEM ' + this.count,
-        total_cost: itemToAdd ? itemToAdd.total_cost : 0,
+        id: itemToAdd ? itemToAdd?.id : '',
+        name: itemToAdd ? itemToAdd?.name : 'ITEM ' + this.count,
+        total_cost: itemToAdd ? itemToAdd?.total_cost : 0,
         subtotal_indirect_cost_dynamic: this.makeTotalIndirectCost(),
-        subtotal_indirect_cost: itemToAdd ? itemToAdd.subtotal_indirect_cost : 0,
-        value_amd: itemToAdd ? itemToAdd.value_amd : 0,
-        value_unforeseen: itemToAdd ? itemToAdd.value_unforeseen : 0,
-        value_utility: itemToAdd ? itemToAdd.value_utility : 0,
-        total_amd_imp_uti: itemToAdd ? itemToAdd.total_amd_imp_uti : 0,
-        another_values: itemToAdd ? itemToAdd.another_values : 0,
-        subTotal: itemToAdd ? itemToAdd.subTotal : 0,
-        retention: itemToAdd ? itemToAdd.retention : 0,
-        percentage_sale: itemToAdd ? itemToAdd.percentage_sale : 0,
-        value_cop: itemToAdd ? itemToAdd.value_cop : 0,
-        value_usd: itemToAdd ? itemToAdd.value_usd : 0,
+        subtotal_indirect_cost: itemToAdd ? itemToAdd?.subtotal_indirect_cost : 0,
+        value_amd: itemToAdd ? itemToAdd?.value_amd : 0,
+        value_unforeseen: itemToAdd ? itemToAdd?.value_unforeseen : 0,
+        value_utility: itemToAdd ? itemToAdd?.value_utility : 0,
+        total_amd_imp_uti: itemToAdd ? itemToAdd?.total_amd_imp_uti : 0,
+        another_values: itemToAdd ? itemToAdd?.another_values : 0,
+        subTotal: itemToAdd ? itemToAdd?.subTotal : 0,
+        retention: itemToAdd ? itemToAdd?.retention : 0,
+        percentage_sale: itemToAdd ? itemToAdd?.percentage_sale : 0,
+        value_cop: itemToAdd ? itemToAdd?.value_cop : 0,
+        value_usd: itemToAdd ? itemToAdd?.value_usd : 0,
         value_prorrota_cop: 0,
-        value_prorrota_usd: itemToAdd ? itemToAdd.value_prorrota_usd : 0,
-        unit_value_prorrateado_cop: itemToAdd ? itemToAdd.unit_value_prorrateado_cop : 0,
-        unit_value_prorrateado_usd: itemToAdd ? itemToAdd.unit_value_prorrateado_usd : 0,
+        value_prorrota_usd: itemToAdd ? itemToAdd?.value_prorrota_usd : 0,
+        unit_value_prorrateado_cop: itemToAdd ? itemToAdd?.unit_value_prorrateado_cop : 0,
+        unit_value_prorrateado_usd: itemToAdd ? itemToAdd?.unit_value_prorrateado_usd : 0,
       }
     )
-    const value_cop = item.get('value_cop')
-    const subItems = item.get('subItems') as FormArray
+    const value_cop = item?.get('value_cop')
+    const subItems = item?.get('subItems') as FormArray
     if (!itemToAdd) {
       this.addSubItem(item);
-      console.log('holi')
     }
-    value_cop.valueChanges.subscribe(r => {
+    value_cop?.valueChanges?.subscribe(r => {
       let total = 0;
-      subItems.controls.forEach((subItem: FormControl) => {
+      subItems?.controls?.forEach((subItem: FormControl) => {
         const percentage_sale =
-          (subItem.get('value_cop').value * 100 / value_cop.value).toFixed(2)
+          (subItem.get('value_cop')?.value * 100 / value_cop?.value).toFixed(2)
 
         total += Number(percentage_sale)
         subItem.patchValue({ percentage_sale })
@@ -147,10 +146,10 @@ export class ItemsComponent implements OnInit {
 
     })
     valueProrrotaUsd.valueChanges.subscribe(r => {
-      subItems.controls.forEach((subItem: FormControl) => {
+      subItems?.controls?.forEach((subItem: FormControl) => {
         const percentage = subItem.get('percentage_sale').value
         let value_prorrota_usd = 0
-        if (percentage > 0 && trm.value > 0) {
+        if (percentage > 0 && trm?.value > 0) {
           value_prorrota_usd = (percentage / 100 * r)
         }
         subItem.patchValue({ value_prorrota_usd })
@@ -167,29 +166,29 @@ export class ItemsComponent implements OnInit {
 
 
     trm.valueChanges.subscribe(r => {
-      subItems.controls.forEach((subItem: FormControl) => {
+      subItems?.controls?.forEach((subItem: FormControl) => {
         let value_usd = 0
         if (r > 0 && subItem.get('value_cop').value > 0) {
           const base = subItem.get('value_cop').value
           value_usd = base / r
         }
         subItem.patchValue({ value_usd })
-        this.updateSubTotals(subItem.parent as FormArray, ['value_usd'])
+        this.updateSubTotals(subItem?.parent as FormArray, ['value_usd'])
       })
     })
 
     this.items.push(item);
     if (itemToAdd) {
       const subItems = item.get('subItems') as FormArray
-      itemToAdd.subitems.forEach(subi => {
-        if (subi.type_module == 'apu_set') {
-          subi.apu_id = subi.apu_set_id
+      itemToAdd?.subitems?.forEach(subi => {
+        if (subi?.type_module == 'apu_set') {
+          subi.apu_id = subi?.apu_set_id
         }
-        if (subi.type_module == 'apu_part') {
-          subi.apu_id = subi.apu_part_id
+        if (subi?.type_module == 'apu_part') {
+          subi.apu_id = subi?.apu_part_id
         }
-        if (subi.type_module == 'apu_service') {
-          subi.apu_id = subi.apu_service_id
+        if (subi?.type_module == 'apu_service') {
+          subi.apu_id = subi?.apu_service_id
         }
         subItems.push(this.makeSubItem(subi, true))
       });
@@ -205,7 +204,7 @@ export class ItemsComponent implements OnInit {
 
   deleteSubItem(group: FormGroup, pos: number) {
     const subItems = group.get('subItems') as FormArray
-    if (subItems.controls.length > 1) {
+    if (subItems?.controls?.length > 1) {
       const id = subItems.at(pos).get('id').value;
       id ? this.subItemsToDelete.push(id) : ''
       this.forma.patchValue({ subItemsToDelete: this.subItemsToDelete })
@@ -278,7 +277,7 @@ export class ItemsComponent implements OnInit {
     let subItems = this.tempItem.get('subItems') as FormArray
     let subItem = this.tempSubItem as FormGroup
     e.forEach(apu => {
-      const exist = subItems.value.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))
+      const exist = subItems?.value?.some(x => (x?.apu_id == apu?.apu_id && x?.type_module == apu?.type_module))
       if (!this.multiple) {
         if (!exist) {
           subItems.setControl(this.indexAux, this.makeSubItem(apu))
@@ -321,46 +320,46 @@ export class ItemsComponent implements OnInit {
 
   makeSubItemGroup(apu, edit = false) {
     const percentages = {
-      percentage_amd: edit ? apu.percentage_amd : this.calculationBase.administration_percentage.value,
-      percentage_unforeseen: edit ? apu.percentage_unforeseen : this.calculationBase.unforeseen_percentage.value,
-      percentage_utility: edit ? apu.percentage_utility : this.calculationBase.utility_percentage.value,
+      percentage_amd: edit ? apu?.percentage_amd : this.calculationBase?.administration_percentage?.value,
+      percentage_unforeseen: edit ? apu?.percentage_unforeseen : this.calculationBase?.unforeseen_percentage?.value,
+      percentage_utility: edit ? apu?.percentage_utility : this.calculationBase?.utility_percentage?.value,
     }
     let description = ''
     if (edit) {
-      description = apu.type_module ? apu[apu.type_module]['name'] : apu['description']
+      description = apu?.type_module ? apu[apu?.type_module]['name'] : apu['description']
     } else {
-      description = (apu ? apu.name : '')
+      description = (apu ? apu?.name : '')
     }
     return this.fb.group({
-      id: ((edit && apu?.id) ? apu.id : ''),
+      id: ((edit && apu?.id) ? apu?.id : ''),
       type: ((apu?.type == 'P' || apu?.type == 'C') ? 'P' : 'P'),
       description,
-      apu_id: [(apu ? apu.apu_id : ''), Validators.required],
-      cuantity: edit ? apu.cuantity : 0,
-      unit_cost: (apu ? apu.unit_cost : ''),
-      total_cost: edit ? apu.total_cost : 0,
-      unit: edit ? apu.unit : 'UNIDAD',
-      indirect_costs: edit ? this.editMakeIndirectCost(apu.indirect_costs) : this.makeIndirectCost(),
-      subtotal_indirect_cost: edit ? apu.subtotal_indirect_cost : 0,
+      apu_id: [(apu ? apu?.apu_id : ''), Validators.required],
+      cuantity: edit ? apu?.cuantity : 0,
+      unit_cost: (apu ? apu?.unit_cost : ''),
+      total_cost: edit ? apu?.total_cost : 0,
+      unit: edit ? apu?.unit : 'UNIDAD',
+      indirect_costs: edit ? this.editMakeIndirectCost(apu?.indirect_costs) : this.makeIndirectCost(),
+      subtotal_indirect_cost: edit ? apu?.subtotal_indirect_cost : 0,
       ...percentages,
-      value_amd: edit ? apu.value_amd : 0,
-      value_unforeseen: edit ? apu.value_unforeseen : 0,
-      value_utility: edit ? apu.value_utility : 0,
-      total_amd_imp_uti: edit ? apu.total_amd_imp_uti : 0,
-      another_values: edit ? apu.another_values : 0,
-      subTotal: edit ? apu.subTotal : 0,
+      value_amd: edit ? apu?.value_amd : 0,
+      value_unforeseen: edit ? apu?.value_unforeseen : 0,
+      value_utility: edit ? apu?.value_utility : 0,
+      total_amd_imp_uti: edit ? apu?.total_amd_imp_uti : 0,
+      another_values: edit ? apu?.another_values : 0,
+      subTotal: edit ? apu?.subTotal : 0,
       retention: 0,
-      percentage_sale: edit ? apu.percentage_sale : 0,
-      value_cop: edit ? apu.value_cop : 0,
-      value_usd: edit ? apu.value_usd : 0,
-      unit_value_cop: edit ? apu.unit_value_cop : 0,
-      unit_value_usd: edit ? apu.unit_value_usd : 0,
-      value_prorrota_cop: edit ? apu.value_prorrota_cop : 0,
-      value_prorrota_usd: edit ? apu.value_prorrota_usd : 0,
-      unit_value_prorrateado_cop: edit ? apu.unit_value_prorrateado_cop : 0,
-      unit_value_prorrateado_usd: edit ? apu.unit_value_prorrateado_usd : 0,
-      observation: edit ? apu.observation : '',
-      type_module: (apu ? apu.type_module : '')
+      percentage_sale: edit ? apu?.percentage_sale : 0,
+      value_cop: edit ? apu?.value_cop : 0,
+      value_usd: edit ? apu?.value_usd : 0,
+      unit_value_cop: edit ? apu?.unit_value_cop : 0,
+      unit_value_usd: edit ? apu?.unit_value_usd : 0,
+      value_prorrota_cop: edit ? apu?.value_prorrota_cop : 0,
+      value_prorrota_usd: edit ? apu?.value_prorrota_usd : 0,
+      unit_value_prorrateado_cop: edit ? apu?.unit_value_prorrateado_cop : 0,
+      unit_value_prorrateado_usd: edit ? apu?.unit_value_prorrateado_usd : 0,
+      observation: edit ? apu?.observation : '',
+      type_module: (apu ? apu?.type_module : '')
     })
   }
 
@@ -368,17 +367,17 @@ export class ItemsComponent implements OnInit {
 
     const subItemGroup = this.makeSubItemGroup(apu, edit)
     let city_id = this.forma.get('destinity_id').value;
-    let city = this.cities.find(c => c.value == city_id);
+    let city = this.cities?.find(c => c?.value == city_id);
     let subtotal = subItemGroup.get('subTotal').value
     if (city) {
       let type = subItemGroup.get('type').value
       if (type == 'S') {
-        let retention = (subtotal / ((100 - city.percentage_service) * 0.01)) - subtotal
+        let retention = (subtotal / ((100 - city?.percentage_service) * 0.01)) - subtotal
         subItemGroup.patchValue({
           retention: retention
         })
       } else if (type == 'P') {
-        let retention = (subtotal / ((100 - city.percentage_product) * 0.01)) - subtotal
+        let retention = (subtotal / ((100 - city?.percentage_product) * 0.01)) - subtotal
         subItemGroup.patchValue({
           retention: retention
         })
@@ -394,22 +393,22 @@ export class ItemsComponent implements OnInit {
     const suma = (a, b) => parseFloat(a) * parseFloat(b);
 
     cuantity.valueChanges.subscribe(r => {
-      const value = (typeof r == "number" && typeof unitCost.value == "number") ? suma(r, unitCost.value) : 0
+      const value = (typeof r == "number" && typeof unitCost?.value == "number") ? suma(r, unitCost?.value) : 0
       subItemGroup.patchValue({ total_cost: value })
     })
 
     unitCost.valueChanges.subscribe(r => {
-      const value = (typeof r == "number" && typeof cuantity.value == "number") ? suma(r, cuantity.value) : 0
+      const value = (typeof r == "number" && typeof cuantity?.value == "number") ? suma(r, cuantity?.value) : 0
       subItemGroup.patchValue({ total_cost: value })
     })
 
     totalCost.valueChanges.subscribe(r => {
       const val = typeof r == "number" ? r : 0
-      const set = type.value == 'P' ? val : 0
-      const value = this.calculateSutIndirectos(indirectCosts, val, type.value)
+      const set = type?.value == 'P' ? val : 0
+      const value = this.calculateSutIndirectos(indirectCosts, val, type?.value)
       subItemGroup.patchValue({ subtotal_indirect_cost: value })
 
-      this.updateSubTotals(subItemGroup.parent as FormArray, ['total_cost'])
+      this.updateSubTotals(subItemGroup?.parent as FormArray, ['total_cost'])
 
     })
     const partId = subItemGroup.get('apu_part_id')
@@ -418,12 +417,12 @@ export class ItemsComponent implements OnInit {
       let subtotal = subItemGroup.get('subTotal').value
       if (city) {
         if (r == 'S') {
-          let retention = (subtotal / ((100 - city.percentage_service) * 0.01)) - subtotal
+          let retention = (subtotal / ((100 - city?.percentage_service) * 0.01)) - subtotal
           subItemGroup.patchValue({
             retention: retention
           })
         } else if (r == 'P') {
-          let retention = (subtotal / ((100 - city.percentage_product) * 0.01)) - subtotal
+          let retention = (subtotal / ((100 - city?.percentage_product) * 0.01)) - subtotal
           subItemGroup.patchValue({
             retention: retention
           })
@@ -451,8 +450,8 @@ export class ItemsComponent implements OnInit {
 
     perAmd.valueChanges.subscribe(r => {
       const percentage_amd = typeof r == 'number' ? r : 0
-      const value_amd = ((percentage_amd / 100) * totalCost.value)
-      let total_amd_imp_uti = value_amd + valueUtility.value + valueUnforeseen.value
+      const value_amd = ((percentage_amd / 100) * totalCost?.value)
+      let total_amd_imp_uti = value_amd + valueUtility?.value + valueUnforeseen?.value
 
       subItemGroup.patchValue({ value_amd, total_amd_imp_uti })
     })
@@ -460,17 +459,17 @@ export class ItemsComponent implements OnInit {
     perUnforeseen.valueChanges.subscribe(r => {
       const percentage_unforeseen = typeof r == 'number' ? r : 0
       const value_unforeseen = ((percentage_unforeseen / 100) * totalCost.value)
-      let total_amd_imp_uti = value_unforeseen + valueUtility.value + valueAmd.value
+      let total_amd_imp_uti = value_unforeseen + valueUtility?.value + valueAmd?.value
 
       subItemGroup.patchValue({ value_unforeseen, total_amd_imp_uti })
     })
 
     perUtility.valueChanges.subscribe(r => {
-      const percentage_unforeseen = typeof perUnforeseen.value == 'number' ? perUnforeseen.value : 0
-      const percentage_amd = typeof perAmd.value == 'number' ? perAmd.value : 0
+      const percentage_unforeseen = typeof perUnforeseen?.value == 'number' ? perUnforeseen?.value : 0
+      const percentage_amd = typeof perAmd?.value == 'number' ? perAmd?.value : 0
       const percentage_utility = typeof r == 'number' ? r : 0
-      const value_unforeseen = ((percentage_unforeseen / 100) * totalCost.value)
-      const value_amd = ((percentage_amd / 100) * totalCost.value)
+      const value_unforeseen = ((percentage_unforeseen / 100) * totalCost?.value)
+      const value_amd = ((percentage_amd / 100) * totalCost?.value)
       const value_utility =
         (
           (totalCost.value + subtotal_indirect_cost.value + value_amd + value_unforeseen) /
@@ -495,54 +494,54 @@ export class ItemsComponent implements OnInit {
 
     totalCost.valueChanges.subscribe(r => {
       subItemGroup.patchValue(this.makeUpdateAmdImpUti({ r, perAmd, perUnforeseen, perUtility, subItemGroup }))
-      subTotal.patchValue(this.updateSubtotal([r, subtotalIndirectCost.value, totalAmdImpUti.value, another.value,]))
+      subTotal.patchValue(this.updateSubtotal([r, subtotalIndirectCost?.value, totalAmdImpUti?.value, another?.value,]))
     })
 
     subtotalIndirectCost.valueChanges.subscribe(r => {
-      const percentage_unforeseen = typeof perUnforeseen.value == 'number' ? perUnforeseen.value : 0
-      const percentage_amd = typeof perAmd.value == 'number' ? perAmd.value : 0
-      const percentage_utility = typeof perUtility.value == 'number' ? perUtility.value : 0
-      const value_unforeseen = ((percentage_unforeseen / 100) * totalCost.value)
-      const value_amd = ((percentage_amd / 100) * totalCost.value)
+      const percentage_unforeseen = typeof perUnforeseen.value == 'number' ? perUnforeseen?.value : 0
+      const percentage_amd = typeof perAmd?.value == 'number' ? perAmd?.value : 0
+      const percentage_utility = typeof perUtility?.value == 'number' ? perUtility.value : 0
+      const value_unforeseen = ((percentage_unforeseen / 100) * totalCost?.value)
+      const value_amd = ((percentage_amd / 100) * totalCost?.value)
       const value_utility =
         (
-          (totalCost.value + r + value_amd + value_unforeseen) /
+          (totalCost?.value + r + value_amd + value_unforeseen) /
           (1 - (percentage_utility / 100))
         ) -
-        (totalCost.value + r + value_amd + value_unforeseen)
+        (totalCost?.value + r + value_amd + value_unforeseen)
         ;
-      let total_amd_imp_uti = value_utility + valueUnforeseen.value + valueAmd.value
+      let total_amd_imp_uti = value_utility + valueUnforeseen.value + valueAmd?.value
 
       subItemGroup.patchValue({ value_utility, total_amd_imp_uti })
-      subTotal.patchValue(this.updateSubtotal([r, totalAmdImpUti.value, another.value, totalCost.value,]))
-      this.updateSubTotals(subItemGroup.parent as FormArray, ['subtotal_indirect_cost'])
+      subTotal.patchValue(this.updateSubtotal([r, totalAmdImpUti?.value, another?.value, totalCost?.value]))
+      this.updateSubTotals(subItemGroup?.parent as FormArray, ['subtotal_indirect_cost'])
 
     })
 
     totalAmdImpUti.valueChanges.subscribe(r => {
-      subTotal.patchValue(this.updateSubtotal([r, another.value, totalCost.value, subtotalIndirectCost.value]))
+      subTotal.patchValue(this.updateSubtotal([r, another?.value, totalCost?.value, subtotalIndirectCost?.value]))
       this.updateSubTotals(subItemGroup.parent as FormArray, ['total_amd_imp_uti', 'value_amd', 'value_unforeseen', 'value_utility'])
     })
 
     another.valueChanges.subscribe(r => {
-      subTotal.patchValue(this.updateSubtotal([r, totalAmdImpUti.value, totalCost.value, subtotalIndirectCost.value]))
+      subTotal.patchValue(this.updateSubtotal([r, totalAmdImpUti?.value, totalCost?.value, subtotalIndirectCost?.value]))
       this.updateSubTotals(subItemGroup.parent as FormArray, ['another_values'])
 
     })
 
     subTotal.valueChanges.subscribe(r => {
-      const base = r + retention.value
+      const base = r + retention?.value
       let city_id = this.forma.get('destinity_id').value;
-      let city = this.cities.find(c => c.value == city_id);
+      let city = this.cities?.find(c => c?.value == city_id);
       if (city) {
         let type = subItemGroup.get('type').value
         if (type == 'S') {
-          let retention = (r / ((100 - city.percentage_service) * 0.01)) - r
+          let retention = (r / ((100 - city?.percentage_service) * 0.01)) - r
           subItemGroup.patchValue({
             retention: retention
           })
         } else if (type == 'P') {
-          let retention = (r / ((100 - city.percentage_product) * 0.01)) - r
+          let retention = (r / ((100 - city?.percentage_product) * 0.01)) - r
           subItemGroup.patchValue({
             retention: retention
           })
@@ -551,7 +550,7 @@ export class ItemsComponent implements OnInit {
       subItemGroup.patchValue(
         {
           value_cop: base,
-          value_usd: (trm.value ? base / trm.value : 0),
+          value_usd: (trm?.value ? base / trm?.value : 0),
         }
       )
       this.updateSubTotals(subItemGroup.parent as FormArray, ['subTotal', 'retention', 'value_cop', 'value_usd'])
@@ -568,7 +567,7 @@ export class ItemsComponent implements OnInit {
       if (prorrota && r > 0) {
         value_prorrota_cop = ((r / 100) * prorrota)
 
-        if (trm.value > 0) {
+        if (trm?.value > 0) {
           value_prorrota_usd = ((r / 100) * prorrota_usd)
         }
       }
@@ -581,25 +580,25 @@ export class ItemsComponent implements OnInit {
     const valueProrrotaCop = subItemGroup.get('value_prorrota_cop')
 
     valueProrrotaCop.valueChanges.subscribe(r => {
-      const unit_value_prorrateado_cop = r + valueCop.value
+      const unit_value_prorrateado_cop = r + valueCop?.value
       subItemGroup.patchValue({ unit_value_prorrateado_cop })
-      this.updateSubTotals(subItemGroup.parent as FormArray, ['unit_value_prorrateado_cop'])
+      this.updateSubTotals(subItemGroup?.parent as FormArray, ['unit_value_prorrateado_cop'])
     })
     valueProrrotaUsd.valueChanges.subscribe(r => {
-      const unit_value_prorrateado_usd = r + valueUsd.value
+      const unit_value_prorrateado_usd = r + valueUsd?.value
       subItemGroup.patchValue({ unit_value_prorrateado_usd })
-      this.updateSubTotals(subItemGroup.parent as FormArray, ['unit_value_prorrateado_usd'])
+      this.updateSubTotals(subItemGroup?.parent as FormArray, ['unit_value_prorrateado_usd'])
     })
     subItemGroup.get('value_cop').valueChanges.subscribe(r => {
-      let unit_value_prorrateado_cop = valueProrrotaCop.value ? r + valueProrrotaCop.value : r
+      let unit_value_prorrateado_cop = valueProrrotaCop?.value ? r + valueProrrotaCop?.value : r
 
       subItemGroup.patchValue({ unit_value_prorrateado_cop })
-      this.updateSubTotals(subItemGroup.parent as FormArray, ['unit_value_prorrateado_cop'])
+      this.updateSubTotals(subItemGroup?.parent as FormArray, ['unit_value_prorrateado_cop'])
     })
     subItemGroup.get('value_usd').valueChanges.subscribe(r => {
-      let unit_value_prorrateado_usd = valueProrrotaUsd.value ? r + valueProrrotaUsd.value : r
+      let unit_value_prorrateado_usd = valueProrrotaUsd?.value ? r + valueProrrotaUsd?.value : r
       subItemGroup.patchValue({ unit_value_prorrateado_usd })
-      this.updateSubTotals(subItemGroup.parent as FormArray, ['unit_value_prorrateado_usd'])
+      this.updateSubTotals(subItemGroup?.parent as FormArray, ['unit_value_prorrateado_usd'])
       this.updateTotals('value_usd', 'total_usd');
 
     })
@@ -611,11 +610,11 @@ export class ItemsComponent implements OnInit {
 
     //TODO retencion se modifica?
     retention.valueChanges.subscribe(r => {
-      valueCop.patchValue(r + subTotal.value)
+      valueCop.patchValue(r + subTotal?.value)
       subItemGroup.patchValue(
         {
-          value_cop: (r + subTotal.value),
-          valueUsd: ((r + subTotal.value) * trm.value),
+          value_cop: (r + subTotal?.value),
+          valueUsd: ((r + subTotal?.value) * trm?.value),
         }
       )
     })
@@ -624,9 +623,9 @@ export class ItemsComponent implements OnInit {
 
   updateTotals(keyBase, keytoUpdate) {
     let total_key = 0
-    this.items.controls.forEach(x => {
-      const subItems = x.get('subItems').value
-      subItems.forEach(sub => {
+    this.items?.controls?.forEach(x => {
+      const subItems = x?.get('subItems')?.value
+      subItems?.forEach(sub => {
         total_key += sub[keyBase]
       });
     })
@@ -634,26 +633,26 @@ export class ItemsComponent implements OnInit {
   }
 
   updateSubTotals(itemGroup: FormArray, keysToUpdate: Array<string>) {
-    const subItems = itemGroup.value;
+    const subItems = itemGroup?.value;
 
     keysToUpdate.forEach(keyToUpdate => {
-      const total: number = subItems.reduce((acc, el) => acc + el[keyToUpdate], 0);
-      const parent: FormGroup = itemGroup.parent as FormGroup
+      const total: number = subItems?.reduce((acc, el) => acc + el[keyToUpdate], 0);
+      const parent: FormGroup = itemGroup?.parent as FormGroup
       parent.patchValue({ [keyToUpdate]: total })
     });
 
   }
   updateSubtotal(values: Array<number>) {
-    return values.reduce((acc, el) => acc + el, 0)
+    return values?.reduce((acc, el) => acc + el, 0)
   }
 
   makeUpdateAmdImpUti({ r, perAmd, perUnforeseen, perUtility, subItemGroup }) {
     let toUpdate = {}
     let sum = 0
     const subtotal_indirect_cost = subItemGroup.get('subtotal_indirect_cost').value
-    const perAmdValue = perAmd.value
-    const perUtilityValue = perUtility.value
-    const perUnforeseenValue = perUnforeseen.value
+    const perAmdValue = perAmd?.value
+    const perUtilityValue = perUtility?.value
+    const perUnforeseenValue = perUnforeseen?.value
     if (typeof r == 'number') {
 
       if (typeof perUnforeseenValue == 'number') {
@@ -696,7 +695,7 @@ export class ItemsComponent implements OnInit {
         subTotal += value;
         x.patchValue({ value })
       } else {
-        if (indirectOriginal.apply_service) {
+        if (indirectOriginal?.apply_service) {
           const value = ((indirectOriginal.percentage / 100) * setValue)
           subTotal += value;
           x.patchValue({ value })
@@ -710,7 +709,7 @@ export class ItemsComponent implements OnInit {
 
   editMakeIndirectCost(indirect) {
     const indirectCosts = this.fb.array([])
-    indirect.forEach((element) => {
+    indirect?.forEach((element) => {
       indirectCosts.push(this.indirectCostgroup(element, this.fb, true));
     });
     return indirectCosts
@@ -727,10 +726,10 @@ export class ItemsComponent implements OnInit {
 
   indirectCostgroup(el, fb: FormBuilder, edit) {
     const group = fb.group({
-      indirect_cost_id: edit ? el.indirect_cost_id : el.value,
-      value: edit ? el.value : 0,
+      indirect_cost_id: edit ? el?.indirect_cost_id : el?.value,
+      value: edit ? el?.value : 0,
     });
-    const id = edit ? el.indirect_cost_id : el.value
+    const id = edit ? el?.indirect_cost_id : el?.value
     if (edit) {
       setTimeout(() => {
         const subItems = group.parent.parent.parent as FormArray
@@ -766,9 +765,9 @@ export class ItemsComponent implements OnInit {
 
   makeTotalIndirectCost(): FormArray {
     const totals = this.fb.array([])
-    this.indirectCosts.forEach((el) => {
+    this.indirectCosts?.forEach((el) => {
       totals.push(this.fb.group({
-        indirect_cost_id: el.value,
+        indirect_cost_id: el?.value,
         sub_total: 0
       }));
     });

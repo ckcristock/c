@@ -12,36 +12,36 @@ export class PlanosConjuntoComponent implements OnInit {
   @Input('data') data;
   @Input('info') info;
   @Output() actualizar = new EventEmitter;
-  env = environment.production
+  env = environment?.production
   constructor(
     private _swal: SwalService,
     private _apu_conjunto: ApuConjuntoService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
   }
 
   borrarPlano(event, item) {
-    this._swal.show({
+    this._swal?.show({
       title: '¿Estás seguro(a)?',
       icon: 'question',
       text: 'Vamos a eliminar este plano',
     }).then(x => {
-      if (x.isConfirmed) {
-        this._apu_conjunto.deleteFile(item.id).subscribe((res: any) => {
-          this._swal.show({
+      if (x?.isConfirmed) {
+        this._apu_conjunto?.deleteFile(item?.id).subscribe((res: any) => {
+          this._swal?.show({
             icon: 'success',
-            title: res.data,
+            title: res?.data,
             text: '',
             showCancel: false,
             timer: 1000
           })
-          this.actualizar.emit()
+          this.actualizar?.emit()
         })
       }
     })
-    event.preventDefault();
-    event.stopPropagation();
+    event?.preventDefault();
+    event?.stopPropagation();
   }
 
 }

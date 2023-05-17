@@ -85,22 +85,22 @@ export class NegociosComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    if (this.permission.permissions.show) {
+    if (this.permission?.permissions?.show) {
       this.createFormFiltersBusiness();
       this.createFormFiltersGeneralView();
       this.getTypes();
       await this.route.queryParamMap.subscribe(async (params: any) => {
-        if (params.params.pageSize) {
-          this.pagination.pageSize = params.params.pageSize
+        if (params?.params?.pageSize) {
+          this.pagination.pageSize = params?.params?.pageSize
         } else {
           this.pagination.pageSize = localStorage.getItem('paginationItemsBusiness') || 100
         }
-        if (params.params.pag) {
-          this.pagination.page = params.params.pag
+        if (params?.params?.pag) {
+          this.pagination.page = params?.params?.pag
         } else {
           this.pagination.page = 1
         }
-        this.orderObj = { ...params.keys, ...params };
+        this.orderObj = { ...params?.keys, ...params };
         if (Object.keys(this.orderObj).length > 3) {
           this.filtrosActivos = true
           const formValues = {};
@@ -141,7 +141,7 @@ export class NegociosComponent implements OnInit {
 
   handlePageEvent(event: PageEvent) {
     this._paginator.handlePageEvent(event, this.pagination);
-    localStorage.setItem('paginationItemsBusiness', this.pagination.pageSize)
+    localStorage.setItem('paginationItemsBusiness', this.pagination?.pageSize)
     this.getNegocios()
   }
 
@@ -173,8 +173,8 @@ export class NegociosComponent implements OnInit {
   selectedDate(fecha) {
     if (fecha.value) {
       this.formFiltersBusiness.patchValue({
-        date_start: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
-        date_end: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+        date_start: this.datePipe.transform(fecha?.value?.begin?._d, 'yyyy-MM-dd'),
+        date_end: this.datePipe.transform(fecha?.value?.end?._d, 'yyyy-MM-dd')
       })
     } else {
       this.formFiltersBusiness.patchValue({
@@ -187,8 +187,8 @@ export class NegociosComponent implements OnInit {
   selectedDateGV(fecha) {
     if (fecha.value) {
       this.formFiltersGeneralView.patchValue({
-        date_start: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
-        date_end: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+        date_start: this.datePipe.transform(fecha?.value?.begin?._d, 'yyyy-MM-dd'),
+        date_end: this.datePipe.transform(fecha?.value?.end?._d, 'yyyy-MM-dd')
       })
     } else {
       this.formFiltersGeneralView.patchValue({
@@ -227,7 +227,7 @@ export class NegociosComponent implements OnInit {
 
   getTypes() {
     this._negocios.indexType().subscribe((res: any) => {
-      this.types = res.data;
+      this.types = res?.data;
     })
   }
 
@@ -235,8 +235,8 @@ export class NegociosComponent implements OnInit {
     this.paginationTypes.page = page;
     this.loadingType = true;
     this._negocios.paginateType(this.paginationTypes).subscribe((res: any) => {
-      this.bussinesTypes = res.data.data;
-      this.paginationTypes.collectionSize = res.data.total;
+      this.bussinesTypes = res?.data?.data;
+      this.paginationTypes.collectionSize = res?.data?.total;
       this.loadingType = false;
     })
   }
@@ -260,7 +260,7 @@ export class NegociosComponent implements OnInit {
             if (res.status) {
               this._swal.show({
                 icon: 'success',
-                title: res.data,
+                title: res?.data,
                 text: '',
                 showCancel: false,
                 timer: 1000
@@ -289,10 +289,10 @@ export class NegociosComponent implements OnInit {
     this.location.replaceState('/crm/negocios', paramsurl.toString());
     await this._negocios.getBusinesses(params).toPromise().then((resp: any) => {
       this.loading = false;
-      this.business = resp.data.data;
-      this.paginacion = resp.data
-      this.paginationMaterial = resp.data
-      if (this.paginationMaterial.last_page < this.pagination.page) {
+      this.business = resp?.data?.data;
+      this.paginacion = resp?.data
+      this.paginationMaterial = resp?.data
+      if (this.paginationMaterial?.last_page < this.pagination?.page) {
         this.paginationMaterial.current_page = 1
         this.pagination.page = 1
         this.getNegocios()
@@ -322,7 +322,7 @@ export class NegociosComponent implements OnInit {
         index = filteredList.length;
       }
       filteredList.splice(index, 0, event.data);
-      this._negocios.changeState({ status: targetStatus }, event.data.id).subscribe();
+      this._negocios.changeState({ status: targetStatus }, event?.data?.id).subscribe();
     }
   }
 
@@ -372,21 +372,21 @@ export class NegociosComponent implements OnInit {
 
     this.loadingGeneralView = true;
     this._negocios.getGeneralView(this.formFiltersGeneralView.value).subscribe((res: any) => {
-      this.generalView = res.data;
-      this.negocios_primera_etapa = res.data.filter(
-        (t) => t.status === 'Prospección'
+      this.generalView = res?.data;
+      this.negocios_primera_etapa = res?.data?.filter(
+        (t) => t?.status === 'Prospección'
       );
-      this.negocios_segunda_etapa = res.data.filter(
-        (t) => t.status === 'Presupuesto'
+      this.negocios_segunda_etapa = res?.data?.filter(
+        (t) => t?.status === 'Presupuesto'
       );
-      this.negocios_tercera_etapa = res.data.filter(
-        (t) => t.status === 'Cotización'
+      this.negocios_tercera_etapa = res?.data?.filter(
+        (t) => t?.status === 'Cotización'
       );
-      this.negocios_cuarta_etapa = res.data.filter(
-        (t) => t.status === 'Negociación'
+      this.negocios_cuarta_etapa = res?.data?.filter(
+        (t) => t?.status === 'Negociación'
       );
-      this.negocios_quinta_etapa = res.data.filter(
-        (t) => t.status === 'Adjudicación'
+      this.negocios_quinta_etapa = res?.data?.filter(
+        (t) => t?.status === 'Adjudicación'
       );
       this.negocios_primera_etapa.forEach((element: any) => {
         this.prospectingStage.budget_value += element.budget_value;
@@ -421,7 +421,7 @@ export class NegociosComponent implements OnInit {
       fifth: 0
     };
     this.negocios_primera_etapa?.forEach((neg: Negocio) => {
-      neg.business_budget.forEach(el => {
+      neg?.business_budget?.forEach(el => {
         this.total.first += el.budget.total_cop;
       });
     });

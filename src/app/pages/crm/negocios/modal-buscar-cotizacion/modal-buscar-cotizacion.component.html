@@ -8,7 +8,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -75,7 +75,10 @@
     </div>
     <div
       class="rounded-top table-responsive"
-      *ngIf="!loadingQuotation && quotations.length > 0; else notDataQuotations"
+      *ngIf="
+        !loadingQuotation && quotations?.length > 0;
+        else notDataQuotations
+      "
     >
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
@@ -100,20 +103,20 @@
               ></mat-checkbox>
             </td>
             <td>
-              {{ item.code | uppercase }}
+              {{ item?.code | uppercase }}
             </td>
-            <td>{{ item.created_at | date : "MMM d, y" }}</td>
+            <td>{{ item?.created_at | date : "MMM d, y" }}</td>
             <td>
               {{
-                (item.client.social_reason
-                  ? item.client.social_reason
-                  : item.client.full_name
+                (item?.client?.social_reason
+                  ? item?.client?.social_reason
+                  : item?.client?.full_name
                 ) | uppercase
               }}
             </td>
-            <td>{{ item.municipality.name | capitalLetter }}</td>
-            <td>${{ item.total_cop | number : "1.2-2" }}</td>
-            <td>${{ item.total_usd | number : "1.2-2" }}</td>
+            <td>{{ item?.municipality?.name | capitalLetter }}</td>
+            <td>${{ item?.total_cop | number : "1.2-2" }}</td>
+            <td>${{ item?.total_usd | number : "1.2-2" }}</td>
             <td>
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
@@ -127,20 +130,20 @@
                   <a
                     class="dropdown-item text-success"
                     href="javascript: void(0);"
-                    (click)="openNewTab('/crm/cotizacion/ver/', item.id)"
+                    (click)="openNewTab('/crm/cotizacion/ver/', item?.id)"
                   >
                     <i class="fas fa-eye"></i> Ver</a
                   >
                   <a
                     class="dropdown-item text-primary"
                     href="javascript: void(0);"
-                    (click)="openNewTab('/crm/cotizacion/copiar/', item.id)"
+                    (click)="openNewTab('/crm/cotizacion/copiar/', item?.id)"
                     ><i class="fas fa-copy"></i> Copiar</a
                   >
                   <a
                     class="dropdown-item text-info"
                     href="javascript: void(0);"
-                    (click)="openNewTab('/crm/cotizacion/editar/', item.id)"
+                    (click)="openNewTab('/crm/cotizacion/editar/', item?.id)"
                     ><i class="fas fa-edit"></i> Editar</a
                   >
                 </div>
@@ -152,9 +155,9 @@
     </div>
     <mat-paginator
       *ngIf="paginationMaterial"
-      [length]="paginationMaterial.total"
-      [pageSize]="paginationMaterial.per_page"
-      [pageIndex]="paginationMaterial.current_page - 1"
+      [length]="paginationMaterial?.total"
+      [pageSize]="paginationMaterial?.per_page"
+      [pageIndex]="paginationMaterial?.current_page - 1"
       [pageSizeOptions]="[5, 10, 25, 100]"
       (page)="handlePageEvent($event)"
       aria-label="Select page"
@@ -162,7 +165,7 @@
     </mat-paginator>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cancelar
     </button>
     <button type="button" (click)="addCotizacion()" class="btn btn-primary">

@@ -6,12 +6,12 @@
     <div class="card-body">
       <app-cabecera [datosCabecera]="datos"></app-cabecera>
       <hr class="line" />
-      <ng-container *ngIf="path != 'crear' && form.controls.included.value">
+      <ng-container *ngIf="path != 'crear' && form?.controls?.included?.value">
         <div class="alert alert-warning" role="alert">
           Esta cotización está ligada a un
           <a
             href="javascript: void(0);"
-            (click)="openNewTab(form.controls.budget_id.value)"
+            (click)="openNewTab(form?.controls?.budget_id?.value)"
             >presupuesto</a
           >
           y no podrá ser cambiada
@@ -20,7 +20,9 @@
       <form [formGroup]="form" novalidate>
         <div class="row">
           <mat-slide-toggle
-            *ngIf="(path == 'crear' || preData) && !form.get('included').value"
+            *ngIf="
+              (path == 'crear' || preData) && !form?.get('included')?.value
+            "
             color="primary"
             class="col-md-4 mb-3"
             (change)="openBudgets($event)"
@@ -51,7 +53,7 @@
               [appendTo]="'body'"
               placeholder="Cliente *"
               [clearable]="false"
-              [class.is-invalid]="form.get('customer_id').invalid"
+              [class.is-invalid]="form?.get('customer_id')?.invalid"
               formControlName="customer_id"
             ></ng-select>
           </div>
@@ -63,7 +65,7 @@
               bindLabel="text"
               [clearable]="false"
               [appendTo]="'body'"
-              [class.is-invalid]="form.get('third_party_person_id').invalid"
+              [class.is-invalid]="form?.get('third_party_person_id')?.invalid"
               appearance="outline"
               bindValue="value"
               notFoundText="No hay registros"
@@ -79,7 +81,7 @@
               [clearable]="false"
               [appendTo]="'body'"
               placeholder="Destino *"
-              [class.is-invalid]="form.get('destinity_id').invalid"
+              [class.is-invalid]="form?.get('destinity_id')?.invalid"
               required
               formControlName="destinity_id"
             ></ng-select>
@@ -89,7 +91,7 @@
             <input
               matInput
               currencyMask
-              [options]="masksMoney.maskCOP"
+              [options]="masksMoney?.maskCOP"
               formControlName="trm"
               autocomplete="off"
               placeholder="Ingresa TRM"
@@ -118,23 +120,23 @@
         ></app-items-quotation>
         <h6>Condiciones comerciales</h6>
         <ckeditor
-          [editor]="_texteditor.Editor"
-          (ready)="_texteditor.onReady($event)"
-          [config]="_texteditor.configEditor"
+          [editor]="_texteditor?.Editor"
+          (ready)="_texteditor?.onReady($event)"
+          [config]="_texteditor?.configEditor"
           formControlName="commercial_terms"
         ></ckeditor>
         <h6 class="mt-4">Requisitos técnicos, funcionales y desempeño</h6>
         <ckeditor
-          [editor]="_texteditor.Editor"
-          (ready)="_texteditor.onReady($event)"
-          [config]="_texteditor.configEditor"
+          [editor]="_texteditor?.Editor"
+          (ready)="_texteditor?.onReady($event)"
+          [config]="_texteditor?.configEditor"
           formControlName="technical_requirements"
         ></ckeditor>
         <h6 class="mt-4">Requisitos legales o reglamentos aplicables</h6>
         <ckeditor
-          [editor]="_texteditor.Editor"
-          (ready)="_texteditor.onReady($event)"
-          [config]="_texteditor.configEditor"
+          [editor]="_texteditor?.Editor"
+          (ready)="_texteditor?.onReady($event)"
+          [config]="_texteditor?.configEditor"
           formControlName="legal_requirements"
         ></ckeditor>
       </form>

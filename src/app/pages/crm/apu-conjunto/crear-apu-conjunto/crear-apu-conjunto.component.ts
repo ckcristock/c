@@ -106,7 +106,7 @@ export class CrearApuConjuntoComponent implements OnInit {
     private modalService: NgbModal,
     private scroll: ViewportScroller,
   ) {
-    this.user_id = _user.user.person.id
+    this.user_id = _user?.user?.person?.id
   }
 
   async ngOnInit(): Promise<void> {
@@ -152,17 +152,17 @@ export class CrearApuConjuntoComponent implements OnInit {
 
   async getConsecutivo() {
     await this._consecutivos.getConsecutivo('apu_sets').toPromise().then((r: any) => {
-      this.datosCabecera.CodigoFormato = r.data.format_code
-      this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
+      this.datosCabecera.CodigoFormato = r?.data?.format_code
+      this.form.patchValue({ format_code: this.datosCabecera?.CodigoFormato })
       if (this.title !== 'Editar conjunto') {
-        this.buildConsecutivo(this.form.get('city_id').value, r)
+        this.buildConsecutivo(this.form?.get('city_id')?.value, r)
         this.form.get('city_id').valueChanges.subscribe(value => {
           this.buildConsecutivo(value, r)
         });
       } else {
-        this.datosCabecera.Codigo = this.data.code
+        this.datosCabecera.Codigo = this.data?.code
         this.form.patchValue({
-          code: this.data.code
+          code: this.data?.code
         })
         this.form.get('city_id').disable()
         /* this.buildConsecutivo(this.form.get('city_id').value, r, 'editar')
@@ -177,29 +177,29 @@ export class CrearApuConjuntoComponent implements OnInit {
   openModal(content) {
     if (this.form.valid) {
       this.preDataSend = {
-        city_id: this.form.get('city_id').value,
-        third_party_id: this.form.get('third_party_id').value,
+        city_id: this.form?.get('city_id')?.value,
+        third_party_id: this.form?.get('third_party_id')?.value,
         line: this.form.get('line').value,
       }
-      this.modalRef = this.modalService.open(this.addAPUModal, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true });
+      this.modalRef = this.modalService?.open(this.addAPUModal, { ariaLabelledBy: 'modal-basic-title', size: 'xl', scrollable: true });
     } else {
-      this.form.markAllAsTouched();
-      this.scroll.scrollToPosition([0, 0]);
+      this.form?.markAllAsTouched();
+      this.scroll?.scrollToPosition([0, 0]);
     }
   }
 
   addFromPart(apu) {
-    this.modalRef.dismiss();
-    this._apuConjunto.getApuPartToAdd(apu.id).subscribe((res: any) => {
-      this.getApus(res.data)
+    this.modalRef?.dismiss();
+    this._apuConjunto?.getApuPartToAdd(apu?.id).subscribe((res: any) => {
+      this.getApus(res?.data)
     })
   }
 
   buildConsecutivo(value, r, context = '') {
     if (r.data.city) {
-      let city = this.cities.find(x => x.value === value)
-      if (city && !city.abbreviation) {
-        this.form.get('city_id').setValue(null);
+      let city = this.cities.find(x => x?.value === value)
+      if (city && !city?.abbreviation) {
+        this.form?.get('city_id')?.setValue(null);
         this._swal.show({
           icon: 'error',
           title: 'Error',
@@ -207,7 +207,7 @@ export class CrearApuConjuntoComponent implements OnInit {
           showCancel: false
         })
       } else {
-        let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
+        let con = this._consecutivos?.construirConsecutivo(r?.data, city?.abbreviation, context);
         this.datosCabecera.Codigo = con
         this.form.patchValue({
           code: con
@@ -224,32 +224,32 @@ export class CrearApuConjuntoComponent implements OnInit {
   unitPiezaId: any;
   getUnits() {
     this._units.selectUnits().subscribe((r: any) => {
-      this.units = r.data;
-      let pieza = this.units.find(x => x.text == 'Pieza')
-      this.unitPiezaId = pieza.value
+      this.units = r?.data;
+      let pieza = this.units.find(x => x?.text == 'Pieza')
+      this.unitPiezaId = pieza?.value
     })
   }
 
   getVariablesApu() {
     this._externos.getExternos().subscribe((res: any) => {
-      this.procesos_externos = res.data
+      this.procesos_externos = res?.data
     })
     this._maquinas.getMaquinas().subscribe((res: any) => {
-      this.maquinas_herramientas = res.data
+      this.maquinas_herramientas = res?.data
     })
     this._internos.getExternos().subscribe((res: any) => {
-      this.procesos_internos = res.data
+      this.procesos_internos = res?.data
     })
   }
 
   machineSet(item, event) {
     let machine_item = item as FormGroup;
-    this.maquinas_herramientas.forEach(element => {
-      if (element.value == event.target.value) {
+    this.maquinas_herramientas?.forEach(element => {
+      if (element?.value == event?.target?.value) {
         let machine = element
-        machine_item.patchValue({
-          unit_id: machine.unit.id,
-          unit_cost: machine.unit_cost
+        machine_item?.patchValue({
+          unit_id: machine?.unit?.id,
+          unit_cost: machine?.unit_cost
         })
         /* machine_item.controls.unit_id.disable()
         machine_item.controls.unit_cost.disable() */
@@ -259,12 +259,12 @@ export class CrearApuConjuntoComponent implements OnInit {
 
   internalSet(item, event) {
     let internal_item = item as FormGroup;
-    this.procesos_internos.forEach(element => {
-      if (element.value == event.target.value) {
+    this.procesos_internos?.forEach(element => {
+      if (element?.value == event?.target?.value) {
         let internal = element
-        internal_item.patchValue({
-          unit_id: internal.unit.id,
-          unit_cost: internal.unit_cost
+        internal_item?.patchValue({
+          unit_id: internal?.unit?.id,
+          unit_cost: internal?.unit_cost
         })
         /* internal_item.controls.unit_id.disable()
         internal_item.controls.unit_cost.disable() */
@@ -273,15 +273,15 @@ export class CrearApuConjuntoComponent implements OnInit {
   }
   externalSet(item, event) {
     let external_item = item as FormGroup;
-    this.procesos_externos.forEach(element => {
-      if (element.value == event.target.value) {
+    this.procesos_externos?.forEach(element => {
+      if (element?.value == event?.target?.value) {
         let external = element
-        external_item.patchValue({
-          unit_id: external.unit.id,
-          unit_cost: external.unit_cost
+        external_item?.patchValue({
+          unit_id: external?.unit?.id,
+          unit_cost: external?.unit_cost
         })
-        /* external_item.controls.unit_id.disable()
-        external_item.controls.unit_cost.disable() */
+        /* external_item?.controls?.unit_id?.disable()
+        external_item?.controls?.unit_cost?.disable() */
       }
     });
   }
@@ -290,35 +290,35 @@ export class CrearApuConjuntoComponent implements OnInit {
     if (!this.data) {
       return null;
     }
-    (this.data.other.length > 0 ? this.otherCollapsed = true : this.otherCollapsed = false);
+    (this.data?.other?.length > 0 ? this.otherCollapsed = true : this.otherCollapsed = false);
   }
 
   getApuSets() {
-    this._apuConjunto.getApuSetList().subscribe((r: any) => {
-      this.apuSets = r.data;
+    this._apuConjunto?.getApuSetList()?.subscribe((r: any) => {
+      this.apuSets = r?.data;
     })
   }
 
   getApuPart() {
-    this._apuConjunto.getApuParts().subscribe((r: any) => {
-      this.apuParts = r.data;
+    this._apuConjunto?.getApuParts()?.subscribe((r: any) => {
+      this.apuParts = r?.data;
     })
   }
 
   loadPeople() {
     this.people$ = concat(
       of([]), // default items
-      this.peopleInput$.pipe(
+      this.peopleInput$?.pipe(
         filter(res => {
-          return res !== null && res.length >= this.minLengthTerm
+          return res !== null && res?.length >= this.minLengthTerm
         }),
         distinctUntilChanged(),
         debounceTime(800),
         tap(() => this.peopleLoading = true),
         switchMap(term => {
           let param = { name: term }
-          return this._apuConjunto.getPeopleXSelect(param).pipe(
-            map((r: any) => { return r.data }),
+          return this._apuConjunto?.getPeopleXSelect(param)?.pipe(
+            map((r: any) => { return r?.data }),
             catchError(() => of([])), // empty list on error
             tap(() => this.peopleLoading = false)
           )
@@ -327,13 +327,13 @@ export class CrearApuConjuntoComponent implements OnInit {
     );
   }
 
-  searchSet = (text$: Observable<string>) => text$.pipe(
+  searchSet = (text$: Observable<string>) => text$?.pipe(
     debounceTime(300),
     distinctUntilChanged(),
     tap(() => this.searchingSet = true),
     switchMap(name =>
-      this._apuConjunto.getApuSetList({ name }).pipe(
-        map((r: any) => r.data),
+      this._apuConjunto?.getApuSetList({ name })?.pipe(
+        map((r: any) => r?.data),
         tap(() => this.searchFailedSet = false),
         catchError(() => {
           this.searchFailedSet = true;
@@ -344,15 +344,15 @@ export class CrearApuConjuntoComponent implements OnInit {
     tap(() => this.searchingSet = false)
   )
 
-  formatterSet = (x: { name: string }) => x.name;
+  formatterSet = (x: { name: string }) => x?.name;
 
-  search = (text$: Observable<string>) => text$.pipe(
+  search = (text$: Observable<string>) => text$?.pipe(
     debounceTime(300),
     distinctUntilChanged(),
     tap(() => this.searching = true),
     switchMap(name =>
-      this._apuConjunto.getApuParts({ name }).pipe(
-        map((r: any) => r.data),
+      this._apuConjunto?.getApuParts({ name })?.pipe(
+        map((r: any) => r?.data),
         tap(() => this.searchFailed = false),
         catchError(() => {
           this.searchFailed = true;
@@ -363,55 +363,55 @@ export class CrearApuConjuntoComponent implements OnInit {
     tap(() => this.searching = false)
   )
 
-  formatter = (x: { name: string }) => x.name;
+  formatter = (x: { name: string }) => x?.name;
 
   select(group: FormGroup, key, toUpdate) {
-    let control = group.get(key).value
+    let control = group?.get(key)?.value
     if (typeof control == 'object') {
-      group.patchValue({ [toUpdate]: control['id'] })
+      group?.patchValue({ [toUpdate]: control['id'] })
     } else {
-      group.patchValue({ [toUpdate]: '' })
+      group?.patchValue({ [toUpdate]: '' })
     }
-    /*         group.patchValue({ [key]: e.target.value })
-         return e.preventDefault() */
+    /*         group?.patchValue({ [key]: e?.target?.value })
+         return e?.preventDefault() */
   }
 
   findApus() {
-    if (this.form.valid) {
-      this.apus.openConfirm()
+    if (this.form?.valid) {
+      this.apus?.openConfirm()
     } else {
-      this.form.markAllAsTouched();
-      this.scroll.scrollToPosition([0, 0]);
+      this.form?.markAllAsTouched();
+      this.scroll?.scrollToPosition([0, 0]);
     }
     // this.formGroup = item;
 
   }
 
   getApus(e: any[]) {
-    let item = this.form.get('list_pieces_sets') as FormArray
-    e.forEach(apu => {
-      const exist = item.value.some(x => (x.apu_part_id == apu.apu_id && x.apu_type == apu.type))
-      !exist ? item.push(this.piecesSetsControl(apu)) :
-        this._swal.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
+    let item = this.form?.get('list_pieces_sets') as FormArray
+    e?.forEach(apu => {
+      const exist = item?.value?.some(x => (x?.apu_part_id == apu?.apu_id && x?.apu_type == apu?.type))
+      !exist ? item?.push(this.piecesSetsControl(apu)) :
+        this._swal?.show({ icon: 'error', title: 'Error', text: 'Ya agregaste este APU', showCancel: false })
     });
 
   }
 
 
   async getBases() {
-    await this._calculationBase.getAll().toPromise().then((r: any) => {
-      this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
+    await this._calculationBase?.getAll()?.toPromise()?.then((r: any) => {
+      this.calculationBase = r?.data?.reduce((acc, el) => ({ ...acc, [el?.concept]: el }), {})
       /* if (this.dataEdit) {
-        this.calculationBase.trm.value = this.dataEdit.trm
+        this.calculationBase?.trm?.value = this.dataEdit?.trm
       } */
     })
   }
 
   onSelect(event) {
     const types = ['image/png', 'image/jpg', 'image/jpeg', 'application/pdf']
-    event.addedFiles.forEach(file => {
-      if (!types.includes(file.type)) {
-        this._swal.show({
+    event?.addedFiles?.forEach(file => {
+      if (!types?.includes(file?.type)) {
+        this._swal?.show({
           icon: 'error',
           title: 'Error de archivo',
           showCancel: false,
@@ -420,21 +420,21 @@ export class CrearApuConjuntoComponent implements OnInit {
         return null
       }
     })
-    this.files.push(...event.addedFiles);
+    this.files?.push(...event?.addedFiles);
   }
 
   onRemove(event) {
-    this.files.splice(this.files.indexOf(event), 1);
+    this.files?.splice(this.files?.indexOf(event), 1);
   }
 
   createForm() {
-    this.form = help.functionsApuConjunto.createForm(this.fb, this.user_id, this.calculationBase);
-    help.functionsApuConjunto.listerTotalDirectCost(this.form);
+    this.form = help?.functionsApuConjunto?.createForm(this.fb, this.user_id, this.calculationBase);
+    help?.functionsApuConjunto?.listerTotalDirectCost(this.form);
   }
 
   getIndirectCosts() {
-    this._apuConjunto.getIndirectCosts().subscribe((r: any) => {
-      this.indirectCosts = r.data;
+    this._apuConjunto?.getIndirectCosts()?.subscribe((r: any) => {
+      this.indirectCosts = r?.data;
       if (!this.data) {
         this.indirectCostPush();
       }
@@ -444,94 +444,94 @@ export class CrearApuConjuntoComponent implements OnInit {
   validateData() {
     if (this.data) {
       setTimeout(() => {
-        help.functionsApuConjunto.fillInForm(this.form, this.data, this.fb, this.apuParts);
+        help?.functionsApuConjunto?.fillInForm(this.form, this.data, this.fb, this.apuParts);
       }, 1200);
-      this.planos = this.data.files
+      this.planos = this.data?.files
     }
   }
 
   refreshData() {
     //this.obtenerDato.emit();
-    this._apuConjunto.getApuSet(this.id).subscribe((r: any) => {
-      this.planos = r.data.files
+    this._apuConjunto?.getApuSet(this.id)?.subscribe((r: any) => {
+      this.planos = r?.data?.files
     })
   }
 
   getPeople() {
-    this._apuConjunto.getPeopleXSelect().subscribe((r: any) => {
-      this.people = r.data;
+    this._apuConjunto?.getPeopleXSelect()?.subscribe((r: any) => {
+      this.people = r?.data;
     })
   }
 
   async getCities() {
-    await this._apuConjunto.getCities().toPromise().then((r: any) => {
-      this.cities = r.data;
-      help.functionsApuConjunto.cityRetention(this.form, this.cities);
+    await this._apuConjunto?.getCities()?.toPromise()?.then((r: any) => {
+      this.cities = r?.data;
+      help?.functionsApuConjunto?.cityRetention(this.form, this.cities);
     })
   }
 
   getClients() {
-    this._apuConjunto.getClient().subscribe((r: any) => {
-      this.clients = r.data;
+    this._apuConjunto?.getClient()?.subscribe((r: any) => {
+      this.clients = r?.data;
     })
   }
 
   piecesSetsControl(item): FormGroup {
-    let group = help.piecesSetsHelper.createPiecesSetsGroup(this.form, this.fb, item, this.unitPiezaId);
+    let group = help?.piecesSetsHelper?.createPiecesSetsGroup(this.form, this.fb, item, this.unitPiezaId);
     return group;
   }
 
   get piecesSetsList() {
-    return this.form.get('list_pieces_sets') as FormArray;
+    return this.form?.get('list_pieces_sets') as FormArray;
   }
 
   newPiecesSets() {
-    if (this.form.valid) {
+    if (this.form?.valid) {
       let machine = this.piecesSetsList;
-      machine.push(this.piecesSetsControl(''))
+      machine?.push(this.piecesSetsControl(''))
     } else {
-      this.form.markAllAsTouched();
-      this.scroll.scrollToPosition([0, 0]);
+      this.form?.markAllAsTouched();
+      this.scroll?.scrollToPosition([0, 0]);
     }
 
   }
 
   deletePiecesSets(i) {
-    this.piecesSetsList.removeAt(i);
-    piecesSetsHelper.subtotalPieceSets(this.piecesSetsList, this.form);
+    this.piecesSetsList?.removeAt(i);
+    piecesSetsHelper?.subtotalPieceSets(this.piecesSetsList, this.form);
   }
 
   machineToolsControl(element): FormGroup {
-    let group = help.machineToolHelper.createMachineToolGroup(this.form, this.fb, element);
+    let group = help?.machineToolHelper?.createMachineToolGroup(this.form, this.fb, element);
     return group;
   }
 
   get machineToolList() {
-    return this.form.get('machine_tools') as FormArray;
+    return this.form?.get('machine_tools') as FormArray;
   }
 
   newMachineTool() {
-    if (this.form.valid) {
-      let maquinas_herramientas_aux = Array.from(this.maquinas_herramientas);
+    if (this.form?.valid) {
+      let maquinas_herramientas_aux = Array?.from(this.maquinas_herramientas);
       let machine = this.machineToolList;
-      const results = maquinas_herramientas_aux.filter(({ value: id1 }) => !machine.value.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
-      results.forEach(element => {
-        machine.push(this.machineToolsControl(element))
+      const results = maquinas_herramientas_aux?.filter(({ value: id1 }) => !machine?.value?.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
+      results?.forEach(element => {
+        machine?.push(this.machineToolsControl(element))
       });
     } else {
-      this.form.markAllAsTouched();
-      this.scroll.scrollToPosition([0, 0]);
+      this.form?.markAllAsTouched();
+      this.scroll?.scrollToPosition([0, 0]);
     }
   }
 
   deleteMachineTool(i) {
-    this.machineToolList.removeAt(i);
-    machineToolHelper.subtotalMachine(this.machineToolList, this.form);
+    this.machineToolList?.removeAt(i);
+    machineToolHelper?.subtotalMachine(this.machineToolList, this.form);
   }
 
   deleteAllMachineTool() {
-    this.machineToolList.clear()
-    machineToolHelper.subtotalMachine(this.machineToolList, this.form);
+    this.machineToolList?.clear()
+    machineToolHelper?.subtotalMachine(this.machineToolList, this.form);
   }
 
   /************** Maquinas Herramientas termina ****************/
@@ -539,36 +539,36 @@ export class CrearApuConjuntoComponent implements OnInit {
   /************** Procesos Internos Inicia ****************/
 
   internalProcessesControl(element): FormGroup {
-    let group = help.internalProcessesHelper.createInternalProcessesGroup(this.form, this.fb, element);
+    let group = help?.internalProcessesHelper?.createInternalProcessesGroup(this.form, this.fb, element);
     return group;
   }
 
   get internalProcessList() {
-    return this.form.get('internal_processes') as FormArray;
+    return this.form?.get('internal_processes') as FormArray;
   }
 
   newInternalProccesses() {
-    if (this.form.valid) {
-      let procesos_internos_aux = Array.from(this.procesos_internos);
+    if (this.form?.valid) {
+      let procesos_internos_aux = Array?.from(this.procesos_internos);
       let internalProccess = this.internalProcessList;
-      const results = procesos_internos_aux.filter(({ value: id1 }) => !internalProccess.value.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
-      results.forEach(element => {
-        internalProccess.push(this.internalProcessesControl(element))
+      const results = procesos_internos_aux?.filter(({ value: id1 }) => !internalProccess?.value?.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
+      results?.forEach(element => {
+        internalProccess?.push(this.internalProcessesControl(element))
       });
     } else {
-      this.form.markAllAsTouched();
-      this.scroll.scrollToPosition([0, 0]);
+      this.form?.markAllAsTouched();
+      this.scroll?.scrollToPosition([0, 0]);
     }
   }
 
   deleteInternalProccess(i) {
-    this.internalProcessList.removeAt(i);
-    internalProcessesHelper.subtotalInternalProcesses(this.internalProcessList, this.form)
+    this.internalProcessList?.removeAt(i);
+    internalProcessesHelper?.subtotalInternalProcesses(this.internalProcessList, this.form)
   }
 
   deleteAllInternalProccess() {
-    this.internalProcessList.clear();
-    internalProcessesHelper.subtotalInternalProcesses(this.internalProcessList, this.form)
+    this.internalProcessList?.clear();
+    internalProcessesHelper?.subtotalInternalProcesses(this.internalProcessList, this.form)
   }
 
 
@@ -577,36 +577,36 @@ export class CrearApuConjuntoComponent implements OnInit {
   /************** Procesos Externos Inicia ****************/
 
   externalProcessesControl(element): FormGroup {
-    let group = help.externalProcessesHelper.createExternalProcessesGroup(this.form, this.fb, element);
+    let group = help?.externalProcessesHelper?.createExternalProcessesGroup(this.form, this.fb, element);
     return group;
   }
 
   get externalProcessList() {
-    return this.form.get('external_processes') as FormArray;
+    return this.form?.get('external_processes') as FormArray;
   }
 
   newExternalProccesses() {
-    if (this.form.valid) {
-      let procesos_externos_aux = Array.from(this.procesos_externos);
+    if (this.form?.valid) {
+      let procesos_externos_aux = Array?.from(this.procesos_externos);
       let exteranlProccess = this.externalProcessList;
-      const results = procesos_externos_aux.filter(({ value: id1 }) => !exteranlProccess.value.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
-      results.forEach(element => {
-        exteranlProccess.push(this.externalProcessesControl(element))
+      const results = procesos_externos_aux?.filter(({ value: id1 }) => !exteranlProccess?.value?.some(({ description: id2 }) => id2 == id1)); // 😍😍😍😍😍
+      results?.forEach(element => {
+        exteranlProccess?.push(this.externalProcessesControl(element))
       });
     } else {
-      this.form.markAllAsTouched();
-      this.scroll.scrollToPosition([0, 0]);
+      this.form?.markAllAsTouched();
+      this.scroll?.scrollToPosition([0, 0]);
     }
   }
 
   deleteExternalProccess(i) {
-    this.externalProcessList.removeAt(i);
-    externalProcessesHelper.subtotalExternalProcesses(this.externalProcessList, this.form);
+    this.externalProcessList?.removeAt(i);
+    externalProcessesHelper?.subtotalExternalProcesses(this.externalProcessList, this.form);
   }
 
   deleteAllExternalProccess() {
-    this.externalProcessList.clear();
-    externalProcessesHelper.subtotalExternalProcesses(this.externalProcessList, this.form);
+    this.externalProcessList?.clear();
+    externalProcessesHelper?.subtotalExternalProcesses(this.externalProcessList, this.form);
   }
 
   /************** Procesos Externos termina ****************/
@@ -614,129 +614,127 @@ export class CrearApuConjuntoComponent implements OnInit {
   /************** Otros Inicia ****************/
 
   othersControl(): FormGroup {
-    let group = help.othersHelper.createOthersGroup(this.form, this.fb);
+    let group = help?.othersHelper?.createOthersGroup(this.form, this.fb);
     return group;
   }
 
   get othersList() {
-    return this.form.get('others') as FormArray;
+    return this.form?.get('others') as FormArray;
   }
 
   newOthersList() {
     let others = this.othersList;
-    others.push(this.othersControl())
+    others?.push(this.othersControl())
   }
 
   deleteOthers(i) {
-    this.othersList.removeAt(i);
-    othersHelper.subtotalOthers(this.othersList, this.form);
+    this.othersList?.removeAt(i);
+    othersHelper?.subtotalOthers(this.othersList, this.form);
   }
 
   /************** Otros Termina ****************/
 
   get indirecCostList() {
-    return this.form.get('indirect_cost') as FormArray;
+    return this.form?.get('indirect_cost') as FormArray;
   }
 
   indirectCostPush() {
-    let indirect_cost = this.form.get('indirect_cost') as FormArray;
-    indirect_cost.clear();
-    this.indirectCosts.forEach(element => {
-      indirect_cost.push(this.indirectCostgroup(element, this.fb, this.form));
+    let indirect_cost = this.form?.get('indirect_cost') as FormArray;
+    indirect_cost?.clear();
+    this.indirectCosts?.forEach(element => {
+      indirect_cost?.push(this.indirectCostgroup(element, this.fb, this.form));
     });
   }
 
   indirectCostgroup(element, fb: FormBuilder, form: FormGroup) {
-    let group = fb.group({
-      name: [element.text],
-      percentage: [element.percentage],
+    let group = fb?.group({
+      name: [element?.text],
+      percentage: [element?.percentage],
       value: [0]
     });
-    help.functionsApuConjunto.indirectCostOp(group, form);
+    help?.functionsApuConjunto?.indirectCostOp(group, form);
     return group;
   }
 
   save() {
-    if (this.form.invalid) {
-      this._swal.show({
+    if (this.form?.invalid) {
+      this._swal?.show({
         icon: 'error',
         title: 'ERROR',
         text: 'Revisa la información y vuelve a intentarlo',
         showCancel: false
       })
-      this.form.markAllAsTouched()
+      this.form?.markAllAsTouched()
     } else {
       let filess = this.files;
-      filess.forEach(elem => {
+      filess?.forEach(elem => {
         let file = elem;
         var reader = new FileReader();
-        reader.readAsDataURL(file);
+        reader?.readAsDataURL(file);
         reader.onload = (event) => {
           this.fileString = {
-            base64: (<FileReader>event.target).result,
-            name: elem.name,
-            type: elem.type
+            base64: (<FileReader>event?.target)?.result,
+            name: elem?.name,
+            type: elem?.type
           };
         };
-        functionsUtils.fileToBase64(file).subscribe((base64) => {
+        functionsUtils?.fileToBase64(file)?.subscribe((base64) => {
           this.file = base64;
-          this.fileArr.push(this.fileString);
+          this.fileArr?.push(this.fileString);
         });
       });
-      this.form.patchValue({
+      this.form?.patchValue({
         files: this.fileArr
       });
-      this._swal
-        .show({
-          text: `Vamos a ${this.id && this.title == 'Editar conjunto' ? 'editar' : 'crear'} un conjunto`,
-          title: '¿Estás seguro(a)?',
-          icon: 'question',
-        })
-        .then((r) => {
-          if (r.isConfirmed) {
-            if (this.id && this.title == 'Editar conjunto') {
-              this._apuConjunto.update(this.form.value, this.id).subscribe(
-                (res: any) => {
-                  if (!res.status) {
-                    this.showError(res)
-                  } else {
-                    this.showSuccess()
+      this._swal?.show({
+        text: `Vamos a ${this.id && this.title == 'Editar conjunto' ? 'editar' : 'crear'} un conjunto`,
+        title: '¿Estás seguro(a)?',
+        icon: 'question',
+      })?.then((r) => {
+        if (r?.isConfirmed) {
+          if (this.id && this.title == 'Editar conjunto') {
+            this._apuConjunto?.update(this.form?.value, this.id)?.subscribe(
+              (res: any) => {
+                if (!res?.status) {
+                  this.showError(res)
+                } else {
+                  this.showSuccess()
+                }
+              },
+              (err) => this.showError(err)
+            );
+          } else {
+            this._apuConjunto?.save(this.form?.value)?.subscribe(
+              (res: any) => {
+                if (!res?.status) {
+                  this.showError(res)
+                } else {
+                  if (this.preData) {
+                    this.saveForBusiness?.emit(res?.data)
                   }
-                },
-                (err) => this.showError(err)
-              );
-            } else {
-              this._apuConjunto.save(this.form.value).subscribe(
-                (res: any) => {
-                  if (!res.status) {
-                    this.showError(res)
-                  } else {
-                    if (this.preData) {
-                      this.saveForBusiness.emit(res.data)
-                    }
-                    this.showSuccess()
-                  }
-                },
-                (err) => this.showError(err)
-              );
-            }
+                  this.showSuccess()
+                }
+              },
+              (err) => this.showError(err)
+            );
           }
-        });
+        }
+      });
     }
   }
 
   apuIdToCreateOrEdit() {
-    let pieces_sets = this.form.get('list_pieces_sets') as FormArray;
-    pieces_sets.controls.forEach(element => {
-      let apu_id = element.get('apu_id').value.id
-      element.patchValue({
+    let pieces_sets = this.form?.get('list_pieces_sets') as FormArray;
+    pieces_sets?.controls?.forEach(element => {
+      let apu_id = element?.get('apu_id')?.value?.id
+      element?.patchValue({
         apu_id
       })
     });
   }
 
   showSuccess() {
-    this._swal.show({
+    this._swal?.show({
       icon: 'success',
       text: `Conjunto ${this.id && this.title == 'Editar conjunto' ? 'editado' : 'creado'} con éxito`,
       title: 'Operación exitosa',
@@ -744,15 +742,15 @@ export class CrearApuConjuntoComponent implements OnInit {
       timer: 1000
     });
     if (!this.preData) {
-      this.router.navigateByUrl('/crm/apus');
+      this.router?.navigateByUrl('/crm/apus');
     }
   }
   showError(err) {
-    this._swal.show({
+    this._swal?.show({
       icon: 'error',
       title: '¡Ooops!',
       showCancel: false,
-      text: err.code,
+      text: err?.code,
     });
   }
 }

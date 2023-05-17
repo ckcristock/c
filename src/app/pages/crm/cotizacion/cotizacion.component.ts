@@ -63,57 +63,57 @@ export class CotizacionComponent implements OnInit {
     private dateAdapter: DateAdapter<any>,
     private _paginator: PaginatorService
   ) {
-    this.dateAdapter.setLocale('es');
+    this.dateAdapter?.setLocale('es');
     this.paginator.itemsPerPageLabel = "Items por página:";
-    this.permission = this._permission.validatePermissions(this.permission)
+    this.permission = this._permission?.validatePermissions(this.permission)
   }
 
   ngOnInit(): void {
-    if (this.permission.permissions.show) {
+    if (this.permission?.permissions?.show) {
       this.createFormFilters();
-      this.route.queryParamMap.subscribe((params: any) => {
-        if (params.params.pageSize) {
-          this.pagination.pageSize = params.params.pageSize
+      this.route?.queryParamMap?.subscribe((params: any) => {
+        if (params?.params?.pageSize) {
+          this.pagination.pageSize = params?.params?.pageSize
         } else {
-          this.pagination.pageSize = localStorage.getItem('paginationItemsQuotation') || 100
+          this.pagination.pageSize = localStorage?.getItem('paginationItemsQuotation') || 100
         }
-        if (params.params.pag) {
-          this.pagination.page = params.params.pag
+        if (params?.params?.pag) {
+          this.pagination.page = params?.params?.pag
         } else {
           this.pagination.page = 1
         }
-        this.orderObj = { ...params.keys, ...params }
-        if (Object.keys(this.orderObj).length > 3) {
+        this.orderObj = { ...params?.keys, ...params }
+        if (Object?.keys(this.orderObj)?.length > 3) {
           this.filtrosActivos = true
           const formValues = {};
           for (const param in params) {
             formValues[param] = params[param];
           }
-          this.form_filters.patchValue(formValues['params']);
+          this.form_filters?.patchValue(formValues['params']);
         }
         this.getQuotation();
         this.getQuotationsCards();
       }
       );
     } else {
-      this.router.navigate(['/notauthorized'])
+      this.router?.navigate(['/notauthorized'])
     }
 
   }
 
   stop(event) {
-    event.preventDefault();
-    event.stopPropagation();
+    event?.preventDefault();
+    event?.stopPropagation();
   }
 
   selectedDate(fecha) {
-    if (fecha.value) {
-      this.form_filters.patchValue({
-        date_start: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
-        date_end: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+    if (fecha?.value) {
+      this.form_filters?.patchValue({
+        date_start: this.datePipe?.transform(fecha?.value?.begin?._d, 'yyyy-MM-dd'),
+        date_end: this.datePipe?.transform(fecha?.value?.end?._d, 'yyyy-MM-dd')
       })
     } else {
-      this.form_filters.patchValue({
+      this.form_filters?.patchValue({
         date_start: '',
         date_end: ''
       })
@@ -121,7 +121,7 @@ export class CotizacionComponent implements OnInit {
   }
 
   createFormFilters() {
-    this.form_filters = this.fb.group({
+    this.form_filters = this.fb?.group({
       date: '',
       date_start: '',
       date_end: '',
@@ -131,56 +131,56 @@ export class CotizacionComponent implements OnInit {
       description: '',
       status: '',
     })
-    this.form_filters.valueChanges.pipe(
+    this.form_filters?.valueChanges?.pipe(
       debounceTime(500),
-    ).subscribe(r => {
+    )?.subscribe(r => {
       this.getQuotation();
     })
   }
 
   resetFiltros() {
-    this._paginator.resetFiltros(this.form_filters);
+    this._paginator?.resetFiltros(this.form_filters);
     this.filtrosActivos = false
   }
 
   openClose() {
     this.matPanel = !this.matPanel;
-    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
+    this.matPanel ? this.accordion?.openAll() : this.accordion?.closeAll();
   }
 
   openList(id) {
     this.view_list = true;
-    this.quotation = this.quotations.find(q => q.id === id);
-    this.quotations.forEach(q => q.selected = (q.id === id));
+    this.quotation = this.quotations?.find(q => q?.id === id);
+    this.quotations?.forEach(q => q.selected = (q?.id === id));
   }
 
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination);
-    localStorage.setItem('paginationItemsQuotation', this.pagination.pageSize);
+    this._paginator?.handlePageEvent(event, this.pagination);
+    localStorage?.setItem('paginationItemsQuotation', this.pagination?.pageSize);
     this.getQuotation()
   }
 
   closeList() {
     this.view_list = false;
-    this.quotations.forEach(q => q.selected = false);
+    this.quotations?.forEach(q => q.selected = false);
   }
 
   updateStatus(status, id) {
-    this._swal.show({
+    this._swal?.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
       showCancel: true,
       text: ''
-    }).then((r) => {
-      if (r.isConfirmed) {
+    })?.then((r) => {
+      if (r?.isConfirmed) {
         let data = {
           status: status
         }
-        this._quotations.updateQuotation(data, id).subscribe((res: any) => {
-          this._swal.show({
+        this._quotations?.updateQuotation(data, id).subscribe((res: any) => {
+          this._swal?.show({
             icon: 'success',
             text: '',
-            title: res.data,
+            title: res?.data,
             showCancel: false,
             timer: 1000
           })
@@ -193,22 +193,22 @@ export class CotizacionComponent implements OnInit {
   }
 
   SetFiltros(paginacion) {
-    return this._paginator.SetFiltros(paginacion, this.pagination, this.form_filters);
+    return this._paginator?.SetFiltros(paginacion, this.pagination, this.form_filters);
   }
 
   getQuotation(id = null) {
     this.loading = true;
     let params = {
       ...this.pagination,
-      ...this.form_filters.value
+      ...this.form_filters?.value
     }
-    var paramsurl = this.SetFiltros(this.pagination.page);
-    this.location.replaceState('/crm/cotizacion', paramsurl.toString());
-    this._quotations.getQuotations(params).subscribe((res: any) => {
-      this.quotations = res.data.data;
+    var paramsurl = this.SetFiltros(this.pagination?.page);
+    this.location?.replaceState('/crm/cotizacion', paramsurl?.toString());
+    this._quotations?.getQuotations(params)?.subscribe((res: any) => {
+      this.quotations = res?.data?.data;
       this.loading = false;
-      this.paginationMaterial = res.data
-      if (this.paginationMaterial.last_page < this.pagination.page) {
+      this.paginationMaterial = res?.data
+      if (this.paginationMaterial?.last_page < this.pagination?.page) {
         this.paginationMaterial.current_page = 1
         this.pagination.page = 1
         this.getQuotation()
@@ -227,18 +227,18 @@ export class CotizacionComponent implements OnInit {
     this.count_aprobada = 0;
     this.count_no_aprobada = 0;
     this.loading_cards = true;
-    this._quotations.getAllQuotations()
-      .subscribe((res: any) => {
+    this._quotations?.getAllQuotations()
+      ?.subscribe((res: any) => {
         this.loading_cards = false;
-        this.quotations_cards = res.data
-        this.quotations_cards.forEach(element => {
-          if (element.status == 'Pendiente') {
+        this.quotations_cards = res?.data
+        this.quotations_cards?.forEach(element => {
+          if (element?.status == 'Pendiente') {
             this.count_pendiente++;
-          } else if (element.status == 'Aprobada') {
+          } else if (element?.status == 'Aprobada') {
             this.count_aprobada++
-          } else if (element.status == 'No aprobada') {
+          } else if (element?.status == 'No aprobada') {
             this.count_no_aprobada++
-          } else if (element.status == 'Anulada') {
+          } else if (element?.status == 'Anulada') {
             this.count_anulada++
           }
         });
@@ -246,7 +246,7 @@ export class CotizacionComponent implements OnInit {
   }
 
   comments_quotation(content, id) {
-    this._modal.open(content)
+    this._modal?.open(content)
   }
 
 }

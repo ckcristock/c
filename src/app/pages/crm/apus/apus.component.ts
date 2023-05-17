@@ -56,7 +56,7 @@ export class ApusComponent implements OnInit {
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
     this.dateAdapter.setLocale('es');
-    this.permission = this._permission.validatePermissions(this.permission)
+    this.permission = this._permission?.validatePermissions(this.permission)
   }
   orderObj: any
   filtrosActivos: boolean = false
@@ -66,41 +66,41 @@ export class ApusComponent implements OnInit {
   ngOnInit(): void {
     if (this.permission?.permissions?.show) {
       this.createFormFilters();
-      this.route?.queryParamMap.subscribe((params: any) => {
-        if (params.params.pageSize) {
-          this.pagination.pageSize = params.params.pageSize
+      this.route?.queryParamMap?.subscribe((params: any) => {
+        if (params?.params?.pageSize) {
+          this.pagination.pageSize = params?.params?.pageSize
         } else {
-          this.pagination.pageSize = localStorage.getItem('paginationItemsAPU') || 100
+          this.pagination.pageSize = localStorage?.getItem('paginationItemsAPU') || 100
         }
-        if (params.params.pag) {
-          this.pagination.page = params.params.pag
+        if (params?.params?.pag) {
+          this.pagination.page = params?.params?.pag
         } else {
           this.pagination.page = 1
         }
-        this.orderObj = { ...params.keys, ...params };
-        if (Object.keys(this.orderObj).length > 3) {
+        this.orderObj = { ...params?.keys, ...params };
+        if (Object?.keys(this.orderObj)?.length > 3) {
           this.filtrosActivos = true
           const formValues = {};
           for (const param in params) {
             formValues[param] = params[param];
           }
-          this.form_filters.patchValue(formValues['params']);
+          this.form_filters?.patchValue(formValues['params']);
         }
-        let date_one = new Date(this.form_filters.controls.date_one.value)
-        let date_two = new Date(this.form_filters.controls.date_two.value)
-        date_one.setDate(date_one.getDate() + 1)
-        date_two.setDate(date_two.getDate() + 1)
+        let date_one = new Date(this.form_filters?.controls?.date_one?.value)
+        let date_two = new Date(this.form_filters?.controls?.date_two?.value)
+        date_one?.setDate(date_one?.getDate() + 1)
+        date_two?.setDate(date_two?.getDate() + 1)
         this.date = { begin: date_one, end: date_two }
         this.getApus()
       }
       );
     } else {
-      this.router.navigate(['/notauthorized'])
+      this.router?.navigate(['/notauthorized'])
     }
   }
 
   createFormFilters() {
-    this.form_filters = this.fb.group({
+    this.form_filters = this.fb?.group({
       code: '',
       date_one: '',
       date_two: '',
@@ -113,7 +113,7 @@ export class ApusComponent implements OnInit {
       set_name: '',
       machine_name: ''
     })
-    this.form_filters.valueChanges.pipe(
+    this.form_filters?.valueChanges?.pipe(
       debounceTime(500),
     ).subscribe(r => {
       this.getApus();
@@ -121,13 +121,13 @@ export class ApusComponent implements OnInit {
   }
 
   selectedDate(fecha) {
-    if (fecha.value) {
-      this.form_filters.patchValue({
-        date_one: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
-        date_two: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+    if (fecha?.value) {
+      this.form_filters?.patchValue({
+        date_one: this.datePipe?.transform(fecha?.value?.begin?._d, 'yyyy-MM-dd'),
+        date_two: this.datePipe?.transform(fecha?.value?.end?._d, 'yyyy-MM-dd')
       })
     } else {
-      this.form_filters.patchValue({
+      this.form_filters?.patchValue({
         date_one: '',
         date_two: ''
       })
@@ -136,18 +136,18 @@ export class ApusComponent implements OnInit {
   }
 
   resetFiltros() {
-    this._paginator.resetFiltros(this.form_filters)
+    this._paginator?.resetFiltros(this.form_filters)
     this.filtrosActivos = false
   }
 
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination);
-    localStorage.setItem('paginationItemsAPU', this.pagination.pageSize);
+    this._paginator?.handlePageEvent(event, this.pagination);
+    localStorage?.setItem('paginationItemsAPU', this.pagination?.pageSize);
     this.getApus()
   }
 
   SetFiltros(paginacion) {
-    return this._paginator.SetFiltros(paginacion, this.pagination, this.form_filters)
+    return this._paginator?.SetFiltros(paginacion, this.pagination, this.form_filters)
   }
   estadoFiltros = false;
   mostrarFiltros() {
@@ -158,15 +158,15 @@ export class ApusComponent implements OnInit {
     this.loading = true;
     let params = {
       ...this.pagination,
-      ...this.form_filters.value
+      ...this.form_filters?.value
     }
-    var paramsurl = this.SetFiltros(this.pagination.page);
-    this.location.replaceState('/crm/apus', paramsurl.toString());
-    this._apus.getApus(params).subscribe((r: any) => {
-      this.apus = r.data.data;
+    var paramsurl = this.SetFiltros(this.pagination?.page);
+    this.location?.replaceState('/crm/apus', paramsurl?.toString());
+    this._apus?.getApus(params)?.subscribe((r: any) => {
+      this.apus = r?.data?.data;
       this.loading = false;
-      this.paginationMaterial = r.data
-      if (this.paginationMaterial.last_page < this.pagination.page) {
+      this.paginationMaterial = r?.data
+      if (this.paginationMaterial?.last_page < this.pagination?.page) {
         this.paginationMaterial.current_page = 1
         this.pagination.page = 1
         this.getApus()

@@ -36,7 +36,7 @@
             </button>
             <button
               class="btn btn-info btn-sm"
-              (click)="matPanelFiltros.toggle()"
+              (click)="matPanelFiltros?.toggle()"
             >
               <i class="fas fa-sliders-h"></i> Filtros
             </button>
@@ -218,7 +218,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of apus" class="text-center">
-              <td class="align-middle">{{ item.code | uppercase }}</td>
+              <td class="align-middle">{{ item?.code | uppercase }}</td>
               <td class="align-middle" *ngIf="checkFecha">
                 {{ item?.created_at | date : "MMM d, y" }}
               </td>
@@ -233,7 +233,7 @@
                 {{ item?.machine_name || "Sin información" | capitalLetter }}
               </td>
               <td class="align-middle" *ngIf="checkDestino">
-                {{ item?.city.name | uppercase }}
+                {{ item?.city?.name | uppercase }}
               </td>
               <td class="align-middle" *ngIf="checkLinea">
                 {{ item?.line | capitalLetter }}
@@ -344,9 +344,9 @@
       </div>
       <mat-paginator
         *ngIf="paginationMaterial"
-        [length]="paginationMaterial.total"
-        [pageSize]="paginationMaterial.per_page"
-        [pageIndex]="paginationMaterial.current_page - 1"
+        [length]="paginationMaterial?.total"
+        [pageSize]="paginationMaterial?.per_page"
+        [pageIndex]="paginationMaterial?.current_page - 1"
         [pageSizeOptions]="[5, 10, 25, 100]"
         (page)="handlePageEvent($event)"
         aria-label="Select page"

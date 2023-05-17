@@ -28,7 +28,7 @@
                 <div class="col-md-3 pt-2 text-center">
                   <img
                     class="img-fluid img-third"
-                    [src]="third_data.image"
+                    [src]="third_data?.image"
                     onerror="this.src='../../../../assets/images/noprofile.png'"
                     alt=""
                   />
@@ -39,7 +39,7 @@
                       <mat-icon class="mat-icon-font d-flex align-items-center"
                         >location_on</mat-icon
                       >
-                      {{ third_data.country.name | capitalLetter }}
+                      {{ third_data?.country?.name | capitalLetter }}
                     </div>
                     <div class="d-flex align-items-center text-truncate">
                       <mat-icon
@@ -47,7 +47,7 @@
                         class="mat-icon-font d-flex align-items-center"
                         >mail</mat-icon
                       >
-                      {{ third_data.email | lowercase }}
+                      {{ third_data?.email | lowercase }}
                     </div>
                     <div class="d-flex align-items-center text-truncate">
                       <mat-icon
@@ -55,11 +55,13 @@
                         class="mat-icon-font d-flex align-items-center"
                         >call</mat-icon
                       >
-                      {{ third_data.landline }}
+                      {{ third_data?.landline }}
                       {{
-                        third_data.landline && third_data.cell_phone ? "-" : ""
+                        third_data?.landline && third_data?.cell_phone
+                          ? "-"
+                          : ""
                       }}
-                      {{ third_data.cell_phone }}
+                      {{ third_data?.cell_phone }}
                     </div>
                     <div class="d-flex align-items-center text-truncate">
                       <mat-icon
@@ -68,12 +70,12 @@
                         >person_add</mat-icon
                       >
                       {{
-                        third_data.is_client
+                        third_data?.is_client
                           ? "Cliente. "
                           : ("" | capitalLetter)
                       }}
                       {{
-                        third_data.is_supplier
+                        third_data?.is_supplier
                           ? "Proveedor"
                           : ("" | capitalLetter)
                       }}
@@ -87,24 +89,26 @@
                             <tr>
                               <th>Tipo doc.:</th>
                               <td>
-                                {{ third_data.document_type_.code | uppercase }}
+                                {{
+                                  third_data?.document_type_?.code | uppercase
+                                }}
                               </td>
                             </tr>
                             <tr>
                               <th>Número:</th>
                               <td>
-                                {{ third_data.nit | number }}
-                                {{ third_data.dv ? "-" + third_data.dv : "" }}
+                                {{ third_data?.nit | number }}
+                                {{ third_data?.dv ? "-" + third_data?.dv : "" }}
                               </td>
                             </tr>
                             <tr>
                               <th>Persona:</th>
-                              <td>{{ third_data.person_type | uppercase }}</td>
+                              <td>{{ third_data?.person_type | uppercase }}</td>
                             </tr>
                             <tr>
                               <th>Dirección:</th>
                               <td>
-                                {{ third_data.cod_dian_address | uppercase }}
+                                {{ third_data?.cod_dian_address | uppercase }}
                               </td>
                             </tr>
                           </tbody>
@@ -118,26 +122,26 @@
                             <tr>
                               <th>Departamento:</th>
                               <td>
-                                {{ third_data.department.name | uppercase }}
+                                {{ third_data?.department?.name | uppercase }}
                               </td>
                             </tr>
                             <tr>
                               <th>Municipio:</th>
                               <td>
-                                {{ third_data.municipality.name | uppercase }}
+                                {{ third_data?.municipality?.name | uppercase }}
                               </td>
                             </tr>
                             <tr>
                               <th>Teléfono pagos:</th>
                               <td>
-                                {{ third_data.phone_payments | uppercase }}
+                                {{ third_data?.phone_payments | uppercase }}
                               </td>
                             </tr>
                             <tr>
                               <th>Correo pagos:</th>
                               <td>
                                 {{
-                                  third_data.email_payments || "No disponible"
+                                  third_data?.email_payments || "No disponible"
                                     | uppercase
                                 }}
                               </td>
@@ -179,7 +183,7 @@
                 >
                   COTIZACIONES
                   <h4 class="text-info mb-0">
-                    {{ pagination.collectionSizeQuotation }}
+                    {{ pagination?.collectionSizeQuotation }}
                   </h4>
                 </li>
                 <li
@@ -187,7 +191,7 @@
                 >
                   PRESUPUESTOS
                   <h4 class="text-info mb-0">
-                    {{ pagination.collectionSizeBudgets }}
+                    {{ pagination?.collectionSizeBudgets }}
                   </h4>
                 </li>
                 <li
@@ -195,7 +199,7 @@
                 >
                   NEGOCIOS
                   <h4 class="text-info mb-0">
-                    {{ pagination.collectionSizeBusiness }}
+                    {{ pagination?.collectionSizeBusiness }}
                   </h4>
                 </li>
               </ul>
@@ -211,7 +215,7 @@
               <div class="rounded-top table-responsive">
                 <table
                   class="table table-bordered table-striped table-sm mb-0"
-                  *ngIf="!loading && people.length > 0; else notData"
+                  *ngIf="!loading && people?.length > 0; else notData"
                 >
                   <thead class="bg-light">
                     <tr class="text-center text-uppercase">
@@ -226,23 +230,23 @@
                   <tbody>
                     <tr *ngFor="let person of people" class="text-center">
                       <td class="align-middle">
-                        {{ person.name | titlecase }}
+                        {{ person?.name | titlecase }}
                       </td>
                       <td class="align-middle">
-                        {{ person.n_document || "Sin informacion" | number }}
+                        {{ person?.n_document || "Sin informacion" | number }}
                       </td>
                       <td class="align-middle">
-                        {{ person.cell_phone || "Sin información" }}
+                        {{ person?.cell_phone || "Sin información" }}
                       </td>
                       <td class="align-middle">
-                        {{ person.email | lowercase }}
+                        {{ person?.email | lowercase }}
                       </td>
                       <td class="align-middle">
-                        {{ person.position | capitalLetter }}
+                        {{ person?.position | capitalLetter }}
                       </td>
                       <td class="align-middle">
                         {{
-                          person.observation || "Sin información"
+                          person?.observation || "Sin información"
                             | capitalLetter
                         }}
                       </td>
@@ -252,9 +256,9 @@
               </div>
               <mat-paginator
                 *ngIf="paginacionPeople"
-                [length]="paginacionPeople.total"
-                [pageSize]="paginacionPeople.per_page"
-                [pageIndex]="paginacionPeople.current_page - 1"
+                [length]="paginacionPeople?.total"
+                [pageSize]="paginacionPeople?.per_page"
+                [pageIndex]="paginacionPeople?.current_page - 1"
                 (page)="handlePageEvent($event, 'people')"
                 aria-label="Select page"
               >
@@ -328,7 +332,7 @@
             <div class="col-md">
               <h3>
                 <span class="badge badge-pill badge-danger"
-                  >{{ pagination.collectionSizeQuotation }} cotizaciones</span
+                  >{{ pagination?.collectionSizeQuotation }} cotizaciones</span
                 >
               </h3>
             </div>
@@ -346,7 +350,7 @@
           <div class="rounded-top table-responsive">
             <table
               class="table table-bordered table-striped table-sm"
-              *ngIf="!loading && quotations.length > 0; else notData"
+              *ngIf="!loading && quotations?.length > 0; else notData"
             >
               <thead class="bg-light">
                 <tr class="text-center text-uppercase">
@@ -363,28 +367,28 @@
                   *ngFor="let item of quotations"
                   class="text-center"
                   [ngClass]="{
-                    'text-danger font-weight-bold': item.status === 'Inactivo'
+                    'text-danger font-weight-bold': item?.status === 'Inactivo'
                   }"
                 >
-                  <td>{{ item.code }}</td>
-                  <td>{{ item.created_at | date : "MMM d, y" }}</td>
-                  <td>{{ item.municipality.name | capitalLetter }}</td>
-                  <td>{{ item.description | capitalLetter }}</td>
+                  <td>{{ item?.code }}</td>
+                  <td>{{ item?.created_at | date : "MMM d, y" }}</td>
+                  <td>{{ item?.municipality?.name | capitalLetter }}</td>
+                  <td>{{ item?.description | capitalLetter }}</td>
                   <td>
                     <span
                       class="badge"
                       [class]="
-                        item.status == 'Pendiente'
+                        item?.status == 'Pendiente'
                           ? 'badge-info'
-                          : item.status == 'Aprobada'
+                          : item?.status == 'Aprobada'
                           ? 'badge-primary'
-                          : item.status == 'No aprobada'
+                          : item?.status == 'No aprobada'
                           ? 'badge-warning'
-                          : item.status == 'Anulada'
+                          : item?.status == 'Anulada'
                           ? 'badge-danger'
                           : 'badge-dark'
                       "
-                      >{{ item.status | uppercase }}</span
+                      >{{ item?.status | uppercase }}</span
                     >
                   </td>
                   <td>
@@ -400,7 +404,7 @@
                         <a
                           class="dropdown-item text-success"
                           href="javascript: void(0);"
-                          (click)="openNewTab('/crm/cotizacion/ver', item.id)"
+                          (click)="openNewTab('/crm/cotizacion/ver', item?.id)"
                         >
                           <i class="fas fa-eye"></i> Ver</a
                         >
@@ -413,9 +417,9 @@
           </div>
           <mat-paginator
             *ngIf="paginacionQuotation"
-            [length]="paginacionQuotation.total"
-            [pageSize]="paginacionQuotation.per_page"
-            [pageIndex]="paginacionQuotation.current_page - 1"
+            [length]="paginacionQuotation?.total"
+            [pageSize]="paginacionQuotation?.per_page"
+            [pageIndex]="paginacionQuotation?.current_page - 1"
             (page)="handlePageEvent($event, 'quotations')"
             aria-label="Select page"
           >
@@ -441,7 +445,7 @@
             <div class="col-md">
               <h3>
                 <span class="badge badge-pill badge-danger"
-                  >{{ pagination.collectionSizeBudgets }} presupuestos</span
+                  >{{ pagination?.collectionSizeBudgets }} presupuestos</span
                 >
               </h3>
             </div>
@@ -459,7 +463,7 @@
           <div class="rounded-top table-responsive">
             <table
               class="table table-bordered table-striped table-sm"
-              *ngIf="!loading && budgets.length > 0; else notData"
+              *ngIf="!loading && budgets?.length > 0; else notData"
             >
               <thead class="bg-light">
                 <tr class="text-center text-uppercase">
@@ -475,23 +479,23 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of budgets" class="text-center">
-                  <td class="align-middle">{{ item.code | uppercase }}</td>
+                  <td class="align-middle">{{ item?.code | uppercase }}</td>
                   <td class="align-middle">
-                    {{ item.created_at | date : "MMM d, y" }}
+                    {{ item?.created_at | date : "MMM d, y" }}
                   </td>
                   <td class="align-middle">
-                    {{ item.destiny.name | capitalLetter }}
+                    {{ item?.destiny?.name | capitalLetter }}
                   </td>
-                  <td class="align-middle">{{ item.line | capitalLetter }}</td>
+                  <td class="align-middle">{{ item?.line | capitalLetter }}</td>
                   <td class="align-middle">
-                    {{ item.user.person.first_name | titlecase }}
-                    {{ item.user.person.first_surname | titlecase }}
-                  </td>
-                  <td class="align-middle">
-                    ${{ item.total_cop | number : "1.2-2" }}
+                    {{ item?.user?.person?.first_name | titlecase }}
+                    {{ item?.user?.person?.first_surname | titlecase }}
                   </td>
                   <td class="align-middle">
-                    USD {{ item.total_usd | number : "1.2-2" }}
+                    ${{ item?.total_cop | number : "1.2-2" }}
+                  </td>
+                  <td class="align-middle">
+                    USD {{ item?.total_usd | number : "1.2-2" }}
                   </td>
                   <td class="align-middle">
                     <div
@@ -510,7 +514,7 @@
                       <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                         <a
                           class="dropdown-item text-success"
-                          (click)="openNewTab('/crm/presupuesto/ver', item.id)"
+                          (click)="openNewTab('/crm/presupuesto/ver', item?.id)"
                         >
                           <i class="fas fa-eye"></i> Ver
                         </a>
@@ -523,9 +527,9 @@
           </div>
           <mat-paginator
             *ngIf="paginacionBudgets"
-            [length]="paginacionBudgets.total"
-            [pageSize]="paginacionBudgets.per_page"
-            [pageIndex]="paginacionBudgets.current_page - 1"
+            [length]="paginacionBudgets?.total"
+            [pageSize]="paginacionBudgets?.per_page"
+            [pageIndex]="paginacionBudgets?.current_page - 1"
             (page)="handlePageEvent($event, 'budgets')"
             aria-label="Select page"
           >
@@ -551,7 +555,7 @@
             <div class="col-md">
               <h3>
                 <span class="badge badge-pill badge-danger"
-                  >{{ pagination.collectionSizeBusiness }} negocios</span
+                  >{{ pagination?.collectionSizeBusiness }} negocios</span
                 >
               </h3>
             </div>
@@ -569,7 +573,7 @@
           <div class="rounded-top table-responsive">
             <table
               class="table table-bordered table-striped table-sm"
-              *ngIf="!loading && business.length > 0; else notData"
+              *ngIf="!loading && business?.length > 0; else notData"
             >
               <thead class="bg-light">
                 <tr class="text-center text-uppercase">
@@ -584,19 +588,19 @@
               <tbody>
                 <tr *ngFor="let item of business" class="text-center">
                   <td class="align-middle" scope="row">
-                    {{ item.code | uppercase }}
+                    {{ item?.code | uppercase }}
                   </td>
                   <td class="align-middle" scope="row">
-                    {{ item.name | capitalLetter }}
+                    {{ item?.name | capitalLetter }}
                   </td>
                   <td class="align-middle">
-                    $ {{ item.budget_value | number : "1.2-2" }}
+                    $ {{ item?.budget_value | number : "1.2-2" }}
                   </td>
                   <td class="align-middle">
-                    {{ item.date | date : "MMM d, y" }}
+                    {{ item?.date | date : "MMM d, y" }}
                   </td>
                   <td class="align-middle">
-                    {{ item.status | capitalLetter }}
+                    {{ item?.status | capitalLetter }}
                   </td>
                   <td>
                     <div ngbDropdown container="body" class="dropdown-primary">
@@ -611,7 +615,7 @@
                         <a
                           class="dropdown-item text-success"
                           href="javascript: void(0);"
-                          (click)="openNewTab('/crm/negocios/', item.id)"
+                          (click)="openNewTab('/crm/negocios/', item?.id)"
                         >
                           <i class="fas fa-eye"></i> Ver</a
                         >
@@ -624,9 +628,9 @@
           </div>
           <mat-paginator
             *ngIf="paginacionBusiness"
-            [length]="paginacionBusiness.total"
-            [pageSize]="paginacionBusiness.per_page"
-            [pageIndex]="paginacionBusiness.current_page - 1"
+            [length]="paginacionBusiness?.total"
+            [pageSize]="paginacionBusiness?.per_page"
+            [pageIndex]="paginacionBusiness?.current_page - 1"
             (page)="handlePageEvent($event, 'business')"
             aria-label="Select page"
           >
@@ -645,20 +649,20 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <ng-container *ngIf="third_party_fields.length > 0; else noFields">
+    <ng-container *ngIf="third_party_fields?.length > 0; else noFields">
       <div class="table-responsive">
         <table class="table table-borderless">
           <tbody>
             <tr *ngFor="let item of third_party_fields">
-              <ng-container *ngIf="third_data[item.name]">
-                <th>{{ item.name | uppercase }}</th>
-                <td>{{ third_data[item.name] }}</td>
+              <ng-container *ngIf="third_data[item?.name]">
+                <th>{{ item?.name | uppercase }}</th>
+                <td>{{ third_data[item?.name] }}</td>
               </ng-container>
             </tr>
           </tbody>
@@ -670,7 +674,7 @@
     </ng-template>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cerrar
     </button>
   </div>

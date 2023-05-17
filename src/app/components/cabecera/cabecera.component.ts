@@ -10,24 +10,24 @@ import { UserService } from 'src/app/core/services/user.service';
 export class CabeceraComponent implements OnInit, OnChanges {
 
   @Input() datosCabecera: any;
-  Empresa : {
-    logo:'',
-    document_number:'',
-    name:'',
-    verification_digit:''
+  Empresa: {
+    logo: '',
+    document_number: '',
+    name: '',
+    verification_digit: ''
   };
 
-  constructor( private http: HttpClient, private _user: UserService) {
-    this.Empresa = this._user.user.person.company_worked;
-   }
-
-  ngOnInit() {
-    
+  constructor(private http: HttpClient, private _user: UserService) {
+    this.Empresa = this._user?.user?.person?.company_worked;
   }
 
-  ngOnChanges(changes:SimpleChanges){
-    if (changes.datosCabecera.previousValue != undefined) {
-      this.datosCabecera = changes.datosCabecera.currentValue;
+  ngOnInit() {
+
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes?.datosCabecera?.previousValue != undefined) {
+      this.datosCabecera = changes?.datosCabecera?.currentValue;
     }
   }
 

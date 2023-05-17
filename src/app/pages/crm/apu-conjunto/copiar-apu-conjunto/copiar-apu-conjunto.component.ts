@@ -18,14 +18,14 @@ export class CopiarApuConjuntoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.id = this.actRoute.snapshot.params.id;
+    this.id = this.actRoute?.snapshot?.params?.id;
     this.getData();
     this.loading = false
   }
 
   async getData() {
-    await this._apuConjunto.getApuSet(this.id).toPromise().then((r: any) => {
-      this.data = r.data;
+    await this._apuConjunto?.getApuSet(this.id)?.toPromise()?.then((r: any) => {
+      this.data = r?.data;
     })
   }
 

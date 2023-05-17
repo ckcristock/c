@@ -292,12 +292,12 @@ export const functionsApuService = {
     form?.get('sale_price_cop_withholding_total')?.valueChanges?.subscribe(value => {
       let trm = form?.get('trm')
       let result = (value / trm?.value);
-      result ? form?.patchValue({ sale_price_usd_withholding_total: Math?.round(result) }) : ''
+      result ? form?.patchValue({ sale_price_usd_withholding_total: result.toFixed(2) }) : ''
     })
     form?.get('trm')?.valueChanges?.subscribe(value => {
       let sale_price_cop_withholding_total = form?.get('sale_price_cop_withholding_total')
       let result = (sale_price_cop_withholding_total?.value / value);
-      form?.patchValue({ sale_price_usd_withholding_total: Math?.round(result) })
+      form?.patchValue({ sale_price_usd_withholding_total: result.toFixed(2) })
     });
   },
 

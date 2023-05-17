@@ -13,7 +13,7 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngIf="comercials.length">
+      <ng-container *ngIf="comercials?.length">
         <ng-container *ngFor="let item of comercials; let i = index">
           <tr class="text-center text-uppercase">
             <td>
@@ -23,7 +23,7 @@
               {{ item?.material?.name }}
             </td>
             <td>
-              {{ item?.unit.name }}
+              {{ item?.unit?.name }}
             </td>
             <td>
               {{ item?.q_unit }}

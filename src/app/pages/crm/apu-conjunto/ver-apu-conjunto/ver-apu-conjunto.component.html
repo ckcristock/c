@@ -11,14 +11,14 @@
           <button
             class="btn btn-info btn-sm"
             type="button"
-            [routerLink]="['/crm/apu/editar-apu-conjunto/', data.id]"
+            [routerLink]="['/crm/apu/editar-apu-conjunto/', data?.id]"
           >
             <i class="fas fa-edit"></i> Editar
           </button>
           <button
             class="btn btn-success btn-sm"
             type="button"
-            [routerLink]="['/crm/apu/copiar-apu-conjunto/', data.id]"
+            [routerLink]="['/crm/apu/copiar-apu-conjunto/', data?.id]"
           >
             <i class="fas fa-copy"></i> Copiar
           </button>
@@ -54,20 +54,20 @@
           </thead>
           <tbody>
             <tr>
-              <td>{{ data.thirdparty.name }}</td>
-              <td>{{ data.name }}</td>
-              <td>{{ data.set_name || "Sin información" }}</td>
-              <td>{{ data.machine_name || "Sin información" }}</td>
-              <td>{{ data.city.name }}</td>
-              <td>{{ data.person.name }}</td>
-              <td>{{ data.line }}</td>
+              <td>{{ data?.thirdparty?.name }}</td>
+              <td>{{ data?.name }}</td>
+              <td>{{ data?.set_name || "Sin información" }}</td>
+              <td>{{ data?.machine_name || "Sin información" }}</td>
+              <td>{{ data?.city?.name }}</td>
+              <td>{{ data?.person?.name }}</td>
+              <td>{{ data?.line }}</td>
             </tr>
             <tr class="text-left">
               <th colspan="100%">Observaciones</th>
             </tr>
             <tr class="text-left">
               <td colspan="100%">
-                {{ data.observation || "No existen observaciones" }}
+                {{ data?.observation || "No existen observaciones" }}
               </td>
             </tr>
           </tbody>
@@ -80,35 +80,35 @@
       <h5 class="mt-2 text-center">Costos directos</h5>
       <hr class="line" />
       <app-planos-conjunto
-        *ngIf="data.files.length > 0"
-        [data]="data.files"
+        *ngIf="data?.files?.length > 0"
+        [data]="data?.files"
         [info]="'ver'"
       >
       </app-planos-conjunto>
       <app-listado-piezas-conjuntos
-        *ngIf="data.setpartlist.length > 0"
-        [data]="data.setpartlist"
-        [list_pieces_sets_subtotal]="data.list_pieces_sets_subtotal"
+        *ngIf="data?.setpartlist?.length > 0"
+        [data]="data?.setpartlist"
+        [list_pieces_sets_subtotal]="data?.list_pieces_sets_subtotal"
       ></app-listado-piezas-conjuntos>
       <app-maquinas-herramientas-conjunto
-        *ngIf="data.machine.length"
-        [data]="data.machine"
-        [machine_tools_subtotal]="data.machine_tools_subtotal"
+        *ngIf="data?.machine?.length"
+        [data]="data?.machine"
+        [machine_tools_subtotal]="data?.machine_tools_subtotal"
       ></app-maquinas-herramientas-conjunto>
       <app-procesos-internos-conjunto
-        *ngIf="data.internal.length"
-        [data]="data.internal"
-        [internal_processes_subtotal]="data.internal_processes_subtotal"
+        *ngIf="data?.internal?.length"
+        [data]="data?.internal"
+        [internal_processes_subtotal]="data?.internal_processes_subtotal"
       ></app-procesos-internos-conjunto>
       <app-procesos-externos-conjunto
-        *ngIf="data.external.length"
-        [data]="data.external"
-        [external_processes_subtotal]="data.external_processes_subtotal"
+        *ngIf="data?.external.length"
+        [data]="data?.external"
+        [external_processes_subtotal]="data?.external_processes_subtotal"
       ></app-procesos-externos-conjunto>
       <app-otros-conjunto
-        *ngIf="data.other.length"
-        [data]="data.other"
-        [others_subtotal]="data.others_subtotal"
+        *ngIf="data?.other?.length"
+        [data]="data?.other"
+        [others_subtotal]="data?.others_subtotal"
       ></app-otros-conjunto>
       <div class="rounded-top table-responsive mt-4">
         <table class="table table-borderless text-center">
@@ -122,7 +122,7 @@
               <td>
                 <h5>
                   <span class="badge badge-success badge-pill"
-                    >${{ data.total_direct_cost | number : "1.2-2" }}</span
+                    >${{ data?.total_direct_cost | number : "1.2-2" }}</span
                   >
                 </h5>
               </td>
@@ -138,19 +138,21 @@
           <div class="rounded-top table-responsive">
             <table class="table table-striped text-uppercase">
               <tbody class="bg-light">
-                <ng-container *ngFor="let item of data.indirect; let i = index">
+                <ng-container
+                  *ngFor="let item of data?.indirect; let i = index"
+                >
                   <tr>
-                    <td>{{ item.name }}</td>
-                    <td class="text-right">{{ item.percentage }}%</td>
+                    <td>{{ item?.name }}</td>
+                    <td class="text-right">{{ item?.percentage }}%</td>
                     <td class="text-right">
-                      ${{ item.value | number : "1.2-2" }}
+                      ${{ item?.value | number : "1.2-2" }}
                     </td>
                   </tr>
                 </ng-container>
                 <tr>
                   <th colspan="2">Costos Indirectos</th>
                   <th class="text-right">
-                    ${{ data.indirect_cost_total | number : "1.2-2" }}
+                    ${{ data?.indirect_cost_total | number : "1.2-2" }}
                   </th>
                 </tr>
                 <tr>
@@ -159,7 +161,7 @@
                   </th>
                   <th class="text-right">
                     ${{
-                      data.direct_costs_indirect_costs_total | number : "1.2-2"
+                      data?.direct_costs_indirect_costs_total | number : "1.2-2"
                     }}
                   </th>
                 </tr>
@@ -176,36 +178,37 @@
                 <tr>
                   <td>Administrativos</td>
                   <td class="text-right">
-                    {{ data.administrative_percentage }}%
+                    {{ data?.administrative_percentage }}%
                   </td>
                   <td class="text-right">
-                    ${{ data.administrative_value | number : "1.2-2" }}
+                    ${{ data?.administrative_value | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>
                   <td>Imprevistos</td>
-                  <td class="text-right">{{ data.unforeseen_percentage }}%</td>
+                  <td class="text-right">{{ data?.unforeseen_percentage }}%</td>
                   <td class="text-right">
-                    ${{ data.unforeseen_value | number : "1.2-2" }}
+                    ${{ data?.unforeseen_value | number : "1.2-2" }}
                   </td>
                 </tr>
                 <tr>
                   <th colspan="2">SubTotal + Administrativos + Imprevistos</th>
                   <th class="text-right">
                     ${{
-                      data.administrative_unforeseen_subtotal | number : "1.2-2"
+                      data?.administrative_unforeseen_subtotal
+                        | number : "1.2-2"
                     }}
                   </th>
                 </tr>
                 <tr>
                   <td colspan="2">Utilidad</td>
-                  <td class="text-right">{{ data.utility_percentage }}%</td>
+                  <td class="text-right">{{ data?.utility_percentage }}%</td>
                 </tr>
                 <tr>
                   <th colspan="2">SubTotal + Admin + Imprevisto + Utilidad</th>
                   <th class="text-right">
                     ${{
-                      data.admin_unforeseen_utility_subtotal | number : "1.2-2"
+                      data?.admin_unforeseen_utility_subtotal | number : "1.2-2"
                     }}
                   </th>
                 </tr>
@@ -219,7 +222,7 @@
                   <th>Precio Venta Total COP + Retención</th>
                   <th class="text-right">
                     ${{
-                      data.sale_price_cop_withholding_total | number : "1.2-2"
+                      data?.sale_price_cop_withholding_total | number : "1.2-2"
                     }}
                   </th>
                 </tr>
@@ -227,7 +230,7 @@
                   <td>TRM</td>
                   <td>
                     <div style="float: right">
-                      ${{ data.trm | number : "1.2-2" }}
+                      ${{ data?.trm | number : "1.2-2" }}
                     </div>
                   </td>
                 </tr>
@@ -235,7 +238,7 @@
                   <th>Precio Venta Total USD + Retención</th>
                   <th class="text-right">
                     ${{
-                      data.sale_price_usd_withholding_total | number : "1.2-2"
+                      data?.sale_price_usd_withholding_total | number : "1.2-2"
                     }}
                   </th>
                 </tr>

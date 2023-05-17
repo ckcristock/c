@@ -8,7 +8,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -85,7 +85,7 @@
     </div>
     <div
       class="rounded-top table-responsive"
-      *ngIf="!loadingBudgets && presupuestos.length > 0; else notDataBudgets"
+      *ngIf="!loadingBudgets && presupuestos?.length > 0; else notDataBudgets"
     >
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
@@ -107,7 +107,7 @@
             *ngFor="let item of presupuestos"
             class="text-center"
             [ngClass]="{
-              'text-danger font-weight-bold': item.state == 'Inactivo'
+              'text-danger font-weight-bold': item?.state == 'Inactivo'
             }"
           >
             <td class="pb-0">
@@ -118,25 +118,25 @@
               ></mat-checkbox>
             </td>
             <td class="align-middle">
-              {{ item.code | uppercase }}
+              {{ item?.code | uppercase }}
             </td>
             <td class="align-middle">
-              {{ item.created_at | date : "MMM d, y" }}
+              {{ item?.created_at | date : "MMM d, y" }}
             </td>
-            <td class="align-middle">{{ item.customer.name | uppercase }}</td>
+            <td class="align-middle">{{ item?.customer?.name | uppercase }}</td>
             <td class="align-middle">
-              {{ item.destiny.name | capitalLetter }}
+              {{ item?.destiny?.name | capitalLetter }}
             </td>
-            <td class="align-middle">{{ item.line | capitalLetter }}</td>
+            <td class="align-middle">{{ item?.line | capitalLetter }}</td>
             <td class="align-middle">
-              {{ item.user.person.first_name | titlecase }}
-              {{ item.user.person.first_surname | titlecase }}
-            </td>
-            <td class="align-middle">
-              ${{ item.total_cop | number : "1.2-2" }}
+              {{ item?.user?.person?.first_name | titlecase }}
+              {{ item?.user?.person?.first_surname | titlecase }}
             </td>
             <td class="align-middle">
-              ${{ item.total_usd | number : "1.2-2" }}
+              ${{ item?.total_cop | number : "1.2-2" }}
+            </td>
+            <td class="align-middle">
+              ${{ item?.total_usd | number : "1.2-2" }}
             </td>
             <td class="align-middle">
               <div
@@ -156,14 +156,14 @@
                   <a
                     class="dropdown-item text-success"
                     href="javascript: void(0);"
-                    (click)="openNewTab('/crm/presupuesto/ver', item.id)"
+                    (click)="openNewTab('/crm/presupuesto/ver', item?.id)"
                   >
                     <i class="fas fa-eye"></i> Ver
                   </a>
                   <a
                     class="dropdown-item text-info"
                     href="javascript: void(0);"
-                    (click)="openNewTab('/crm/presupuesto/editar', item.id)"
+                    (click)="openNewTab('/crm/presupuesto/editar', item?.id)"
                   >
                     <i class="fas fa-edit"></i> Editar
                   </a>
@@ -176,9 +176,9 @@
     </div>
     <mat-paginator
       *ngIf="paginationMaterial"
-      [length]="paginationMaterial.total"
-      [pageSize]="paginationMaterial.per_page"
-      [pageIndex]="paginationMaterial.current_page - 1"
+      [length]="paginationMaterial?.total"
+      [pageSize]="paginationMaterial?.per_page"
+      [pageIndex]="paginationMaterial?.current_page - 1"
       [pageSizeOptions]="[5, 10, 25, 100]"
       (page)="handlePageEvent($event)"
       aria-label="Select page"
@@ -189,7 +189,7 @@
     <button
       type="button"
       class="btn btn-danger"
-      (click)="modal.dismiss('Cross click')"
+      (click)="modal?.dismiss('Cross click')"
     >
       Cancelar
     </button>

@@ -293,20 +293,20 @@ export const functionsApu = {
       let trm = group?.get('trm')?.value;
       let amount = group?.get('amount')?.value;
       group?.patchValue({
-        sale_price_usd_withholding_total: Math?.round(value / trm),
+        sale_price_usd_withholding_total: (value / trm).toFixed(2),
         sale_value_cop_unit: Math?.round(value / amount)
       })
     });
     group?.get('trm')?.valueChanges?.subscribe(value => {
       let sale_price_cop_withholding_total = group?.get('sale_price_cop_withholding_total')?.value;
       group?.patchValue({
-        sale_price_usd_withholding_total: Math?.round(sale_price_cop_withholding_total / value)
+        sale_price_usd_withholding_total: (sale_price_cop_withholding_total / value).toFixed(2)
       })
     });
     group?.get('sale_price_usd_withholding_total')?.valueChanges?.subscribe(value => {
       let amount = group?.get('amount')?.value;
       group?.patchValue({
-        sale_value_usd_unit: Math?.round(value / amount)
+        sale_value_usd_unit: (value / amount).toFixed(2)
       });
     });
   },

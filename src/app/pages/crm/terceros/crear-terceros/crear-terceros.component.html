@@ -42,10 +42,10 @@
                   [disableOptionCentering]="true"
                   #selectCountries
                   required
-                  (selectionChange)="filterDepartments($event.value)"
+                  (selectionChange)="filterDepartments($event?.value)"
                 >
                   <mat-select-filter
-                    *ngIf="selectCountries.focused"
+                    *ngIf="selectCountries?.focused"
                     [placeholder]="'Buscar'"
                     [array]="countries"
                     [displayMember]="'text'"
@@ -54,8 +54,8 @@
 
                   <mat-option
                     *ngFor="let item of filteredCountries"
-                    [value]="item.value"
-                    >{{ item.text }}</mat-option
+                    [value]="item?.value"
+                    >{{ item?.text }}</mat-option
                   >
                 </mat-select>
                 <mat-icon matSuffix>flag</mat-icon>
@@ -68,10 +68,10 @@
                   [disableOptionCentering]="true"
                   #selectDepartments
                   required
-                  (selectionChange)="filterMunicipalities($event.value)"
+                  (selectionChange)="filterMunicipalities($event?.value)"
                 >
                   <mat-select-filter
-                    *ngIf="selectDepartments.focused"
+                    *ngIf="selectDepartments?.focused"
                     [placeholder]="'Buscar'"
                     [array]="departments"
                     [displayMember]="'text'"
@@ -79,8 +79,8 @@
                   ></mat-select-filter>
                   <mat-option
                     *ngFor="let department of filteredDepartment"
-                    [value]="department.value"
-                    >{{ department.text }}</mat-option
+                    [value]="department?.value"
+                    >{{ department?.text }}</mat-option
                   >
                 </mat-select>
               </mat-form-field>
@@ -93,7 +93,7 @@
                   formControlName="municipality_id"
                 >
                   <mat-select-filter
-                    *ngIf="selectMunicipalities.focused"
+                    *ngIf="selectMunicipalities?.focused"
                     [placeholder]="'Buscar'"
                     [array]="municipalities"
                     [displayMember]="'text'"
@@ -101,8 +101,8 @@
                   ></mat-select-filter>
                   <mat-option
                     *ngFor="let municipality of filteredMunicipality"
-                    [value]="municipality.value"
-                    >{{ municipality.text }}</mat-option
+                    [value]="municipality?.value"
+                    >{{ municipality?.text }}</mat-option
                   >
                 </mat-select>
                 <mat-error>
@@ -125,7 +125,7 @@
               <mat-form-field
                 class="col"
                 appearance="outline"
-                *ngIf="form.get('person_type').value != 'juridico'"
+                *ngIf="form?.get('person_type')?.value != 'juridico'"
               >
                 <mat-label>Tipo de documento</mat-label>
                 <mat-select
@@ -135,8 +135,8 @@
                 >
                   <mat-option
                     *ngFor="let item of documentTypes"
-                    [value]="item.value"
-                    >{{ item.code }} - {{ item.text }}</mat-option
+                    [value]="item?.value"
+                    >{{ item?.code }} - {{ item?.text }}</mat-option
                   >
                 </mat-select>
                 <mat-icon matSuffix>branding_watermark</mat-icon>
@@ -150,7 +150,7 @@
                   formControlName="nit"
                   required
                   autocomplete="off"
-                  (change)="validarDV($event.target.value)"
+                  (change)="validarDV($event?.target?.value)"
                   placeholder="Ingresa el número de identificación"
                 />
                 <mat-icon matSuffix>badge</mat-icon>
@@ -160,8 +160,8 @@
                 class="col-md-1"
                 appearance="outline"
                 *ngIf="
-                  this.nitSelected == this.form.get('document_type').value &&
-                  this.form.get('country_id').value == 1
+                  this.nitSelected == this.form?.get('document_type')?.value &&
+                  this?.form?.get('country_id')?.value == 1
                 "
               >
                 <mat-label>DV</mat-label>
@@ -191,7 +191,7 @@
               <mat-form-field
                 class="col"
                 appearance="outline"
-                *ngIf="form.get('first_name').enabled"
+                *ngIf="form?.get('first_name')?.enabled"
               >
                 <mat-label>Primer nombre</mat-label>
                 <input
@@ -208,7 +208,7 @@
               <mat-form-field
                 class="col"
                 appearance="outline"
-                *ngIf="form.get('second_name').enabled"
+                *ngIf="form?.get('second_name')?.enabled"
               >
                 <mat-label>Segundo nombre</mat-label>
                 <input
@@ -223,7 +223,7 @@
               <mat-form-field
                 class="col"
                 appearance="outline"
-                *ngIf="form.get('first_surname').enabled"
+                *ngIf="form?.get('first_surname')?.enabled"
               >
                 <mat-label>Primer apellido</mat-label>
                 <input
@@ -240,7 +240,7 @@
               <mat-form-field
                 class="col"
                 appearance="outline"
-                *ngIf="form.get('second_surname').enabled"
+                *ngIf="form?.get('second_surname')?.enabled"
               >
                 <mat-label>Segundo apellido</mat-label>
                 <input
@@ -255,7 +255,7 @@
               <mat-form-field
                 class="col"
                 appearance="outline"
-                *ngIf="form.get('social_reason').enabled"
+                *ngIf="form?.get('social_reason')?.enabled"
               >
                 <mat-label>Razón social</mat-label>
                 <input
@@ -315,15 +315,15 @@
                   placeholder="Ingrese el correo"
                 />
                 <mat-icon matSuffix>email</mat-icon>
-                <mat-error *ngIf="form.get('email').errors?.email">
+                <mat-error *ngIf="form?.get('email')?.errors?.email">
                   El correo es incorrecto
                 </mat-error>
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
                 <mat-label>Zona</mat-label>
                 <mat-select formControlName="zone_id">
-                  <mat-option *ngFor="let zone of zones" [value]="zone.value"
-                    >{{ zone.text | uppercase }}
+                  <mat-option *ngFor="let zone of zones" [value]="zone?.value"
+                    >{{ zone?.text | uppercase }}
                   </mat-option>
                 </mat-select>
                 <mat-icon matSuffix>place</mat-icon>
@@ -337,7 +337,7 @@
                   formControlName="dian_address"
                 >
                   <mat-select-filter
-                    *ngIf="selectDirection1.focused"
+                    *ngIf="selectDirection1?.focused"
                     [placeholder]="'Buscar'"
                     [array]="address"
                     [displayMember]="'description'"
@@ -346,8 +346,8 @@
 
                   <mat-option
                     *ngFor="let addre of filteredDianDirection"
-                    [value]="addre.code"
-                    >{{ addre.description }}
+                    [value]="addre?.code"
+                    >{{ addre?.description }}
                   </mat-option>
                 </mat-select>
                 <mat-error>
@@ -382,7 +382,7 @@
                   formControlName="address_three"
                 >
                   <mat-select-filter
-                    *ngIf="selectDirection2.focused"
+                    *ngIf="selectDirection2?.focused"
                     [placeholder]="'Buscar'"
                     [array]="address"
                     [displayMember]="'description'"
@@ -391,8 +391,8 @@
                   <mat-option value="">Ninguna</mat-option>
                   <mat-option
                     *ngFor="let item of filteredDianDirection"
-                    [value]="item.description"
-                    >{{ item.description }}</mat-option
+                    [value]="item?.description"
+                    >{{ item?.description }}</mat-option
                   >
                 </mat-select>
               </mat-form-field>
@@ -424,12 +424,12 @@
                 appearance="outline"
                 *ngFor="let item of fields"
               >
-                <mat-label>{{ item.label | titlecase }}</mat-label>
+                <mat-label>{{ item?.label | titlecase }}</mat-label>
                 <input
-                  [type]="item.type"
+                  [type]="item?.type"
                   matInput
-                  [required]="item.required == 'Si'"
-                  [formControlName]="item.name"
+                  [required]="item?.required == 'Si'"
+                  [formControlName]="item?.name"
                   autocomplete="off"
                 />
               </mat-form-field>
@@ -453,8 +453,8 @@
                   <mat-select formControlName="regime">
                     <mat-option
                       *ngFor="let item of regimes"
-                      [value]="item.value"
-                      >{{ item.text }}</mat-option
+                      [value]="item?.value"
+                      >{{ item?.text }}</mat-option
                     >
                   </mat-select>
                 </mat-form-field>
@@ -484,7 +484,7 @@
                     placeholder="Ingrese correo pagos"
                     formControlName="email_payments"
                   />
-                  <mat-error *ngIf="form.get('email_payments').errors?.email">
+                  <mat-error *ngIf="form?.get('email_payments')?.errors?.email">
                     Correo es <strong>inválido</strong>
                   </mat-error>
                 </mat-form-field>
@@ -493,8 +493,8 @@
                   <mat-select formControlName="fiscal_responsibility">
                     <mat-option
                       *ngFor="let item of fiscalResponsibility"
-                      [value]="item.value"
-                      >{{ item.code }} - {{ item.text }}</mat-option
+                      [value]="item?.value"
+                      >{{ item?.code }} - {{ item?.text }}</mat-option
                     >
                   </mat-select>
                 </mat-form-field>
@@ -628,8 +628,8 @@
                 <mat-form-field class="col" appearance="outline">
                   <mat-label>Condición de pago</mat-label>
                   <mat-select formControlName="condition_payment">
-                    <mat-option *ngFor="let item of pagos" [value]="item.valor"
-                      >{{ item.clave }}
+                    <mat-option *ngFor="let item of pagos" [value]="item?.valor"
+                      >{{ item?.clave }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -638,7 +638,7 @@
                   <input
                     matInput
                     currencyMask
-                    [options]="masks.maskCOP"
+                    [options]="masks?.maskCOP"
                     appInputPosition
                     placeholder="Ingrese el cupo"
                     formControlName="assigned_space"
@@ -649,7 +649,7 @@
                   <input
                     matInput
                     currencyMask
-                    [options]="masks.maskPorcentaje"
+                    [options]="masks?.maskPorcentaje"
                     appInputPositionInitial
                     placeholder="Ingrese el desc."
                     formControlName="discount_prompt_payment"
@@ -714,10 +714,10 @@
           </mat-step>
           <mat-step>
             <ng-template matStepLabel>Personas</ng-template>
-            <ng-container *ngIf="personList.controls.length; else notData">
+            <ng-container *ngIf="personList?.controls?.length; else notData">
               <ng-container
                 formArrayName="person"
-                *ngFor="let item of personList.controls; let i = index"
+                *ngFor="let item of personList?.controls; let i = index"
               >
                 <div class="card card-shadow mt-3">
                   <div class="card-body">
@@ -876,218 +876,6 @@
 <ng-template #placeholder>
   <app-placeholder-form></app-placeholder-form>
 </ng-template>
-
-<div class="row">
-  <div class="col-12">
-    <!-- <div class="row">
-            <div class="col-md-12 text-center mt-2 mb-4">
-                <h4>Datos Básicos</h4>
-            </div>
-
-            <div class="form-goup col-md-2">
-                <label for="">NIT</label>
-                <input type="number" class="form-control form-control-sm" formControlName="nit">
-                <ng-container *ngIf="nit_valid">
-                    <small *ngFor="let item of form.get('nit').errors | ObjToArrayPipe" class="text-danger">
-                        {{ item?.msj }}
-                    </small>
-                </ng-container>
-            </div>
-            //abre coment <div class="form-group col-md-2" style="margin-top: 29px;">
-                <input type="text" readonly class="form-control form-control-sm">
-            </div> //ciera coment
-            <div class="form-group col-md-5">
-                <label for="">Tipo de Persona</label>
-                <select class="form-control form-control-sm" formControlName="person_type"
-                    (change)="personType()">
-                    <option selected>Seleccione</option>
-                    <option value="natural">Natural</option>
-                    <option value="juridico">Jurídico</option>
-                </select>
-                <ng-container *ngIf="person_type_valid">
-                    <small *ngFor="let item of form.get('person_type').errors | ObjToArrayPipe"
-                        class="text-danger">
-                        {{ item?.msj }}
-                    </small>
-                </ng-container>
-            </div>
-            <div class="form-group col-md-5">
-                <label for="">Tipo de Tercero</label>
-                <select class="form-control form-control-sm" formControlName="third_party_type"
-                    (change)="personType()">
-                    <option selected>Seleccione</option>
-                    <option value="Cliente">Cliente</option>
-                    <option value="Proveedor">Proveedor</option>
-                </select>
-                <ng-container *ngIf="third_party_type_valid">
-                    <small *ngFor="let item of form.get('third_party_type').errors | ObjToArrayPipe"
-                        class="text-danger">
-                        {{ item?.msj }}
-                    </small>
-                </ng-container>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="">Primer Nombre</label>
-                <input type="text" class="form-control form-control-sm" formControlName="first_name">
-                <ng-container *ngIf="first_name_valid">
-                    <small *ngFor="let item of form.get('first_name').errors | ObjToArrayPipe"
-                        class="text-danger">
-                        {{ item?.msj }}
-                    </small>
-                </ng-container>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="">Segundo Nombre</label>
-                <input type="text" class="form-control form-control-sm" formControlName="second_name">
-            </div>
-            <div class="form-group col-md-3">
-                <label for="">Primer Apellido</label>
-                <input type="text" class="form-control form-control-sm" formControlName="first_surname">
-                <ng-container *ngIf="first_surname_valid">
-                    <small *ngFor="let item of form.get('first_surname').errors | ObjToArrayPipe"
-                        class="text-danger">
-                        {{ item?.msj }}
-                    </small>
-                </ng-container>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="">Segundo Apellido</label>
-                <input type="text" class="form-control form-control-sm" formControlName="second_surname">
-            </div>
-            <div class="form-group col-md-4">
-                <label for="">Foto</label>
-                <input type="file" class="form-control form-control-sm" accept="image/*"
-                    (change)="onFileChanged($event)">
-            </div>
-            <div class="form-group col-md-4">
-                <label for="">Razón Social</label>
-                <input type="text" class="form-control form-control-sm" formControlName="social_reason">
-                <ng-container *ngIf="social_reason_valid">
-                    <small *ngFor="let item of form.get('social_reason').errors | ObjToArrayPipe"
-                        class="text-danger">
-                        {{ item?.msj }}
-                    </small>
-                </ng-container>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="">Nombre Comercial</label>
-                <input type="text" class="form-control form-control-sm" formControlName="tradename">
-            </div>
-            <div class="form-group col-md-3">
-                <label for="">Dirección</label>
-                <select class="form-control form-control-sm" formControlName="dian_address">
-                    <option *ngFor="let addre of address" [value]="addre.code">
-                        {{ addre.description }}
-                    </option>
-                </select>
-                <ng-container *ngIf="dian_address_valid">
-                    <small *ngFor="let item of form.get('dian_address').errors | ObjToArrayPipe"
-                        class="text-danger">
-                        {{ item?.msj }}
-                    </small>
-                </ng-container>
-            </div>
-            <div class="form-group col-md-1" style="margin-top: 29px;">
-                <input type="text" class="form-control form-control-sm" formControlName="address_one">
-            </div>
-            <div class="form-group col-md-1">
-                <label for="">#</label>
-                <input type="text" class="form-control form-control-sm" formControlName="address_two">
-            </div>
-            <div class="form-group col-md-2" style="margin-top: 29px;">
-                <select class="form-control form-control-sm" readonly formControlName="address_three">
-                    <option *ngFor="let item of address" [value]="item.description">
-                        {{ item.description }}
-                    </option>
-                </select>
-            </div>
-            <div class="form-group col-md-1" style="margin-top: 29px;">
-                <input type="text" class="form-control form-control-sm" formControlName="address_four">
-            </div>
-            <div class="form-group col-md-4">
-                <label for="">Dirección Cod. Dian</label>
-                <input type="text" class="form-control form-control-sm" readonly
-                    formControlName="cod_dian_address">
-                <ng-container *ngIf="cod_dian_address_valid">
-                    <small *ngFor="let item of form.get('cod_dian_address').errors | ObjToArrayPipe"
-                        class="text-danger">
-                        {{ item?.msj }}
-                    </small>
-                </ng-container>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="">Tel. Fijo</label>
-                <input type="number" class="form-control form-control-sm" formControlName="landline">
-                <ng-container *ngIf="landline_valid">
-                    <small *ngFor="let item of form.get('landline').errors | ObjToArrayPipe"
-                        class="text-danger">
-                        {{ item?.msj }}
-                    </small>
-                </ng-container>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="">Tel. Celular</label>
-                <input type="number" class="form-control form-control-sm" formControlName="cell_phone">
-                <ng-container *ngIf="cell_phone_valid">
-                    <small *ngFor="let item of form.get('cell_phone').errors | ObjToArrayPipe"
-                        class="text-danger">
-                        {{ item?.msj }}
-                    </small>
-                </ng-container>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="">Email</label>
-                <input type="email" class="form-control form-control-sm" formControlName="email">
-                <ng-container *ngIf="email_valid">
-                    <small *ngFor="let item of form.get('email').errors | ObjToArrayPipe"
-                        class="text-danger">
-                        {{ item?.msj }}
-                    </small>
-                    <small class="text-danger" *ngIf="form.get('email').errors?.email">Email
-                        invalido</small>
-                </ng-container>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="">Zona</label>
-                <select class="form-control form-control-sm" formControlName="zone_id">
-                    <option selected>Seleccione</option>
-                    <option *ngFor="let zone of zones" [value]="zone.value">
-                        {{ zone.text | uppercase }}
-                    </option>
-                </select>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="">Departamento</label>
-                <select class="form-control form-control-sm" formControlName="department_id">
-                    <option selected>Seleccione</option>
-                    <option *ngFor="let department of departments" [value]="department.value">
-                        {{ department.text }}
-                    </option>
-                </select>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="">Municipio</label>
-                <select class="form-control form-control-sm" formControlName="municipality_id">
-                    <option selected>Seleccione</option>
-                    <option *ngFor="let municipality of municipalities" [value]="municipality.value">
-                        {{ municipality.text }}
-                    </option>
-                </select>
-                <ng-container *ngIf="municipality_valid">
-                    <small *ngFor="let item of form.get('municipality_id').errors | ObjToArrayPipe"
-                        class="text-danger">
-                        {{ item?.msj }}
-                    </small>
-                </ng-container>
-            </div>
-            <div class="form-group col-md-3" *ngFor="let item of fields">
-                <label for="">{{ item.label | titlecase }}</label>
-                <input class="form-control form-control-sm" [type]="item.type"
-                    [formControlName]="item.name">
-            </div>
-        </div> -->
-  </div>
-</div>
 
 <app-reload-button
   [reload]="reload"

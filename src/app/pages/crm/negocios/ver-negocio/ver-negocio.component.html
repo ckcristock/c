@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-md-2 d-flex justify-content-center align-self-center">
             <img
-              [src]="negocio?.third_party.image | image"
+              [src]="negocio?.third_party?.image | image"
               id="imageOutput"
               onerror="this.src='../../../../assets/images/noprofile.png'"
               class="d-block img-thumbnail rounded-circle img-fluid"
@@ -21,9 +21,9 @@
             }}</span>
             <h6>
               {{
-                (negocio?.third_party.social_reason
-                  ? negocio?.third_party.social_reason
-                  : negocio?.third_party.full_name
+                (negocio?.third_party?.social_reason
+                  ? negocio?.third_party?.social_reason
+                  : negocio?.third_party?.full_name
                 ) | uppercase
               }}
             </h6>
@@ -31,7 +31,7 @@
               <tbody>
                 <tr>
                   <th>Persona</th>
-                  <td>{{ negocio?.third_party_person.name | titlecase }}</td>
+                  <td>{{ negocio?.third_party_person?.name | titlecase }}</td>
                 </tr>
                 <tr>
                   <th>Fecha</th>
@@ -50,7 +50,7 @@
             <mat-form-field class="pb-0" appearance="outline">
               <mat-label>Etapa</mat-label>
               <mat-select
-                [value]="negocio.status"
+                [value]="negocio?.status"
                 (selectionChange)="changeState($event)"
               >
                 <mat-option value="Prospección">Prospección</mat-option>
@@ -73,7 +73,7 @@
           <div class="col-md-2 align-self-center">
             <img
               class="img-fluid"
-              [src]="qr.changingThisBreaksApplicationSecurity"
+              [src]="qr?.changingThisBreaksApplicationSecurity"
               alt=""
             />
           </div>
@@ -93,7 +93,7 @@
               <button
                 type="button"
                 class="btn btn-sm btn-info"
-                (click)="modalBuscarPresupuesto.openModal()"
+                (click)="modalBuscarPresupuesto?.openModal()"
               >
                 <i class="fa fa-search"></i> Buscar
               </button>
@@ -109,7 +109,7 @@
         </div>
         <div
           class="rounded-top table-responsive"
-          *ngIf="!loading && negocio.business_budget.length > 0; else notData"
+          *ngIf="!loading && negocio?.business_budget?.length > 0; else notData"
         >
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
@@ -127,13 +127,13 @@
                 class="text-center"
               >
                 <th class="align-middle" scope="row">
-                  {{ pres?.budget.code | uppercase }}
+                  {{ pres?.budget?.code | uppercase }}
                 </th>
                 <td class="align-middle">
-                  {{ pres?.budget.created_at | date : "MMM d, y" }}
+                  {{ pres?.budget?.created_at | date : "MMM d, y" }}
                 </td>
                 <td class="align-middle text-right">
-                  $ {{ pres?.budget.total_cop | number : "1.2-2" }}
+                  $ {{ pres?.budget?.total_cop | number : "1.2-2" }}
                 </td>
 
                 <td class="align-middle">
@@ -165,7 +165,7 @@
                         class="dropdown-item text-success"
                         href="javascript: void(0);"
                         (click)="
-                          openNewTab('/crm/presupuesto/ver/', pres?.budget.id)
+                          openNewTab('/crm/presupuesto/ver/', pres?.budget?.id)
                         "
                       >
                         <i class="fas fa-eye"></i> Ver</a
@@ -223,7 +223,7 @@
               <button
                 class="text-center btn btn-info btn-sm"
                 role="button"
-                (click)="modalBuscarCotizacion.openModal()"
+                (click)="modalBuscarCotizacion?.openModal()"
               >
                 <i class="fa fa-search"></i> Buscar
               </button>
@@ -239,7 +239,7 @@
         </div>
         <div
           class="rounded-top table-responsive"
-          *ngIf="!loading && negocio?.quotations.length > 0; else notData"
+          *ngIf="!loading && negocio?.quotations?.length > 0; else notData"
         >
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
@@ -254,10 +254,10 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of negocio?.quotations" class="text-center">
-                <th scope="row">{{ item.code | uppercase }}</th>
-                <td>{{ item.created_at | date : "MMM d, y" }}</td>
+                <th scope="row">{{ item?.code | uppercase }}</th>
+                <td>{{ item?.created_at | date : "MMM d, y" }}</td>
                 <td class="text-right">
-                  $ {{ item.total_cop | number : "1.2-2" }}
+                  $ {{ item?.total_cop | number : "1.2-2" }}
                 </td>
                 <!-- <td
                   [role]="item.budget_included == 'si' ? 'button' : ''"
@@ -278,15 +278,15 @@
                   <span
                     class="badge"
                     [class]="
-                      item.pivot.status == 'Pendiente'
+                      item?.pivot?.status == 'Pendiente'
                         ? 'badge-warning'
-                        : item.pivot.status == 'Rechazada'
+                        : item?.pivot?.status == 'Rechazada'
                         ? 'badge-danger'
-                        : item.pivot.status == 'Aprobada'
+                        : item?.pivot?.status == 'Aprobada'
                         ? 'badge-success'
                         : ''
                     "
-                    >{{ item.pivot.status | uppercase }}</span
+                    >{{ item?.pivot?.status | uppercase }}</span
                   >
                 </td>
                 <td>
@@ -305,14 +305,17 @@
                         (click)="
                           openNewTab(
                             '/crm/cotizacion/ver/',
-                            item.pivot.quotation_id
+                            item?.pivot?.quotation_id
                           )
                         "
                       >
                         <i class="fas fa-eye"></i> Ver</a
                       >
                       <ng-container
-                        *ngIf="item.pivot.status == 'Pendiente'; else pendiente"
+                        *ngIf="
+                          item?.pivot?.status == 'Pendiente';
+                          else pendiente
+                        "
                       >
                         <a
                           class="dropdown-item text-success"
@@ -405,7 +408,7 @@
         </div>
         <div
           class="rounded-top table-responsive"
-          *ngIf="!loading && negocio?.apus.length > 0; else notData"
+          *ngIf="!loading && negocio?.apus?.length > 0; else notData"
         >
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
@@ -420,18 +423,18 @@
             </thead>
             <tbody>
               <tr *ngFor="let item of negocio?.apus" class="text-center">
-                <th scope="row">{{ item.apuable.code | uppercase }}</th>
-                <td>{{ item.apuable.name | capitalLetter }}</td>
-                <td>{{ item.apuable.line | capitalLetter }}</td>
-                <td>{{ item.apuable.typeapu_name | capitalLetter }}</td>
+                <th scope="row">{{ item?.apuable?.code | uppercase }}</th>
+                <td>{{ item?.apuable?.name | capitalLetter }}</td>
+                <td>{{ item?.apuable?.line | capitalLetter }}</td>
+                <td>{{ item?.apuable?.typeapu_name | capitalLetter }}</td>
                 <td class="text-right">
                   ${{
-                    (item.apuable.typeapu_name == "Pieza"
-                      ? item.apuable.unit_direct_cost
-                      : item.apuable.typeapu_name == "Conjunto"
-                      ? item.apuable.total_direct_cost
-                      : item.apuable.typeapu_name == "Servicio"
-                      ? item.apuable.total_unit_cost
+                    (item?.apuable?.typeapu_name == "Pieza"
+                      ? item?.apuable?.unit_direct_cost
+                      : item?.apuable?.typeapu_name == "Conjunto"
+                      ? item?.apuable?.total_direct_cost
+                      : item?.apuable?.typeapu_name == "Servicio"
+                      ? item?.apuable?.total_unit_cost
                       : ""
                     ) | number : "1.2-2"
                   }}
@@ -447,36 +450,36 @@
                     </button>
                     <div ngbDropdownMenu>
                       <a
-                        *ngIf="item.apuable.typeapu_name == 'Servicio'"
+                        *ngIf="item?.apuable?.typeapu_name == 'Servicio'"
                         class="dropdown-item text-success"
                         href="javascript: void(0);"
                         (click)="
                           openNewTab(
                             '/crm/apu/ver-apu-servicio',
-                            item.apuable_id
+                            item?.apuable_id
                           )
                         "
                       >
                         <i class="fas fa-eye"></i> Ver
                       </a>
                       <a
-                        *ngIf="item.apuable.typeapu_name == 'Pieza'"
+                        *ngIf="item?.apuable?.typeapu_name == 'Pieza'"
                         class="dropdown-item text-success"
                         href="javascript: void(0);"
                         (click)="
-                          openNewTab('/crm/apu/ver-apu-pieza', item.apuable_id)
+                          openNewTab('/crm/apu/ver-apu-pieza', item?.apuable_id)
                         "
                       >
                         <i class="fas fa-eye"></i> Ver
                       </a>
                       <a
-                        *ngIf="item.apuable.typeapu_name == 'Conjunto'"
+                        *ngIf="item?.apuable?.typeapu_name == 'Conjunto'"
                         class="dropdown-item text-success"
                         href="javascript: void(0);"
                         (click)="
                           openNewTab(
                             '/crm/apu/ver-apu-conjunto',
-                            item.apuable_id
+                            item?.apuable_id
                           )
                         "
                       >
@@ -495,7 +498,7 @@
       <div class="card-body">
         <h5 class="text-primary">Notas</h5>
         <ng-container
-          *ngIf="!loading && negocio?.notes.length > 0; else notData"
+          *ngIf="!loading && negocio?.notes?.length > 0; else notData"
         >
           <ul class="list-group list-group-flush">
             <li
@@ -504,13 +507,13 @@
             >
               <div class="d-flex w-100 justify-content-between">
                 <h6 class="mb-1">
-                  {{ item.person.person | uppercase }}
+                  {{ item?.person?.person | uppercase }}
                 </h6>
                 <div
                   class="btn-group"
                   role="group"
                   aria-label="Button group"
-                  *ngIf="item.person_id == person_id && !editNoteBool"
+                  *ngIf="item?.person_id == person_id && !editNoteBool"
                 >
                   <button
                     type="button"
@@ -521,8 +524,8 @@
                   </button>
                 </div>
               </div>
-              <div class="card-text" *ngIf="!item.hide; else editNoteTemplate">
-                {{ item.note | capitalLetter }}
+              <div class="card-text" *ngIf="!item?.hide; else editNoteTemplate">
+                {{ item?.note | capitalLetter }}
               </div>
               <ng-template #editNoteTemplate>
                 <form [formGroup]="editNoteForm">
@@ -566,7 +569,7 @@
                 </form>
               </ng-template>
               <small class="text-muted">{{
-                item.updated_at | date : "MMM d, y, h:mm a"
+                item?.updated_at | date : "MMM d, y, h:mm a"
               }}</small>
             </li>
           </ul>
@@ -640,7 +643,7 @@
               >Historial</a
             >
             <ng-template ngbNavContent>
-              <app-historial-negocio [id]="filtros.id"></app-historial-negocio>
+              <app-historial-negocio [id]="filtros?.id"></app-historial-negocio>
             </ng-template>
           </li>
         </ul>
@@ -680,7 +683,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -693,13 +696,13 @@
     ></app-crear-apu-pieza>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cancelar
     </button>
     <button
       type="button"
       class="btn btn-primary"
-      (click)="crearApuPieza.save()"
+      (click)="crearApuPieza?.save()"
     >
       Guardar
     </button>
@@ -714,7 +717,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -727,13 +730,13 @@
     ></app-crear-apu-conjunto>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cancelar
     </button>
     <button
       type="button"
       class="btn btn-primary"
-      (click)="crearApuConjunto.save()"
+      (click)="crearApuConjunto?.save()"
     >
       Guardar
     </button>
@@ -748,7 +751,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -761,13 +764,13 @@
     ></app-crear-apu-servicio>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cancelar
     </button>
     <button
       type="button"
       class="btn btn-primary"
-      (click)="crearApuServicio.save()"
+      (click)="crearApuServicio?.save()"
     >
       Guardar
     </button>
@@ -782,7 +785,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -795,13 +798,13 @@
     ></app-crear-cotizacion>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cancelar
     </button>
     <button
       type="button"
       class="btn btn-primary"
-      (click)="crearCotizacion.save()"
+      (click)="crearCotizacion?.save()"
     >
       Guardar
     </button>
@@ -816,7 +819,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -829,13 +832,13 @@
     ></app-crear-presupuesto>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cancelar
     </button>
     <button
       type="button"
       class="btn btn-primary"
-      (click)="crearPresupuesto.save()"
+      (click)="crearPresupuesto?.save()"
     >
       Guardar
     </button>

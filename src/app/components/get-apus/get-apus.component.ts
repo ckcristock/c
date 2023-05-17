@@ -105,10 +105,10 @@ export class GetApusComponent implements OnInit {
       ...this.form_filters.value
     }
     this._apu.getApus(params).subscribe((r: any) => {
-      this.apus = r.data.data
-      this.apus.forEach(apu => {
-        this.state.forEach(sta => {
-          if (sta.apu_id == apu.apu_id && sta.type == apu.type) {
+      this.apus = r?.data?.data
+      this.apus?.forEach(apu => {
+        this.state?.forEach(sta => {
+          if (sta?.apu_id == apu?.apu_id && sta?.type == apu?.type) {
             apu.selected = true
           }
         });
@@ -163,13 +163,13 @@ export class GetApusComponent implements OnInit {
         showCancel: false
       });
     } else {
-      const index = this.state.findIndex(x => (x.apu_id === apu.apu_id && x.type === apu.type));
-      if (apu.selected) {
+      const index = this.state?.findIndex(x => (x?.apu_id === apu?.apu_id && x?.type === apu?.type));
+      if (apu?.selected) {
         if (!this.multiple) {
-          this.state.forEach(item => item.selected = false);
+          this.state?.forEach(item => item.selected = false);
         }
         if (index === -1) {
-          this.state.push(apu);
+          this.state?.push(apu);
           apu.selected = true
         }
       } else {

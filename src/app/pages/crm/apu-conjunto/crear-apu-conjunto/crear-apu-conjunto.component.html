@@ -43,7 +43,7 @@
             [items]="cities"
             bindLabel="text"
             appearance="outline"
-            [class.is-invalid]="form.get('city_id').invalid"
+            [class.is-invalid]="form?.get('city_id')?.invalid"
             [appendTo]="'body'"
             [clearable]="false"
             placeholder="Destino *"
@@ -61,7 +61,7 @@
             [clearable]="false"
             appearance="outline"
             [appendTo]="'body'"
-            [class.is-invalid]="form.get('third_party_id').invalid"
+            [class.is-invalid]="form?.get('third_party_id')?.invalid"
             placeholder="Cliente *"
             bindValue="value"
             loadingText="loading"
@@ -96,7 +96,7 @@
       <h5 class="mt-2 text-center">Costos directos</h5>
       <hr class="line" />
       <app-planos-conjunto
-        *ngIf="planos.length > 0 && title == 'Editar conjunto'"
+        *ngIf="planos?.length > 0 && title == 'Editar conjunto'"
         (actualizar)="refreshData()"
         [data]="planos"
         [info]="'editar'"
@@ -116,14 +116,14 @@
           [removable]="true"
           (removed)="onRemove(f)"
         >
-          <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+          <ngx-dropzone-label>{{ f?.name }} ({{ f?.type }})</ngx-dropzone-label>
         </ngx-dropzone-preview>
       </ngx-dropzone>
       <h6 class="mt-3">Listado de piezas</h6>
       <div class="alert alert-warning" role="alert">
         Todas las piezas deben estar ligadas a un APU existente
       </div>
-      <ng-container *ngIf="piecesSetsList.controls.length; else notData">
+      <ng-container *ngIf="piecesSetsList?.controls?.length; else notData">
         <div class="rounded-top">
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
@@ -142,7 +142,7 @@
             </thead>
             <tbody formArrayName="list_pieces_sets">
               <ng-container
-                *ngFor="let item of piecesSetsList.controls; let i = index"
+                *ngFor="let item of piecesSetsList?.controls; let i = index"
               >
                 <tr [formGroupName]="i" class="text-center">
                   <td class="align-middle">
@@ -151,8 +151,8 @@
                   <td class="align-middle">
                     <select
                       *ngIf="
-                        !item.get('apu_part_id').value &&
-                          !item.get('apu_set_child_id').value;
+                        !item?.get('apu_part_id')?.value &&
+                          !item?.get('apu_set_child_id')?.value;
                         else apuType
                       "
                       class="form-control form-control-sm"
@@ -164,9 +164,9 @@
                     </select>
                     <ng-template #apuType>
                       {{
-                        item.controls.apu_type.value == "P"
+                        item?.controls?.apu_type?.value == "P"
                           ? "Pieza"
-                          : item.controls.apu_type.value == "C"
+                          : item?.controls?.apu_type?.value == "C"
                           ? "Conjunto"
                           : ""
                       }}
@@ -176,8 +176,8 @@
                     <div class="position-relative">
                       <input
                         *ngIf="
-                          item['controls']['apu_type']['value'] == 'P' &&
-                          !item.get('apu_part_id').value
+                          item?.controls?.apu_type?.value == 'P' &&
+                          !item?.get('apu_part_id')?.value
                         "
                         style="min-width: 13rem"
                         id="typeahead-http"
@@ -192,8 +192,8 @@
                       />
                       <input
                         *ngIf="
-                          item['controls']['apu_type']['value'] == 'C' &&
-                          !item.get('apu_set_child_id').value
+                          item?.controls?.apu_type?.value == 'C' &&
+                          !item?.get('apu_set_child_id')?.value
                         "
                         style="min-width: 13rem"
                         id="typeahead-httpp"
@@ -211,11 +211,11 @@
                     </div>
                     <ng-container
                       *ngIf="
-                        item.get('apu_part_id').value ||
-                        item.get('apu_set_child_id').value
+                        item?.get('apu_part_id')?.value ||
+                        item?.get('apu_set_child_id')?.value
                       "
                     >
-                      {{ item.get("description").value.name | capitalLetter }}
+                      {{ item?.get("description")?.value.name | capitalLetter }}
                     </ng-container>
                     <!-- <ng-select
                       [items]="apuPart$ | async"
@@ -248,8 +248,8 @@
                       <option value="" disabled selected hidden>
                         Selecciona
                       </option>
-                      <option *ngFor="let item of units" [value]="item.value">
-                        {{ item.text }}
+                      <option *ngFor="let item of units" [value]="item?.value">
+                        {{ item?.text }}
                       </option>
                     </select>
                   </td>
@@ -257,17 +257,17 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskNumbers2Decimal"
+                      [options]="masksMoney?.maskNumbers2Decimal"
                       class="form-control form-control-sm"
                       id="costo_unitario_maquinas_herra"
                       formControlName="amount"
                     />
                   </td>
                   <td class="align-middle">
-                    ${{ item.controls.unit_cost.value | number : "1.2-2" }}
+                    ${{ item?.controls?.unit_cost?.value | number : "1.2-2" }}
                   </td>
                   <td class="align-middle">
-                    ${{ item.controls.total.value | number : "1.2-2" }}
+                    ${{ item?.controls?.total?.value | number : "1.2-2" }}
                   </td>
                   <td class="align-middle">
                     <button
@@ -318,17 +318,17 @@
           Agregar APU pieza
         </button>
       </div>
-      <ng-container *ngIf="piecesSetsList.controls.length">
+      <ng-container *ngIf="piecesSetsList?.controls?.length">
         <app-list-items
           title1="SUBTOTAL"
-          [var1]="this.form.get('list_pieces_sets_subtotal').value"
+          [var1]="this.form?.get('list_pieces_sets_subtotal')?.value"
           type1="cop"
           mt="mt-2"
         ></app-list-items>
       </ng-container>
       <hr />
       <h6 class="mt-3">Máquinas herramientas</h6>
-      <ng-container *ngIf="machineToolList.controls.length; else notData">
+      <ng-container *ngIf="machineToolList?.controls?.length; else notData">
         <div class="rounded-top table-responsive">
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
@@ -354,14 +354,14 @@
             </thead>
             <tbody formArrayName="machine_tools">
               <ng-container
-                *ngFor="let item of machineToolList.controls; let i = index"
+                *ngFor="let item of machineToolList?.controls; let i = index"
               >
                 <tr [formGroupName]="i" class="text-center">
                   <td class="align-middle">
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    {{ item.value.name_description | capitalLetter }}
+                    {{ item?.value?.name_description | capitalLetter }}
                     <!-- <select
                       class="form-control form-control-sm"
                       formControlName="description"
@@ -379,7 +379,7 @@
                     </select> -->
                   </td>
                   <td class="align-middle">
-                    {{ item.value.unit_name | capitalLetter }}
+                    {{ item?.value?.unit_name | capitalLetter }}
                     <!-- <select
                       class="form-control form-control-sm"
                       formControlName="unit_id"
@@ -396,14 +396,14 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskNumbers2Decimal"
+                      [options]="masksMoney?.maskNumbers2Decimal"
                       class="form-control form-control-sm"
                       id="costo_unitario_maquinas_herra"
                       formControlName="amount"
                     />
                   </td>
                   <td class="align-middle">
-                    ${{ item.value.unit_cost | number : "1.2-2" }}
+                    ${{ item?.value?.unit_cost | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       appInputPosition
@@ -414,7 +414,7 @@
                     /> -->
                   </td>
                   <td class="align-middle">
-                    ${{ item.value.total | number : "1.2-2" }}
+                    ${{ item?.value?.total | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       appInputPosition
@@ -451,17 +451,17 @@
         <i class="fas fa-plus"></i>
         Agregar máquinas herramientas
       </button>
-      <ng-container *ngIf="machineToolList.controls.length">
+      <ng-container *ngIf="machineToolList?.controls?.length">
         <app-list-items
           title1="SUBTOTAL"
-          [var1]="this.form.get('machine_tools_subtotal').value"
+          [var1]="this.form?.get('machine_tools_subtotal')?.value"
           type1="cop"
           mt="mt-2"
         ></app-list-items>
       </ng-container>
       <hr />
       <h6 class="mt-3">Procesos internos</h6>
-      <ng-container *ngIf="internalProcessList.controls.length; else notData">
+      <ng-container *ngIf="internalProcessList?.controls?.length; else notData">
         <div class="rounded-top table-responsive">
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
@@ -487,12 +487,15 @@
             </thead>
             <tbody formArrayName="internal_processes">
               <ng-container
-                *ngFor="let item of internalProcessList.controls; let i = index"
+                *ngFor="
+                  let item of internalProcessList?.controls;
+                  let i = index
+                "
               >
                 <tr [formGroupName]="i" class="text-center">
                   <td class="align-middle">{{ i + 1 }}</td>
                   <td class="align-middle">
-                    {{ item.value.name_description | capitalLetter }}
+                    {{ item?.value?.name_description | capitalLetter }}
                     <!-- <select
                       class="form-control form-control-sm"
                       formControlName="description"
@@ -510,7 +513,7 @@
                     </select> -->
                   </td>
                   <td class="align-middle">
-                    {{ item.value.unit_name | capitalLetter }}
+                    {{ item?.value?.unit_name | capitalLetter }}
                     <!-- <select
                       class="form-control form-control-sm"
                       formControlName="unit_id"
@@ -527,14 +530,14 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskNumbers2Decimal"
+                      [options]="masksMoney?.maskNumbers2Decimal"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_interno"
                       formControlName="amount"
                     />
                   </td>
                   <td class="align-middle">
-                    ${{ item.value.unit_cost | number : "1.2-2" }}
+                    ${{ item?.value?.unit_cost | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       appInputPosition
@@ -545,7 +548,7 @@
                     /> -->
                   </td>
                   <td class="align-middle">
-                    ${{ item.value.total | number : "1.2-2" }}
+                    ${{ item?.value?.total | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       appInputPosition
@@ -582,17 +585,17 @@
         <i class="fas fa-plus"></i>
         Agregar procesos internos
       </button>
-      <ng-container *ngIf="internalProcessList.controls.length">
+      <ng-container *ngIf="internalProcessList?.controls?.length">
         <app-list-items
           title1="SUBTOTAL"
-          [var1]="this.form.get('internal_processes_subtotal').value"
+          [var1]="this.form?.get('internal_processes_subtotal')?.value"
           type1="cop"
           mt="mt-2"
         ></app-list-items>
       </ng-container>
       <hr />
       <h6 class="mt-3">Procesos externos</h6>
-      <ng-container *ngIf="externalProcessList.controls.length; else notData">
+      <ng-container *ngIf="externalProcessList?.controls?.length; else notData">
         <div class="rounded-top table-responsive">
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
@@ -618,14 +621,17 @@
             </thead>
             <tbody formArrayName="external_processes">
               <ng-container
-                *ngFor="let item of externalProcessList.controls; let i = index"
+                *ngFor="
+                  let item of externalProcessList?.controls;
+                  let i = index
+                "
               >
                 <tr [formGroupName]="i" class="text-center">
                   <td class="align-middle">
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    {{ item.value.name_description | capitalLetter }}
+                    {{ item?.value?.name_description | capitalLetter }}
                     <!--  <select
                       class="form-control form-control-sm"
                       formControlName="description"
@@ -643,7 +649,7 @@
                     </select> -->
                   </td>
                   <td class="align-middle">
-                    {{ item.value.unit_name | capitalLetter }}
+                    {{ item?.value?.unit_name | capitalLetter }}
                     <!-- <select
                       class="form-control form-control-sm"
                       formControlName="unit_id"
@@ -660,7 +666,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskNumbers2Decimal"
+                      [options]="masksMoney?.maskNumbers2Decimal"
                       class="form-control form-control-sm"
                       id="q_unitaria_proceso_externo"
                       formControlName="amount"
@@ -671,7 +677,7 @@
                     <input
                       currencyMask
                       appInputPosition
-                      [options]="masksMoney.maskCOP"
+                      [options]="masksMoney?.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_proceso_externo"
                       style="width: 8rem"
@@ -679,7 +685,7 @@
                     />
                   </td>
                   <td class="align-middle">
-                    ${{ item.value.total | number : "1.2-2" }}
+                    ${{ item?.value?.total | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       appInputPosition
@@ -716,17 +722,17 @@
         <i class="fas fa-plus"></i>
         Agregar procesos externos
       </button>
-      <ng-container *ngIf="externalProcessList.controls.length">
+      <ng-container *ngIf="externalProcessList?.controls?.length">
         <app-list-items
           title1="SUBTOTAL"
-          [var1]="this.form.get('external_processes_subtotal').value"
+          [var1]="this.form?.get('external_processes_subtotal')?.value"
           type1="cop"
           mt="mt-2"
         ></app-list-items>
       </ng-container>
       <hr />
       <h6>Otros</h6>
-      <ng-container *ngIf="othersList.controls.length; else notData">
+      <ng-container *ngIf="othersList?.controls?.length; else notData">
         <div class="rounded-top table-responsive">
           <table class="table table-bordered table-striped table-sm">
             <thead class="bg-light">
@@ -744,7 +750,7 @@
             </thead>
             <tbody formArrayName="others">
               <ng-container
-                *ngFor="let item of othersList.controls; let i = index"
+                *ngFor="let item of othersList?.controls; let i = index"
               >
                 <tr [formGroupName]="i" class="text-center">
                   <td class="align-middle">
@@ -769,8 +775,8 @@
                       <option value="" disabled selected hidden>
                         Selecciona
                       </option>
-                      <option *ngFor="let item of units" [value]="item.value">
-                        {{ item.text }}
+                      <option *ngFor="let item of units" [value]="item?.value">
+                        {{ item?.text }}
                       </option>
                     </select>
                   </td>
@@ -778,7 +784,7 @@
                     <input
                       currencyMask
                       appInputPositionInitial
-                      [options]="masksMoney.maskNumbers2Decimal"
+                      [options]="masksMoney?.maskNumbers2Decimal"
                       class="form-control form-control-sm"
                       id="q_unitaria_otros"
                       formControlName="amount"
@@ -788,14 +794,14 @@
                     <input
                       currencyMask
                       appInputPosition
-                      [options]="masksMoney.maskCOP"
+                      [options]="masksMoney?.maskCOP"
                       class="form-control form-control-sm"
                       id="costo_unitario_otros"
                       formControlName="unit_cost"
                     />
                   </td>
                   <td class="align-middle">
-                    ${{ item.controls.total.value | number : "1.2-2" }}
+                    ${{ item?.controls?.total?.value | number : "1.2-2" }}
                   </td>
                   <td class="align-middle">
                     <button
@@ -825,10 +831,10 @@
         <i class="fas fa-plus"></i>
         Agregar otro
       </button>
-      <ng-container *ngIf="othersList.controls.length">
+      <ng-container *ngIf="othersList?.controls?.length">
         <app-list-items
           title1="SUBTOTAL"
-          [var1]="this.form.get('others_subtotal').value"
+          [var1]="this.form?.get('others_subtotal')?.value"
           type1="cop"
           mt="mt-2"
         ></app-list-items>
@@ -836,7 +842,7 @@
       <hr />
       <app-list-items
         title1="COSTO DIRECTO TOTAL"
-        [var1]="this.form.get('total_direct_cost').value"
+        [var1]="this.form?.get('total_direct_cost')?.value"
         type1="cop"
       ></app-list-items>
       <div class="row mt-3">
@@ -866,26 +872,26 @@
                   <ng-container formArrayName="indirect_cost">
                     <ng-container
                       *ngFor="
-                        let item of indirecCostList.controls;
+                        let item of indirecCostList?.controls;
                         let i = index
                       "
                     >
                       <tr [formGroupName]="i">
                         <td class="col-7 align-middle">
-                          {{ item.controls.name.value }}
+                          {{ item?.controls?.name?.value }}
                         </td>
                         <td class="col-2 align-middle">
                           <input
                             currencyMask
                             appInputPositionInitial
-                            [options]="masksMoney.maskPorcentaje"
+                            [options]="masksMoney?.maskPorcentaje"
                             step=".1"
                             class="form-control form-control-sm"
                             formControlName="percentage"
                           />
                         </td>
                         <td class="col-3 text-right align-middle">
-                          ${{ item.controls.value.value | number : "1.2-2" }}
+                          ${{ item?.controls?.value?.value | number : "1.2-2" }}
                         </td>
                       </tr>
                     </ng-container>
@@ -896,7 +902,7 @@
                     </th>
                     <th class="text-right align-middle">
                       ${{
-                        form.controls.indirect_cost_total.value
+                        form?.controls?.indirect_cost_total?.value
                           | number : "1.2-2"
                       }}
                     </th>
@@ -907,7 +913,7 @@
                     </th>
                     <th class="text-right align-middle">
                       ${{
-                        form.controls.direct_costs_indirect_costs_total.value
+                        form?.controls?.direct_costs_indirect_costs_total?.value
                           | number : "1.2-2"
                       }}
                     </th>
@@ -944,7 +950,7 @@
                       <input
                         currencyMask
                         appInputPositionInitial
-                        [options]="masksMoney.maskPorcentaje"
+                        [options]="masksMoney?.maskPorcentaje"
                         step=".1"
                         class="form-control form-control-sm"
                         formControlName="administrative_percentage"
@@ -952,7 +958,7 @@
                     </td>
                     <td class="col-3 text-right align-middle">
                       ${{
-                        form.controls.administrative_value.value
+                        form?.controls?.administrative_value?.value
                           | number : "1.2-2"
                       }}
                     </td>
@@ -963,14 +969,15 @@
                       <input
                         currencyMask
                         appInputPositionInitial
-                        [options]="masksMoney.maskPorcentaje"
+                        [options]="masksMoney?.maskPorcentaje"
                         class="form-control form-control-sm"
                         formControlName="unforeseen_percentage"
                       />
                     </td>
                     <td class="col-3 text-right">
                       ${{
-                        form.controls.unforeseen_value.value | number : "1.2-2"
+                        form?.controls?.unforeseen_value?.value
+                          | number : "1.2-2"
                       }}
                     </td>
                   </tr>
@@ -980,8 +987,8 @@
                     </td>
                     <td class="col-3 text-right">
                       ${{
-                        form.controls.administrative_unforeseen_subtotal.value
-                          | number : "1.2-2"
+                        form?.controls?.administrative_unforeseen_subtotal
+                          ?.value | number : "1.2-2"
                       }}
                     </td>
                   </tr>
@@ -991,7 +998,7 @@
                       <input
                         currencyMask
                         appInputPositionInitial
-                        [options]="masksMoney.maskPorcentaje"
+                        [options]="masksMoney?.maskPorcentaje"
                         class="form-control form-control-sm"
                         formControlName="utility_percentage"
                       />
@@ -1003,7 +1010,7 @@
                     </td>
                     <td class="col-3 text-right">
                       ${{
-                        form.controls.admin_unforeseen_utility_subtotal.value
+                        form?.controls?.admin_unforeseen_utility_subtotal?.value
                           | number : "1.2-2"
                       }}
                     </td>
@@ -1024,7 +1031,7 @@
                       <span>
                         $
                         {{
-                          form.get("sale_price_cop_withholding_total").value
+                          form?.get("sale_price_cop_withholding_total")?.value
                             | number : "1.2-2"
                         }}
                       </span>
@@ -1037,7 +1044,7 @@
                     <input
                       currencyMask
                       appInputPosition
-                      [options]="masksMoney.maskCOP"
+                      [options]="masksMoney?.maskCOP"
                       class="form-control form-control-sm"
                       formControlName="trm"
                     />
@@ -1052,7 +1059,7 @@
                       <span>
                         USD
                         {{
-                          form.get("sale_price_usd_withholding_total").value
+                          form?.get("sale_price_usd_withholding_total")?.value
                             | number : "1.2-2"
                         }}
                       </span>
@@ -1089,7 +1096,7 @@
 ></app-get-apus>
 
 <ng-template #rt let-r="result" let-t="term">
-  <span class="f-9">{{ r.name }} </span>
+  <span class="f-9">{{ r?.name }} </span>
 </ng-template>
 <ng-template #wait>
   <div class="card">

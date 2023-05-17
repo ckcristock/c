@@ -58,7 +58,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
     private _modal: ModalNoCloseService,
     public _consecutivos: ConsecutivosService,
   ) {
-    this.id = this._user.user.person.id;
+    this.id = this._user?.user?.person?.id;
   }
 
   ngOnInit(): void {
@@ -69,8 +69,8 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this.getCities();
     this.getTypes();
     this.getContacts();
-    this.route.paramMap.subscribe(params => {
-      this.business_id = params.get('id');
+    this.route?.paramMap?.subscribe(params => {
+      this.business_id = params?.get('id');
       if (this.business_id) {
         this.getBusiness(this.business_id);
       }
@@ -82,9 +82,9 @@ export class ModalNuevoNegocioComponent implements OnInit {
 
   addBudget(e) {
     let cont = 0;
-    e.forEach(element => {
-      if (!this.budgetsSelected.some(bud => bud.id == element.id)) {
-        this.budgetsSelected.push(element)
+    e?.forEach(element => {
+      if (!this.budgetsSelected?.some(bud => bud?.id == element?.id)) {
+        this.budgetsSelected?.push(element)
       } else {
         cont++;
       }
@@ -101,9 +101,9 @@ export class ModalNuevoNegocioComponent implements OnInit {
 
   addQuotation(e) {
     let cont = 0;
-    e.forEach(element => {
-      if (!this.quotationSelected.some(quot => quot.id == element.id)) {
-        this.quotationSelected.push(element)
+    e?.forEach(element => {
+      if (!this.quotationSelected?.some(quot => quot?.id == element?.id)) {
+        this.quotationSelected?.push(element)
       } else {
         cont++;
       }
@@ -120,7 +120,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
 
   async getTypes() {
     await this._negocios.indexType().toPromise().then((res: any) => {
-      this.types = res.data;
+      this.types = res?.data;
     })
   }
 
@@ -146,21 +146,21 @@ export class ModalNuevoNegocioComponent implements OnInit {
     this.loading = true;
     this._negocios.getBusiness(id).subscribe((res: any) => {
       this.form.patchValue({
-        id: res.data.id,
-        name: res.data.name,
-        description: res.data.description,
-        third_party_id: res.data.third_party_id,
-        third_party_person_id: res.data.third_party_person_id,
-        city_id: res.data.city_id,
-        date: res.data.date,
-        person_id: res.data.person_id,
-        business_type_id: res.data.business_type_id,
-        format_code: res.data.formmat_code,
-        code: res.data.code
+        id: res?.data?.id,
+        name: res?.data?.name,
+        description: res?.data?.description,
+        third_party_id: res?.data?.third_party_id,
+        third_party_person_id: res?.data?.third_party_person_id,
+        city_id: res?.data?.city_id,
+        date: res?.data?.date,
+        person_id: res?.data?.person_id,
+        business_type_id: res?.data?.business_type_id,
+        format_code: res?.data?.formmat_code,
+        code: res?.data?.code
       })
-      this.datosCabecera.Codigo = res.data.code;
-      this.datosCabecera.CodigoFormato = res.data.format_code;
-      this.datosCabecera.Fecha = res.data.created_at;
+      this.datosCabecera.Codigo = res?.data?.code;
+      this.datosCabecera.CodigoFormato = res?.data?.format_code;
+      this.datosCabecera.Fecha = res?.data?.created_at;
       this.datosCabecera.Titulo = 'Editar negocio'
       this.loading = false;
     })
@@ -168,8 +168,8 @@ export class ModalNuevoNegocioComponent implements OnInit {
 
   getApus(e: any[]) {
     let cont = 0;
-    e.forEach(apu => {
-      if (!this.apuSelected.some(x => (x.apu_id == apu.apu_id && x.type_module == apu.type_module))) {
+    e?.forEach(apu => {
+      if (!this.apuSelected?.some(x => (x?.apu_id == apu?.apu_id && x?.type_module == apu?.type_module))) {
         this.apuSelected.push(apu)
       } else {
         cont++;
@@ -197,24 +197,24 @@ export class ModalNuevoNegocioComponent implements OnInit {
   }
 
   deleteApu(item) {
-    let id = this.apuSelected.indexOf(item)
-    this.apuSelected.splice(id, 1)
+    let id = this.apuSelected?.indexOf(item)
+    this.apuSelected?.splice(id, 1)
   }
 
   deleteBudget(item) {
-    let id = this.budgetsSelected.indexOf(item)
-    this.budgetsSelected.splice(id, 1)
+    let id = this.budgetsSelected?.indexOf(item)
+    this.budgetsSelected?.splice(id, 1)
   }
 
   deleteQuotation(item) {
-    let id = this.quotationSelected.indexOf(item)
-    this.quotationSelected.splice(id, 1)
+    let id = this.quotationSelected?.indexOf(item)
+    this.quotationSelected?.splice(id, 1)
   }
 
   getConsecutivo() {
     this._consecutivos.getConsecutivo('businesses').subscribe((r: any) => {
-      this.datosCabecera.CodigoFormato = r.data.format_code
-      this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
+      this.datosCabecera.CodigoFormato = r?.data?.format_code
+      this.form.patchValue({ format_code: this.datosCabecera?.CodigoFormato })
       this.construirConsecutivo(this.form.get('city_id').value, r)
       this.form.get('city_id').valueChanges.subscribe(value => {
         if (!this.business_id) {
@@ -225,10 +225,10 @@ export class ModalNuevoNegocioComponent implements OnInit {
   }
 
   construirConsecutivo(value, r, context = '') {
-    if (r.data.city) {
-      let city = this.cities.find(x => x.value === value);
-      if (city && !city.abbreviation) {
-        this.form.get('city_id').setValue(null);
+    if (r?.data?.city) {
+      let city = this.cities?.find(x => x?.value === value);
+      if (city && !city?.abbreviation) {
+        this.form.get('city_id')?.setValue(null);
         this._swal.show({
           icon: 'error',
           title: 'Error',
@@ -236,7 +236,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
           showCancel: false
         })
       } else {
-        let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation);
+        let con = this._consecutivos.construirConsecutivo(r?.data, city?.abbreviation);
         this.datosCabecera.Codigo = con
         this.form.patchValue({
           code: con
@@ -281,7 +281,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
   getCompanies() {
     this._negocios.getThirds().subscribe(
       (resp: any) => {
-        this.companies = resp.data;
+        this.companies = resp?.data;
       },
       () => { },
       () => {
@@ -291,7 +291,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
 
   getContacts() {
     this._negocios.getThirdPartyPersonIndex().subscribe((resp: any) => {
-      this.contacts = resp.data;
+      this.contacts = resp?.data;
     });
   }
 
@@ -299,12 +299,12 @@ export class ModalNuevoNegocioComponent implements OnInit {
     if (this.form.valid) {
       this._swal.show({
         title: '¿Estás seguro(a)?',
-        text: 'Vamos a ' + (this.form.value.id ? 'editar' : 'crear') + ' el negocio',
+        text: 'Vamos a ' + (this.form?.value?.id ? 'editar' : 'crear') + ' el negocio',
         icon: 'question',
         showCancel: true,
       }).then((r) => {
         if (r.isConfirmed) {
-          if (this.form.value.id) {
+          if (this.form?.value?.id) {
             this._negocios.updateBasicData(this.form.value).subscribe((res: any) => {
               this.swalAlert();
               this.router.navigateByUrl('/crm/negocios')
@@ -346,35 +346,35 @@ export class ModalNuevoNegocioComponent implements OnInit {
   addApuPieza(apu) {
     this._modal.close();
     this._apuConjunto.getApuPartToAdd(apu.id).subscribe((res: any) => {
-      this.getApus(res.data)
+      this.getApus(res?.data)
     })
   }
 
   addNewAPUConjunto(apu) {
     this._modal.close();
     this._apuConjunto.getApuSetToAdd(apu.id).subscribe((res: any) => {
-      this.getApus(res.data)
+      this.getApus(res?.data)
     })
   }
 
   addNewAPUServicio(apu) {
     this._modal.close();
     this._apuConjunto.getApuServiceToAdd(apu.id).subscribe((res: any) => {
-      this.getApus(res.data)
+      this.getApus(res?.data)
     })
   }
 
   addNewBudget(pre) {
     this._modal.close();
     this._budget.getBudgetToAdd(pre.id).subscribe((res: any) => {
-      this.budgetsSelected.push(res.data)
+      this.budgetsSelected.push(res?.data)
     })
   }
 
   addNewQuotation(quot) {
     this._modal.close();
     this._quotation.getQuotationToAdd(quot.id).subscribe((res: any) => {
-      this.quotationSelected.push(res.data)
+      this.quotationSelected.push(res?.data)
     })
   }
 

@@ -12,27 +12,27 @@ export class ListadoPiezasConjuntosComponent implements OnInit {
   constructor(private platformLocation: PlatformLocation) { }
   href: string = "";
   ngOnInit(): void {
-    this.href = (this.platformLocation as any).location.origin;
+    this.href = (this.platformLocation as any)?.location?.origin;
   }
 
   openInNewTab(item) {
     let uri = ''
     let id;
-    switch (item.apu_type) {
+    switch (item?.apu_type) {
       case 'P':
         uri = '/crm/apu/ver-apu-pieza';
-        id = item.apupart.id
+        id = item?.apupart?.id
         break;
       case 'C':
         uri = '/crm/apu/ver-apu-conjunto';
-        id = item.apuset.id
+        id = item?.apuset?.id
         break;
       default:
         break;
     }
     const url = this.href + `${uri}/${id}`;
 
-    window.open(url, '_blank');
+    window?.open(url, '_blank');
   }
 
 }

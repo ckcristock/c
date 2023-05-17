@@ -34,9 +34,9 @@ export class VerPresupuestoComponent implements OnInit {
     this.loading = true;
     this._budget.get(this.id).subscribe((r: any) => {
       this.data = r.data
-      this.datosCabecera.Codigo = r.data.code;
-      this.datosCabecera.Fecha = r.data.created_at;
-      this.datosCabecera.CodigoFormato = r.data.format_code;
+      this.datosCabecera.Codigo = r?.data?.code;
+      this.datosCabecera.Fecha = r?.data?.created_at;
+      this.datosCabecera.CodigoFormato = r?.data?.format_code;
       this.loading = false;
     })
   }

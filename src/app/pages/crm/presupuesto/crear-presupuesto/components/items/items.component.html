@@ -1,8 +1,8 @@
 <ng-container [formGroup]="forma">
   <div formArrayName="items">
     <h5 class="text-center">Elementos del presupuesto</h5>
-    <ng-container *ngIf="items.controls.length; else notData">
-      <div *ngFor="let item of items.controls; let i = index">
+    <ng-container *ngIf="items?.controls?.length; else notData">
+      <div *ngFor="let item of items?.controls; let i = index">
         <div class="d-flex align-items-center justify-content-between">
           <h4 class="h4-custom">
             <span class="badge badge-primary badge-custom">{{ i + 1 }}</span>
@@ -39,13 +39,13 @@
                   class="align-middle"
                   [DynamicColspan]="'indirect_cost'"
                   min="1"
-                  [max]="indirectCosts.length + 1"
+                  [max]="indirectCosts?.length + 1"
                   role="button"
                   (click)="changeView(item, 'indirect_cost')"
                 >
                   <ng-container
                     *ngIf="
-                      item.controls?.shows?.value?.indirect_cost;
+                      item?.controls?.shows?.value?.indirect_cost;
                       else down
                     "
                   >
@@ -62,7 +62,7 @@
                   (click)="changeView(item, 'sum_others')"
                 >
                   <ng-container
-                    *ngIf="item.controls?.shows?.value?.sum_others; else down"
+                    *ngIf="item?.controls?.shows?.value?.sum_others; else down"
                   >
                     <i class="fas fa-chevron-right text-primary"></i>
                   </ng-container>
@@ -77,7 +77,7 @@
                   role="button"
                 >
                   <ng-container
-                    *ngIf="item.controls?.shows?.value?.total_sale; else down"
+                    *ngIf="item?.controls?.shows?.value?.total_sale; else down"
                   >
                     <i class="fas fa-chevron-right text-primary"></i>
                   </ng-container>
@@ -87,11 +87,11 @@
                   class="align-middle"
                   (click)="changeView(item, 'prorrateo')"
                   role="button"
-                  *ngIf="item.controls?.shows?.value?.prorrateo"
+                  *ngIf="item?.controls?.shows?.value?.prorrateo"
                   colspan="4"
                 >
                   <ng-container
-                    *ngIf="item.controls?.shows?.value?.prorrateo; else down"
+                    *ngIf="item?.controls?.shows?.value?.prorrateo; else down"
                   >
                     <i class="fas fa-chevron-right text-primary"></i>
                   </ng-container>
@@ -113,16 +113,16 @@
                   Valor total costo
                 </th>
                 <ng-container
-                  *ngIf="item.controls?.shows?.value?.indirect_cost"
+                  *ngIf="item?.controls?.shows?.value?.indirect_cost"
                 >
                   <th class="align-middle" *ngFor="let item of indirectCosts">
-                    {{ item.text }}
+                    {{ item?.text }}
                   </th>
                 </ng-container>
                 <th class="align-middle" title="Subtotal Indirectos">
                   Subtotal indirectos
                 </th>
-                <ng-container *ngIf="item.controls?.shows?.value?.sum_others">
+                <ng-container *ngIf="item?.controls?.shows?.value?.sum_others">
                   <th class="align-middle">%</th>
                   <th class="align-middle">AMD</th>
                   <th class="align-middle">%</th>
@@ -132,14 +132,14 @@
                 </ng-container>
                 <th class="align-middle">ADM+IMP+UTI</th>
                 <th class="align-middle">Otros Cargos</th>
-                <ng-container *ngIf="item.controls?.shows?.value?.total_sale">
+                <ng-container *ngIf="item?.controls?.shows?.value?.total_sale">
                   <th class="align-middle">Subtotal</th>
                   <th class="align-middle">Retención</th>
                 </ng-container>
                 <th class="align-middle">%</th>
                 <th class="align-middle">V/U Venta COP</th>
                 <th class="align-middle">V/U Venta USD</th>
-                <ng-container *ngIf="item.controls?.shows?.value?.prorrateo">
+                <ng-container *ngIf="item?.controls?.shows?.value?.prorrateo">
                   <th class="align-middle">V. Prorr. COP</th>
                   <th class="align-middle">V. Prorr. USD</th>
                   <th class="align-middle">V/U Venta Prorr. COP</th>
@@ -153,13 +153,16 @@
             </thead>
             <tbody>
               <ng-container
-                *ngIf="item.controls?.subItems?.controls?.length; else notData2"
+                *ngIf="
+                  item?.controls?.subItems?.controls?.length;
+                  else notData2
+                "
               >
                 <ng-container formArrayName="subItems">
                   <ng-container
                     [formGroupName]="y"
                     *ngFor="
-                      let subItem of item.controls?.subItems?.controls;
+                      let subItem of item?.controls?.subItems?.controls;
                       let y = index;
                       let last = last
                     "
@@ -185,18 +188,18 @@
                           </option>
                         </select>
                         <ng-template #type>
-                          {{ subItem.controls?.type?.value | capitalLetter }}
+                          {{ subItem?.controls?.type?.value | capitalLetter }}
                         </ng-template>
                       </td>
                       <td>
                         <i
                           class="fas"
                           [class]="
-                            subItem.get('type_module')?.value == 'apu_part'
+                            subItem?.get('type_module')?.value == 'apu_part'
                               ? 'fa-wrench'
-                              : subItem.get('type_module')?.value == 'apu_set'
+                              : subItem?.get('type_module')?.value == 'apu_set'
                               ? 'fa-cogs'
-                              : subItem.get('type_module')?.value ==
+                              : subItem?.get('type_module')?.value ==
                                 'apu_service'
                               ? 'fa-headset'
                               : 'fa-box'
@@ -205,7 +208,7 @@
                       </td>
                       <td class="align-middle position-relative">
                         <div
-                          *ngIf="!subItem.get('type_module')?.value"
+                          *ngIf="!subItem?.get('type_module')?.value"
                           class="table-input-bar"
                         ></div>
                         <input
@@ -213,10 +216,10 @@
                           type="text"
                           class="form-control form-control-sm text-uppercase"
                           placeholder="Ingresa la descripción"
-                          [readonly]="subItem.get('type_module')?.value"
+                          [readonly]="subItem?.get('type_module')?.value"
                           [ngClass]="{
                             'form-control-plaintext':
-                              subItem.get('type_module')?.value
+                              subItem?.get('type_module')?.value
                           }"
                           formControlName="description"
                         />
@@ -233,7 +236,7 @@
                           </button>
                           <button
                             type="button"
-                            *ngIf="!subItem.get('apu_id')?.value"
+                            *ngIf="!subItem?.get('apu_id')?.value"
                             (click)="findApus(item, false, subItem, y)"
                             class="btn btn-info btn-sm"
                           >
@@ -241,11 +244,11 @@
                           </button>
                           <button
                             type="button"
-                            *ngIf="subItem.get('apu_id').value"
+                            *ngIf="subItem?.get('apu_id')?.value"
                             (click)="
                               openNewTab(
-                                subItem.get('type_module')?.value,
-                                subItem.get('apu_id')?.value
+                                subItem?.get('type_module')?.value,
+                                subItem?.get('apu_id')?.value
                               )
                             "
                             class="btn btn-primary btn-sm"
@@ -268,7 +271,7 @@
                         <input
                           currencyMask
                           appInputPositionInitial
-                          [options]="masksMoney.maskNumbers"
+                          [options]="masksMoney?.maskNumbers"
                           formControlName="cuantity"
                           class="form-control form-control-sm"
                         />
@@ -278,7 +281,7 @@
                         <input
                           currencyMask
                           appInputPosition
-                          [options]="masksMoney.maskCOP"
+                          [options]="masksMoney?.maskCOP"
                           formControlName="unit_cost"
                           class="form-control form-control-sm"
                         />
@@ -286,7 +289,7 @@
                       <td class="align-middle table-info">
                         <div class="values">
                           ${{
-                            subItem.controls?.total_cost?.value
+                            subItem?.controls?.total_cost?.value
                               | number : "1.2-2"
                           }}
                         </div>
@@ -294,7 +297,7 @@
                       <!-- Costos directos -->
                       <ng-container
                         formArrayName="indirect_costs"
-                        *ngIf="item.controls?.shows?.value?.indirect_cost"
+                        *ngIf="item?.controls?.shows?.value?.indirect_cost"
                       >
                         <ng-container
                           [formGroupName]="indirecIndex"
@@ -325,11 +328,11 @@
                       <!-- end Costos directos -->
                       <!-- Variables AMD IMPREVISTOS UTILIDAD -->
                       <ng-container
-                        *ngIf="item.controls?.shows?.value?.sum_others"
+                        *ngIf="item?.controls?.shows?.value?.sum_others"
                       >
                         <td class="align-middle position-relative">
                           {{
-                            subItem.controls?.percentage_amd?.value
+                            subItem?.controls?.percentage_amd?.value
                               | number : "1.2-2"
                           }}%
                           <!-- <div class="table-input-bar"></div>
@@ -345,14 +348,14 @@
                         <td class="align-middle">
                           <div class="values">
                             ${{
-                              subItem.controls?.value_amd?.value
+                              subItem?.controls?.value_amd?.value
                                 | number : "1.2-2"
                             }}
                           </div>
                         </td>
                         <td class="align-middle position-relative">
                           {{
-                            subItem.controls?.percentage_unforeseen?.value
+                            subItem?.controls?.percentage_unforeseen?.value
                               | number : "1.2-2"
                           }}%
                           <!-- <div class="table-input-bar"></div>
@@ -368,14 +371,14 @@
                         <td class="align-middle">
                           <div class="values">
                             ${{
-                              subItem.controls?.value_unforeseen?.value
+                              subItem?.controls?.value_unforeseen?.value
                                 | number : "1.2-2"
                             }}
                           </div>
                         </td>
                         <td class="align-middle position-relative">
                           {{
-                            subItem.controls?.percentage_utility?.value
+                            subItem?.controls?.percentage_utility?.value
                               | number : "1.2-2"
                           }}%
                           <!-- <div class="table-input-bar"></div>
@@ -391,7 +394,7 @@
                         <td class="align-middle">
                           <div class="values">
                             ${{
-                              subItem.controls?.value_utility?.value
+                              subItem?.controls?.value_utility?.value
                                 | number : "1.2-2"
                             }}
                           </div>
@@ -400,7 +403,7 @@
                       <td class="align-middle table-danger">
                         <div class="values">
                           ${{
-                            subItem.controls?.total_amd_imp_uti?.value
+                            subItem?.controls?.total_amd_imp_uti?.value
                               | number : "1.2-2"
                           }}
                         </div>
@@ -412,18 +415,18 @@
                         <input
                           currencyMask
                           appInputPosition
-                          [options]="masksMoney.maskCOP"
+                          [options]="masksMoney?.maskCOP"
                           formControlName="another_values"
                           class="form-control form-control-sm"
                         />
                       </td>
                       <ng-container
-                        *ngIf="item.controls?.shows?.value?.total_sale"
+                        *ngIf="item?.controls?.shows?.value?.total_sale"
                       >
                         <td class="align-middle">
                           <div class="values">
                             ${{
-                              subItem.controls?.subTotal?.value
+                              subItem?.controls?.subTotal?.value
                                 | number : "1.2-2"
                             }}
                           </div>
@@ -431,7 +434,7 @@
                         <td class="align-middle">
                           <div class="values">
                             ${{
-                              subItem.controls?.retention?.value
+                              subItem?.controls?.retention?.value
                                 | number : "1.2-2"
                             }}
                           </div>
@@ -440,8 +443,8 @@
                       <td class="align-middle">
                         <div class="values text-center">
                           {{
-                            subItem.controls?.percentage_sale?.value
-                              ? subItem.controls?.percentage_sale?.value
+                            subItem?.controls?.percentage_sale?.value
+                              ? subItem?.controls?.percentage_sale?.value
                               : (0 | number)
                           }}%
                         </div>
@@ -449,7 +452,7 @@
                       <td class="align-middle">
                         <div class="values">
                           ${{
-                            subItem.controls?.value_cop?.value
+                            subItem?.controls?.value_cop?.value
                               | number : "1.2-2"
                           }}
                         </div>
@@ -458,19 +461,19 @@
                         <div class="values">
                           USD
                           {{
-                            subItem.controls?.value_usd?.value
+                            subItem?.controls?.value_usd?.value
                               | number : "1.2-2"
                           }}
                         </div>
                       </td>
                       <!-- END Variables TOTAl Venta -->
                       <ng-container
-                        *ngIf="item.controls?.shows?.value?.prorrateo"
+                        *ngIf="item?.controls?.shows?.value?.prorrateo"
                       >
                         <td class="align-middle">
                           <div class="values">
                             ${{
-                              subItem.controls?.value_prorrota_cop?.value
+                              subItem?.controls?.value_prorrota_cop?.value
                                 | number : "1.2-2"
                             }}
                           </div>
@@ -479,7 +482,7 @@
                           <div class="values">
                             USD
                             {{
-                              subItem.controls?.value_prorrota_usd?.value
+                              subItem?.controls?.value_prorrota_usd?.value
                                 | number : "1.2-2"
                             }}
                           </div>
@@ -487,7 +490,7 @@
                         <td class="align-middle">
                           <div class="values">
                             ${{
-                              subItem.controls?.unit_value_prorrateado_cop
+                              subItem?.controls?.unit_value_prorrateado_cop
                                 ?.value | number : "1.2-2"
                             }}
                           </div>
@@ -496,7 +499,7 @@
                           <div class="values">
                             USD
                             {{
-                              subItem.controls?.unit_value_prorrateado_usd
+                              subItem?.controls?.unit_value_prorrateado_usd
                                 ?.value | number : "1.2-2"
                             }}
                           </div>
@@ -532,27 +535,29 @@
                   <th class="align-middle text-center" colspan="9">SUBTOTAL</th>
                   <td class="align-middle">
                     <div class="values">
-                      ${{ item.controls?.total_cost?.value | number : "1.2-2" }}
+                      ${{
+                        item?.controls?.total_cost?.value | number : "1.2-2"
+                      }}
                     </div>
                   </td>
                   <!-- TOTALS COSTOS INDIRECTOS -->
                   <ng-container
                     formArrayName="subtotal_indirect_cost_dynamic"
-                    *ngIf="item.controls?.shows?.value?.indirect_cost"
+                    *ngIf="item?.controls?.shows?.value?.indirect_cost"
                   >
                     <!-- FOREACH indirect COSTS -->
                     <ng-container
                       [formGroupName]="indirecTotalIndex"
                       *ngFor="
                         let subtIndirect of item?.controls
-                          .subtotal_indirect_cost_dynamic?.controls;
+                          ?.subtotal_indirect_cost_dynamic?.controls;
                         let indirecTotalIndex = index
                       "
                     >
                       <td class="align-middle">
                         <div class="values">
                           ${{
-                            subtIndirect.controls?.sub_total?.value
+                            subtIndirect?.controls?.sub_total?.value
                               | number : "1.2-2"
                           }}
                         </div>
@@ -562,19 +567,21 @@
                   <td class="align-middle">
                     <div class="values">
                       ${{
-                        item.controls?.subtotal_indirect_cost?.value
+                        item?.controls?.subtotal_indirect_cost?.value
                           | number : "1.2-2"
                       }}
                     </div>
                   </td>
                   <!-- END TOTALS COSTOS INDIRECTOS  -->
                   <!-- OTHERS -->
-                  <ng-container *ngIf="item.controls?.shows?.value?.sum_others">
+                  <ng-container
+                    *ngIf="item?.controls?.shows?.value?.sum_others"
+                  >
                     <td class="align-middle"></td>
                     <td class="align-middle">
                       <div class="values">
                         ${{
-                          item.controls?.value_amd?.value | number : "1.2-2"
+                          item?.controls?.value_amd?.value | number : "1.2-2"
                         }}
                       </div>
                     </td>
@@ -582,7 +589,7 @@
                     <td class="align-middle">
                       <div class="values">
                         ${{
-                          item.controls?.value_unforeseen?.value
+                          item?.controls?.value_unforeseen?.value
                             | number : "1.2-2"
                         }}
                       </div>
@@ -591,7 +598,8 @@
                     <td class="align-middle">
                       <div class="values">
                         ${{
-                          item.controls?.value_utility?.value | number : "1.2-2"
+                          item?.controls?.value_utility?.value
+                            | number : "1.2-2"
                         }}
                       </div>
                     </td>
@@ -599,7 +607,7 @@
                   <td class="align-middle">
                     <div class="values">
                       ${{
-                        item.controls?.total_amd_imp_uti?.value
+                        item?.controls?.total_amd_imp_uti?.value
                           | number : "1.2-2"
                       }}
                     </div>
@@ -609,48 +617,52 @@
                   <td class="align-middle">
                     <div class="values">
                       ${{
-                        item.controls?.another_values?.value | number : "1.2-2"
+                        item?.controls?.another_values?.value | number : "1.2-2"
                       }}
                     </div>
                   </td>
-                  <ng-container *ngIf="item.controls?.shows?.value?.total_sale">
+                  <ng-container
+                    *ngIf="item?.controls?.shows?.value?.total_sale"
+                  >
                     <td class="align-middle">
                       <div class="values">
-                        ${{ item.controls?.subTotal?.value | number : "1.2-2" }}
+                        ${{
+                          item?.controls?.subTotal?.value | number : "1.2-2"
+                        }}
                       </div>
                     </td>
                     <td class="align-middle">
                       <div class="values">
                         ${{
-                          item.controls?.retention?.value | number : "1.2-2"
+                          item?.controls?.retention?.value | number : "1.2-2"
                         }}
                       </div>
                     </td>
                   </ng-container>
                   <td class="align-middle">
                     <div class="values text-center">
-                      {{ item.controls?.percentage_sale?.value }}%
+                      {{ item?.controls?.percentage_sale?.value }}%
                     </div>
                   </td>
                   <td class="align-middle">
                     <div class="values">
-                      ${{ item.controls?.value_cop?.value | number : "1.2-2" }}
+                      ${{ item?.controls?.value_cop?.value | number : "1.2-2" }}
                     </div>
                   </td>
                   <td class="align-middle">
                     <div class="values">
-                      ${{ item.controls?.value_usd?.value | number : "1.2-2" }}
+                      ${{ item?.controls?.value_usd?.value | number : "1.2-2" }}
                     </div>
                   </td>
                   <!-- END TOTAL VALOR VENTA -->
                   <!-- TOTAL PRORRATEO -->
-                  <ng-container *ngIf="item.controls?.shows?.value?.prorrateo">
+                  <ng-container *ngIf="item?.controls?.shows?.value?.prorrateo">
                     <td class="align-middle position-relative">
                       <div class="table-input-bar"></div>
                       <input
                         currencyMask
                         appInputPosition
-                        [options]="masksMoney.maskCOP"
+                        [options]="masksMoney?.maskCOP"
                         formControlName="value_prorrota_cop"
                         class="form-control form-control-sm"
                       />
@@ -660,7 +672,7 @@
                       <input
                         currencyMask
                         appInputPositionUsd
-                        [options]="masksMoney.maskUSD"
+                        [options]="masksMoney?.maskUSD"
                         formControlName="value_prorrota_usd"
                         class="form-control form-control-sm"
                       />
@@ -668,7 +680,7 @@
                     <td class="align-middle">
                       <div class="values">
                         ${{
-                          item.controls?.unit_value_prorrateado_cop?.value
+                          item?.controls?.unit_value_prorrateado_cop?.value
                             | number : "1.2-2"
                         }}
                       </div>
@@ -677,7 +689,7 @@
                       <div class="values">
                         USD
                         {{
-                          item.controls?.unit_value_prorrateado_usd?.value
+                          item?.controls?.unit_value_prorrateado_usd?.value
                             | number : "1.2-2"
                         }}
                       </div>
@@ -728,7 +740,7 @@
 </ng-template>
 
 <ng-template #rt let-r="result" let-t="term">
-  <ngb-highlight [result]="r.text" [term]="t"></ngb-highlight>
+  <ngb-highlight [result]="r?.text" [term]="t"></ngb-highlight>
 </ng-template>
 
 <app-get-apus #apus (sendApus)="getApus($event)"> </app-get-apus>

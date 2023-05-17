@@ -26,17 +26,17 @@ export class VerApuConjuntoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.id = this.actRoute.snapshot.params.id;
+    this.id = this.actRoute?.snapshot?.params?.id;
     this.getApuPart();
   }
 
   getApuPart() {
     this.loading = true;
-    this._apuConjunto.getApuSet(this.id).subscribe((r: any) => {
-      this.data = r.data;
-      this.datosCabecera.Codigo = r.data.code;
-      this.datosCabecera.Fecha = r.data.created_at;
-      this.datosCabecera.CodigoFormato = r.data.format_code;
+    this._apuConjunto?.getApuSet(this.id)?.subscribe((r: any) => {
+      this.data = r?.data;
+      this.datosCabecera.Codigo = r?.data?.code;
+      this.datosCabecera.Fecha = r?.data?.created_at;
+      this.datosCabecera.CodigoFormato = r?.data?.format_code;
       this.isData = true;
       this.loading = false;
     })
@@ -46,13 +46,13 @@ export class VerApuConjuntoComponent implements OnInit {
 
   download() {
     this.donwloading = true;
-    this._apuConjunto.download(this.id).subscribe((response: BlobPart) => {
+    this._apuConjunto?.download(this.id)?.subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/pdf' });
-      let link = document.createElement('a');
+      let link = document?.createElement('a');
       const filename = 'apu_conjunto_' + this.id;
-      link.href = window.URL.createObjectURL(blob);
+      link.href = window?.URL?.createObjectURL(blob);
       link.download = `${filename}.pdf`;
-      link.click();
+      link?.click();
       this.donwloading = false;
     }),
       (error) => {

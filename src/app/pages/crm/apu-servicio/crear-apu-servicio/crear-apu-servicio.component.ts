@@ -97,7 +97,7 @@ export class CrearApuServicioComponent implements OnInit {
   }
 
   async getBases() {
-    await this._calculationBase?.getAll().toPromise().then((r: any) => {
+    await this._calculationBase?.getAll()?.toPromise()?.then((r: any) => {
       this.calculationBase = r.data?.reduce((acc, el) => ({ ...acc, [el?.concept]: el }), {})
       /* if (this.dataEdit) {
         this.calculationBase.trm.value = this.dataEdit.trm
@@ -196,152 +196,150 @@ export class CrearApuServicioComponent implements OnInit {
       this.scroll?.scrollToPosition([0, 0]);
       return null
     }
-    this.mpMCalculateLaborList.push(this.mpMCalculateLaborControl());
+    this.mpMCalculateLaborList?.push(this.mpMCalculateLaborControl());
   }
 
   deletempMCalculateLaborList(i) {
-    this.mpMCalculateLaborList.removeAt(i);
+    this.mpMCalculateLaborList?.removeAt(i);
   }
 
   //!Nuevas
 
   apMCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
-    let group = help.apmCalculateLaborHelper.createApmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+    let group = help?.apmCalculateLaborHelper?.createApmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
       this.cities);
     return group;
   }
 
   get apMCalculateLaborList() {
-    return this.form.get('apm_calculate_labor') as FormArray
+    return this.form?.get('apm_calculate_labor') as FormArray
   }
 
   newapMCalculateLaborList() {
-    if (this.form.get('city_id').invalid) {
-      this.form.get('city_id').markAsTouched()
-      this.scroll.scrollToPosition([0, 0]);
+    if (this.form?.get('city_id')?.invalid) {
+      this.form?.get('city_id')?.markAsTouched()
+      this.scroll?.scrollToPosition([0, 0]);
       return null
     }
-    this.apMCalculateLaborList.push(this.apMCalculateLaborControl());
+    this.apMCalculateLaborList?.push(this.apMCalculateLaborControl());
   }
 
   deleteapMCalculateLaborList(i) {
-    this.apMCalculateLaborList.removeAt(i);
+    this.apMCalculateLaborList?.removeAt(i);
   }
 
   //?Contratistas
   cApMCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
-    let group = help.cApmCalculateLaborHelper.createCApmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+    let group = help?.cApmCalculateLaborHelper?.createCApmCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
       this.cities);
     return group;
   }
 
   get cApMCalculateLaborList() {
-    return this.form.get('c_apm_calculate_labor') as FormArray
+    return this.form?.get('c_apm_calculate_labor') as FormArray
   }
 
   newCApMCalculateLaborList() {
-    if (this.form.get('city_id').invalid) {
-      this.form.get('city_id').markAsTouched()
-      this.scroll.scrollToPosition([0, 0]);
+    if (this.form?.get('city_id')?.invalid) {
+      this.form?.get('city_id')?.markAsTouched()
+      this.scroll?.scrollToPosition([0, 0]);
       return null
     }
-    this.cApMCalculateLaborList.push(this.cApMCalculateLaborControl());
+    this.cApMCalculateLaborList?.push(this.cApMCalculateLaborControl());
   }
 
   deleteCApMCalculateLaborList(i) {
-    this.cApMCalculateLaborList.removeAt(i);
+    this.cApMCalculateLaborList?.removeAt(i);
   }
 
   cVdCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
-    let group = help.cVdCalculateLaborHelper.createCVdCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+    let group = help?.cVdCalculateLaborHelper?.createCVdCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
       this.cities);
     return group;
   }
 
   get cVdCalculateLaborList() {
-    return this.form.get('c_vd_calculate_labor') as FormArray
+    return this.form?.get('c_vd_calculate_labor') as FormArray
   }
 
   newCVdMCalculateLaborList() {
-    if (this.form.get('city_id').invalid) {
-      this.form.get('city_id').markAsTouched()
-      this.scroll.scrollToPosition([0, 0]);
+    if (this.form?.get('city_id')?.invalid) {
+      this.form?.get('city_id')?.markAsTouched()
+      this.scroll?.scrollToPosition([0, 0]);
       return null
     }
-    this.cVdCalculateLaborList.push(this.cVdCalculateLaborControl());
+    this.cVdCalculateLaborList?.push(this.cVdCalculateLaborControl());
   }
 
   deleteCVdCalculateLaborList(i) {
-    this.cVdCalculateLaborList.removeAt(i);
+    this.cVdCalculateLaborList?.removeAt(i);
   }
 
   cMeCalculateLaborControl(): FormGroup { // cmo = Calculo Mano Obra
-    let group = help.cMeCalculateLaborHelper.createCMeCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
+    let group = help?.cMeCalculateLaborHelper?.createCMeCalculateLaborGroup(this.form, this.fb, this.profiles, this.tEestimations,
       this.cities);
     return group;
   }
 
   get cMeCalculateLaborList() {
-    return this.form.get('c_me_calculate_labor') as FormArray
+    return this.form?.get('c_me_calculate_labor') as FormArray
   }
 
   newCMeCalculateLaborList() {
-    if (this.form.get('city_id').invalid) {
-      this.form.get('city_id').markAsTouched()
-      this.scroll.scrollToPosition([0, 0]);
+    if (this.form?.get('city_id')?.invalid) {
+      this.form?.get('city_id')?.markAsTouched()
+      this.scroll?.scrollToPosition([0, 0]);
       return null
     }
-    this.cMeCalculateLaborList.push(this.cMeCalculateLaborControl());
+    this.cMeCalculateLaborList?.push(this.cMeCalculateLaborControl());
   }
 
   deleteCMeCalculateLaborList(i) {
-    this.cMeCalculateLaborList.removeAt(i);
+    this.cMeCalculateLaborList?.removeAt(i);
   }
 
   //! Fin nuevas
 
 
   save() {
-    if (this.form.invalid) {
-      this._swal.show({
+    if (this.form?.invalid) {
+      this._swal?.show({
         icon: 'error',
         title: 'ERROR',
         text: 'Revisa la información y vuelve a intentarlo',
         showCancel: false
       })
-      this.form.markAllAsTouched()
+      this.form?.markAllAsTouched()
     } else {
-      this._swal
-        .show({
-          text: `Vamos a ${this.id && this.title == 'Editar servicio' ? 'editar' : 'crear'} un servicio`,
-          title: '¿Estás seguro(a)?',
-          icon: 'question',
-        })
-        .then((r) => {
-          if (r.isConfirmed) {
-            if (this.id && this.title == 'Editar servicio') {
-              this._apuService.update(this.form.value, this.id).subscribe(
-                (res: any) => this.showSuccess(),
-                (err) => this.showError(err)
-              );
-            } else {
-              this._apuService.save(this.form.value).subscribe(
-                (res: any) => {
-                  if (this.preData) {
-                    this.saveForBusiness.emit(res.data)
-                  }
-                  this.showSuccess()
-                },
-                (err) => this.showError(err)
-              );
-            }
+      this._swal?.show({
+        text: `Vamos a ${this.id && this.title == 'Editar servicio' ? 'editar' : 'crear'} un servicio`,
+        title: '¿Estás seguro(a)?',
+        icon: 'question',
+      })?.then((r) => {
+        if (r?.isConfirmed) {
+          if (this.id && this.title == 'Editar servicio') {
+            this._apuService?.update(this.form?.value, this.id)?.subscribe(
+              (res: any) => this.showSuccess(),
+              (err) => this.showError(err)
+            );
+          } else {
+            this._apuService?.save(this.form?.value)?.subscribe(
+              (res: any) => {
+                if (this.preData) {
+                  this.saveForBusiness?.emit(res?.data)
+                }
+                this.showSuccess()
+              },
+              (err) => this.showError(err)
+            );
           }
-        });
+        }
+      });
     }
   }
 
   showSuccess() {
-    this._swal.show({
+    this._swal?.show({
       icon: 'success',
       text: `Servicio ${this.id && this.title == 'Editar servicio' ? 'editado' : 'creado'} con éxito`,
       title: 'Operación exitosa',
@@ -349,56 +347,56 @@ export class CrearApuServicioComponent implements OnInit {
       timer: 1000
     });
     if (!this.preData) {
-      this.router.navigateByUrl('/crm/apus');
+      this.router?.navigateByUrl('/crm/apus');
     }
   }
   showError(err) {
-    this._swal.show({
+    this._swal?.show({
       icon: 'error',
       title: '¡Ooops!',
       showCancel: false,
-      text: err.code,
+      text: err?.code,
     });
   }
   async getConsecutivo() {
-    await this._consecutivos.getConsecutivo('apu_services').toPromise().then((r: any) => {
-      this.datosCabecera.CodigoFormato = r.data.format_code
-      this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
+    await this._consecutivos?.getConsecutivo('apu_services')?.toPromise()?.then((r: any) => {
+      this.datosCabecera.CodigoFormato = r?.data?.format_code
+      this.form?.patchValue({ format_code: this.datosCabecera?.CodigoFormato })
       if (this.title !== 'Editar servicio') {
-        this.buildConsecutivo(this.form.get('city_id').value, r)
-        this.form.get('city_id').valueChanges.subscribe(value => {
+        this.buildConsecutivo(this.form?.get('city_id')?.value, r)
+        this.form?.get('city_id')?.valueChanges?.subscribe(value => {
           this.buildConsecutivo(value, r)
         });
       } else {
-        this.datosCabecera.Codigo = this.data.code
-        this.form.patchValue({
-          code: this.data.code
+        this.datosCabecera.Codigo = this.data?.code
+        this.form?.patchValue({
+          code: this.data?.code
         })
-        this.form.get('city_id').disable()
+        this.form?.get('city_id')?.disable()
       }
     })
   }
 
   buildConsecutivo(value, r, context = '') {
-    if (r.data.city) {
-      let city = this.cities.find(x => x.value === value)
-      if (city && !city.abbreviation) {
-        this.form.get('city_id').setValue(null);
-        this._swal.show({
+    if (r?.data?.city) {
+      let city = this.cities?.find(x => x?.value === value)
+      if (city && !city?.abbreviation) {
+        this.form?.get('city_id')?.setValue(null);
+        this._swal?.show({
           icon: 'error',
           title: 'Error',
           text: 'El destino no tiene abreviatura.',
           showCancel: false
         })
       } else {
-        let con = this._consecutivos.construirConsecutivo(r.data, city?.abbreviation, context);
+        let con = this._consecutivos?.construirConsecutivo(r?.data, city?.abbreviation, context);
         this.datosCabecera.Codigo = con
-        this.form.patchValue({
+        this.form?.patchValue({
           code: con
         })
       }
     } else {
-      let con = this._consecutivos.construirConsecutivo(r.data);
+      let con = this._consecutivos?.construirConsecutivo(r?.data);
       this.datosCabecera.Codigo = con
       this.form.patchValue({
         code: con

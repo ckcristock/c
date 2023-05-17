@@ -18,14 +18,14 @@ export class EditarApuConjuntoComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    this.id = this.actRoute.snapshot.params.id;
+    this.id = this.actRoute?.snapshot?.params?.id;
     await this.getData();
     this.loading = false
   }
 
   async getData() {
-    await this._apuConjunto.getApuSet(this.id).toPromise().then((r: any) => {
-      this.data = r.data;
+    await this._apuConjunto?.getApuSet(this.id)?.toPromise()?.then((r: any) => {
+      this.data = r?.data;
     })
   }
 

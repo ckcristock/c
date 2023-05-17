@@ -95,18 +95,18 @@
           <div class="row">
             <ng-container formArrayName="indirect_costs">
               <ng-container
-                *ngFor="let item of indirecCostList.controls; let i = index"
+                *ngFor="let item of indirecCostList?.controls; let i = index"
               >
                 <ng-container [formGroupName]="i">
                   <mat-form-field class="col-md-4" appearance="outline">
                     <mat-label>{{
-                      item.controls.name.value | uppercase
+                      item?.controls?.name?.value | uppercase
                     }}</mat-label>
                     <input
                       matInput
                       appInputPositionInitial
                       currencyMask
-                      [options]="masksMoney.maskPorcentaje"
+                      [options]="masksMoney?.maskPorcentaje"
                       formControlName="percentage"
                     />
                   </mat-form-field>
@@ -119,7 +119,7 @@
                 matInput
                 currencyMask
                 appInputPositionInitial
-                [options]="masksMoney.maskPorcentaje"
+                [options]="masksMoney?.maskPorcentaje"
                 formControlName="administrative_percentage"
               />
             </mat-form-field>
@@ -129,7 +129,7 @@
                 matInput
                 currencyMask
                 appInputPositionInitial
-                [options]="masksMoney.maskPorcentaje"
+                [options]="masksMoney?.maskPorcentaje"
                 formControlName="unforeseen_percentage"
               />
             </mat-form-field>
@@ -139,7 +139,7 @@
                 matInput
                 currencyMask
                 appInputPositionInitial
-                [options]="masksMoney.maskPorcentaje"
+                [options]="masksMoney?.maskPorcentaje"
                 formControlName="utility_percentage"
               />
             </mat-form-field>
@@ -170,6 +170,9 @@
             title4="V/U VENTA PRORRATEADO USD"
             [var4]="unit_value_prorrateado_usd"
             type4="usd"
+            title5="TOTAL INTERNO"
+            [var5]="internal_total"
+            type5="cop"
           >
           </app-list-items>
         </div>

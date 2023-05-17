@@ -67,7 +67,6 @@ export class CrearPresupuestoComponent implements OnInit {
     await this.getCities();
     this.getConsecutivo();
     if (this.preData) {
-      console.log(this.preData)
       this.forma?.patchValue({
         destinity_id: this.preData?.city_id,
         customer_id: this.preData?.third_party_id,
@@ -87,17 +86,17 @@ export class CrearPresupuestoComponent implements OnInit {
 
   getConsecutivo() {
     this._consecutivos.getConsecutivo('budgets').subscribe((r: any) => {
-      this.datosCabecera.CodigoFormato = r.data.format_code
-      this.forma.patchValue({ format_code: this.datosCabecera.CodigoFormato })
+      this.datosCabecera.CodigoFormato = r?.data?.format_code
+      this.forma.patchValue({ format_code: this.datosCabecera?.CodigoFormato })
       if (this.path !== 'editar') {
         this.buildConsecutivo(this.forma.get('destinity_id').value, r)
         this.forma.get('destinity_id').valueChanges.subscribe(value => {
           this.buildConsecutivo(value, r)
         });
       } else {
-        this.datosCabecera.Codigo = this.dataEdit.code
+        this.datosCabecera.Codigo = this.dataEdit?.code
         this.forma.patchValue({
-          code: this.dataEdit.code
+          code: this.dataEdit?.code
         })
         this.forma.get('destinity_id').disable()
       }
@@ -105,9 +104,9 @@ export class CrearPresupuestoComponent implements OnInit {
   }
 
   buildConsecutivo(value, r, context = '') {
-    if (r.data.city) {
-      let city = this.cities.find(x => x.value === value)
-      if (city && !city.abbreviation) {
+    if (r?.data?.city) {
+      let city = this.cities?.find(x => x?.value === value)
+      if (city && !city?.abbreviation) {
         this.forma.get('destinity_id').setValue(null);
         this._swal.show({
           icon: 'error',
@@ -133,24 +132,24 @@ export class CrearPresupuestoComponent implements OnInit {
 
   async getBases() {
     await this._calculationBase.getAll().toPromise().then((r: any) => {
-      this.calculationBase = r.data.reduce((acc, el) => ({ ...acc, [el.concept]: el }), {})
+      this.calculationBase = r.data?.reduce((acc, el) => ({ ...acc, [el?.concept]: el }), {})
 
       if (this.dataEdit) {
-        this.calculationBase.trm.value = this.dataEdit.trm
+        this.calculationBase.trm.value = this.dataEdit?.trm
       }
     })
   }
   async getIndirectCosts() {
     if (this.dataEdit) {
       this.indirectCosts =
-        this.dataEdit.indirect_costs.reduce((acc, el) => {
+        this.dataEdit?.indirect_costs?.reduce((acc, el) => {
           return [...acc,
-          { text: el.indirect_cost.name, value: el.indirect_cost_id, percentage: el.percentage, apply_service: el.indirect_cost.apply_service }
+          { text: el?.indirect_cost?.name, value: el?.indirect_cost_id, percentage: el?.percentage, apply_service: el?.indirect_cost?.apply_service }
           ]
         }, [])
     } else {
       await this._apuPieza.getIndirectCosts().toPromise().then((r: any) => {
-        this.indirectCosts = r.data;
+        this.indirectCosts = r?.data;
       });
     }
     this.indirectCostPush(this.indirecCostList);
@@ -159,7 +158,7 @@ export class CrearPresupuestoComponent implements OnInit {
 
   getClients() {
     this._apuPieza.getClient().subscribe((r: any) => {
-      this.clients = r.data;
+      this.clients = r?.data;
     })
   }
 
@@ -175,7 +174,7 @@ export class CrearPresupuestoComponent implements OnInit {
         tap(() => this.custumerLoading = true),
         switchMap(name => {
           return this._apuPieza.getClient({ name }).pipe(
-            map((r: any) => { return r.data }),
+            map((r: any) => { return r?.data }),
             catchError(() => of([])), // empty list on error
             tap(() => this.custumerLoading = false)
           )
@@ -186,32 +185,32 @@ export class CrearPresupuestoComponent implements OnInit {
 
   createForm() {
     this.forma = this.fb.group({
-      id: (this.dataEdit && this.path == 'editar' ? this.dataEdit.id : ''),
-      customer_id: [(this.dataEdit ? this.dataEdit.customer_id : null), Validators.required],
-      destinity_id: [(this.dataEdit ? this.dataEdit.destinity_id : null), Validators.required],
-      line: [(this.dataEdit ? this.dataEdit.line : ''), Validators.required],
-      trm: [this.calculationBase.trm.value, Validators.required],
-      project: [(this.dataEdit ? this.dataEdit.project : ''), Validators.required],
+      id: (this.dataEdit && this.path == 'editar' ? this.dataEdit?.id : ''),
+      customer_id: [(this.dataEdit ? this.dataEdit?.customer_id : null), Validators.required],
+      destinity_id: [(this.dataEdit ? this.dataEdit?.destinity_id : null), Validators.required],
+      line: [(this.dataEdit ? this.dataEdit?.line : ''), Validators.required],
+      trm: [this.calculationBase?.trm?.value, Validators.required],
+      project: [(this.dataEdit ? this.dataEdit?.project : ''), Validators.required],
       indirect_costs: this.fb.array([]),
       observation: '',
       items: this.fb.array([]),
-      total_cop: (this.dataEdit ? this.dataEdit.total_cop : 0),
-      total_usd: (this.dataEdit ? this.dataEdit.total_usd : 0),
-      unit_value_prorrateado_cop: (this.dataEdit ? this.dataEdit.unit_value_prorrateado_cop : 0),
-      unit_value_prorrateado_usd: (this.dataEdit ? this.dataEdit.unit_value_prorrateado_usd : 0),
+      total_cop: (this.dataEdit ? this.dataEdit?.total_cop : 0),
+      total_usd: (this.dataEdit ? this.dataEdit?.total_usd : 0),
+      unit_value_prorrateado_cop: (this.dataEdit ? this.dataEdit?.unit_value_prorrateado_cop : 0),
+      unit_value_prorrateado_usd: (this.dataEdit ? this.dataEdit?.unit_value_prorrateado_usd : 0),
       subItemsToDelete: [[]],
       itemsTodelete: [[]],
       format_code: [''],
       code: [''],
-      administrative_percentage: [this.calculationBase.administration_percentage.value],
-      unforeseen_percentage: [this.calculationBase.unforeseen_percentage.value],
-      utility_percentage: [this.calculationBase.utility_percentage.value],
+      administrative_percentage: [this.calculationBase?.administration_percentage?.value],
+      unforeseen_percentage: [this.calculationBase?.unforeseen_percentage?.value],
+      utility_percentage: [this.calculationBase?.utility_percentage?.value],
     });
     this.forma.get('administrative_percentage').valueChanges.subscribe(value => {
       const items = this.forma.get('items') as FormArray
-      items.controls.forEach((i: FormGroup) => {
-        const subItems = i.controls.subItems as FormArray
-        subItems.controls.forEach((sub: FormGroup) => {
+      items.controls?.forEach((i: FormGroup) => {
+        const subItems = i.controls?.subItems as FormArray
+        subItems.controls?.forEach((sub: FormGroup) => {
           sub.patchValue({
             percentage_amd: value
           })
@@ -221,8 +220,8 @@ export class CrearPresupuestoComponent implements OnInit {
     this.forma.get('unforeseen_percentage').valueChanges.subscribe(value => {
       const items = this.forma.get('items') as FormArray
       items.controls.forEach((i: FormGroup) => {
-        const subItems = i.controls.subItems as FormArray
-        subItems.controls.forEach((sub: FormGroup) => {
+        const subItems = i?.controls?.subItems as FormArray
+        subItems?.controls.forEach((sub: FormGroup) => {
           sub.patchValue({
             percentage_unforeseen: value
           })
@@ -231,9 +230,9 @@ export class CrearPresupuestoComponent implements OnInit {
     })
     this.forma.get('utility_percentage').valueChanges.subscribe(value => {
       const items = this.forma.get('items') as FormArray
-      items.controls.forEach((i: FormGroup) => {
-        const subItems = i.controls.subItems as FormArray
-        subItems.controls.forEach((sub: FormGroup) => {
+      items?.controls?.forEach((i: FormGroup) => {
+        const subItems = i?.controls?.subItems as FormArray
+        subItems?.controls.forEach((sub: FormGroup) => {
           sub.patchValue({
             percentage_utility: value
           })
@@ -245,16 +244,16 @@ export class CrearPresupuestoComponent implements OnInit {
   indirectCostPush(indirect, all = true) {
     indirect.clear();
     this.indirectCosts.forEach((element) => {
-      indirect.push(this.indirectCostgroup(element, this.fb, all));
+      indirect?.push(this.indirectCostgroup(element, this.fb, all));
     });
   }
 
   indirectCostgroup(el, fb: FormBuilder, all = true) {
-    const optionals = all ? { percentage: [el.percentage], name: [el.text] } : {}
+    const optionals = all ? { percentage: [el?.percentage], name: [el?.text] } : {}
 
     let group = fb.group({
-      indirect_cost_id: el.value,
-      apply_service: el.apply_service,
+      indirect_cost_id: el?.value,
+      apply_service: el?.apply_service,
       value: 0,
       ...optionals
     });
@@ -266,11 +265,11 @@ export class CrearPresupuestoComponent implements OnInit {
 
         /* Actualizar todos los subtotales de los elementos cuand cambia el porcetaje global */
         items.controls.forEach((i: FormGroup) => {
-          const subItems = i.controls.subItems as FormArray
-          subItems.controls.forEach((sub: FormGroup) => {
-            const totalCost = sub.controls.type
+          const subItems = i?.controls?.subItems as FormArray
+          subItems?.controls?.forEach((sub: FormGroup) => {
+            const totalCost = sub?.controls?.type
             setTimeout(() => {
-              totalCost.patchValue(totalCost.value)
+              totalCost.patchValue(totalCost?.value)
             }, 500);
           })
         })
@@ -282,7 +281,7 @@ export class CrearPresupuestoComponent implements OnInit {
 
   async getCities() {
     await this._apuPieza.getCities().toPromise().then((r: any) => {
-      this.cities = r.data;
+      this.cities = r?.data;
     })
   }
 
@@ -333,9 +332,13 @@ export class CrearPresupuestoComponent implements OnInit {
   get unit_value_prorrateado_usd() {
     return this.forma.get('unit_value_prorrateado_usd').value
   }
+  get internal_total() {
+    return this.forma.get('internal_total')?.value;
+  }
   get indirecCostList() {
     return this.forma.get('indirect_costs') as FormArray;
   }
+
 
   get hasItems() {
     return this.forma.get('items').value.length

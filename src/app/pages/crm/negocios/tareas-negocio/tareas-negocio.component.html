@@ -2,17 +2,17 @@
   <div class="d-flex justify-content-end">
     <button
       class="btn btn-sm btn-primary btn-block mb-3"
-      (click)="newTask.openInit()"
+      (click)="newTask?.openInit()"
     >
       <i class="fa fa-plus"></i> Agregar
     </button>
   </div>
-  <ng-container *ngIf="!loading && tasks.length > 0; else notData">
+  <ng-container *ngIf="!loading && tasks?.length > 0; else notData">
     <div *ngFor="let item of tasks">
       <div
         class="card bg-light"
         role="button"
-        [routerLink]="['/task', item.id]"
+        [routerLink]="['/task', item?.id]"
       >
         <app-card-task [list]="item" [view_state]="true"></app-card-task>
       </div>

@@ -28,7 +28,7 @@ export class TableNegociosComponent implements OnInit {
   }
 
   changeState(event, neg) {
-    this._negocios.changeState({ status: event.target.value }, neg.id).subscribe(() => {
+    this._negocios.changeState({ status: event?.target?.value }, neg?.id).subscribe(() => {
       this._swal.show({
         icon: 'success',
         title: 'Operación exitosa',

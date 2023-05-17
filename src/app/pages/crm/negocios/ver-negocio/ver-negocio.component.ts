@@ -46,8 +46,8 @@ export class VerNegocioComponent implements OnInit {
     private _quotation: QuotationService,
     private _budget: BudgetService,
   ) {
-    this.filtros.id = this.ruta.snapshot.params.id;
-    this.person_id = this._user.user.person.id
+    this.filtros.id = this.ruta?.snapshot?.params?.id;
+    this.person_id = this._user?.user?.person?.id
   }
 
   ngOnInit(): void {
@@ -57,8 +57,8 @@ export class VerNegocioComponent implements OnInit {
 
   async getApus(e: any[]) {
     let cont = 0;
-    await e.forEach(apu => {
-      const exist = this.negocio['apus'].some(x => (x.apuable_id == apu.apu_id && x.apuable.typeapu_name == apu.type_name))
+    await e?.forEach(apu => {
+      const exist = this.negocio['apus']?.some(x => (x?.apuable_id == apu?.apu_id && x?.apuable?.typeapu_name == apu?.type_name))
       if (!exist) {
         this.apuSelected.push(apu)
       } else {
@@ -69,7 +69,7 @@ export class VerNegocioComponent implements OnInit {
       this._swal.show({
         icon: 'error',
         title: 'Error',
-        text: e.length == cont ? 'No hay nada nuevo para agregar' : 'Ya agregaste alguno(s) de los APU seleccionados, agregaremos los demas',
+        text: e?.length == cont ? 'No hay nada nuevo para agregar' : 'Ya agregaste alguno(s) de los APU seleccionados, agregaremos los demas',
         showCancel: false
       }).then(r => {
         if (r.isConfirmed) {
@@ -98,10 +98,10 @@ export class VerNegocioComponent implements OnInit {
     this.editNoteBool = true;
     item.hide = true;
     this.editNoteForm = this.fb.group({
-      id: item.id,
-      person_id: item.person_id,
-      note: [item.note, [Validators.required, Validators.maxLength(500)]],
-      business_id: item.business_id
+      id: item?.id,
+      person_id: item?.person_id,
+      note: [item?.note, [Validators.required, Validators.maxLength(500)]],
+      business_id: item?.business_id
     });
   }
 
@@ -121,20 +121,20 @@ export class VerNegocioComponent implements OnInit {
         if (r.isConfirmed) {
           this._negocio.newNote(this.editNoteForm.value).subscribe(
             (res: any) => {
-              if (res.status) {
+              if (res?.status) {
                 this.editNoteForm.patchValue({
                   note: ''
                 })
                 this._swal.show({
                   icon: 'success',
-                  title: res.data,
+                  title: res?.data,
                   text: '',
                   showCancel: false,
                   timer: 1000
                 })
                 this.cancelEdit(item);
                 this._negocio.getNotes(this.filtros.id).subscribe((res: any) => {
-                  this.negocio.notes = res.data[0]
+                  this.negocio.notes = res?.data[0]
                 })
               }
             }
@@ -155,11 +155,11 @@ export class VerNegocioComponent implements OnInit {
     this._swal.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
-      text: 'Agregaremos ' + this.apuSelected.length + ' APU a este negocio.'
+      text: 'Agregaremos ' + this.apuSelected?.length + ' APU a este negocio.'
     }).then(r => {
       if (r.isConfirmed) {
         let data = {
-          business_id: this.filtros.id,
+          business_id: this.filtros?.id,
           apus: this.apuSelected,
           person_id: this.person_id
         }
@@ -178,7 +178,7 @@ export class VerNegocioComponent implements OnInit {
   }
 
   changeState(event) {
-    this._negocio.changeState({ status: event.value }, this.filtros.id).subscribe(() => {
+    this._negocio.changeState({ status: event?.value }, this.filtros?.id).subscribe(() => {
       this._swal.show({
         icon: 'success',
         title: 'Operación exitosa',
@@ -200,7 +200,7 @@ export class VerNegocioComponent implements OnInit {
     this.form_notes = this.fb.group({
       person_id: [this.person_id],
       note: ['', [Validators.required, Validators.maxLength(500)]],
-      business_id: [this.filtros.id]
+      business_id: [this.filtros?.id]
     });
   }
 
@@ -214,19 +214,19 @@ export class VerNegocioComponent implements OnInit {
         if (r.isConfirmed) {
           this._negocio.newNote(this.form_notes.value).subscribe(
             (res: any) => {
-              if (res.status) {
+              if (res?.status) {
                 this.form_notes.patchValue({
                   note: ''
                 })
                 this._swal.show({
                   icon: 'success',
-                  title: res.data,
+                  title: res?.data,
                   text: '',
                   showCancel: false,
                   timer: 1000
                 })
                 this._negocio.getNotes(this.filtros.id).subscribe((res: any) => {
-                  this.negocio.notes = res.data[0]
+                  this.negocio.notes = res?.data[0]
                 })
               }
             }
@@ -279,43 +279,43 @@ export class VerNegocioComponent implements OnInit {
   getBussines() {
     this.loading = true;
     this._negocio.getBusiness(this.filtros.id).subscribe((res: any) => {
-      this.qr = this._sanitizer.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + res.code)
-      this.negocio = res.data;
+      this.qr = this._sanitizer?.bypassSecurityTrustResourceUrl('data:image/jpg;base64,' + res?.code)
+      this.negocio = res?.data;
       this.loading = false;
     })
-    this.business_budget_id = this.ruta.snapshot.params.id;
+    this.business_budget_id = this.ruta?.snapshot?.params?.id;
   }
 
   addNewApuPieza(apu) {
     this._modal.close();
-    this._apuConjunto.getApuPartToAdd(apu.id).subscribe((res: any) => {
-      this.getApus(res.data)
+    this._apuConjunto.getApuPartToAdd(apu?.id).subscribe((res: any) => {
+      this.getApus(res?.data)
     })
   }
 
   addNewAPUConjunto(apu) {
     this._modal.close();
-    this._apuConjunto.getApuSetToAdd(apu.id).subscribe((res: any) => {
-      this.getApus(res.data)
+    this._apuConjunto.getApuSetToAdd(apu?.id).subscribe((res: any) => {
+      this.getApus(res?.data)
     })
   }
 
   addNewAPUServicio(apu) {
     this._modal.close();
-    this._apuConjunto.getApuServiceToAdd(apu.id).subscribe((res: any) => {
-      this.getApus(res.data)
+    this._apuConjunto.getApuServiceToAdd(apu?.id).subscribe((res: any) => {
+      this.getApus(res?.data)
     })
   }
   addNewQuotation(quot) {
     this._modal.close();
-    this._quotation.getQuotationToAdd(quot.id).subscribe((res: any) => {
+    this._quotation.getQuotationToAdd(quot?.id).subscribe((res: any) => {
       this.cotizacionesSeleccionadas.push({
-        quotation_id: res.data.id,
-        business_id: this.filtros.id,
-        total_cop: res.data.total_cop
+        quotation_id: res?.data?.id,
+        business_id: this.filtros?.id,
+        total_cop: res?.data?.total_cop
       });
       let data = {
-        business_id: this.filtros.id,
+        business_id: this.filtros?.id,
         quotations: this.cotizacionesSeleccionadas,
         person_id: this.person_id
       }
@@ -325,7 +325,7 @@ export class VerNegocioComponent implements OnInit {
         this._swal.show({
           icon: 'success',
           title: 'Cotizaciones agregadas',
-          text: res.data,
+          text: res?.data,
           showCancel: false
         })
       });
@@ -336,14 +336,14 @@ export class VerNegocioComponent implements OnInit {
   cotizacionesSeleccionadas: any[] = [];
   addNewBudget(pre) {
     this._modal.close();
-    this._budget.getBudgetToAdd(pre.id).subscribe((res: any) => {
+    this._budget.getBudgetToAdd(pre?.id).subscribe((res: any) => {
       this.presupuestosSeleccionados.push({
-        budget_id: res.data.id,
-        business_budget_id: this.filtros.id,
-        total_cop: res.data.total_cop
+        budget_id: res?.data?.id,
+        business_budget_id: this.filtros?.id,
+        total_cop: res?.data?.total_cop
       });
       let data = {
-        business_id: this.filtros.id,
+        business_id: this.filtros?.id,
         budgets: this.presupuestosSeleccionados,
         person_id: this.person_id
       }
@@ -353,7 +353,7 @@ export class VerNegocioComponent implements OnInit {
         this._swal.show({
           icon: 'success',
           title: 'Presupuestos agregados',
-          text: res.data,
+          text: res?.data,
           showCancel: false
         })
       });

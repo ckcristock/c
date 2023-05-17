@@ -17,7 +17,7 @@ export class ShowItemsPresupuestoComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.items = this.data.items.reduce((acc, el) => [...acc, { ...el, shows: this.shows }], [])
+    this.items = this.data?.items?.reduce((acc, el) => [...acc, { ...el, shows: this.shows }], [])
   }
 
 }

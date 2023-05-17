@@ -29,7 +29,7 @@ export class ModalBuscarPresupuestoComponent implements OnInit {
   paginationMaterial: any;
   pagination: any = {
     page: '',
-    pageSize: localStorage.getItem('paginationItemsBudget') || 100,
+    pageSize: localStorage?.getItem('paginationItemsBudget') || 100,
   }
   constructor(
     private _modal: ModalService,
@@ -46,13 +46,13 @@ export class ModalBuscarPresupuestoComponent implements OnInit {
 
   openModal() {
     if (this.third_party_id) {
-      this._modal.open(this.modal, 'xl');
+      this._modal?.open(this.modal, 'xl');
       this.createFormFiltersBudgets();
       this.getPeople();
       this.getPresupuestos();
       this.presupuestosSeleccionados = [];
     } else {
-      this._swal.show({
+      this._swal?.show({
         icon: 'info',
         title: 'Atención',
         text: 'Selecciona un tercero para continuar.',
@@ -62,13 +62,13 @@ export class ModalBuscarPresupuestoComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination);
-    localStorage.setItem('paginationItemsBudget', this.pagination.pageSize)
+    this._paginator?.handlePageEvent(event, this.pagination);
+    localStorage?.setItem('paginationItemsBudget', this.pagination.pageSize)
     this.getPresupuestos()
   }
 
   createFormFiltersBudgets() {
-    this.form_filters_budget = this.fb.group({
+    this.form_filters_budget = this.fb?.group({
       code: '',
       date: '',
       customer: '',
@@ -76,17 +76,17 @@ export class ModalBuscarPresupuestoComponent implements OnInit {
       line: '',
       person_id: ''
     })
-    this.form_filters_budget.valueChanges.pipe(
+    this.form_filters_budget?.valueChanges?.pipe(
       debounceTime(500),
-    ).subscribe(r => {
+    )?.subscribe(r => {
       this.getPresupuestos();
     })
   }
 
   getPeople() {
-    this._person.getPeopleIndex().subscribe((res: any) => {
-      this.people = res.data
-      this.people.unshift({ text: 'Todos ', value: '' });
+    this._person?.getPeopleIndex()?.subscribe((res: any) => {
+      this.people = res?.data
+      this.people?.unshift({ text: 'Todos ', value: '' });
     })
   }
 
@@ -94,20 +94,20 @@ export class ModalBuscarPresupuestoComponent implements OnInit {
     this.loadingBudgets = true;
     let params = {
       ...this.pagination,
-      ...this.form_filters_budget.value,
+      ...this.form_filters_budget?.value,
       third_party_id: this.third_party_id
     }
-    this._negocio.getBudgets(params).subscribe((resp: any) => {
-      this.presupuestos = resp.data.data;
-      this.presupuestos.forEach(pre => {
-        this.presupuestosSeleccionados.forEach(bud => {
-          if ((this.create ? bud.id : bud.budget_id) == pre.id) {
+    this._negocio?.getBudgets(params)?.subscribe((resp: any) => {
+      this.presupuestos = resp?.data?.data;
+      this.presupuestos?.forEach(pre => {
+        this.presupuestosSeleccionados?.forEach(bud => {
+          if ((this.create ? bud?.id : bud?.budget_id) == pre?.id) {
             pre.selected = true
           }
         });
       });
-      this.paginationMaterial = resp.data
-      if (this.paginationMaterial.last_page < this.pagination.page) {
+      this.paginationMaterial = resp?.data
+      if (this.paginationMaterial?.last_page < this.pagination?.page) {
         this.paginationMaterial.current_page = 1
         this.pagination.page = 1
         this.getPresupuestos()
@@ -117,23 +117,23 @@ export class ModalBuscarPresupuestoComponent implements OnInit {
   }
 
   guardarPresupuesto(item, event) {
-    const index = this.presupuestosSeleccionados.findIndex(x => ((this.create ? x.id : x.budget_id) === item.id));
-    if (item.selected) {
+    const index = this.presupuestosSeleccionados?.findIndex(x => ((this.create ? x?.id : x?.budget_id) === item?.id));
+    if (item?.selected) {
       if (index === -1) {
         if (!this.create) {
-          this.presupuestosSeleccionados.push({
-            budget_id: item.id,
-            business_budget_id: this.business_id,
-            total_cop: item.total_cop
+          this.presupuestosSeleccionados?.push({
+            budget_id: item?.id,
+            business_budget_id: this?.business_id,
+            total_cop: item?.total_cop
           });
         } else {
-          this.presupuestosSeleccionados.push(item)
+          this.presupuestosSeleccionados?.push(item)
         }
         item.selected = true
       }
     } else {
       if (index !== -1) {
-        this.presupuestosSeleccionados.splice(index, 1);
+        this.presupuestosSeleccionados?.splice(index, 1);
         item.selected = false
       }
     }
@@ -141,54 +141,54 @@ export class ModalBuscarPresupuestoComponent implements OnInit {
 
   saveBudget() {
     if (!this.create) {
-      this._swal.show({
+      this._swal?.show({
         icon: 'question',
         title: '¿Estás seguro(a)?',
         text: 'Vamos a agregar los presupuestos seleccionados'
-      }).then(r => {
-        if (r.isConfirmed) {
+      })?.then(r => {
+        if (r?.isConfirmed) {
           let data = {
             business_id: this.business_id,
             budgets: this.presupuestosSeleccionados,
             person_id: this.person_id
           }
-          this._negocio.newBusinessBudget(data).subscribe((res: any) => {
-            this.update.emit();
+          this._negocio?.newBusinessBudget(data)?.subscribe((res: any) => {
+            this.update?.emit();
             this.getPresupuestos();
-            this._modal.close();
+            this._modal?.close();
             this.presupuestosSeleccionados = [];
-            this._swal.show({
+            this._swal?.show({
               icon: 'success',
               title: 'Presupuestos agregados',
-              text: res.data,
+              text: res?.data,
               showCancel: false
             })
           });
         }
       })
     } else {
-      this.update.emit(this.presupuestosSeleccionados);
-      this._modal.close();
+      this.update?.emit(this.presupuestosSeleccionados);
+      this._modal?.close();
     }
   }
 
   dateChange(e) {
-    if (e.value) {
-      this.form_filters_budget.patchValue({
-        date: new Date(e.value).toISOString()
+    if (e?.value) {
+      this.form_filters_budget?.patchValue({
+        date: new Date(e?.value)?.toISOString()
       })
     } else {
-      this.form_filters_budget.patchValue({
+      this.form_filters_budget?.patchValue({
         date: ''
       })
     }
   }
 
   openNewTab(route, id = '') {
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree([route + '/' + id])
+    const url = this.router?.serializeUrl(
+      this.router?.createUrlTree([route + '/' + id])
     );
-    window.open(url, '_blank');
+    window?.open(url, '_blank');
   }
 
 }

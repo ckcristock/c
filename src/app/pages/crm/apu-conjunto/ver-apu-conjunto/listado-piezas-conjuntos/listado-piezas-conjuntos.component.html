@@ -14,7 +14,7 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngIf="pieces_sets.length">
+      <ng-container *ngIf="pieces_sets?.length">
         <ng-container *ngFor="let item of pieces_sets; let i = index">
           <tr class="text-center text-uppercase">
             <td>
@@ -22,30 +22,30 @@
             </td>
             <td>
               {{
-                item.apu_type == "C"
+                item?.apu_type == "C"
                   ? "Conjunto"
-                  : item.apu_type == "P"
+                  : item?.apu_type == "P"
                   ? "Pieza"
                   : ""
               }}
             </td>
-            <td *ngIf="item.apu_type == 'C'">
-              {{ item.apuset.name }}
+            <td *ngIf="item?.apu_type == 'C'">
+              {{ item?.apuset?.name }}
             </td>
-            <td *ngIf="item.apu_type == 'P'">
-              {{ item.apupart.name }}
+            <td *ngIf="item?.apu_type == 'P'">
+              {{ item?.apupart?.name }}
             </td>
             <!-- <td *ngIf="item.apu_type != 'pieza' && item.apu_type != 'conjunto'">
               {{ item.apupart.name }}
             </td> -->
             <td>
-              {{ item.unit?.name }}
+              {{ item?.unit?.name }}
             </td>
             <td>
-              {{ item.amount }}
+              {{ item?.amount }}
             </td>
-            <td>${{ item.unit_cost | number : "1.2-2" }}</td>
-            <td>${{ item.total | number : "1.2-2" }}</td>
+            <td>${{ item?.unit_cost | number : "1.2-2" }}</td>
+            <td>${{ item?.total | number : "1.2-2" }}</td>
             <td>
               <i
                 class="fas fa-eye text-primary"

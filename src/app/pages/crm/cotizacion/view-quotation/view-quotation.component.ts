@@ -36,11 +36,11 @@ export class ViewQuotationComponent implements OnInit {
     private _permission: PermissionService,
     private _swal: SwalService
   ) {
-    this.permission = this._permission.validatePermissions(this.permission)
+    this.permission = this._permission?.validatePermissions(this.permission)
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
+    this.route?.params?.subscribe(params => {
       this.id = params['id'];
       this.getQuotation(this.id)
     })
@@ -48,11 +48,11 @@ export class ViewQuotationComponent implements OnInit {
 
   getQuotation(id) {
     this.loading = true;
-    this._quotation.getQuotation(id).subscribe((res: any) => {
-      this.quotation = res.data;
-      this.headerData.Codigo = res.data.code;
-      this.headerData.Fecha = res.data.created_at;
-      this.headerData.CodigoFormato = res.data.format_code;
+    this._quotation?.getQuotation(id)?.subscribe((res: any) => {
+      this.quotation = res?.data;
+      this.headerData.Codigo = res?.data?.code;
+      this.headerData.Fecha = res?.data?.created_at;
+      this.headerData.CodigoFormato = res?.data?.format_code;
       this.loading = false;
       this.creator = res?.data?.activities?.find(x => x?.status == 'Creación')?.person;
       this.approve = res?.data?.activities?.filter(x => x?.status == 'Aprobación')[0]?.person
@@ -60,21 +60,21 @@ export class ViewQuotationComponent implements OnInit {
   }
 
   updateStatus(status, id) {
-    this._swal.show({
+    this._swal?.show({
       icon: 'question',
       title: '¿Estás seguro(a)?',
       showCancel: true,
       text: ''
-    }).then((r) => {
-      if (r.isConfirmed) {
+    })?.then((r) => {
+      if (r?.isConfirmed) {
         let data = {
           status: status
         }
-        this._quotation.updateQuotation(data, id).subscribe((res: any) => {
-          this._swal.show({
+        this._quotation?.updateQuotation(data, id)?.subscribe((res: any) => {
+          this._swal?.show({
             icon: 'success',
             text: '',
-            title: res.data,
+            title: res?.data,
             showCancel: false,
             timer: 1000
           })
@@ -87,13 +87,13 @@ export class ViewQuotationComponent implements OnInit {
   donwloading = false;
   download() {
     this.donwloading = true;
-    this._quotation.download(this.id).subscribe((response: BlobPart) => {
+    this._quotation?.download(this.id)?.subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/pdf' });
-      let link = document.createElement('a');
+      let link = document?.createElement('a');
       const filename = 'cotización' + this.id;
-      link.href = window.URL.createObjectURL(blob);
+      link.href = window?.URL?.createObjectURL(blob);
       link.download = `${filename}.pdf`;
-      link.click();
+      link?.click();
       this.donwloading = false;
     }),
       (error) => {

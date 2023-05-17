@@ -196,6 +196,7 @@ export class CrearPresupuestoComponent implements OnInit {
       items: this.fb.array([]),
       total_cop: (this.dataEdit ? this.dataEdit?.total_cop : 0),
       total_usd: (this.dataEdit ? this.dataEdit?.total_usd : 0),
+      internal_total: (this.dataEdit ? this.dataEdit?.internal_total : 0),
       unit_value_prorrateado_cop: (this.dataEdit ? this.dataEdit?.unit_value_prorrateado_cop : 0),
       unit_value_prorrateado_usd: (this.dataEdit ? this.dataEdit?.unit_value_prorrateado_usd : 0),
       subItemsToDelete: [[]],

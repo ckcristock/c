@@ -111,7 +111,20 @@ export class ItemsComponent implements OnInit {
         unit_value_prorrateado_usd: itemToAdd ? itemToAdd?.unit_value_prorrateado_usd : 0,
       }
     )
-    const value_cop = item?.get('value_cop')
+    const value_cop = item?.get('value_cop');
+
+    let total_cost = item?.get('total_cost');
+    total_cost.valueChanges.subscribe(r => {
+      //! arreglar esto
+      let internal_total = 0;
+      this.items.value.forEach(item => {
+        internal_total += item.total_cost
+      });
+      this.forma.patchValue({
+        internal_total: internal_total + r
+      })
+    })
+
     const subItems = item?.get('subItems') as FormArray
     if (!itemToAdd) {
       this.addSubItem(item);

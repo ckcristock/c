@@ -1,10 +1,10 @@
 <h4 class="card-title mb-4">Certificados carta de cesantías</h4>
-<div *ngIf="!loading && layoffs.length > 0; else notData">  
+<div *ngIf="!loading && layoffs.length > 0; else notData">
   <ul class="list-unstyled activity-wid">
     <li class="activity-list pb-1" *ngFor="let item of layoffs">
       <div class="activity-icon">
         <img
-          src="{{ item.image | image: 'users' }}"
+          src="{{ item.image | image : 'users' }}"
           class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
           [title]="item.first_name + item.first_surname"
           onerror="this.src='../../../../../assets/images/noprofile.png'"
@@ -16,15 +16,15 @@
             {{ item.first_name }}
             {{ item.first_surname }}
           </div>
-  
+
           <div class="card-text">
-            {{ item.created_at | date: "longDate" }}
+            {{ item.created_at | date : "longDate" }}
             <small class="text-muted"
-              >{{ item.created_at | date: "hh:mm aa" }}
+              >{{ item.created_at | date : "hh:mm aa" }}
             </small>
           </div>
           <span class="text-muted">{{ item.reason }}</span>
-          <br>
+          <br />
           <strong
             [ngClass]="{
               'text-danger': item.state == 'Rechazada',
@@ -41,9 +41,14 @@
             title="Descargar comprobante"
             (click)="downloadComprobante(item.id)"
             role="button"
-            class="fa fa-cloud-download-alt text-info h3 mx-1"
+            class="text-info h3 mx-1"
+            [class]="
+              !donwloading
+                ? 'fa fa-cloud-download-alt'
+                : 'fas fa-spinner fa-spin'
+            "
           ></i>
-  
+
           <i
             role="button"
             title="Descargar soportes"
@@ -57,7 +62,7 @@
               (click)="cambiarEstado(item, 'Rechazada')"
               class="fa fa-times text-danger h3 mx-1"
             ></i>
-  
+
             <i
               role="button"
               title="Aprobar"

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { VerViaticosService } from './ver-viaticos.service';
 import { Subscription } from 'rxjs';
 import { LegalizarDataService } from '../legalizar/legalizar-data.service';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-ver-viaticos',
@@ -19,7 +20,8 @@ export class VerViaticosComponent implements OnInit {
     private _viaticos: VerViaticosService,
     private location: Location,
     private route: ActivatedRoute,
-    private _viaticosData: LegalizarDataService
+    private _viaticosData: LegalizarDataService,
+    private _swal: SwalService
   ) { }
 
   ngOnInit(): void {
@@ -52,13 +54,14 @@ export class VerViaticosComponent implements OnInit {
       link.download = `${filename}.pdf`;
       link.click();
       /*  this.loading = false; */
-    }),
+    },
       (error) => {
         /*  this.loading = false; */
+        this._swal.hardError();
       },
       () => {
         /*  this.loading = false; */
-      };
+      });
   }
 
   ngOnDestroy(): void {

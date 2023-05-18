@@ -115,14 +115,15 @@ export class ItemsComponent implements OnInit {
 
     let total_cost = item?.get('total_cost');
     total_cost.valueChanges.subscribe(r => {
-      //! arreglar esto
       let internal_total = 0;
-      this.items.value.forEach(item => {
-        internal_total += item.total_cost
-      });
-      this.forma.patchValue({
-        internal_total: internal_total + r
-      })
+      setTimeout(() => {
+        this.items.value.forEach(item => {
+          internal_total += item.total_cost
+        });
+        this.forma.patchValue({
+          internal_total: internal_total
+        })
+      }, 500);
     })
 
     const subItems = item?.get('subItems') as FormArray
@@ -346,12 +347,12 @@ export class ItemsComponent implements OnInit {
     return this.fb.group({
       id: ((edit && apu?.id) ? apu?.id : ''),
       type: ((apu?.type == 'P' || apu?.type == 'C') ? 'P' : 'P'),
-      description,
+      description: [description, Validators.required],
       apu_id: [(apu ? apu?.apu_id : ''), Validators.required],
-      cuantity: edit ? apu?.cuantity : 0,
-      unit_cost: (apu ? apu?.unit_cost : ''),
+      cuantity: [edit ? apu?.cuantity : 0, [Validators.required, Validators.min(1)]],
+      unit_cost: [(apu ? apu?.unit_cost : ''), [Validators.required, Validators.min(1)]],
       total_cost: edit ? apu?.total_cost : 0,
-      unit: edit ? apu?.unit : 'UNIDAD',
+      unit: [edit ? apu?.unit : 'UNIDAD', Validators.required],
       indirect_costs: edit ? this.editMakeIndirectCost(apu?.indirect_costs) : this.makeIndirectCost(),
       subtotal_indirect_cost: edit ? apu?.subtotal_indirect_cost : 0,
       ...percentages,

@@ -287,38 +287,67 @@ export class CrearPresupuestoComponent implements OnInit {
   }
 
   save() {
-    this._swal.show({
-      title: '¿Está seguro?',
-      text: 'Se dispone a guardar un presupuesto',
-      icon: 'question'
-    }).then(async r => {
-      if (r.isConfirmed) {
-        await this.dataEdit && this.path != 'copiar' ? this.updateData() : this.saveData()
-        this._swal.show({
-          title: 'Se ha guardado con éxito',
-          text: '',
-          icon: 'success',
-          showCancel: false
-        })
-        if (!this.preData) {
-          this.router.navigate(['crm/presupuesto'])
+    if (this.forma.valid && this.hasItems > 0) {
+      this._swal.show({
+        title: '¿Estás seguro(a)?',
+        text: 'Vamos a guardar este presupuesto',
+        icon: 'question'
+      }).then(async r => {
+        if (r.isConfirmed) {
+          await this.dataEdit && this.path != 'copiar' ? this.updateData() : this.saveData();
         }
-      }
-    })
+      })
+    } else {
+      this._swal.incompleteError();
+      this.forma.markAllAsTouched();
+    }
   }
 
   saveData = () => {
     const data = this.forma.value;
     this._budget.save({ data }).subscribe((res: any) => {
-      if (this.preData) {
-        this.saveForBusiness.emit(res.data)
+      if (res.status) {
+        this._swal.show({
+          title: 'Operación exitosa',
+          text: 'Presupuesto guardado con éxito',
+          icon: 'success',
+          timer: 1000,
+          showCancel: false
+        })
+        if (this.preData) {
+          this.saveForBusiness.emit(res.data)
+        } else {
+          this.router.navigate(['crm/presupuesto'])
+        }
+      } else {
+        this._swal.hardError()
       }
+    }, (error) => {
+      this._swal.hardError();
     })
   }
 
   updateData = () => {
     const data = this.forma.value;
-    this._budget.update(data, this.id).subscribe(r => { })
+    this._budget.update(data, this.id).subscribe((r: any) => {
+      if (r.status) {
+        this._swal.show({
+          title: 'Operación exitosa',
+          text: 'Presupuesto actualizado con éxito',
+          icon: 'success',
+          timer: 1000,
+          showCancel: false
+        })
+        this.router.navigate(['crm/presupuesto'])
+      } else {
+        this._swal.hardError()
+      }
+
+    },
+      (error) => {
+        this._swal.hardError()
+      }
+    )
   }
 
   get total_cop() {

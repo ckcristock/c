@@ -162,13 +162,14 @@ export class NominaComponent implements OnInit {
       link.download = `${filename}.xlsx`;
       link.click();
       this.donwloadingExcNov = false;
-    }),
+    },
       (error: any) => {
         this.donwloadingExcNov = false;
+        this._swal.hardError();
       },
       () => {
         this.donwloadingExcNov = false;
-      };
+      });
   }
 
   mostrarIngresosP(fun) { }

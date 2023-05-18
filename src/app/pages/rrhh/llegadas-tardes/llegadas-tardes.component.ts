@@ -20,6 +20,7 @@ import { HttpParams } from '@angular/common/http';
 import { debounceTime } from 'rxjs/operators';
 import { User } from 'src/app/core/models/users.model';
 import { UserService } from 'src/app/core/services/user.service';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 @Component({
   selector: 'app-llegadas-tardes',
   templateUrl: './llegadas-tardes.component.html',
@@ -116,6 +117,7 @@ export class LlegadasTardesComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private _user: UserService,
+    private _swal: SwalService
   ) {
     this.user = _user.user;
     this.dateAdapter.setLocale('es');
@@ -286,13 +288,14 @@ export class LlegadasTardesComponent implements OnInit {
         link.download = `${filename}.xlsx`;
         link.click();
         this.donwloading = false;
-      }),
-      (error) => {
-        this.donwloading = false;
       },
-      () => {
-        this.donwloading = false;
-      };
+        (error) => {
+          this.donwloading = false;
+          this._swal.hardError();
+        },
+        () => {
+          this.donwloading = false;
+        });
   }
 
   getPeople() {

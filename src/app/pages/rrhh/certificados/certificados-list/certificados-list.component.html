@@ -4,7 +4,7 @@
     <li class="activity-list pb-1" *ngFor="let item of certificates">
       <div class="activity-icon">
         <img
-          src="{{ item.image | image: 'users' }}"
+          src="{{ item.image | image : 'users' }}"
           class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
           [title]="item.first_name + item.first_surname"
           onerror="this.src='../../../../../assets/images/noprofile.png'"
@@ -17,18 +17,25 @@
             {{ item.first_surname }}
           </div>
           <div class="card-text">
-            {{ item.created_at | date: "longDate" }}
+            {{ item.created_at | date : "longDate" }}
             <small class="text-muted"
-              >{{ item.created_at | date: "hh:mm aa" }}
+              >{{ item.created_at | date : "hh:mm aa" }}
             </small>
           </div>
           <span class="text-muted">{{ item.reason }}</span>
         </div>
-        <i
-          role="button"
-          (click)="download(item.id)"
-          class="fa fa-cloud-download-alt text-info h3"
-        ></i>
+        <div>
+          <i
+            role="button"
+            (click)="download(item.id)"
+            class="text-info h3"
+            [class]="
+              !donwloading
+                ? 'fa fa-cloud-download-alt'
+                : 'fas fa-spinner fa-spin'
+            "
+          ></i>
+        </div>
       </div>
     </li>
   </ul>

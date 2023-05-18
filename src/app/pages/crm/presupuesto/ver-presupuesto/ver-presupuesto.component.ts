@@ -78,11 +78,14 @@ export class VerPresupuestoComponent implements OnInit {
           link.download = `${filename}.pdf`;
           link.click();
           this.donwloading = false;
-        }),
+        },
           (error) => {
+            this.donwloading = false;
+            this._swal.hardError();
           },
           () => {
-          };
+            this.donwloading = false;
+          });
       }
     })
   }
@@ -96,12 +99,14 @@ export class VerPresupuestoComponent implements OnInit {
       link.download = `${filename}.pdf`;
       link.click();
       this.donwloadingInterno = false;
-    }),
+    },
       (error) => {
         this.donwloadingInterno = false;
+        this._swal.hardError();
       },
       () => {
-      };
+        this.donwloadingInterno = false;
+      });
   }
 
 }

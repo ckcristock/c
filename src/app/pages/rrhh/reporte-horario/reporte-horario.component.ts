@@ -18,6 +18,7 @@ import { User } from 'src/app/core/models/users.model';
 import { PageEvent } from '@angular/material';
 import { HttpParams } from '@angular/common/http';
 import { debounceTime } from 'rxjs/operators';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-reporte-horario',
@@ -66,6 +67,7 @@ export class ReporteHorarioComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private _user: UserService,
+    private _swal: SwalService
   ) {
     this.user = _user.user;
     this.dateAdapter.setLocale('es');
@@ -256,13 +258,14 @@ export class ReporteHorarioComponent implements OnInit {
         link.download = `${filename}.xlsx`;
         link.click();
         this.donwloading = false;
-      }),
-      (error) => {
-        this.donwloading = false;
       },
-      () => {
-        this.donwloading = false;
-      };
+        (error) => {
+          this._swal.hardError();
+          this.donwloading = false;
+        },
+        () => {
+          this.donwloading = false;
+        });
   }
 
   getForm() {

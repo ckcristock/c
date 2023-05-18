@@ -48,6 +48,11 @@ export class CrearCotizacionComponent implements OnInit {
   loadingView: boolean;
   masksMoney = consts
   thirdParties: any[] = [];
+
+  get items() {
+    return this.form.get('items') as FormArray;
+  }
+
   reload: boolean;
   constructor(
     private _apuPieza: ApuPiezaService,
@@ -291,6 +296,7 @@ export class CrearCotizacionComponent implements OnInit {
     );
     window?.open(url, '_blank');
   }
+
   budgetSelected(item) {
     if (this.form?.controls?.money_type?.value != '') {
       (async () => {
@@ -367,7 +373,7 @@ export class CrearCotizacionComponent implements OnInit {
   }
 
   save() {
-    if (this.form?.valid) {
+    if (this.form?.valid && this.items.value.length > 0) {
       this._swal?.show({
         title: '¿Estás seguro(a)?',
         text: '',
@@ -375,28 +381,29 @@ export class CrearCotizacionComponent implements OnInit {
       })?.then((r) => {
         if (r?.isConfirmed) {
           this._quotation?.save(this.form?.getRawValue())?.subscribe((res: any) => {
-            this._swal?.show({
-              title: 'Operación exitosa',
-              icon: 'success',
-              text: '',
-              showCancel: false,
-              timer: 1000
-            })
-            if (this.preData) {
-              this.saveForBusiness?.emit(res?.data)
+            if (res.status) {
+              this._swal?.show({
+                title: 'Operación exitosa',
+                icon: 'success',
+                text: '',
+                showCancel: false,
+                timer: 1000
+              })
+              if (this.preData) {
+                this.saveForBusiness?.emit(res?.data)
+              } else {
+                this.router?.navigate(['/crm/cotizacion'])
+              }
             } else {
-              this.router?.navigate(['/crm/cotizacion'])
+              this._swal.hardError();
             }
+          }, (error) => {
+            this._swal.hardError();
           });
         }
       })
     } else {
-      this._swal?.show({
-        icon: 'error',
-        title: 'ERROR',
-        text: 'Faltan datos requeridos. Completa toda la información e intenta de nuevo.',
-        showCancel: false
-      })
+      this._swal?.incompleteError();
     }
   }
 

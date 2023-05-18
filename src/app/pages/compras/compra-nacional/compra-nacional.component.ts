@@ -68,13 +68,14 @@ export class CompraNacionalComponent implements OnInit {
       link.download = `${filename}.pdf`;
       link.click();
       this.downloading = false;
-    }),
+    },
       (error) => {
         this.downloading = false;
+        this._swal.hardError();
       },
       () => {
         this.downloading = false;
-      };
+      });
   }
 
   listarComprasNacionales(page = 1) {

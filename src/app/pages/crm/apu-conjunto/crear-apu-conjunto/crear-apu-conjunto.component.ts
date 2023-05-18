@@ -658,12 +658,7 @@ export class CrearApuConjuntoComponent implements OnInit {
 
   save() {
     if (this.form?.invalid) {
-      this._swal?.show({
-        icon: 'error',
-        title: 'ERROR',
-        text: 'Revisa la información y vuelve a intentarlo',
-        showCancel: false
-      })
+      this._swal.incompleteError()
       this.form?.markAllAsTouched()
     } else {
       let filess = this.files;
@@ -746,11 +741,6 @@ export class CrearApuConjuntoComponent implements OnInit {
     }
   }
   showError(err) {
-    this._swal?.show({
-      icon: 'error',
-      title: '¡Ooops!',
-      showCancel: false,
-      text: err?.code,
-    });
+    this._swal.hardError();
   }
 }

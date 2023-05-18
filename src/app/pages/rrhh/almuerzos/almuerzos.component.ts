@@ -78,7 +78,7 @@ export class AlmuerzosComponent implements OnInit {
     private _group: GroupService,
     private _person: PersonService,
     private modalService: NgbModal,
-    private _modal: ModalService
+    private _modal: ModalService,
 
   ) { }
 
@@ -341,13 +341,14 @@ export class AlmuerzosComponent implements OnInit {
       link.download = `${filename}.xlsx`;
       link.click();
       this.donwloading = false;
-    }),
+    },
       (error) => {
         this.donwloading = false;
+        this._swal.hardError();
       },
       () => {
         this.donwloading = false;
-      };
+      });
   }
 
   get person_valid() {

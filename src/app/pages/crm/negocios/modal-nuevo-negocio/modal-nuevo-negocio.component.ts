@@ -306,16 +306,30 @@ export class ModalNuevoNegocioComponent implements OnInit {
         if (r.isConfirmed) {
           if (this.form?.value?.id) {
             this._negocios.updateBasicData(this.form.value).subscribe((res: any) => {
-              this.swalAlert();
-              this.router.navigateByUrl('/crm/negocios')
-            })
+              if (res.status) {
+                this.swalAlert();
+                this.router.navigateByUrl('/crm/negocios');
+              } else {
+                this._swal.hardError();
+              }
+            },
+              (error) => {
+                this._swal.hardError();
+              }
+            )
           } else {
             this.form.addControl('budgets', this.fb.control(this.budgetsSelected));
             this.form.addControl('quotations', this.fb.control(this.quotationSelected));
             this.form.addControl('apu', this.fb.control(this.apuSelected));
-            this._negocios.saveNeg(this.form.value).subscribe(r => {
-              this.swalAlert();
-              this.router.navigateByUrl('/crm/negocios')
+            this._negocios.saveNeg(this.form.value).subscribe((r: any) => {
+              if (r.status) {
+                this.swalAlert();
+                this.router.navigateByUrl('/crm/negocios')
+              } else {
+                this._swal.hardError();
+              }
+            }, (error) => {
+              this._swal.hardError();
             });
           }
         }
@@ -323,12 +337,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
 
     } else {
       this.form.markAllAsTouched()
-      this._swal.show({
-        icon: 'error',
-        title: 'ERROR',
-        text: 'Completa todos los campos requeridos para poder continuar',
-        showCancel: false
-      })
+      this._swal.incompleteError();
     }
 
   }

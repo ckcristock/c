@@ -389,6 +389,26 @@
             Vista general
           </a>
           <ng-template ngbNavContent>
+            <div class="row">
+              <ng-container [formGroup]="formFiltersGeneralView">
+                <mat-form-field appearance="outline" class="col-12">
+                  <mat-label>Rango de fechas</mat-label>
+                  <input
+                    matInput
+                    [satDatepicker]="pickerGV"
+                    [value]="dateGeneralView"
+                    (dateChange)="selectedDateGV($event)"
+                    name="daterange"
+                    autocomplete="off"
+                  />
+                  <sat-datepicker #pickerGV [rangeMode]="true"></sat-datepicker>
+                  <sat-datepicker-toggle
+                    matSuffix
+                    [for]="pickerGV"
+                  ></sat-datepicker-toggle>
+                </mat-form-field>
+              </ng-container>
+            </div>
             <ng-container
               *ngIf="
                 !loadingGeneralView && generalView?.length > 0;
@@ -396,29 +416,8 @@
               "
             >
               <div class="row mt-3">
-                <ng-container [formGroup]="formFiltersGeneralView">
-                  <mat-form-field appearance="outline" class="col-12">
-                    <mat-label>Rango de fechas</mat-label>
-                    <input
-                      matInput
-                      [satDatepicker]="pickerGV"
-                      [value]="dateGeneralView"
-                      (dateChange)="selectedDateGV($event)"
-                      name="daterange"
-                      autocomplete="off"
-                    />
-                    <sat-datepicker
-                      #pickerGV
-                      [rangeMode]="true"
-                    ></sat-datepicker>
-                    <sat-datepicker-toggle
-                      matSuffix
-                      [for]="pickerGV"
-                    ></sat-datepicker-toggle>
-                  </mat-form-field>
-                </ng-container>
-                <div class="col-md-6">
-                  <div class="card border-card-business">
+                <div class="col-md-6 d-flex align-items-stretch">
+                  <div class="card border-card-business w-100">
                     <div class="card-body">
                       <h5 class="card-title">Prospección</h5>
                       <table class="table table-hover">
@@ -427,7 +426,7 @@
                             <td>Cantidad de negocios</td>
                             <td>{{ negocios_primera_etapa?.length }}</td>
                           </tr>
-                          <tr>
+                          <!-- <tr>
                             <td>Valor total por presupuesto</td>
                             <td>
                               ${{
@@ -444,18 +443,28 @@
                                   | number : "1.2-2"
                               }}
                             </td>
-                          </tr>
+                          </tr> -->
                           <tr>
                             <td>Rango de fechas</td>
-                            <td>{{ today | date }} - {{ today | date }}</td>
+                            <td>
+                              {{
+                                formFiltersGeneralView.get("date_start").value
+                                  | date
+                              }}
+                              -
+                              {{
+                                formFiltersGeneralView.get("date_end").value
+                                  | date
+                              }}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="card border-card-business">
+                <div class="col-md-6 d-flex align-items-stretch">
+                  <div class="card border-card-business w-100">
                     <div class="card-body">
                       <h5 class="card-title">Presupuesto</h5>
                       <table class="table table-hover">
@@ -471,9 +480,14 @@
                                 this.budgetStage?.budget_value
                                   | number : "1.2-2"
                               }}
+                              - USD
+                              {{
+                                this.budgetStage?.budget_value_usd
+                                  | number : "1.2-2"
+                              }}
                             </td>
                           </tr>
-                          <tr>
+                          <!-- <tr>
                             <td>Valor total por cotización</td>
                             <td>
                               ${{
@@ -481,18 +495,28 @@
                                   | number : "1.2-2"
                               }}
                             </td>
-                          </tr>
+                          </tr> -->
                           <tr>
                             <td>Rango de fechas</td>
-                            <td>{{ today | date }} - {{ today | date }}</td>
+                            <td>
+                              {{
+                                formFiltersGeneralView.get("date_start").value
+                                  | date
+                              }}
+                              -
+                              {{
+                                formFiltersGeneralView.get("date_end").value
+                                  | date
+                              }}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="card border-card-business">
+                <div class="col-md-6 d-flex align-items-stretch">
+                  <div class="card border-card-business w-100">
                     <div class="card-body">
                       <h5 class="card-title">Cotización</h5>
                       <table class="table table-hover">
@@ -508,6 +532,11 @@
                                 this.quotationStage?.budget_value
                                   | number : "1.2-2"
                               }}
+                              - USD
+                              {{
+                                this.quotationStage?.budget_value_usd
+                                  | number : "1.2-2"
+                              }}
                             </td>
                           </tr>
                           <tr>
@@ -517,19 +546,34 @@
                                 this.quotationStage?.quotation_value
                                   | number : "1.2-2"
                               }}
+                              - USD
+                              {{
+                                this.quotationStage?.quotation_value_usd
+                                  | number : "1.2-2"
+                              }}
                             </td>
                           </tr>
                           <tr>
                             <td>Rango de fechas</td>
-                            <td>{{ today | date }} - {{ today | date }}</td>
+                            <td>
+                              {{
+                                formFiltersGeneralView.get("date_start").value
+                                  | date
+                              }}
+                              -
+                              {{
+                                formFiltersGeneralView.get("date_end").value
+                                  | date
+                              }}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="card border-card-business">
+                <div class="col-md-6 d-flex align-items-stretch">
+                  <div class="card border-card-business w-100">
                     <div class="card-body">
                       <h5 class="card-title">Negociación</h5>
                       <table class="table table-hover">
@@ -545,6 +589,11 @@
                                 this.negotiationStage?.budget_value
                                   | number : "1.2-2"
                               }}
+                              - USD
+                              {{
+                                this.negotiationStage?.budget_value_usd
+                                  | number : "1.2-2"
+                              }}
                             </td>
                           </tr>
                           <tr>
@@ -554,19 +603,34 @@
                                 this.negotiationStage?.quotation_value
                                   | number : "1.2-2"
                               }}
+                              - USD
+                              {{
+                                this.negotiationStage?.quotation_value_usd
+                                  | number : "1.2-2"
+                              }}
                             </td>
                           </tr>
                           <tr>
                             <td>Rango de fechas</td>
-                            <td>{{ today | date }} - {{ today | date }}</td>
+                            <td>
+                              {{
+                                formFiltersGeneralView.get("date_start").value
+                                  | date
+                              }}
+                              -
+                              {{
+                                formFiltersGeneralView.get("date_end").value
+                                  | date
+                              }}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="card border-card-business">
+                <div class="col-md-6 d-flex align-items-stretch">
+                  <div class="card border-card-business w-100">
                     <div class="card-body">
                       <h5 class="card-title">Adjudicación</h5>
                       <table class="table table-hover">
@@ -581,6 +645,11 @@
                               ${{
                                 this.awardStage?.budget_value | number : "1.2-2"
                               }}
+                              - USD
+                              {{
+                                this.awardStage?.budget_value_usd
+                                  | number : "1.2-2"
+                              }}
                             </td>
                           </tr>
                           <tr>
@@ -590,11 +659,26 @@
                                 this.awardStage?.quotation_value
                                   | number : "1.2-2"
                               }}
+                              - USD
+                              {{
+                                this.awardStage?.quotation_value_usd
+                                  | number : "1.2-2"
+                              }}
                             </td>
                           </tr>
                           <tr>
                             <td>Rango de fechas</td>
-                            <td>{{ today | date }} - {{ today | date }}</td>
+                            <td>
+                              {{
+                                formFiltersGeneralView.get("date_start").value
+                                  | date
+                              }}
+                              -
+                              {{
+                                formFiltersGeneralView.get("date_end").value
+                                  | date
+                              }}
+                            </td>
                           </tr>
                         </tbody>
                       </table>

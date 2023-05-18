@@ -95,12 +95,13 @@ export class ViewQuotationComponent implements OnInit {
       link.download = `${filename}.pdf`;
       link?.click();
       this.donwloading = false;
-    }),
+    },
       (error) => {
         this.donwloading = false;
+        this._swal.hardError();
       },
       () => {
         this.donwloading = false;
-      };
+      });
   }
 }

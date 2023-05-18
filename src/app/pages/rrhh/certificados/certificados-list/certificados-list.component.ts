@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { CertificadosService } from '../certificados.service';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-certificados-list',
@@ -10,6 +11,7 @@ export class CertificadosListComponent implements OnInit {
   @Input() filtro: any
   certificates: any[] = [];
   loading: boolean;
+  donwloading: boolean = false;
   pagination: any = {
     page: 1,
     pageSize: 5,
@@ -18,6 +20,7 @@ export class CertificadosListComponent implements OnInit {
 
   constructor(
     private _certificados: CertificadosService,
+    private _swal: SwalService
   ) { }
 
   ngOnInit(): void {
@@ -39,6 +42,7 @@ export class CertificadosListComponent implements OnInit {
   }
 
   download(id) {
+    this.donwloading = true;
     this._certificados.downloadLaboral(id).subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/pdf' });
       let link = document.createElement('a');
@@ -46,10 +50,14 @@ export class CertificadosListComponent implements OnInit {
       link.href = window.URL.createObjectURL(blob);
       link.download = `${filename}.pdf`;
       link.click();
+      this.donwloading = false;
     },
       (error) => {
+        this._swal.hardError();
+        this.donwloading = false;
       },
       () => {
+        this.donwloading = false;
       })
   }
 }

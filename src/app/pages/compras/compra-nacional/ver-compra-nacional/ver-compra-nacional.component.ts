@@ -82,13 +82,14 @@ export class VerCompraNacionalComponent implements OnInit {
       link.download = `${filename}.pdf`;
       link.click();
       this.downloading = false;
-    }),
+    },
       (error) => {
         this.downloading = false;
+        this._swal.hardError();
       },
       () => {
         this.downloading = false;
-      };
+      });
   }
 
   async EstadoAprobacion(Estado) {

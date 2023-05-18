@@ -303,12 +303,7 @@ export class CrearApuServicioComponent implements OnInit {
 
   save() {
     if (this.form?.invalid) {
-      this._swal?.show({
-        icon: 'error',
-        title: 'ERROR',
-        text: 'Revisa la información y vuelve a intentarlo',
-        showCancel: false
-      })
+      this._swal?.hardError();
       this.form?.markAllAsTouched()
     } else {
       this._swal?.show({
@@ -319,16 +314,26 @@ export class CrearApuServicioComponent implements OnInit {
         if (r?.isConfirmed) {
           if (this.id && this.title == 'Editar servicio') {
             this._apuService?.update(this.form?.value, this.id)?.subscribe(
-              (res: any) => this.showSuccess(),
+              (res: any) => {
+                if (res.status) {
+                  this.showSuccess()
+                } else {
+                  this.showError(res)
+                }
+              },
               (err) => this.showError(err)
             );
           } else {
             this._apuService?.save(this.form?.value)?.subscribe(
               (res: any) => {
-                if (this.preData) {
-                  this.saveForBusiness?.emit(res?.data)
+                if (res.status) {
+                  if (this.preData) {
+                    this.saveForBusiness?.emit(res?.data)
+                  }
+                  this.showSuccess()
+                } else {
+                  this.showError(res)
                 }
-                this.showSuccess()
               },
               (err) => this.showError(err)
             );
@@ -351,12 +356,7 @@ export class CrearApuServicioComponent implements OnInit {
     }
   }
   showError(err) {
-    this._swal?.show({
-      icon: 'error',
-      title: '¡Ooops!',
-      showCancel: false,
-      text: err?.code,
-    });
+    this._swal?.hardError();
   }
   async getConsecutivo() {
     await this._consecutivos?.getConsecutivo('apu_services')?.toPromise()?.then((r: any) => {

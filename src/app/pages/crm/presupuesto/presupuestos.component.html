@@ -167,7 +167,7 @@
               <th *ngIf="checkQuien">Quien elabora</th>
               <th *ngIf="checkTCop">Total COP</th>
               <th *ngIf="checkTUsd">Total USD</th>
-              <th>Estado</th>
+              <!-- <th>Estado</th> -->
               <th><i class="mdi mdi-chevron-down"></i></th>
             </tr>
           </thead>
@@ -189,7 +189,7 @@
                 {{ item?.customer?.name | uppercase }}
               </td>
               <td *ngIf="checkDestino" class="align-middle">
-                {{ item?.destiny?.name | capitalLetter }}
+                {{ item?.destiny?.name | uppercase }}
               </td>
               <td *ngIf="checkLinea" class="align-middle">
                 {{ item?.line | capitalLetter }}
@@ -204,7 +204,7 @@
               <td *ngIf="checkTUsd" class="align-middle">
                 USD {{ item?.total_usd | number : "1.2-2" }}
               </td>
-              <td>
+              <!-- <td>
                 <span
                   class="badge"
                   [class]="
@@ -213,7 +213,7 @@
                 >
                   {{ item?.state | uppercase }}
                 </span>
-              </td>
+              </td> -->
               <td class="align-middle">
                 <div
                   ngbDropdown
@@ -241,7 +241,7 @@
                     >
                       <i class="fas fa-edit"></i> Editar
                     </a>
-                    <a
+                    <!-- <a
                       *ngIf="item?.state == 'Activo'"
                       href="javascript: void(0);"
                       (click)="activateOrInactive('Inactivo', item?.id)"
@@ -256,7 +256,7 @@
                       class="dropdown-item text-primary"
                     >
                       <i class="fas fa-check"></i> Activar
-                    </a>
+                    </a> -->
                     <a
                       class="dropdown-item text-primary"
                       href="javascript: void(0);"

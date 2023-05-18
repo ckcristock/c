@@ -115,11 +115,7 @@ export class NegociosComponent implements OnInit {
         date_two.setDate(date_two.getDate() + 1)
         this.date = { begin: date_one, end: date_two }
 
-        let date_oneGV = new Date()
-        let date_twoGV = new Date(date_oneGV.getFullYear(), date_oneGV.getMonth() - 1, date_oneGV.getDate());
-        date_oneGV.setDate(date_one.getDate() + 1)
-        date_twoGV.setDate(date_two.getDate() + 1)
-        this.dateGeneralView = { begin: date_oneGV, end: date_twoGV }
+
         await this.getNegocios();
       }
       );
@@ -161,9 +157,17 @@ export class NegociosComponent implements OnInit {
   }
 
   createFormFiltersGeneralView() {
+    let date_oneGV = new Date()
+    let date_twoGV = new Date(date_oneGV.getFullYear(), date_oneGV.getMonth() - 1, date_oneGV.getDate());
+    let date_one = this.datePipe?.transform(date_oneGV, 'yyyy-MM-dd');
+    let date_two = this.datePipe?.transform(date_twoGV, 'yyyy-MM-dd')
+    /* date_oneGV.setDate(date_oneGV.getDate() + 1)
+    date_twoGV.setDate(date_twoGV.getDate() + 1) */
+    this.dateGeneralView = { begin: date_twoGV, end: date_oneGV }
+    console.log(date_one, date_two)
     this.formFiltersGeneralView = this.fb.group({
-      date_start: '',
-      date_end: ''
+      date_start: date_two,
+      date_end: date_one
     })
     this.formFiltersGeneralView.valueChanges.pipe(debounceTime(500)).subscribe(r => {
       this.getGeneralView()
@@ -348,29 +352,64 @@ export class NegociosComponent implements OnInit {
   generalView: any = [];
   prospectingStage = {
     budget_value: 0,
-    quotation_value: 0
+    quotation_value: 0,
+    budget_value_usd: 0,
+    quotation_value_usd: 0,
   };
   budgetStage = {
     budget_value: 0,
-    quotation_value: 0
+    quotation_value: 0,
+    budget_value_usd: 0,
+    quotation_value_usd: 0,
   };
   quotationStage = {
     budget_value: 0,
-    quotation_value: 0
+    quotation_value: 0,
+    budget_value_usd: 0,
+    quotation_value_usd: 0,
   };
   negotiationStage = {
     budget_value: 0,
-    quotation_value: 0
+    quotation_value: 0,
+    budget_value_usd: 0,
+    quotation_value_usd: 0,
   };
   awardStage = {
     budget_value: 0,
-    quotation_value: 0
+    quotation_value: 0,
+    budget_value_usd: 0,
+    quotation_value_usd: 0,
   };
 
   loadingGeneralView: boolean;
-  getGeneralView() {
 
+  getGeneralView() {
     this.loadingGeneralView = true;
+    this.prospectingStage.budget_value = 0;
+    this.prospectingStage.quotation_value = 0;
+    this.prospectingStage.budget_value_usd = 0;
+    this.prospectingStage.quotation_value_usd = 0;
+    /*  */
+    this.budgetStage.budget_value = 0;
+    this.budgetStage.quotation_value = 0;
+    this.budgetStage.budget_value_usd = 0;
+    this.budgetStage.quotation_value_usd = 0;
+    /*  */
+    this.quotationStage.budget_value = 0;
+    this.quotationStage.quotation_value = 0;
+    this.quotationStage.budget_value_usd = 0;
+    this.quotationStage.quotation_value_usd = 0;
+    /*  */
+    this.negotiationStage.budget_value = 0;
+    this.negotiationStage.quotation_value = 0;
+    this.negotiationStage.budget_value_usd = 0;
+    this.negotiationStage.quotation_value_usd = 0;
+    /*  */
+    this.awardStage.budget_value = 0;
+    this.awardStage.quotation_value = 0;
+    this.awardStage.budget_value_usd = 0;
+    this.awardStage.quotation_value_usd = 0;
+    /*  */
     this._negocios.getGeneralView(this.formFiltersGeneralView.value).subscribe((res: any) => {
       this.generalView = res?.data;
       this.negocios_primera_etapa = res?.data?.filter(
@@ -391,22 +430,32 @@ export class NegociosComponent implements OnInit {
       this.negocios_primera_etapa.forEach((element: any) => {
         this.prospectingStage.budget_value += element.budget_value;
         this.prospectingStage.quotation_value += element.quotation_value;
+        this.prospectingStage.budget_value_usd += element.budget_value_usd;
+        this.prospectingStage.quotation_value_usd += element.quotation_value_usd;
       });
       this.negocios_segunda_etapa.forEach((element: any) => {
         this.budgetStage.budget_value += element.budget_value;
         this.budgetStage.quotation_value += element.quotation_value;
+        this.budgetStage.budget_value_usd += element.budget_value_usd;
+        this.budgetStage.quotation_value_usd += element.quotation_value_usd;
       });
       this.negocios_tercera_etapa.forEach((element: any) => {
         this.quotationStage.budget_value += element.budget_value;
         this.quotationStage.quotation_value += element.quotation_value;
+        this.quotationStage.budget_value_usd += element.budget_value_usd;
+        this.quotationStage.quotation_value_usd += element.quotation_value_usd;
       });
       this.negocios_cuarta_etapa.forEach((element: any) => {
         this.negotiationStage.budget_value += element.budget_value;
         this.negotiationStage.quotation_value += element.quotation_value;
+        this.negotiationStage.budget_value_usd += element.budget_value_usd;
+        this.negotiationStage.quotation_value_usd += element.quotation_value_usd;
       });
       this.negocios_quinta_etapa.forEach((element: any) => {
         this.awardStage.budget_value += element.budget_value;
         this.awardStage.quotation_value += element.quotation_value;
+        this.awardStage.budget_value_usd += element.budget_value_usd;
+        this.awardStage.quotation_value_usd += element.quotation_value_usd;
       });
       this.loadingGeneralView = false;
     })

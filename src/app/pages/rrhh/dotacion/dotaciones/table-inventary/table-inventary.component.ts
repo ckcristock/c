@@ -224,13 +224,14 @@ export class TableInventaryComponent implements OnInit {
       link.download = `${filename}.xlsx`;
       link.click();
       this.donwloading = false;
-    }),
+    },
       (error) => {
         this.donwloading = false;
+        this._swal.hardError();
       },
       () => {
         this.donwloading = false;
-      };
+      });
   }
 
   ListarDotaciones(page = 1) {

@@ -151,13 +151,14 @@ export class InventarioDotacionComponent implements OnInit {
       link.download = `${filename}.xlsx`;
       link.click();
       this.donwloading = false;
-    }),
+    },
       (error) => {
         this.donwloading = false;
+        this._swal.hardError();
       },
       () => {
         this.donwloading = false;
-      };
+      });
   }
 
   estadoFiltros = false;

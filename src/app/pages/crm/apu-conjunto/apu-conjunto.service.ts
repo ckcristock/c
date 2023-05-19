@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable, of } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { ApuSetResponse } from './copiar-apu-conjunto/copiar-apu-conjunto.component';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +42,7 @@ export class ApuConjuntoService {
   }
 
   getApuSet(id: any) {
-    return this.http.get(`${environment.base_url}/apu-sets/${id}`);
+    return this.http.get<ApuSetResponse>(`${environment.base_url}/apu-sets/${id}`);
   }
 
   save(data: any) {
@@ -63,19 +62,19 @@ export class ApuConjuntoService {
     return this.http.get(`${environment.base_url}/apu-set/pdf/${id}`, { headers, responseType: 'blob' as 'json' });
   }
 
-  deleteFile(id) {
+  deleteFile(id: any) {
     return this.http.get(`${environment.base_url}/apu-set-delete-file/${id}`);
   }
 
-  getApuPartToAdd(id) {
+  getApuPartToAdd(id: any) {
     return this.http.get(`${environment.base_url}/get-apu-part-to-add-in-set/${id}`);
   }
 
-  getApuSetToAdd(id) {
+  getApuSetToAdd(id: any) {
     return this.http.get(`${environment.base_url}/get-apu-set-to-add/${id}`);
   }
 
-  getApuServiceToAdd(id) {
+  getApuServiceToAdd(id: any) {
     return this.http.get(`${environment.base_url}/get-apu-service-to-add/${id}`);
   }
 

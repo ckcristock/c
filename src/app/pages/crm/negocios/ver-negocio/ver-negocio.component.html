@@ -34,7 +34,11 @@
                   <td>{{ negocio?.third_party_person?.name | titlecase }}</td>
                 </tr>
                 <tr>
-                  <th>Fecha</th>
+                  <th>Fecha de creación</th>
+                  <td>{{ negocio?.created_at | date }}</td>
+                </tr>
+                <tr>
+                  <th>Fecha de entrega</th>
                   <td>{{ negocio?.date | date }}</td>
                 </tr>
                 <tr>
@@ -56,7 +60,7 @@
                 <mat-option value="Prospección">Prospección</mat-option>
                 <mat-option value="Presupuesto">Presupuesto</mat-option>
                 <mat-option value="Cotización">Cotización</mat-option>
-                <mat-option value="Negociación">Negociación</mat-option>
+                <mat-option value="Rechazado">Rechazado</mat-option>
                 <mat-option value="Adjudicación">Adjudicación</mat-option>
               </mat-select>
             </mat-form-field>
@@ -543,7 +547,6 @@
                         formControlName="note"
                         [cdkTextareaAutosize]="true"
                       ></textarea>
-                      <mat-hint>Max. 500 caracteres</mat-hint>
                     </mat-form-field>
                   </div>
                   <div

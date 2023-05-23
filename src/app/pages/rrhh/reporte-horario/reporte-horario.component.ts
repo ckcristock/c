@@ -191,13 +191,12 @@ export class ReporteHorarioComponent implements OnInit {
     const fecha_fin = this.formFilters.controls.date_to.value == ''
       ? moment().format('YYYY-MM-DD')
       : this.formFilters.controls.date_to.value
-    this._reporteHorario
-      .getFixedTurnsDiaries(fecha_ini, fecha_fin, params)
-      .subscribe((r) => {
-        this.reporteHorarios = r.data;
-        this.loading = false;
-        //falta paginación, es necearia??
-      });
+    this._reporteHorario.getFixedTurnsDiaries(fecha_ini, fecha_fin, params).subscribe((r) => {
+      this.reporteHorarios = r.data;
+      console.log(r.data)
+      this.loading = false;
+      //falta paginación, es necearia??
+    });
   }
 
   getPeople() {

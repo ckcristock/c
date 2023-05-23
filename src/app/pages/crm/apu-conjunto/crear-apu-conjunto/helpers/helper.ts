@@ -64,13 +64,13 @@ export const functionsApuConjunto = {
 
   createForm(fb: FormBuilder, user_id, calculationBase) {
     let group = fb?.group({
-      name: ['', Validators?.required],
+      name: ['', [Validators?.required, Validators.maxLength(191)]],
       city_id: [null, Validators?.required],
       person_id: [user_id],
       third_party_id: [null, Validators?.required],
-      line: ['', Validators?.required],
+      line: ['', [Validators?.required, Validators.maxLength(191)]],
       files: [''],
-      observation: [''],
+      observation: ['', Validators.maxLength(65535)],
       list_pieces_sets: fb?.array([]),
       list_pieces_sets_subtotal: [0],
       machine_tools: fb?.array([]),

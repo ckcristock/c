@@ -1115,6 +1115,7 @@
                       class="form-control form-control-sm"
                       id="descripcion_otros"
                       style="min-width: 25rem"
+                      [class.is-invalid]="item.get('description').invalid"
                       placeholder="Ingresa descripción"
                       formControlName="description"
                       rows="1"
@@ -1425,8 +1426,7 @@
                   <th class="col-3 text-right">
                     <h6>
                       <span>
-                        $
-                        {{
+                        ${{
                           form?.get("sale_price_cop_withholding_total")?.value
                             | number : "1.2-2"
                         }}
@@ -1439,8 +1439,7 @@
                   <th class="col-3 text-right">
                     <h6>
                       <span>
-                        $
-                        {{
+                        ${{
                           form?.get("sale_value_cop_unit")?.value
                             | number : "1.2-2"
                         }}
@@ -1481,7 +1480,7 @@
                       <span>
                         USD
                         {{
-                          form?.get("sale_value_usd_unit")?.value
+                          form?.get("sale_value_usd_unit")?.value || 0
                             | number : "1.2-2"
                         }}
                       </span>

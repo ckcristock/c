@@ -91,7 +91,7 @@ export class ItemsComponent implements OnInit {
         },
         subItems: this.fb.array([]),
         id: itemToAdd ? itemToAdd?.id : '',
-        name: itemToAdd ? itemToAdd?.name : 'ITEM ' + this.count,
+        name: [itemToAdd ? itemToAdd?.name : 'ITEM ' + this.count, [Validators.required, Validators.maxLength(50)]],
         total_cost: itemToAdd ? itemToAdd?.total_cost : 0,
         subtotal_indirect_cost_dynamic: this.makeTotalIndirectCost(),
         subtotal_indirect_cost: itemToAdd ? itemToAdd?.subtotal_indirect_cost : 0,
@@ -347,7 +347,7 @@ export class ItemsComponent implements OnInit {
     return this.fb.group({
       id: ((edit && apu?.id) ? apu?.id : ''),
       type: ((apu?.type == 'P' || apu?.type == 'C') ? 'P' : 'P'),
-      description: [description, Validators.required],
+      description: [description, [Validators.required, Validators.maxLength(50)]],
       apu_id: [(apu ? apu?.apu_id : '')],
       cuantity: [edit ? apu?.cuantity : 0, [Validators.required, Validators.min(1)]],
       unit_cost: [(apu ? apu?.unit_cost : ''), [Validators.required, Validators.min(1)]],

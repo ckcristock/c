@@ -49,7 +49,7 @@
           <div class="row">
             <ng-container [formGroup]="form_filters">
               <mat-form-field appearance="outline" class="col">
-                <mat-label>Rango de fechas</mat-label>
+                <mat-label>Fecha de creación</mat-label>
                 <input
                   matInput
                   [satDatepicker]="picker"
@@ -179,7 +179,7 @@
               >Quien elabora</mat-checkbox
             >
             <mat-checkbox color="primary" [(ngModel)]="checkFecha"
-              >Fecha</mat-checkbox
+              >Fecha creación</mat-checkbox
             >
           </section>
         </mat-expansion-panel>
@@ -204,7 +204,7 @@
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
               <th>Código</th>
-              <th *ngIf="checkFecha">Fecha</th>
+              <th *ngIf="checkFecha">Fecha creación</th>
               <th *ngIf="checkCliente">Cliente</th>
               <th *ngIf="checkNombre">Nombre</th>
               <th>Conjunto</th>

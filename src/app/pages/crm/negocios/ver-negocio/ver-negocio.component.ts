@@ -178,15 +178,27 @@ export class VerNegocioComponent implements OnInit {
   }
 
   changeState(event) {
-    this._negocio.changeState({ status: event?.value }, this.filtros?.id).subscribe(() => {
-      this._swal.show({
-        icon: 'success',
-        title: 'Operación exitosa',
-        text: 'Etapa cambiada con éxito',
-        showCancel: false,
-        timer: 1000
-      })
-    });
+    this._swal.show({
+      title: '¿Estas seguro(a)?',
+      text: 'Vamos a cambiar la etapa del negocio',
+      icon: 'question'
+    }).then(r => {
+      if (r.isConfirmed) {
+        this._negocio.changeState({ status: event?.value }, this.filtros?.id).subscribe((res: any) => {
+          if (res.status) {
+            this._swal.show({
+              icon: 'success',
+              title: 'Operación exitosa',
+              text: 'Etapa cambiada con éxito',
+              showCancel: false,
+              timer: 1000
+            })
+          } else {
+            this._swal.hardError();
+          }
+        });
+      }
+    })
   }
 
   openNewTab(route, id = '') {
@@ -199,7 +211,7 @@ export class VerNegocioComponent implements OnInit {
   createFormNotes() {
     this.form_notes = this.fb.group({
       person_id: [this.person_id],
-      note: ['', [Validators.required, Validators.maxLength(500)]],
+      note: ['', [Validators.required, Validators.maxLength(65535)]],
       business_id: [this.filtros?.id]
     });
   }
@@ -263,14 +275,18 @@ export class VerNegocioComponent implements OnInit {
           label: label
         }
         this._negocio.changeStatusQyB(data).subscribe((r: any) => {
-          this._swal.show({
-            icon: 'success',
-            title: 'Correcto',
-            text: 'Se ha cambiado el estado correctamente',
-            showCancel: false,
-            timer: 1000
-          })
-          this.getBussines()
+          if (r?.status) {
+            this._swal.show({
+              icon: 'success',
+              title: 'Correcto',
+              text: 'Se ha cambiado el estado correctamente',
+              showCancel: false,
+              timer: 1000
+            })
+            this.getBussines();
+          } else {
+            this._swal.hardError
+          }
         })
       }
     })

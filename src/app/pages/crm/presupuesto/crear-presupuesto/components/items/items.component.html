@@ -15,7 +15,8 @@
             <input
               appAutoFocusDirective
               type="text"
-              class="input-custom w-100 h-100"
+              class="input-custom form-control w-100 h-100"
+              [class.is-invalid]="item.get('name').invalid"
               formControlName="name"
             />
           </div>
@@ -216,6 +217,9 @@
                           type="text"
                           class="form-control form-control-sm text-uppercase"
                           placeholder="Ingresa la descripción"
+                          [class.is-invalid]="
+                            subItem?.get('description')?.invalid
+                          "
                           [readonly]="subItem?.get('type_module')?.value"
                           [ngClass]="{
                             'form-control-plaintext':

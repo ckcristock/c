@@ -7,12 +7,13 @@
       <tr class="text-center text-uppercase">
         <th>Foto</th>
         <th>Código</th>
+        <th>Fecha creación</th>
         <th>Tipo</th>
         <th>Tercero</th>
         <th>Nombre</th>
         <th>Presupuesto</th>
         <th>Cotización</th>
-        <th>Fecha entrega</th>
+        <th>Fecha etapa</th>
         <th class="">Etapa</th>
         <th><i class="mdi mdi-chevron-down"></i></th>
       </tr>
@@ -27,6 +28,7 @@
           />
         </td>
         <td class="align-middle" scope="row">{{ neg?.code | uppercase }}</td>
+        <td>{{ neg?.created_at | date }}</td>
         <td class="align-middle" scope="row">
           {{ neg?.type?.name | uppercase }}
         </td>
@@ -54,7 +56,7 @@
             <option value="Prospección">Prospección</option>
             <option value="Presupuesto">Presupuesto</option>
             <option value="Cotización">Cotización</option>
-            <option value="Negociación">Negociación</option>
+            <option value="Rechazado">Rechazado</option>
             <option value="Adjudicación">Adjudicación</option>
           </select>
         </td>
@@ -79,7 +81,6 @@
                 class="dropdown-item text-info"
                 href="javascript: void(0);"
                 [routerLink]="['/crm/negocios/editar', neg?.id]"
-                (click)="nextState(neg?.status, neg?.id)"
               >
                 <i class="fas fa-edit"></i> Editar</a
               >

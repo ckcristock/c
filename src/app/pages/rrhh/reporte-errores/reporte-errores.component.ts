@@ -55,7 +55,7 @@ export class ReporteErroresComponent implements OnInit {
       this.createFormFilters();
       await this.getPeople();
       this.route.queryParamMap.subscribe((params: any) => {
-        this._paginator.checkParams(this.pagination, params)
+        this._paginator.checkParams(this.pagination, params, 'paginationErroresAsistencia')
         this.orderObj = { ...params.keys, ...params }
         if (Object.keys(this.orderObj).length > 4) {
           this.active_filters = true
@@ -73,6 +73,7 @@ export class ReporteErroresComponent implements OnInit {
   }
 
   paginate() {
+    this.loading = true;
     let params = {
       ...this.pagination,
       ...this.formFilters.value
@@ -96,7 +97,8 @@ export class ReporteErroresComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination)
+    this._paginator.handlePageEvent(event, this.pagination);
+    localStorage?.setItem('paginationErroresAsistencia', this.pagination?.pageSize);
     this.paginate()
   }
 

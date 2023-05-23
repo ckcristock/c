@@ -27,8 +27,6 @@ import { SwalService } from '../../ajustes/informacion-base/services/swal.servic
   styleUrls: ['./llegadas-tardes.component.scss'],
 })
 export class LlegadasTardesComponent implements OnInit {
-
-  @ViewChild(MatAccordion) accordion: MatAccordion;
   datePipe = new DatePipe('es-CO');
   donutChart = donutChart;
   group_id: any;
@@ -83,7 +81,6 @@ export class LlegadasTardesComponent implements OnInit {
   people: any[];
 
   loading: boolean;
-  matPanel: boolean;
   date: any;
   estadoFiltros = false;
   formFilters: FormGroup;
@@ -152,12 +149,18 @@ export class LlegadasTardesComponent implements OnInit {
           }
           this.formFilters.patchValue(formValues['params']);
         }
-
-        /* let fecha = new Date();
-        this.lastDay = fecha.toISOString().split('T')[0]; //pendiente revisar la funcionalidad y usar las fechas de el formulario de filtros
-        this.firstDay = new Date(fecha.setDate(fecha.getDate() - 2))
-          .toISOString()
-          .split('T')[0]; */
+        let date_one: Date;
+        let date_two: Date;
+        if (this.formFilters?.controls?.date_from?.value) {
+          date_one = new Date(this.formFilters?.controls?.date_from?.value)
+          date_two = new Date(this.formFilters?.controls?.date_to?.value)
+          date_one?.setDate(date_one?.getDate() + 1)
+          date_two?.setDate(date_two?.getDate() + 1)
+        } else {
+          date_one = new Date()
+          date_two = new Date()
+        }
+        this.date = { begin: date_one, end: date_two }
         this.getLateArrivals();
         this.getLinearDataset();
         this.getStatisticsByDays();
@@ -166,11 +169,6 @@ export class LlegadasTardesComponent implements OnInit {
     } else {
       this.router.navigate(['/notautorized']);
     }
-  }
-
-  openClose() {
-    this.matPanel = !this.matPanel;
-    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
   }
 
   handlePageEvent(event: PageEvent) {
@@ -207,7 +205,6 @@ export class LlegadasTardesComponent implements OnInit {
       people_id: [''],
       date_from: [''],
       date_to: [''],
-      date: [{ begin: new Date(2018, 7, 5), end: new Date(2018, 7, 25) }]
     })
     this.formFilters.valueChanges.pipe(
       debounceTime(500),
@@ -278,8 +275,7 @@ export class LlegadasTardesComponent implements OnInit {
     const fecha_fin = this.formFilters.controls.date_to.value == ''
       ? moment().format('YYYY-MM-DD')
       : this.formFilters.controls.date_to.value
-    this._lateArrivals
-      .downloadLateArrivals(fecha_ini, fecha_fin, params)
+    this._lateArrivals.downloadLateArrivals(fecha_ini, fecha_fin, params)
       .subscribe((response: BlobPart) => {
         let blob = new Blob([response], { type: 'application/excel' });
         let link = document.createElement('a');

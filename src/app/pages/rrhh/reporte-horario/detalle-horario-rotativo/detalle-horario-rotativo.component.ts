@@ -17,7 +17,7 @@ export class DetalleHorarioRotativoComponent implements OnInit {
   convertHours(decimal) {
     let horas = Math.floor(decimal);
     let minutos = Math.round((decimal - horas) * 60);
-    return `${horas}h ${minutos}m`;
+    return `${(horas)}h ${(minutos)}m`;
   }
 
 }

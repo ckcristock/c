@@ -255,7 +255,7 @@
             placeholder="Ingresa el nombre"
             required
           />
-          <mat-error *ngIf="name_valid">Campo obligatorio</mat-error>
+          <mat-error *ngIf="name_valid">{{ name_error_message }}</mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Número de documento</mat-label>
@@ -265,7 +265,7 @@
             formControlName="n_document"
             placeholder="Ingresa el número de documento"
           />
-          <mat-error *ngIf="n_document_valid">Campo obligatorio</mat-error>
+          <mat-error *ngIf="n_document_valid">{{ n_document_valid }}</mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-6" appearance="outline">
           <mat-label>Teléfono</mat-label>

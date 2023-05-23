@@ -254,8 +254,8 @@ export class ModalNuevoNegocioComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [],
-      name: ['', Validators.required],
-      description: [''],
+      name: ['', [Validators.required, Validators.maxLength(250)]],
+      description: ['', Validators.maxLength(65535)],
       third_party_id: [null, Validators.required],
       third_party_person_id: [null, Validators.required],
       /* country_id: [null, Validators.required], */

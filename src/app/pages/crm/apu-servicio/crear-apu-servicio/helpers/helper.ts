@@ -63,12 +63,12 @@ export const functionsApuService = {
 
   createForm(fb: FormBuilder, clients: Array<any>, user_id, calculationBase) {
     let group = fb?.group({
-      name: ['', Validators?.required],
+      name: ['', [Validators?.required, Validators.maxLength(191)]],
       city_id: [null, Validators?.required],
       person_id: [user_id],
       third_party_id: [null, Validators?.required],
-      line: ['', Validators?.required],
-      observation: [''],
+      line: ['', [Validators?.required, Validators.maxLength(191)]],
+      observation: ['', Validators.maxLength(65535)],
       subtotal_labor: [0],
       subtotal_labor_mpm: [0],
       subtotal_labor_apm: [0],

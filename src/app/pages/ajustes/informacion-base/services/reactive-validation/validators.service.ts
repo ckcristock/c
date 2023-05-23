@@ -11,7 +11,9 @@ import {
   providedIn: 'root',
 })
 export class ValidatorsService {
+
   constructor() { }
+
   min(min: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
@@ -20,7 +22,7 @@ export class ValidatorsService {
           min: {
             min: min,
             actual: control.value,
-            msj: ` -El valor debe ser mayor a ${min - 1} `,
+            msj: `El valor debe ser mayor a ${min - 1}`,
           },
         }
         : null;
@@ -34,12 +36,13 @@ export class ValidatorsService {
           min: {
             min: min,
             actual: control.value,
-            msj: ` -El valor debe ser menor a ${min + 1} `,
+            msj: `El valor debe ser menor a ${min + 1} `,
           },
         }
         : null;
     };
   }
+
   minLength(min: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = String(control.value)?.length;
@@ -49,30 +52,31 @@ export class ValidatorsService {
           minLength: {
             min: min,
             actual: control.value,
-            msj: ` -El campo debe tenener mínimo ${min} caracteres`,
+            msj: `Mínimo ${min} caracteres`,
           },
         }
         : null;
     };
   }
 
-  maxLength(min: number): ValidatorFn {
+  maxLength(max: number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = String(control.value)?.length;
-      return !isNaN(value) && value > min
+      return !isNaN(value) && value > max
         ? {
-          minLength: {
-            min: min,
+          maxLength: {
+            min: max,
             actual: control.value,
-            msj: ` -El campo debe tenener máximo ${min} caracteres`,
+            msj: `Máximo ${max} caracteres`,
           },
         }
         : null;
     };
   }
+
   required(control: AbstractControl): ValidationErrors | null {
     return ValidatorsService.isEmptyInputValue(control.value)
-      ? { required: { msj: ' -El campo es obligatorio' } }
+      ? { required: { msj: 'El campo es obligatorio' } }
       : null;
   }
 
@@ -93,7 +97,7 @@ export class ValidatorsService {
       if (date1 > date2) {
         fieldControl2.setErrors({
           checkDates: {
-            msj: ` -La segunda fecha no debe ser mayor `,
+            msj: `La segunda fecha no debe ser mayor `,
           }
         })
       }

@@ -23,20 +23,29 @@ export class TableNegociosComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  nextState(state, id) {
-    this._negocios.changeState({ status: state }, id).subscribe();
-  }
 
   changeState(event, neg) {
-    this._negocios.changeState({ status: event?.target?.value }, neg?.id).subscribe(() => {
-      this._swal.show({
-        icon: 'success',
-        title: 'Operación exitosa',
-        text: 'Etapa cambiada con éxito',
-        showCancel: false,
-        timer: 1000
-      })
-    });
+    this._swal.show({
+      title: '¿Estas seguro(a)?',
+      text: 'Vamos a cambiar la etapa del negocio',
+      icon: 'question'
+    }).then(r => {
+      if (r.isConfirmed) {
+        this._negocios.changeState({ status: event?.target?.value }, neg?.id).subscribe((res: any) => {
+          if (res.status) {
+            this._swal.show({
+              icon: 'success',
+              title: 'Operación exitosa',
+              text: 'Etapa cambiada con éxito',
+              showCancel: false,
+              timer: 1000
+            })
+          } else {
+            this._swal.hardError();
+          }
+        });
+      }
+    })
   }
 
   getNegociosParent($event) {

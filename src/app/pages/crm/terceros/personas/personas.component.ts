@@ -193,13 +193,13 @@ export class PersonasComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [''],
-      name: ['', this._validators.required],
-      n_document: [''],
-      landline: [''],
-      cell_phone: [''],
-      email: ['', Validators.email],
-      position: [''],
-      observation: [''],
+      name: ['', [this._validators.required, this._validators.maxLength(50), this._validators.minLength(3)]],
+      n_document: ['', this._validators.max(99999999999)],
+      landline: ['', this._validators.maxLength(50)],
+      cell_phone: ['', this._validators.maxLength(50)],
+      email: ['', [Validators.email, this._validators.maxLength(50)]],
+      position: ['', this._validators.maxLength(50)],
+      observation: ['', this._validators.maxLength(65535)],
       third_party_id: [null],
     });
   }
@@ -259,10 +259,28 @@ export class PersonasComponent implements OnInit {
   }
 
   get name_valid() {
-    return this.form.get('name').invalid && this.form.get('name').touched
+    const nameControl = this.form.get('name');
+    return nameControl.invalid && nameControl.touched;
   }
+
+  get name_error_message() {
+    const nameControl = this.form.get('name');
+    if (nameControl.errors) {
+      if (nameControl.errors.maxLength) {
+        return nameControl.errors.maxLength.msj;
+      } else if (nameControl.errors.minLength) {
+        return nameControl.errors.minLength.msj;
+      }
+    }
+    return 'Campo obligatorio';
+  }
+
   get n_document_valid() {
-    return this.form.get('n_document').invalid && this.form.get('n_document').touched
+    const nameControl = this.form.get('n_document');
+    if (nameControl.errors && nameControl.errors.max) {
+      return nameControl.errors.max.msj;
+    }
+    return 'Campo obligatorio';
   }
   get email_valid() {
     return this.form.get('email').invalid && this.form.get('email').touched

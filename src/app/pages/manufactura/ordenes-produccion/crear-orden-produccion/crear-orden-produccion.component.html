@@ -1,8 +1,11 @@
-<div class="card">
-  <div class="card-body">
-    <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
-    <hr class="line" />
-    <ng-container *ngIf="!loading && form; else notData">
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<ng-container *ngIf="!loading && form; else placeholder">
+  <div class="card">
+    <div class="card-body">
+      <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+      <hr class="line" />
       <ng-container [formGroup]="form">
         <div class="row">
           <mat-form-field class="col" appearance="outline">
@@ -78,6 +81,7 @@
               matInput
               [matDatepicker]="dp_delivery"
               disabled
+              [min]="today"
               [required]="true"
             />
             <mat-hint
@@ -168,9 +172,9 @@
       <button type="button" class="btn btn-primary btn-block" (click)="save()">
         Guardar y enviar
       </button>
-    </ng-container>
+    </div>
   </div>
-</div>
+</ng-container>
 
 <ng-template #rt_third let-r="result" let-t="term">
   <div>{{ r.nit }} - {{ r.text }}</div>

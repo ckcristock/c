@@ -26,11 +26,9 @@ Object.defineProperty(TooltipComponent.prototype, 'message', {
   styleUrls: ['./ordenes-produccion.component.scss']
 })
 export class OrdenesProduccionComponent implements OnInit {
-  @ViewChild(MatAccordion) accordion: MatAccordion;
   datePipe = new DatePipe('es-CO');
   workOrders: any[] = []
   loading: boolean;
-  matPanel: boolean;
   date: any;
   formFilters: FormGroup;
   orderObj: any
@@ -63,20 +61,10 @@ export class OrdenesProduccionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     if (this.permission.permissions.show) {
       this.createFormFilters();
       this.route.queryParamMap.subscribe((params: any) => {
-        if (params.params.pageSize) {
-          this.pagination.pageSize = params.params.pageSize
-        } else {
-          this.pagination.pageSize = 10
-        }
-        if (params.params.pag) {
-          this.pagination.page = params.params.pag
-        } else {
-          this.pagination.page = 1
-        }
+        this._paginator.checkParams(this.pagination, params, 'paginationOrdenesPoduccion');
         this.orderObj = { ...params.keys, ...params }
         if (Object.keys(this.orderObj).length > 4) {
           this.active_filters = true
@@ -93,13 +81,9 @@ export class OrdenesProduccionComponent implements OnInit {
     }
   }
 
-  openClose() {
-    this.matPanel = !this.matPanel;
-    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
-  }
-
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination)
+    this._paginator.handlePageEvent(event, this.pagination);
+    localStorage?.setItem('paginationOrdenesPoduccion', this.pagination?.pageSize);
     this.getWorkOrders()
   }
 

@@ -25,6 +25,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
   quotations: any[] = [];
   third_people: any[] = [];
   last_id: number;
+  today = new Date();
   cities: any[] = [];
   path: string;
   datosCabecera = {

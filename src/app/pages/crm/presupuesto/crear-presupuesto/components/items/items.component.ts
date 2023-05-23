@@ -348,7 +348,7 @@ export class ItemsComponent implements OnInit {
       id: ((edit && apu?.id) ? apu?.id : ''),
       type: ((apu?.type == 'P' || apu?.type == 'C') ? 'P' : 'P'),
       description: [description, Validators.required],
-      apu_id: [(apu ? apu?.apu_id : ''), Validators.required],
+      apu_id: [(apu ? apu?.apu_id : '')],
       cuantity: [edit ? apu?.cuantity : 0, [Validators.required, Validators.min(1)]],
       unit_cost: [(apu ? apu?.unit_cost : ''), [Validators.required, Validators.min(1)]],
       total_cost: edit ? apu?.total_cost : 0,

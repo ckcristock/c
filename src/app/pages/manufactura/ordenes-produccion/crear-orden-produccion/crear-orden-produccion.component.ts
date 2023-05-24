@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, OnInit } from '@angular/core';
+import { AfterContentChecked, Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, OperatorFunction } from 'rxjs';
@@ -17,6 +17,7 @@ import { OrdenesProduccionService } from '../../services/ordenes-produccion.serv
   styleUrls: ['./crear-orden-produccion.component.scss']
 })
 export class CrearOrdenProduccionComponent implements OnInit {
+  @Input('action') action: string;
   form: FormGroup;
   loading: boolean;
   work_order;
@@ -27,13 +28,15 @@ export class CrearOrdenProduccionComponent implements OnInit {
   last_id: number;
   today = new Date();
   cities: any[] = [];
-  path: string;
   datosCabecera = {
     Titulo: 'Nueva orden de producción',
     Fecha: new Date(),
     Codigo: '',
     CodigoFormato: ''
   }
+  filterPart = { type_multiple: 'pieza' };
+  filterSet = { type_multiple: 'conjunto' };
+  filterService = { type_multiple: 'servicio' };
   constructor(
     private fb: FormBuilder,
     private _quotation: QuotationService,
@@ -45,9 +48,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
     public router: Router,
     public _consecutivos: ConsecutivosService,
     private route: ActivatedRoute,
-  ) {
-    this.path = this.route.snapshot.url[1].path;
-  }
+  ) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -55,10 +56,8 @@ export class CrearOrdenProduccionComponent implements OnInit {
     })
     this.createForm();
     this.getData();
-    if (this.path == 'editar') {
-      this.getWorkOrder(this.id, 'editar')
-    } else if (this.path == 'copiar') {
-      this.getWorkOrder(this.id, 'copiar')
+    if (this.id) {
+      this.getWorkOrder(this.id)
     }
   }
 
@@ -66,7 +65,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
     this._consecutivos.getConsecutivo('work_orders').subscribe((r: any) => {
       this.datosCabecera.CodigoFormato = r.data.format_code
       this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
-      if (this.path != 'editar') {
+      if (this.action != 'editar') {
         let con = this._consecutivos.construirConsecutivo(r.data);
         this.datosCabecera.Codigo = con
       }
@@ -88,28 +87,27 @@ export class CrearOrdenProduccionComponent implements OnInit {
     })
   }
 
-  getWorkOrder(id, param) {
+  getWorkOrder(id) {
     this.loading = true
     this._work_order.getWorkOrder(id).subscribe((res: any) => {
       this.work_order = res.data;
       this.loading = false
       this.form.patchValue({
-        id: param == 'editar' ? res.data.id : '',
+        id: this.action == 'edit' ? res.data.id : '',
         purchase_order: this.work_order.purchase_order,
         name: this.work_order.name,
         type: this.work_order.type,
         third_party_id: this.work_order.third_party,
-        quotation_id: this.work_order.quotation,
-        delivery_date: this.work_order.delivery_date,
+        expected_delivery_date: this.work_order.expected_delivery_date,
         municipality_id: this.work_order.city,
-        observation: this.work_order.observation,
+        observations: this.work_order.observations,
         third_party_person_id: this.work_order.third_party_person,
         description: this.work_order.description,
         technical_requirements: this.work_order.technical_requirements,
         legal_requirements: this.work_order.legal_requirements,
-        date: param == 'editar' ? this.work_order.date : new Date(),
+        date: this.action == 'edit' ? this.work_order.date : new Date(),
       });
-      if (this.path == 'editar') {
+      if (this.action == 'edit') {
         this.form.patchValue({
           code: this.work_order.code
         })
@@ -121,31 +119,30 @@ export class CrearOrdenProduccionComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       id: [''],
-      purchase_order: ['', Validators.required],
-      type: ['', Validators.required],
-      name: ['', Validators.required],
+      code: ['', [Validators.required, Validators.maxLength(250)]],
+      name: ['', [Validators.required, Validators.maxLength(250)]],
+      purchase_order: ['', [Validators.required, Validators.maxLength(250)]],
+      class: ['Repuesto', Validators.required],
+      type: ['V', Validators.required],
+      expected_delivery_date: ['', Validators.required],
       third_party_id: ['', Validators.required],
-      quotation_id: ['', Validators.required],
-      delivery_date: ['', Validators.required],
       municipality_id: ['', Validators.required],
-      observation: ['', Validators.required],
       third_party_person_id: ['', Validators.required],
-      description: ['', Validators.required],
-      technical_requirements: ['', Validators.required],
-      legal_requirements: ['', Validators.required],
-      date: [new Date(), Validators.required],
-      code: [''],
-      format_code: [''],
-    })
-    const type = this.form.get('type')
-    const third_party_id = this.form.get('third_party_id')
-    type.valueChanges.subscribe(q => {
-      if (q == 'externa') {
-        this.form.controls.third_party_id.enable()
-        this.form.controls.quotation_id.enable()
+      observations: ['', Validators.maxLength(65535)],
+      format_code: ['', Validators.maxLength(250)],
+      description: ['', Validators.maxLength(4294967295)],
+      technical_requirements: ['', Validators.maxLength(4294967295)],
+      legal_requirements: ['', Validators.maxLength(4294967295)],
+    });
+    const classFormControl = this.form.get('class');
+    const third_party_id = this.form.get('third_party_id');
+    classFormControl.valueChanges.subscribe(value => {
+      if (value == 'Interna') {
+        this.form.controls.third_party_id.disable();
+        this.form.controls.third_party_person_id.disable();
       } else {
-        this.form.controls.third_party_id.disable()
-        this.form.controls.quotation_id.disable()
+        this.form.controls.third_party_id.enable();
+        this.form.controls.third_party_person_id.enable();
       }
     })
     third_party_id.valueChanges.subscribe(q => {
@@ -209,13 +206,12 @@ export class CrearOrdenProduccionComponent implements OnInit {
     if (this.form.valid) {
       this._swal.show({
         icon: 'question',
-        title: '¿Está seguro(a)?',
+        title: '¿Estás seguro(a)?',
         text: 'Vamos a guardar esta orden de producción.'
       }).then(res => {
         if (res.isConfirmed) {
           this.form.patchValue({
             municipality_id: this.form.controls.municipality_id?.value.value,
-            quotation_id: this.form.controls.quotation_id?.value.id,
             third_party_id: this.form.controls.third_party_id?.value.value,
             third_party_person_id: this.form.controls.third_party_person_id?.value.id,
           })
@@ -232,12 +228,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
         }
       })
     } else {
-      this._swal.show({
-        icon: 'error',
-        title: 'ERROR',
-        text: 'Completa todos los campos y vuelve a intentarlo',
-        showCancel: false
-      })
+      this._swal.incompleteError();
     }
 
   }

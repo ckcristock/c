@@ -38,6 +38,7 @@
           />
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
+          <mat-label>Fecha de creación</mat-label>
           <input
             matInput
             (dateChange)="dateChange($event)"
@@ -93,14 +94,13 @@
               <tr class="text-center text-uppercase">
                 <th></th>
                 <th>Código</th>
-                <th>Fecha</th>
+                <th>Fecha creación</th>
                 <th>Cliente</th>
                 <th>Destino</th>
                 <th>Linea</th>
                 <th>Quien elabora</th>
                 <th>Total COP</th>
                 <th>Total USD</th>
-                <th>Estado</th>
                 <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
@@ -119,33 +119,23 @@
                   {{ item.created_at | date : "MMM d, y" }}
                 </td>
                 <td class="align-middle">
-                  {{ item.customer.name | titlecase }}
+                  {{ item.customer?.name | uppercase }}
                 </td>
                 <td class="align-middle">
-                  {{ item.destiny.name | capitalLetter }}
+                  {{ item.destiny?.name | uppercase }}
                 </td>
                 <td class="align-middle">
                   {{ item.line | capitalLetter }}
                 </td>
                 <td class="align-middle">
-                  {{ item.user.person.first_name | titlecase }}
-                  {{ item.user.person.first_surname | titlecase }}
+                  {{ item.user?.person?.first_name | titlecase }}
+                  {{ item.user?.person?.first_surname | titlecase }}
                 </td>
                 <td class="align-middle">
                   ${{ item.total_cop | number : "1.2-2" }}
                 </td>
                 <td class="align-middle">
                   USD {{ item.total_usd | number : "1.2-2" }}
-                </td>
-                <td>
-                  <span
-                    class="badge"
-                    [class]="
-                      item.state == 'Activo' ? 'badge-success' : 'badge-danger'
-                    "
-                  >
-                    {{ item.state | uppercase }}
-                  </span>
                 </td>
                 <td class="align-middle">
                   <div
@@ -164,6 +154,7 @@
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                       <a
                         class="dropdown-item text-success"
+                        href="javascript: void(0);"
                         (click)="openNewTab(item.id)"
                       >
                         <i class="fas fa-eye"></i> Ver
@@ -177,19 +168,16 @@
         </div>
       </mat-radio-group>
     </ng-container>
-    <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize"
-      [pageSize]="pagination.pageSize"
-      [(page)]="pagination.page"
-      (pageChange)="getBudgets($event)"
-      aria-label="Default pagination"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
+    <mat-paginator
+      *ngIf="paginationMaterial"
+      [length]="paginationMaterial?.total"
+      [pageSize]="paginationMaterial?.per_page"
+      [pageIndex]="paginationMaterial?.current_page - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
     >
-    </ngb-pagination>
+    </mat-paginator>
   </div>
   <div class="modal-footer">
     <!-- <button type="button" class="btn btn-danger" (click)="_modal.close()">

@@ -725,7 +725,7 @@ export class CrearApuPiezaComponent implements OnInit {
         timer: 1000
       });
       if (!this.preData) {
-        this.router.navigateByUrl('/crm/apus');
+        this.router.navigateByUrl(`/crm/apu/ver-apu-pieza/${res.data.id}`);
       }
     } else {
       this._swal.hardError();

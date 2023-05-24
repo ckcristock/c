@@ -317,7 +317,7 @@ export class CrearPresupuestoComponent implements OnInit {
         if (this.preData) {
           this.saveForBusiness.emit(res.data)
         } else {
-          this.router.navigate(['crm/presupuesto'])
+          this.router.navigate([`crm/presupuesto/ver/${res.data.id}`])
         }
       } else {
         this._swal.hardError()
@@ -338,7 +338,7 @@ export class CrearPresupuestoComponent implements OnInit {
           timer: 1000,
           showCancel: false
         })
-        this.router.navigate(['crm/presupuesto'])
+        this.router.navigate([`crm/presupuesto/ver/${r.data.id}`])
       } else {
         this._swal.hardError()
       }

@@ -316,7 +316,7 @@ export class CrearApuServicioComponent implements OnInit {
             this._apuService?.update(this.form?.value, this.id)?.subscribe(
               (res: any) => {
                 if (res.status) {
-                  this.showSuccess()
+                  this.showSuccess(res)
                 } else {
                   this.showError(res)
                 }
@@ -330,7 +330,7 @@ export class CrearApuServicioComponent implements OnInit {
                   if (this.preData) {
                     this.saveForBusiness?.emit(res?.data)
                   }
-                  this.showSuccess()
+                  this.showSuccess(res)
                 } else {
                   this.showError(res)
                 }
@@ -343,7 +343,7 @@ export class CrearApuServicioComponent implements OnInit {
     }
   }
 
-  showSuccess() {
+  showSuccess(res) {
     this._swal?.show({
       icon: 'success',
       text: `Servicio ${this.id && this.title == 'Editar servicio' ? 'editado' : 'creado'} con éxito`,
@@ -352,7 +352,7 @@ export class CrearApuServicioComponent implements OnInit {
       timer: 1000
     });
     if (!this.preData) {
-      this.router?.navigateByUrl('/crm/apus');
+      this.router?.navigateByUrl(`/crm/apu/ver-apu-servicio/${res.data.id}`);
     }
   }
   showError(err) {

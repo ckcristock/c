@@ -693,7 +693,7 @@ export class CrearApuConjuntoComponent implements OnInit {
                 if (!res?.status) {
                   this.showError(res)
                 } else {
-                  this.showSuccess()
+                  this.showSuccess(res)
                 }
               },
               (err) => this.showError(err)
@@ -707,7 +707,7 @@ export class CrearApuConjuntoComponent implements OnInit {
                   if (this.preData) {
                     this.saveForBusiness?.emit(res?.data)
                   }
-                  this.showSuccess()
+                  this.showSuccess(res)
                 }
               },
               (err) => this.showError(err)
@@ -728,7 +728,7 @@ export class CrearApuConjuntoComponent implements OnInit {
     });
   }
 
-  showSuccess() {
+  showSuccess(res) {
     this._swal?.show({
       icon: 'success',
       text: `Conjunto ${this.id && this.title == 'Editar conjunto' ? 'editado' : 'creado'} con éxito`,
@@ -737,7 +737,7 @@ export class CrearApuConjuntoComponent implements OnInit {
       timer: 1000
     });
     if (!this.preData) {
-      this.router?.navigateByUrl('/crm/apus');
+      this.router?.navigateByUrl(`/crm/apu/ver-apu-conjunto/${res.data.id}`);
     }
   }
   showError(err) {

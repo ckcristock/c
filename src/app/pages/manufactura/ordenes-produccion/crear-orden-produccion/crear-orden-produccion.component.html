@@ -8,7 +8,19 @@
       <hr class="line" />
       <ng-container [formGroup]="form">
         <div class="row">
-          <mat-form-field class="col" appearance="outline">
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="name"
+              placeholder="Ingresa el nombre"
+              autocomplete="off"
+              required
+            />
+            <mat-error>Campo obligatorio</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-3" appearance="outline">
             <mat-label>Órden de pedido</mat-label>
             <input
               matInput
@@ -19,76 +31,19 @@
             />
             <mat-error>Campo obligatorio</mat-error>
           </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Tipo</mat-label>
-            <mat-select formControlName="type" required>
-              <mat-option value="externa">Externa</mat-option>
-              <mat-option value="interna">Interna</mat-option>
-            </mat-select>
-            <mat-error>Campo obligatorio</mat-error>
-          </mat-form-field>
-          <ng-container *ngIf="form.controls.type.value == 'externa'">
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Cliente</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="third_party_id"
-                [ngbTypeahead]="search_tercero"
-                [inputFormatter]="formatter_tercero"
-                [resultTemplate]="rt_third"
-                [editable]="false"
-                placeholder="Busca por nombre"
-                required
-              />
-              <mat-error>Campo obligatorio</mat-error>
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Solicitado por</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="third_party_person_id"
-                [ngbTypeahead]="search_person_id"
-                [inputFormatter]="formatter_person_id"
-                [resultTemplate]="rt_person_id"
-                [editable]="false"
-                placeholder="Busca por nombre"
-                required
-              />
-              <mat-error>Campo obligatorio</mat-error>
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Cotización</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="quotation_id"
-                [ngbTypeahead]="search_quotation"
-                [inputFormatter]="formatter_quotation"
-                [resultTemplate]="rt_quotation"
-                [editable]="false"
-                placeholder="Busca por línea o proyecto"
-                required
-              />
-              <mat-error>Campo obligatorio</mat-error>
-            </mat-form-field>
-          </ng-container>
-          <mat-form-field class="col" appearance="outline">
+          <mat-form-field class="col-md-3" appearance="outline">
             <mat-label>Fecha de entrega</mat-label>
             <input
-              formControlName="delivery_date"
+              formControlName="expected_delivery_date"
               matInput
               [matDatepicker]="dp_delivery"
-              disabled
               [min]="today"
               [required]="true"
             />
             <mat-hint
               >{{
-                form.controls.delivery_date.value
-                  ? (form.controls.delivery_date.value | date : "fullDate")
-                  : "DD/MM/YYYY"
+                (form.get("expected_delivery_date").value
+                  | date : "fullDate") || "DD/MM/YYYY"
               }}
             </mat-hint>
             <mat-error>Campo obligatorio</mat-error>
@@ -96,9 +51,28 @@
               matSuffix
               [for]="dp_delivery"
             ></mat-datepicker-toggle>
-            <mat-datepicker #dp_delivery disabled="false"></mat-datepicker>
+            <mat-datepicker #dp_delivery></mat-datepicker>
           </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
+          <mat-form-field class="col-md-3" appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="type" required>
+              <mat-option value="V">V</mat-option>
+              <mat-option value="Y">I</mat-option>
+              <mat-option value="G">G</mat-option>
+            </mat-select>
+            <mat-error>Campo obligatorio</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-3" appearance="outline">
+            <mat-label>Clase</mat-label>
+            <mat-select formControlName="class" required>
+              <mat-option value="Interna">Interna</mat-option>
+              <mat-option value="Proyecto">Proyecto</mat-option>
+              <mat-option value="Repuesto">Repuesto</mat-option>
+              <mat-option value="Servicio">Servicio</mat-option>
+            </mat-select>
+            <mat-error>Campo obligatorio</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-6" appearance="outline">
             <mat-label>Ciudad</mat-label>
             <input
               matInput
@@ -113,18 +87,45 @@
             />
             <mat-error>Campo obligatorio</mat-error>
           </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Nombre</mat-label>
+          <mat-form-field
+            class="col-md-6"
+            appearance="outline"
+            *ngIf="form.get('third_party_id').enabled"
+          >
+            <mat-label>Cliente</mat-label>
             <input
               matInput
               type="text"
-              formControlName="name"
-              placeholder="Ingresa el nombre"
-              autocomplete="off"
+              formControlName="third_party_id"
+              [ngbTypeahead]="search_tercero"
+              [inputFormatter]="formatter_tercero"
+              [resultTemplate]="rt_third"
+              [editable]="false"
+              placeholder="Busca por nombre"
               required
             />
             <mat-error>Campo obligatorio</mat-error>
           </mat-form-field>
+          <mat-form-field
+            class="col-md-6"
+            appearance="outline"
+            *ngIf="form.get('third_party_person_id').enabled"
+          >
+            <mat-label>Solicitado por</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="third_party_person_id"
+              [ngbTypeahead]="search_person_id"
+              [inputFormatter]="formatter_person_id"
+              [resultTemplate]="rt_person_id"
+              [editable]="false"
+              placeholder="Busca por nombre"
+              required
+            />
+            <mat-error>Campo obligatorio</mat-error>
+          </mat-form-field>
+
           <mat-form-field
             class="col-12 mat-form-field-no-padding textarea"
             appearance="outline"
@@ -134,12 +135,56 @@
               matInput
               placeholder="Ingresa las observaciones"
               rows="5"
-              formControlName="observation"
-              required
+              formControlName="observations"
               [cdkTextareaAutosize]="true"
             ></textarea>
-            <mat-error>Campo obligatorio</mat-error>
           </mat-form-field>
+          <div class="col-12">
+            <div class="btn-group btn-block mb-2" role="group">
+              <button
+                class="btn btn-info"
+                type="button"
+                (click)="modalPresupuesto.openModal()"
+              >
+                <i class="fas fa-file-invoice-dollar"></i> Presupuesto
+              </button>
+              <button
+                class="btn btn-info"
+                type="button"
+                (click)="modalCotizacion.openModal()"
+              >
+                <i class="fas fa-file-alt"></i> Cotización
+              </button>
+              <button
+                class="btn btn-info"
+                type="button"
+                (click)="modalNegocio.openModal()"
+              >
+                <i class="fas fa-building"></i> Negocio
+              </button>
+              <button
+                class="btn btn-info"
+                type="button"
+                (click)="modalPieza.openConfirm()"
+              >
+                <i class="fas fa-cogs"></i> Pieza
+              </button>
+              <button
+                class="btn btn-info"
+                type="button"
+                (click)="modalConjunto.openConfirm()"
+              >
+                <i class="fas fa-puzzle-piece"></i> Conjunto
+              </button>
+              <button
+                class="btn btn-info"
+                type="button"
+                (click)="modalServicio.openConfirm()"
+              >
+                <i class="fas fa-tools"></i> Servicio
+              </button>
+            </div>
+          </div>
         </div>
         <div class="mb-4">
           <div>Descripcion</div>
@@ -191,3 +236,13 @@
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
+<app-modal-buscar-presupuesto
+  #modalPresupuesto
+  [third_party_id]="' '"
+></app-modal-buscar-presupuesto>
+<app-modal-buscar-cotizacion #modalCotizacion [third_party_id]="' '">
+</app-modal-buscar-cotizacion>
+<app-get-apus #modalPieza [filter]="filterPart"> </app-get-apus>
+<app-get-apus #modalConjunto [filter]="filterSet"> </app-get-apus>
+<app-get-apus #modalServicio [filter]="filterService"> </app-get-apus>
+<app-get-business #modalNegocio></app-get-business>

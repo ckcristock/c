@@ -392,7 +392,7 @@ export class CrearCotizacionComponent implements OnInit {
               if (this.preData) {
                 this.saveForBusiness?.emit(res?.data)
               } else {
-                this.router?.navigate(['/crm/cotizacion'])
+                this.router?.navigate([`/crm/cotizacion/ver/${res.data.id}`])
               }
             } else {
               this._swal.hardError();

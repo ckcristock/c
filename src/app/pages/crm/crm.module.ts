@@ -226,6 +226,10 @@ export const MY_FORMATS = {
     PresupuestoModule,
     NgbModule,
     DropdownModule
+  ],
+  exports: [
+    ModalBuscarPresupuestoComponent,
+    ModalBuscarCotizacionComponent
   ]
 })
 export class CrmModule { }

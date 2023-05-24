@@ -308,7 +308,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
             this._negocios.updateBasicData(this.form.value).subscribe((res: any) => {
               if (res.status) {
                 this.swalAlert();
-                this.router.navigateByUrl('/crm/negocios');
+                this.router.navigateByUrl(`/crm/negocios/${res.data.id}`);
               } else {
                 this._swal.hardError();
               }
@@ -324,7 +324,7 @@ export class ModalNuevoNegocioComponent implements OnInit {
             this._negocios.saveNeg(this.form.value).subscribe((r: any) => {
               if (r.status) {
                 this.swalAlert();
-                this.router.navigateByUrl('/crm/negocios')
+                this.router.navigateByUrl(`/crm/negocios/${r.data.id}`)
               } else {
                 this._swal.hardError();
               }

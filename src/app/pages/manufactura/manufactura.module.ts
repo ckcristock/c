@@ -20,6 +20,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { VerOrdenProduccionComponent } from './ordenes-produccion/ver-orden-produccion/ver-orden-produccion.component';
 import { VerIngenieriaComponent } from './ingenieria/ver-ingenieria/ver-ingenieria.component';
 import { VerDisenoComponent } from './diseno/ver-diseno/ver-diseno.component';
+import { CrmModule } from '../crm/crm.module';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -49,6 +50,7 @@ export const MY_FORMATS = {
     ManufacturaRoutingModule,
     NgbDropdownModule,
     ComponentsModule,
+    CrmModule,
     FormsModule,
     NgSelectModule,
     HttpClientModule,

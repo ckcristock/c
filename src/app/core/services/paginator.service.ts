@@ -34,11 +34,11 @@ export class PaginatorService {
     return params;
   }
 
-  checkParams(pagination, params, nameLocalStorage) {
+  checkParams(pagination, params, nameLocalStorage, items = 100) {
     if (params?.params?.pageSize) {
       pagination.pageSize = params?.params?.pageSize
     } else {
-      pagination.pageSize = localStorage?.getItem(nameLocalStorage) || 100
+      pagination.pageSize = localStorage?.getItem(nameLocalStorage) || items
     }
     if (params?.params?.pag) {
       pagination.page = params?.params?.pag

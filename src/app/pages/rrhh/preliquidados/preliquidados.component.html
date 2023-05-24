@@ -29,23 +29,9 @@
                 loadingText="loading "
                 [clearable]="false"
               >
-              <ng-option value="">Todos</ng-option>
+                <ng-option value="">Todos</ng-option>
               </ng-select>
             </div>
-            <!-- ESTO NO SE NECESITARIA POR QUE LA PAGINACION YA LO TRAE -->
-            <!-- <mat-form-field class="col" appearance="outline">
-              <mat-label>Items por página</mat-label>
-              <mat-select
-                [(ngModel)]="pageSize"
-                (ngModelChange)="refreshPreLiquidated()"
-                [ngModelOptions]="{ standalone: true }"
-              >
-                <mat-option [value]="10">10 items por página</mat-option>
-                <mat-option [value]="20">20 items por página</mat-option>
-                <mat-option [value]="50">50 items por página</mat-option>
-                <mat-option [value]="100">100 items por página</mat-option>
-              </mat-select>
-            </mat-form-field> -->
           </ng-container>
         </div>
       </mat-expansion-panel>
@@ -121,25 +107,12 @@
         </div>
       </div>
     </div>
-    <!--  <ngb-pagination
-      class="d-flex justify-content-center pagination-rounded pagination-sm"
-      [collectionSize]="pagination.collectionSize"
-      (pageChange)="getPreliquidados($event)"
-      [pageSize]="pagination.pageSize"
-      [(page)]="pagination.page"
-      aria-label="Default pagination"
-      maxSize="5"
-      rotate="true"
-      ellipses="false"
-      boundaryLinks="true"
-    >
-    </ngb-pagination> -->
     <mat-paginator
       *ngIf="paginationMaterial"
       [length]="paginationMaterial.total"
       [pageSize]="paginationMaterial.per_page"
       [pageIndex]="paginationMaterial.current_page - 1"
-      [pageSizeOptions]="[5, 10, 25, 100]"
+      [pageSizeOptions]="[4, 12, 24, 48, 96]"
       (page)="handlePageEvent($event)"
       aria-label="Select page"
     >

@@ -133,7 +133,66 @@ export class OrdenesProduccionComponent implements OnInit {
         this.pagination.page = 1
         this.getWorkOrders()
       }
+      this.workOrders.forEach(async workOrder => {
+        const fechaCreacion = new Date(workOrder.created_at);
+        const fechaEntrega = new Date(workOrder.expected_delivery_date);
+        const fechaEntregaReal = new Date(workOrder.delivery_date);
+        const estado = workOrder.status;
+        workOrder.committed_days = this.calcularDiasEntrega(fechaCreacion, fechaEntrega);
+        workOrder.delivery_days = await this.calcularDiferenciaFechas(fechaEntrega);
+        workOrder.status_time = this.obtenerEstadoProyecto(estado, workOrder.delivery_days);
+        workOrder.real_days = this.calcularDiferenciaFechas2(fechaEntregaReal, fechaCreacion);
+      });
     })
+  }
+
+  calcularDiasEntrega(fechaCreacion: Date, fechaEntrega: Date): number | string {
+    if (!fechaEntrega) {
+      return 'NA';
+    }
+    const diffTime = Math.abs(fechaEntrega.getTime() - fechaCreacion.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays + 1;
+  }
+
+  async calcularDiferenciaFechas(fechaEntrega: Date): Promise<string | number> {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (fechaEntrega.getTime() > 0) {
+      const diffTime = Math.abs(fechaEntrega.getTime() - today.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays;
+    }
+    return '';
+  }
+
+  calcularDiferenciaFechas2(fechaEntregaReal: Date | string, fechaCreacion: Date | string): number | string {
+    if (fechaEntregaReal) {
+      return 'N/A';
+    }
+
+    const fechaSValue = new Date(fechaEntregaReal);
+    const fechaNValue = new Date(fechaCreacion);
+    const differenceInDays = Math.floor((fechaSValue.getTime() - fechaNValue.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+
+    return differenceInDays;
+  }
+
+  obtenerEstadoProyecto(estado: string, diasRestantes: number): string {
+    console.log(diasRestantes)
+    if (estado === 'T') {
+      return 'TERMINADO';
+    }
+    if (estado === 'A') {
+      return 'NA';
+    }
+    if (diasRestantes > 0) {
+      return 'A TIEMPO';
+    }
+    if (diasRestantes <= 0) {
+      return 'RETRASADO';
+    }
+    return '';
   }
 
   selectedDate(fecha, type_date) {

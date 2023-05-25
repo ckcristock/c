@@ -110,7 +110,7 @@
               />
             </mat-form-field>
             <mat-form-field appearance="outline" class="col">
-              <mat-label>Fecha</mat-label>
+              <mat-label>Fecha de creación</mat-label>
               <input
                 matInput
                 [satDatepicker]="pickerDate"
@@ -219,24 +219,51 @@
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
             <th>Código</th>
-            <th>Fecha</th>
+            <th class="text-nowrap">Fecha creación</th>
+            <th>Tipo</th>
+            <th>Clase</th>
+            <th>País</th>
             <th>Ciudad</th>
             <th>Cliente</th>
+            <th>Cotización</th>
             <th>Descripción</th>
             <th>Observaciones</th>
-            <th>Entrega</th>
+            <th class="text-nowrap">Fecha comprometida</th>
+            <th class="text-nowrap">Días comprometidos</th>
+            <th class="text-nowrap">Días entrega</th>
             <th>Estado</th>
+            <th class="text-nowrap">Fecha finalizada</th>
+            <th class="text-nowrap">Días reales</th>
+            <th>Indicador</th>
+            <!-- Ingeniería y diseño -->
+            <th class="text-nowrap">Fecha entrega de planos</th>
+            <th class="text-nowrap">Días diseño</th>
+            <th class="text-nowrap">% Diseño</th>
+            <!-- Producción -->
+            <th class="text-nowrap">Fecha recibido planos</th>
+            <th class="text-nowrap">Días producción</th>
+            <th class="text-nowrap">Fecha entrega</th>
+            <!-- Financiero -->
+            <th class="text-nowrap">N° Remisión</th>
+            <th class="text-nowrap">Fecha remisión</th>
+            <th>Valor</th>
+            <th class="text-nowrap">N° Factura</th>
+            <th class="text-nowrap">Fecha factura</th>
             <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of workOrders" class="text-center">
-            <td>{{ item.code }}</td>
-            <td>{{ item.date | date : "MMM d, y" }}</td>
+            <td class="text-nowrap">{{ item.code }}</td>
+            <td>{{ item.created_at | date }}</td>
+            <td>{{ item.type }}</td>
+            <td>{{ item.class }}</td>
+            <td>{{ item.city?.department_?.country?.name }}</td>
             <td>{{ item.city?.name }}</td>
-            <td>
+            <td class="text-nowrap">
               {{ item.third_party.text }}
             </td>
+            <td>Cotización</td>
             <td
               role="button"
               class="text-primary"
@@ -245,9 +272,43 @@
             >
               Ver detalles
             </td>
-            <td>{{ item.observation }}</td>
+            <td>{{ item.observations || "Sin observaciones" }}</td>
+            <td>{{ item.expected_delivery_date | date }}</td>
+            <td>{{ item.committed_days }}</td>
+            <td>{{ item.delivery_days }}</td>
+            <td class="text-nowrap">
+              <span
+                class="badge badge-pill"
+                [class]="
+                  item.status_time == 'TERMINADO'
+                    ? 'badge-success'
+                    : item.status_time == 'A TIEMPO'
+                    ? 'badge-warning'
+                    : item.status_time == 'RETRASADO'
+                    ? 'badge-banger'
+                    : 'badge-dark'
+                "
+                >{{ item.status_time }}</span
+              >
+            </td>
+            <td>{{ (item.delivery_date | date) || "S.I" }}</td>
+            <td>{{ item.real_days }}</td>
+            <td>Indicador</td>
+            <!-- Ingeniería y diseño -->
+            <td>{{ item.delivery_date_of_plans }}</td>
+            <td>Días diseño</td>
+            <td>% diseño</td>
+            <!-- Producción -->
+            <td>{{ item.date_of_plans_received }}</td>
+            <td>días produccion</td>
             <td>{{ item.delivery_date }}</td>
-            <td>
+            <!-- Financiero -->
+            <td>{{ item.referral_number }}</td>
+            <td>{{ item.date_of_referral }}</td>
+            <td>{{ item.value }}</td>
+            <td>{{ item.invoice_number }}</td>
+            <td>{{ item.date_of_invoice }}</td>
+            <!-- <td>
               <span
                 class="badge"
                 [class]="
@@ -263,7 +324,7 @@
                 "
                 >{{ item.status | uppercase }}</span
               >
-            </td>
+            </td> -->
             <td>
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button

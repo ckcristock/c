@@ -31,6 +31,9 @@ export class ApusComponent implements OnInit {
   checkQuien: boolean = true
   checkFecha: boolean = true
   apus: any[] = [];
+  orderObj: any
+  filtrosActivos: boolean = false
+  masksInput = consts;
   loading: boolean = false;
   paginationMaterial: any;
   pagination: any = {
@@ -58,11 +61,7 @@ export class ApusComponent implements OnInit {
     this.dateAdapter.setLocale('es');
     this.permission = this._permission?.validatePermissions(this.permission)
   }
-  orderObj: any
-  filtrosActivos: boolean = false
-  paginacion: any
 
-  masksInput = consts;
   ngOnInit(): void {
     if (this.permission?.permissions?.show) {
       this.createFormFilters();

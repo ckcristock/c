@@ -1,13 +1,10 @@
-import { AfterContentChecked, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, OperatorFunction } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 import { MunicipiosService } from 'src/app/pages/ajustes/configuracion/departamentos-municipios/municipios/municipios.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { Texteditor2Service } from 'src/app/pages/ajustes/informacion-base/services/texteditor2.service';
-import { QuotationService } from 'src/app/pages/crm/cotizacion/quotation.service';
 import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
 import { OrdenesProduccionService } from '../../services/ordenes-produccion.service';
 
@@ -23,7 +20,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
   work_order;
   id: number;
   thirds: any[] = [];
-  quotations: any[] = [];
   third_people: any[] = [];
   last_id: number;
   today = new Date();
@@ -39,7 +35,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
   filterService = { type_multiple: 'servicio' };
   constructor(
     private fb: FormBuilder,
-    private _quotation: QuotationService,
     private _third_party: TercerosService,
     private _work_order: OrdenesProduccionService,
     private _city: MunicipiosService,
@@ -56,28 +51,15 @@ export class CrearOrdenProduccionComponent implements OnInit {
     })
     this.createForm();
     this.getData();
+    this.getThirdPerson()
     if (this.id) {
       this.getWorkOrder(this.id)
     }
   }
 
-  getConsecutivo() {
-    this._consecutivos.getConsecutivo('work_orders').subscribe((r: any) => {
-      this.datosCabecera.CodigoFormato = r.data.format_code
-      this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
-      if (this.action != 'editar') {
-        let con = this._consecutivos.construirConsecutivo(r.data);
-        this.datosCabecera.Codigo = con
-      }
-    })
-  }
-
   getData() {
     this.loading = true;
     this.getConsecutivo();
-    this._quotation.getAllQuotations().subscribe((res: any) => {
-      this.quotations = res.data
-    })
     this._third_party.getClient().subscribe((res: any) => {
       this.thirds = res.data
     })
@@ -85,6 +67,46 @@ export class CrearOrdenProduccionComponent implements OnInit {
       this.cities = res.data
       this.loading = false
     })
+  }
+
+  getConsecutivo() {
+    this._consecutivos.getConsecutivo('work_orders').subscribe((r: any) => {
+      this.datosCabecera.CodigoFormato = r.data.format_code
+      this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
+      if (this.action != 'editar') {
+        this.buildConsecutivo(this.form.get('municipality_id')?.value, r)
+        this.form.get('municipality_id')?.valueChanges.subscribe(value => {
+          this.buildConsecutivo(value, r)
+        });
+      }
+    })
+  }
+
+  buildConsecutivo(value, r, context = '') {
+    if (r.data.city) {
+      let city = this.cities?.find(x => x?.value === value)
+      if (city && !city?.abbreviation) {
+        this.form.get('municipality_id')?.setValue(null);
+        this._swal.show({
+          icon: 'error',
+          title: 'Error',
+          text: 'El destino no tiene abreviatura.',
+          showCancel: false
+        })
+      } else {
+        let con = this._consecutivos.construirConsecutivo(r?.data, city?.abbreviation, context);
+        this.datosCabecera.Codigo = con
+        this.form.patchValue({
+          code: con
+        })
+      }
+    } else {
+      let con = this._consecutivos.construirConsecutivo(r.data);
+      this.datosCabecera.Codigo = con
+      this.form.patchValue({
+        code: con
+      })
+    }
   }
 
   getWorkOrder(id) {
@@ -125,9 +147,9 @@ export class CrearOrdenProduccionComponent implements OnInit {
       class: ['Repuesto', Validators.required],
       type: ['V', Validators.required],
       expected_delivery_date: ['', Validators.required],
-      third_party_id: ['', Validators.required],
-      municipality_id: ['', Validators.required],
-      third_party_person_id: ['', Validators.required],
+      third_party_id: [null, Validators.required],
+      municipality_id: [null, Validators.required],
+      third_party_person_id: [null, Validators.required],
       observations: ['', Validators.maxLength(65535)],
       format_code: ['', Validators.maxLength(250)],
       description: ['', Validators.maxLength(4294967295)],
@@ -135,7 +157,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
       legal_requirements: ['', Validators.maxLength(4294967295)],
     });
     const classFormControl = this.form.get('class');
-    const third_party_id = this.form.get('third_party_id');
     classFormControl.valueChanges.subscribe(value => {
       if (value == 'Interna') {
         this.form.controls.third_party_id.disable();
@@ -145,64 +166,16 @@ export class CrearOrdenProduccionComponent implements OnInit {
         this.form.controls.third_party_person_id.enable();
       }
     })
-    third_party_id.valueChanges.subscribe(q => {
-      if (q && q.value) {
-        this.getThirdPerson(q?.value)
-      }
-    })
   }
 
-  getThirdPerson(third_id) {
-    this._third_party.getThirdPartyPersonForThird(third_id).subscribe((res: any) => {
+  getThirdPerson() {
+    this._third_party.getThirdPartyPersonIndex().subscribe((res: any) => {
       this.third_people = res.data
     })
   }
 
-  search_tercero: OperatorFunction<string, readonly { text; nit }[]> = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      map((term) =>
-        term === ''
-          ? []
-          : this.thirds.filter((v) => v.text.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
-      ),
-    );
-  formatter_tercero = (x: { text: string }) => x.text;
-
-  search_quotation: OperatorFunction<string, readonly { name; id }[]> = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      map((term) =>
-        term === ''
-          ? []
-          : this.quotations.filter((v) => v.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
-      ),
-    );
-  formatter_quotation = (x: { name: string }) => x.name;
-
-  search_city: OperatorFunction<string, readonly { text; value }[]> = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      map((term) =>
-        term === ''
-          ? []
-          : this.cities.filter((v) => v.text.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
-      ),
-    );
-  formatter_city = (x: { text: string }) => x.text;
-
-  search_person_id: OperatorFunction<string, readonly { name; id }[]> = (text$: Observable<string>) =>
-    text$.pipe(
-      debounceTime(200),
-      map((term) =>
-        term === ''
-          ? []
-          : this.third_people.filter((v) => v.name.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
-      ),
-    );
-  formatter_person_id = (x: { name: string }) => x.name;
-
   save() {
+    console.log(this.form.value)
     if (this.form.valid) {
       this._swal.show({
         icon: 'question',
@@ -210,11 +183,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
         text: 'Vamos a guardar esta orden de producción.'
       }).then(res => {
         if (res.isConfirmed) {
-          this.form.patchValue({
-            municipality_id: this.form.controls.municipality_id?.value.value,
-            third_party_id: this.form.controls.third_party_id?.value.value,
-            third_party_person_id: this.form.controls.third_party_person_id?.value.id,
-          })
           this._work_order.saveWorkOrder(this.form.value).subscribe(r => {
             this._swal.show({
               icon: 'success',

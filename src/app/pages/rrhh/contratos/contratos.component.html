@@ -7,14 +7,14 @@
             <h4 class="text-primary">
               Contratos<span style="font-size: smaller">
                 <small class="pb-2 text-secondary text-muted">
-                  pág. {{ paginacion?.current_page }}
+                  pág. {{ paginationMaterial?.current_page }}
                 </small>
               </span>
             </h4>
           </div>
           <div class="col-md-6 px-0 text-right">
             <div class="btn-group rounded w-sm-100">
-              <button class="btn btn-info btn-sm" (click)="openClose()">
+              <button class="btn btn-info btn-sm" (click)="matPanel.toggle()">
                 <i class="fas fa-sliders-h"></i> Filtros
               </button>
             </div>
@@ -22,83 +22,67 @@
         </div>
         <hr class="line" />
         <mat-accordion multi>
-          <mat-expansion-panel class="mat-elevation-z0">
+          <mat-expansion-panel #matPanel class="mat-elevation-z0">
             <div class="row">
-              <mat-form-field
-                class="col"
-                appearance="outline"
-                *ngIf="companies.length > 1"
-              >
-                <mat-label>Empresa</mat-label>
-                <mat-select
-                  [(ngModel)]="filtros.company"
-                  (selectionChange)="getAllContracts()"
-                  name="empresa"
+              <ng-container [formGroup]="formFilters">
+                <mat-form-field
+                  class="col"
+                  appearance="outline"
+                  *ngIf="companies.length > 1"
                 >
-                  <mat-option
-                    *ngFor="let item of companies"
-                    [value]="item.value"
-                    >{{ item.text }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Funcionario</mat-label>
-                <input
-                  matInput
-                  type="text"
-                  [(ngModel)]="filtros.person"
-                  (input)="getAllContracts()"
-                  name="funcionario"
-                  autocomplete="off"
-                  placeholder="Busca por funcionario"
-                />
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Grupos</mat-label>
-                <mat-select
-                  [(ngModel)]="filtros.group"
-                  (selectionChange)="getAllContracts()"
-                  name="group"
-                >
-                  <mat-option value="">Todos</mat-option>
-                  <mat-option
-                    *ngFor="let item of groups"
-                    [value]="item.value"
-                    >{{ item.text }}</mat-option
-                  >
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Dependencias</mat-label>
-                <mat-select
-                  [(ngModel)]="filtros.dependency"
-                  (selectionChange)="getAllContracts()"
-                  name="dependency"
-                >
-                  <mat-option value="">Todas</mat-option>
-                  <mat-option
-                    *ngFor="let item of dependencies"
-                    [value]="item.value"
-                    >{{ item.text }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field class="col" appearance="outline">
-                <mat-label>Cargo</mat-label>
-                <mat-select
-                  [(ngModel)]="filtros.position"
-                  (selectionChange)="getAllContracts()"
-                  name="position"
-                >
-                  <mat-option value="">Todos</mat-option>
-                  <mat-option
-                    *ngFor="let item of positions"
-                    [value]="item.value"
-                    >{{ item.text }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+                  <mat-label>Empresa</mat-label>
+                  <mat-select formControlName="company">
+                    <mat-option
+                      *ngFor="let item of companies"
+                      [value]="item.value"
+                      >{{ item.text }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Funcionario</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    formControlName="person"
+                    autocomplete="off"
+                    placeholder="Busca por funcionario"
+                  />
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Grupos</mat-label>
+                  <mat-select formControlName="group">
+                    <mat-option value="">Todos</mat-option>
+                    <mat-option
+                      *ngFor="let item of groups"
+                      [value]="item.value"
+                      >{{ item.text }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Dependencias</mat-label>
+                  <mat-select formControlName="dependency">
+                    <mat-option value="">Todas</mat-option>
+                    <mat-option
+                      *ngFor="let item of dependencies"
+                      [value]="item.value"
+                      >{{ item.text }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col" appearance="outline">
+                  <mat-label>Cargo</mat-label>
+                  <mat-select formControlName="position">
+                    <mat-option value="">Todos</mat-option>
+                    <mat-option
+                      *ngFor="let item of positions"
+                      [value]="item.value"
+                      >{{ item.text }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </ng-container>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
@@ -220,10 +204,11 @@
           </table>
         </div>
         <mat-paginator
-          *ngIf="paginacion"
-          [length]="paginacion.total"
-          [pageSize]="paginacion.per_page"
-          [pageIndex]="paginacion.current_page - 1"
+          *ngIf="paginationMaterial"
+          [length]="paginationMaterial?.total"
+          [pageSize]="paginationMaterial?.per_page"
+          [pageIndex]="paginationMaterial?.current_page - 1"
+          [pageSizeOptions]="[5, 10, 25, 100]"
           (page)="handlePageEvent($event)"
           aria-label="Select page"
         >
@@ -300,11 +285,15 @@
           </div>
         </div>
         <mat-paginator
-          *ngIf="paginacion2 && !contractData && contractsToExpire.length > 0"
-          [length]="paginacion2.total"
-          [pageSize]="paginacion2.per_page"
-          hidePageSize="true"
-          [pageIndex]="paginacion2.current_page - 1"
+          *ngIf="
+            paginationMaterialExpire &&
+            !contractData &&
+            contractsToExpire.length > 0
+          "
+          [length]="paginationMaterialExpire.total"
+          [pageSize]="paginationMaterialExpire.per_page"
+          [pageIndex]="paginationMaterialExpire.current_page - 1"
+          [pageSizeOptions]="[5, 10, 25, 100]"
           (page)="handlePageEvent2($event)"
           aria-label="Select page"
         >

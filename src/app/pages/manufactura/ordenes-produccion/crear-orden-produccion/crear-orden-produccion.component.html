@@ -72,60 +72,59 @@
             </mat-select>
             <mat-error>Campo obligatorio</mat-error>
           </mat-form-field>
-          <mat-form-field class="col-md-6" appearance="outline">
-            <mat-label>Ciudad</mat-label>
-            <input
-              matInput
-              type="text"
+          <div class="col-md-6 mat-form-field-wrapper">
+            <ng-select
               formControlName="municipality_id"
-              [ngbTypeahead]="search_city"
-              [inputFormatter]="formatter_city"
-              [resultTemplate]="rt_city"
-              [editable]="false"
-              placeholder="Busca por nombre"
-              required
-            />
-            <mat-error>Campo obligatorio</mat-error>
-          </mat-form-field>
-          <mat-form-field
-            class="col-md-6"
-            appearance="outline"
+              [items]="cities"
+              bindLabel="text"
+              [class.is-invalid]="form.get('municipality_id')?.invalid"
+              appearance="outline"
+              [appendTo]="'body'"
+              [clearable]="false"
+              placeholder="Destino *"
+              bindValue="value"
+              loadingText="loading"
+            >
+            </ng-select>
+          </div>
+          <div
+            class="col-md-6 mat-form-field-wrapper"
             *ngIf="form.get('third_party_id').enabled"
           >
-            <mat-label>Cliente</mat-label>
-            <input
-              matInput
-              type="text"
+            <ng-select
               formControlName="third_party_id"
-              [ngbTypeahead]="search_tercero"
-              [inputFormatter]="formatter_tercero"
-              [resultTemplate]="rt_third"
-              [editable]="false"
-              placeholder="Busca por nombre"
-              required
-            />
-            <mat-error>Campo obligatorio</mat-error>
-          </mat-form-field>
-          <mat-form-field
-            class="col-md-6"
-            appearance="outline"
+              [items]="thirds"
+              [clearable]="false"
+              bindLabel="text"
+              appearance="outline"
+              [class.is-invalid]="form.get('third_party_id')?.invalid"
+              [appendTo]="'body'"
+              placeholder="Cliente *"
+              bindValue="value"
+              loadingText="loading"
+              ngDefaultControl
+            >
+            </ng-select>
+          </div>
+          <div
+            class="col-md-6 mat-form-field-wrapper"
             *ngIf="form.get('third_party_person_id').enabled"
           >
-            <mat-label>Solicitado por</mat-label>
-            <input
-              matInput
-              type="text"
+            <ng-select
               formControlName="third_party_person_id"
-              [ngbTypeahead]="search_person_id"
-              [inputFormatter]="formatter_person_id"
-              [resultTemplate]="rt_person_id"
-              [editable]="false"
-              placeholder="Busca por nombre"
-              required
-            />
-            <mat-error>Campo obligatorio</mat-error>
-          </mat-form-field>
-
+              [items]="third_people"
+              [clearable]="false"
+              bindLabel="text"
+              appearance="outline"
+              [class.is-invalid]="form.get('third_party_person_id')?.invalid"
+              [appendTo]="'body'"
+              placeholder="Contacto *"
+              bindValue="value"
+              loadingText="loading"
+              ngDefaultControl
+            >
+            </ng-select>
+          </div>
           <mat-form-field
             class="col-12 mat-form-field-no-padding textarea"
             appearance="outline"
@@ -221,16 +220,7 @@
   </div>
 </ng-container>
 
-<ng-template #rt_third let-r="result" let-t="term">
-  <div>{{ r.nit }} - {{ r.text }}</div>
-</ng-template>
 <ng-template #rt_quotation let-r="result" let-t="term">
-  <div>{{ r.name }}</div>
-</ng-template>
-<ng-template #rt_city let-r="result" let-t="term">
-  <div>{{ r.text }}</div>
-</ng-template>
-<ng-template #rt_person_id let-r="result" let-t="term">
   <div>{{ r.name }}</div>
 </ng-template>
 <ng-template #notData>

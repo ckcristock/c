@@ -102,6 +102,7 @@ export class NovedadesComponent implements OnInit {
       .subscribe((r: any) => {
         this.peopleCount = r.data
         this.paylads = this.peopleCount.reduce(this.reducePayloads, [])
+        console.log(this.paylads)
       })
   }
   types: any[] = []

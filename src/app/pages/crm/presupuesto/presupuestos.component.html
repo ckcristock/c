@@ -159,7 +159,7 @@
         >
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
-              <th *ngIf="checkItem">Código</th>
+              <th class="text-nowrap" *ngIf="checkItem">Código</th>
               <th *ngIf="checkFecha">Fecha creación</th>
               <th *ngIf="checkCliente">Cliente</th>
               <th *ngIf="checkDestino">Destino</th>
@@ -179,7 +179,7 @@
                 'text-danger font-weight-bold': item?.state == 'Inactivo'
               }"
             >
-              <td *ngIf="checkItem" class="align-middle">
+              <td *ngIf="checkItem" class="text-nowrap">
                 {{ item?.code | uppercase }}
               </td>
               <td *ngIf="checkFecha" class="align-middle">

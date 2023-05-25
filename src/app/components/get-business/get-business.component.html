@@ -1,6 +1,6 @@
 <ng-template #modal let-modal>
   <div class="modal-header">
-    <h4 class="text-primary modal-title">{{ selected }}</h4>
+    <h4 class="text-primary modal-title">Seleccionar negocio</h4>
     <button
       type="button"
       class="close"
@@ -12,11 +12,178 @@
     </button>
   </div>
 
-  <div class="modal-body"></div>
+  <div class="modal-body">
+    <ng-container [formGroup]="formFilters">
+      <div class="row">
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Código</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="code"
+            autocomplete="off"
+            placeholder="Busca por código"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="name"
+            autocomplete="off"
+            placeholder="Busca por nombre"
+          />
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tercero</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="company_name"
+            autocomplete="off"
+            placeholder="Busca por empresa"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col">
+          <mat-label>Fecha de etapa</mat-label>
+          <input
+            matInput
+            [satDatepicker]="picker"
+            (dateChange)="selectedDate($event)"
+            name="daterange"
+            autocomplete="off"
+          />
+          <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+          <sat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></sat-datepicker-toggle>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="business_type_id">
+            <mat-option value="">Todos</mat-option>
+            <mat-option *ngFor="let item of types" [value]="item?.value">{{
+              item?.text
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </ng-container>
+    <div class="rounded-top table-responsive mt-3">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!loading && business?.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th></th>
+            <th>Foto</th>
+            <th>Código</th>
+            <th>Fecha creación</th>
+            <th>Tipo</th>
+            <th>Tercero</th>
+            <th>Nombre</th>
+            <th>Presupuesto</th>
+            <th>Cotización</th>
+            <th>Fecha etapa</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let neg of business" class="text-center">
+            <td class="pb-0">
+              <mat-checkbox
+                color="primary"
+                (change)="addBusiness(neg, $event)"
+                [(ngModel)]="neg.selected"
+              ></mat-checkbox>
+            </td>
+            <td class="p-0">
+              <img
+                [src]="neg?.third_party?.image | image"
+                onerror="this.src='../../../../assets/images/noprofile.png'"
+                class="rounded-circle mx-auto img-fluid header-profile-user"
+              />
+            </td>
+            <td class="text-nowrap" scope="row">
+              {{ neg?.code | uppercase }}
+            </td>
+            <td>{{ neg?.created_at | date }}</td>
+            <td class="align-middle" scope="row">
+              {{ neg?.type?.name | uppercase }}
+            </td>
+            <td class="align-middle">
+              {{ neg?.third_party?.full_name | uppercase }}
+            </td>
+            <td class="align-middle" scope="row">
+              {{ neg?.name | capitalLetter }}
+            </td>
+            <td class="align-middle">
+              ${{ neg?.budget_value || 0 | number : "1.2-2" }} <br />
+              USD {{ neg?.budget_value_usd || 0 | number : "1.2-2" }}
+            </td>
+            <td class="align-middle">
+              ${{ neg?.quotation_value || 0 | number : "1.2-2" }} <br />
+              USD {{ neg?.quotation_value_usd || 0 | number : "1.2-2" }}
+            </td>
+            <td class="align-middle">{{ neg?.date | date : "MMM d, y" }}</td>
+            <td>
+              <div ngbDropdown container="body" class="dropdown-primary">
+                <button
+                  ngbDropdownToggle
+                  class="btn btn-primary btn-sm"
+                  type="button"
+                >
+                  <i class="mdi mdi-chevron-down"></i>
+                </button>
+                <div ngbDropdownMenu>
+                  <a
+                    class="dropdown-item text-success"
+                    href="javascript: void(0);"
+                    [routerLink]="['/crm/negocios/', neg?.id]"
+                  >
+                    <i class="fas fa-eye"></i> Ver</a
+                  >
+                  <a
+                    class="dropdown-item text-info"
+                    href="javascript: void(0);"
+                    [routerLink]="['/crm/negocios/editar', neg?.id]"
+                  >
+                    <i class="fas fa-edit"></i> Editar</a
+                  >
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <mat-paginator
+      *ngIf="paginationMaterial"
+      [length]="paginationMaterial?.total"
+      [pageSize]="paginationMaterial?.per_page"
+      [pageIndex]="paginationMaterial?.current_page - 1"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      (page)="handlePageEvent($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-danger" (click)="_modal.close()">
       Cancelar
     </button>
-    <button type="button" class="btn btn-primary">Guardar</button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="addBusinessForParent()"
+    >
+      Agregar
+    </button>
   </div>
+</ng-template>
+<ng-template #notData>
+  <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

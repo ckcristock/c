@@ -211,7 +211,7 @@
         >aquí</a
       >
     </div>
-    <div class="rounded-top table-responsive">
+    <div class="rounded-top table-responsive" id="table-wrapper">
       <table
         class="table table-bordered table-striped table-sm"
         *ngIf="!loading && workOrders.length > 0; else notData"
@@ -236,20 +236,26 @@
             <th class="text-nowrap">Días reales</th>
             <th>Indicador</th>
             <!-- Ingeniería y diseño -->
-            <th class="text-nowrap">Fecha entrega de planos</th>
-            <th class="text-nowrap">Días diseño</th>
-            <th class="text-nowrap">% Diseño</th>
+            <ng-container *ngIf="permission.permissions.engineering_and_design">
+              <th class="text-nowrap">Fecha entrega de planos</th>
+              <th class="text-nowrap">Días diseño</th>
+              <th class="text-nowrap">% Diseño</th>
+            </ng-container>
             <!-- Producción -->
-            <th class="text-nowrap">Fecha recibido planos</th>
-            <th class="text-nowrap">Días producción</th>
-            <th class="text-nowrap">Fecha entrega</th>
+            <ng-container *ngIf="permission.permissions.production">
+              <th class="text-nowrap">Fecha recibido planos</th>
+              <th class="text-nowrap">Días producción</th>
+              <th class="text-nowrap">Fecha entrega</th>
+            </ng-container>
             <!-- Financiero -->
-            <th class="text-nowrap">N° Remisión</th>
-            <th class="text-nowrap">Fecha remisión</th>
-            <th>Valor</th>
-            <th class="text-nowrap">N° Factura</th>
-            <th class="text-nowrap">Fecha factura</th>
-            <th><i class="mdi mdi-chevron-down"></i></th>
+            <ng-container *ngIf="permission.permissions.financial">
+              <th class="text-nowrap">N° Remisión</th>
+              <th class="text-nowrap">Fecha remisión</th>
+              <th>Valor</th>
+              <th class="text-nowrap">N° Factura</th>
+              <th class="text-nowrap">Fecha factura</th>
+            </ng-container>
+            <th class="fixed-column"><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -272,7 +278,7 @@
             >
               Ver detalles
             </td>
-            <td>{{ item.observations || "Sin observaciones" }}</td>
+            <td>{{ item.observations || "N/A" }}</td>
             <td>{{ item.expected_delivery_date | date }}</td>
             <td>{{ item.committed_days }}</td>
             <td>{{ item.delivery_days }}</td>
@@ -291,23 +297,29 @@
                 >{{ item.status_time }}</span
               >
             </td>
-            <td>{{ (item.delivery_date | date) || "S.I" }}</td>
+            <td>{{ (item.delivery_date | date) || "N/A" }}</td>
             <td>{{ item.real_days }}</td>
-            <td>Indicador</td>
+            <td>{{ item.indicator }}</td>
             <!-- Ingeniería y diseño -->
-            <td>{{ item.delivery_date_of_plans }}</td>
-            <td>Días diseño</td>
-            <td>% diseño</td>
+            <ng-container *ngIf="permission.permissions.engineering_and_design">
+              <td>{{ (item.delivery_date_of_plans | date) || "N/A" }}</td>
+              <td>{{ item.design_days }}</td>
+              <td>{{ item.design_percentage }}</td>
+            </ng-container>
             <!-- Producción -->
-            <td>{{ item.date_of_plans_received }}</td>
-            <td>días produccion</td>
-            <td>{{ item.delivery_date }}</td>
+            <ng-container *ngIf="permission.permissions.production">
+              <td>{{ (item.date_of_plans_received | date) || "N/A" }}</td>
+              <td>{{ item.production_days }}</td>
+              <td>{{ (item.delivery_date | date) || "N/A" }}</td>
+            </ng-container>
             <!-- Financiero -->
-            <td>{{ item.referral_number }}</td>
-            <td>{{ item.date_of_referral }}</td>
-            <td>{{ item.value }}</td>
-            <td>{{ item.invoice_number }}</td>
-            <td>{{ item.date_of_invoice }}</td>
+            <ng-container *ngIf="permission.permissions.financial">
+              <td>{{ item.referral_number || "N/A" }}</td>
+              <td>{{ (item.date_of_referral | date) || "N/A" }}</td>
+              <td>{{ item.value || "N/A" }}</td>
+              <td>{{ item.invoice_number || "N/A" }}</td>
+              <td>{{ (item.date_of_invoice | date) || "N/A" }}</td>
+            </ng-container>
             <!-- <td>
               <span
                 class="badge"
@@ -325,7 +337,7 @@
                 >{{ item.status | uppercase }}</span
               >
             </td> -->
-            <td>
+            <td class="fixed-column">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle

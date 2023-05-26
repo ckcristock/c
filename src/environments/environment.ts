@@ -4,4 +4,9 @@ export const environment = {
   url_assets: 'http://core-back.test/',
   base_url: 'http://core-back.test/api',
   ruta: 'http://inventario.sigmaqmo.com/',
+  websockets: {
+    appId: '12345',
+    key: 'ASDASD2121',
+    cluster: 'mt1',
+  },
 };

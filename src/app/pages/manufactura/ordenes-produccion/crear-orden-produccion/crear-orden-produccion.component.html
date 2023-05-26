@@ -226,13 +226,43 @@
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
+
 <app-modal-buscar-presupuesto
   #modalPresupuesto
+  (update)="newBudget($event)"
+  [create]="true"
   [third_party_id]="' '"
 ></app-modal-buscar-presupuesto>
-<app-modal-buscar-cotizacion #modalCotizacion [third_party_id]="' '">
+
+<app-modal-buscar-cotizacion
+  (update)="newQuotation($event)"
+  [create]="true"
+  #modalCotizacion
+  [third_party_id]="' '"
+>
 </app-modal-buscar-cotizacion>
-<app-get-apus #modalPieza [filter]="filterPart"> </app-get-apus>
-<app-get-apus #modalConjunto [filter]="filterSet"> </app-get-apus>
-<app-get-apus #modalServicio [filter]="filterService"> </app-get-apus>
-<app-get-business #modalNegocio></app-get-business>
+
+<app-get-apus
+  (sendApus)="newApuPart($event)"
+  #modalPieza
+  [filter]="filterPart"
+></app-get-apus>
+
+<app-get-apus
+  (sendApus)="newApuSet($event)"
+  #modalConjunto
+  [filter]="filterSet"
+>
+</app-get-apus>
+
+<app-get-apus
+  (sendApus)="newApuService($event)"
+  #modalServicio
+  [filter]="filterService"
+>
+</app-get-apus>
+
+<app-get-business
+  (update)="newBusiness($event)"
+  #modalNegocio
+></app-get-business>

@@ -8,6 +8,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
+import { groupBy, mergeMap, toArray } from 'rxjs/operators';
+import { from } from 'rxjs';
 @Component({
   selector: 'app-ver-orden-produccion',
   templateUrl: './ver-orden-produccion.component.html',
@@ -153,6 +155,13 @@ export class VerOrdenProduccionComponent implements OnInit {
     this.loading = true
     this._work_order.getWorkOrder(this.work_order_id).subscribe((res: any) => {
       this.work_order = res.data;
+      /* console.log(res.data)
+      let a = from(this.work_order.elements).pipe(
+        groupBy((element: any) => element.work_orderable_type),
+        mergeMap((group) => group.pipe(toArray())),
+        toArray()
+      )
+      console.log(a) */
       this.datosCabecera.Codigo = res.data.code;
       this.datosCabecera.Fecha = res.data.date;
       this.datosCabecera.CodigoFormato = res.data.format_code;

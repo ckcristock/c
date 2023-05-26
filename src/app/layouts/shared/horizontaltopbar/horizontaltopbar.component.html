@@ -45,7 +45,9 @@
           (click)="getAlerts()"
         >
           <i class="fas fa-bell"> </i>
-          <span class="badge badge-pill badge-danger">{{ count }}</span>
+          <span class="badge badge-pill badge-danger" *ngIf="count > 0">{{
+            count
+          }}</span>
         </button>
         <div
           class="dropdown-menu dropdown-menu-lg dropdown-menu-right border border-light"
@@ -55,37 +57,40 @@
           <div class="card-title">
             <h6 class="text-center text-primary mt-2">Notificaciones</h6>
           </div>
-          <div style="max-height: 50vh; overflow-y: auto">
+          <div style="max-height: 65vh; overflow-y: auto">
             <ng-container *ngIf="!loading && alerts.length > 0; else notData">
               <div class="list-group list-group-flush">
                 <a
                   *ngFor="let notification of alerts"
-                  (click)="modalAlert.show(notification); read(notification)"
+                  (click)="read(notification)"
+                  [routerLink]="notification.url"
                   href="javascript:void(0)"
                   class="list-group-item list-group-item-action flex-column align-items-start"
+                  [class]="
+                    notification.read_boolean == 0 ? 'active-border' : ''
+                  "
                 >
                   <div class="d-flex justify-content-between">
-                    <h6
-                      class="mb-1"
-                      [ngClass]="
-                        notification.read_boolean != 0 ? 'text-muted' : ''
-                      "
-                    >
+                    <div>
                       <i [class]="notification.icon"></i>
-                      {{ notification.type }}
-                    </h6>
-                    <i
-                      *ngIf="notification.read_boolean == 0"
-                      class="fas fa-circle text-primary"
-                    ></i>
+                      <b> {{ notification.type }}</b>
+                      <div>
+                        <small>
+                          {{ notification.description }}
+                        </small>
+                      </div>
+                    </div>
+                    <img
+                      [src]="notification.transmitter.image"
+                      alt=""
+                      onerror="this.src='../../../../assets/images/noprofile.png'"
+                      class="rounded-circle img-fluid header-profile-user"
+                    />
                   </div>
-                  <div
-                    class="d-flex w-100 justify-content-between"
-                    [ngClass]="
-                      notification.read_boolean != 0 ? 'text-muted' : ''
-                    "
-                  >
-                    <small>{{ notification.transmitter.full_name }}</small>
+                  <div class="d-flex w-100 justify-content-between">
+                    <small>{{
+                      notification.transmitter.full_names | titlecase
+                    }}</small>
                     <small>{{ notification.created_at | date }}</small>
                   </div>
                 </a>

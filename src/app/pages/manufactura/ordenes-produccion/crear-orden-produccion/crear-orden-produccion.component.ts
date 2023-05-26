@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConsecutivosService } from 'src/app/pages/ajustes/configuracion/consecutivos/consecutivos.service';
 import { MunicipiosService } from 'src/app/pages/ajustes/configuracion/departamentos-municipios/municipios/municipios.service';
@@ -155,6 +155,12 @@ export class CrearOrdenProduccionComponent implements OnInit {
       description: ['', Validators.maxLength(4294967295)],
       technical_requirements: ['', Validators.maxLength(4294967295)],
       legal_requirements: ['', Validators.maxLength(4294967295)],
+      budgets: this.fb.array([]),
+      quotations: this.fb.array([]),
+      business: this.fb.array([]),
+      apu_parts: this.fb.array([]),
+      apu_sets: this.fb.array([]),
+      apu_services: this.fb.array([]),
     });
     const classFormControl = this.form.get('class');
     classFormControl.valueChanges.subscribe(value => {
@@ -172,6 +178,89 @@ export class CrearOrdenProduccionComponent implements OnInit {
     this._third_party.getThirdPartyPersonIndex().subscribe((res: any) => {
       this.third_people = res.data
     })
+  }
+
+  get budgets() {
+    return this.form.get('budgets') as FormArray;
+  }
+
+  get quotations() {
+    return this.form.get('quotations') as FormArray;
+  }
+
+  get business() {
+    return this.form.get('business') as FormArray;
+  }
+
+  get apu_parts() {
+    return this.form.get('apu_parts') as FormArray;
+  }
+  get apu_sets() {
+    return this.form.get('apu_sets') as FormArray;
+  }
+  get apu_services() {
+    return this.form.get('apu_services') as FormArray;
+  }
+
+  newBudget(budgets) {
+    budgets.forEach(budget => {
+      this.budgets.push(this.fb.group({
+        id: [budget.id],
+        code: [budget.code],
+        total_cop: [budget.total_cop],
+      }))
+    });
+  }
+
+  newQuotation(quotations) {
+    quotations.forEach(quotation => {
+      this.quotations.push(this.fb.group({
+        id: [quotation.id],
+        code: [quotation.code],
+        total_cop: [quotation.total_cop],
+      }))
+    });
+  }
+
+  newBusiness(business) {
+    business.forEach(business => {
+      this.business.push(this.fb.group({
+        id: [business.id],
+        code: [business.code],
+        total_cop: [business.total_cop],
+      }))
+    });
+  }
+
+  newApuPart(apu_parts) {
+    console.log(apu_parts)
+    apu_parts.forEach(apu_part => {
+      this.apu_parts.push(this.fb.group({
+        id: [apu_part.apu_id],
+        code: [apu_part.code],
+        total_cop: [apu_part.total_cop],
+      }))
+    });
+  }
+
+  newApuSet(apu_sets) {
+    apu_sets.forEach(apu_set => {
+      this.apu_sets.push(this.fb.group({
+        id: [apu_set.apu_id],
+        code: [apu_set.code],
+        total_cop: [apu_set.total_cop],
+      }))
+    });
+  }
+
+  newApuService(apu_services) {
+    apu_services.forEach(apu_service => {
+      this.apu_services.push(this.fb.group({
+        id: [apu_service.apu_id],
+        code: [apu_service.code],
+        total_cop: [apu_service.total_cop],
+      }))
+    });
   }
 
   save() {

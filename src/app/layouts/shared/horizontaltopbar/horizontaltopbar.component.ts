@@ -15,6 +15,8 @@ import { User } from 'src/app/core/models/users.model';
 import { interval, timer, Subscription } from 'rxjs';
 import { AlertasComunService } from 'src/app/pages/rrhh/alertas-comun/alertas-comun.service';
 import { RightsidebarComponent } from '../rightsidebar/rightsidebar.component';
+import Pusher from 'pusher-js';
+import Echo from 'laravel-echo'
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -54,9 +56,12 @@ export class HorizontaltopbarComponent implements OnInit {
     public http: HttpClient,
     private _alert: AlertasComunService,
     private route: ActivatedRoute,
-  ) { }
+  ) {
+
+  }
 
   ngOnInit(): void {
+    this.setupPusher();
     this.element = document.documentElement;
 
     this.user = this._user.user;
@@ -93,6 +98,54 @@ export class HorizontaltopbarComponent implements OnInit {
       }
     });
     this.getAlerts();
+  }
+
+  private setupPusher() {
+    /* const echo = new Echo({
+      broadcaster: 'pusher',
+      cluster: 'mt1',
+      key: 'ASDASD2121',
+      forceTLS: true,
+      wsHost: window.location.hostname,
+      wsPort: 6001,
+      disableStats: true,
+      enabledTransports: ['ws']
+    })
+    echo.channel('notification').listen('NewNotification', (e) => {
+      console.log(e)
+    })
+    const pusher = new Pusher('ASDASD2121', {
+      cluster: 'mt1',
+    });
+    const channel = pusher.subscribe('notification');
+    console.log(channel, pusher.bind)
+    pusher.connection.bind('connected', () => {
+      console.log('Conexión establecida con éxito');
+      channel.bind('notification', (data) => {
+        console.log(data);
+      });
+    }); */
+  }
+
+  getAlerts() {
+    this.loading = true;
+    if (this.user.person.id) {
+      let param = { user_id: this.user.person.id };
+
+      this._alert.getAlertsNotification(param).subscribe((r: any) => {
+        this.alerts = r.data;
+        if (r.code <= 99) {
+          this.count = r.code
+        } else {
+          this.count = '99+'
+        }
+        this.loading = false
+      });
+      /* this.initSearch() */
+    } else {
+      /* this.initSearch() */
+    }
+
   }
 
   validateFolder(id) {
@@ -169,26 +222,7 @@ export class HorizontaltopbarComponent implements OnInit {
     this._user.logout();
   }
 
-  getAlerts() {
-    this.loading = true;
-    if (this.user.person.id) {
-      let param = { user_id: this.user.person.id };
 
-      this._alert.getAlertsNotification(param).subscribe((r: any) => {
-        this.alerts = r.data;
-        if (r.code <= 99) {
-          this.count = r.code
-        } else {
-          this.count = '99+'
-        }
-        this.loading = false
-      });
-      /* this.initSearch() */
-    } else {
-      /* this.initSearch() */
-    }
-
-  }
 
   read(not) {
     if (not.read_boolean == 0) {

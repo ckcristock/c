@@ -7,6 +7,7 @@ import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swa
 import { Texteditor2Service } from 'src/app/pages/ajustes/informacion-base/services/texteditor2.service';
 import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
 import { OrdenesProduccionService } from '../../services/ordenes-produccion.service';
+import { groupBy, map, mergeMap, reduce, toArray } from 'rxjs/operators';
 
 @Component({
   selector: 'app-crear-orden-produccion',
@@ -14,11 +15,11 @@ import { OrdenesProduccionService } from '../../services/ordenes-produccion.serv
   styleUrls: ['./crear-orden-produccion.component.scss']
 })
 export class CrearOrdenProduccionComponent implements OnInit {
-  @Input('action') action: string;
   form: FormGroup;
   loading: boolean;
   work_order;
   id: number;
+  action: any;
   thirds: any[] = [];
   third_people: any[] = [];
   last_id: number;
@@ -48,6 +49,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.id = params['id'];
+      this.action = this.route.snapshot.url[1].path;
     })
     this.createForm();
     this.getData();
@@ -111,25 +113,46 @@ export class CrearOrdenProduccionComponent implements OnInit {
 
   getWorkOrder(id) {
     this.loading = true
-    this._work_order.getWorkOrder(id).subscribe((res: any) => {
+    this._work_order.getWorkOrder(id).pipe(
+      map((res: any) => {
+        const elements = res.data.elements;
+        const groupedElements = elements.reduce((acc: any, curr: any) => {
+          const key = curr.work_orderable_type.replace(/[\\/\.]/g, '_');
+          if (acc[key]) {
+            acc[key].push(curr);
+          } else {
+            acc[key] = [curr];
+          }
+          return acc;
+        }, {});
+        return { ...res, data: { ...res.data, elements: groupedElements } };
+      })
+    ).subscribe((res: any) => {
+      console.log(res)
       this.work_order = res.data;
       this.loading = false
       this.form.patchValue({
-        id: this.action == 'edit' ? res.data.id : '',
+        id: this.action == 'editar' ? res.data.id : '',
         purchase_order: this.work_order.purchase_order,
         name: this.work_order.name,
         type: this.work_order.type,
-        third_party_id: this.work_order.third_party,
+        third_party_id: this.work_order.third_party_id,
         expected_delivery_date: this.work_order.expected_delivery_date,
-        municipality_id: this.work_order.city,
+        municipality_id: this.work_order.municipality_id,
         observations: this.work_order.observations,
-        third_party_person_id: this.work_order.third_party_person,
+        third_party_person_id: this.work_order.third_party_person_id,
         description: this.work_order.description,
         technical_requirements: this.work_order.technical_requirements,
         legal_requirements: this.work_order.legal_requirements,
-        date: this.action == 'edit' ? this.work_order.date : new Date(),
+        date: this.action == 'editar' ? this.work_order.date : new Date(),
       });
-      if (this.action == 'edit') {
+      this.newBudget(this.work_order?.elements?.App_Models_Budget, true);
+      this.newQuotation(this.work_order?.elements?.App_Models_Quotation, true);
+      this.newBusiness(this.work_order?.elements?.App_Models_Business, true);
+      this.newApuPart(this.work_order?.elements?.App_Models_ApuPart, true);
+      this.newApuSet(this.work_order?.elements?.App_Models_ApuSet, true);
+      this.newApuService(this.work_order?.elements?.App_Models_ApuService, true);
+      if (this.action == 'editar') {
         this.form.patchValue({
           code: this.work_order.code
         })
@@ -202,65 +225,94 @@ export class CrearOrdenProduccionComponent implements OnInit {
     return this.form.get('apu_services') as FormArray;
   }
 
-  newBudget(budgets) {
+  newBudget(budgets, alter = false) {
     budgets.forEach(budget => {
+      const budget_intern = alter ? budget.work_orderable : budget;
       this.budgets.push(this.fb.group({
-        id: [budget.id],
-        code: [budget.code],
-        total_cop: [budget.total_cop],
+        id: [budget_intern.id],
+        code: [budget_intern.code],
+        total_cop: [budget_intern.total_cop],
       }))
     });
   }
 
-  newQuotation(quotations) {
+  newQuotation(quotations, alter = false) {
     quotations.forEach(quotation => {
+      const quotation_intern = alter ? quotation.work_orderable : quotation;
       this.quotations.push(this.fb.group({
-        id: [quotation.id],
-        code: [quotation.code],
-        total_cop: [quotation.total_cop],
+        id: [quotation_intern.id],
+        code: [quotation_intern.code],
+        total_cop: [quotation_intern.total_cop],
       }))
     });
   }
 
-  newBusiness(business) {
+  newBusiness(business, alter = false) {
     business.forEach(business => {
+      const business_intern = alter ? business.work_orderable : business;
       this.business.push(this.fb.group({
-        id: [business.id],
-        code: [business.code],
-        total_cop: [business.total_cop],
+        id: [business_intern.id],
+        code: [business_intern.code],
+        total_cop: [business_intern.total_cop],
       }))
     });
   }
 
-  newApuPart(apu_parts) {
-    console.log(apu_parts)
+  newApuPart(apu_parts, alter = false) {
     apu_parts.forEach(apu_part => {
+      const apu_part_intern = alter ? apu_part.work_orderable : apu_part;
       this.apu_parts.push(this.fb.group({
-        id: [apu_part.apu_id],
-        code: [apu_part.code],
-        total_cop: [apu_part.total_cop],
+        id: [apu_part_intern.apu_id],
+        code: [apu_part_intern.code],
+        total_cop: [apu_part_intern.total_cop],
       }))
     });
   }
 
-  newApuSet(apu_sets) {
+  newApuSet(apu_sets, alter = false) {
     apu_sets.forEach(apu_set => {
+      const apu_set_intern = alter ? apu_set.work_orderable : apu_set;
       this.apu_sets.push(this.fb.group({
-        id: [apu_set.apu_id],
-        code: [apu_set.code],
-        total_cop: [apu_set.total_cop],
+        id: [apu_set_intern.apu_id],
+        code: [apu_set_intern.code],
+        total_cop: [apu_set_intern.total_cop],
       }))
     });
   }
 
-  newApuService(apu_services) {
+  newApuService(apu_services, alter = false) {
     apu_services.forEach(apu_service => {
+      const apu_service_intern = alter ? apu_service.work_orderable : apu_service;
       this.apu_services.push(this.fb.group({
-        id: [apu_service.apu_id],
-        code: [apu_service.code],
-        total_cop: [apu_service.total_cop],
+        id: [apu_service_intern.apu_id],
+        code: [apu_service_intern.code],
+        total_cop: [apu_service_intern.total_cop],
       }))
     });
+  }
+
+  deleteBudget(i) {
+    this.budgets.removeAt(i)
+  }
+
+  deleteQuotation(i) {
+    this.quotations.removeAt(i)
+  }
+
+  deleteBusiness(i) {
+    this.business.removeAt(i)
+  }
+
+  deleteApuPart(i) {
+    this.apu_parts.removeAt(i)
+  }
+
+  deleteApuSet(i) {
+    this.apu_sets.removeAt(i)
+  }
+
+  deleteApuService(i) {
+    this.apu_services.removeAt(i)
   }
 
   save() {

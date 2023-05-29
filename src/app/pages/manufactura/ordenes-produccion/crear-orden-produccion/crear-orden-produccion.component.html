@@ -185,6 +185,255 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <ng-container *ngIf="budgets.value.length > 0">
+            <div class="col-md-4">
+              <h6>Presupuestos</h6>
+              <div class="rounded-top table-responsive">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Código</th>
+                      <th><i class="mdi mdi-chevron-down"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let budget of budgets.value; let i = index"
+                      class="text-center"
+                    >
+                      <td>
+                        <a
+                          role="button"
+                          [routerLink]="['/crm/presupuesto/ver/', budget.id]"
+                          target="_blank"
+                          >{{ budget.code }}</a
+                        >
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm"
+                          (click)="deleteBudget(i)"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="quotations.value.length > 0">
+            <div class="col-md-4">
+              <h6>Cotizaciones</h6>
+              <div class="rounded-top table-responsive">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Código</th>
+                      <th><i class="mdi mdi-chevron-down"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let quotation of quotations.value; let i = index"
+                      class="text-center"
+                    >
+                      <td>
+                        <a
+                          role="button"
+                          [routerLink]="['/crm/cotizacion/ver/', quotation.id]"
+                          target="_blank"
+                          >{{ quotation.code }}</a
+                        >
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm"
+                          (click)="deleteQuotation(i)"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="business.value.length > 0">
+            <div class="col-md-4">
+              <h6>Negocios</h6>
+              <div class="rounded-top table-responsive">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Código</th>
+                      <th><i class="mdi mdi-chevron-down"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let busines of business.value; let i = index"
+                      class="text-center"
+                    >
+                      <td>
+                        <a
+                          role="button"
+                          [routerLink]="['/crm/negocios/', busines.id]"
+                          target="_blank"
+                          >{{ busines.code }}</a
+                        >
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm"
+                          (click)="deleteBusiness(i)"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="apu_parts.value.length > 0">
+            <div class="col-md-4">
+              <h6>Piezas</h6>
+              <div class="rounded-top table-responsive">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Código</th>
+                      <th><i class="mdi mdi-chevron-down"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let apu_part of apu_parts.value; let i = index"
+                      class="text-center"
+                    >
+                      <td>
+                        <a
+                          role="button"
+                          [routerLink]="[
+                            '/crm/apu/ver-apu-pieza/',
+                            apu_part.id
+                          ]"
+                          target="_blank"
+                          >{{ apu_part.code }}</a
+                        >
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm"
+                          (click)="deleteApuPart(i)"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="apu_sets.value.length > 0">
+            <div class="col-md-4">
+              <h6>Conjuntos</h6>
+              <div class="rounded-top table-responsive">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Código</th>
+                      <th><i class="mdi mdi-chevron-down"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let apu_set of apu_sets.value; let i = index"
+                      class="text-center"
+                    >
+                      <td>
+                        <a
+                          role="button"
+                          [routerLink]="[
+                            '/crm/apu/ver-apu-conjunto/',
+                            apu_set.id
+                          ]"
+                          target="_blank"
+                          >{{ apu_set.code }}</a
+                        >
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm"
+                          (click)="deleteApuSet(i)"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="apu_services.value.length > 0">
+            <div class="col-md-4">
+              <h6>Servicios</h6>
+              <div class="rounded-top table-responsive">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Código</th>
+                      <th><i class="mdi mdi-chevron-down"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="
+                        let apu_service of apu_services.value;
+                        let i = index
+                      "
+                      class="text-center"
+                    >
+                      <td>
+                        <a
+                          role="button"
+                          [routerLink]="[
+                            '/crm/apu/ver-apu-servicio/',
+                            apu_service.id
+                          ]"
+                          target="_blank"
+                          >{{ apu_service.code }}</a
+                        >
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm"
+                          (click)="deleteApuService(i)"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
         <div class="mb-4">
           <div>Descripcion</div>
           <ckeditor

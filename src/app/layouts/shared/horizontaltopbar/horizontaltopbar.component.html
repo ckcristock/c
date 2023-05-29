@@ -42,7 +42,7 @@
           ngbDropdownToggle
           class="btn header-item noti-icon waves-effect iconClass"
           id="page-header-notifications-dropdown"
-          (click)="getAlerts()"
+          (click)="refreshTime()"
         >
           <i class="fas fa-bell"> </i>
           <span class="badge badge-pill badge-danger" *ngIf="count > 0">{{
@@ -55,9 +55,24 @@
           aria-labelledby="page-header-notifications-dropdown"
         >
           <div class="card-title">
-            <h6 class="text-center text-primary mt-2">Notificaciones</h6>
+            <div class="d-flex justify-content-between mx-2">
+              <h6 class="text-primary mt-2">Notificaciones</h6>
+              <div class="m-2">
+                <i
+                  class="fas fa-envelope-open mx-2 text-warning"
+                  role="button"
+                  title="Marcar todas como leídas"
+                  (click)="markAllAsRead()"
+                ></i>
+                <i
+                  class="fas fa-sync text-primary"
+                  role="button"
+                  (click)="getAlerts()"
+                ></i>
+              </div>
+            </div>
           </div>
-          <div style="max-height: 65vh; overflow-y: auto">
+          <div class="scroll-container" #scrollContainer>
             <ng-container *ngIf="!loading && alerts.length > 0; else notData">
               <div class="list-group list-group-flush">
                 <a
@@ -91,7 +106,7 @@
                     <small>{{
                       notification.transmitter.full_names | titlecase
                     }}</small>
-                    <small>{{ notification.created_at | date }}</small>
+                    <small>{{ notification.time_ago }}</small>
                   </div>
                 </a>
               </div>
@@ -165,6 +180,10 @@
 </ng-template>
 
 <app-modal-alert #modalAlert> </app-modal-alert>
+
+<ngb-toast class="floating-toast" *ngIf="viewAlert" header="Nueva notificación">
+  {{ message }}
+</ngb-toast>
 
 <!-- <a href="/" class="logo logo-dark">
   <span class="logo-sm">

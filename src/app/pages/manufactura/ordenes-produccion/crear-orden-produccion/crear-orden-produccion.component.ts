@@ -46,28 +46,31 @@ export class CrearOrdenProduccionComponent implements OnInit {
     private route: ActivatedRoute,
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.loading = true;
+    this.createForm();
     this.route.params.subscribe(params => {
       this.id = params['id'];
       this.action = this.route.snapshot.url[1].path;
+      this.datosCabecera.Titulo = this.action == 'editar' ? 'Editar orden de producción' : 'Nueva orden de producción';
     })
-    this.createForm();
-    this.getData();
-    this.getThirdPerson()
     if (this.id) {
       this.getWorkOrder(this.id)
     }
+    await this.getData();
+    this.getConsecutivo();
+    this.loading = false
   }
 
-  getData() {
-    this.loading = true;
-    this.getConsecutivo();
+  async getData() {
+
+    this.getThirdPerson();
     this._third_party.getClient().subscribe((res: any) => {
       this.thirds = res.data
     })
-    this._city.getAllMunicipalities().subscribe((res: any) => {
+    await this._city.getAllMunicipalities().toPromise().then((res: any) => {
       this.cities = res.data
-      this.loading = false
+
     })
   }
 
@@ -109,6 +112,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
         code: con
       })
     }
+
   }
 
   getWorkOrder(id) {
@@ -128,7 +132,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
         return { ...res, data: { ...res.data, elements: groupedElements } };
       })
     ).subscribe((res: any) => {
-      console.log(res)
       this.work_order = res.data;
       this.loading = false
       this.form.patchValue({
@@ -225,69 +228,130 @@ export class CrearOrdenProduccionComponent implements OnInit {
     return this.form.get('apu_services') as FormArray;
   }
 
-  newBudget(budgets, alter = false) {
-    budgets.forEach(budget => {
-      const budget_intern = alter ? budget.work_orderable : budget;
-      this.budgets.push(this.fb.group({
-        id: [budget_intern.id],
-        code: [budget_intern.code],
-        total_cop: [budget_intern.total_cop],
-      }))
+  newBudget(budgets: any, alter = false): void {
+    let duplicateCount = 0;
+    budgets.forEach((budget) => {
+      const budgetToUse = alter ? budget.work_orderable : budget;
+      const idExists = this.budgets.value?.some((b) => b?.id === budgetToUse?.id);
+      if (!idExists) {
+        this.budgets.push(this.fb.group({
+          id: [budgetToUse.id],
+          code: [budgetToUse.code],
+        }));
+      } else {
+        duplicateCount++;
+      }
     });
+    if (duplicateCount > 0) {
+      this.swalAlert();
+    }
   }
 
+
   newQuotation(quotations, alter = false) {
+    let duplicateCount = 0;
     quotations.forEach(quotation => {
       const quotation_intern = alter ? quotation.work_orderable : quotation;
-      this.quotations.push(this.fb.group({
-        id: [quotation_intern.id],
-        code: [quotation_intern.code],
-        total_cop: [quotation_intern.total_cop],
-      }))
+      const idExists = this.quotations.value?.some((q) => q?.id === quotation_intern?.id);
+      if (!idExists) {
+        this.quotations.push(this.fb.group({
+          id: [quotation_intern.id],
+          code: [quotation_intern.code],
+        }))
+      } else {
+        duplicateCount++;
+      }
     });
+    if (duplicateCount > 0) {
+      this.swalAlert();
+    }
   }
 
   newBusiness(business, alter = false) {
+    let duplicateCount = 0;
     business.forEach(business => {
       const business_intern = alter ? business.work_orderable : business;
-      this.business.push(this.fb.group({
-        id: [business_intern.id],
-        code: [business_intern.code],
-        total_cop: [business_intern.total_cop],
-      }))
+      const idExists = this.business.value?.some((b) => b?.id === business_intern?.id);
+      if (!idExists) {
+        this.business.push(this.fb.group({
+          id: [business_intern.id],
+          code: [business_intern.code],
+        }))
+      } else {
+        duplicateCount++;
+      }
     });
+    if (duplicateCount > 0) {
+      this.swalAlert();
+    }
   }
 
   newApuPart(apu_parts, alter = false) {
+    let duplicateCount = 0;
     apu_parts.forEach(apu_part => {
       const apu_part_intern = alter ? apu_part.work_orderable : apu_part;
-      this.apu_parts.push(this.fb.group({
-        id: [apu_part_intern.apu_id],
-        code: [apu_part_intern.code],
-        total_cop: [apu_part_intern.total_cop],
-      }))
+      const id = alter ? apu_part_intern.id : apu_part_intern.apu_id;
+      const idExists = this.apu_parts.value?.some((a) => a?.id === id);
+      if (!idExists) {
+        this.apu_parts.push(this.fb.group({
+          id: [id],
+          code: [apu_part_intern.code],
+        }))
+      } else {
+        duplicateCount++;
+      }
     });
+    if (duplicateCount > 0) {
+      this.swalAlert();
+    }
   }
 
   newApuSet(apu_sets, alter = false) {
+    let duplicateCount = 0;
     apu_sets.forEach(apu_set => {
       const apu_set_intern = alter ? apu_set.work_orderable : apu_set;
-      this.apu_sets.push(this.fb.group({
-        id: [apu_set_intern.apu_id],
-        code: [apu_set_intern.code],
-        total_cop: [apu_set_intern.total_cop],
-      }))
+      const id = alter ? apu_set_intern.id : apu_set_intern.apu_id;
+      const idExists = this.apu_sets.value?.some((a) => a?.id === id);
+      if (!idExists) {
+        this.apu_sets.push(this.fb.group({
+          id: [id],
+          code: [apu_set_intern.code],
+        }))
+      } else {
+        duplicateCount++;
+      }
     });
+    if (duplicateCount > 0) {
+      this.swalAlert();
+    }
   }
 
   newApuService(apu_services, alter = false) {
+    let duplicateCount = 0;
     apu_services.forEach(apu_service => {
       const apu_service_intern = alter ? apu_service.work_orderable : apu_service;
-      this.apu_services.push(this.fb.group({
-        id: [apu_service_intern.apu_id],
-        code: [apu_service_intern.code],
-        total_cop: [apu_service_intern.total_cop],
-      }))
+      const id = alter ? apu_service_intern.id : apu_service_intern.apu_id;
+      const idExists = this.apu_services.value?.some((a) => a?.id === id);
+      if (!idExists) {
+        this.apu_services.push(this.fb.group({
+          id: [id],
+          code: [apu_service_intern.code],
+        }))
+      } else {
+        duplicateCount++;
+      }
+    });
+    if (duplicateCount > 0) {
+      this.swalAlert();
+    }
+  }
+
+  swalAlert() {
+    this._swal.show({
+      icon: 'info',
+      title: 'Alerta',
+      text: 'Algunos elementos no fueron agregados porque ya se encuentran en la lista.',
+      showCancel: false
     });
   }
 
@@ -318,13 +382,14 @@ export class CrearOrdenProduccionComponent implements OnInit {
   save() {
     console.log(this.form.value)
     if (this.form.valid) {
+      let action = this.action == 'editar'
       this._swal.show({
         icon: 'question',
         title: '¿Estás seguro(a)?',
-        text: 'Vamos a guardar esta orden de producción.'
+        text: 'Vamos a ' + this.action + ' esta orden de producción.'
       }).then(res => {
         if (res.isConfirmed) {
-          this._work_order.saveWorkOrder(this.form.value).subscribe(r => {
+          this._work_order.saveWorkOrder(this.form.value).subscribe((r: any) => {
             this._swal.show({
               icon: 'success',
               title: 'Correcto',
@@ -332,7 +397,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
               showCancel: false,
               timer: 100
             })
-            this.router.navigate(['/manufactura/ordenes-produccion'])
+            this.router.navigate(['/manufactura/ordenes-produccion/ver/', r.data.id])
           })
         }
       })

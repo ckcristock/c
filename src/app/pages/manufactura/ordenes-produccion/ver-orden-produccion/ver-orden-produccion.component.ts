@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
-import { groupBy, mergeMap, toArray } from 'rxjs/operators';
+import { groupBy, map, mergeMap, toArray } from 'rxjs/operators';
 import { from } from 'rxjs';
 @Component({
   selector: 'app-ver-orden-produccion',
@@ -49,7 +49,7 @@ export class VerOrdenProduccionComponent implements OnInit {
     this.ganttRenderice();
     this.route.paramMap.subscribe(params => {
       this.work_order_id = params.get('id');
-      this.ruta = environment.url_assets + '/filemanagerOT/filemanager/dialog.php?config=2&car=ordenes-produccion/op' + this.work_order_id;
+      //this.ruta = environment.url_assets + '/filemanagerOT/filemanager/dialog.php?config=2&car=ordenes-produccion/op' + this.work_order_id;
       this.createBlueprintForm();
       this.getWorkOrder();
     })
@@ -148,20 +148,27 @@ export class VerOrdenProduccionComponent implements OnInit {
       { unit: "hour", step: 1, format: "%H" }
     ];
 
-    gantt.init(this.ganttContainer.nativeElement);
+    gantt.init(this.ganttContainer?.nativeElement);
   }
 
   getWorkOrder() {
     this.loading = true
-    this._work_order.getWorkOrder(this.work_order_id).subscribe((res: any) => {
+    this._work_order.getWorkOrder(this.work_order_id).pipe(
+      map((res: any) => {
+        const elements = res.data.elements;
+        const groupedElements = elements.reduce((acc: any, curr: any) => {
+          const key = curr.work_orderable_type.replace(/[\\/\.]/g, '_');
+          if (acc[key]) {
+            acc[key].push(curr);
+          } else {
+            acc[key] = [curr];
+          }
+          return acc;
+        }, {});
+        return { ...res, data: { ...res.data, elements: groupedElements } };
+      })
+    ).subscribe((res: any) => {
       this.work_order = res.data;
-      /* console.log(res.data)
-      let a = from(this.work_order.elements).pipe(
-        groupBy((element: any) => element.work_orderable_type),
-        mergeMap((group) => group.pipe(toArray())),
-        toArray()
-      )
-      console.log(a) */
       this.datosCabecera.Codigo = res.data.code;
       this.datosCabecera.Fecha = res.data.date;
       this.datosCabecera.CodigoFormato = res.data.format_code;

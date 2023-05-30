@@ -1,9 +1,290 @@
-<div class="card">
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<div class="card" *ngIf="!loading && work_order; else placeholder">
   <div class="card-body">
     <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
     <hr class="line" />
-    <div #gantt_here class="gantt-chart"></div>
-    <ng-container *ngIf="!loading && work_order; else notData">
+    <div class="d-flex justify-content-end mb-2">
+      <div class="btn-group rounded w-sm-100">
+        <button
+          class="btn btn-info btn-sm"
+          type="button"
+          [routerLink]="[
+            '/manufactura/ordenes-produccion/editar',
+            work_order?.id
+          ]"
+        >
+          <i class="fas fa-edit"></i> Editar
+        </button>
+        <button
+          class="btn btn-primary btn-sm"
+          type="button"
+          [routerLink]="[
+            '/manufactura/ordenes-produccion/copiar',
+            work_order?.id
+          ]"
+        >
+          <i class="fas fa-copy"></i> Copiar
+        </button>
+      </div>
+    </div>
+    <!-- <div #gantt_here class="gantt-chart"></div> -->
+    <div class="rounded-top table-responsive">
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Fecha creación</th>
+            <th>Orden pedido</th>
+            <th>Tipo</th>
+            <th>Clase</th>
+            <th>Ciudad</th>
+            <th>Cliente</th>
+            <th>Fecha comprometida</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center">
+            <td>{{ work_order.created_at | date }}</td>
+            <td>{{ work_order.purchase_order }}</td>
+            <td>{{ work_order.type }}</td>
+            <td>{{ work_order.class }}</td>
+            <td>{{ work_order.city?.name }}</td>
+            <td>
+              {{ work_order.third_party?.text }} <br />
+              {{ work_order.third_party_person?.name | uppercase }}
+            </td>
+            <td>{{ work_order.expected_delivery_date | date }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row">
+      <ng-container *ngIf="work_order?.elements?.App_Models_Budget.length > 0">
+        <div class="col-md-4">
+          <h6>Presupuestos</h6>
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Código</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let budget of work_order?.elements?.App_Models_Budget;
+                    let i = index
+                  "
+                  class="text-center"
+                >
+                  <td>
+                    <a
+                      role="button"
+                      [routerLink]="[
+                        '/crm/presupuesto/ver/',
+                        budget.work_orderable.id
+                      ]"
+                      target="_blank"
+                      >{{ budget.work_orderable.code }}</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container
+        *ngIf="work_order?.elements?.App_Models_Quotation.length > 0"
+      >
+        <div class="col-md-4">
+          <h6>Cotizaciones</h6>
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Código</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let quotation of work_order?.elements?.App_Models_Quotation;
+                    let i = index
+                  "
+                  class="text-center"
+                >
+                  <td>
+                    <a
+                      role="button"
+                      [routerLink]="[
+                        '/crm/cotizacion/ver/',
+                        quotation.work_orderable.id
+                      ]"
+                      target="_blank"
+                      >{{ quotation.work_orderable.code }}</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container
+        *ngIf="work_order?.elements?.App_Models_Business.length > 0"
+      >
+        <div class="col-md-4">
+          <h6>Negocios</h6>
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Código</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let busines of work_order?.elements?.App_Models_Business;
+                    let i = index
+                  "
+                  class="text-center"
+                >
+                  <td>
+                    <a
+                      role="button"
+                      [routerLink]="[
+                        '/crm/negocios/',
+                        busines.work_orderable.id
+                      ]"
+                      target="_blank"
+                      >{{ busines.work_orderable.code }}</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="work_order?.elements?.App_Models_ApuPart.length > 0">
+        <div class="col-md-4">
+          <h6>Piezas</h6>
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Código</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let apu_part of work_order?.elements?.App_Models_ApuPart;
+                    let i = index
+                  "
+                  class="text-center"
+                >
+                  <td>
+                    <a
+                      role="button"
+                      [routerLink]="[
+                        '/crm/apu/ver-apu-pieza/',
+                        apu_part.work_orderable.id
+                      ]"
+                      target="_blank"
+                      >{{ apu_part.work_orderable.code }}</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="work_order?.elements?.App_Models_ApuSet.length > 0">
+        <div class="col-md-4">
+          <h6>Conjuntos</h6>
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Código</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let apu_set of work_order?.elements?.App_Models_ApuSet;
+                    let i = index
+                  "
+                  class="text-center"
+                >
+                  <td>
+                    <a
+                      role="button"
+                      [routerLink]="[
+                        '/crm/apu/ver-apu-conjunto/',
+                        apu_set.work_orderable.id
+                      ]"
+                      target="_blank"
+                      >{{ apu_set.work_orderable.code }}</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container
+        *ngIf="work_order?.elements?.App_Models_ApuService.length > 0"
+      >
+        <div class="col-md-4">
+          <h6>Servicios</h6>
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Código</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="
+                    let apu_service of work_order?.elements
+                      ?.App_Models_ApuService;
+                    let i = index
+                  "
+                  class="text-center"
+                >
+                  <td>
+                    <a
+                      role="button"
+                      [routerLink]="[
+                        '/crm/apu/ver-apu-servicio/',
+                        apu_service.work_orderable.id
+                      ]"
+                      target="_blank"
+                      >{{ apu_service.work_orderable.code }}</a
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <h6>Descripción</h6>
+    <div [innerHTML]="work_order.description"></div>
+    <h6>Requisitos técnicos, funcionales y desempeño</h6>
+    <div [innerHTML]="work_order.technical_requirements"></div>
+    <h6>Requisitos legales o reglamentos aplicacbles</h6>
+    <div [innerHTML]="work_order.legal_requirements"></div>
+    <ng-container>
       <mat-accordion class="accordion-custom">
         <mat-expansion-panel class="mat-elevation-z0">
           <mat-expansion-panel-header>
@@ -16,102 +297,6 @@
         </mat-expansion-panel>
         <mat-expansion-panel class="mat-elevation-z0">
           <mat-expansion-panel-header>
-            <mat-panel-title> Detalles </mat-panel-title>
-            <mat-panel-description>
-              <span></span>
-              <mat-icon>info</mat-icon>
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <div class="row mx-3">
-            <div class="col-md-3 d-flex justify-content-between border py-2">
-              <b>Fecha elab.</b>
-              <span>{{ work_order.created_at | date }}</span>
-            </div>
-            <div class="col-md-3 d-flex justify-content-between border py-2">
-              <b>Orden pedido</b>
-              <span>{{ work_order.purchase_order }}</span>
-            </div>
-            <div class="col-md-3 d-flex justify-content-between border py-2">
-              <b>Cotización</b>
-              <span
-                ><a
-                  [routerLink]="[
-                    '/crm/cotizacion/ver',
-                    work_order.quotation_id
-                  ]"
-                  href=""
-                  >{{ work_order.quotation.line }} -
-                  {{ work_order.quotation.project }}</a
-                ></span
-              >
-            </div>
-            <div class="col-md-3 d-flex justify-content-between border py-2">
-              <b>Ciudad</b>
-              <span>{{ work_order.city.name }}</span>
-            </div>
-            <div class="col-md-3 d-flex justify-content-between border py-2">
-              <b>Elabora</b>
-              <span>????</span>
-            </div>
-            <div class="col-md-3 d-flex justify-content-between border py-2">
-              <b>Entrega pactada</b>
-              <span>{{ work_order.delivery_date | date }}</span>
-            </div>
-            <div class="col-md-3 d-flex justify-content-between border py-2">
-              <b>Entrega real</b>
-              <span></span>
-            </div>
-            <div class="col-md-3 d-flex justify-content-between border py-2">
-              <b>Tipo proyecto</b>
-              <span>{{ work_order.type | uppercase }}</span>
-            </div>
-            <div class="col-md-6 d-flex justify-content-between border py-2">
-              <b>Cliente</b>
-              <span>{{ work_order.third_party.text | uppercase }}</span>
-            </div>
-            <div class="col-md-6 d-flex justify-content-between border py-2">
-              <b>Solicitado por</b>
-              <span>{{ work_order.third_party_person.name | uppercase }}</span>
-            </div>
-            <div class="col-md-12 border py-2">
-              <b>Detalles generales</b>
-              <ul class="mb-0">
-                <li>
-                  <a
-                    (click)="
-                      openModal(
-                        view_requirements,
-                        1,
-                        work_order.technical_requirements
-                      )
-                    "
-                    href="javascript:void(0)"
-                    >Requisitos técnicos, funcionales y desempeño</a
-                  >
-                </li>
-                <li>
-                  <a
-                    (click)="
-                      openModal(
-                        view_requirements,
-                        2,
-                        work_order.legal_requirements
-                      )
-                    "
-                    href="javascript:void(0)"
-                    >Requisitos legales o reglamentos aplicacbles</a
-                  >
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-12 border py-2">
-              <b>Descripción</b>
-              <div [innerHTML]="work_order.description"></div>
-            </div>
-          </div>
-        </mat-expansion-panel>
-        <mat-expansion-panel class="mat-elevation-z0">
-          <mat-expansion-panel-header>
             <mat-panel-title> Planos y archivos </mat-panel-title>
             <mat-panel-description>
               <span></span>
@@ -119,11 +304,11 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div class="mx-3">
-            <iframe
+            <!-- <iframe
               [src]="ruta | safe"
               style="width: 100%; height: 30rem; border: 0"
               scrolling="yes"
-            ></iframe>
+            ></iframe> -->
             <ng-container [formGroup]="blueprintForm">
               <div class="row">
                 <mat-form-field class="col pb-0" appearance="outline">
@@ -217,29 +402,6 @@
     </ng-container>
   </div>
 </div>
-
-<ng-template #view_requirements let-modal>
-  <div class="modal-header">
-    <h4 class="text-primary modal-title">{{ modal_title }}</h4>
-    <button
-      type="button"
-      class="close"
-      data-dismiss="modal"
-      aria-label="Close"
-      (click)="_modal.close()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div [innerHTML]="modal_content"></div>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
-      Cerrar
-    </button>
-  </div>
-</ng-template>
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>

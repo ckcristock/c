@@ -48,10 +48,14 @@
               class="custom-label text-info"
               role="button"
               triggers="mouseenter:mouseleave"
-              >{{ horario.leave_time_one | time }}
+              ><i
+                *ngIf="!horario.img_two"
+                class="fas fa-exclamation-circle text-warning"
+              ></i>
+              {{ horario.leave_time_one | time }}
             </span>
             <ng-template #salidaUno>
-              <div>
+              <div *ngIf="horario.img_two; else noImage">
                 <img [src]="horario.img_two" class="img-fluid" />
               </div>
             </ng-template>
@@ -77,10 +81,15 @@
               class="custom-label text-info"
               role="button"
               triggers="mouseenter:mouseleave"
-              >{{ horario.entry_time_two | time }}
+            >
+              <i
+                *ngIf="!horario.img_three"
+                class="fas fa-exclamation-circle text-warning"
+              ></i>
+              {{ horario.entry_time_two | time }}
             </span>
             <ng-template #entradaDos>
-              <div>
+              <div *ngIf="horario.img_three; else noImage">
                 <img [src]="horario.img_three" class="img-fluid" />
               </div>
             </ng-template>
@@ -106,10 +115,15 @@
               class="custom-label text-info"
               role="button"
               triggers="mouseenter:mouseleave"
-              >{{ horario.leave_time_two | time }}
+            >
+              <i
+                *ngIf="!horario.img_four"
+                class="fas fa-exclamation-circle text-warning"
+              ></i>
+              {{ horario.leave_time_two | time }}
             </span>
             <ng-template #salidaDos>
-              <div>
+              <div *ngIf="horario.img_four; else noImage">
                 <img [src]="horario.img_four" class="img-fluid" />
               </div>
             </ng-template>
@@ -147,3 +161,7 @@
   <span>Sin reportar</span>
 </ng-template>
 <ng-template #popTitle>Foto</ng-template>
+<ng-template #noImage>
+  Esta hora se ha generado automaticamente con la información del turno porque
+  el funcionario no marcó.
+</ng-template>

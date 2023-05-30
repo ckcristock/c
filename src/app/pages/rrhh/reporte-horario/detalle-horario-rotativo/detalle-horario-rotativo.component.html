@@ -145,12 +145,20 @@
               class="custom-label text-info"
               role="button"
               triggers="mouseenter:mouseleave"
-              >{{ horario.leave_time_one | time }}
+              ><i
+                *ngIf="!horario.img_two"
+                class="fas fa-exclamation-circle text-warning"
+              ></i>
+              {{ horario.leave_time_one | time }}
             </span>
             <ng-template #salidaUno>
-              <div>
+              <div *ngIf="horario.img_two; else noImage">
                 <img [src]="horario.img_two" class="img-fluid" />
               </div>
+              <ng-template #noImage>
+                Esta hora se ha generado automaticamente con la información del
+                turno porque el funcionario no marcó salida.
+              </ng-template>
             </ng-template>
             <a
               class="btn btn-link p-0"

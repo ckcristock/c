@@ -16,6 +16,7 @@ import { RightsidebarComponent } from '../rightsidebar/rightsidebar.component';
 import Echo from 'laravel-echo';
 import { map } from 'rxjs/operators';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -66,27 +67,28 @@ export class HorizontaltopbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.scrollContainer.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
-    const echo = new Echo({
-      broadcaster: 'pusher',
-      cluster: 'mt1',
-      key: 'ASDASD2121',
-      wsHost: window.location.hostname,
-      wsPort: 6001,
-      wssPort: 6001,
-      forceTLS: false,
-      encrypted: false,
-      disableStats: true,
-      enabledTransports: ['ws']
-    })
-    echo.channel('notification').listen('NewNotification', (e: any) => {
-      this.viewAlert = true;
-      this.message = e.message?.description;
-      this.getAlerts();
-      console.log(e)
-      setTimeout(() => {
-        this.viewAlert = false;
-      }, 6000);
-    })
+    if (environment.production) {
+      const echo = new Echo({
+        broadcaster: 'pusher',
+        cluster: 'mt1',
+        key: 'ASDASD2121',
+        wsHost: window.location.hostname,
+        wsPort: 6001,
+        wssPort: 6001,
+        forceTLS: false,
+        encrypted: false,
+        disableStats: true,
+        enabledTransports: ['ws']
+      })
+      echo.channel('notification').listen('NewNotification', (e: any) => {
+        this.viewAlert = true;
+        this.message = e.message?.description;
+        this.getAlerts();
+        setTimeout(() => {
+          this.viewAlert = false;
+        }, 6000);
+      })
+    }
     this.element = document.documentElement;
 
     this.user = this._user.user;

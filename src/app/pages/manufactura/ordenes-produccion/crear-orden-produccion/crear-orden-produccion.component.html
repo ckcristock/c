@@ -42,7 +42,7 @@
             />
             <mat-hint
               >{{
-                (form.get("expected_delivery_date").value
+                (form?.get("expected_delivery_date")?.value
                   | date : "fullDate") || "DD/MM/YYYY"
               }}
             </mat-hint>
@@ -77,7 +77,7 @@
               formControlName="municipality_id"
               [items]="cities"
               bindLabel="text"
-              [class.is-invalid]="form.get('municipality_id')?.invalid"
+              [class.is-invalid]="form?.get('municipality_id')?.invalid"
               appearance="outline"
               [appendTo]="'body'"
               [clearable]="false"
@@ -89,7 +89,7 @@
           </div>
           <div
             class="col-md-6 mat-form-field-wrapper"
-            *ngIf="form.get('third_party_id').enabled"
+            *ngIf="form?.get('third_party_id')?.enabled"
           >
             <ng-select
               formControlName="third_party_id"
@@ -97,7 +97,7 @@
               [clearable]="false"
               bindLabel="text"
               appearance="outline"
-              [class.is-invalid]="form.get('third_party_id')?.invalid"
+              [class.is-invalid]="form?.get('third_party_id')?.invalid"
               [appendTo]="'body'"
               placeholder="Cliente *"
               bindValue="value"
@@ -108,7 +108,7 @@
           </div>
           <div
             class="col-md-6 mat-form-field-wrapper"
-            *ngIf="form.get('third_party_person_id').enabled"
+            *ngIf="form?.get('third_party_person_id')?.enabled"
           >
             <ng-select
               formControlName="third_party_person_id"
@@ -116,7 +116,7 @@
               [clearable]="false"
               bindLabel="text"
               appearance="outline"
-              [class.is-invalid]="form.get('third_party_person_id')?.invalid"
+              [class.is-invalid]="form?.get('third_party_person_id')?.invalid"
               [appendTo]="'body'"
               placeholder="Contacto *"
               bindValue="value"
@@ -143,42 +143,42 @@
               <button
                 class="btn btn-info"
                 type="button"
-                (click)="modalPresupuesto.openModal()"
+                (click)="modalPresupuesto?.openModal()"
               >
                 <i class="fas fa-file-invoice-dollar"></i> Presupuesto
               </button>
               <button
                 class="btn btn-info"
                 type="button"
-                (click)="modalCotizacion.openModal()"
+                (click)="modalCotizacion?.openModal()"
               >
                 <i class="fas fa-file-alt"></i> Cotización
               </button>
               <button
                 class="btn btn-info"
                 type="button"
-                (click)="modalNegocio.openModal()"
+                (click)="modalNegocio?.openModal()"
               >
                 <i class="fas fa-building"></i> Negocio
               </button>
               <button
                 class="btn btn-info"
                 type="button"
-                (click)="modalPieza.openConfirm()"
+                (click)="modalPieza?.openConfirm()"
               >
                 <i class="fas fa-cogs"></i> Pieza
               </button>
               <button
                 class="btn btn-info"
                 type="button"
-                (click)="modalConjunto.openConfirm()"
+                (click)="modalConjunto?.openConfirm()"
               >
                 <i class="fas fa-puzzle-piece"></i> Conjunto
               </button>
               <button
                 class="btn btn-info"
                 type="button"
-                (click)="modalServicio.openConfirm()"
+                (click)="modalServicio?.openConfirm()"
               >
                 <i class="fas fa-tools"></i> Servicio
               </button>
@@ -470,7 +470,7 @@
 </ng-container>
 
 <ng-template #rt_quotation let-r="result" let-t="term">
-  <div>{{ r.name }}</div>
+  <div>{{ r?.name }}</div>
 </ng-template>
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>

@@ -1,15 +1,13 @@
-import { Component, ContentChild, ContentChildren, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalService } from 'src/app/core/services/modal.service';
 import { OrdenesProduccionService } from '../../services/ordenes-produccion.service';
 import { gantt } from 'dhtmlx-gantt';
-import { environment } from 'src/environments/environment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
-import { groupBy, map, mergeMap, toArray } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-ver-orden-produccion',
   templateUrl: './ver-orden-produccion.component.html',
@@ -48,7 +46,7 @@ export class VerOrdenProduccionComponent implements OnInit {
   ngOnInit(): void {
     this.ganttRenderice();
     this.route.paramMap.subscribe(params => {
-      this.work_order_id = params.get('id');
+      this.work_order_id = params?.get('id');
       //this.ruta = environment.url_assets + '/filemanagerOT/filemanager/dialog.php?config=2&car=ordenes-produccion/op' + this.work_order_id;
       this.createBlueprintForm();
       this.getWorkOrder();
@@ -69,7 +67,7 @@ export class VerOrdenProduccionComponent implements OnInit {
   onFileSelected(event) {
     if (event.target.files[0]) {
 
-      let file = event.target.files[0];
+      let file = event?.target?.files[0];
       const types = ['application/pdf']
       if (!types.includes(file.type)) {
         this._swal.show({
@@ -80,14 +78,14 @@ export class VerOrdenProduccionComponent implements OnInit {
         });
         return null
       }
-      this.file_name = event.target.files[0].name;
+      this.file_name = event?.target?.files[0]?.name;
       this.fileAttr = 'Archivo cargado'
       var reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
+      reader.readAsDataURL(event?.target?.files[0]);
       reader.onload = (event) => {
-        this.fileString = (<FileReader>event.target).result;
+        this.fileString = (<FileReader>event?.target)?.result;
         const type = { ext: this.fileString };
-        this.type = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
+        this.type = type?.ext?.match(/[^:/]\w+(?=;|,)/)[0];
       };
       functionsUtils.fileToBase64(file).subscribe((base64) => {
         this.file = base64;
@@ -97,7 +95,7 @@ export class VerOrdenProduccionComponent implements OnInit {
   }
 
   uploadBlueprint() {
-    if (this.blueprintForm.invalid) {
+    if (this.blueprintForm?.invalid) {
       this._swal.show({
         icon: 'error',
         title: 'Campos incompletos',
@@ -153,11 +151,11 @@ export class VerOrdenProduccionComponent implements OnInit {
 
   getWorkOrder() {
     this.loading = true
-    this._work_order.getWorkOrder(this.work_order_id).pipe(
+    this._work_order?.getWorkOrder(this.work_order_id)?.pipe(
       map((res: any) => {
-        const elements = res.data.elements;
-        const groupedElements = elements.reduce((acc: any, curr: any) => {
-          const key = curr.work_orderable_type.replace(/[\\/\.]/g, '_');
+        const elements = res?.data?.elements;
+        const groupedElements = elements?.reduce((acc: any, curr: any) => {
+          const key = curr?.work_orderable_type?.replace(/[\\/\.]/g, '_');
           if (acc[key]) {
             acc[key].push(curr);
           } else {
@@ -165,13 +163,13 @@ export class VerOrdenProduccionComponent implements OnInit {
           }
           return acc;
         }, {});
-        return { ...res, data: { ...res.data, elements: groupedElements } };
+        return { ...res, data: { ...res?.data, elements: groupedElements } };
       })
     ).subscribe((res: any) => {
-      this.work_order = res.data;
-      this.datosCabecera.Codigo = res.data.code;
-      this.datosCabecera.Fecha = res.data.date;
-      this.datosCabecera.CodigoFormato = res.data.format_code;
+      this.work_order = res?.data;
+      this.datosCabecera.Codigo = res?.data?.code;
+      this.datosCabecera.Fecha = res?.data?.created_at;
+      this.datosCabecera.CodigoFormato = res?.data?.format_code;
       this.loading = false
     })
   }

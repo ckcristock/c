@@ -34,7 +34,6 @@
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
-            <th>Fecha creación</th>
             <th>Orden pedido</th>
             <th>Tipo</th>
             <th>Clase</th>
@@ -45,22 +44,21 @@
         </thead>
         <tbody>
           <tr class="text-center">
-            <td>{{ work_order.created_at | date }}</td>
-            <td>{{ work_order.purchase_order }}</td>
-            <td>{{ work_order.type }}</td>
-            <td>{{ work_order.class }}</td>
-            <td>{{ work_order.city?.name }}</td>
+            <td>{{ work_order?.purchase_order }}</td>
+            <td>{{ work_order?.type }}</td>
+            <td>{{ work_order?.class }}</td>
+            <td>{{ work_order?.city?.name }}</td>
             <td>
-              {{ work_order.third_party?.text }} <br />
-              {{ work_order.third_party_person?.name | uppercase }}
+              {{ work_order?.third_party?.text }} <br />
+              {{ work_order?.third_party_person?.name | uppercase }}
             </td>
-            <td>{{ work_order.expected_delivery_date | date }}</td>
+            <td>{{ work_order?.expected_delivery_date | date }}</td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="row">
-      <ng-container *ngIf="work_order?.elements?.App_Models_Budget.length > 0">
+      <ng-container *ngIf="work_order?.elements?.App_Models_Budget?.length > 0">
         <div class="col-md-4">
           <h6>Presupuestos</h6>
           <div class="rounded-top table-responsive">
@@ -83,10 +81,10 @@
                       role="button"
                       [routerLink]="[
                         '/crm/presupuesto/ver/',
-                        budget.work_orderable.id
+                        budget?.work_orderable?.id
                       ]"
                       target="_blank"
-                      >{{ budget.work_orderable.code }}</a
+                      >{{ budget?.work_orderable?.code }}</a
                     >
                   </td>
                 </tr>
@@ -96,7 +94,7 @@
         </div>
       </ng-container>
       <ng-container
-        *ngIf="work_order?.elements?.App_Models_Quotation.length > 0"
+        *ngIf="work_order?.elements?.App_Models_Quotation?.length > 0"
       >
         <div class="col-md-4">
           <h6>Cotizaciones</h6>
@@ -120,10 +118,10 @@
                       role="button"
                       [routerLink]="[
                         '/crm/cotizacion/ver/',
-                        quotation.work_orderable.id
+                        quotation?.work_orderable?.id
                       ]"
                       target="_blank"
-                      >{{ quotation.work_orderable.code }}</a
+                      >{{ quotation?.work_orderable?.code }}</a
                     >
                   </td>
                 </tr>
@@ -133,7 +131,7 @@
         </div>
       </ng-container>
       <ng-container
-        *ngIf="work_order?.elements?.App_Models_Business.length > 0"
+        *ngIf="work_order?.elements?.App_Models_Business?.length > 0"
       >
         <div class="col-md-4">
           <h6>Negocios</h6>
@@ -157,10 +155,10 @@
                       role="button"
                       [routerLink]="[
                         '/crm/negocios/',
-                        busines.work_orderable.id
+                        busines?.work_orderable?.id
                       ]"
                       target="_blank"
-                      >{{ busines.work_orderable.code }}</a
+                      >{{ busines?.work_orderable?.code }}</a
                     >
                   </td>
                 </tr>
@@ -169,7 +167,9 @@
           </div>
         </div>
       </ng-container>
-      <ng-container *ngIf="work_order?.elements?.App_Models_ApuPart.length > 0">
+      <ng-container
+        *ngIf="work_order?.elements?.App_Models_ApuPart?.length > 0"
+      >
         <div class="col-md-4">
           <h6>Piezas</h6>
           <div class="rounded-top table-responsive">
@@ -192,10 +192,10 @@
                       role="button"
                       [routerLink]="[
                         '/crm/apu/ver-apu-pieza/',
-                        apu_part.work_orderable.id
+                        apu_part?.work_orderable?.id
                       ]"
                       target="_blank"
-                      >{{ apu_part.work_orderable.code }}</a
+                      >{{ apu_part?.work_orderable?.code }}</a
                     >
                   </td>
                 </tr>
@@ -204,7 +204,7 @@
           </div>
         </div>
       </ng-container>
-      <ng-container *ngIf="work_order?.elements?.App_Models_ApuSet.length > 0">
+      <ng-container *ngIf="work_order?.elements?.App_Models_ApuSet?.length > 0">
         <div class="col-md-4">
           <h6>Conjuntos</h6>
           <div class="rounded-top table-responsive">
@@ -227,10 +227,10 @@
                       role="button"
                       [routerLink]="[
                         '/crm/apu/ver-apu-conjunto/',
-                        apu_set.work_orderable.id
+                        apu_set?.work_orderable?.id
                       ]"
                       target="_blank"
-                      >{{ apu_set.work_orderable.code }}</a
+                      >{{ apu_set?.work_orderable?.code }}</a
                     >
                   </td>
                 </tr>
@@ -240,7 +240,7 @@
         </div>
       </ng-container>
       <ng-container
-        *ngIf="work_order?.elements?.App_Models_ApuService.length > 0"
+        *ngIf="work_order?.elements?.App_Models_ApuService?.length > 0"
       >
         <div class="col-md-4">
           <h6>Servicios</h6>
@@ -265,10 +265,10 @@
                       role="button"
                       [routerLink]="[
                         '/crm/apu/ver-apu-servicio/',
-                        apu_service.work_orderable.id
+                        apu_service?.work_orderable?.id
                       ]"
                       target="_blank"
-                      >{{ apu_service.work_orderable.code }}</a
+                      >{{ apu_service?.work_orderable?.code }}</a
                     >
                   </td>
                 </tr>
@@ -278,12 +278,18 @@
         </div>
       </ng-container>
     </div>
-    <h6>Descripción</h6>
-    <div [innerHTML]="work_order.description"></div>
-    <h6>Requisitos técnicos, funcionales y desempeño</h6>
-    <div [innerHTML]="work_order.technical_requirements"></div>
-    <h6>Requisitos legales o reglamentos aplicacbles</h6>
-    <div [innerHTML]="work_order.legal_requirements"></div>
+    <ng-container *ngIf="work_order?.description">
+      <h6>Descripción</h6>
+      <div [innerHTML]="work_order?.description"></div>
+    </ng-container>
+    <ng-container *ngIf="work_order?.technical_requirements">
+      <h6>Requisitos técnicos, funcionales y desempeño</h6>
+      <div [innerHTML]="work_order?.technical_requirements"></div>
+    </ng-container>
+    <ng-container *ngIf="work_order?.legal_requirements">
+      <h6>Requisitos legales o reglamentos aplicacbles</h6>
+      <div [innerHTML]="work_order?.legal_requirements"></div>
+    </ng-container>
     <ng-container>
       <mat-accordion class="accordion-custom">
         <mat-expansion-panel class="mat-elevation-z0">
@@ -339,7 +345,7 @@
                     mat-raised-button
                     class="w-100"
                     color="primary"
-                    (click)="fileInput.click()"
+                    (click)="fileInput?.click()"
                   >
                     <span
                       data-toggle="tooltip"

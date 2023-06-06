@@ -6,7 +6,11 @@
           <h5>{{ task_data.titulo | uppercase }}</h5>
         </div>
         <h6>Descripción</h6>
-        <div class="card-text" [innerHTML]="task_data.descripcion"></div>
+        <div
+          class="card-text"
+          [ngClass]="'inner-html-mb-0'"
+          [innerHTML]="task_data.descripcion"
+        ></div>
         <div class="d-flex justify-content-between">
           <div>
             <span
@@ -81,7 +85,11 @@
                   </div>
                 </small>
               </div>
-              <div class="card-text" [innerHTML]="item.comment"></div>
+              <div
+                class="card-text"
+                [ngClass]="'inner-html-mb-0'"
+                [innerHTML]="item.comment"
+              ></div>
               <small class="text-muted">{{
                 item.created_at | date : "MMM d, y, h:mm a"
               }}</small>

@@ -120,8 +120,8 @@ export class ItemsQuotationComponent implements OnInit {
               ? item_to_add?.quotationitemable_type
               : '',
       name: [item_to_add ? item_to_add?.name : '', Validators?.required],
-      cuantity_aux: [1, Validators?.required],
-      cuantity: 1,
+      cuantity_aux: [item_to_add ? item_to_add?.cuantity : 1, Validators?.required],
+      cuantity: item_to_add ? item_to_add?.cuantity : 1,
       value_cop_aux:
         (category == 'apu' && item_to_add && !noCreate)
           ? item_to_add?.unit_cost
@@ -228,24 +228,23 @@ export class ItemsQuotationComponent implements OnInit {
     const value_usd_aux = item?.get('value_usd_aux')
     const total_cop_aux = item?.get('total_cop_aux')
     const total_usd_aux = item?.get('total_usd_aux')
+
     value_cop_aux?.valueChanges?.subscribe(r => {
       let cuantity_aux = item?.get('cuantity_aux')?.value
-      let value_cop_aux = item?.get('value_cop_aux')?.value
-      let total_cop_aux = value_cop_aux * cuantity_aux
+      let total_cop_aux = r * cuantity_aux
       item?.patchValue({
         total_cop_aux: total_cop_aux,
-        value_cop: value_cop_aux,
+        value_cop: r,
         total_cop: total_cop_aux,
       })
     })
 
     value_usd_aux?.valueChanges?.subscribe(r => {
       let cuantity_aux = item?.get('cuantity_aux')?.value
-      let value_usd_aux = item?.get('value_usd_aux')?.value
-      let total_usd_aux = value_usd_aux * cuantity_aux
+      let total_usd_aux = r * cuantity_aux
       item?.patchValue({
         total_usd_aux: total_usd_aux,
-        value_usd: total_usd_aux,
+        value_usd: r,
         total_usd: total_usd_aux,
       })
     })
@@ -253,15 +252,14 @@ export class ItemsQuotationComponent implements OnInit {
     cuantity_aux?.valueChanges?.subscribe(r => {
       let value_cop_aux = item?.get('value_cop_aux')?.value
       let value_usd_aux = item?.get('value_usd_aux')?.value
-      let cuantity_aux = item?.get('cuantity_aux')?.value
-      let total_cop_aux = value_cop_aux * cuantity_aux
-      let total_usd_aux = value_usd_aux * cuantity_aux
+      let total_cop_aux = value_cop_aux * r
+      let total_usd_aux = value_usd_aux * r
       item?.patchValue({
         total_cop_aux: total_cop_aux,
         total_cop: total_cop_aux,
         total_usd_aux: total_usd_aux,
         total_usd: total_usd_aux,
-        cuantity: cuantity_aux,
+        cuantity: r,
       })
     })
 
@@ -376,44 +374,40 @@ export class ItemsQuotationComponent implements OnInit {
     const cuantity_aux = subItemGroup?.get('cuantity_aux')
     const value_cop_aux = subItemGroup?.get('value_cop_aux')
     const value_usd_aux = subItemGroup?.get('value_usd_aux')
-    const total_cop_aux = subItemGroup?.get('total_cop_aux')
-    const total_usd_aux = subItemGroup?.get('total_usd_aux')
     const suma = (a, b) => parseFloat(a) * parseFloat(b);
     cuantity_aux?.valueChanges?.subscribe(r => {
       let value_cop_aux = subItemGroup?.get('value_cop_aux')?.value
       let value_usd_aux = subItemGroup?.get('value_usd_aux')?.value
-      let cuantity_aux = subItemGroup?.get('cuantity_aux')?.value
-
-      let total_cop_aux = value_cop_aux * cuantity_aux
-      let total_usd_aux = value_usd_aux * cuantity_aux
+      let total_cop_aux = value_cop_aux * r
+      let total_usd_aux = value_usd_aux * r
 
       subItemGroup?.patchValue({
         total_cop_aux: total_cop_aux,
         total_cop: total_cop_aux,
         total_usd_aux: total_usd_aux,
         total_usd: total_usd_aux,
-        cuantity: cuantity_aux,
+        cuantity: r,
       })
       this?.recalculate(subItemGroup, group)
     })
+
     value_cop_aux?.valueChanges?.subscribe(r => {
       let cuantity_aux = subItemGroup?.get('cuantity_aux')?.value
-      let value_cop_aux = subItemGroup?.get('value_cop_aux')?.value
-      let total_cop_aux = value_cop_aux * cuantity_aux
+      let total_cop_aux = r * cuantity_aux
       subItemGroup?.patchValue({
         total_cop_aux: total_cop_aux,
-        value_cop: value_cop_aux,
+        value_cop: r,
         total_cop: total_cop_aux,
       })
       this.recalculate(subItemGroup, group)
     })
+
     value_usd_aux?.valueChanges?.subscribe(r => {
       let cuantity_aux = subItemGroup?.get('cuantity_aux')?.value
-      let value_usd_aux = subItemGroup?.get('value_usd_aux')?.value
-      let total_usd_aux = value_usd_aux * cuantity_aux
+      let total_usd_aux = r * cuantity_aux
       subItemGroup?.patchValue({
         total_usd_aux: total_usd_aux,
-        value_usd: value_usd_aux,
+        value_usd: r,
         total_usd: total_usd_aux,
       })
       this.recalculate(subItemGroup, group)

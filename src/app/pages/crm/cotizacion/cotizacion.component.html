@@ -380,9 +380,9 @@
           </button>
         </div>
         <ng-container *ngFor="let item of quotation?.items">
-          <div [innerHTML]="item?.name"></div>
+          <div [ngClass]="'inner-html-mb-0'" [innerHTML]="item?.name"></div>
           <!-- <ng-container *ngFor="let subitem of item?.sub_items">
-            <div [innerHTML]="subitem?.description"></div>
+            <div [ngClass]="'inner-html-mb-0'" [innerHTML]="subitem?.description"></div>
           </ng-container> -->
         </ng-container>
       </div>

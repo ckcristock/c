@@ -280,15 +280,24 @@
     </div>
     <ng-container *ngIf="work_order?.description">
       <h6>Descripción</h6>
-      <div [innerHTML]="work_order?.description"></div>
+      <div
+        [ngClass]="'inner-html-mb-0'"
+        [innerHTML]="work_order?.description"
+      ></div>
     </ng-container>
     <ng-container *ngIf="work_order?.technical_requirements">
       <h6>Requisitos técnicos, funcionales y desempeño</h6>
-      <div [innerHTML]="work_order?.technical_requirements"></div>
+      <div
+        [ngClass]="'inner-html-mb-0'"
+        [innerHTML]="work_order?.technical_requirements"
+      ></div>
     </ng-container>
     <ng-container *ngIf="work_order?.legal_requirements">
       <h6>Requisitos legales o reglamentos aplicacbles</h6>
-      <div [innerHTML]="work_order?.legal_requirements"></div>
+      <div
+        [ngClass]="'inner-html-mb-0'"
+        [innerHTML]="work_order?.legal_requirements"
+      ></div>
     </ng-container>
     <ng-container>
       <mat-accordion class="accordion-custom">

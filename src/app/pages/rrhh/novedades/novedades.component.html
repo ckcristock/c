@@ -79,15 +79,15 @@
             *ngIf="people.length > 0"
             class="btn btn-success btn-sm"
           >
-            <span *ngIf="!donwloading; else status"
-              ><i class="fas fa-file-download"></i> Descargar</span
+            <span
+              ><i
+                class="fas"
+                [class]="
+                  !donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'
+                "
+              ></i>
+              {{ !donwloading ? "Descargar" : "Descargando" }}</span
             >
-            <ng-template #status>
-              <div class="spinner-border spinner-border-sm" role="status">
-                <span class="sr-only">Loading...</span>
-              </div>
-              Generando...
-            </ng-template>
           </button>
           <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros

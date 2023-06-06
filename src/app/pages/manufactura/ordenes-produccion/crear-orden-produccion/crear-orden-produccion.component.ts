@@ -8,6 +8,7 @@ import { Texteditor2Service } from 'src/app/pages/ajustes/informacion-base/servi
 import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
 import { OrdenesProduccionService } from '../../services/ordenes-produccion.service';
 import { map } from 'rxjs/operators';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-crear-orden-produccion',
@@ -20,6 +21,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
   work_order;
   id: number;
   action: any;
+  masks = consts;
   thirds: any[] = [];
   third_people: any[] = [];
   last_id: number;
@@ -135,7 +137,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
       this.loading = false
       this.form?.patchValue({
         id: this.action == 'editar' ? res?.data?.id : '',
-        purchase_order: this.work_order?.purchase_order,
+        //purchase_order: this.work_order?.purchase_order,
         name: this.work_order?.name,
         type: this.work_order?.type,
         third_party_id: this.work_order?.third_party_id,
@@ -168,7 +170,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
       id: [''],
       code: ['', [Validators.required, Validators.maxLength(250)]],
       name: ['', [Validators.required, Validators.maxLength(250)]],
-      purchase_order: ['', [Validators.required, Validators.maxLength(250)]],
       class: ['Repuesto', Validators.required],
       type: ['V', Validators.required],
       expected_delivery_date: ['', Validators.required],
@@ -180,6 +181,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
       description: ['', Validators.maxLength(4294967295)],
       technical_requirements: ['', Validators.maxLength(4294967295)],
       legal_requirements: ['', Validators.maxLength(4294967295)],
+      purchase_orders: this.fb.array([]),
       budgets: this.fb.array([]),
       quotations: this.fb.array([]),
       business: this.fb.array([]),
@@ -227,6 +229,11 @@ export class CrearOrdenProduccionComponent implements OnInit {
     return this.form?.get('apu_services') as FormArray;
   }
 
+
+  get purchase_orders() {
+    return this.form?.get('purchase_orders') as FormArray;
+  }
+
   newBudget(budgets: any, alter = false): void {
     let duplicateCount = 0;
     budgets?.forEach((budget) => {
@@ -236,6 +243,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
         this.budgets?.push(this.fb.group({
           id: [budgetToUse?.id],
           code: [budgetToUse?.code],
+          value: [budgetToUse?.total_cop]
         }));
       } else {
         duplicateCount++;
@@ -325,6 +333,8 @@ export class CrearOrdenProduccionComponent implements OnInit {
     }
   }
 
+
+
   newApuService(apu_services, alter = false) {
     let duplicateCount = 0;
     apu_services?.forEach(apu_service => {
@@ -343,6 +353,19 @@ export class CrearOrdenProduccionComponent implements OnInit {
     if (duplicateCount > 0) {
       this.swalAlert();
     }
+  }
+
+  addPurchaseOrder() {
+    this.purchase_orders?.push(this.fb.group({
+      number: [''],
+      value: [''],
+      file: [''],
+      name_file: ['Carga el archivo (.pdf, .jpg, .jpeg, .png)'],
+    }))
+  }
+
+  deletePurchaseOrder(i) {
+    this.purchase_orders?.removeAt(i);
   }
 
   swalAlert() {

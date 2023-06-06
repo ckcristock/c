@@ -191,7 +191,7 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Género</mat-label>
           <mat-select formControlName="gener" required>
-            <mat-option value="">No aplica</mat-option>
+            <mat-option value="No aplica">No aplica</mat-option>
             <mat-option value="M">Masculino</mat-option>
             <mat-option value="F">Femenino</mat-option>
           </mat-select>
@@ -221,8 +221,8 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de contrato</mat-label>
           <mat-select formControlName="work_contract_type_id" required>
-            <mat-option *ngFor="let item of contracts" [value]="item.value">{{
-              item.text
+            <mat-option *ngFor="let item of contracts" [value]="item.id">{{
+              item.name
             }}</mat-option>
           </mat-select>
           <mat-error *ngIf="contractType_invalid">
@@ -254,13 +254,11 @@
       <div class="row">
         <mat-form-field class="col" appearance="outline">
           <mat-label>Educación mínima</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="education"
-            placeholder="Ejm: Universidad / Carrera técnica"
-            required
-          />
+          <mat-select formControlName="education" required>
+            <mat-option *ngFor="let item of educations" [value]="item.value">{{
+              item.name
+            }}</mat-option>
+          </mat-select>
           <mat-error *ngIf="education_invalid">
             Es necesario el campo
           </mat-error>
@@ -322,6 +320,7 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Licencia de conducción</mat-label>
           <mat-select formControlName="drivingLicenseJob">
+            <mat-option value="">No aplica</mat-option>
             <mat-option *ngFor="let item of licenses" [value]="item.value">{{
               item.text
             }}</mat-option>

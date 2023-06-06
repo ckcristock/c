@@ -21,6 +21,8 @@ import { VerOrdenProduccionComponent } from './ordenes-produccion/ver-orden-prod
 import { VerIngenieriaComponent } from './ingenieria/ver-ingenieria/ver-ingenieria.component';
 import { VerDisenoComponent } from './diseno/ver-diseno/ver-diseno.component';
 import { CrmModule } from '../crm/crm.module';
+import { NgxCurrencyModule } from 'ngx-currency';
+import { DirectivesModule } from 'src/app/core/directives/directives.module';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -69,7 +71,9 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     MatNativeDateModule,
     SatDatepickerModule,
+    DirectivesModule,
     SatNativeDateModule,
+    NgxCurrencyModule,
     MatTooltipModule,
     CKEditorModule,
     NgbModule

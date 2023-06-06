@@ -7,6 +7,7 @@
       <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
       <hr class="line" />
       <ng-container [formGroup]="form">
+        <h6>Información básica</h6>
         <div class="row">
           <mat-form-field class="col-md-6" appearance="outline">
             <mat-label>Nombre</mat-label>
@@ -20,18 +21,8 @@
             />
             <mat-error>Campo obligatorio</mat-error>
           </mat-form-field>
-          <mat-form-field class="col-md-3" appearance="outline">
-            <mat-label>Órden de pedido</mat-label>
-            <input
-              matInput
-              type="text"
-              formControlName="purchase_order"
-              autocomplete="off"
-              required
-            />
-            <mat-error>Campo obligatorio</mat-error>
-          </mat-form-field>
-          <mat-form-field class="col-md-3" appearance="outline">
+
+          <mat-form-field class="col-md-6" appearance="outline">
             <mat-label>Fecha de entrega</mat-label>
             <input
               formControlName="expected_delivery_date"
@@ -56,9 +47,9 @@
           <mat-form-field class="col-md-3" appearance="outline">
             <mat-label>Tipo</mat-label>
             <mat-select formControlName="type" required>
-              <mat-option value="V">V</mat-option>
-              <mat-option value="Y">I</mat-option>
-              <mat-option value="G">G</mat-option>
+              <mat-option value="V">Venta</mat-option>
+              <mat-option value="Y">Interna</mat-option>
+              <mat-option value="G">Garantía</mat-option>
             </mat-select>
             <mat-error>Campo obligatorio</mat-error>
           </mat-form-field>
@@ -143,13 +134,6 @@
               <button
                 class="btn btn-info"
                 type="button"
-                (click)="modalPresupuesto?.openModal()"
-              >
-                <i class="fas fa-file-invoice-dollar"></i> Presupuesto
-              </button>
-              <button
-                class="btn btn-info"
-                type="button"
                 (click)="modalCotizacion?.openModal()"
               >
                 <i class="fas fa-file-alt"></i> Cotización
@@ -161,72 +145,10 @@
               >
                 <i class="fas fa-building"></i> Negocio
               </button>
-              <button
-                class="btn btn-info"
-                type="button"
-                (click)="modalPieza?.openConfirm()"
-              >
-                <i class="fas fa-cogs"></i> Pieza
-              </button>
-              <button
-                class="btn btn-info"
-                type="button"
-                (click)="modalConjunto?.openConfirm()"
-              >
-                <i class="fas fa-puzzle-piece"></i> Conjunto
-              </button>
-              <button
-                class="btn btn-info"
-                type="button"
-                (click)="modalServicio?.openConfirm()"
-              >
-                <i class="fas fa-tools"></i> Servicio
-              </button>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <ng-container *ngIf="budgets.value.length > 0">
-            <div class="col-md-4">
-              <h6>Presupuestos</h6>
-              <div class="rounded-top table-responsive">
-                <table class="table table-bordered table-striped table-sm">
-                  <thead class="bg-light">
-                    <tr class="text-center text-uppercase">
-                      <th>Código</th>
-                      <th><i class="mdi mdi-chevron-down"></i></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      *ngFor="let budget of budgets.value; let i = index"
-                      class="text-center"
-                    >
-                      <td>
-                        <a
-                          role="button"
-                          [routerLink]="['/crm/presupuesto/ver/', budget.id]"
-                          target="_blank"
-                          >{{ budget.code }}</a
-                        >
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          class="btn btn-danger btn-sm"
-                          (click)="deleteBudget(i)"
-                        >
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </ng-container>
           <ng-container *ngIf="quotations.value.length > 0">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <h6>Cotizaciones</h6>
               <div class="rounded-top table-responsive">
                 <table class="table table-bordered table-striped table-sm">
@@ -265,7 +187,7 @@
             </div>
           </ng-container>
           <ng-container *ngIf="business.value.length > 0">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <h6>Negocios</h6>
               <div class="rounded-top table-responsive">
                 <table class="table table-bordered table-striped table-sm">
@@ -303,135 +225,246 @@
               </div>
             </div>
           </ng-container>
-          <ng-container *ngIf="apu_parts.value.length > 0">
-            <div class="col-md-4">
-              <h6>Piezas</h6>
-              <div class="rounded-top table-responsive">
-                <table class="table table-bordered table-striped table-sm">
-                  <thead class="bg-light">
-                    <tr class="text-center text-uppercase">
-                      <th>Código</th>
-                      <th><i class="mdi mdi-chevron-down"></i></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      *ngFor="let apu_part of apu_parts.value; let i = index"
-                      class="text-center"
-                    >
-                      <td>
-                        <a
-                          role="button"
-                          [routerLink]="[
-                            '/crm/apu/ver-apu-pieza/',
-                            apu_part.id
-                          ]"
-                          target="_blank"
-                          >{{ apu_part.code }}</a
-                        >
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          class="btn btn-danger btn-sm"
-                          (click)="deleteApuPart(i)"
-                        >
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="apu_sets.value.length > 0">
-            <div class="col-md-4">
-              <h6>Conjuntos</h6>
-              <div class="rounded-top table-responsive">
-                <table class="table table-bordered table-striped table-sm">
-                  <thead class="bg-light">
-                    <tr class="text-center text-uppercase">
-                      <th>Código</th>
-                      <th><i class="mdi mdi-chevron-down"></i></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      *ngFor="let apu_set of apu_sets.value; let i = index"
-                      class="text-center"
-                    >
-                      <td>
-                        <a
-                          role="button"
-                          [routerLink]="[
-                            '/crm/apu/ver-apu-conjunto/',
-                            apu_set.id
-                          ]"
-                          target="_blank"
-                          >{{ apu_set.code }}</a
-                        >
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          class="btn btn-danger btn-sm"
-                          (click)="deleteApuSet(i)"
-                        >
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="apu_services.value.length > 0">
-            <div class="col-md-4">
-              <h6>Servicios</h6>
-              <div class="rounded-top table-responsive">
-                <table class="table table-bordered table-striped table-sm">
-                  <thead class="bg-light">
-                    <tr class="text-center text-uppercase">
-                      <th>Código</th>
-                      <th><i class="mdi mdi-chevron-down"></i></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      *ngFor="
-                        let apu_service of apu_services.value;
-                        let i = index
-                      "
-                      class="text-center"
-                    >
-                      <td>
-                        <a
-                          role="button"
-                          [routerLink]="[
-                            '/crm/apu/ver-apu-servicio/',
-                            apu_service.id
-                          ]"
-                          target="_blank"
-                          >{{ apu_service.code }}</a
-                        >
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          class="btn btn-danger btn-sm"
-                          (click)="deleteApuService(i)"
-                        >
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </ng-container>
+        </div>
+        <hr />
+        <h6>Datos financieros</h6>
+        <ng-container
+          *ngIf="purchase_orders?.controls?.length > 0; else notDataAlert"
+        >
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Número de orden</th>
+                  <th>Valor</th>
+                  <th>Documento</th>
+                  <th><i class="fas fa-trash-alt"></i></th>
+                </tr>
+              </thead>
+              <tbody formArrayName="purchase_orders">
+                <ng-container
+                  *ngFor="let item of purchase_orders?.controls; let i = index"
+                >
+                  <tr [formGroupName]="i">
+                    <td>
+                      <mat-form-field class="pb-0 w-100" appearance="outline">
+                        <input
+                          matInput
+                          placeholder="Ingresa el número de orden"
+                          type="text"
+                          formControlName="number"
+                          autocomplete="off"
+                          required
+                        />
+                      </mat-form-field>
+                    </td>
+                    <td>
+                      <mat-form-field class="pb-0 w-100" appearance="outline">
+                        <input
+                          matInput
+                          type="text"
+                          currencyMask
+                          formControlName="value"
+                          [options]="masks.maskCOP"
+                          appInputPosition
+                          autocomplete="off"
+                          required
+                        />
+                      </mat-form-field>
+                    </td>
+                    <td>
+                      <div class="input-group">
+                        <div class="custom-file">
+                          <input
+                            type="file"
+                            class="custom-file-input"
+                            accept=".png,.jpg,.jpeg,.pdf"
+                            (change)="onFileChanged($event)"
+                          />
+                          <label class="custom-file-label">{{
+                            item.get("name_file").value
+                          }}</label>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      <button
+                        class="btn btn-danger btn-sm"
+                        type="button"
+                        (click)="deletePurchaseOrder(i)"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+        <div class="btn-group btn-block">
+          <button
+            class="btn btn-primary btn-sm"
+            placement="bottom"
+            type="button"
+            (click)="addPurchaseOrder()"
+          >
+            <i class="fas fa-plus"></i>
+            Agregar
+          </button>
+        </div>
+        <hr />
+        <div class="btn-group btn-block mb-2" role="group">
+          <button
+            class="btn btn-info"
+            type="button"
+            (click)="modalPresupuesto?.openModal()"
+          >
+            <i class="fas fa-file-invoice-dollar"></i> Presupuesto
+          </button>
+
+          <button
+            class="btn btn-info"
+            type="button"
+            (click)="modalPieza?.openConfirm()"
+          >
+            <i class="fas fa-cogs"></i> Pieza
+          </button>
+          <button
+            class="btn btn-info"
+            type="button"
+            (click)="modalConjunto?.openConfirm()"
+          >
+            <i class="fas fa-puzzle-piece"></i> Conjunto
+          </button>
+          <button
+            class="btn btn-info"
+            type="button"
+            (click)="modalServicio?.openConfirm()"
+          >
+            <i class="fas fa-tools"></i> Servicio
+          </button>
+        </div>
+        <div
+          class="rounded-top table-responsive"
+          *ngIf="
+            budgets.value.length > 0 ||
+            apu_parts.value.length > 0 ||
+            apu_sets.value.length > 0 ||
+            apu_services.value.length > 0
+          "
+        >
+          <table class="table table-bordered table-striped table-sm">
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Tipo</th>
+                <th>Código</th>
+                <th>Valor</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let budget of budgets.value; let i = index"
+                class="text-center"
+              >
+                <td>Presupuesto</td>
+                <td>
+                  <a
+                    role="button"
+                    [routerLink]="['/crm/presupuesto/ver/', budget.id]"
+                    target="_blank"
+                    >{{ budget.code }}</a
+                  >
+                </td>
+                <td>${{ budget.value | number : "1.2-2" }}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteBudget(i)"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr
+                *ngFor="let apu_part of apu_parts.value; let i = index"
+                class="text-center"
+              >
+                <td>Pieza</td>
+                <td>
+                  <a
+                    role="button"
+                    [routerLink]="['/crm/apu/ver-apu-pieza/', apu_part.id]"
+                    target="_blank"
+                    >{{ apu_part.code }}</a
+                  >
+                </td>
+                <td></td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteApuPart(i)"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr
+                *ngFor="let apu_set of apu_sets.value; let i = index"
+                class="text-center"
+              >
+                <td>Conjunto</td>
+                <td>
+                  <a
+                    role="button"
+                    [routerLink]="['/crm/apu/ver-apu-conjunto/', apu_set.id]"
+                    target="_blank"
+                    >{{ apu_set.code }}</a
+                  >
+                </td>
+                <td></td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteApuSet(i)"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr
+                *ngFor="let apu_service of apu_services.value; let i = index"
+                class="text-center"
+              >
+                <td>Servicio</td>
+                <td>
+                  <a
+                    role="button"
+                    [routerLink]="[
+                      '/crm/apu/ver-apu-servicio/',
+                      apu_service.id
+                    ]"
+                    target="_blank"
+                    >{{ apu_service.code }}</a
+                  >
+                </td>
+                <td></td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteApuService(i)"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <div class="mb-4">
@@ -472,6 +505,7 @@
 <ng-template #rt_quotation let-r="result" let-t="term">
   <div>{{ r?.name }}</div>
 </ng-template>
+
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
 </ng-template>
@@ -515,3 +549,9 @@
   (update)="newBusiness($event)"
   #modalNegocio
 ></app-get-business>
+
+<ng-template #notDataAlert>
+  <div class="alert alert-warning text-center" role="alert">
+    ¡No hay datos aquí!
+  </div>
+</ng-template>

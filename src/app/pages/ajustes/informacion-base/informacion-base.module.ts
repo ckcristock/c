@@ -84,6 +84,7 @@ import { CatSubcatModule } from '../parametros/cat-subcat/cat-subcat.module';
 import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from 'saturn-datepicker';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DropdownModule } from 'primeng/dropdown';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -100,6 +101,7 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { EmbalajeComponent } from './catalogo/components/embalaje/embalaje.component';
 import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
+import { ResponsablesComponent } from './responsables/responsables.component';
 
 @NgModule({
   declarations: [
@@ -107,6 +109,7 @@ import { DirectivesModule } from 'src/app/core/directives/directives.module';
     GrupoestibaComponent,
     EmpresasComponent,
     FuncionariosComponent,
+    ResponsablesComponent,
     RegimenesNivelesComponent,
     AseguradorasComponent,
     DetalleFuncionarioComponent,
@@ -195,6 +198,7 @@ import { DirectivesModule } from 'src/app/core/directives/directives.module';
     SatNativeDateModule,
     DirectivesModule,
     CurrencyMaskModule,
+    DropdownModule,
     SweetAlert2Module.forRoot(),
   ],
   exports: [

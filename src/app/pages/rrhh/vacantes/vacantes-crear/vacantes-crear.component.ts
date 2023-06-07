@@ -24,13 +24,15 @@ export class VacantesCrearComponent implements OnInit {
 
   form: FormGroup
   fecha = new Date();
+  loading: boolean = false;
   departments: any[] = [];
-  municipalities: any[] = [];
+  masks = consts;
+  municipalities: any[] = [{ text: 'Primero selecciona un departamento', value: '', disabled: true }];
   visaSelected: boolean;
   companies: any[] = [];
   groups: any[] = [];
-  dependencies: any[] = [];
-  positions: any[] = [];
+  dependencies: any[] = [{ text: 'Primero selecciona un grupo', value: '', disabled: true }];
+  positions: any[] = [{ text: 'Primero selecciona una dependencia', value: '', disabled: true }];
   contracts: any[] = [];
   visas: any[] = [];
   licenses: any[] = [];
@@ -67,7 +69,8 @@ export class VacantesCrearComponent implements OnInit {
 
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.loading = true;
     this.createForm()
     this.getCompanies()
     this.getGroups()
@@ -76,13 +79,14 @@ export class VacantesCrearComponent implements OnInit {
     this.getVisaTypes();
     this.getDrivingLicenses();
     this.getDocumentTypes();
-    this.getSalaryTypes();
+    await this.getSalaryTypes();
+    this.loading = false;
   }
 
   createForm() {
     this.form = this.fb.group({
       company_id: ['', Validators.required],
-      title: ['', Validators.required],
+      title: ['', [Validators.required, Validators.maxLength(500)]],
       date_start: ['', Validators.required],
       date_end: ['', Validators.required],
       group_id: ['', Validators.required],
@@ -96,8 +100,8 @@ export class VacantesCrearComponent implements OnInit {
       description: ['', Validators.required],
       education: ['', Validators.required],
       experience_year: ['', Validators.required],
-      min_age: [''],
-      max_age: [''],
+      min_age: [18, Validators.min(18)],
+      max_age: [65, Validators.min(18)],
       can_trip: ['', Validators.required],
       change_residence: ['', Validators.required],
       gener: ['No aplica', Validators.required],
@@ -114,8 +118,8 @@ export class VacantesCrearComponent implements OnInit {
   }
 
 
-  getSalaryTypes() {
-    this._job.getSalaryTypes().subscribe((r: any) => {
+  async getSalaryTypes() {
+    await this._job.getSalaryTypes().toPromise().then((r: any) => {
       this.salaries = r.data;
     })
   }
@@ -147,14 +151,14 @@ export class VacantesCrearComponent implements OnInit {
   getDepartments() {
     this._department.getDepartments().subscribe((r: any) => {
       this.departments = r.data
-      this.departments.unshift({ text: 'Seleccione uno', value: '' });
+      this.departments.unshift({ text: 'Selecciona uno', value: '', disabled: true });
 
     })
   }
   getMunicipalities(department_id) {
     this._municipality.getMinicipalities({ department_id }).subscribe((r: any) => {
       this.municipalities = r.data
-      this.municipalities.unshift({ text: 'Seleccione uno', value: '' });
+      this.municipalities.unshift({ text: 'Selecciona uno', value: '', disabled: true });
     })
   }
 
@@ -192,24 +196,25 @@ export class VacantesCrearComponent implements OnInit {
   }
 
   save() {
-    this.form.markAllAsTouched()
-    if (this.form.invalid) { return false }
-    this._swal.show({
-      text: 'Vamos a crear una nueva vacante',
-      title: '¿Estás seguro(a)?',
-      icon: 'question',
-      showCancel: true,
-    })
-      .then(result => {
-        if (result.value) {
+    if (this.form.invalid) {
+      this._swal.incompleteError();
+      this.form.markAllAsTouched()
+    } else {
+      this._swal.show({
+        title: '¿Estás seguro(a)?',
+        text: 'Vamos a crear una nueva vacante',
+        icon: 'question',
+      }).then(result => {
+        if (result.isConfirmed) {
           this.sendData()
         }
       });
+    }
   }
 
   sendData() {
     this._job.save(this.form.value).subscribe((r: any) => {
-      if (r.code == 200) {
+      if (r.status) {
         this._swal.show({
           text: 'Se ha creado una nueva vacante',
           title: 'Creación exitosa',
@@ -218,8 +223,13 @@ export class VacantesCrearComponent implements OnInit {
           timer: 1000
         })
         this.router.navigateByUrl('/rrhh/vacantes')
+      } else {
+        this._swal.hardError();
       }
-    })
+    },
+      error => {
+        this._swal.hardError();
+      })
   }
   getCompanies() {
     this._company.getCompanies().subscribe((d: any) => {
@@ -232,19 +242,19 @@ export class VacantesCrearComponent implements OnInit {
   getPosition(dependency_id) {
     this._position.getPositions({ dependency_id }).subscribe((r: any) => {
       this.positions = r.data
-      this.positions.unshift({ text: 'Seleccione uno', value: '' });
+      this.positions.unshift({ text: 'Selecciona uno', value: '', disabled: true });
     })
   }
   getDependencies(group_id) {
     this._dependecies.getDependencies({ group_id }).subscribe((d: any) => {
       this.dependencies = d.data;
-      this.dependencies.unshift({ text: 'Seleccione una', value: '' });
+      this.dependencies.unshift({ text: 'Selecciona una', value: '', disabled: true });
     });
   }
   getGroups() {
     this._group.getGroup().subscribe((r: any) => {
       this.groups = r.data
-      this.groups.unshift({ text: 'Seleccione uno', value: '' });
+      this.groups.unshift({ text: 'Selecciona uno', value: '', disabled: true });
     })
   }
 

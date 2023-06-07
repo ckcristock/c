@@ -183,11 +183,16 @@ export class CrearOrdenProduccionComponent implements OnInit {
       legal_requirements: ['', Validators.maxLength(4294967295)],
       purchase_orders: this.fb.array([]),
       budgets: this.fb.array([]),
+      total_budgets: [0],
       quotations: this.fb.array([]),
       business: this.fb.array([]),
       apu_parts: this.fb.array([]),
+      total_apu_parts: [0],
       apu_sets: this.fb.array([]),
+      total_apu_sets: [0],
       apu_services: this.fb.array([]),
+      total_apu_services: [0],
+      total: [0]
     });
     const classFormControl = this.form?.get('class');
     classFormControl?.valueChanges?.subscribe(value => {
@@ -249,6 +254,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
         duplicateCount++;
       }
     });
+    this.recalculate(['budgets'])
     if (duplicateCount > 0) {
       this.swalAlert();
     }
@@ -293,41 +299,71 @@ export class CrearOrdenProduccionComponent implements OnInit {
     }
   }
 
+  recalculate(keys) {
+    keys.forEach(key => {
+      let formArray = this.form?.get(key) as FormArray;
+      let total_value = 0;
+      formArray?.controls?.forEach(control => {
+        total_value += control.value.value
+      })
+      this.form.patchValue({
+        ['total_' + key]: total_value,
+      })
+    });
+    let value =
+      this.form.get('total_budgets').value +
+      this.form.get('total_apu_parts').value +
+      this.form.get('total_apu_sets').value +
+      this.form.get('total_apu_services').value;
+    this.form.patchValue({
+      total: value
+    })
+  }
+
   newApuPart(apu_parts, alter = false) {
     let duplicateCount = 0;
     apu_parts?.forEach(apu_part => {
       const apu_part_intern = alter ? apu_part?.work_orderable : apu_part;
       const id = alter ? apu_part_intern?.id : apu_part_intern?.apu_id;
+      const value = alter ? apu_part_intern?.unit_direct_cost : apu_part_intern?.unit_cost;
       const idExists = this.apu_parts?.value?.some((a) => a?.id === id);
       if (!idExists) {
         this.apu_parts?.push(this.fb.group({
           id: [id],
           code: [apu_part_intern?.code],
+          value: [value]
         }))
       } else {
         duplicateCount++;
       }
     });
+    this.recalculate(['apu_parts'])
     if (duplicateCount > 0) {
       this.swalAlert();
     }
   }
+
+
 
   newApuSet(apu_sets, alter = false) {
     let duplicateCount = 0;
     apu_sets?.forEach(apu_set => {
       const apu_set_intern = alter ? apu_set?.work_orderable : apu_set;
       const id = alter ? apu_set_intern?.id : apu_set_intern?.apu_id;
+      console.log(apu_set_intern)
+      const value = alter ? apu_set_intern?.total_direct_cost : apu_set_intern?.unit_cost;
       const idExists = this.apu_sets?.value?.some((a) => a?.id === id);
       if (!idExists) {
         this.apu_sets?.push(this.fb.group({
           id: [id],
           code: [apu_set_intern.code],
+          value: [value]
         }))
       } else {
         duplicateCount++;
       }
     });
+    this.recalculate(['apu_sets'])
     if (duplicateCount > 0) {
       this.swalAlert();
     }
@@ -340,16 +376,19 @@ export class CrearOrdenProduccionComponent implements OnInit {
     apu_services?.forEach(apu_service => {
       const apu_service_intern = alter ? apu_service?.work_orderable : apu_service;
       const id = alter ? apu_service_intern?.id : apu_service_intern?.apu_id;
+      const value = alter ? apu_service_intern?.total_unit_cost : apu_service_intern?.unit_cost;
       const idExists = this.apu_services?.value?.some((a) => a?.id === id);
       if (!idExists) {
         this.apu_services?.push(this.fb.group({
           id: [id],
           code: [apu_service_intern?.code],
+          value: [value]
         }))
       } else {
         duplicateCount++;
       }
     });
+    this.recalculate(['apu_services'])
     if (duplicateCount > 0) {
       this.swalAlert();
     }
@@ -402,7 +441,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
   }
 
   save() {
-    //console.log(this.form.value)
+    console.log(this.form.value)
     if (this.form?.valid) {
       this._swal.show({
         icon: 'question',
@@ -424,6 +463,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
       })
     } else {
       this._swal.incompleteError();
+      this.form.markAllAsTouched();
     }
 
   }

@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { DataDinamicService } from '../../../../data-dinamic.service';
-import { OpenAgendaService } from '../../../agendamiento/open-agenda.service';
 import { PersonService } from './person.service';
 import { Observable, ReplaySubject } from 'rxjs';
-import {functionsUtils} from '../../../../core/utils/functionsUtils';
+import { functionsUtils } from '../../../../core/utils/functionsUtils';
 @Component({
   selector: 'app-persons',
   templateUrl: './persons.component.html',
@@ -112,7 +110,8 @@ export class PersonsComponent implements OnInit {
   municipalities: any = [];
   locations: any = [];
   saving = false;
-  constructor(private _dataDinamic: DataDinamicService, private _person: PersonService) {
+  constructor(
+    private _person: PersonService) {
 
   }
 
@@ -135,7 +134,7 @@ export class PersonsComponent implements OnInit {
 
   }
   imageSrc = ''
- 
+
 
   guardar(form: NgForm) {
     this.saving = true;
@@ -161,46 +160,46 @@ export class PersonsComponent implements OnInit {
 
 
   getCities(department) {
-    if (department) {
+    /* if (department) {
       this._dataDinamic.getCities({ department_id: department.value }).subscribe((req: any) => {
         this.cities = req.data
         this.cities.unshift({ text: 'Seleccione', value: '' })
       })
-    }
+    } */
   }
 
   async getDepartments() {
-    await this._dataDinamic.getDepartments().toPromise().then((req: any) => {
+    /* await this._dataDinamic.getDepartments().toPromise().then((req: any) => {
       this.departments = req.data
       this.departments.unshift({ text: 'Seleccione', value: '' })
-    })
+    }) */
   }
 
   getPeopleTypes() {
-    this._dataDinamic.getPeopleTypes().subscribe((req: any) => {
+    /* this._dataDinamic.getPeopleTypes().subscribe((req: any) => {
       this.peopleTypes = req.data
       this.peopleTypes.unshift({ text: 'Seleccione', value: '' })
-    })
+    }) */
   }
 
   getCompanies() {
-    this._dataDinamic.getCompanies(1).subscribe((req: any) => {
+    /* this._dataDinamic.getCompanies(1).subscribe((req: any) => {
       this.companies = req.data
-      /*   this.companies.unshift({ text: 'Seleccione', value: '' }) */
-    })
+      this.companies.unshift({ text: 'Seleccione', value: '' })
+    }) */
   }
 
   getSpecialties() {
-    this._dataDinamic.getSpecialties('', '').subscribe((resp: any) => {
+    /* this._dataDinamic.getSpecialties('', '').subscribe((resp: any) => {
       this.specialities = resp.data;
-    });
+    }); */
   }
 
   getTypeDocuments() {
-    this._dataDinamic.getTypeDocuments().subscribe((resp: any) => {
+    /* this._dataDinamic.getTypeDocuments().subscribe((resp: any) => {
       this.typesDocuments = resp.data;
       this.typesDocuments.unshift({ text: 'Seleccione', value: '' })
-    });
+    }); */
   }
 
 }

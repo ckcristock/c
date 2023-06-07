@@ -12,6 +12,7 @@ export class ResponsablesComponent implements OnInit {
 
   responsibles: any[] = [];
   people: any[] = [];
+  loading: boolean = false;
 
   constructor(
     private _responsibles: ResponsablesService,
@@ -25,8 +26,10 @@ export class ResponsablesComponent implements OnInit {
   }
 
   getResponsiles() {
+    this.loading = true;
     this._responsibles.getResponsibles().subscribe((res: any) => {
       this.responsibles = res.data;
+      this.loading = false;
     })
   }
 

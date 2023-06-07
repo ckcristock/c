@@ -377,7 +377,9 @@
                     >{{ budget.code }}</a
                   >
                 </td>
-                <td>${{ budget.value | number : "1.2-2" }}</td>
+                <td class="text-right">
+                  ${{ budget.value | number : "1.2-2" }}
+                </td>
                 <td>
                   <button
                     type="button"
@@ -388,6 +390,15 @@
                   </button>
                 </td>
               </tr>
+              <ng-container *ngIf="budgets.value.length > 0">
+                <tr class="table-primary">
+                  <th colspan="2" class="text-center">TOTAL PRESUPUESTOS</th>
+                  <th class="text-right">
+                    ${{ form.get("total_budgets").value | number : "1.2-2" }}
+                  </th>
+                  <td></td>
+                </tr>
+              </ng-container>
               <tr
                 *ngFor="let apu_part of apu_parts.value; let i = index"
                 class="text-center"
@@ -401,7 +412,9 @@
                     >{{ apu_part.code }}</a
                   >
                 </td>
-                <td></td>
+                <td class="text-right">
+                  ${{ apu_part.value | number : "1.2-2" }}
+                </td>
                 <td>
                   <button
                     type="button"
@@ -412,6 +425,15 @@
                   </button>
                 </td>
               </tr>
+              <ng-container *ngIf="apu_parts.value.length > 0">
+                <tr class="table-primary">
+                  <th colspan="2" class="text-center">TOTAL PIEZAS</th>
+                  <th class="text-right">
+                    ${{ form.get("total_apu_parts").value | number : "1.2-2" }}
+                  </th>
+                  <td></td>
+                </tr>
+              </ng-container>
               <tr
                 *ngFor="let apu_set of apu_sets.value; let i = index"
                 class="text-center"
@@ -425,7 +447,9 @@
                     >{{ apu_set.code }}</a
                   >
                 </td>
-                <td></td>
+                <td class="text-right">
+                  ${{ apu_set.value | number : "1.2-2" }}
+                </td>
                 <td>
                   <button
                     type="button"
@@ -436,6 +460,15 @@
                   </button>
                 </td>
               </tr>
+              <ng-container *ngIf="apu_sets.value.length > 0">
+                <tr class="table-primary">
+                  <th colspan="2" class="text-center">TOTAL CONJUNTOS</th>
+                  <th class="text-right">
+                    ${{ form.get("total_apu_sets").value | number : "1.2-2" }}
+                  </th>
+                  <td></td>
+                </tr>
+              </ng-container>
               <tr
                 *ngFor="let apu_service of apu_services.value; let i = index"
                 class="text-center"
@@ -452,7 +485,9 @@
                     >{{ apu_service.code }}</a
                   >
                 </td>
-                <td></td>
+                <td class="text-right">
+                  ${{ apu_service.value | number : "1.2-2" }}
+                </td>
                 <td>
                   <button
                     type="button"
@@ -463,10 +498,28 @@
                   </button>
                 </td>
               </tr>
+              <ng-container *ngIf="apu_services.value.length > 0">
+                <tr class="table-primary">
+                  <th colspan="2" class="text-center">TOTAL SERVCIOS</th>
+                  <th class="text-right">
+                    ${{
+                      form.get("total_apu_services").value | number : "1.2-2"
+                    }}
+                  </th>
+                  <td></td>
+                </tr>
+              </ng-container>
+              <tr class="table-success">
+                <th colspan="2" class="text-center">TOTAL</th>
+                <th class="text-right">
+                  ${{ form.get("total").value | number : "1.2-2" }}
+                </th>
+                <td></td>
+              </tr>
             </tbody>
           </table>
         </div>
-
+        <h6>Alcance</h6>
         <div class="mb-4">
           <div>Descripcion</div>
           <ckeditor

@@ -229,21 +229,21 @@
         <hr />
         <h6>Datos financieros</h6>
         <ng-container
-          *ngIf="purchase_orders?.controls?.length > 0; else notDataAlert"
+          *ngIf="orders_managment?.controls?.length > 0; else notDataAlert"
         >
           <div class="rounded-top table-responsive">
             <table class="table table-bordered table-striped table-sm">
               <thead class="bg-light">
                 <tr class="text-center text-uppercase">
-                  <th>Número de orden</th>
+                  <th>Número de orden de pedido</th>
                   <th>Valor</th>
                   <th>Documento</th>
                   <th><i class="fas fa-trash-alt"></i></th>
                 </tr>
               </thead>
-              <tbody formArrayName="purchase_orders">
+              <tbody formArrayName="orders_managment">
                 <ng-container
-                  *ngFor="let item of purchase_orders?.controls; let i = index"
+                  *ngFor="let item of orders_managment?.controls; let i = index"
                 >
                   <tr [formGroupName]="i">
                     <td>
@@ -282,7 +282,7 @@
                             (change)="onFileChanged($event)"
                           />
                           <label class="custom-file-label">{{
-                            item.get("name_file").value
+                            item.get("file_name").value
                           }}</label>
                         </div>
                       </div>
@@ -291,7 +291,7 @@
                       <button
                         class="btn btn-danger btn-sm"
                         type="button"
-                        (click)="deletePurchaseOrder(i)"
+                        (click)="deleteOrderManagement(i)"
                       >
                         <i class="fas fa-trash-alt"></i>
                       </button>
@@ -307,12 +307,18 @@
             class="btn btn-primary btn-sm"
             placement="bottom"
             type="button"
-            (click)="addPurchaseOrder()"
+            (click)="addOrderManagement()"
           >
             <i class="fas fa-plus"></i>
             Agregar
           </button>
         </div>
+        <app-list-items
+          title1="TOTAL ÓRDENES DE PEDIDO"
+          [var1]="form.get('total_order_managment').value"
+          type1="cop"
+          mt="mt-2"
+        ></app-list-items>
         <hr />
         <div class="btn-group btn-block mb-2" role="group">
           <button
@@ -512,7 +518,10 @@
               <tr class="table-success">
                 <th colspan="2" class="text-center">TOTAL</th>
                 <th class="text-right">
-                  ${{ form.get("total").value | number : "1.2-2" }}
+                  ${{
+                    form.get("total_budget_part_set_service").value
+                      | number : "1.2-2"
+                  }}
                 </th>
                 <td></td>
               </tr>
@@ -520,6 +529,15 @@
           </table>
         </div>
         <h6>Alcance</h6>
+        <div class="row">
+          <mat-form-field>
+            <mat-label
+              >Selecciona la cotización base para determinar el
+              alcance</mat-label
+            >
+            <mat-select> </mat-select>
+          </mat-form-field>
+        </div>
         <div class="mb-4">
           <div>Descripcion</div>
           <ckeditor

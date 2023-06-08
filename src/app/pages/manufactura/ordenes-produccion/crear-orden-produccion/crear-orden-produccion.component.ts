@@ -181,7 +181,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
       description: ['', Validators.maxLength(4294967295)],
       technical_requirements: ['', Validators.maxLength(4294967295)],
       legal_requirements: ['', Validators.maxLength(4294967295)],
-      purchase_orders: this.fb.array([]),
+      orders_managment: this.fb.array([]),
       budgets: this.fb.array([]),
       total_budgets: [0],
       quotations: this.fb.array([]),
@@ -192,7 +192,8 @@ export class CrearOrdenProduccionComponent implements OnInit {
       total_apu_sets: [0],
       apu_services: this.fb.array([]),
       total_apu_services: [0],
-      total: [0]
+      total_budget_part_set_service: [0],
+      total_order_managment: [0]
     });
     const classFormControl = this.form?.get('class');
     classFormControl?.valueChanges?.subscribe(value => {
@@ -235,8 +236,8 @@ export class CrearOrdenProduccionComponent implements OnInit {
   }
 
 
-  get purchase_orders() {
-    return this.form?.get('purchase_orders') as FormArray;
+  get orders_managment() {
+    return this.form?.get('orders_managment') as FormArray;
   }
 
   newBudget(budgets: any, alter = false): void {
@@ -394,17 +395,37 @@ export class CrearOrdenProduccionComponent implements OnInit {
     }
   }
 
-  addPurchaseOrder() {
-    this.purchase_orders?.push(this.fb.group({
-      number: [''],
-      value: [''],
-      file: [''],
-      name_file: ['Carga el archivo (.pdf, .jpg, .jpeg, .png)'],
-    }))
+  addOrderManagement() {
+    let order_managment = this.fb.group({
+      number: ['', [Validators.required, Validators.maxLength(500)]],
+      value: ['', [Validators.required, Validators.min(1)]],
+      file: ['', Validators.required],
+      file_name: ['Carga el archivo (.pdf, .jpg, .jpeg, .png)'],
+    });
+
+    order_managment.get('value')?.valueChanges.subscribe(() => {
+      this.calculateTotalOrderManagement();
+    });
+
+    this.orders_managment?.push(order_managment);
   }
 
-  deletePurchaseOrder(i) {
-    this.purchase_orders?.removeAt(i);
+  calculateTotalOrderManagement() {
+    const orders = this.orders_managment?.controls;
+    let total = 0;
+    if (orders) {
+      for (let order of orders) {
+        const value = order.get('value')?.value;
+        if (value) {
+          total += parseFloat(value);
+        }
+      }
+    }
+    this.form.get('total_order_managment')?.setValue(total);
+  }
+
+  deleteOrderManagement(i) {
+    this.orders_managment?.removeAt(i);
   }
 
   swalAlert() {

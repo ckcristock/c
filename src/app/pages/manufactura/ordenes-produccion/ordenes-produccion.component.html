@@ -218,42 +218,80 @@
       >
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
-            <th>Código</th>
-            <th class="text-nowrap">Fecha creación</th>
-            <th>Tipo</th>
-            <th>Clase</th>
-            <th>País</th>
-            <th>Ciudad</th>
-            <th>Cliente</th>
-            <th>Cotización</th>
-            <th>Descripción</th>
-            <th>Observaciones</th>
-            <th class="text-nowrap">Fecha comprometida</th>
-            <th class="text-nowrap">Días comprometidos</th>
-            <th class="text-nowrap">Días entrega</th>
-            <th>Estado</th>
-            <th class="text-nowrap">Fecha finalizada</th>
-            <th class="text-nowrap">Días reales</th>
-            <th>Indicador</th>
+            <th class="vertical-text">Código</th>
+            <th class="vertical-text">Creación</th>
+            <th class="vertical-text">Tipo</th>
+            <th class="vertical-text">Clase</th>
+            <th class="vertical-text">País</th>
+            <th class="vertical-text">Ciudad</th>
+            <th class="vertical-text">Cliente</th>
+            <th class="vertical-text">Cotización</th>
+            <th class="vertical-text">Descripción</th>
+            <th class="vertical-text">Observaciones</th>
+            <th class="vertical-text">
+              comprometida <br />
+              Fecha
+            </th>
+            <th class="vertical-text">
+              Días <br />
+              comprometidos
+            </th>
+            <th class="vertical-text">
+              Días <br />
+              entrega
+            </th>
+            <th class="vertical-text">Estado</th>
+            <th class="vertical-text">
+              Fecha <br />
+              finalizada
+            </th>
+            <th class="vertical-text">
+              Días <br />
+              reales
+            </th>
+            <th class="vertical-text">Indicador</th>
             <!-- Ingeniería y diseño -->
             <ng-container *ngIf="permission.permissions.engineering_and_design">
-              <th class="text-nowrap">Fecha entrega de planos</th>
-              <th class="text-nowrap">Días diseño</th>
-              <th class="text-nowrap">% Diseño</th>
+              <th class="vertical-text">
+                Fecha <br />
+                entrega <br />
+                de planos
+              </th>
+              <th class="vertical-text">
+                Días <br />
+                diseño
+              </th>
+              <th class="vertical-text">% Diseño</th>
             </ng-container>
             <!-- Producción -->
             <ng-container *ngIf="permission.permissions.production">
-              <th class="text-nowrap">Fecha recibido planos</th>
-              <th class="text-nowrap">Días producción</th>
-              <th class="text-nowrap">Fecha entrega</th>
+              <th class="vertical-text">
+                Fecha <br />
+                recibido <br />
+                planos
+              </th>
+              <th class="vertical-text">
+                Días <br />
+                producción
+              </th>
+              <th class="vertical-text">
+                Fecha <br />
+                entrega
+              </th>
             </ng-container>
             <!-- Financiero -->
             <ng-container *ngIf="permission.permissions.financial">
-              <th class="text-nowrap">N° Remisión</th>
-              <th class="text-nowrap">Fecha remisión</th>
-              <th>Valor</th>
-              <th class="text-nowrap">N° Factura</th>
-              <th class="text-nowrap">Fecha factura</th>
+              <th class="vertical-text">N° Remisión</th>
+              <th class="vertical-text">
+                Fecha <br />
+                remisión
+              </th>
+              <th class="vertical-text">Valor</th>
+              <th class="vertical-text">N° Factura</th>
+              <th class="vertical-text">
+                Fecha <br />
+                factura
+              </th>
             </ng-container>
             <th class="fixed-column"><i class="mdi mdi-chevron-down"></i></th>
           </tr>

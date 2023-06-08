@@ -9,6 +9,8 @@ import { TercerosService } from 'src/app/pages/crm/terceros/terceros.service';
 import { OrdenesProduccionService } from '../../services/ordenes-produccion.service';
 import { map } from 'rxjs/operators';
 import { consts } from 'src/app/core/utils/consts';
+import { QuotationService } from 'src/app/pages/crm/cotizacion/quotation.service';
+import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 
 @Component({
   selector: 'app-crear-orden-produccion',
@@ -46,6 +48,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
     public router: Router,
     public _consecutivos: ConsecutivosService,
     private route: ActivatedRoute,
+    private _quotation: QuotationService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -141,7 +144,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
         name: this.work_order?.name,
         type: this.work_order?.type,
         third_party_id: this.work_order?.third_party_id,
-        expected_delivery_date: this.work_order?.expected_delivery_date,
+        expected_delivery_date: new Date(this.work_order?.expected_delivery_date + 'T00:00:00'),
         municipality_id: this.work_order?.municipality_id,
         observations: this.work_order?.observations,
         third_party_person_id: this.work_order?.third_party_person_id,
@@ -149,6 +152,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
         technical_requirements: this.work_order?.technical_requirements,
         legal_requirements: this.work_order?.legal_requirements,
         date: this.action == 'editar' ? this.work_order?.date : new Date(),
+        total_order_managment: this.work_order?.total_order_managment,
       });
       this.newBudget(this.work_order?.elements?.App_Models_Budget, true);
       this.newQuotation(this.work_order?.elements?.App_Models_Quotation, true);
@@ -156,6 +160,9 @@ export class CrearOrdenProduccionComponent implements OnInit {
       this.newApuPart(this.work_order?.elements?.App_Models_ApuPart, true);
       this.newApuSet(this.work_order?.elements?.App_Models_ApuSet, true);
       this.newApuService(this.work_order?.elements?.App_Models_ApuService, true);
+      this.work_order.order_managments.forEach(order_managment => {
+        this.addOrderManagement(order_managment)
+      });
       if (this.action == 'editar') {
         this.form.patchValue({
           code: this.work_order?.code
@@ -204,6 +211,36 @@ export class CrearOrdenProduccionComponent implements OnInit {
         this.form?.controls?.third_party_id?.enable();
         this.form?.controls?.third_party_person_id?.enable();
       }
+    })
+  }
+
+  onFileChanged(event, i) {
+    if (event.target.files.length == 1) {
+      this.orders_managment.controls[i].get('file_view').markAsTouched();
+      let file = event.target.files[0];
+      const types = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf']
+      if (!types.includes(file.type)) {
+        this._swal.show({
+          icon: 'error',
+          title: 'Error de archivo',
+          showCancel: false,
+          text: 'El tipo de archivo no es válido'
+        });
+        return null
+      }
+      functionsUtils.fileToBase64(file).subscribe((base64) => {
+        this.orders_managment.controls[i].patchValue({
+          file: base64,
+          file_name: file.name,
+          file_type: file.type
+        })
+      });
+    }
+  }
+
+  determineScope(e) {
+    this._quotation.getQuotation(e.value).subscribe((res: any) => {
+      console.log(res)
     })
   }
 
@@ -317,7 +354,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
       this.form.get('total_apu_sets').value +
       this.form.get('total_apu_services').value;
     this.form.patchValue({
-      total: value
+      total_budget_part_set_service: value
     })
   }
 
@@ -395,12 +432,16 @@ export class CrearOrdenProduccionComponent implements OnInit {
     }
   }
 
-  addOrderManagement() {
+  addOrderManagement(order = null) {
+
     let order_managment = this.fb.group({
-      number: ['', [Validators.required, Validators.maxLength(500)]],
-      value: ['', [Validators.required, Validators.min(1)]],
-      file: ['', Validators.required],
-      file_name: ['Carga el archivo (.pdf, .jpg, .jpeg, .png)'],
+      number: [order ? order?.number : '', [Validators.required, Validators.maxLength(500)]],
+      value: [order ? order?.value : '', [Validators.required, Validators.min(1)]],
+      file: [order ? order?.file : '', Validators.required],
+      file_type: [],
+      file_name: [order ? order?.file_name : 'Carga el archivo (.pdf, .jpg, .jpeg, .png)'],
+      file_view: [],
+      date: [order ? new Date(order?.date + 'T00:00:00') : '', Validators.required]
     });
 
     order_managment.get('value')?.valueChanges.subscribe(() => {
@@ -411,6 +452,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
   }
 
   calculateTotalOrderManagement() {
+    console.log('llegando')
     const orders = this.orders_managment?.controls;
     let total = 0;
     if (orders) {
@@ -426,6 +468,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
 
   deleteOrderManagement(i) {
     this.orders_managment?.removeAt(i);
+    this.calculateTotalOrderManagement();
   }
 
   swalAlert() {
@@ -438,7 +481,8 @@ export class CrearOrdenProduccionComponent implements OnInit {
   }
 
   deleteBudget(i) {
-    this.budgets?.removeAt(i)
+    this.budgets?.removeAt(i);
+    this.recalculate(['budget'])
   }
 
   deleteQuotation(i) {
@@ -450,15 +494,18 @@ export class CrearOrdenProduccionComponent implements OnInit {
   }
 
   deleteApuPart(i) {
-    this.apu_parts?.removeAt(i)
+    this.apu_parts?.removeAt(i);
+    this.recalculate(['apu_parts'])
   }
 
   deleteApuSet(i) {
-    this.apu_sets?.removeAt(i)
+    this.apu_sets?.removeAt(i);
+    this.recalculate(['apu_sets'])
   }
 
   deleteApuService(i) {
-    this.apu_services?.removeAt(i)
+    this.apu_services?.removeAt(i);
+    this.recalculate(['apu_service'])
   }
 
   save() {

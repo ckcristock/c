@@ -238,6 +238,7 @@
                   <th>Número de orden de pedido</th>
                   <th>Valor</th>
                   <th>Documento</th>
+                  <th>Fecha</th>
                   <th><i class="fas fa-trash-alt"></i></th>
                 </tr>
               </thead>
@@ -278,14 +279,36 @@
                           <input
                             type="file"
                             class="custom-file-input"
+                            formControlName="file_view"
+                            [class.is-invalid]="
+                              item.get('file').invalid &&
+                              item.get('file_view').touched
+                            "
                             accept=".png,.jpg,.jpeg,.pdf"
-                            (change)="onFileChanged($event)"
+                            (change)="onFileChanged($event, i)"
                           />
                           <label class="custom-file-label">{{
                             item.get("file_name").value
                           }}</label>
                         </div>
                       </div>
+                    </td>
+                    <td>
+                      <mat-form-field class="pb-0 w-100" appearance="outline">
+                        <input
+                          formControlName="date"
+                          matInput
+                          [matDatepicker]="dateOrderManagement"
+                          [min]="today"
+                          placeholder="Selecciona la fecha"
+                          [required]="true"
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="dateOrderManagement"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #dateOrderManagement></mat-datepicker>
+                      </mat-form-field>
                     </td>
                     <td class="text-center">
                       <button
@@ -530,12 +553,19 @@
         </div>
         <h6>Alcance</h6>
         <div class="row">
-          <mat-form-field>
+          <mat-form-field class="col-md-12" appearance="outline">
             <mat-label
               >Selecciona la cotización base para determinar el
               alcance</mat-label
             >
-            <mat-select> </mat-select>
+            <mat-select (selectionChange)="determineScope($event)">
+              <mat-option
+                *ngFor="let quotation of quotations.value"
+                [value]="quotation.id"
+              >
+                {{ quotation.code }}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
         <div class="mb-4">

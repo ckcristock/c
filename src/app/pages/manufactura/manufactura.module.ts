@@ -23,6 +23,8 @@ import { VerDisenoComponent } from './diseno/ver-diseno/ver-diseno.component';
 import { CrmModule } from '../crm/crm.module';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
+import { EditorModule } from 'primeng/editor';
+import { AlcanceItemsComponent } from './ordenes-produccion/crear-orden-produccion/alcance-items/alcance-items.component';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -45,6 +47,7 @@ export const MY_FORMATS = {
     VerOrdenProduccionComponent,
     VerIngenieriaComponent,
     VerDisenoComponent,
+    AlcanceItemsComponent
   ],
   imports: [
     CommonModule,
@@ -76,7 +79,8 @@ export const MY_FORMATS = {
     NgxCurrencyModule,
     MatTooltipModule,
     CKEditorModule,
-    NgbModule
+    NgbModule,
+    EditorModule
   ],
   providers: [
     {

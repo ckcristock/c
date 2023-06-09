@@ -558,7 +558,10 @@
               >Selecciona la cotización base para determinar el
               alcance</mat-label
             >
-            <mat-select (selectionChange)="determineScope($event)">
+            <mat-select
+              (selectionChange)="determineScope($event)"
+              formControlName="quotation_id"
+            >
               <mat-option
                 *ngFor="let quotation of quotations.value"
                 [value]="quotation.id"
@@ -568,6 +571,14 @@
             </mat-select>
           </mat-form-field>
         </div>
+        <ng-container
+          *ngIf="
+            !loadingItems && quotation_items.value.length > 0;
+            else notDataItems
+          "
+        >
+          <app-alcance-items [form]="form"></app-alcance-items>
+        </ng-container>
         <div class="mb-4">
           <div>Descripcion</div>
           <ckeditor
@@ -609,6 +620,10 @@
 
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #notDataItems>
+  <app-not-data [loading]="loadingItems"></app-not-data>
 </ng-template>
 
 <app-modal-buscar-presupuesto

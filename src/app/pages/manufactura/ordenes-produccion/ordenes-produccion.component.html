@@ -217,80 +217,80 @@
         *ngIf="!loading && workOrders.length > 0; else notData"
       >
         <thead class="bg-light">
-          <tr class="text-center text-uppercase">
-            <th class="vertical-text">Código</th>
+          <tr class="text-center text-uppercase p-th-0">
+            <th>Código</th>
             <th class="vertical-text">Creación</th>
-            <th class="vertical-text">Tipo</th>
-            <th class="vertical-text">Clase</th>
-            <th class="vertical-text">País</th>
-            <th class="vertical-text">Ciudad</th>
-            <th class="vertical-text">Cliente</th>
-            <th class="vertical-text">Cotización</th>
-            <th class="vertical-text">Descripción</th>
-            <th class="vertical-text">Observaciones</th>
+            <th>Tipo</th>
+            <th>Clase</th>
+            <th>País</th>
+            <th>Ciudad</th>
+            <th>Cliente</th>
+            <th>Cotización</th>
+            <th>Descripción</th>
+            <th>Observaciones</th>
             <th class="vertical-text">
               comprometida <br />
               Fecha
             </th>
             <th class="vertical-text">
-              Días <br />
-              comprometidos
+              comprometidos <br />
+              Días
             </th>
             <th class="vertical-text">
-              Días <br />
-              entrega
+              entrega <br />
+              Días
             </th>
             <th class="vertical-text">Estado</th>
             <th class="vertical-text">
-              Fecha <br />
-              finalizada
+              finalizada <br />
+              Fecha
             </th>
             <th class="vertical-text">
-              Días <br />
-              reales
+              reales <br />
+              Días
             </th>
             <th class="vertical-text">Indicador</th>
             <!-- Ingeniería y diseño -->
             <ng-container *ngIf="permission.permissions.engineering_and_design">
               <th class="vertical-text">
-                Fecha <br />
+                de planos <br />
                 entrega <br />
-                de planos
+                Fecha
               </th>
               <th class="vertical-text">
-                Días <br />
-                diseño
+                diseño <br />
+                Días
               </th>
               <th class="vertical-text">% Diseño</th>
             </ng-container>
             <!-- Producción -->
             <ng-container *ngIf="permission.permissions.production">
               <th class="vertical-text">
-                Fecha <br />
+                planos <br />
                 recibido <br />
-                planos
+                Fecha
               </th>
               <th class="vertical-text">
-                Días <br />
-                producción
+                producción <br />
+                Días
               </th>
               <th class="vertical-text">
-                Fecha <br />
-                entrega
+                entrega <br />
+                Fecha
               </th>
             </ng-container>
             <!-- Financiero -->
             <ng-container *ngIf="permission.permissions.financial">
               <th class="vertical-text">N° Remisión</th>
               <th class="vertical-text">
-                Fecha <br />
-                remisión
+                remisión <br />
+                Fecha
               </th>
               <th class="vertical-text">Valor</th>
               <th class="vertical-text">N° Factura</th>
               <th class="vertical-text">
-                Fecha <br />
-                factura
+                factura <br />
+                Fecha
               </th>
             </ng-container>
             <th class="fixed-column"><i class="mdi mdi-chevron-down"></i></th>
@@ -299,25 +299,24 @@
         <tbody>
           <tr *ngFor="let item of workOrders" class="text-center">
             <td class="text-nowrap">{{ item.code }}</td>
-            <td>{{ item.created_at | date }}</td>
-            <td>{{ item.type }}</td>
+            <td>{{ item.created_at | date : "shortDate" }}</td>
+            <td>
+              {{
+                item.type == "V"
+                  ? "Venta"
+                  : item.type == "Y"
+                  ? "Interna"
+                  : "Garantía"
+              }}
+            </td>
             <td>{{ item.class }}</td>
             <td>{{ item.city?.department_?.country?.name }}</td>
             <td>{{ item.city?.name }}</td>
-            <td class="text-nowrap">
-              {{ item.third_party.text }}
-            </td>
+            <td>{{ item.third_party.text }}</td>
             <td>Cotización</td>
-            <td
-              role="button"
-              class="text-primary"
-              matTooltipClass="tooltip-custom"
-              [matTooltip]="item.description"
-            >
-              Ver detalles
-            </td>
+            <td>{{ item.description || "N/A" }}</td>
             <td>{{ item.observations || "N/A" }}</td>
-            <td>{{ item.expected_delivery_date | date }}</td>
+            <td>{{ item.expected_delivery_date | date : "shortDate" }}</td>
             <td>{{ item.committed_days }}</td>
             <td>{{ item.delivery_days }}</td>
             <td class="text-nowrap">
@@ -335,28 +334,40 @@
                 >{{ item.status_time }}</span
               >
             </td>
-            <td>{{ (item.delivery_date | date) || "N/A" }}</td>
+            <td>{{ (item.delivery_date | date : "shortDate") || "N/A" }}</td>
             <td>{{ item.real_days }}</td>
             <td>{{ item.indicator }}</td>
             <!-- Ingeniería y diseño -->
             <ng-container *ngIf="permission.permissions.engineering_and_design">
-              <td>{{ (item.delivery_date_of_plans | date) || "N/A" }}</td>
+              <td>
+                {{
+                  (item.delivery_date_of_plans | date : "shortDate") || "N/A"
+                }}
+              </td>
               <td>{{ item.design_days }}</td>
               <td>{{ item.design_percentage }}</td>
             </ng-container>
             <!-- Producción -->
             <ng-container *ngIf="permission.permissions.production">
-              <td>{{ (item.date_of_plans_received | date) || "N/A" }}</td>
+              <td>
+                {{
+                  (item.date_of_plans_received | date : "shortDate") || "N/A"
+                }}
+              </td>
               <td>{{ item.production_days }}</td>
-              <td>{{ (item.delivery_date | date) || "N/A" }}</td>
+              <td>{{ (item.delivery_date | date : "shortDate") || "N/A" }}</td>
             </ng-container>
             <!-- Financiero -->
             <ng-container *ngIf="permission.permissions.financial">
               <td>{{ item.referral_number || "N/A" }}</td>
-              <td>{{ (item.date_of_referral | date) || "N/A" }}</td>
+              <td>
+                {{ (item.date_of_referral | date : "shortDate") || "N/A" }}
+              </td>
               <td>{{ item.value || "N/A" }}</td>
               <td>{{ item.invoice_number || "N/A" }}</td>
-              <td>{{ (item.date_of_invoice | date) || "N/A" }}</td>
+              <td>
+                {{ (item.date_of_invoice | date : "shortDate") || "N/A" }}
+              </td>
             </ng-container>
             <!-- <td>
               <span

@@ -200,7 +200,9 @@ export class CrearOrdenProduccionComponent implements OnInit {
       apu_services: this.fb.array([]),
       total_apu_services: [0],
       total_budget_part_set_service: [0],
-      total_order_managment: [0]
+      total_order_managment: [0],
+      quotation_id: ['', Validators.required],
+      quotation_items: this.fb.array([])
     });
     const classFormControl = this.form?.get('class');
     classFormControl?.valueChanges?.subscribe(value => {
@@ -237,11 +239,35 @@ export class CrearOrdenProduccionComponent implements OnInit {
       });
     }
   }
-
+  loadingItems: boolean = false;
   determineScope(e) {
+    this.loadingItems = true;
+    this.quotation_items.clear();
     this._quotation.getQuotation(e.value).subscribe((res: any) => {
-      console.log(res)
+      res.data?.items?.forEach(item => {
+        let item_to_add = this.fb.group({
+          quotation_item_id: item.id,
+          name: [item.name, Validators.required],
+          cuantity: [item.cuantity, [Validators.required, Validators.min(1)]],
+          subitems: this.fb.array([])
+        })
+        let sub_items = item_to_add.get('subitems') as FormArray
+        this.quotation_items.push(item_to_add)
+        item.sub_items.forEach(sub_item => {
+          let subitem_to_add = this.fb.group({
+            quotation_item_subitem_id: sub_item.id,
+            name: [sub_item.description, Validators.required],
+            cuantity: [sub_item.cuantity, [Validators.required, Validators.min(1)]],
+          })
+          sub_items.push(subitem_to_add)
+        });
+      });
+      this.loadingItems = false;
     })
+  }
+
+  get quotation_items() {
+    return this.form?.get('quotation_items') as FormArray;
   }
 
   getThirdPerson() {

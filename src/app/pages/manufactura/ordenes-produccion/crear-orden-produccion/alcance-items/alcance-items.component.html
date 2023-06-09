@@ -1,0 +1,86 @@
+<ng-container [formGroup]="form">
+  <div formArrayName="quotation_items">
+    <h6>Elementos</h6>
+    <ng-container *ngIf="quotation_items?.controls?.length > 0">
+      <div class="rounded-top table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th>#</th>
+              <th>Descripción</th>
+              <th class="col-1">Cantidad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container
+              [formGroupName]="i"
+              *ngFor="let item of quotation_items?.controls; let i = index"
+            >
+              <tr class="text-center">
+                <th class="align-middle">{{ i + 1 }}</th>
+                <td>
+                  <p-editor
+                    formControlName="name"
+                    [autoResize]="true"
+                  ></p-editor>
+                </td>
+                <td>
+                  <mat-form-field class="pb-0 w-100" appearance="outline">
+                    <input
+                      matInput
+                      currencyMask
+                      appInputPositionInitial
+                      [options]="masks?.maskNumbers"
+                      formControlName="cuantity"
+                      autocomplete="off"
+                      required
+                    />
+                  </mat-form-field>
+                </td>
+              </tr>
+              <ng-container
+                *ngIf="
+                  item?.controls?.subitems?.controls?.length;
+                  else notData2
+                "
+              >
+                <ng-container formArrayName="subitems">
+                  <ng-container
+                    [formGroupName]="y"
+                    *ngFor="
+                      let subitem of item?.controls?.subitems?.controls;
+                      let y = index
+                    "
+                  >
+                    <tr class="text-center">
+                      <td class="align-middle">{{ i + 1 }}.{{ y + 1 }}</td>
+                      <td class="align-middle">
+                        <p-editor
+                          formControlName="name"
+                          [autoResize]="true"
+                        ></p-editor>
+                      </td>
+                      <td class="align-middle">
+                        <mat-form-field class="pb-0 w-100" appearance="outline">
+                          <input
+                            matInput
+                            currencyMask
+                            appInputPositionInitial
+                            [options]="masks?.maskNumbers"
+                            formControlName="cuantity"
+                            autocomplete="off"
+                            required
+                          />
+                        </mat-form-field>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>

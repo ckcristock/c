@@ -54,7 +54,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.loading = true;
     this.createForm();
-    this.route.params.subscribe(params => {
+    this.route?.params?.subscribe(params => {
       this.id = params['id'];
       this.action = this.route?.snapshot?.url[1]?.path;
       this.datosCabecera.Titulo = this.action == 'editar' ? 'Editar orden de producción' : 'Nueva orden de producción';
@@ -81,17 +81,17 @@ export class CrearOrdenProduccionComponent implements OnInit {
   getConsecutivo() {
     this._consecutivos?.getConsecutivo('work_orders')?.subscribe((r: any) => {
       this.datosCabecera.CodigoFormato = r?.data?.format_code
-      this.form.patchValue({ format_code: this.datosCabecera.CodigoFormato })
+      this.form.patchValue({ format_code: this.datosCabecera?.CodigoFormato })
       if (this.action != 'editar') {
         this.buildConsecutivo(this.form?.get('municipality_id')?.value, r)
-        this.form.get('municipality_id')?.valueChanges.subscribe(value => {
+        this.form?.get('municipality_id')?.valueChanges?.subscribe(value => {
           this.buildConsecutivo(value, r)
         });
       }
     })
   }
 
-  buildConsecutivo(value, r, context = '') {
+  buildConsecutivo(value: any, r: any, context = '') {
     if (r?.data?.city) {
       let city = this.cities?.find(x => x?.value === value)
       if (city && !city?.abbreviation) {
@@ -140,7 +140,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
       this.loading = false
       this.form?.patchValue({
         id: this.action == 'editar' ? res?.data?.id : '',
-        //purchase_order: this.work_order?.purchase_order,
         name: this.work_order?.name,
         type: this.work_order?.type,
         third_party_id: this.work_order?.third_party_id,
@@ -148,7 +147,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
         municipality_id: this.work_order?.municipality_id,
         observations: this.work_order?.observations,
         third_party_person_id: this.work_order?.third_party_person_id,
-        description: this.work_order?.description,
         technical_requirements: this.work_order?.technical_requirements,
         legal_requirements: this.work_order?.legal_requirements,
         date: this.action == 'editar' ? this.work_order?.date : new Date(),
@@ -160,7 +158,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
       this.newApuPart(this.work_order?.elements?.App_Models_ApuPart, true);
       this.newApuSet(this.work_order?.elements?.App_Models_ApuSet, true);
       this.newApuService(this.work_order?.elements?.App_Models_ApuService, true);
-      this.work_order.order_managments.forEach(order_managment => {
+      this.work_order?.order_managments?.forEach(order_managment => {
         this.addOrderManagement(order_managment)
       });
       if (this.action == 'editar') {
@@ -173,7 +171,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
   }
 
   createForm() {
-    this.form = this.fb.group({
+    this.form = this.fb?.group({
       id: [''],
       code: ['', [Validators.required, Validators.maxLength(250)]],
       name: ['', [Validators.required, Validators.maxLength(250)]],
@@ -185,7 +183,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
       third_party_person_id: [null, Validators.required],
       observations: ['', Validators.maxLength(65535)],
       format_code: ['', Validators.maxLength(250)],
-      description: ['', Validators.maxLength(4294967295)],
       technical_requirements: ['', Validators.maxLength(4294967295)],
       legal_requirements: ['', Validators.maxLength(4294967295)],
       orders_managment: this.fb.array([]),
@@ -216,12 +213,12 @@ export class CrearOrdenProduccionComponent implements OnInit {
     })
   }
 
-  onFileChanged(event, i) {
-    if (event.target.files.length == 1) {
-      this.orders_managment.controls[i].get('file_view').markAsTouched();
-      let file = event.target.files[0];
+  onFileChanged(event: any, i: any) {
+    if (event?.target?.files?.length == 1) {
+      this.orders_managment?.controls[i]?.get('file_view')?.markAsTouched();
+      let file = event?.target?.files[0];
       const types = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf']
-      if (!types.includes(file.type)) {
+      if (!types.includes(file?.type)) {
         this._swal.show({
           icon: 'error',
           title: 'Error de archivo',
@@ -230,40 +227,60 @@ export class CrearOrdenProduccionComponent implements OnInit {
         });
         return null
       }
-      functionsUtils.fileToBase64(file).subscribe((base64) => {
-        this.orders_managment.controls[i].patchValue({
+      functionsUtils?.fileToBase64(file)?.subscribe((base64) => {
+        this.orders_managment?.controls[i]?.patchValue({
           file: base64,
-          file_name: file.name,
-          file_type: file.type
+          file_name: file?.name,
+          file_type: file?.type
         })
       });
     }
   }
   loadingItems: boolean = false;
-  determineScope(e) {
+  determineScope(e: any) {
     this.loadingItems = true;
-    this.quotation_items.clear();
-    this._quotation.getQuotation(e.value).subscribe((res: any) => {
-      res.data?.items?.forEach(item => {
+    this.quotation_items?.clear();
+    this._quotation?.getQuotation(e?.value)?.subscribe((res: any) => {
+      this.form.patchValue({
+        legal_requirements: res?.data?.legal_requirements,
+        technical_requirements: res?.data?.technical_requirements
+      })
+      res?.data?.items?.forEach(item => {
         let item_to_add = this.fb.group({
-          quotation_item_id: item.id,
-          name: [item.name, Validators.required],
-          cuantity: [item.cuantity, [Validators.required, Validators.min(1)]],
-          subitems: this.fb.array([])
+          quotation_item_id: item?.id,
+          name: [item?.name, Validators.required],
+          cuantity: [item?.cuantity, [Validators.required, Validators.min(1)]],
+          subitems: this.fb.array([]),
+          unit: ['UNIDAD', Validators.required],
+          observations: ['', Validators.maxLength(4294967295)]
         })
-        let sub_items = item_to_add.get('subitems') as FormArray
-        this.quotation_items.push(item_to_add)
-        item.sub_items.forEach(sub_item => {
+        let sub_items = item_to_add?.get('subitems') as FormArray
+        this.quotation_items?.push(item_to_add)
+        item?.sub_items?.forEach(sub_item => {
           let subitem_to_add = this.fb.group({
-            quotation_item_subitem_id: sub_item.id,
-            name: [sub_item.description, Validators.required],
-            cuantity: [sub_item.cuantity, [Validators.required, Validators.min(1)]],
+            quotation_item_subitem_id: sub_item?.id,
+            name: [sub_item?.description, Validators.required],
+            cuantity: [sub_item?.cuantity, [Validators.required, Validators.min(1)]],
+            unit: ['UNIDAD', Validators.required],
+            observations: ['', Validators.maxLength(4294967295)]
           })
-          sub_items.push(subitem_to_add)
+          sub_items?.push(subitem_to_add)
         });
       });
       this.loadingItems = false;
     })
+  }
+
+  addItemToScop() {
+    let item_to_add = this.fb.group({
+      quotation_item_id: '',
+      name: ['', Validators.required],
+      cuantity: [1, [Validators.required, Validators.min(1)]],
+      subitems: this.fb.array([]),
+      unit: ['UNIDAD', Validators.required],
+      observations: ['', Validators.maxLength(4294967295)]
+    })
+    this.quotation_items?.push(item_to_add)
   }
 
   get quotation_items() {
@@ -297,8 +314,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
   get apu_services() {
     return this.form?.get('apu_services') as FormArray;
   }
-
-
   get orders_managment() {
     return this.form?.get('orders_managment') as FormArray;
   }
@@ -325,7 +340,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
   }
 
 
-  newQuotation(quotations, alter = false) {
+  newQuotation(quotations: any, alter = false) {
     let duplicateCount = 0;
     quotations?.forEach(quotation => {
       const quotation_intern = alter ? quotation?.work_orderable : quotation;
@@ -344,7 +359,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
     }
   }
 
-  newBusiness(business, alter = false) {
+  newBusiness(business: any, alter = false) {
     let duplicateCount = 0;
     business?.forEach(business => {
       const business_intern = alter ? business?.work_orderable : business;
@@ -363,28 +378,28 @@ export class CrearOrdenProduccionComponent implements OnInit {
     }
   }
 
-  recalculate(keys) {
-    keys.forEach(key => {
+  recalculate(keys: any) {
+    keys?.forEach(key => {
       let formArray = this.form?.get(key) as FormArray;
       let total_value = 0;
       formArray?.controls?.forEach(control => {
-        total_value += control.value.value
+        total_value += control?.value?.value
       })
-      this.form.patchValue({
+      this.form?.patchValue({
         ['total_' + key]: total_value,
       })
     });
     let value =
-      this.form.get('total_budgets').value +
-      this.form.get('total_apu_parts').value +
-      this.form.get('total_apu_sets').value +
-      this.form.get('total_apu_services').value;
-    this.form.patchValue({
+      this.form?.get('total_budgets')?.value +
+      this.form?.get('total_apu_parts')?.value +
+      this.form?.get('total_apu_sets')?.value +
+      this.form?.get('total_apu_services')?.value;
+    this.form?.patchValue({
       total_budget_part_set_service: value
     })
   }
 
-  newApuPart(apu_parts, alter = false) {
+  newApuPart(apu_parts: any, alter = false) {
     let duplicateCount = 0;
     apu_parts?.forEach(apu_part => {
       const apu_part_intern = alter ? apu_part?.work_orderable : apu_part;
@@ -407,9 +422,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
     }
   }
 
-
-
-  newApuSet(apu_sets, alter = false) {
+  newApuSet(apu_sets: any, alter = false) {
     let duplicateCount = 0;
     apu_sets?.forEach(apu_set => {
       const apu_set_intern = alter ? apu_set?.work_orderable : apu_set;
@@ -433,9 +446,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
     }
   }
 
-
-
-  newApuService(apu_services, alter = false) {
+  newApuService(apu_services: any, alter = false) {
     let duplicateCount = 0;
     apu_services?.forEach(apu_service => {
       const apu_service_intern = alter ? apu_service?.work_orderable : apu_service;
@@ -459,7 +470,6 @@ export class CrearOrdenProduccionComponent implements OnInit {
   }
 
   addOrderManagement(order = null) {
-
     let order_managment = this.fb.group({
       number: [order ? order?.number : '', [Validators.required, Validators.maxLength(500)]],
       value: [order ? order?.value : '', [Validators.required, Validators.min(1)]],
@@ -470,7 +480,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
       date: [order ? new Date(order?.date + 'T00:00:00') : '', Validators.required]
     });
 
-    order_managment.get('value')?.valueChanges.subscribe(() => {
+    order_managment?.get('value')?.valueChanges.subscribe(() => {
       this.calculateTotalOrderManagement();
     });
 
@@ -478,21 +488,20 @@ export class CrearOrdenProduccionComponent implements OnInit {
   }
 
   calculateTotalOrderManagement() {
-    console.log('llegando')
     const orders = this.orders_managment?.controls;
     let total = 0;
     if (orders) {
       for (let order of orders) {
-        const value = order.get('value')?.value;
+        const value = order?.get('value')?.value;
         if (value) {
           total += parseFloat(value);
         }
       }
     }
-    this.form.get('total_order_managment')?.setValue(total);
+    this.form?.get('total_order_managment')?.setValue(total);
   }
 
-  deleteOrderManagement(i) {
+  deleteOrderManagement(i: any) {
     this.orders_managment?.removeAt(i);
     this.calculateTotalOrderManagement();
   }
@@ -506,30 +515,30 @@ export class CrearOrdenProduccionComponent implements OnInit {
     });
   }
 
-  deleteBudget(i) {
+  deleteBudget(i: any) {
     this.budgets?.removeAt(i);
     this.recalculate(['budget'])
   }
 
-  deleteQuotation(i) {
+  deleteQuotation(i: any) {
     this.quotations?.removeAt(i)
   }
 
-  deleteBusiness(i) {
+  deleteBusiness(i: any) {
     this.business?.removeAt(i)
   }
 
-  deleteApuPart(i) {
+  deleteApuPart(i: any) {
     this.apu_parts?.removeAt(i);
     this.recalculate(['apu_parts'])
   }
 
-  deleteApuSet(i) {
+  deleteApuSet(i: any) {
     this.apu_sets?.removeAt(i);
     this.recalculate(['apu_sets'])
   }
 
-  deleteApuService(i) {
+  deleteApuService(i: any) {
     this.apu_services?.removeAt(i);
     this.recalculate(['apu_service'])
   }
@@ -542,7 +551,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
         title: '¿Estás seguro(a)?',
         text: 'Vamos a ' + this.action + ' esta orden de producción.'
       }).then(res => {
-        if (res.isConfirmed) {
+        if (res?.isConfirmed) {
           this._work_order?.saveWorkOrder(this.form?.value).subscribe((r: any) => {
             this._swal.show({
               icon: 'success',
@@ -551,7 +560,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
               showCancel: false,
               timer: 100
             })
-            this.router.navigate(['/manufactura/ordenes-produccion/ver/', r.data])
+            this.router.navigate(['/manufactura/ordenes-produccion/ver/', r?.data])
           })
         }
       })
@@ -559,6 +568,5 @@ export class CrearOrdenProduccionComponent implements OnInit {
       this._swal.incompleteError();
       this.form.markAllAsTouched();
     }
-
   }
 }

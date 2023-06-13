@@ -8,7 +8,10 @@
             <tr class="text-center text-uppercase">
               <th>#</th>
               <th>Descripción</th>
+              <th><i class="mdi mdi-chevron-down"></i></th>
+              <th>Unidad</th>
               <th class="col-1">Cantidad</th>
+              <th>Observaciones</th>
             </tr>
           </thead>
           <tbody>
@@ -16,16 +19,45 @@
               [formGroupName]="i"
               *ngFor="let item of quotation_items?.controls; let i = index"
             >
-              <tr class="text-center">
-                <th class="align-middle">{{ i + 1 }}</th>
-                <td>
+              <tr class="text-center table-info">
+                <th class="align-bottom">{{ i + 1 }}</th>
+                <td class="align-bottom">
                   <p-editor
                     formControlName="name"
                     [autoResize]="true"
                   ></p-editor>
                 </td>
-                <td>
-                  <mat-form-field class="pb-0 w-100" appearance="outline">
+                <td class="align-bottom">
+                  <div class="btn-group" role="group">
+                    <button
+                      class="btn btn-primary btn-sm"
+                      matTooltip="Agregar subitem"
+                      (click)="addSubItemToScop(item)"
+                      type="button"
+                    >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </td>
+                <td class="align-bottom">
+                  <mat-form-field
+                    class="pb-0 w-100 mw-mff"
+                    appearance="outline"
+                  >
+                    <input
+                      matInput
+                      type="text"
+                      formControlName="unit"
+                      autocomplete="off"
+                      required
+                    />
+                  </mat-form-field>
+                </td>
+                <td class="align-bottom">
+                  <mat-form-field
+                    class="pb-0 w-100 mw-mff"
+                    appearance="outline"
+                  >
                     <input
                       matInput
                       currencyMask
@@ -35,6 +67,21 @@
                       autocomplete="off"
                       required
                     />
+                  </mat-form-field>
+                </td>
+                <td class="align-bottom">
+                  <mat-form-field
+                    class="mat-form-field-no-padding textarea pb-0 w-100"
+                    appearance="outline"
+                  >
+                    <mat-label>Descripción</mat-label>
+                    <textarea
+                      matInput
+                      placeholder="Ingresa la descripción"
+                      rows="5"
+                      formControlName="description"
+                      [cdkTextareaAutosize]="true"
+                    ></textarea>
                   </mat-form-field>
                 </td>
               </tr>
@@ -60,8 +107,26 @@
                           [autoResize]="true"
                         ></p-editor>
                       </td>
+                      <td></td>
+                      <td>
+                        <mat-form-field
+                          class="pb-0 w-100 mw-mff"
+                          appearance="outline"
+                        >
+                          <input
+                            matInput
+                            type="text"
+                            formControlName="unit"
+                            autocomplete="off"
+                            required
+                          />
+                        </mat-form-field>
+                      </td>
                       <td class="align-middle">
-                        <mat-form-field class="pb-0 w-100" appearance="outline">
+                        <mat-form-field
+                          class="pb-0 w-100 mw-mff"
+                          appearance="outline"
+                        >
                           <input
                             matInput
                             currencyMask
@@ -71,6 +136,21 @@
                             autocomplete="off"
                             required
                           />
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field
+                          class="mat-form-field-no-padding textarea pb-0 w-100"
+                          appearance="outline"
+                        >
+                          <mat-label>Descripción</mat-label>
+                          <textarea
+                            matInput
+                            placeholder="Ingresa la descripción"
+                            rows="5"
+                            formControlName="description"
+                            [cdkTextareaAutosize]="true"
+                          ></textarea>
                         </mat-form-field>
                       </td>
                     </tr>

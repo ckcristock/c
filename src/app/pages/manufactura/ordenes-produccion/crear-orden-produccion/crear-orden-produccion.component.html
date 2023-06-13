@@ -7,7 +7,7 @@
       <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
       <hr class="line" />
       <ng-container [formGroup]="form">
-        <h6>Información básica</h6>
+        <h6 class="text-center text-primary">Información básica</h6>
         <div class="row">
           <mat-form-field class="col-md-6" appearance="outline">
             <mat-label>Nombre</mat-label>
@@ -147,7 +147,7 @@
               </button>
             </div>
           </div>
-          <ng-container *ngIf="quotations.value.length > 0">
+          <ng-container *ngIf="quotations?.value?.length > 0">
             <div class="col-md-6">
               <h6>Cotizaciones</h6>
               <div class="rounded-top table-responsive">
@@ -160,15 +160,15 @@
                   </thead>
                   <tbody>
                     <tr
-                      *ngFor="let quotation of quotations.value; let i = index"
+                      *ngFor="let quotation of quotations?.value; let i = index"
                       class="text-center"
                     >
                       <td>
                         <a
                           role="button"
-                          [routerLink]="['/crm/cotizacion/ver/', quotation.id]"
+                          [routerLink]="['/crm/cotizacion/ver/', quotation?.id]"
                           target="_blank"
-                          >{{ quotation.code }}</a
+                          >{{ quotation?.code }}</a
                         >
                       </td>
                       <td>
@@ -186,7 +186,7 @@
               </div>
             </div>
           </ng-container>
-          <ng-container *ngIf="business.value.length > 0">
+          <ng-container *ngIf="business?.value?.length > 0">
             <div class="col-md-6">
               <h6>Negocios</h6>
               <div class="rounded-top table-responsive">
@@ -199,15 +199,15 @@
                   </thead>
                   <tbody>
                     <tr
-                      *ngFor="let busines of business.value; let i = index"
+                      *ngFor="let busines of business?.value; let i = index"
                       class="text-center"
                     >
                       <td>
                         <a
                           role="button"
-                          [routerLink]="['/crm/negocios/', busines.id]"
+                          [routerLink]="['/crm/negocios/', busines?.id]"
                           target="_blank"
-                          >{{ busines.code }}</a
+                          >{{ busines?.code }}</a
                         >
                       </td>
                       <td>
@@ -227,7 +227,8 @@
           </ng-container>
         </div>
         <hr />
-        <h6>Datos financieros</h6>
+        <h6 class="text-center text-primary">Datos financieros</h6>
+        <h6>Órdenes de pedido</h6>
         <ng-container
           *ngIf="orders_managment?.controls?.length > 0; else notDataAlert"
         >
@@ -266,7 +267,7 @@
                           type="text"
                           currencyMask
                           formControlName="value"
-                          [options]="masks.maskCOP"
+                          [options]="masks?.maskCOP"
                           appInputPosition
                           autocomplete="off"
                           required
@@ -281,14 +282,14 @@
                             class="custom-file-input"
                             formControlName="file_view"
                             [class.is-invalid]="
-                              item.get('file').invalid &&
-                              item.get('file_view').touched
+                              item?.get('file')?.invalid &&
+                              item?.get('file_view')?.touched
                             "
                             accept=".png,.jpg,.jpeg,.pdf"
                             (change)="onFileChanged($event, i)"
                           />
                           <label class="custom-file-label">{{
-                            item.get("file_name").value
+                            item?.get("file_name")?.value
                           }}</label>
                         </div>
                       </div>
@@ -338,11 +339,12 @@
         </div>
         <app-list-items
           title1="TOTAL ÓRDENES DE PEDIDO"
-          [var1]="form.get('total_order_managment').value"
+          [var1]="form?.get('total_order_managment')?.value"
           type1="cop"
           mt="mt-2"
         ></app-list-items>
         <hr />
+        <h6>Presupuesto base</h6>
         <div class="btn-group btn-block mb-2" role="group">
           <button
             class="btn btn-info"
@@ -377,10 +379,10 @@
         <div
           class="rounded-top table-responsive"
           *ngIf="
-            budgets.value.length > 0 ||
-            apu_parts.value.length > 0 ||
-            apu_sets.value.length > 0 ||
-            apu_services.value.length > 0
+            budgets?.value?.length > 0 ||
+            apu_parts?.value?.length > 0 ||
+            apu_sets?.value?.length > 0 ||
+            apu_services?.value?.length > 0
           "
         >
           <table class="table table-bordered table-striped table-sm">
@@ -394,20 +396,20 @@
             </thead>
             <tbody>
               <tr
-                *ngFor="let budget of budgets.value; let i = index"
+                *ngFor="let budget of budgets?.value; let i = index"
                 class="text-center"
               >
                 <td>Presupuesto</td>
                 <td>
                   <a
                     role="button"
-                    [routerLink]="['/crm/presupuesto/ver/', budget.id]"
+                    [routerLink]="['/crm/presupuesto/ver/', budget?.id]"
                     target="_blank"
-                    >{{ budget.code }}</a
+                    >{{ budget?.code }}</a
                   >
                 </td>
                 <td class="text-right">
-                  ${{ budget.value | number : "1.2-2" }}
+                  ${{ budget?.value | number : "1.2-2" }}
                 </td>
                 <td>
                   <button
@@ -419,30 +421,30 @@
                   </button>
                 </td>
               </tr>
-              <ng-container *ngIf="budgets.value.length > 0">
+              <ng-container *ngIf="budgets?.value?.length > 0">
                 <tr class="table-primary">
                   <th colspan="2" class="text-center">TOTAL PRESUPUESTOS</th>
                   <th class="text-right">
-                    ${{ form.get("total_budgets").value | number : "1.2-2" }}
+                    ${{ form?.get("total_budgets")?.value | number : "1.2-2" }}
                   </th>
                   <td></td>
                 </tr>
               </ng-container>
               <tr
-                *ngFor="let apu_part of apu_parts.value; let i = index"
+                *ngFor="let apu_part of apu_parts?.value; let i = index"
                 class="text-center"
               >
                 <td>Pieza</td>
                 <td>
                   <a
                     role="button"
-                    [routerLink]="['/crm/apu/ver-apu-pieza/', apu_part.id]"
+                    [routerLink]="['/crm/apu/ver-apu-pieza/', apu_part?.id]"
                     target="_blank"
-                    >{{ apu_part.code }}</a
+                    >{{ apu_part?.code }}</a
                   >
                 </td>
                 <td class="text-right">
-                  ${{ apu_part.value | number : "1.2-2" }}
+                  ${{ apu_part?.value | number : "1.2-2" }}
                 </td>
                 <td>
                   <button
@@ -454,30 +456,32 @@
                   </button>
                 </td>
               </tr>
-              <ng-container *ngIf="apu_parts.value.length > 0">
+              <ng-container *ngIf="apu_parts?.value?.length > 0">
                 <tr class="table-primary">
                   <th colspan="2" class="text-center">TOTAL PIEZAS</th>
                   <th class="text-right">
-                    ${{ form.get("total_apu_parts").value | number : "1.2-2" }}
+                    ${{
+                      form?.get("total_apu_parts")?.value | number : "1.2-2"
+                    }}
                   </th>
                   <td></td>
                 </tr>
               </ng-container>
               <tr
-                *ngFor="let apu_set of apu_sets.value; let i = index"
+                *ngFor="let apu_set of apu_sets?.value; let i = index"
                 class="text-center"
               >
                 <td>Conjunto</td>
                 <td>
                   <a
                     role="button"
-                    [routerLink]="['/crm/apu/ver-apu-conjunto/', apu_set.id]"
+                    [routerLink]="['/crm/apu/ver-apu-conjunto/', apu_set?.id]"
                     target="_blank"
-                    >{{ apu_set.code }}</a
+                    >{{ apu_set?.code }}</a
                   >
                 </td>
                 <td class="text-right">
-                  ${{ apu_set.value | number : "1.2-2" }}
+                  ${{ apu_set?.value | number : "1.2-2" }}
                 </td>
                 <td>
                   <button
@@ -489,17 +493,17 @@
                   </button>
                 </td>
               </tr>
-              <ng-container *ngIf="apu_sets.value.length > 0">
+              <ng-container *ngIf="apu_sets?.value?.length > 0">
                 <tr class="table-primary">
                   <th colspan="2" class="text-center">TOTAL CONJUNTOS</th>
                   <th class="text-right">
-                    ${{ form.get("total_apu_sets").value | number : "1.2-2" }}
+                    ${{ form?.get("total_apu_sets")?.value | number : "1.2-2" }}
                   </th>
                   <td></td>
                 </tr>
               </ng-container>
               <tr
-                *ngFor="let apu_service of apu_services.value; let i = index"
+                *ngFor="let apu_service of apu_services?.value; let i = index"
                 class="text-center"
               >
                 <td>Servicio</td>
@@ -508,14 +512,14 @@
                     role="button"
                     [routerLink]="[
                       '/crm/apu/ver-apu-servicio/',
-                      apu_service.id
+                      apu_service?.id
                     ]"
                     target="_blank"
-                    >{{ apu_service.code }}</a
+                    >{{ apu_service?.code }}</a
                   >
                 </td>
                 <td class="text-right">
-                  ${{ apu_service.value | number : "1.2-2" }}
+                  ${{ apu_service?.value | number : "1.2-2" }}
                 </td>
                 <td>
                   <button
@@ -527,12 +531,12 @@
                   </button>
                 </td>
               </tr>
-              <ng-container *ngIf="apu_services.value.length > 0">
+              <ng-container *ngIf="apu_services?.value?.length > 0">
                 <tr class="table-primary">
                   <th colspan="2" class="text-center">TOTAL SERVCIOS</th>
                   <th class="text-right">
                     ${{
-                      form.get("total_apu_services").value | number : "1.2-2"
+                      form?.get("total_apu_services")?.value | number : "1.2-2"
                     }}
                   </th>
                   <td></td>
@@ -542,7 +546,7 @@
                 <th colspan="2" class="text-center">TOTAL</th>
                 <th class="text-right">
                   ${{
-                    form.get("total_budget_part_set_service").value
+                    form?.get("total_budget_part_set_service")?.value
                       | number : "1.2-2"
                   }}
                 </th>
@@ -551,7 +555,8 @@
             </tbody>
           </table>
         </div>
-        <h6>Alcance</h6>
+        <hr />
+        <h6 class="text-center text-primary">Alcance</h6>
         <div class="row">
           <mat-form-field class="col-md-12" appearance="outline">
             <mat-label
@@ -563,46 +568,45 @@
               formControlName="quotation_id"
             >
               <mat-option
-                *ngFor="let quotation of quotations.value"
-                [value]="quotation.id"
+                *ngFor="let quotation of quotations?.value"
+                [value]="quotation?.id"
               >
-                {{ quotation.code }}
+                {{ quotation?.code }}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <ng-container
           *ngIf="
-            !loadingItems && quotation_items.value.length > 0;
+            !loadingItems && quotation_items?.value?.length > 0;
             else notDataItems
           "
         >
           <app-alcance-items [form]="form"></app-alcance-items>
         </ng-container>
-        <div class="mb-4">
-          <div>Descripcion</div>
-          <ckeditor
-            [editor]="_texteditor.Editor"
-            (ready)="_texteditor.onReady($event)"
-            [config]="_texteditor.configEditor"
-            formControlName="description"
-          ></ckeditor>
-        </div>
+        <button
+          class="btn btn-primary btn-sm btn-block"
+          (click)="addItemToScop()"
+          type="button"
+        >
+          <i class="fas fa-plus"></i> Agregar item
+        </button>
+        <hr />
         <div class="mb-4">
           <div>Requisitos técnicos, funcionales y desempeño</div>
           <ckeditor
-            [editor]="_texteditor.Editor"
-            (ready)="_texteditor.onReady($event)"
-            [config]="_texteditor.configEditor"
+            [editor]="_texteditor?.Editor"
+            (ready)="_texteditor?.onReady($event)"
+            [config]="_texteditor?.configEditor"
             formControlName="technical_requirements"
           ></ckeditor>
         </div>
         <div class="mb-4">
           <div>Requisitos legales o reglamentos aplicables</div>
           <ckeditor
-            [editor]="_texteditor.Editor"
-            (ready)="_texteditor.onReady($event)"
-            [config]="_texteditor.configEditor"
+            [editor]="_texteditor?.Editor"
+            (ready)="_texteditor?.onReady($event)"
+            [config]="_texteditor?.configEditor"
             formControlName="legal_requirements"
           ></ckeditor>
         </div>

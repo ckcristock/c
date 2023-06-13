@@ -34,69 +34,44 @@
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
           <tr class="text-center text-uppercase">
-            <th>Orden pedido</th>
+            <th>Nombre</th>
             <th>Tipo</th>
             <th>Clase</th>
-            <th>Ciudad</th>
+            <th>Destino</th>
             <th>Cliente</th>
+            <th>Contacto</th>
             <th>Fecha comprometida</th>
           </tr>
         </thead>
         <tbody>
           <tr class="text-center">
-            <td>{{ work_order?.purchase_order }}</td>
-            <td>{{ work_order?.type }}</td>
+            <td>{{ work_order?.name }}</td>
+            <td>
+              {{
+                work_order?.type == "V"
+                  ? "Venta"
+                  : work_order?.type == "Y"
+                  ? "Interna"
+                  : "Garantía"
+              }}
+            </td>
             <td>{{ work_order?.class }}</td>
             <td>{{ work_order?.city?.name }}</td>
             <td>
               {{ work_order?.third_party?.text }} <br />
               {{ work_order?.third_party_person?.name | uppercase }}
             </td>
+            <td>{{ work_order?.third_party_person?.name }}</td>
             <td>{{ work_order?.expected_delivery_date | date }}</td>
           </tr>
         </tbody>
       </table>
     </div>
     <div class="row">
-      <ng-container *ngIf="work_order?.elements?.App_Models_Budget?.length > 0">
-        <div class="col-md-4">
-          <h6>Presupuestos</h6>
-          <div class="rounded-top table-responsive">
-            <table class="table table-bordered table-striped table-sm">
-              <thead class="bg-light">
-                <tr class="text-center text-uppercase">
-                  <th>Código</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  *ngFor="
-                    let budget of work_order?.elements?.App_Models_Budget;
-                    let i = index
-                  "
-                  class="text-center"
-                >
-                  <td>
-                    <a
-                      role="button"
-                      [routerLink]="[
-                        '/crm/presupuesto/ver/',
-                        budget?.work_orderable?.id
-                      ]"
-                      target="_blank"
-                      >{{ budget?.work_orderable?.code }}</a
-                    >
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </ng-container>
       <ng-container
         *ngIf="work_order?.elements?.App_Models_Quotation?.length > 0"
       >
-        <div class="col-md-4">
+        <div class="col-md-6">
           <h6>Cotizaciones</h6>
           <div class="rounded-top table-responsive">
             <table class="table table-bordered table-striped table-sm">
@@ -133,7 +108,7 @@
       <ng-container
         *ngIf="work_order?.elements?.App_Models_Business?.length > 0"
       >
-        <div class="col-md-4">
+        <div class="col-md-6">
           <h6>Negocios</h6>
           <div class="rounded-top table-responsive">
             <table class="table table-bordered table-striped table-sm">
@@ -167,116 +142,194 @@
           </div>
         </div>
       </ng-container>
-      <ng-container
-        *ngIf="work_order?.elements?.App_Models_ApuPart?.length > 0"
-      >
-        <div class="col-md-4">
-          <h6>Piezas</h6>
-          <div class="rounded-top table-responsive">
-            <table class="table table-bordered table-striped table-sm">
-              <thead class="bg-light">
-                <tr class="text-center text-uppercase">
-                  <th>Código</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  *ngFor="
-                    let apu_part of work_order?.elements?.App_Models_ApuPart;
-                    let i = index
-                  "
-                  class="text-center"
-                >
-                  <td>
-                    <a
-                      role="button"
-                      [routerLink]="[
-                        '/crm/apu/ver-apu-pieza/',
-                        apu_part?.work_orderable?.id
-                      ]"
-                      target="_blank"
-                      >{{ apu_part?.work_orderable?.code }}</a
-                    >
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="work_order?.elements?.App_Models_ApuSet?.length > 0">
-        <div class="col-md-4">
-          <h6>Conjuntos</h6>
-          <div class="rounded-top table-responsive">
-            <table class="table table-bordered table-striped table-sm">
-              <thead class="bg-light">
-                <tr class="text-center text-uppercase">
-                  <th>Código</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  *ngFor="
-                    let apu_set of work_order?.elements?.App_Models_ApuSet;
-                    let i = index
-                  "
-                  class="text-center"
-                >
-                  <td>
-                    <a
-                      role="button"
-                      [routerLink]="[
-                        '/crm/apu/ver-apu-conjunto/',
-                        apu_set?.work_orderable?.id
-                      ]"
-                      target="_blank"
-                      >{{ apu_set?.work_orderable?.code }}</a
-                    >
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container
-        *ngIf="work_order?.elements?.App_Models_ApuService?.length > 0"
-      >
-        <div class="col-md-4">
-          <h6>Servicios</h6>
-          <div class="rounded-top table-responsive">
-            <table class="table table-bordered table-striped table-sm">
-              <thead class="bg-light">
-                <tr class="text-center text-uppercase">
-                  <th>Código</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  *ngFor="
-                    let apu_service of work_order?.elements
-                      ?.App_Models_ApuService;
-                    let i = index
-                  "
-                  class="text-center"
-                >
-                  <td>
-                    <a
-                      role="button"
-                      [routerLink]="[
-                        '/crm/apu/ver-apu-servicio/',
-                        apu_service?.work_orderable?.id
-                      ]"
-                      target="_blank"
-                      >{{ apu_service?.work_orderable?.code }}</a
-                    >
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </ng-container>
+    </div>
+    <hr />
+    <h6>Datos financieros</h6>
+    <ng-container
+      *ngIf="work_order?.order_managments?.length > 0; else notDataAlert"
+    >
+      <div class="rounded-top table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+          <thead class="bg-light">
+            <tr class="text-center text-uppercase">
+              <th>Número de orden de pedido</th>
+              <th>Valor</th>
+              <th>Documento</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let item of work_order?.order_managments">
+              <tr class="text-center">
+                <td>{{ item.number }}</td>
+                <td class="text-right">${{ item.value | number : "1.2-2" }}</td>
+                <td>
+                  <a [href]="item.file" target="_blank">Ver</a>
+                </td>
+                <td>{{ item.date | date }}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+    <app-list-items
+      title1="TOTAL ÓRDENES DE PEDIDO"
+      [var1]="work_order?.total_order_managment"
+      type1="cop"
+      mt="mt-2"
+    ></app-list-items>
+    <hr />
+    <div
+      class="rounded-top table-responsive"
+      *ngIf="
+        work_order?.elements?.App_Models_Budget?.length > 0 ||
+        work_order?.elements?.App_Models_ApuPart?.length > 0 ||
+        work_order?.elements?.App_Models_ApuSet?.length > 0 ||
+        work_order?.elements?.App_Models_ApuService?.length > 0
+      "
+    >
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Tipo</th>
+            <th>Código</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let budget of work_order?.elements?.App_Models_Budget"
+            class="text-center"
+          >
+            <td>Presupuesto</td>
+            <td>
+              <a
+                role="button"
+                [routerLink]="[
+                  '/crm/presupuesto/ver/',
+                  budget.work_orderable.id
+                ]"
+                target="_blank"
+                >{{ budget.work_orderable.code }}</a
+              >
+            </td>
+            <td class="text-right">
+              ${{ budget.work_orderable.total_cop | number : "1.2-2" }}
+            </td>
+          </tr>
+          <ng-container
+            *ngIf="work_order?.elements?.App_Models_Budget.length > 0"
+          >
+            <tr class="table-primary">
+              <th colspan="2" class="text-center">TOTAL PRESUPUESTOS</th>
+              <th class="text-right">
+                ${{ work_order?.total_budgets | number : "1.2-2" }}
+              </th>
+            </tr>
+          </ng-container>
+          <tr
+            *ngFor="let apu_part of work_order?.elements?.App_Models_ApuPart"
+            class="text-center"
+          >
+            <td>Pieza</td>
+            <td>
+              <a
+                role="button"
+                [routerLink]="[
+                  '/crm/apu/ver-apu-pieza/',
+                  apu_part.work_orderable.id
+                ]"
+                target="_blank"
+                >{{ apu_part.work_orderable.code }}</a
+              >
+            </td>
+            <td class="text-right">
+              ${{ apu_part.work_orderable.unit_direct_cost | number : "1.2-2" }}
+            </td>
+          </tr>
+          <ng-container
+            *ngIf="work_order?.elements?.App_Models_ApuPart.length > 0"
+          >
+            <tr class="table-primary">
+              <th colspan="2" class="text-center">TOTAL PIEZAS</th>
+              <th class="text-right">
+                ${{ work_order.total_apu_parts | number : "1.2-2" }}
+              </th>
+            </tr>
+          </ng-container>
+          <tr
+            *ngFor="let apu_set of work_order?.elements?.App_Models_ApuSet"
+            class="text-center"
+          >
+            <td>Conjunto</td>
+            <td>
+              <a
+                role="button"
+                [routerLink]="[
+                  '/crm/apu/ver-apu-conjunto/',
+                  apu_set?.work_orderable.id
+                ]"
+                target="_blank"
+                >{{ apu_set.work_orderable.code }}</a
+              >
+            </td>
+            <td class="text-right">
+              ${{ apu_set.work_orderable.total_direct_cost | number : "1.2-2" }}
+            </td>
+          </tr>
+          <ng-container
+            *ngIf="work_order?.elements?.App_Models_ApuSet?.length > 0"
+          >
+            <tr class="table-primary">
+              <th colspan="2" class="text-center">TOTAL CONJUNTOS</th>
+              <th class="text-right">
+                ${{ work_order?.total_apu_sets | number : "1.2-2" }}
+              </th>
+            </tr>
+          </ng-container>
+          <tr
+            *ngFor="
+              let apu_service of work_order?.elements?.App_Models_ApuService
+            "
+            class="text-center"
+          >
+            <td>Servicio</td>
+            <td>
+              <a
+                role="button"
+                [routerLink]="[
+                  '/crm/apu/ver-apu-servicio/',
+                  apu_service.work_orderable.id
+                ]"
+                target="_blank"
+                >{{ apu_service.work_orderable.code }}</a
+              >
+            </td>
+            <td class="text-right">
+              ${{
+                apu_service.work_orderable.total_unit_cost | number : "1.2-2"
+              }}
+            </td>
+          </tr>
+          <ng-container
+            *ngIf="work_order?.elements?.App_Models_ApuService?.length > 0"
+          >
+            <tr class="table-primary">
+              <th colspan="2" class="text-center">TOTAL SERVCIOS</th>
+              <th class="text-right">
+                ${{ work_order.total_apu_services | number : "1.2-2" }}
+              </th>
+            </tr>
+          </ng-container>
+          <tr class="table-success">
+            <th colspan="2" class="text-center">TOTAL</th>
+            <th class="text-right">
+              ${{ work_order.total_budget_part_set_service | number : "1.2-2" }}
+            </th>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <ng-container *ngIf="work_order?.description">
       <h6>Descripción</h6>

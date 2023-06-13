@@ -32,7 +32,10 @@ export class OrdenesProduccionComponent implements OnInit, AfterViewInit {
   date: any;
   formFilters: FormGroup;
   orderObj: any
-  active_filters: boolean = false
+  active_filters: boolean = false;
+  collapseEngineeringAndDesign: boolean = false;
+  collapseProduction: boolean = false;
+  collapseFinancial: boolean = false;
   permission: Permissions = {
     menu: 'Órdenes de producción',
     permissions: {

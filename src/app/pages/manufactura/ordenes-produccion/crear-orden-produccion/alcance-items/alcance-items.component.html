@@ -1,17 +1,17 @@
 <ng-container [formGroup]="form">
-  <div formArrayName="quotation_items">
-    <h6>Elementos</h6>
-    <ng-container *ngIf="quotation_items?.controls?.length > 0">
+  <h6>Elementos</h6>
+  <ng-container *ngIf="quotation_items?.controls?.length > 0">
+    <div formArrayName="quotation_items">
       <div class="rounded-top table-responsive">
         <table class="table table-bordered table-striped table-sm">
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
               <th>#</th>
               <th>Descripción</th>
-              <th><i class="mdi mdi-chevron-down"></i></th>
               <th>Unidad</th>
               <th class="col-1">Cantidad</th>
               <th>Observaciones</th>
+              <th><i class="mdi mdi-chevron-down"></i></th>
             </tr>
           </thead>
           <tbody>
@@ -25,20 +25,10 @@
                   <p-editor
                     formControlName="name"
                     [autoResize]="true"
+                    placeholder="Ingresa la descripción del item"
                   ></p-editor>
                 </td>
-                <td class="align-bottom">
-                  <div class="btn-group" role="group">
-                    <button
-                      class="btn btn-primary btn-sm"
-                      matTooltip="Agregar subitem"
-                      (click)="addSubItemToScop(item)"
-                      type="button"
-                    >
-                      <i class="fas fa-plus"></i>
-                    </button>
-                  </div>
-                </td>
+
                 <td class="align-bottom">
                   <mat-form-field
                     class="pb-0 w-100 mw-mff"
@@ -74,22 +64,38 @@
                     class="mat-form-field-no-padding textarea pb-0 w-100"
                     appearance="outline"
                   >
-                    <mat-label>Descripción</mat-label>
                     <textarea
                       matInput
-                      placeholder="Ingresa la descripción"
+                      placeholder="Ingresa las observaciones"
                       rows="5"
-                      formControlName="description"
+                      formControlName="observations"
                       [cdkTextareaAutosize]="true"
                     ></textarea>
                   </mat-form-field>
                 </td>
+                <td class="align-bottom">
+                  <div class="btn-group" role="group">
+                    <button
+                      class="btn btn-primary btn-sm"
+                      matTooltip="Agregar subitem"
+                      (click)="addSubItemToScop(item)"
+                      type="button"
+                    >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                    <button
+                      class="btn btn-danger btn-sm"
+                      matTooltip="Eliminar subitem"
+                      (click)="deleteItemToScop(i)"
+                      type="button"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
               </tr>
               <ng-container
-                *ngIf="
-                  item?.controls?.subitems?.controls?.length;
-                  else notData2
-                "
+                *ngIf="item?.controls?.subitems?.controls?.length > 0"
               >
                 <ng-container formArrayName="subitems">
                   <ng-container
@@ -105,9 +111,10 @@
                         <p-editor
                           formControlName="name"
                           [autoResize]="true"
+                          placeholder="Ingresa la descripción del subitem"
                         ></p-editor>
                       </td>
-                      <td></td>
+
                       <td>
                         <mat-form-field
                           class="pb-0 w-100 mw-mff"
@@ -143,15 +150,26 @@
                           class="mat-form-field-no-padding textarea pb-0 w-100"
                           appearance="outline"
                         >
-                          <mat-label>Descripción</mat-label>
                           <textarea
                             matInput
-                            placeholder="Ingresa la descripción"
+                            placeholder="Ingresa las observaciones"
                             rows="5"
-                            formControlName="description"
+                            formControlName="observations"
                             [cdkTextareaAutosize]="true"
                           ></textarea>
                         </mat-form-field>
+                      </td>
+                      <td>
+                        <div class="btn-group" role="group">
+                          <button
+                            class="btn btn-danger btn-sm"
+                            matTooltip="Eliminar subitem"
+                            (click)="deleteSubItemToScop(item, y)"
+                            type="button"
+                          >
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   </ng-container>
@@ -161,6 +179,6 @@
           </tbody>
         </table>
       </div>
-    </ng-container>
-  </div>
+    </div>
+  </ng-container>
 </ng-container>

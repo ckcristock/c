@@ -26,11 +26,20 @@ export class AlcanceItemsComponent implements OnInit {
     let subitems = item.get('subitems') as FormArray;
     subitems.push(this.fb.group({
       quotation_item_subitem_id: '',
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.maxLength(4294967295)]],
       cuantity: [1, [Validators.required, Validators.min(1)]],
-      unit: ['UNIDAD', Validators.required],
+      unit: ['UNIDAD', [Validators.required, Validators.maxLength(255)]],
       observations: ['', Validators.maxLength(4294967295)]
     }))
+  }
+
+  deleteItemToScop(i) {
+    this.quotation_items.removeAt(i);
+  }
+
+  deleteSubItemToScop(item, y) {
+    let subitems = item.get('subitems') as FormArray;
+    subitems.removeAt(y);
   }
 
 }

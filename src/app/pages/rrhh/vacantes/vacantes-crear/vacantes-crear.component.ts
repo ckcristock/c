@@ -113,7 +113,7 @@ export class VacantesCrearComponent implements OnInit {
       visa: ['', Validators.required],
       visa_type_id: [''],
       salary_type_id: [1],
-      driving_license: [],
+      driving_license: ['No aplica'],
     })
   }
 

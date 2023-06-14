@@ -300,7 +300,6 @@
                           formControlName="date"
                           matInput
                           [matDatepicker]="dateOrderManagement"
-                          [min]="today"
                           placeholder="Selecciona la fecha"
                           [required]="true"
                         />
@@ -390,7 +389,9 @@
               <tr class="text-center text-uppercase">
                 <th>Tipo</th>
                 <th>Código</th>
-                <th>Valor</th>
+                <th>Costos directos</th>
+                <th>Costos indirectos</th>
+                <th>Total</th>
                 <th><i class="mdi mdi-chevron-down"></i></th>
               </tr>
             </thead>
@@ -409,7 +410,13 @@
                   >
                 </td>
                 <td class="text-right">
-                  ${{ budget?.value | number : "1.2-2" }}
+                  ${{ budget?.total_direct_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ budget?.total_indirect_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ budget?.total | number : "1.2-2" }}
                 </td>
                 <td>
                   <button
@@ -424,6 +431,18 @@
               <ng-container *ngIf="budgets?.value?.length > 0">
                 <tr class="table-primary">
                   <th colspan="2" class="text-center">TOTAL PRESUPUESTOS</th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_direct_cost_budgets")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_indirect_cost_budgets")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
                   <th class="text-right">
                     ${{ form?.get("total_budgets")?.value | number : "1.2-2" }}
                   </th>
@@ -444,7 +463,13 @@
                   >
                 </td>
                 <td class="text-right">
-                  ${{ apu_part?.value | number : "1.2-2" }}
+                  ${{ apu_part?.total_direct_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ apu_part?.total_indirect_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ apu_part?.total | number : "1.2-2" }}
                 </td>
                 <td>
                   <button
@@ -459,6 +484,18 @@
               <ng-container *ngIf="apu_parts?.value?.length > 0">
                 <tr class="table-primary">
                   <th colspan="2" class="text-center">TOTAL PIEZAS</th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_direct_cost_apu_parts")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_indirect_cost_apu_parts")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
                   <th class="text-right">
                     ${{
                       form?.get("total_apu_parts")?.value | number : "1.2-2"
@@ -481,7 +518,13 @@
                   >
                 </td>
                 <td class="text-right">
-                  ${{ apu_set?.value | number : "1.2-2" }}
+                  ${{ apu_set?.total_direct_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ apu_set?.total_indirect_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ apu_set?.total | number : "1.2-2" }}
                 </td>
                 <td>
                   <button
@@ -496,6 +539,18 @@
               <ng-container *ngIf="apu_sets?.value?.length > 0">
                 <tr class="table-primary">
                   <th colspan="2" class="text-center">TOTAL CONJUNTOS</th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_direct_cost_apu_sets")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_indirect_cost_apu_sets")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
                   <th class="text-right">
                     ${{ form?.get("total_apu_sets")?.value | number : "1.2-2" }}
                   </th>
@@ -519,7 +574,13 @@
                   >
                 </td>
                 <td class="text-right">
-                  ${{ apu_service?.value | number : "1.2-2" }}
+                  ${{ apu_service?.total_direct_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ apu_service?.total_indirect_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ apu_service?.total | number : "1.2-2" }}
                 </td>
                 <td>
                   <button
@@ -536,21 +597,71 @@
                   <th colspan="2" class="text-center">TOTAL SERVCIOS</th>
                   <th class="text-right">
                     ${{
+                      form?.get("total_direct_cost_apu_services")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_indirect_cost_apu_services")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{
                       form?.get("total_apu_services")?.value | number : "1.2-2"
                     }}
                   </th>
                   <td></td>
                 </tr>
               </ng-container>
-              <tr class="table-success">
-                <th colspan="2" class="text-center">TOTAL</th>
-                <th class="text-right">
+            </tbody>
+          </table>
+        </div>
+        <app-list-items
+          title1="TOTAL COSTOS DIRECTOS"
+          [var1]="form?.get('total_direct_cost_budget_part_set_service')?.value"
+          type1="cop"
+          title2="TOTAL COSTOS INDIRECTOS"
+          [var2]="
+            form?.get('total_indirect_cost_budget_part_set_service')?.value
+          "
+          type2="cop"
+          title3="TOTAL PRESUPUESTO BASE"
+          [var3]="form?.get('total_budget_part_set_service')?.value"
+          type3="cop"
+          mt="mt-2"
+        ></app-list-items>
+        <hr />
+        <div class="rounded-top table-responsive">
+          <table class="table table-bordered table-striped table-sm">
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Total órdenes de pedido</th>
+                <th>Total presupuesto base</th>
+                <th>Ganancia</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center table-success">
+                <th>
                   ${{
-                    form?.get("total_budget_part_set_service")?.value
+                    form.get("total_order_managment").value | number : "1.2-2"
+                  }}
+                </th>
+                <th>
+                  ${{
+                    form.get("total_budget_part_set_service").value
                       | number : "1.2-2"
                   }}
                 </th>
-                <td></td>
+                <th>
+                  ${{
+                    form.get("total_order_managment").value -
+                      form.get("total_budget_part_set_service").value
+                      | number : "1.2-2"
+                  }}
+                </th>
               </tr>
             </tbody>
           </table>

@@ -188,6 +188,18 @@ export class CrearOrdenProduccionComponent implements OnInit {
       orders_managment: this.fb.array([]),
       budgets: this.fb.array([]),
       total_budgets: [0],
+      total_indirect_cost_budgets: [0],
+      total_direct_cost_budgets: [0],
+      total_indirect_cost_apu_services: [0],
+      total_direct_cost_apu_services: [0],
+      total_indirect_cost_apu_parts: [0],
+      total_direct_cost_apu_parts: [0],
+      total_indirect_cost_apu_sets: [0],
+      total_direct_cost_apu_sets: [0],
+      //!Nuevas
+      total_direct_cost_budget_part_set_service: [0],
+      total_indirect_cost_budget_part_set_service: [0],
+      //!Fin de nuevas
       quotations: this.fb.array([]),
       business: this.fb.array([]),
       apu_parts: this.fb.array([]),
@@ -198,7 +210,7 @@ export class CrearOrdenProduccionComponent implements OnInit {
       total_apu_services: [0],
       total_budget_part_set_service: [0],
       total_order_managment: [0],
-      quotation_id: ['', Validators.required],
+      quotation_id: [''],
       quotation_items: this.fb.array([])
     });
     const classFormControl = this.form?.get('class');
@@ -248,10 +260,10 @@ export class CrearOrdenProduccionComponent implements OnInit {
       res?.data?.items?.forEach(item => {
         let item_to_add = this.fb.group({
           quotation_item_id: item?.id,
-          name: [item?.name, Validators.required],
+          name: [item?.name, [Validators.required, Validators.maxLength(4294967295)]],
           cuantity: [item?.cuantity, [Validators.required, Validators.min(1)]],
           subitems: this.fb.array([]),
-          unit: ['UNIDAD', Validators.required],
+          unit: ['UNIDAD', [Validators.required, Validators.maxLength(255)]],
           observations: ['', Validators.maxLength(4294967295)]
         })
         let sub_items = item_to_add?.get('subitems') as FormArray
@@ -259,9 +271,9 @@ export class CrearOrdenProduccionComponent implements OnInit {
         item?.sub_items?.forEach(sub_item => {
           let subitem_to_add = this.fb.group({
             quotation_item_subitem_id: sub_item?.id,
-            name: [sub_item?.description, Validators.required],
+            name: [sub_item?.description, [Validators.required, Validators.maxLength(4294967295)]],
             cuantity: [sub_item?.cuantity, [Validators.required, Validators.min(1)]],
-            unit: ['UNIDAD', Validators.required],
+            unit: ['UNIDAD', [Validators.required, Validators.maxLength(255)]],
             observations: ['', Validators.maxLength(4294967295)]
           })
           sub_items?.push(subitem_to_add)
@@ -327,7 +339,9 @@ export class CrearOrdenProduccionComponent implements OnInit {
         this.budgets?.push(this.fb.group({
           id: [budgetToUse?.id],
           code: [budgetToUse?.code],
-          value: [budgetToUse?.total_cop]
+          total_direct_cost: [budgetToUse?.total_direct_cost],
+          total_indirect_cost: [budgetToUse?.total_indirect_cost],
+          total: [budgetToUse?.total_direct_cost + budgetToUse?.total_indirect_cost]
         }));
       } else {
         duplicateCount++;
@@ -382,11 +396,17 @@ export class CrearOrdenProduccionComponent implements OnInit {
     keys?.forEach(key => {
       let formArray = this.form?.get(key) as FormArray;
       let total_value = 0;
+      let total_indirect_cost = 0;
+      let total_direct_cost = 0;
       formArray?.controls?.forEach(control => {
-        total_value += control?.value?.value
+        total_value += control?.value?.total;
+        total_indirect_cost += control?.value?.total_indirect_cost;
+        total_direct_cost += control?.value?.total_direct_cost;
       })
       this.form?.patchValue({
         ['total_' + key]: total_value,
+        ['total_indirect_cost_' + key]: total_indirect_cost,
+        ['total_direct_cost_' + key]: total_direct_cost,
       })
     });
     let value =
@@ -394,8 +414,20 @@ export class CrearOrdenProduccionComponent implements OnInit {
       this.form?.get('total_apu_parts')?.value +
       this.form?.get('total_apu_sets')?.value +
       this.form?.get('total_apu_services')?.value;
+    let value_direct =
+      this.form?.get('total_direct_cost_budgets')?.value +
+      this.form?.get('total_direct_cost_apu_parts')?.value +
+      this.form?.get('total_direct_cost_apu_sets')?.value +
+      this.form?.get('total_direct_cost_apu_services')?.value;
+    let value_indirect =
+      this.form?.get('total_indirect_cost_budgets')?.value +
+      this.form?.get('total_indirect_cost_apu_parts')?.value +
+      this.form?.get('total_indirect_cost_apu_sets')?.value +
+      this.form?.get('total_indirect_cost_apu_services')?.value;
     this.form?.patchValue({
-      total_budget_part_set_service: value
+      total_budget_part_set_service: value,
+      total_direct_cost_budget_part_set_service: value_direct,
+      total_indirect_cost_budget_part_set_service: value_indirect,
     })
   }
 
@@ -410,7 +442,9 @@ export class CrearOrdenProduccionComponent implements OnInit {
         this.apu_parts?.push(this.fb.group({
           id: [id],
           code: [apu_part_intern?.code],
-          value: [value]
+          total_direct_cost: [value],
+          total_indirect_cost: [apu_part_intern?.indirect_cost_total],
+          total: [value + apu_part_intern?.indirect_cost_total]
         }))
       } else {
         duplicateCount++;
@@ -434,7 +468,9 @@ export class CrearOrdenProduccionComponent implements OnInit {
         this.apu_sets?.push(this.fb.group({
           id: [id],
           code: [apu_set_intern.code],
-          value: [value]
+          total_direct_cost: [value],
+          total_indirect_cost: [apu_set_intern?.indirect_cost_total],
+          total: [value + apu_set_intern?.indirect_cost_total]
         }))
       } else {
         duplicateCount++;
@@ -457,7 +493,9 @@ export class CrearOrdenProduccionComponent implements OnInit {
         this.apu_services?.push(this.fb.group({
           id: [id],
           code: [apu_service_intern?.code],
-          value: [value]
+          total_direct_cost: [value],
+          total_indirect_cost: [apu_service_intern?.indirect_cost_total],
+          total: [value + apu_service_intern?.indirect_cost_total]
         }))
       } else {
         duplicateCount++;

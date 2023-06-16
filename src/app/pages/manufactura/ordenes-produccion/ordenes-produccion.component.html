@@ -220,95 +220,67 @@
           <tr class="text-uppercase text-center table-primary">
             <th colspan="15">Información básica</th>
             <th
-              *ngIf="
-                permission.permissions.engineering_and_design &&
-                !collapseEngineeringAndDesign
-              "
-              colspan="3"
-            >
-              Ingeniería y Diseño
-            </th>
-            <th
-              class="dynamic-colspan"
               *ngIf="permission.permissions.engineering_and_design"
+              [attr.colspan]="!collapseEngineeringAndDesign ? '3' : '1'"
+              (click)="
+                collapseEngineeringAndDesign = !collapseEngineeringAndDesign
+              "
+              role="button"
+              [matTooltip]="
+                collapseEngineeringAndDesign
+                  ? 'Mostrar ingeniería y diseño'
+                  : 'Ocultar ingeniería y diseño'
+              "
             >
-              <button
-                class="btn btn-warning btn-sm btn-custom-dynamic-colspan"
-                [matTooltip]="
-                  collapseEngineeringAndDesign
-                    ? 'Mostrar ingeniería y diseño'
-                    : 'Ocultar ingeniería y diseño'
-                "
-                (click)="
-                  collapseEngineeringAndDesign = !collapseEngineeringAndDesign
-                "
-                type="button"
-              >
-                <i
-                  class="fas"
-                  [class]="
-                    collapseEngineeringAndDesign
-                      ? 'fa-chevron-right'
-                      : 'fa-chevron-left'
-                  "
-                ></i>
-              </button>
-            </th>
-            <th
-              *ngIf="permission.permissions.production && !collapseProduction"
-              colspan="3"
-            >
-              Producción
+              <div class="d-flex justify-content-between">
+                <div *ngIf="!collapseEngineeringAndDesign">
+                  Ingeniería y Diseño
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                  <i
+                    class="fas"
+                    [class]="
+                      collapseEngineeringAndDesign
+                        ? 'fa-chevron-right'
+                        : 'fa-chevron-left'
+                    "
+                  ></i>
+                </div>
+              </div>
             </th>
             <th
               *ngIf="permission.permissions.production"
-              class="dynamic-colspan"
+              [attr.colspan]="!collapseProduction ? '3' : '1'"
+              (click)="collapseProduction = !collapseProduction"
+              [matTooltip]="
+                collapseProduction ? 'Mostrar producción' : 'Ocultar producción'
+              "
+              role="button"
             >
-              <button
-                class="btn btn-warning btn-sm btn-custom-dynamic-colspan"
-                (click)="collapseProduction = !collapseProduction"
-                [matTooltip]="
-                  collapseProduction
-                    ? 'Mostrar producción'
-                    : 'Ocultar producción'
+              <span *ngIf="!collapseProduction">Producción </span>
+              <i
+                class="fas"
+                [class]="
+                  collapseProduction ? 'fa-chevron-right' : 'fa-chevron-left'
                 "
-                type="button"
-              >
-                <i
-                  class="fas"
-                  [class]="
-                    collapseProduction ? 'fa-chevron-right' : 'fa-chevron-left'
-                  "
-                ></i>
-              </button>
-            </th>
-            <th
-              colspan="5"
-              *ngIf="permission.permissions.financial && !collapseFinancial"
-            >
-              Financiero
+              ></i>
             </th>
             <th
               *ngIf="permission.permissions.financial"
-              class="dynamic-colspan"
+              [attr.colspan]="!collapseFinancial ? '5' : '1'"
+              (click)="collapseFinancial = !collapseFinancial"
+              [matTooltip]="
+                collapseFinancial ? 'Mostrar financiero' : 'Ocultar financiero'
+              "
+              role="button"
             >
-              <button
-                class="btn btn-warning btn-sm btn-custom-dynamic-colspan"
-                (click)="collapseFinancial = !collapseFinancial"
-                [matTooltip]="
-                  collapseFinancial
-                    ? 'Mostrar financiero'
-                    : 'Ocultar financiero'
+              <span *ngIf="!collapseFinancial">Financiero </span>
+              <i
+                class="fas"
+                [class]="
+                  collapseFinancial ? 'fa-chevron-right' : 'fa-chevron-left'
                 "
-                type="button"
-              >
-                <i
-                  class="fas"
-                  [class]="
-                    collapseFinancial ? 'fa-chevron-right' : 'fa-chevron-left'
-                  "
-                ></i>
-              </button>
+              ></i>
             </th>
             <th></th>
           </tr>
@@ -362,7 +334,10 @@
               <th class="vertical-text">% Diseño</th>
             </ng-container>
             <th
-              *ngIf="permission.permissions.engineering_and_design"
+              *ngIf="
+                permission.permissions.engineering_and_design &&
+                collapseEngineeringAndDesign
+              "
               class="dynamic-colspan"
             ></th>
             <!-- Producción -->
@@ -384,7 +359,7 @@
               </th>
             </ng-container>
             <th
-              *ngIf="permission.permissions.production"
+              *ngIf="permission.permissions.production && collapseProduction"
               class="dynamic-colspan"
             ></th>
             <!-- Financiero -->
@@ -404,7 +379,7 @@
               </th>
             </ng-container>
             <th
-              *ngIf="permission.permissions.financial"
+              *ngIf="permission.permissions.financial && collapseFinancial"
               class="dynamic-colspan"
             ></th>
             <th class="fixed-column"><i class="mdi mdi-chevron-down"></i></th>
@@ -469,7 +444,10 @@
               <td>{{ item.design_percentage }}</td>
             </ng-container>
             <td
-              *ngIf="permission.permissions.engineering_and_design"
+              *ngIf="
+                permission.permissions.engineering_and_design &&
+                collapseEngineeringAndDesign
+              "
               class="dynamic-colspan"
             ></td>
             <!-- Producción -->
@@ -485,7 +463,7 @@
               <td>{{ (item.delivery_date | date : "shortDate") || "N/A" }}</td>
             </ng-container>
             <td
-              *ngIf="permission.permissions.production"
+              *ngIf="permission.permissions.production && collapseProduction"
               class="dynamic-colspan"
             ></td>
             <!-- Financiero -->
@@ -503,7 +481,7 @@
               </td>
             </ng-container>
             <td
-              *ngIf="permission.permissions.financial"
+              *ngIf="permission.permissions.financial && collapseFinancial"
               class="dynamic-colspan"
             ></td>
             <!-- <td>

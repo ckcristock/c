@@ -194,7 +194,9 @@
           <tr class="text-center text-uppercase">
             <th>Tipo</th>
             <th>Código</th>
-            <th>Valor</th>
+            <th>Costos directos</th>
+            <th>Costos indirectos</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
@@ -215,14 +217,26 @@
               >
             </td>
             <td class="text-right">
-              ${{ budget.work_orderable.total_cop | number : "1.2-2" }}
+              ${{ budget?.total_direct_cost | number : "1.2-2" }}
             </td>
+            <td class="text-right">
+              ${{ budget?.total_indirect_cost | number : "1.2-2" }}
+            </td>
+            <td class="text-right">${{ budget.total | number : "1.2-2" }}</td>
           </tr>
           <ng-container
             *ngIf="work_order?.elements?.App_Models_Budget.length > 0"
           >
             <tr class="table-primary">
               <th colspan="2" class="text-center">TOTAL PRESUPUESTOS</th>
+              <th class="text-right">
+                ${{ work_order?.total_direct_cost_budgets | number : "1.2-2" }}
+              </th>
+              <th class="text-right">
+                ${{
+                  work_order?.total_indirect_cost_budgets | number : "1.2-2"
+                }}
+              </th>
               <th class="text-right">
                 ${{ work_order?.total_budgets | number : "1.2-2" }}
               </th>
@@ -245,14 +259,28 @@
               >
             </td>
             <td class="text-right">
-              ${{ apu_part.work_orderable.unit_direct_cost | number : "1.2-2" }}
+              ${{ apu_part?.total_direct_cost | number : "1.2-2" }}
             </td>
+            <td class="text-right">
+              ${{ apu_part?.total_indirect_cost | number : "1.2-2" }}
+            </td>
+            <td class="text-right">${{ apu_part.total | number : "1.2-2" }}</td>
           </tr>
           <ng-container
             *ngIf="work_order?.elements?.App_Models_ApuPart.length > 0"
           >
             <tr class="table-primary">
               <th colspan="2" class="text-center">TOTAL PIEZAS</th>
+              <th class="text-right">
+                ${{
+                  work_order?.total_direct_cost_apu_parts | number : "1.2-2"
+                }}
+              </th>
+              <th class="text-right">
+                ${{
+                  work_order?.total_indirect_cost_apu_parts | number : "1.2-2"
+                }}
+              </th>
               <th class="text-right">
                 ${{ work_order.total_apu_parts | number : "1.2-2" }}
               </th>
@@ -275,14 +303,26 @@
               >
             </td>
             <td class="text-right">
-              ${{ apu_set.work_orderable.total_direct_cost | number : "1.2-2" }}
+              ${{ apu_set?.total_direct_cost | number : "1.2-2" }}
             </td>
+            <td class="text-right">
+              ${{ apu_set?.total_indirect_cost | number : "1.2-2" }}
+            </td>
+            <td class="text-right">${{ apu_set.total | number : "1.2-2" }}</td>
           </tr>
           <ng-container
             *ngIf="work_order?.elements?.App_Models_ApuSet?.length > 0"
           >
             <tr class="table-primary">
               <th colspan="2" class="text-center">TOTAL CONJUNTOS</th>
+              <th class="text-right">
+                ${{ work_order?.total_direct_cost_apu_sets | number : "1.2-2" }}
+              </th>
+              <th class="text-right">
+                ${{
+                  work_order?.total_indirect_cost_apu_sets | number : "1.2-2"
+                }}
+              </th>
               <th class="text-right">
                 ${{ work_order?.total_apu_sets | number : "1.2-2" }}
               </th>
@@ -307,9 +347,13 @@
               >
             </td>
             <td class="text-right">
-              ${{
-                apu_service.work_orderable.total_unit_cost | number : "1.2-2"
-              }}
+              ${{ apu_service?.total_direct_cost | number : "1.2-2" }}
+            </td>
+            <td class="text-right">
+              ${{ apu_service?.total_indirect_cost | number : "1.2-2" }}
+            </td>
+            <td class="text-right">
+              ${{ apu_service?.total | number : "1.2-2" }}
             </td>
           </tr>
           <ng-container
@@ -318,19 +362,36 @@
             <tr class="table-primary">
               <th colspan="2" class="text-center">TOTAL SERVCIOS</th>
               <th class="text-right">
+                ${{
+                  work_order?.total_direct_cost_apu_services | number : "1.2-2"
+                }}
+              </th>
+              <th class="text-right">
+                ${{
+                  work_order?.total_indirect_cost_apu_services
+                    | number : "1.2-2"
+                }}
+              </th>
+              <th class="text-right">
                 ${{ work_order.total_apu_services | number : "1.2-2" }}
               </th>
             </tr>
           </ng-container>
-          <tr class="table-success">
-            <th colspan="2" class="text-center">TOTAL</th>
-            <th class="text-right">
-              ${{ work_order.total_budget_part_set_service | number : "1.2-2" }}
-            </th>
-          </tr>
         </tbody>
       </table>
     </div>
+    <app-list-items
+      title1="TOTAL COSTOS DIRECTOS"
+      [var1]="work_order?.total_direct_cost_budget_part_set_service"
+      type1="cop"
+      title2="TOTAL COSTOS INDIRECTOS"
+      [var2]="work_order?.total_indirect_cost_budget_part_set_service"
+      type2="cop"
+      title3="TOTAL PRESUPUESTO BASE"
+      [var3]="work_order?.total_budget_part_set_service"
+      type3="cop"
+      mt="mt-2"
+    ></app-list-items>
     <ng-container *ngIf="work_order?.description">
       <h6>Descripción</h6>
       <div

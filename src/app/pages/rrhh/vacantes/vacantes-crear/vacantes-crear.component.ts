@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import 'rxjs/add/operator/takeWhile';
 import { Router } from '@angular/router';
@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { CompanyService } from 'src/app/pages/ajustes/informacion-base/services/company.service';
 import { isArraysEqual } from '@fullcalendar/core';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-vacantes-crear',
@@ -21,14 +22,13 @@ import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swa
 })
 
 export class VacantesCrearComponent implements OnInit {
-
+  @Input('edit') edit;
   form: FormGroup
   fecha = new Date();
   loading: boolean = false;
   departments: any[] = [];
   masks = consts;
   municipalities: any[] = [{ text: 'Primero selecciona un departamento', value: '', disabled: true }];
-  visaSelected: boolean;
   companies: any[] = [];
   groups: any[] = [];
   dependencies: any[] = [{ text: 'Primero selecciona un grupo', value: '', disabled: true }];
@@ -80,11 +80,13 @@ export class VacantesCrearComponent implements OnInit {
     this.getDrivingLicenses();
     this.getDocumentTypes();
     await this.getSalaryTypes();
+    this.edit ? this.pullJob() : '';
     this.loading = false;
   }
 
   createForm() {
     this.form = this.fb.group({
+      id: [''],
       company_id: ['', Validators.required],
       title: ['', [Validators.required, Validators.maxLength(500)]],
       date_start: ['', Validators.required],
@@ -114,6 +116,30 @@ export class VacantesCrearComponent implements OnInit {
       visa_type_id: [''],
       salary_type_id: [1],
       driving_license: ['No aplica'],
+    })
+    this.form.get('group_id').valueChanges.subscribe(v => {
+      this.getDependencies(v);
+    })
+    this.form.get('dependency_id').valueChanges.subscribe(v => {
+      this.getPosition(v)
+    })
+    this.form.get('department_id').valueChanges.subscribe(v => {
+      this.getMunicipalities(v)
+    })
+    this.form.get('visa').valueChanges.subscribe(v => {
+      v == 1 ? this.form.get('visa_type_id').disable() : this.form.get('visa_type_id').enable()
+    })
+  }
+
+  pullJob() {
+    this.form.patchValue({
+      ...this.edit,
+      date_start: moment(this.edit.date_start).format('YYYY-MM-DD'),
+      date_end: moment(this.edit.date_end).format('YYYY-MM-DD'),
+      group_id: this.edit.position?.dependency?.group?.id,
+      dependency_id: this.edit.position?.dependency_id,
+      department_id: this.edit.municipality?.department_id
+
     })
   }
 
@@ -196,6 +222,7 @@ export class VacantesCrearComponent implements OnInit {
   }
 
   save() {
+    console.log(this.form.value)
     if (this.form.invalid) {
       this._swal.incompleteError();
       this.form.markAllAsTouched()
@@ -258,22 +285,7 @@ export class VacantesCrearComponent implements OnInit {
     })
   }
 
-  visa() {
-    if (this.form.controls.visa.value == 0) {
-      this.visaSelected = true;
-    } else {
-      this.visaSelected = false;
-    }
-  }
 
-  salaryChange() {
-    if (this.form.controls.salary_type_id.value == 2) {
-      this.rangeSalary = true;
-    }
-    else {
-      this.rangeSalary = false;
-    }
-  }
 
   get company_id_invalid() {
     return (this.form.get('company_id').invalid && this.form.get('company_id').touched);

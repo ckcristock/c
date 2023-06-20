@@ -81,6 +81,7 @@ export const cutLaserHelper = {
         }
       }
     });
+    console.log(formula)
     let result = eval(formula);
     cut_laser?.patchValue({
       time: (result / 60)?.toFixed(7)

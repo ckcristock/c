@@ -5,7 +5,7 @@
   <div class="card-body">
     <form [formGroup]="form" (ngSubmit)="save()">
       <div class="card-title">
-        <h4 class="text-primary">Nueva vacante</h4>
+        <h4 class="text-primary">{{ edit ? "Editar" : "Crear" }} vacante</h4>
       </div>
       <hr class="line" />
       <div class="row">
@@ -43,7 +43,7 @@
             type="date"
             formControlName="date_start"
             autocomplete="off"
-            (change)="validarFechas()"
+            (blur)="validarFechas()"
             required
           />
           <mat-error *ngIf="date_start_invalid">
@@ -58,17 +58,13 @@
             formControlName="date_end"
             autocomplete="off"
             required
-            (change)="validarFechas()"
+            (blur)="validarFechas()"
           />
           <mat-error *ngIf="date_end_invalid"> Es necesaria la fecha</mat-error>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Grupo</mat-label>
-          <mat-select
-            formControlName="group_id"
-            (selectionChange)="getDependencies($event.value)"
-            required
-          >
+          <mat-select formControlName="group_id" required>
             <mat-option
               *ngFor="let item of groups"
               [value]="item.value"
@@ -82,11 +78,7 @@
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Dependencia</mat-label>
-          <mat-select
-            formControlName="dependency_id"
-            (selectionChange)="getPosition($event.value)"
-            required
-          >
+          <mat-select formControlName="dependency_id" required>
             <mat-option
               *ngFor="let item of dependencies"
               [value]="item.value"
@@ -117,7 +109,6 @@
             formControlName="department_id"
             [items]="departments"
             bindLabel="text"
-            (change)="getMunicipalities($event.value)"
             [class.is-invalid]="form.get('department_id').invalid"
             bindValue="value"
             appearance="outline"
@@ -143,18 +134,13 @@
         </div>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Tipo de salario</mat-label>
-          <mat-select
-            formControlName="salary_type_id"
-            (selectionChange)="salaryChange()"
-            required
-          >
+          <mat-select formControlName="salary_type_id" required>
             <mat-option *ngFor="let item of salaries" [value]="item.value">{{
               item.text
             }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
-          <!-- *ngIf="rangeSalary == true" -->
           <mat-label>Salario (-)</mat-label>
           <input
             matInput
@@ -164,7 +150,7 @@
             currencyMask
             [options]="masks.maskCOP"
             appInputPosition
-            (change)="validarSalarios()"
+            (blur)="validarSalarios()"
             required
           />
           <mat-error *ngIf="min_salary_invalid">
@@ -172,7 +158,6 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
-          <!-- *ngIf="rangeSalary == true" -->
           <mat-label>Salario (+)</mat-label>
           <input
             matInput
@@ -181,7 +166,7 @@
             currencyMask
             [options]="masks.maskCOP"
             appInputPosition
-            (change)="validarSalarios()"
+            (blur)="validarSalarios()"
             required
           />
           <mat-error *ngIf="max_salary_invalid">
@@ -203,16 +188,16 @@
           <mat-label>Género</mat-label>
           <mat-select formControlName="gener" required>
             <mat-option value="No aplica">No aplica</mat-option>
-            <mat-option value="M">Masculino</mat-option>
-            <mat-option value="F">Femenino</mat-option>
+            <mat-option value="Masculino">Masculino</mat-option>
+            <mat-option value="Femenino">Femenino</mat-option>
           </mat-select>
           <mat-error *ngIf="gener_invalid"> Es necesario el género </mat-error>
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Idiomas</mat-label>
           <mat-select formControlName="languages" required>
-            <mat-option value="espanol">Español</mat-option>
-            <mat-option value="ingles">Inglés</mat-option>
+            <mat-option value="Español">Español</mat-option>
+            <mat-option value="Inglés">Inglés</mat-option>
           </mat-select>
           <mat-error *ngIf="languages_invalid">
             Es necesario el idioma
@@ -312,8 +297,8 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Disponibilidad para viajar</mat-label>
           <mat-select formControlName="can_trip" required>
-            <mat-option value="1">Sí</mat-option>
-            <mat-option value="2">No</mat-option>
+            <mat-option [value]="1">Sí</mat-option>
+            <mat-option [value]="2">No</mat-option>
           </mat-select>
           <mat-error *ngIf="can_trip_invalid">
             Es necesario el campo
@@ -322,8 +307,8 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Cambio de residencia</mat-label>
           <mat-select formControlName="change_residence" required>
-            <mat-option value="1">Sí</mat-option>
-            <mat-option value="2">No</mat-option>
+            <mat-option [value]="1">Sí</mat-option>
+            <mat-option [value]="2">No</mat-option>
           </mat-select>
           <mat-error *ngIf="change_residence_invalid">
             Es necesario el campo
@@ -332,7 +317,7 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Licencia de conducción</mat-label>
           <mat-select formControlName="driving_license">
-            <mat-option value="No aplica">No aplica</mat-option>
+            <mat-option [value]="0">No aplica</mat-option>
             <mat-option *ngFor="let item of licenses" [value]="item.value">{{
               item.text
             }}</mat-option>
@@ -352,7 +337,7 @@
         <mat-form-field class="col" appearance="outline">
           <mat-label>Pasaporte</mat-label>
           <mat-select formControlName="passport" required>
-            <mat-option *ngFor="let item of options" [value]="item.valor">{{
+            <mat-option *ngFor="let item of options" [value]="item.clave">{{
               item.clave
             }}</mat-option>
           </mat-select>
@@ -362,11 +347,7 @@
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Visa americana</mat-label>
-          <mat-select
-            formControlName="visa"
-            required
-            (selectionChange)="visa()"
-          >
+          <mat-select formControlName="visa" required>
             <mat-option *ngFor="let item of options" [value]="item.valor">{{
               item.clave
             }}</mat-option>
@@ -376,7 +357,7 @@
         <mat-form-field
           class="col"
           appearance="outline"
-          *ngIf="visaSelected == true"
+          *ngIf="form.get('visa_type_id').enabled"
         >
           <mat-label>Tipo de visa</mat-label>
           <mat-select formControlName="visa_type_id" required>

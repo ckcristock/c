@@ -91,7 +91,8 @@
             <th>Calidad</th>
             <th>Tipo</th>
             <th>Costo</th>
-            <th>Cantidad</th>
+            <th class="col-1">Cantidad</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
@@ -107,7 +108,39 @@
             <td class="text-right align-middle">
               $ {{ inventario.cost | number | puntos }}
             </td>
-            <td class="align-middle">{{ inventario.stock }}</td>
+            <td class="align-middle" *ngIf="!inventario.edit; else inputEdit">
+              {{ inventario.stock }}
+            </td>
+            <ng-template #inputEdit>
+              <td class="d-flex justify-content-end">
+                <input
+                  class="form-control form-control-sm"
+                  style="max-width: 4rem"
+                  currencyMask
+                  [options]="mask.maskNumbers"
+                  appInputPositionInitial
+                  [(ngModel)]="inventario.stock"
+                />
+              </td>
+            </ng-template>
+            <td *ngIf="!inventario.edit; else saveButton">
+              <button
+                class="btn btn-sm btn-info"
+                (click)="inventario.edit = true"
+              >
+                <i class="fas fa-edit"></i>
+              </button>
+            </td>
+            <ng-template #saveButton>
+              <td>
+                <button
+                  class="btn btn-sm btn-primary"
+                  (click)="update(inventario)"
+                >
+                  <i class="fas fa-save"></i>
+                </button>
+              </td>
+            </ng-template>
           </tr>
         </tbody>
       </table>

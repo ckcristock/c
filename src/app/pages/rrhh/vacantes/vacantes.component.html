@@ -1,15 +1,12 @@
 <div class="card">
   <div class="card-body">
-    <div
-      class="row card-title d-flex justify-content-between"
-      *ngIf="paginacion"
-    >
+    <div class="row card-title d-flex justify-content-between">
       <div class="col-md-6 px-0">
         <h4 class="text-primary">
           Vacantes
           <span style="font-size: smaller">
             <small class="pb-2 text-secondary text-muted">
-              pág. {{ paginacion.current_page }}
+              pág. {{ paginacion?.current_page }}
             </small>
           </span>
         </h4>
@@ -237,12 +234,19 @@
                                               [routerLink]="['/vacanteseditar',job.id]">
                                               <i class="ti-pencil"></i> Editar</a> -->
                   <a
-                    class="dropdown-item text-info"
+                    class="dropdown-item text-success"
                     href="javascript:void(0)"
                     [routerLink]="['/rrhh/vacantes-ver', job.id]"
                   >
                     <i class="fas fa-eye"></i> Ver</a
                   >
+                  <a
+                    class="dropdown-item text-info"
+                    href="javascript: void(0);"
+                    [routerLink]="['editar', job.id]"
+                  >
+                    <i class="fas fa-edit"></i> Editar
+                  </a>
                   <a
                     *ngIf="job.state != 'Cancelada'"
                     class="dropdown-item text-danger"

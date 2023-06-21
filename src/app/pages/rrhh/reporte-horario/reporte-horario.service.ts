@@ -126,4 +126,8 @@ export class ReporteHorarioService {
       { params, headers, responseType: 'blob' as 'json' }
     );
   }
+
+  updateHoursWorked(data) {
+    return this.http.post(`${environment.base_url}/update-hours-worked`, data)
+  }
 }

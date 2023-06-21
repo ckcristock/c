@@ -10,6 +10,7 @@ export interface Permissions {
     approve_product_categories?: boolean,
     engineering_and_design?: boolean,
     production?: boolean,
-    financial?: boolean
+    financial?: boolean,
+    modify_hours?: boolean
   }
 }

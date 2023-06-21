@@ -8,6 +8,9 @@
         <th>Entrada 2</th>
         <th>Salida 2</th>
         <th>Horas trabaj.</th>
+        <ng-container *ngIf="permissions.permissions.modify_hours">
+          <th>Editar</th>
+        </ng-container>
       </tr>
     </thead>
     <tbody>
@@ -136,7 +139,7 @@
             </a>
           </section>
         </td>
-        <td>
+        <td *ngIf="!horario.edit; else inputEdit">
           <div
             *ngIf="
               horario.working_hours && horario.working_hours != '00:00:00';
@@ -149,6 +152,30 @@
             </span>
           </div>
         </td>
+        <ng-template #inputEdit>
+          <td class="d-flex justify-content-end">
+            <input
+              class="form-control form-control-sm"
+              style="max-width: 4rem"
+              currencyMask
+              [options]="mask.maskNumbers2Decimal"
+              appInputPositionInitial
+              [(ngModel)]="horario.working_hours"
+            />
+          </td>
+        </ng-template>
+        <td *ngIf="!horario.edit; else saveButton">
+          <button class="btn btn-sm btn-info" (click)="horario.edit = true">
+            <i class="fas fa-edit"></i>
+          </button>
+        </td>
+        <ng-template #saveButton>
+          <td>
+            <button class="btn btn-sm btn-primary" (click)="update(horario)">
+              <i class="fas fa-save"></i>
+            </button>
+          </td>
+        </ng-template>
       </tr>
     </tbody>
   </table>

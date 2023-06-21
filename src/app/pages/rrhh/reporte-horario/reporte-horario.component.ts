@@ -37,7 +37,8 @@ export class ReporteHorarioComponent implements OnInit {
     menu: 'Reporte de horarios',
     permissions: {
       show: true,
-      add: true
+      add: true,
+      modify_hours: true
     }
   };
   paginationMaterial: any;

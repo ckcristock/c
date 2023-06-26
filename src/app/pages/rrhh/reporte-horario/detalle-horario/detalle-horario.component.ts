@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Permissions } from 'src/app/core/interfaces/permissions-interface';
 import { ReporteHorarioService } from '../reporte-horario.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { consts } from 'src/app/core/utils/consts';
 import Swal from 'sweetalert2';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-detalle-horario',
@@ -12,14 +13,18 @@ import Swal from 'sweetalert2';
 })
 export class DetalleHorarioComponent implements OnInit {
   @Input('horas') horas: any
+  @Input('horasEditadas') horasEditadas: any;
   @Input('horarios') horarios: any
   @Input('type_report') type_report: any;
   @Input('permissions') permissions: Permissions;
+  @Output('update') updateList = new EventEmitter();
   mask = consts;
+  horarioEditado: any[] = [];
 
   constructor(
     private _swal: SwalService,
-    private _reporteHorarios: ReporteHorarioService
+    private _reporteHorarios: ReporteHorarioService,
+    private _modal: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -29,6 +34,11 @@ export class DetalleHorarioComponent implements OnInit {
     let horas = Math.floor(decimal);
     let minutos = Math.round((decimal - horas) * 60);
     return `${horas}h ${minutos}m`;
+  }
+
+  openModal(content, element) {
+    this._modal.open(content, 'lg');
+    this.horarioEditado = element.edit
   }
 
   update(item) {
@@ -59,7 +69,8 @@ export class DetalleHorarioComponent implements OnInit {
     })
       .then((result) => {
         if (result.isConfirmed) {
-          item.edit = false;
+          item.editHour = false;
+          this.updateList.emit()
           this._swal.show({
             icon: 'success',
             title: 'Operación exitosa',

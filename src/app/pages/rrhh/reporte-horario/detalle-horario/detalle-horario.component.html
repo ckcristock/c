@@ -9,7 +9,7 @@
         <th>Salida 2</th>
         <th>Horas trabaj.</th>
         <ng-container *ngIf="permissions.permissions.modify_hours">
-          <th>Editar</th>
+          <th><i class="mdi mdi-chevron-down"></i></th>
         </ng-container>
       </tr>
     </thead>
@@ -139,17 +139,21 @@
             </a>
           </section>
         </td>
-        <td *ngIf="!horario.edit; else inputEdit">
+        <td *ngIf="!horario.editHour; else inputEdit">
           <div
             *ngIf="
               horario.working_hours && horario.working_hours != '00:00:00';
-              else notHour2
+              else notHourFinal
             "
           >
             <!-- <span class="dot" [class]="horario.colors.leave"></span> -->
             <span class="custom-label"
-              >{{ convertHours(horario.working_hours) }}
+              >Original: {{ convertHours(horario.working_hours) }}
             </span>
+          </div>
+          <div *ngIf="horario.edit.length > 0">
+            Editada:
+            {{ convertHours(horario.edit[horario.edit.length - 1].hours) }}
           </div>
         </td>
         <ng-template #inputEdit>
@@ -164,16 +168,38 @@
             />
           </td>
         </ng-template>
-        <td *ngIf="!horario.edit; else saveButton">
-          <button class="btn btn-sm btn-info" (click)="horario.edit = true">
-            <i class="fas fa-edit"></i>
-          </button>
+        <td *ngIf="!horario.editHour; else saveButton">
+          <div class="btn-group" role="group">
+            <button
+              class="btn btn-sm btn-info"
+              (click)="horario.editHour = true"
+            >
+              <i class="fas fa-edit"></i>
+            </button>
+            <ng-container *ngIf="horario.edit.length > 0">
+              <button
+                class="btn btn-sm btn-success"
+                title="Ver histórico de ediciones"
+                (click)="openModal(modal, horario)"
+              >
+                <i class="fas fa-history"></i>
+              </button>
+            </ng-container>
+          </div>
         </td>
         <ng-template #saveButton>
           <td>
-            <button class="btn btn-sm btn-primary" (click)="update(horario)">
-              <i class="fas fa-save"></i>
-            </button>
+            <div class="btn-group" role="group">
+              <button class="btn btn-sm btn-primary" (click)="update(horario)">
+                <i class="fas fa-save"></i>
+              </button>
+              <button
+                class="btn btn-sm btn-danger"
+                (click)="horario.editHour = false"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
           </td>
         </ng-template>
       </tr>
@@ -181,14 +207,64 @@
   </table>
 </div>
 <div class="alert alert-info text-center" role="alert">
-  Total horas trabajadas: {{ convertHours(horas) }}
+  Total horas trabajadas: {{ convertHours(horas) }} <br />
+  <ng-container *ngIf="horas != horasEditadas">
+    Total horas trabajadas editadas:
+    {{ convertHours(horasEditadas) }}
+  </ng-container>
 </div>
 
 <ng-template #notHour2>
   <span>Sin reportar</span>
 </ng-template>
+
+<ng-template #notHourFinal>
+  <span>Original: Sin reportar</span>
+</ng-template>
 <ng-template #popTitle>Foto</ng-template>
 <ng-template #noImage>
   Esta hora se ha generado automaticamente con la información del turno porque
   el funcionario no marcó.
+</ng-template>
+
+<ng-template #modal let-modal>
+  <div class="modal-header">
+    <h4 class="text-primary modal-title">Historico de ediciones</h4>
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      aria-label="Close"
+      (click)="_modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="rounded-top table-responsive">
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Fecha</th>
+            <th>Horas</th>
+            <th>Justificación</th>
+            <th>Editor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center" *ngFor="let item of horarioEditado">
+            <td>{{ item.created_at | date }}</td>
+            <td>{{ convertHours(item.hours) }}</td>
+            <td>{{ item.justification }}</td>
+            <td>{{ item.person?.full_names }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+      Cerrar
+    </button>
+  </div>
 </ng-template>

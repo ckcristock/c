@@ -28,8 +28,14 @@ export class ReporteHorarioService {
               group.dependencies.forEach((dependency) => {
                 dependency.people.forEach((person) => {
                   person.totalHours = 0;
+                  person.totalHoursEdit = 0;
                   person.diaries.forEach((diary) => {
                     person.totalHours += parseFloat(diary.working_hours || 0);
+                    if (diary.edit.length > 0) {
+                      person.totalHoursEdit += parseFloat(diary.edit[diary.edit.length - 1].hours || 0)
+                    } else {
+                      person.totalHoursEdit += parseFloat(diary.working_hours || 0)
+                    }
                     if (diary.rotating_turn_id) {
                       diary = this.makeColorArrival(diary);
                     }

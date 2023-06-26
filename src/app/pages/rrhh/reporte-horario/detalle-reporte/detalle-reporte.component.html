@@ -53,8 +53,10 @@
                         >
                           <app-detalle-horario-rotativo
                             [horas]="person.totalHours"
+                            [horasEditadas]="person.totalHoursEdit"
                             [permissions]="permissions"
                             [horarios]="person.diaries"
+                            (update)="updateList()"
                           ></app-detalle-horario-rotativo>
                         </ng-container>
                       </td>
@@ -64,8 +66,10 @@
                         <ng-template #detalleFijo>
                           <app-detalle-horario
                             [horas]="person.totalHours"
+                            [horasEditadas]="person.totalHoursEdit"
                             [permissions]="permissions"
                             [horarios]="person.diaries"
+                            (update)="updateList()"
                           ></app-detalle-horario>
                         </ng-template>
                       </td>

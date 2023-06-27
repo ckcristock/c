@@ -39,7 +39,7 @@ export class AsignacionTurnosService {
     return this.http.post(`${environment.base_url}/rotating-hour`, body);
   }
 
-  getHistory() {
-    return this.http.get(`${environment.base_url}/history-rotating-hour`);
+  getHistory(params = {}) {
+    return this.http.get(`${environment.base_url}/history-rotating-hour`, { params });
   }
 }

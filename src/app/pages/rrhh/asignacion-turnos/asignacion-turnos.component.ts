@@ -120,7 +120,7 @@ export class AsignacionTurnosComponent implements OnInit {
 
   handlePageEvent(event: PageEvent) {
     this._paginator.handlePageEvent(event, this.pagination);
-    this.getData()
+    this.getHistory()
   }
 
   resetFiltros() {
@@ -136,7 +136,10 @@ export class AsignacionTurnosComponent implements OnInit {
 
   getHistory() {
     this.loadingHistory = true;
-    this._asignacion.getHistory().subscribe((res: any) => {
+    let params = {
+      ...this.pagination,
+    }
+    this._asignacion.getHistory(params).subscribe((res: any) => {
       this.history = res.data.data;
       this.loadingHistory = false;
       this.paginationMaterial = res?.data

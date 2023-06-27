@@ -32,7 +32,7 @@ export class ReporteHorarioService {
                   person.diaries.forEach((diary) => {
                     person.totalHours += parseFloat(diary.working_hours || 0);
                     if (diary.edit.length > 0) {
-                      person.totalHoursEdit += parseFloat(diary.edit[diary.edit.length - 1].hours || 0)
+                      person.totalHoursEdit += parseFloat(diary.edit[0].hours || 0)
                     } else {
                       person.totalHoursEdit += parseFloat(diary.working_hours || 0)
                     }

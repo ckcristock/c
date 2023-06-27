@@ -22,7 +22,9 @@ export class SemanaTurnoComponent implements OnInit {
   turnos: any[] = [];
   loading: boolean;
   today = new Date();
-
+  hoy = new Date();
+  DIA_EN_MILISEGUNDOS = 24 * 60 * 60 * 1000;
+  ayer = new Date(this.hoy.getTime() - this.DIA_EN_MILISEGUNDOS);
   constructor(
     private _asignacion: AsignacionTurnosService,
     private _swal: SwalService
@@ -67,7 +69,7 @@ export class SemanaTurnoComponent implements OnInit {
       this.people.forEach((r) => {
         if (r.selected) {
           r.diasSemana.forEach((dia) => {
-            if (new Date(dia.fecha) > this.today) {
+            if (new Date(dia.fecha) > this.ayer) {
               if (dia.dia == 'domingo') {
                 let turnId = this.masiveTurnId?.sunday?.id ? this.masiveTurnId?.sunday?.id : 0;
                 dia.turno = turnId;
@@ -198,7 +200,7 @@ export class SemanaTurnoComponent implements OnInit {
                 dia.turno != null &&
                 dia.turno != undefined &&
                 dia.turno != 'seleccione' &&
-                fechaDia > this.today
+                fechaDia > this.ayer
               ) {
                 horarios.push({
                   person_id: funcionario.id,
@@ -229,13 +231,17 @@ export class SemanaTurnoComponent implements OnInit {
   saveHours(horarios) {
     this._asignacion.saveHours(horarios).subscribe(
       (r: any) => {
-        this._swal.show({
-          icon: 'success',
-          title: 'Guardado con éxito',
-          text: '',
-          showCancel: false,
-          timer: 1000
-        });
+        if (r.status) {
+          this._swal.show({
+            icon: 'success',
+            title: 'Guardado con éxito',
+            text: '',
+            showCancel: false,
+            timer: 1000
+          });
+        } else {
+          this._swal.hardError();
+        }
       },
       (err) => {
         this._swal.show({

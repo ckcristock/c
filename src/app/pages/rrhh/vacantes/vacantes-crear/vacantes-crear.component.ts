@@ -101,7 +101,8 @@ export class VacantesCrearComponent implements OnInit {
       turn_type: ['', Validators.required],
       description: ['', Validators.required],
       education: ['', Validators.required],
-      experience_year: ['', Validators.required],
+      experience_year: [''],
+      months_experience: [''],
       min_age: [18, Validators.min(18)],
       max_age: [65, Validators.min(18)],
       can_trip: ['', Validators.required],
@@ -328,9 +329,6 @@ export class VacantesCrearComponent implements OnInit {
   }
   get education_invalid() {
     return this.form.get('education').invalid && this.form.get('education').touched;
-  }
-  get experience_year_invalid() {
-    return this.form.get('experience_year').invalid && this.form.get('experience_year').touched;
   }
   get change_residence_invalid() {
     return this.form.get('change_residence').invalid && this.form.get('change_residence').touched;

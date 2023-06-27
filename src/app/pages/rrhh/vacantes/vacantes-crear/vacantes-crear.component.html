@@ -266,11 +266,18 @@
             appInputPositionInitial
             formControlName="experience_year"
             placeholder="Ingresa los años de experiencia"
-            required
           />
-          <mat-error *ngIf="experience_year_invalid">
-            Es necesaria la experiencia
-          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col" appearance="outline">
+          <mat-label>Meses de experencia</mat-label>
+          <input
+            matInput
+            currencyMask
+            [options]="masks.maskNumbers"
+            appInputPositionInitial
+            formControlName="months_experience"
+            placeholder="Ingresa los meses de experiencia"
+          />
         </mat-form-field>
         <mat-form-field class="col" appearance="outline">
           <mat-label>Edad mínima</mat-label>

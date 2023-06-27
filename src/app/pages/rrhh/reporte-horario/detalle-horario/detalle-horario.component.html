@@ -153,7 +153,7 @@
           </div>
           <div *ngIf="horario.edit.length > 0">
             Editada:
-            {{ convertHours(horario.edit[horario.edit.length - 1].hours) }}
+            {{ convertHours(horario.edit[0].hours) }}
           </div>
         </td>
         <ng-template #inputEdit>
@@ -253,7 +253,7 @@
         </thead>
         <tbody>
           <tr class="text-center" *ngFor="let item of horarioEditado">
-            <td>{{ item.created_at | date }}</td>
+            <td>{{ item.created_at | date : "MMM d, y, h:mm:ss a" }}</td>
             <td>{{ convertHours(item.hours) }}</td>
             <td>{{ item.justification }}</td>
             <td>{{ item.person?.full_names }}</td>

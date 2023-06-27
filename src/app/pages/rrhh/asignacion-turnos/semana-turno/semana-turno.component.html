@@ -58,7 +58,7 @@
           <select
             class="form-control form-control-sm select-turno"
             [(ngModel)]="dia.turno"
-            [disabled]="getFecha(dia.fecha) < today"
+            [disabled]="getFecha(dia.fecha) <= ayer"
             [ngStyle]="{ 'background-color': dia.color, color: '#FFF' }"
             (change)="getColorByDay(dia)"
           >

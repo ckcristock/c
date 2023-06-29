@@ -250,7 +250,7 @@ export class VacantesCrearComponent implements OnInit {
           showCancel: false,
           timer: 1000
         })
-        this.router.navigateByUrl('/rrhh/vacantes')
+        this.router.navigateByUrl(`/rrhh/vacantes-ver/${r.data}`)
       } else {
         this._swal.hardError();
       }

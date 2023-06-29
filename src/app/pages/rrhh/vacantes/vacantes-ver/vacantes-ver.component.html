@@ -44,6 +44,9 @@
           <h4 class="text-primary">{{ job.title }}</h4>
         </div>
         <hr class="line" />
+        <h6>Descripción</h6>
+        <div>{{ job.description }}</div>
+        <hr />
         <h6 class="">Información general</h6>
         <div class="rounded-top table-responsive">
           <table class="table table-bordered table-striped table-sm">
@@ -57,10 +60,28 @@
             </thead>
             <tbody>
               <tr class="text-center">
-                <td>{{ job.municipality.department.name }}</td>
-                <td>{{ job.municipality.name }}</td>
+                <td>{{ job.municipality?.department?.name | uppercase }}</td>
+                <td>{{ job.municipality?.name | uppercase }}</td>
                 <td>{{ job.date_start | date : "dd/M/yyyy" }}</td>
                 <td>{{ job.date_end | date : "dd/M/yyyy" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="rounded-top table-responsive">
+          <table class="table table-bordered table-striped table-sm">
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Género</th>
+                <th>Idioma</th>
+                <th>Medio de transporte</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center text-uppercase">
+                <td>{{ job.gener }}</td>
+                <td>{{ job.languages }}</td>
+                <td>{{ job.conveyance }}</td>
               </tr>
             </tbody>
           </table>
@@ -78,14 +99,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="text-center">
+              <tr class="text-center text-uppercase">
                 <td>{{ job.position.dependency.name }}</td>
                 <td>{{ job.position.name }}</td>
                 <td *ngIf="job.min_salary || job.max_salary">
-                  {{ job.min_salary | currency }} -
-                  {{ job.max_salary | currency }}
+                  ${{ job.min_salary | number : "1.2-2" }} - ${{
+                    job.max_salary | number : "1.2-2"
+                  }}
+                  <br />
+                  {{ job?.salary_type?.name }}
                 </td>
-                <td *ngIf="!job.min_salary && !job.max_salary">A convenir</td>
                 <td>{{ job.turn_type }}</td>
               </tr>
             </tbody>
@@ -93,41 +116,44 @@
         </div>
         <hr />
         <h6 class="">Requisitos</h6>
-        <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-striped table-sm">
-            <thead class="bg-light">
-              <tr class="text-center text-uppercase">
-                <th>Educación mínima</th>
-                <th>Edad</th>
-                <th>Viajar</th>
-                <th>Cambio de residencia</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="text-center">
-                <td>{{ job.education }}</td>
-                <td>{{ job.min_age }} - {{ job.max_age }}</td>
-                <td>{{ job.can_trip == 1 ? "Sí" : "No" }}</td>
-                <td>{{ job.change_residence == 1 ? "Sí" : "No" }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <hr />
-        <div class="rounded-top table-responsive">
-          <table class="table table-bordered table-striped table-sm">
-            <thead class="bg-light">
-              <tr class="text-center text-uppercase">
-                <th>Descripción</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="text-center">
-                <td>{{ job.description }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <ul class="list-group">
+          <li class="list-group-item">
+            <b>EDUCACIÓN MÍNIMA: </b> {{ job.education }}
+          </li>
+          <li class="list-group-item">
+            <b>AÑOS DE EXPERIENCIA: </b> {{ job.experience_year || 0 }}
+          </li>
+          <li class="list-group-item">
+            <b>MESES DE EXPERIENCIA: </b> {{ job.months_experience || 0 }}
+          </li>
+          <li class="list-group-item">
+            <b>EDAD: </b> {{ job.min_age }} - {{ job.max_age }}
+          </li>
+          <li class="list-group-item">
+            <b>DISPONIBILIDAD PARA VIAJAR: </b>
+            {{ job.can_trip == 1 ? "Sí" : "No" }}
+          </li>
+          <li class="list-group-item">
+            <b>CAMBIO DE RESIDENCIA: </b>
+            {{ job.change_residence == 1 ? "Sí" : "No" }}
+          </li>
+          <li class="list-group-item">
+            <b>LICENCIA DE CONDUCCIÓN: </b>
+            {{ job.driving_licence_name?.type || "No aplica" }}
+          </li>
+          <li class="list-group-item">
+            <b>DOCUMENTOS LEGALES NECESARIOS: </b>
+            {{ job.document_type?.name }}
+          </li>
+          <li class="list-group-item">
+            <b>PASAPORTE: </b>
+            {{ job.passport }}
+          </li>
+          <li class="list-group-item">
+            <b>VISA: </b>
+            {{ job.visa_type?.name || "No" }}
+          </li>
+        </ul>
       </div>
     </div>
   </div>

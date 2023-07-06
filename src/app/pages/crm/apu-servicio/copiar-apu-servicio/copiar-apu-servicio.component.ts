@@ -23,7 +23,7 @@ export class CopiarApuServicioComponent implements OnInit {
   }
 
   async getData() {
-    await this._apuService.getApuService(this.id).toPromise().then((r: any) => {
+    await this._apuService?.getApuService(this.id).toPromise()?.then((r: any) => {
       this.data = r?.data;
     })
   }

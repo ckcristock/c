@@ -1,27 +1,25 @@
-<div class="form-group d-flex justify-content-end">
-  <!--   <app-turno [turnos]="turnos"></app-turno>
-  <button
-    class="btn btn-link"
-    (click)="asignarHorariosMasivo()"
-    style="padding: 0 10px !important"
-  >
-    Asignar
-  </button> -->
-</div>
 <div class="rounded-top table-responsive">
   <table class="table table-bordered table-striped table-sm">
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
         <th>Funcionario</th>
         <th *ngFor="let dia of diasSemana">
-          {{ dia.dia == 'Sunday' ? 'Domingo' : 
-            dia.dia == 'Monday' ? 'Lunes' : 
-            dia.dia == 'Tuesday' ? 'Martes' : 
-            dia.dia == 'Wednesday' ? 'Miércoles' : 
-            dia.dia == 'Thursday' ? 'Jueves' : 
-            dia.dia == 'Friday' ? 'Viernes' : 
-            dia.dia == 'Saturday' ? 'Sábado' : 
-            dia.dia 
+          {{
+            dia.dia == "Sunday"
+              ? "Domingo"
+              : dia.dia == "Monday"
+              ? "Lunes"
+              : dia.dia == "Tuesday"
+              ? "Martes"
+              : dia.dia == "Wednesday"
+              ? "Miércoles"
+              : dia.dia == "Thursday"
+              ? "Jueves"
+              : dia.dia == "Friday"
+              ? "Viernes"
+              : dia.dia == "Saturday"
+              ? "Sábado"
+              : dia.dia
           }}
           <br />
           {{ formatFecha(dia.fecha) }}

@@ -87,7 +87,6 @@ export class CrearCompraNacionalComponent implements OnInit {
     this.formCategories.patchValue({
       category_id: orderDetails?.queryParams?.data?.category_id
     })
-    console.log(orderDetails);
     this.formCompra.patchValue({
       Fecha_Entrega_Probable: orderDetails?.queryParams?.data?.expected_date,
       Id_Proveedor: orderDetails?.queryParams?.products[0]?.third_party_id,

@@ -256,11 +256,11 @@ export class DatosFuncionarioComponent implements OnInit {
   onFileChangedSignature(event) {
     if (event.target.files.length == 1) {
       let file = event.target.files[0];
-      const maxWidth = 546;
-      let maxHeight = 100;
+      const maxWidth = 800;
+      let maxHeight = 450;
       this.validarDimensionesImagen(file, maxWidth, maxHeight)
         .then(() => {
-          const types = ['image/png', 'image/jpeg', 'image/jpg']
+          const types = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml']
           if (!types.includes(file.type)) {
             this._swal.show({
               icon: 'error',
@@ -283,7 +283,7 @@ export class DatosFuncionarioComponent implements OnInit {
             icon: 'error',
             title: 'Error de archivo',
             showCancel: false,
-            text: 'La imagen no tiene las dimensiones solicitadas (546px de ancho por 100px de alto)'
+            text: 'La imagen no tiene las dimensiones solicitadas (800px de ancho por 450px de alto)'
           });
         });
 
@@ -299,6 +299,8 @@ export class DatosFuncionarioComponent implements OnInit {
           const width = img.width;
           const height = img.height;
           if (width == maxWidth && height == maxHeight) {
+            resolve();
+          } else if (file.type == 'image/svg+xml') {
             resolve();
           } else {
             reject(`Las dimensiones de la imagen deben ser iguales a ${maxWidth}x${maxHeight}`);

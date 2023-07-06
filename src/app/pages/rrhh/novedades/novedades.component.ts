@@ -6,6 +6,7 @@ import { PayrollFactorService } from './payroll-factor.service';
 import { PersonService } from '../../ajustes/informacion-base/persons/person.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { DatePipe } from '@angular/common';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-novedades',
@@ -27,7 +28,8 @@ export class NovedadesComponent implements OnInit {
   constructor(
     private _payroll: PayrollFactorService,
     private fb: FormBuilder,
-    private _people: PersonService
+    private _people: PersonService,
+    private _swal: SwalService
   ) {
 
   }
@@ -50,13 +52,14 @@ export class NovedadesComponent implements OnInit {
       link.download = `${filename}.xlsx`;
       link.click();
       this.donwloading = false;
-    }),
+    },
       (error) => {
         this.donwloading = false;
+        this._swal.hardError();
       },
       () => {
         this.donwloading = false;
-      };
+      });
   }
 
   openClose() {
@@ -99,6 +102,7 @@ export class NovedadesComponent implements OnInit {
       .subscribe((r: any) => {
         this.peopleCount = r.data
         this.paylads = this.peopleCount.reduce(this.reducePayloads, [])
+        console.log(this.paylads)
       })
   }
   types: any[] = []

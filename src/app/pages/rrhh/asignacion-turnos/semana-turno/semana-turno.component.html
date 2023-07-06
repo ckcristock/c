@@ -3,15 +3,11 @@
     (changed)="turnAllChanged($event); asignarHorariosMasivo()"
     [turnos]="turnos"
   ></app-turno>
-  <!-- <button
-    class="btn btn-primary btn-sm"
-    (click)="asignarHorariosMasivo()"
-    style="padding: 0 10px !important"
-  >
-    Asignar
-  </button> -->
 </div>
-<div class="rounded-top table-responsive" *ngIf="!loading && diasSemana.length > 0; else notData">
+<div
+  class="rounded-top table-responsive"
+  *ngIf="!loading && diasSemana.length > 0; else notData"
+>
   <table class="table table-bordered table-striped table-sm">
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
@@ -52,20 +48,17 @@
           />
         </td>
         <td class="align-middle">
-          {{ person.first_name  | titlecase }} {{ person.first_surname | titlecase }}
+          {{ person.first_name | titlecase }}
+          {{ person.first_surname | titlecase }}
         </td>
         <td
           class="align-middle p-0"
           *ngFor="let dia of person.diasSemana; let i = index"
         >
-          <!-- {{ turnos }} -->
-          <!--   <app-turno
-                (changed)="turnChanged($event, person, dia)"
-                [turnos]="turnos"
-              ></app-turno> -->
           <select
             class="form-control form-control-sm select-turno"
             [(ngModel)]="dia.turno"
+            [disabled]="getFecha(dia.fecha) <= ayer"
             [ngStyle]="{ 'background-color': dia.color, color: '#FFF' }"
             (change)="getColorByDay(dia)"
           >

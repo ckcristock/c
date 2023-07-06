@@ -18,6 +18,7 @@ import { User } from 'src/app/core/models/users.model';
 import { PageEvent } from '@angular/material';
 import { HttpParams } from '@angular/common/http';
 import { debounceTime } from 'rxjs/operators';
+import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-reporte-horario',
@@ -36,7 +37,8 @@ export class ReporteHorarioComponent implements OnInit {
     menu: 'Reporte de horarios',
     permissions: {
       show: true,
-      add: true
+      add: true,
+      modify_hours: true
     }
   };
   paginationMaterial: any;
@@ -66,6 +68,7 @@ export class ReporteHorarioComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private _user: UserService,
+    private _swal: SwalService
   ) {
     this.user = _user.user;
     this.dateAdapter.setLocale('es');
@@ -189,13 +192,12 @@ export class ReporteHorarioComponent implements OnInit {
     const fecha_fin = this.formFilters.controls.date_to.value == ''
       ? moment().format('YYYY-MM-DD')
       : this.formFilters.controls.date_to.value
-    this._reporteHorario
-      .getFixedTurnsDiaries(fecha_ini, fecha_fin, params)
-      .subscribe((r) => {
-        this.reporteHorarios = r.data;
-        this.loading = false;
-        //falta paginación, es necearia??
-      });
+    this._reporteHorario.getFixedTurnsDiaries(fecha_ini, fecha_fin, params).subscribe((r) => {
+      this.reporteHorarios = r.data;
+      console.log(r.data)
+      this.loading = false;
+      //falta paginación, es necearia??
+    });
   }
 
   getPeople() {
@@ -256,13 +258,14 @@ export class ReporteHorarioComponent implements OnInit {
         link.download = `${filename}.xlsx`;
         link.click();
         this.donwloading = false;
-      }),
-      (error) => {
-        this.donwloading = false;
       },
-      () => {
-        this.donwloading = false;
-      };
+        (error) => {
+          this._swal.hardError();
+          this.donwloading = false;
+        },
+        () => {
+          this.donwloading = false;
+        });
   }
 
   getForm() {

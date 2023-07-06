@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ModalService } from 'src/app/core/services/modal.service';
@@ -7,8 +7,8 @@ import { UserService } from 'src/app/core/services/user.service';
 import { functionsUtils } from 'src/app/core/utils/functionsUtils';
 import { SwalService } from '../../ajustes/informacion-base/services/swal.service';
 import { TaskService } from '../task.service';
-import { TexteditorService } from '../../ajustes/informacion-base/services/texteditor.service';
 import Swal from 'sweetalert2'
+import { Texteditor2Service } from '../../ajustes/informacion-base/services/texteditor2.service';
 
 @Component({
   selector: 'app-new-task',
@@ -23,10 +23,7 @@ export class NewTaskComponent implements OnInit {
   @Output() refresh: EventEmitter<any> = new EventEmitter();
   private _suscription: any;
   fileString: any = '';
-  file: any[] = [];
-  files: any[] = [];
   type: any = '';
-  loadingTypes: boolean;
   types: any[] = []
   form: FormGroup;
   people: any[] = []
@@ -35,7 +32,7 @@ export class NewTaskComponent implements OnInit {
     private _modal: ModalService,
     public _task: TaskService,
     private fb: FormBuilder,
-    private _texteditor: TexteditorService,
+    private _texteditor: Texteditor2Service,
     private _user: UserService,
     private _swal: SwalService,
     private router: Router,
@@ -50,7 +47,7 @@ export class NewTaskComponent implements OnInit {
     this.getPeople();
     this.getTypes();
     this.createForm();
-    this._modal.open(this.newtask, 'lg')
+    this._modal.open(this.newtask, 'xl')
   }
 
   getPeople() {
@@ -60,113 +57,116 @@ export class NewTaskComponent implements OnInit {
   }
 
   getTypes() {
-    this.loadingTypes = true;
     this._task.getTypes().subscribe((res: any) => {
       this.types = res.data;
-      /* if (this.category) {
-        this.types.forEach(type => {
-          if (type.text == 'Negocios') {
-            this.form.patchValue({ type_id: type.value })
-            this.form.get('type_id')
-          }
-        });
-      } */
-      this.loadingTypes = false;
     })
   }
 
   createForm() {
     this.form = this.fb.group({
-      id_realizador: ['', Validators.required],
+      id_realizador: [null, Validators.required],
       type_id: ['', Validators.required],
       titulo: ['', Validators.required],
       descripcion: [''],
       descripcion_aux: ['', Validators.required],
       fecha: ['', Validators.required],
-      files: [''],
       link: [''],
       id_asignador: this._user.user.person.id,
       hora: ['', Validators.required],
       business_id: [this.business_id],
-      category: [this.category]
+      category: [this.category],
+      files: this.fb.array([]),
     })
   }
 
-  deleteFiles(id) {
-    this.files = this.files.filter(function (e) { return e.id != id })
-    this.file = this.file.filter(function (e) { return e.id != id })
+  get files() {
+    return this.form.get('files') as FormArray;
+  }
+
+  deleteFiles(i) {
+    this.files.removeAt(i)
   }
 
   onFileChanged(event) {
-    let f = event.target.files;
-    for (let i = 0; i < f.length; i++) {
-      let params = {
-        name: f[i].name,
-        id: i
-      }
-      this.files.push(params)
-      let file = f[i];
-      const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
-      if (!types.includes(file.type)) {
-        this._swal.show({
-          icon: 'error',
-          title: 'Error de archivo',
-          showCancel: false,
-          text: 'El tipo de archivo no es válido'
-        });
-        return null
-      }
-      var reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        this.fileString = (<FileReader>event.target).result;
-        const type = { ext: this.fileString };
-        this.type = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
-      };
-      functionsUtils.fileToBase64(file).subscribe((base64) => {
-        this.file.push({
-          id: i,
-          name: file.name,
-          type: this.type,
-          base64: base64
+    const files = Array.from(event.target.files);
+    console.log(files)
+    if (files.length > 0) {
+      files.forEach((file: any, index) => {
+        const types = ['application/pdf', 'image/png', 'image/jpg', 'image/jpeg']
+        if (!types.includes(file.type)) {
+          this._swal.show({
+            icon: 'error',
+            title: 'Error de archivo',
+            showCancel: false,
+            text: 'El tipo de archivo no es válido'
+          });
+          return null
+        }
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          this.fileString = (<FileReader>event.target).result;
+          const type = { ext: this.fileString };
+          this.type = type.ext.match(/[^:/]\w+(?=;|,)/)[0];
+        };
+        functionsUtils.fileToBase64(file).subscribe((base64) => {
+          this.files.push(this.fb.group({
+            id: index,
+            name: file.name,
+            type: this.type,
+            base64: base64
+          }));
         });
       });
     }
   }
-
+  disabledButton: boolean = false;
   save() {
-    if (this.form.value.link) {
-      this.form.patchValue({
-        link: this.router.url
-      })
-    }
-    this.form.patchValue({
-      descripcion: btoa(this.form.value.descripcion_aux),
-      files: this.file,
-      id_asignador: this._user.user.person.id,
-    })
-    this._task.save(this.form.value).subscribe((res: any) => {
-      this._modal.close()
-      this.form.reset()
-      this.createForm()
-      this.file = []
-      this.files = []
-      this.refresh.emit()
-      Swal.fire({
-        title: res.data,
-        text: '¿Deseas ir a la tarea?',
-        showDenyButton: true,
-        icon: 'success',
-        confirmButtonText: 'Sí',
-        confirmButtonColor: '#A3BD30',
-        denyButtonText: `No`,
-        denyButtonColor: '#d33',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.router.navigate(['/task', res.code])
+    if (this.form.valid) {
+      this._swal.show({
+        icon: 'question',
+        title: '¿Estás seguro(a)?',
+        text: 'Vamos a agregar una nueva tarea.'
+      }).then(r => {
+        if (r.isConfirmed) {
+          this.disabledButton = true;
+          this.form.patchValue({
+            descripcion: btoa(this.form.value.descripcion_aux),
+            id_asignador: this._user.user.person.id,
+            link: this.form.value.link ? this.router.url : '',
+          })
+          this._task.save(this.form.value).subscribe((res: any) => {
+            if (res.status) {
+              this._modal.close()
+              this.form.reset()
+              this.createForm()
+              this.refresh.emit()
+              Swal.fire({
+                title: res.data,
+                text: '¿Deseas ir a la tarea?',
+                showDenyButton: true,
+                icon: 'success',
+                confirmButtonText: 'Sí',
+                confirmButtonColor: '#A3BD30',
+                denyButtonText: `No`,
+                denyButtonColor: '#d33',
+                reverseButtons: true
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.router.navigate(['/task', res.code])
+                }
+              });
+            }
+          },
+            error => {
+              this._swal.hardError();
+              this.disabledButton = false;
+
+            })
         }
       });
-    })
+    } else {
+      this._swal.incompleteError();
+    }
   }
 }

@@ -79,11 +79,13 @@ export const materiaHelper = {
         let measure = element?.controls?.measure?.value;
         let value = element?.controls?.value?.value;
         formula = formula?.replace(new RegExp('{' + measure + '}', 'g'), value);
+        //console.log(formula)
       });
       let data = materials?.find(m => m?.id == materiaControl?.material_id?.value);
       let result;
       try {
         result = math?.evaluate(formula);
+        //console.log(result, materials)
       }
       catch (error) {
       }

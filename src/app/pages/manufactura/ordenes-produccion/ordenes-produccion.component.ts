@@ -1,6 +1,6 @@
 import { DatePipe, Location } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatAccordion, PageEvent, TooltipComponent } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -25,21 +25,25 @@ Object.defineProperty(TooltipComponent.prototype, 'message', {
   templateUrl: './ordenes-produccion.component.html',
   styleUrls: ['./ordenes-produccion.component.scss']
 })
-export class OrdenesProduccionComponent implements OnInit {
-  @ViewChild(MatAccordion) accordion: MatAccordion;
+export class OrdenesProduccionComponent implements OnInit, AfterViewInit {
   datePipe = new DatePipe('es-CO');
   workOrders: any[] = []
   loading: boolean;
-  matPanel: boolean;
   date: any;
   formFilters: FormGroup;
   orderObj: any
-  active_filters: boolean = false
+  active_filters: boolean = false;
+  collapseEngineeringAndDesign: boolean = false;
+  collapseProduction: boolean = false;
+  collapseFinancial: boolean = false;
   permission: Permissions = {
     menu: 'Órdenes de producción',
     permissions: {
       show: true,
-      add: true
+      add: true,
+      engineering_and_design: true,
+      production: true,
+      financial: true
     }
   };
   paginationMaterial: any;
@@ -63,20 +67,10 @@ export class OrdenesProduccionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     if (this.permission.permissions.show) {
       this.createFormFilters();
       this.route.queryParamMap.subscribe((params: any) => {
-        if (params.params.pageSize) {
-          this.pagination.pageSize = params.params.pageSize
-        } else {
-          this.pagination.pageSize = 10
-        }
-        if (params.params.pag) {
-          this.pagination.page = params.params.pag
-        } else {
-          this.pagination.page = 1
-        }
+        this._paginator.checkParams(this.pagination, params, 'paginationOrdenesPoduccion');
         this.orderObj = { ...params.keys, ...params }
         if (Object.keys(this.orderObj).length > 4) {
           this.active_filters = true
@@ -93,13 +87,33 @@ export class OrdenesProduccionComponent implements OnInit {
     }
   }
 
-  openClose() {
-    this.matPanel = !this.matPanel;
-    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
+  ngAfterViewInit() {
+    this.initializeHorizontalScroll();
+  }
+
+  initializeHorizontalScroll() {
+    const tableWrapper = document.getElementById('table-wrapper');
+    if (tableWrapper) {
+      tableWrapper.addEventListener('mousedown', function (event) {
+        const startX = event.pageX;
+        const scrollLeft = tableWrapper.scrollLeft;
+        tableWrapper.addEventListener('mousemove', handleMouseMove);
+
+        function handleMouseMove(event) {
+          const x = event.pageX - startX;
+          tableWrapper.scrollLeft = scrollLeft - x;
+        }
+
+        tableWrapper.addEventListener('mouseup', function () {
+          tableWrapper.removeEventListener('mousemove', handleMouseMove);
+        });
+      });
+    }
   }
 
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination)
+    this._paginator.handlePageEvent(event, this.pagination);
+    localStorage?.setItem('paginationOrdenesPoduccion', this.pagination?.pageSize);
     this.getWorkOrders()
   }
 
@@ -132,7 +146,7 @@ export class OrdenesProduccionComponent implements OnInit {
     })
   }
 
-  getWorkOrders() {
+  async getWorkOrders() {
     this.loading = true;
     let params = {
       ...this.pagination,
@@ -140,16 +154,16 @@ export class OrdenesProduccionComponent implements OnInit {
     }
     var paramsurl = this.SetFiltros(this.pagination.page);
     this.location.replaceState('/manufactura/ordenes-produccion', paramsurl.toString());
-    this._work_orders.getWorkOrders(params).subscribe((res: any) => {
-      this.workOrders = res.data.data;
-      this.loading = false;
-      this.paginationMaterial = res.data
-      if (this.paginationMaterial.last_page < this.pagination.page) {
-        this.paginationMaterial.current_page = 1
-        this.pagination.page = 1
-        this.getWorkOrders()
-      }
-    })
+    const res: any = await this._work_orders.getWorkOrders(params).toPromise();
+    this.workOrders = res.data.data;
+    this.loading = false;
+    this.paginationMaterial = res.data;
+
+    if (this.paginationMaterial.last_page < this.pagination.page) {
+      this.paginationMaterial.current_page = 1;
+      this.pagination.page = 1;
+      await this.getWorkOrders();
+    }
   }
 
   selectedDate(fecha, type_date) {

@@ -67,17 +67,17 @@
               <span
                 class="badge"
                 [class]="
-                  quotation.status == 'Pendiente'
+                  quotation?.status == 'Pendiente'
                     ? 'badge-info'
-                    : quotation.status == 'Aprobada'
+                    : quotation?.status == 'Aprobada'
                     ? 'badge-primary'
-                    : quotation.status == 'No aprobada'
+                    : quotation?.status == 'No aprobada'
                     ? 'badge-warning'
-                    : quotation.status == 'Anulada'
+                    : quotation?.status == 'Anulada'
                     ? 'badge-danger'
                     : 'badge-dark'
                 "
-                >{{ quotation.status | uppercase }}</span
+                >{{ quotation?.status | uppercase }}</span
               >
             </div>
             <div class="btn-group rounded w-sm-100">
@@ -85,33 +85,33 @@
                 class="btn btn-primary btn-sm"
                 type="button"
                 *ngIf="
-                  quotation.status != 'Anulada' &&
-                  this.permission.permissions.approve &&
-                  quotation.status != 'Aprobada'
+                  quotation?.status != 'Anulada' &&
+                  this?.permission?.permissions?.approve &&
+                  quotation?.status != 'Aprobada'
                 "
-                (click)="updateStatus('Aprobada', quotation.id)"
+                (click)="updateStatus('Aprobada', quotation?.id)"
               >
                 <i class="fas fa-thumbs-up"></i> Aprobar
               </button>
               <button
                 class="btn btn-info btn-sm"
                 type="button"
-                *ngIf="quotation.status == 'Pendiente'"
-                [routerLink]="['/crm/cotizacion/editar', quotation.id]"
+                *ngIf="quotation?.status == 'Pendiente'"
+                [routerLink]="['/crm/cotizacion/editar', quotation?.id]"
               >
                 <i class="fas fa-edit"></i> Editar
               </button>
               <button
                 class="btn btn-primary btn-sm"
                 type="button"
-                [routerLink]="['/crm/cotizacion/copiar', quotation.id]"
+                [routerLink]="['/crm/cotizacion/copiar', quotation?.id]"
               >
                 <i class="fas fa-copy"></i> Copiar
               </button>
               <button
                 type="button"
                 (click)="download()"
-                *ngIf="quotation.status == 'Aprobada'"
+                *ngIf="quotation?.status == 'Aprobada'"
                 class="btn btn-danger btn-sm"
               >
                 <span
@@ -138,19 +138,19 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>{{ quotation.description }}</td>
-                  <td>{{ quotation.municipality.name }}</td>
+                  <td>{{ quotation?.description }}</td>
+                  <td>{{ quotation?.municipality?.name }}</td>
                   <td>
-                    {{ quotation.client.full_name }}
+                    {{ quotation?.client?.full_name }}
                   </td>
-                  <td>{{ quotation.third_person.name }}</td>
+                  <td>{{ quotation?.third_person?.name }}</td>
                 </tr>
                 <tr class="text-left">
                   <th colspan="100%">Observaciones</th>
                 </tr>
                 <tr class="text-left">
                   <td colspan="100%">
-                    {{ quotation.observation || "No existen observaciones" }}
+                    {{ quotation?.observation || "No existen observaciones" }}
                   </td>
                 </tr>
               </tbody>
@@ -158,22 +158,23 @@
           </div>
         </div>
       </div>
+
       <div class="card">
         <div class="card-body">
           <div
             class="rounded-top table-responsive"
-            *ngIf="quotation.items.length > 0; else notItems"
+            *ngIf="quotation?.items?.length > 0; else notItems"
           >
             <table class="table table-bordered table-striped table-sm">
-              <thead class="bg-light">
-                <tr class="text-center text-uppercase">
+              <thead>
+                <tr class="table-secondary text-center text-uppercase">
                   <th rowspan="2">#</th>
                   <th rowspan="2" class="col-md-7">Descripción</th>
                   <th rowspan="2">Cantidad</th>
                   <th colspan="2">Valor unitario</th>
                   <th colspan="2">Valor total</th>
                 </tr>
-                <tr class="text-center text-uppercase">
+                <tr class="table-secondary text-center text-uppercase">
                   <th>COP sin iva</th>
                   <th>USD</th>
                   <th>COP sin iva</th>
@@ -182,54 +183,54 @@
               </thead>
               <tbody>
                 <ng-container
-                  *ngFor="let item of quotation.items; let i = index"
+                  *ngFor="let item of quotation?.items; let i = index"
                 >
-                  <tr>
+                  <tr class="font-weight-bold">
                     <td class="text-center">{{ i + 1 }}</td>
                     <td>
                       <div
-                        [ngClass]="'alert-p-0'"
-                        [innerHTML]="item.name"
+                        [ngClass]="'inner-html-mb-0'"
+                        [innerHTML]="item?.name"
                       ></div>
                     </td>
-                    <td class="text-center">{{ item.cuantity }}</td>
+                    <td class="text-center">{{ item?.cuantity }}</td>
                     <td class="text-right">
-                      ${{ item.value_cop | number : "1.2-2" }}
+                      ${{ item?.value_cop | number : "1.2-2" }}
+                    </td>
+                    <td class="text-right text-nowrap">
+                      USD {{ item?.value_usd | number : "1.2-2" }}
                     </td>
                     <td class="text-right">
-                      ${{ item.total_cop | number : "1.2-2" }}
+                      ${{ item?.total_cop | number : "1.2-2" }}
                     </td>
-                    <td class="text-right">
-                      USD{{ item.value_usd | number : "1.2-2" }}
-                    </td>
-                    <td class="text-right">
-                      USD{{ item.total_usd | number : "1.2-2" }}
+                    <td class="text-right text-nowrap">
+                      USD {{ item?.total_usd | number : "1.2-2" }}
                     </td>
                   </tr>
-                  <ng-container *ngIf="item.sub_items.length > 0">
+                  <ng-container *ngIf="item?.sub_items?.length > 0">
                     <ng-container
-                      *ngFor="let sub_item of item.sub_items; let y = index"
+                      *ngFor="let sub_item of item?.sub_items; let y = index"
                     >
                       <tr>
                         <td class="text-center">{{ i + 1 }}.{{ y + 1 }}</td>
                         <td>
                           <div
-                            [ngClass]="'alert-p-0'"
-                            [innerHTML]="sub_item.description"
+                            [ngClass]="'inner-html-mb-0'"
+                            [innerHTML]="sub_item?.description"
                           ></div>
                         </td>
-                        <td class="text-center">{{ sub_item.cuantity }}</td>
+                        <td class="text-center">{{ sub_item?.cuantity }}</td>
                         <td class="text-right">
-                          ${{ sub_item.value_cop | number : "1.2-2" }}
+                          ${{ sub_item?.value_cop | number : "1.2-2" }}
+                        </td>
+                        <td class="text-right text-nowrap">
+                          USD {{ sub_item?.value_usd | number : "1.2-2" }}
                         </td>
                         <td class="text-right">
-                          ${{ sub_item.total_cop | number : "1.2-2" }}
+                          ${{ sub_item?.total_cop | number : "1.2-2" }}
                         </td>
-                        <td class="text-right">
-                          USD{{ sub_item.value_usd | number : "1.2-2" }}
-                        </td>
-                        <td class="text-right">
-                          USD{{ sub_item.total_usd | number : "1.2-2" }}
+                        <td class="text-right text-nowrap">
+                          USD {{ sub_item?.total_usd | number : "1.2-2" }}
                         </td>
                       </tr>
                     </ng-container>
@@ -240,10 +241,10 @@
           </div>
           <app-list-items
             title1="VALOR TOTAL SIN IVA"
-            [var1]="quotation.total_cop"
+            [var1]="quotation?.total_cop"
             type1="cop"
             title2="TOTAL USD"
-            [var2]="quotation.total_usd"
+            [var2]="quotation?.total_usd"
             type2="usd"
           >
           </app-list-items>
@@ -252,38 +253,38 @@
       <div class="card">
         <div class="card-body">
           <div
-            *ngIf="quotation.commercial_terms"
+            *ngIf="quotation?.commercial_terms"
             class="alert alert-light alert-custom-quotation pb-0 mb-0"
-            [innerHTML]="quotation.commercial_terms"
+            [innerHTML]="quotation?.commercial_terms"
             role="alert"
-            [ngClass]="'alert-p-0'"
+            [ngClass]="'inner-html-mb-0'"
           ></div>
           <div
-            *ngIf="quotation.legal_requirements"
+            *ngIf="quotation?.legal_requirements"
             class="alert alert-light alert-custom-quotation pb-0 mb-0"
-            [innerHTML]="quotation.legal_requirements"
+            [innerHTML]="quotation?.legal_requirements"
             role="alert"
-            [ngClass]="'alert-p-0'"
+            [ngClass]="'inner-html-mb-0'"
           ></div>
           <div
-            *ngIf="quotation.technical_requirement"
+            *ngIf="quotation?.technical_requirement"
             class="alert alert-light alert-custom-quotation pb-0 mb-0"
-            [innerHTML]="quotation.technical_requirements"
+            [innerHTML]="quotation?.technical_requirements"
             role="alert"
-            [ngClass]="'alert-p-0'"
+            [ngClass]="'inner-html-mb-0'"
           ></div>
           <div class="rounded-top table-responsive">
             <table class="table table-borderless text-center text-uppercase">
               <thead>
                 <tr>
-                  <td class="p-0" *ngIf="creator">
+                  <td class="p-0 align-bottom" *ngIf="creator">
                     <img
                       class="img-fluid img-firma"
                       [src]="creator?.signature"
                       onerror="this.src='../../../../../assets/images/sinfirma.png'"
                     />
                   </td>
-                  <td class="p-0" *ngIf="approve">
+                  <td class="p-0 align-bottom" *ngIf="approve">
                     <img
                       class="img-fluid img-firma"
                       [src]="approve?.signature"

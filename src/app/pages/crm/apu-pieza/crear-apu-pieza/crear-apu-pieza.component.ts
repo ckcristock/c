@@ -14,7 +14,6 @@ import { othersHelper } from './helpers/others';
 import { functionsUtils } from '../../../../core/utils/functionsUtils';
 import { SwalService } from '../../../ajustes/informacion-base/services/swal.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { functionsApu } from './helpers/helper';
 import { CalculationBasesService } from '../../../ajustes/configuracion/base-calculos/calculation-bases.service';
 import { ProcesosExternosService } from 'src/app/pages/ajustes/parametros/apu/procesos-externos/procesos-externos.service';
 import { ProcesosInternosService } from 'src/app/pages/ajustes/parametros/apu/procesos-internos/procesos-internos.service';
@@ -27,8 +26,6 @@ import {
 import { UserService } from 'src/app/core/services/user.service';
 import { MaterialesService } from 'src/app/pages/ajustes/parametros/apu/materiales/materiales.service';
 import { MaterialesMateriaPrimaService } from 'src/app/pages/ajustes/parametros/apu/materiales-materia-prima/materiales-materia-prima.service';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-
 @Component({
   selector: 'app-crear-apu-pieza',
   templateUrl: './crear-apu-pieza.component.html',
@@ -98,6 +95,7 @@ export class CrearApuPiezaComponent implements OnInit {
   ) {
     this.user_id = _user?.user?.person?.id
   }
+  selectedOption: string = '';
 
   async ngOnInit() {
     this.datosCabecera.Fecha = this.id ? this.data?.created_at : new Date();
@@ -155,7 +153,6 @@ export class CrearApuPiezaComponent implements OnInit {
     }
     this._materials.getMaterialsIndex(params).subscribe((res: any) => {
       this.materialsIndex = res.data;
-      this.materialsIndex.unshift({ text: 'Busca y selecciona', id: '' })
     })
   }
 
@@ -166,7 +163,6 @@ export class CrearApuPiezaComponent implements OnInit {
     }
     this._rawMaterialMaterials.getRawMaterialMaterialsIndex(params).subscribe((res: any) => {
       this.commercialMaterials = res?.data
-      this.commercialMaterials.unshift({ text: 'Busca y selecciona', id: '' })
     })
   }
 
@@ -291,7 +287,6 @@ export class CrearApuPiezaComponent implements OnInit {
     }
     this._apuPieza.getGeometries(params).subscribe((r: any) => {
       this.geometries = r?.data;
-      this.geometries.unshift({ text: 'Busca y selecciona', value: '' })
     })
   }
   async getCutLaserMaterial(event: any = '') {
@@ -301,7 +296,6 @@ export class CrearApuPiezaComponent implements OnInit {
     }
     await this._apuPieza.cutLaserMaterial(params).toPromise().then((r: any) => {
       this.cutLaserMaterials = r?.data;
-      this.cutLaserMaterials.unshift({ name: 'Busca y selecciona', id: '' })
     })
   }
 
@@ -312,7 +306,6 @@ export class CrearApuPiezaComponent implements OnInit {
     }
     this._apuPieza.getMaterials(params).subscribe((r: any) => {
       this.materials = r?.data;
-      this.materials.unshift({ text: 'Busca y selecciona', id: '' })
     })
   }
 
@@ -672,12 +665,7 @@ export class CrearApuPiezaComponent implements OnInit {
 
   save() {
     if (this.form?.invalid) {
-      this._swal.show({
-        icon: 'error',
-        title: 'ERROR',
-        text: 'Revisa la información y vuelve a intentarlo',
-        showCancel: false
-      })
+      this._swal.incompleteError();
       this.form.markAllAsTouched()
     } else {
       let filess = this.files;
@@ -700,54 +688,51 @@ export class CrearApuPiezaComponent implements OnInit {
       this.form.patchValue({
         files: this.fileArr
       });
-      this._swal
-        .show({
-          text: `Vamos a ${this.id && this.title == 'Editar pieza' ? 'editar' : 'crear'} una pieza`,
-          title: '¿Estás seguro(a)?',
-          icon: 'question',
-        })
-        .then((r) => {
-          if (r.isConfirmed) {
-            if (this.id && this.title == 'Editar pieza') {
-              this._apuPieza.update(this.form.value, this.id).subscribe(
-                (res: any) => this.showSuccess(),
-                (err) => this.showError(err)
-              );
-            } else {
-              this._apuPieza.save(this.form.value).subscribe(
-                (res: any) => {
-                  if (this.preData) {
-                    this.saveForAddToSet.emit(res.data)
-                  }
-                  this.showSuccess()
-                },
-                (err) => this.showError(err)
-              );
-            }
+      this._swal.show({
+        text: `Vamos a ${this.id && this.title == 'Editar pieza' ? 'editar' : 'crear'} una pieza`,
+        title: '¿Estás seguro(a)?',
+        icon: 'question',
+      }).then((r) => {
+        if (r.isConfirmed) {
+          if (this.id && this.title == 'Editar pieza') {
+            this._apuPieza.update(this.form.value, this.id).subscribe(
+              (res: any) => this.showSuccess(res),
+              (err) => this.showError(err)
+            );
+          } else {
+            this._apuPieza.save(this.form.value).subscribe(
+              (res: any) => {
+                if (this.preData) {
+                  this.saveForAddToSet.emit(res.data)
+                }
+                this.showSuccess(res)
+              },
+              (err) => this.showError(err)
+            );
           }
-        });
+        }
+      });
     }
   }
 
-  showSuccess() {
-    this._swal.show({
-      icon: 'success',
-      text: `Pieza ${this.id && this.title == 'Editar pieza' ? 'editada' : 'creada'} con éxito`,
-      title: 'Operación exitosa',
-      showCancel: false,
-      timer: 1000
-    });
-    if (!this.preData) {
-      this.router.navigateByUrl('/crm/apus');
+  showSuccess(res) {
+    if (res.status) {
+      this._swal.show({
+        icon: 'success',
+        text: `Pieza ${this.id && this.title == 'Editar pieza' ? 'editada' : 'creada'} con éxito`,
+        title: 'Operación exitosa',
+        showCancel: false,
+        timer: 1000
+      });
+      if (!this.preData) {
+        this.router.navigateByUrl(`/crm/apu/ver-apu-pieza/${res.data.id}`);
+      }
+    } else {
+      this._swal.hardError();
     }
   }
   showError(err) {
-    this._swal.show({
-      icon: 'error',
-      title: '¡Ooops!',
-      showCancel: false,
-      text: err.code,
-    });
+    this._swal.hardError();
   }
 
 }

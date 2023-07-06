@@ -1,4 +1,4 @@
-<div class="row">
+<!-- <div class="row">
   <div class="col-md-2">
     <div class="card">
       <div class="card-body p-3">
@@ -65,7 +65,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <div class="card">
   <div class="card-body">
     <div class="row card-title d-flex justify-content-between">
@@ -88,7 +88,7 @@
           >
             <i class="fa fa-plus"></i> Agregar
           </button>
-          <button class="btn btn-info btn-sm" (click)="openClose()">
+          <button class="btn btn-info btn-sm" (click)="matPanel.toggle()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -96,7 +96,7 @@
     </div>
     <hr class="line" />
     <mat-accordion multi>
-      <mat-expansion-panel class="mat-elevation-z0">
+      <mat-expansion-panel #matPanel class="mat-elevation-z0">
         <div class="row">
           <ng-container [formGroup]="formFilters">
             <mat-form-field class="col" appearance="outline">
@@ -110,7 +110,7 @@
               />
             </mat-form-field>
             <mat-form-field appearance="outline" class="col">
-              <mat-label>Fecha</mat-label>
+              <mat-label>Fecha de creación</mat-label>
               <input
                 matInput
                 [satDatepicker]="pickerDate"
@@ -211,43 +211,280 @@
         >aquí</a
       >
     </div>
-    <div class="rounded-top table-responsive">
+    <div class="rounded-top table-responsive" id="table-wrapper">
       <table
         class="table table-bordered table-striped table-sm"
         *ngIf="!loading && workOrders.length > 0; else notData"
       >
-        <thead class="bg-light">
-          <tr class="text-center text-uppercase">
+        <thead>
+          <tr class="text-uppercase text-center table-primary">
+            <th colspan="15">Información básica</th>
+            <th
+              *ngIf="permission.permissions.engineering_and_design"
+              [attr.colspan]="!collapseEngineeringAndDesign ? '3' : '1'"
+              (click)="
+                collapseEngineeringAndDesign = !collapseEngineeringAndDesign
+              "
+              role="button"
+              [matTooltip]="
+                collapseEngineeringAndDesign
+                  ? 'Mostrar ingeniería y diseño'
+                  : 'Ocultar ingeniería y diseño'
+              "
+            >
+              <div class="d-flex justify-content-between">
+                <div *ngIf="!collapseEngineeringAndDesign">
+                  Ingeniería y Diseño
+                </div>
+                <div class="d-flex align-items-center justify-content-center">
+                  <i
+                    class="fas"
+                    [class]="
+                      collapseEngineeringAndDesign
+                        ? 'fa-chevron-right'
+                        : 'fa-chevron-left'
+                    "
+                  ></i>
+                </div>
+              </div>
+            </th>
+            <th
+              *ngIf="permission.permissions.production"
+              [attr.colspan]="!collapseProduction ? '3' : '1'"
+              (click)="collapseProduction = !collapseProduction"
+              [matTooltip]="
+                collapseProduction ? 'Mostrar producción' : 'Ocultar producción'
+              "
+              role="button"
+            >
+              <span *ngIf="!collapseProduction">Producción </span>
+              <i
+                class="fas"
+                [class]="
+                  collapseProduction ? 'fa-chevron-right' : 'fa-chevron-left'
+                "
+              ></i>
+            </th>
+            <th
+              *ngIf="permission.permissions.financial"
+              [attr.colspan]="!collapseFinancial ? '5' : '1'"
+              (click)="collapseFinancial = !collapseFinancial"
+              [matTooltip]="
+                collapseFinancial ? 'Mostrar financiero' : 'Ocultar financiero'
+              "
+              role="button"
+            >
+              <span *ngIf="!collapseFinancial">Financiero </span>
+              <i
+                class="fas"
+                [class]="
+                  collapseFinancial ? 'fa-chevron-right' : 'fa-chevron-left'
+                "
+              ></i>
+            </th>
+            <th></th>
+          </tr>
+          <tr class="text-center text-uppercase p-th-0 table-primary">
             <th>Código</th>
-            <th>Fecha</th>
+            <th class="vertical-text">Creación</th>
+            <th class="vertical-text">Tipo</th>
+            <th class="vertical-text">Clase</th>
             <th>Ciudad</th>
             <th>Cliente</th>
+            <th>Cotización</th>
             <th>Descripción</th>
-            <th>Observaciones</th>
-            <th>Entrega</th>
-            <th>Estado</th>
-            <th><i class="mdi mdi-chevron-down"></i></th>
+            <th class="vertical-text">
+              comprometida <br />
+              Fecha
+            </th>
+            <th class="vertical-text">
+              comprometidos <br />
+              Días
+            </th>
+            <th class="vertical-text">
+              entrega <br />
+              Días
+            </th>
+            <th class="vertical-text">Estado</th>
+            <th class="vertical-text">
+              finalizada <br />
+              Fecha
+            </th>
+            <th class="vertical-text">
+              reales <br />
+              Días
+            </th>
+            <th class="vertical-text">Indicador</th>
+            <!-- Ingeniería y diseño -->
+            <ng-container
+              *ngIf="
+                permission.permissions.engineering_and_design &&
+                !collapseEngineeringAndDesign
+              "
+            >
+              <th class="vertical-text">
+                de planos <br />
+                entrega <br />
+                Fecha
+              </th>
+              <th class="vertical-text">
+                diseño <br />
+                Días
+              </th>
+              <th class="vertical-text">% Diseño</th>
+            </ng-container>
+            <th
+              *ngIf="
+                permission.permissions.engineering_and_design &&
+                collapseEngineeringAndDesign
+              "
+              class="dynamic-colspan"
+            ></th>
+            <!-- Producción -->
+            <ng-container
+              *ngIf="permission.permissions.production && !collapseProduction"
+            >
+              <th class="vertical-text">
+                planos <br />
+                recibido <br />
+                Fecha
+              </th>
+              <th class="vertical-text">
+                producción <br />
+                Días
+              </th>
+              <th class="vertical-text">
+                entrega <br />
+                Fecha
+              </th>
+            </ng-container>
+            <th
+              *ngIf="permission.permissions.production && collapseProduction"
+              class="dynamic-colspan"
+            ></th>
+            <!-- Financiero -->
+            <ng-container
+              *ngIf="permission.permissions.financial && !collapseFinancial"
+            >
+              <th class="vertical-text">N° Remisión</th>
+              <th class="vertical-text">
+                remisión <br />
+                Fecha
+              </th>
+              <th class="vertical-text">Valor</th>
+              <th class="vertical-text">N° Factura</th>
+              <th class="vertical-text">
+                factura <br />
+                Fecha
+              </th>
+            </ng-container>
+            <th
+              *ngIf="permission.permissions.financial && collapseFinancial"
+              class="dynamic-colspan"
+            ></th>
+            <th class="fixed-column"><i class="mdi mdi-chevron-down"></i></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of workOrders" class="text-center">
-            <td>{{ item.code }}</td>
-            <td>{{ item.date | date : "MMM d, y" }}</td>
-            <td>{{ item.city?.name }}</td>
-            <td>
-              {{ item.third_party.text }}
-            </td>
+            <td class="text-nowrap">{{ item.code }}</td>
+            <td>{{ item.created_at | date : "shortDate" }}</td>
             <td
-              role="button"
-              class="text-primary"
-              matTooltipClass="tooltip-custom"
-              [matTooltip]="item.description"
+              [matTooltip]="
+                item.type == 'V'
+                  ? 'Venta'
+                  : item.type == 'Y'
+                  ? 'Interna'
+                  : 'Garantía'
+              "
             >
-              Ver detalles
+              {{ item.type }}
             </td>
-            <td>{{ item.observation }}</td>
-            <td>{{ item.delivery_date }}</td>
-            <td>
+            <td [matTooltip]="item.class">{{ item.class[0] }}</td>
+            <td [matTooltip]="item.city?.name">
+              {{ item.city?.abbreviation }}
+            </td>
+            <td>{{ item.third_party.text }}</td>
+            <td>Cotización</td>
+            <td>{{ item.observations || "N/A" }}</td>
+            <td>{{ item.expected_delivery_date | date : "shortDate" }}</td>
+            <td>{{ item.committed_days }}</td>
+            <td>{{ item.delivery_days }}</td>
+            <td class="text-nowrap">
+              <span
+                class="badge badge-pill"
+                [class]="
+                  item.status_time == 'TERMINADO'
+                    ? 'badge-success'
+                    : item.status_time == 'A TIEMPO'
+                    ? 'badge-warning'
+                    : item.status_time == 'RETRASADO'
+                    ? 'badge-banger'
+                    : 'badge-dark'
+                "
+                >{{ item.status_time }}</span
+              >
+            </td>
+            <td>{{ (item.delivery_date | date : "shortDate") || "N/A" }}</td>
+            <td>{{ item.real_days }}</td>
+            <td>{{ item.indicator }}</td>
+            <!-- Ingeniería y diseño -->
+            <ng-container
+              *ngIf="
+                permission.permissions.engineering_and_design &&
+                !collapseEngineeringAndDesign
+              "
+            >
+              <td>
+                {{
+                  (item.delivery_date_of_plans | date : "shortDate") || "N/A"
+                }}
+              </td>
+              <td>{{ item.design_days }}</td>
+              <td>{{ item.design_percentage }}</td>
+            </ng-container>
+            <td
+              *ngIf="
+                permission.permissions.engineering_and_design &&
+                collapseEngineeringAndDesign
+              "
+              class="dynamic-colspan"
+            ></td>
+            <!-- Producción -->
+            <ng-container
+              *ngIf="permission.permissions.production && !collapseProduction"
+            >
+              <td>
+                {{
+                  (item.date_of_plans_received | date : "shortDate") || "N/A"
+                }}
+              </td>
+              <td>{{ item.production_days }}</td>
+              <td>{{ (item.delivery_date | date : "shortDate") || "N/A" }}</td>
+            </ng-container>
+            <td
+              *ngIf="permission.permissions.production && collapseProduction"
+              class="dynamic-colspan"
+            ></td>
+            <!-- Financiero -->
+            <ng-container
+              *ngIf="permission.permissions.financial && !collapseFinancial"
+            >
+              <td>{{ item.referral_number || "N/A" }}</td>
+              <td>
+                {{ (item.date_of_referral | date : "shortDate") || "N/A" }}
+              </td>
+              <td>{{ item.value || "N/A" }}</td>
+              <td>{{ item.invoice_number || "N/A" }}</td>
+              <td>
+                {{ (item.date_of_invoice | date : "shortDate") || "N/A" }}
+              </td>
+            </ng-container>
+            <td
+              *ngIf="permission.permissions.financial && collapseFinancial"
+              class="dynamic-colspan"
+            ></td>
+            <!-- <td>
               <span
                 class="badge"
                 [class]="
@@ -263,8 +500,8 @@
                 "
                 >{{ item.status | uppercase }}</span
               >
-            </td>
-            <td>
+            </td> -->
+            <td class="fixed-column">
               <div ngbDropdown container="body" class="dropdown-primary">
                 <button
                   ngbDropdownToggle

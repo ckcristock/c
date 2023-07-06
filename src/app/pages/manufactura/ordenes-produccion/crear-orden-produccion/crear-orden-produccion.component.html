@@ -1,115 +1,15 @@
-<div class="card">
-  <div class="card-body">
-    <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
-    <hr class="line" />
-    <ng-container *ngIf="!loading && form; else notData">
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<ng-container *ngIf="!loading && form; else placeholder">
+  <div class="card">
+    <div class="card-body">
+      <app-cabecera [datosCabecera]="datosCabecera"></app-cabecera>
+      <hr class="line" />
       <ng-container [formGroup]="form">
+        <h6 class="text-center text-primary">Información básica</h6>
         <div class="row">
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Órden de pedido</mat-label>
-            <input
-              matInput
-              type="text"
-              formControlName="purchase_order"
-              autocomplete="off"
-              required
-            />
-            <mat-error>Campo obligatorio</mat-error>
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Tipo</mat-label>
-            <mat-select formControlName="type" required>
-              <mat-option value="externa">Externa</mat-option>
-              <mat-option value="interna">Interna</mat-option>
-            </mat-select>
-            <mat-error>Campo obligatorio</mat-error>
-          </mat-form-field>
-          <ng-container *ngIf="form.controls.type.value == 'externa'">
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Cliente</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="third_party_id"
-                [ngbTypeahead]="search_tercero"
-                [inputFormatter]="formatter_tercero"
-                [resultTemplate]="rt_third"
-                [editable]="false"
-                placeholder="Busca por nombre"
-                required
-              />
-              <mat-error>Campo obligatorio</mat-error>
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Solicitado por</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="third_party_person_id"
-                [ngbTypeahead]="search_person_id"
-                [inputFormatter]="formatter_person_id"
-                [resultTemplate]="rt_person_id"
-                [editable]="false"
-                placeholder="Busca por nombre"
-                required
-              />
-              <mat-error>Campo obligatorio</mat-error>
-            </mat-form-field>
-            <mat-form-field class="col" appearance="outline">
-              <mat-label>Cotización</mat-label>
-              <input
-                matInput
-                type="text"
-                formControlName="quotation_id"
-                [ngbTypeahead]="search_quotation"
-                [inputFormatter]="formatter_quotation"
-                [resultTemplate]="rt_quotation"
-                [editable]="false"
-                placeholder="Busca por línea o proyecto"
-                required
-              />
-              <mat-error>Campo obligatorio</mat-error>
-            </mat-form-field>
-          </ng-container>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Fecha de entrega</mat-label>
-            <input
-              formControlName="delivery_date"
-              matInput
-              [matDatepicker]="dp_delivery"
-              disabled
-              [required]="true"
-            />
-            <mat-hint
-              >{{
-                form.controls.delivery_date.value
-                  ? (form.controls.delivery_date.value | date : "fullDate")
-                  : "DD/MM/YYYY"
-              }}
-            </mat-hint>
-            <mat-error>Campo obligatorio</mat-error>
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="dp_delivery"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #dp_delivery disabled="false"></mat-datepicker>
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
-            <mat-label>Ciudad</mat-label>
-            <input
-              matInput
-              type="text"
-              formControlName="municipality_id"
-              [ngbTypeahead]="search_city"
-              [inputFormatter]="formatter_city"
-              [resultTemplate]="rt_city"
-              [editable]="false"
-              placeholder="Busca por nombre"
-              required
-            />
-            <mat-error>Campo obligatorio</mat-error>
-          </mat-form-field>
-          <mat-form-field class="col" appearance="outline">
+          <mat-form-field class="col-md-6" appearance="outline">
             <mat-label>Nombre</mat-label>
             <input
               matInput
@@ -121,6 +21,101 @@
             />
             <mat-error>Campo obligatorio</mat-error>
           </mat-form-field>
+
+          <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Fecha de entrega</mat-label>
+            <input
+              formControlName="expected_delivery_date"
+              matInput
+              [matDatepicker]="dp_delivery"
+              [min]="today"
+              [required]="true"
+            />
+            <mat-hint
+              >{{
+                (form?.get("expected_delivery_date")?.value
+                  | date : "fullDate") || "DD/MM/YYYY"
+              }}
+            </mat-hint>
+            <mat-error>Campo obligatorio</mat-error>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="dp_delivery"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #dp_delivery></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col-md-3" appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="type" required>
+              <mat-option value="V">Venta</mat-option>
+              <mat-option value="Y">Interna</mat-option>
+              <mat-option value="G">Garantía</mat-option>
+            </mat-select>
+            <mat-error>Campo obligatorio</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-3" appearance="outline">
+            <mat-label>Clase</mat-label>
+            <mat-select formControlName="class" required>
+              <mat-option value="Interna">Interna</mat-option>
+              <mat-option value="Proyecto">Proyecto</mat-option>
+              <mat-option value="Repuesto">Repuesto</mat-option>
+              <mat-option value="Servicio">Servicio</mat-option>
+            </mat-select>
+            <mat-error>Campo obligatorio</mat-error>
+          </mat-form-field>
+          <div class="col-md-6 mat-form-field-wrapper">
+            <ng-select
+              formControlName="municipality_id"
+              [items]="cities"
+              bindLabel="text"
+              [class.is-invalid]="form?.get('municipality_id')?.invalid"
+              appearance="outline"
+              [appendTo]="'body'"
+              [clearable]="false"
+              placeholder="Destino *"
+              bindValue="value"
+              loadingText="loading"
+            >
+            </ng-select>
+          </div>
+          <div
+            class="col-md-6 mat-form-field-wrapper"
+            *ngIf="form?.get('third_party_id')?.enabled"
+          >
+            <ng-select
+              formControlName="third_party_id"
+              [items]="thirds"
+              [clearable]="false"
+              bindLabel="text"
+              appearance="outline"
+              [class.is-invalid]="form?.get('third_party_id')?.invalid"
+              [appendTo]="'body'"
+              placeholder="Cliente *"
+              bindValue="value"
+              loadingText="loading"
+              ngDefaultControl
+            >
+            </ng-select>
+          </div>
+          <div
+            class="col-md-6 mat-form-field-wrapper"
+            *ngIf="form?.get('third_party_person_id')?.enabled"
+          >
+            <ng-select
+              formControlName="third_party_person_id"
+              [items]="third_people"
+              [clearable]="false"
+              bindLabel="text"
+              appearance="outline"
+              [class.is-invalid]="form?.get('third_party_person_id')?.invalid"
+              [appendTo]="'body'"
+              placeholder="Contacto *"
+              bindValue="value"
+              loadingText="loading"
+              ngDefaultControl
+            >
+            </ng-select>
+          </div>
           <mat-form-field
             class="col-12 mat-form-field-no-padding textarea"
             appearance="outline"
@@ -130,37 +125,599 @@
               matInput
               placeholder="Ingresa las observaciones"
               rows="5"
-              formControlName="observation"
-              required
+              formControlName="observations"
               [cdkTextareaAutosize]="true"
             ></textarea>
-            <mat-error>Campo obligatorio</mat-error>
+          </mat-form-field>
+          <div class="col-12">
+            <div class="btn-group btn-block mb-2" role="group">
+              <button
+                class="btn btn-info"
+                type="button"
+                (click)="modalCotizacion?.openModal()"
+              >
+                <i class="fas fa-file-alt"></i> Cotización
+              </button>
+              <button
+                class="btn btn-info"
+                type="button"
+                (click)="modalNegocio?.openModal()"
+              >
+                <i class="fas fa-building"></i> Negocio
+              </button>
+            </div>
+          </div>
+          <ng-container *ngIf="quotations?.value?.length > 0">
+            <div class="col-md-6">
+              <h6>Cotizaciones</h6>
+              <div class="rounded-top table-responsive">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Código</th>
+                      <th><i class="mdi mdi-chevron-down"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let quotation of quotations?.value; let i = index"
+                      class="text-center"
+                    >
+                      <td>
+                        <a
+                          role="button"
+                          [routerLink]="['/crm/cotizacion/ver/', quotation?.id]"
+                          target="_blank"
+                          >{{ quotation?.code }}</a
+                        >
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm"
+                          (click)="deleteQuotation(i)"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="business?.value?.length > 0">
+            <div class="col-md-6">
+              <h6>Negocios</h6>
+              <div class="rounded-top table-responsive">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead class="bg-light">
+                    <tr class="text-center text-uppercase">
+                      <th>Código</th>
+                      <th><i class="mdi mdi-chevron-down"></i></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let busines of business?.value; let i = index"
+                      class="text-center"
+                    >
+                      <td>
+                        <a
+                          role="button"
+                          [routerLink]="['/crm/negocios/', busines?.id]"
+                          target="_blank"
+                          >{{ busines?.code }}</a
+                        >
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-sm"
+                          (click)="deleteBusiness(i)"
+                        >
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        <hr />
+        <h6 class="text-center text-primary">Datos financieros</h6>
+        <h6>Órdenes de pedido</h6>
+        <ng-container
+          *ngIf="orders_managment?.controls?.length > 0; else notDataAlert"
+        >
+          <div class="rounded-top table-responsive">
+            <table class="table table-bordered table-striped table-sm">
+              <thead class="bg-light">
+                <tr class="text-center text-uppercase">
+                  <th>Número de orden de pedido</th>
+                  <th>Valor</th>
+                  <th>Documento</th>
+                  <th>Fecha</th>
+                  <th><i class="fas fa-trash-alt"></i></th>
+                </tr>
+              </thead>
+              <tbody formArrayName="orders_managment">
+                <ng-container
+                  *ngFor="let item of orders_managment?.controls; let i = index"
+                >
+                  <tr [formGroupName]="i">
+                    <td>
+                      <mat-form-field class="pb-0 w-100" appearance="outline">
+                        <input
+                          matInput
+                          placeholder="Ingresa el número de orden"
+                          type="text"
+                          formControlName="number"
+                          autocomplete="off"
+                          required
+                        />
+                      </mat-form-field>
+                    </td>
+                    <td>
+                      <mat-form-field class="pb-0 w-100" appearance="outline">
+                        <input
+                          matInput
+                          type="text"
+                          currencyMask
+                          formControlName="value"
+                          [options]="masks?.maskCOP"
+                          appInputPosition
+                          autocomplete="off"
+                          required
+                        />
+                      </mat-form-field>
+                    </td>
+                    <td>
+                      <div class="input-group">
+                        <div class="custom-file">
+                          <input
+                            type="file"
+                            class="custom-file-input"
+                            formControlName="file_view"
+                            [class.is-invalid]="
+                              item?.get('file')?.invalid &&
+                              item?.get('file_view')?.touched
+                            "
+                            accept=".png,.jpg,.jpeg,.pdf"
+                            (change)="onFileChanged($event, i)"
+                          />
+                          <label class="custom-file-label">{{
+                            item?.get("file_name")?.value
+                          }}</label>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <mat-form-field class="pb-0 w-100" appearance="outline">
+                        <input
+                          formControlName="date"
+                          matInput
+                          [matDatepicker]="dateOrderManagement"
+                          placeholder="Selecciona la fecha"
+                          [required]="true"
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="dateOrderManagement"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #dateOrderManagement></mat-datepicker>
+                      </mat-form-field>
+                    </td>
+                    <td class="text-center">
+                      <button
+                        class="btn btn-danger btn-sm"
+                        type="button"
+                        (click)="deleteOrderManagement(i)"
+                      >
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </ng-container>
+        <div class="btn-group btn-block">
+          <button
+            class="btn btn-primary btn-sm"
+            placement="bottom"
+            type="button"
+            (click)="addOrderManagement()"
+          >
+            <i class="fas fa-plus"></i>
+            Agregar
+          </button>
+        </div>
+        <app-list-items
+          title1="TOTAL ÓRDENES DE PEDIDO"
+          [var1]="form?.get('total_order_managment')?.value"
+          type1="cop"
+          mt="mt-2"
+        ></app-list-items>
+        <hr />
+        <h6>Presupuesto base</h6>
+        <div class="btn-group btn-block mb-2" role="group">
+          <button
+            class="btn btn-info"
+            type="button"
+            (click)="modalPresupuesto?.openModal()"
+          >
+            <i class="fas fa-file-invoice-dollar"></i> Presupuesto
+          </button>
+
+          <button
+            class="btn btn-info"
+            type="button"
+            (click)="modalPieza?.openConfirm()"
+          >
+            <i class="fas fa-cogs"></i> Pieza
+          </button>
+          <button
+            class="btn btn-info"
+            type="button"
+            (click)="modalConjunto?.openConfirm()"
+          >
+            <i class="fas fa-puzzle-piece"></i> Conjunto
+          </button>
+          <button
+            class="btn btn-info"
+            type="button"
+            (click)="modalServicio?.openConfirm()"
+          >
+            <i class="fas fa-tools"></i> Servicio
+          </button>
+        </div>
+        <div
+          class="rounded-top table-responsive"
+          *ngIf="
+            budgets?.value?.length > 0 ||
+            apu_parts?.value?.length > 0 ||
+            apu_sets?.value?.length > 0 ||
+            apu_services?.value?.length > 0
+          "
+        >
+          <table class="table table-bordered table-striped table-sm">
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Tipo</th>
+                <th>Código</th>
+                <th>Costos directos</th>
+                <th>Costos indirectos</th>
+                <th>Total</th>
+                <th><i class="mdi mdi-chevron-down"></i></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                *ngFor="let budget of budgets?.value; let i = index"
+                class="text-center"
+              >
+                <td>Presupuesto</td>
+                <td>
+                  <a
+                    role="button"
+                    [routerLink]="['/crm/presupuesto/ver/', budget?.id]"
+                    target="_blank"
+                    >{{ budget?.code }}</a
+                  >
+                </td>
+                <td class="text-right">
+                  ${{ budget?.total_direct_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ budget?.total_indirect_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ budget?.total | number : "1.2-2" }}
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteBudget(i)"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <ng-container *ngIf="budgets?.value?.length > 0">
+                <tr class="table-primary">
+                  <th colspan="2" class="text-center">TOTAL PRESUPUESTOS</th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_direct_cost_budgets")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_indirect_cost_budgets")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{ form?.get("total_budgets")?.value | number : "1.2-2" }}
+                  </th>
+                  <td></td>
+                </tr>
+              </ng-container>
+              <tr
+                *ngFor="let apu_part of apu_parts?.value; let i = index"
+                class="text-center"
+              >
+                <td>Pieza</td>
+                <td>
+                  <a
+                    role="button"
+                    [routerLink]="['/crm/apu/ver-apu-pieza/', apu_part?.id]"
+                    target="_blank"
+                    >{{ apu_part?.code }}</a
+                  >
+                </td>
+                <td class="text-right">
+                  ${{ apu_part?.total_direct_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ apu_part?.total_indirect_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ apu_part?.total | number : "1.2-2" }}
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteApuPart(i)"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <ng-container *ngIf="apu_parts?.value?.length > 0">
+                <tr class="table-primary">
+                  <th colspan="2" class="text-center">TOTAL PIEZAS</th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_direct_cost_apu_parts")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_indirect_cost_apu_parts")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_apu_parts")?.value | number : "1.2-2"
+                    }}
+                  </th>
+                  <td></td>
+                </tr>
+              </ng-container>
+              <tr
+                *ngFor="let apu_set of apu_sets?.value; let i = index"
+                class="text-center"
+              >
+                <td>Conjunto</td>
+                <td>
+                  <a
+                    role="button"
+                    [routerLink]="['/crm/apu/ver-apu-conjunto/', apu_set?.id]"
+                    target="_blank"
+                    >{{ apu_set?.code }}</a
+                  >
+                </td>
+                <td class="text-right">
+                  ${{ apu_set?.total_direct_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ apu_set?.total_indirect_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ apu_set?.total | number : "1.2-2" }}
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteApuSet(i)"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <ng-container *ngIf="apu_sets?.value?.length > 0">
+                <tr class="table-primary">
+                  <th colspan="2" class="text-center">TOTAL CONJUNTOS</th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_direct_cost_apu_sets")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_indirect_cost_apu_sets")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{ form?.get("total_apu_sets")?.value | number : "1.2-2" }}
+                  </th>
+                  <td></td>
+                </tr>
+              </ng-container>
+              <tr
+                *ngFor="let apu_service of apu_services?.value; let i = index"
+                class="text-center"
+              >
+                <td>Servicio</td>
+                <td>
+                  <a
+                    role="button"
+                    [routerLink]="[
+                      '/crm/apu/ver-apu-servicio/',
+                      apu_service?.id
+                    ]"
+                    target="_blank"
+                    >{{ apu_service?.code }}</a
+                  >
+                </td>
+                <td class="text-right">
+                  ${{ apu_service?.total_direct_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ apu_service?.total_indirect_cost | number : "1.2-2" }}
+                </td>
+                <td class="text-right">
+                  ${{ apu_service?.total | number : "1.2-2" }}
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteApuService(i)"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              <ng-container *ngIf="apu_services?.value?.length > 0">
+                <tr class="table-primary">
+                  <th colspan="2" class="text-center">TOTAL SERVCIOS</th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_direct_cost_apu_services")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_indirect_cost_apu_services")?.value
+                        | number : "1.2-2"
+                    }}
+                  </th>
+                  <th class="text-right">
+                    ${{
+                      form?.get("total_apu_services")?.value | number : "1.2-2"
+                    }}
+                  </th>
+                  <td></td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <app-list-items
+          title1="TOTAL COSTOS DIRECTOS"
+          [var1]="form?.get('total_direct_cost_budget_part_set_service')?.value"
+          type1="cop"
+          title2="TOTAL COSTOS INDIRECTOS"
+          [var2]="
+            form?.get('total_indirect_cost_budget_part_set_service')?.value
+          "
+          type2="cop"
+          title3="TOTAL PRESUPUESTO BASE"
+          [var3]="form?.get('total_budget_part_set_service')?.value"
+          type3="cop"
+          mt="mt-2"
+        ></app-list-items>
+        <hr />
+        <div class="rounded-top table-responsive">
+          <table class="table table-bordered table-striped table-sm">
+            <thead class="bg-light">
+              <tr class="text-center text-uppercase">
+                <th>Total órdenes de pedido</th>
+                <th>Total presupuesto base</th>
+                <th>Ganancia</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="text-center table-success">
+                <th>
+                  ${{
+                    form.get("total_order_managment").value | number : "1.2-2"
+                  }}
+                </th>
+                <th>
+                  ${{
+                    form.get("total_budget_part_set_service").value
+                      | number : "1.2-2"
+                  }}
+                </th>
+                <th>
+                  ${{
+                    form.get("total_order_managment").value -
+                      form.get("total_budget_part_set_service").value
+                      | number : "1.2-2"
+                  }}
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <hr />
+        <h6 class="text-center text-primary">Alcance</h6>
+        <div class="row">
+          <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label
+              >Selecciona la cotización base para determinar el
+              alcance</mat-label
+            >
+            <mat-select
+              (selectionChange)="determineScope($event)"
+              formControlName="quotation_id"
+            >
+              <mat-option
+                *ngFor="let quotation of quotations?.value"
+                [value]="quotation?.id"
+              >
+                {{ quotation?.code }}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
-        <div class="mb-4">
-          <div>Descripcion</div>
-          <ckeditor
-            [editor]="_texteditor.Editor"
-            (ready)="_texteditor.onReady($event)"
-            [config]="_texteditor.configEditor"
-            formControlName="description"
-          ></ckeditor>
-        </div>
+        <ng-container
+          *ngIf="
+            !loadingItems && quotation_items?.value?.length > 0;
+            else notDataItems
+          "
+        >
+          <app-alcance-items [form]="form"></app-alcance-items>
+        </ng-container>
+        <button
+          class="btn btn-primary btn-sm btn-block"
+          (click)="addItemToScop()"
+          type="button"
+        >
+          <i class="fas fa-plus"></i> Agregar item
+        </button>
+        <hr />
         <div class="mb-4">
           <div>Requisitos técnicos, funcionales y desempeño</div>
           <ckeditor
-            [editor]="_texteditor.Editor"
-            (ready)="_texteditor.onReady($event)"
-            [config]="_texteditor.configEditor"
+            [editor]="_texteditor?.Editor"
+            (ready)="_texteditor?.onReady($event)"
+            [config]="_texteditor?.configEditor"
             formControlName="technical_requirements"
           ></ckeditor>
         </div>
         <div class="mb-4">
           <div>Requisitos legales o reglamentos aplicables</div>
           <ckeditor
-            [editor]="_texteditor.Editor"
-            (ready)="_texteditor.onReady($event)"
-            [config]="_texteditor.configEditor"
+            [editor]="_texteditor?.Editor"
+            (ready)="_texteditor?.onReady($event)"
+            [config]="_texteditor?.configEditor"
             formControlName="legal_requirements"
           ></ckeditor>
         </div>
@@ -168,22 +725,64 @@
       <button type="button" class="btn btn-primary btn-block" (click)="save()">
         Guardar y enviar
       </button>
-    </ng-container>
+    </div>
   </div>
-</div>
+</ng-container>
 
-<ng-template #rt_third let-r="result" let-t="term">
-  <div>{{ r.nit }} - {{ r.text }}</div>
-</ng-template>
 <ng-template #rt_quotation let-r="result" let-t="term">
-  <div>{{ r.name }}</div>
+  <div>{{ r?.name }}</div>
 </ng-template>
-<ng-template #rt_city let-r="result" let-t="term">
-  <div>{{ r.text }}</div>
-</ng-template>
-<ng-template #rt_person_id let-r="result" let-t="term">
-  <div>{{ r.name }}</div>
-</ng-template>
+
 <ng-template #notData>
   <app-not-data [loading]="loading"></app-not-data>
+</ng-template>
+
+<ng-template #notDataItems>
+  <app-not-data [loading]="loadingItems"></app-not-data>
+</ng-template>
+
+<app-modal-buscar-presupuesto
+  #modalPresupuesto
+  (update)="newBudget($event)"
+  [create]="true"
+  [third_party_id]="' '"
+></app-modal-buscar-presupuesto>
+
+<app-modal-buscar-cotizacion
+  (update)="newQuotation($event)"
+  [create]="true"
+  #modalCotizacion
+  [third_party_id]="' '"
+>
+</app-modal-buscar-cotizacion>
+
+<app-get-apus
+  (sendApus)="newApuPart($event)"
+  #modalPieza
+  [filter]="filterPart"
+></app-get-apus>
+
+<app-get-apus
+  (sendApus)="newApuSet($event)"
+  #modalConjunto
+  [filter]="filterSet"
+>
+</app-get-apus>
+
+<app-get-apus
+  (sendApus)="newApuService($event)"
+  #modalServicio
+  [filter]="filterService"
+>
+</app-get-apus>
+
+<app-get-business
+  (update)="newBusiness($event)"
+  #modalNegocio
+></app-get-business>
+
+<ng-template #notDataAlert>
+  <div class="alert alert-warning text-center" role="alert">
+    ¡No hay datos aquí!
+  </div>
 </ng-template>

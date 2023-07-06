@@ -3,6 +3,7 @@ import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { DotacionService } from '../../dotacion.service';
 import { Label } from 'ng2-charts';
 import { MatAccordion } from '@angular/material/expansion';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 
 
@@ -13,7 +14,7 @@ import { MatAccordion } from '@angular/material/expansion';
 })
 export class CategoryStockComponent implements OnInit {
 
-  constructor(private _dotation: DotacionService) { }
+  constructor(private _dotation: DotacionService, private _swal: SwalService) { }
 
   @ViewChild('tablestock') private tablestock;
 
@@ -111,13 +112,14 @@ export class CategoryStockComponent implements OnInit {
       link.download = `${filename}.xlsx`;
       link.click();
       this.donwloading = false;
-    }),
+    },
       (error) => {
         this.donwloading = false;
+        this._swal.hardError();
       },
       () => {
         this.donwloading = false;
-      };
+      });
   }
 
 

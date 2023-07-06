@@ -29,18 +29,18 @@
       <tbody>
         <tr class="text-center text-uppercase">
           <td>{{ i + 1 }}</td>
-          <td>{{ item.profiles?.profile }}</td>
-          <td>{{ getDesplazamiento(item.displacement_type) }}</td>
-          <td>{{ item.people_number }}</td>
-          <td>{{ item.days_number_displacement }}</td>
-          <td>{{ item.workind_day_displacement }}</td>
-          <td>{{ item.hours_displacement }}</td>
-          <td>{{ item.days_number_ordinary }}</td>
-          <td>{{ item.working_day_ordinary }}</td>
-          <td>{{ item.hours_ordinary }}</td>
-          <td>{{ item.days_number_festive }}</td>
-          <td>{{ item.working_day_festive }}</td>
-          <td>{{ item.hours_festive }}</td>
+          <td>{{ item?.profiles?.profile }}</td>
+          <td>{{ getDesplazamiento(item?.displacement_type) }}</td>
+          <td>{{ item?.people_number }}</td>
+          <td>{{ item?.days_number_displacement }}</td>
+          <td>{{ item?.workind_day_displacement }}</td>
+          <td>{{ item?.hours_displacement }}</td>
+          <td>{{ item?.days_number_ordinary }}</td>
+          <td>{{ item?.working_day_ordinary }}</td>
+          <td>{{ item?.hours_ordinary }}</td>
+          <td>{{ item?.days_number_festive }}</td>
+          <td>{{ item?.working_day_festive }}</td>
+          <td>{{ item?.hours_festive }}</td>
         </tr>
       </tbody>
     </ng-container>
@@ -55,7 +55,7 @@
           <thead>
             <tr class="table-primary text-center text-uppercase">
               <th>Perfil</th>
-              <th>{{ item.profiles?.profile }}</th>
+              <th>{{ item?.profiles?.profile }}</th>
               <th colspan="3">Viáticos</th>
             </tr>
           </thead>
@@ -72,18 +72,18 @@
             <tr
               class="text-center text-uppercase"
               *ngFor="
-                let itemx of item.travel_estimation_assemblies_start_up_c;
+                let itemx of item?.travel_estimation_assemblies_start_up_c;
                 let j = index
               "
             >
-              <td>{{ itemx.description }}</td>
-              <td>{{ itemx.unit }}</td>
-              <td>{{ itemx.amount }}</td>
+              <td>{{ itemx?.description }}</td>
+              <td>{{ itemx?.unit }}</td>
+              <td>{{ itemx?.amount }}</td>
               <td class="text-right">
-                ${{ itemx.unit_value | number : "1.2-2" }}
+                ${{ itemx?.unit_value | number : "1.2-2" }}
               </td>
               <td class="text-right">
-                ${{ itemx.total_value | number : "1.2-2" }}
+                ${{ itemx?.total_value | number : "1.2-2" }}
               </td>
             </tr>
           </tbody>
@@ -91,7 +91,7 @@
             <tr>
               <th colspan="4" class="text-right text-uppercase">Subtotal</th>
               <th class="text-right">
-                ${{ item.subtotal | number : "1.2-2" }}
+                ${{ item?.subtotal | number : "1.2-2" }}
               </th>
             </tr>
           </tfoot>

@@ -62,243 +62,215 @@
     </div>
   </div>
 </div>
-<div class="row">
-  <div class="col-lg-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="row card-title d-flex justify-content-between">
-          <div class="col-md-6 px-0">
-            <h4 class="text-primary">Novedades</h4>
-          </div>
-          <div class="col-md-6 px-0 text-right">
-            <div class="btn-group rounded w-sm-100">
-              <button class="btn btn-primary btn-sm" (click)="openModal.emit()">
-                <i class="fa fa-plus"></i> Agregar
-              </button>
-              <button
-                type="button"
-                (click)="download()"
-                *ngIf="people.length > 0"
-                class="btn btn-success btn-sm"
-              >
-                <span *ngIf="!donwloading; else status"
-                  ><i class="fas fa-file-download"></i> Descargar</span
-                >
-                <ng-template #status>
-                  <div class="spinner-border spinner-border-sm" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                  Generando...
-                </ng-template>
-              </button>
-              <button class="btn btn-info btn-sm" (click)="openClose()">
-                <i class="fas fa-sliders-h"></i> Filtros
-              </button>
-            </div>
-          </div>
-        </div>
-        <hr class="line" />
-        <form [formGroup]="form">
-          <mat-accordion multi>
-            <mat-expansion-panel class="mat-elevation-z0">
-              <div class="row mt-1px">
-                <div class="col">
-                  <ng-select
-                    formControlName="personfill"
-                    [items]="peopleSelects"
-                    bindLabel="text"
-                    bindValue="value"
-                    loadingText="loading"
-                    appearance="outline"
-                    [clearable]="false"
-                    [appendTo]="'body'"
-                    placeholder="Funcionario"
-                    (change)="cargarNovedades()"
-                    ngDefaultControl
-                  >
-                  </ng-select>
-                </div>
-                <mat-form-field class="col" appearance="outline">
-                  <mat-label>Fecha de inicio</mat-label>
-                  <input
-                    matInput
-                    type="date"
-                    formControlName="date_start"
-                    (change)="cargarNovedades()"
-                  />
-                </mat-form-field>
-                <mat-form-field class="col" appearance="outline">
-                  <mat-label>Fecha de fin</mat-label>
-                  <input
-                    matInput
-                    type="date"
-                    formControlName="date_end"
-                    (change)="cargarNovedades()"
-                  />
-                </mat-form-field>
-                <mat-form-field class="col" appearance="outline">
-                  <mat-label>Tipo</mat-label>
-                  <mat-select
-                    formControlName="type"
-                    (selectionChange)="cargarNovedades()"
-                  >
-                    <mat-option value="">Todos</mat-option>
-                    <mat-option
-                      *ngFor="let item of types"
-                      [value]="item.value"
-                      >{{ item.text }}</mat-option
-                    >
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </mat-expansion-panel>
-          </mat-accordion>
-        </form>
-        <div class="rounded-top table-responsive">
-          <table
-            class="table table-bordered table-striped table-sm"
-            *ngIf="!loading && people.length > 0; else notData"
+<div class="card">
+  <div class="card-body">
+    <div class="row card-title d-flex justify-content-between">
+      <div class="col-md-6 px-0">
+        <h4 class="text-primary">Novedades</h4>
+      </div>
+      <div class="col-md-6 px-0 text-right">
+        <div class="btn-group rounded w-sm-100">
+          <button class="btn btn-primary btn-sm" (click)="openModal.emit()">
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+          <button
+            type="button"
+            (click)="download()"
+            *ngIf="people.length > 0"
+            class="btn btn-success btn-sm"
           >
-            <thead class="bg-light">
-              <tr class="text-center text-uppercase">
-                <th>Foto</th>
-                <th>Funcionarios</th>
-                <th>Dependencia</th>
-                <th>Fecha</th>
-                <th>Novedad</th>
-                <th>Descripción</th>
-                <th>Inicio</th>
-                <th>Fin</th>
-                <th class="col-1">ACC.</th>
-              </tr>
-            </thead>
-            <tbody>
-              <ng-container *ngFor="let person of people">
-                <tr class="text-center">
-                  <td class="align-middle">
-                    <img
-                      src="{{ person?.person?.image | image }}"
-                      onerror="this.src='../../../../assets/images/noprofile.png'"
-                      class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
-                    />
-                  </td>
-                  <td class="align-middle">
-                    {{ person.person.first_name }}
-                    {{ person.person.first_surname }}
-                  </td>
-                  <td class="align-middle">
-                    {{
-                      person.person.contractultimate.position.dependency.name
-                    }}
-                  </td>
-                  <td class="align-middle">
-                    {{ person.created_at | date }}
-                  </td>
-                  <td class="align-middle">
-                    {{ person.disability_leave.concept }}
-                  </td>
-                  <td class="align-middle">
-                    {{ person.observation }}
-                  </td>
-                  <td class="align-middle">
-                    {{ person.date_start | date }}
-                  </td>
-                  <td class="align-middle">
-                    {{ person.date_end | date }}
-                  </td>
-                  <td class="align-middle">
-                    <div ngbDropdown container="body" class="dropdown-primary">
-                      <button
-                        ngbDropdownToggle
-                        class="btn btn-primary btn-sm"
-                        type="button"
-                      >
-                        <i class="fas fa-sort-down"></i>
-                      </button>
-                      <div ngbDropdownMenu>
-                        <a
-                          class="dropdown-item text-info"
-                          (click)="editarNovedad(person)"
-                          href="javascript:void(0)"
-                        >
-                          <i class="fas fa-edit"></i> Editar</a
-                        >
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-                <!-- <ng-container *ngIf="this.person.selected">
-                  <tr>
-                    <td colspan="100%">
-                      <div class="rounded-top table-responsive">
-                        <table class="table table-striped">
-                          <thead class="bg-light">
-                            <tr class="text-center text-uppercase">
-                              <th>Fecha</th>
-                              <th>Novedad</th>
-                              <th>Descripción</th>
-                              <th>Inicio</th>
-                              <th>Fin</th>
-                              <th class="col-1">ACC.</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr
-                              *ngFor="let fact of person.payroll_factors"
-                              class="text-center"
-                            >
-
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </td>
-                  </tr>
-                </ng-container> -->
-              </ng-container>
-            </tbody>
-          </table>
-          <ngb-pagination
-            class="d-flex justify-content-center pagination-rounded pagination-sm"
-            [collectionSize]="pagination.collectionSize"
-            (pageChange)="cargarNovedades($event)"
-            [pageSize]="pagination.pageSize"
-            [(page)]="pagination.page"
-            aria-label="Default pagination"
-            maxSize="5"
-            rotate="true"
-            ellipses="false"
-            boundaryLinks="true"
-            rotate="true"
-            ellipses="false"
-            boundaryLinks="true"
-          >
-          </ngb-pagination>
-          <!-- <div class="text-right" *ngIf="form.get('type').value">
-            {{ form.get("type").value }}:
-          </div> -->
+            <span
+              ><i
+                class="fas"
+                [class]="
+                  !donwloading ? 'fa-file-download' : 'fa-spinner fa-spin'
+                "
+              ></i>
+              {{ !donwloading ? "Descargar" : "Descargando" }}</span
+            >
+          </button>
+          <button class="btn btn-info btn-sm" (click)="openClose()">
+            <i class="fas fa-sliders-h"></i> Filtros
+          </button>
         </div>
       </div>
+    </div>
+    <hr class="line" />
+    <form [formGroup]="form">
+      <mat-accordion multi>
+        <mat-expansion-panel class="mat-elevation-z0">
+          <div class="row mt-1px">
+            <div class="col">
+              <ng-select
+                formControlName="personfill"
+                [items]="peopleSelects"
+                bindLabel="text"
+                bindValue="value"
+                loadingText="loading"
+                appearance="outline"
+                [clearable]="false"
+                [appendTo]="'body'"
+                placeholder="Funcionario"
+                (change)="cargarNovedades()"
+                ngDefaultControl
+              >
+              </ng-select>
+            </div>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Fecha de inicio</mat-label>
+              <input
+                matInput
+                type="date"
+                formControlName="date_start"
+                (change)="cargarNovedades()"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Fecha de fin</mat-label>
+              <input
+                matInput
+                type="date"
+                formControlName="date_end"
+                (change)="cargarNovedades()"
+              />
+            </mat-form-field>
+            <mat-form-field class="col" appearance="outline">
+              <mat-label>Tipo</mat-label>
+              <mat-select
+                formControlName="type"
+                (selectionChange)="cargarNovedades()"
+              >
+                <mat-option value="">Todos</mat-option>
+                <mat-option *ngFor="let item of types" [value]="item.value">{{
+                  item.text
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </form>
+    <div class="rounded-top table-responsive">
+      <table
+        class="table table-bordered table-striped table-sm"
+        *ngIf="!loading && people.length > 0; else notData"
+      >
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Foto</th>
+            <th>Funcionarios</th>
+            <th>Dependencia</th>
+            <th>Fecha</th>
+            <th>Novedad</th>
+            <th>Descripción</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th><i class="mdi mdi-chevron-down"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let person of people">
+            <tr class="text-center">
+              <td class="align-middle p-0">
+                <img
+                  src="{{ person?.person?.image | image }}"
+                  onerror="this.src='../../../../assets/images/noprofile.png'"
+                  class="img-thumbnail rounded-circle header-profile-user mx-auto d-block"
+                />
+              </td>
+              <td class="align-middle">
+                {{ person?.person?.first_name }}
+                {{ person?.person?.first_surname }}
+              </td>
+              <td class="align-middle">
+                {{
+                  person?.person?.contractultimate?.position?.dependency?.name
+                }}
+              </td>
+              <td class="align-middle">
+                {{ person?.created_at | date }}
+              </td>
+              <td class="align-middle">
+                {{ person?.disability_leave?.concept }}
+              </td>
+              <td class="align-middle">
+                {{ person?.observation }}
+              </td>
+              <td class="align-middle">
+                {{ person?.date_start | date }}
+              </td>
+              <td class="align-middle">
+                {{ person?.date_end | date }}
+              </td>
+              <td class="align-middle">
+                <div ngbDropdown container="body" class="dropdown-primary">
+                  <button
+                    ngbDropdownToggle
+                    class="btn btn-primary btn-sm"
+                    type="button"
+                  >
+                    <i class="mdi mdi-chevron-down"></i>
+                  </button>
+                  <div ngbDropdownMenu>
+                    <a
+                      class="dropdown-item text-info"
+                      (click)="editarNovedad(person)"
+                      href="javascript:void(0)"
+                    >
+                      <i class="fas fa-edit"></i> Editar</a
+                    >
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <!-- <ng-container *ngIf="this.person.selected">
+              <tr>
+                <td colspan="100%">
+                  <div class="rounded-top table-responsive">
+                    <table class="table table-striped">
+                      <thead class="bg-light">
+                        <tr class="text-center text-uppercase">
+                          <th>Fecha</th>
+                          <th>Novedad</th>
+                          <th>Descripción</th>
+                          <th>Inicio</th>
+                          <th>Fin</th>
+                          <th class="col-1">ACC.</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          *ngFor="let fact of person.payroll_factors"
+                          class="text-center"
+                        >
 
-      <ng-template #notData>
-        <app-not-data [loading]="loading"></app-not-data>
-      </ng-template>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </td>
+              </tr>
+            </ng-container> -->
+          </ng-container>
+        </tbody>
+      </table>
+      <ngb-pagination
+        class="d-flex justify-content-center pagination-rounded pagination-sm"
+        [collectionSize]="pagination.collectionSize"
+        (pageChange)="cargarNovedades($event)"
+        [pageSize]="pagination.pageSize"
+        [(page)]="pagination.page"
+        aria-label="Default pagination"
+        maxSize="5"
+        rotate="true"
+        ellipses="false"
+        boundaryLinks="true"
+      >
+      </ngb-pagination>
     </div>
   </div>
+
+  <ng-template #notData>
+    <app-not-data [loading]="loading"></app-not-data>
+  </ng-template>
 </div>
-<!-- <a
-  class="dropdown-item "
-  href=""
-  [swal]="{
-    title: '¿Está Seguro?',
-    text: 'Se dispone a eliminar la novedad',
-    type: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Si, Eliminar',
-    cancelButtonText: 'Dejame verificar'
-  }"
-  (confirm)="EliminarNovedad(novedad.Id_Novedad)"
->
-  <i class="fa fa-times"></i> Elim.</a
->
- -->

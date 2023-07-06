@@ -34,9 +34,9 @@ export class VerPresupuestoComponent implements OnInit {
     this.loading = true;
     this._budget.get(this.id).subscribe((r: any) => {
       this.data = r.data
-      this.datosCabecera.Codigo = r.data.code;
-      this.datosCabecera.Fecha = r.data.created_at;
-      this.datosCabecera.CodigoFormato = r.data.format_code;
+      this.datosCabecera.Codigo = r?.data?.code;
+      this.datosCabecera.Fecha = r?.data?.created_at;
+      this.datosCabecera.CodigoFormato = r?.data?.format_code;
       this.loading = false;
     })
   }
@@ -78,11 +78,14 @@ export class VerPresupuestoComponent implements OnInit {
           link.download = `${filename}.pdf`;
           link.click();
           this.donwloading = false;
-        }),
+        },
           (error) => {
+            this.donwloading = false;
+            this._swal.hardError();
           },
           () => {
-          };
+            this.donwloading = false;
+          });
       }
     })
   }
@@ -96,12 +99,14 @@ export class VerPresupuestoComponent implements OnInit {
       link.download = `${filename}.pdf`;
       link.click();
       this.donwloadingInterno = false;
-    }),
+    },
       (error) => {
         this.donwloadingInterno = false;
+        this._swal.hardError();
       },
       () => {
-      };
+        this.donwloadingInterno = false;
+      });
   }
 
 }

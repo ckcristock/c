@@ -42,10 +42,12 @@
           ngbDropdownToggle
           class="btn header-item noti-icon waves-effect iconClass"
           id="page-header-notifications-dropdown"
-          (click)="getAlerts()"
+          (click)="refreshTime()"
         >
           <i class="fas fa-bell"> </i>
-          <span class="badge badge-pill badge-danger">{{ count }}</span>
+          <span class="badge badge-pill badge-danger" *ngIf="count > 0">{{
+            count
+          }}</span>
         </button>
         <div
           class="dropdown-menu dropdown-menu-lg dropdown-menu-right border border-light"
@@ -53,40 +55,58 @@
           aria-labelledby="page-header-notifications-dropdown"
         >
           <div class="card-title">
-            <h6 class="text-center text-primary mt-2">Notificaciones</h6>
+            <div class="d-flex justify-content-between mx-2">
+              <h6 class="text-primary mt-2">Notificaciones</h6>
+              <div class="m-2">
+                <i
+                  class="fas fa-envelope-open mx-2 text-warning"
+                  role="button"
+                  title="Marcar todas como leídas"
+                  (click)="markAllAsRead()"
+                ></i>
+                <i
+                  class="fas fa-sync text-primary"
+                  role="button"
+                  (click)="getAlerts()"
+                ></i>
+              </div>
+            </div>
           </div>
-          <div style="max-height: 50vh; overflow-y: auto">
+          <div class="scroll-container" #scrollContainer>
             <ng-container *ngIf="!loading && alerts.length > 0; else notData">
               <div class="list-group list-group-flush">
                 <a
                   *ngFor="let notification of alerts"
-                  (click)="modalAlert.show(notification); read(notification)"
+                  (click)="read(notification)"
+                  [routerLink]="notification.url"
                   href="javascript:void(0)"
                   class="list-group-item list-group-item-action flex-column align-items-start"
+                  [class]="
+                    notification.read_boolean == 0 ? 'active-border' : ''
+                  "
                 >
                   <div class="d-flex justify-content-between">
-                    <h6
-                      class="mb-1"
-                      [ngClass]="
-                        notification.read_boolean != 0 ? 'text-muted' : ''
-                      "
-                    >
+                    <div>
                       <i [class]="notification.icon"></i>
-                      {{ notification.type }}
-                    </h6>
-                    <i
-                      *ngIf="notification.read_boolean == 0"
-                      class="fas fa-circle text-primary"
-                    ></i>
+                      <b> {{ notification.type }}</b>
+                      <div>
+                        <small>
+                          {{ notification.description }}
+                        </small>
+                      </div>
+                    </div>
+                    <img
+                      [src]="notification.transmitter.image"
+                      alt=""
+                      onerror="this.src='../../../../assets/images/noprofile.png'"
+                      class="rounded-circle img-fluid header-profile-user"
+                    />
                   </div>
-                  <div
-                    class="d-flex w-100 justify-content-between"
-                    [ngClass]="
-                      notification.read_boolean != 0 ? 'text-muted' : ''
-                    "
-                  >
-                    <small>{{ notification.transmitter.full_name }}</small>
-                    <small>{{ notification.created_at | date }}</small>
+                  <div class="d-flex w-100 justify-content-between">
+                    <small>{{
+                      notification.transmitter.full_names | titlecase
+                    }}</small>
+                    <small>{{ notification.time_ago }}</small>
                   </div>
                 </a>
               </div>
@@ -125,7 +145,10 @@
         </button>
         <div class="dropdown-menu dropdown-menu-right" ngbDropdownMenu>
           <!-- item-->
-          <a class="dropdown-item" href="javascript: void(0);"
+          <a
+            class="dropdown-item"
+            href="javascript: void(0);"
+            [routerLink]="'/mi-perfil'"
             ><i class="ri-user-line align-middle mr-1"></i> Perfil</a
           >
 
@@ -160,6 +183,10 @@
 </ng-template>
 
 <app-modal-alert #modalAlert> </app-modal-alert>
+
+<ngb-toast class="floating-toast" *ngIf="viewAlert" header="Nueva notificación">
+  {{ message }}
+</ngb-toast>
 
 <!-- <a href="/" class="logo logo-dark">
   <span class="logo-sm">

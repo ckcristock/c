@@ -25,6 +25,8 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, SatDatepickerModule, Sa
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { ListItemsComponent } from './list-items/list-items.component';
 import { GetBudgetsComponent } from './get-budgets/get-budgets.component';
+import { GetBusinessComponent } from './get-business/get-business.component';
+import { PersonalProfileComponent } from './personal-profile/personal-profile.component';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -53,7 +55,9 @@ export const MY_FORMATS = {
     ReloadButtonComponent,
     ModalPreliquidarComponent,
     ListItemsComponent,
-    GetBudgetsComponent
+    GetBudgetsComponent,
+    GetBusinessComponent,
+    PersonalProfileComponent
   ],
   exports: [
     ModalBasicComponent,
@@ -71,7 +75,8 @@ export const MY_FORMATS = {
     ReloadButtonComponent,
     ModalPreliquidarComponent,
     ListItemsComponent,
-    GetBudgetsComponent
+    GetBudgetsComponent,
+    GetBusinessComponent
   ],
   imports: [
     NgbAccordionModule,

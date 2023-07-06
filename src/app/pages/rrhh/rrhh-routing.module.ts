@@ -31,6 +31,7 @@ import { DescargoComponent } from './procesos/disciplinarios/descargo/descargo.c
 import { CerrarProcesoComponent } from './procesos/disciplinarios/cerrar-proceso/cerrar-proceso.component';
 import { CrearProcesoComponent } from './procesos/disciplinarios/crear-proceso/crear-proceso.component';
 import { ReporteErroresComponent } from './reporte-errores/reporte-errores.component';
+import { VacantesEditarComponent } from './vacantes/vacantes-editar/vacantes-editar.component';
 
 
 
@@ -38,6 +39,7 @@ const routes: Routes = [
   { path: 'vacantes', component: VacantesComponent },
   { path: 'vacantes-crear', component: VacantesCrearComponent },
   { path: 'vacantes-ver/:id', component: VacantesVerComponent },
+  { path: 'vacantes/editar/:id', component: VacantesEditarComponent },
   { path: 'actividades', component: ActividadesComponent },
   { path: 'novedades', component: NovedadesComponent },
   { path: 'llegadas-tarde', component: LlegadasTardesComponent },

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -19,6 +19,7 @@ import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { PagesModule } from 'src/app/pages/pages.module';
+import { MenubarModule } from 'primeng/menubar';
 
 @NgModule({
   // tslint:disable-next-line: max-line-length
@@ -43,7 +44,9 @@ import { PagesModule } from 'src/app/pages/pages.module';
     ReactiveFormsModule,
     CKEditorModule,
     NgSelectModule,
-    PagesModule
+    PagesModule,
+    NgbToastModule,
+    MenubarModule,
   ],
   exports: [FooterComponent, RightsidebarComponent, HorizontaltopbarComponent, HorizontalnavbarComponent],
   providers: []

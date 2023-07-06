@@ -2,6 +2,7 @@ import {
   FormGroup,
   FormBuilder,
   FormArray,
+  Validators,
 } from '@angular/forms';
 
 export const othersHelper = {
@@ -28,7 +29,7 @@ export const othersHelper = {
   createOthersGroup(form: FormGroup, fb: FormBuilder) {
     let amount = form?.get('amount')?.value;
     let others = fb?.group({
-      description: [''],
+      description: ['', Validators.maxLength(100)],
       unit_id: [''],
       q_unit: [0],
       q_total: [amount],

@@ -1,18 +1,19 @@
 <div class="rounded-top table-responsive mt-3">
   <table
     class="table table-bordered table-striped table-sm"
-    *ngIf="!loading && negocios.length > 0; else notData"
+    *ngIf="!loading && negocios?.length > 0; else notData"
   >
     <thead class="bg-light">
       <tr class="text-center text-uppercase">
         <th>Foto</th>
         <th>Código</th>
+        <th>Fecha creación</th>
         <th>Tipo</th>
         <th>Tercero</th>
         <th>Nombre</th>
         <th>Presupuesto</th>
         <th>Cotización</th>
-        <th>Fecha entrega</th>
+        <th>Fecha etapa</th>
         <th class="">Etapa</th>
         <th><i class="mdi mdi-chevron-down"></i></th>
       </tr>
@@ -21,36 +22,41 @@
       <tr *ngFor="let neg of negocios" class="text-center">
         <td class="p-0">
           <img
-            [src]="neg.third_party.image | image"
+            [src]="neg?.third_party?.image | image"
             onerror="this.src='../../../../assets/images/noprofile.png'"
             class="rounded-circle mx-auto img-fluid header-profile-user"
           />
         </td>
-        <td class="align-middle" scope="row">{{ neg.code | uppercase }}</td>
+        <td class="text-nowrap" scope="row">{{ neg?.code | uppercase }}</td>
+        <td>{{ neg?.created_at | date }}</td>
         <td class="align-middle" scope="row">
           {{ neg?.type?.name | uppercase }}
         </td>
         <td class="align-middle">
-          {{ neg.third_party.full_name | uppercase }}
+          {{ neg?.third_party?.full_name | uppercase }}
         </td>
-        <td class="align-middle" scope="row">{{ neg.name | capitalLetter }}</td>
+        <td class="align-middle" scope="row">
+          {{ neg?.name | capitalLetter }}
+        </td>
         <td class="align-middle">
-          ${{ neg.budget_value || 0 | number : "1.2-2" }}
+          ${{ neg?.budget_value || 0 | number : "1.2-2" }} <br />
+          USD {{ neg?.budget_value_usd || 0 | number : "1.2-2" }}
         </td>
         <td class="align-middle">
-          ${{ neg.quotation_value || 0 | number : "1.2-2" }}
+          ${{ neg?.quotation_value || 0 | number : "1.2-2" }} <br />
+          USD {{ neg?.quotation_value_usd || 0 | number : "1.2-2" }}
         </td>
-        <td class="align-middle">{{ neg.date | date : "MMM d, y" }}</td>
+        <td class="align-middle">{{ neg?.date | date : "MMM d, y" }}</td>
         <td class="align-middle p-0">
           <select
             class="form-control form-control-sm form-control-table"
-            [value]="neg.status"
+            [value]="neg?.status"
             (change)="changeState($event, neg)"
           >
             <option value="Prospección">Prospección</option>
             <option value="Presupuesto">Presupuesto</option>
             <option value="Cotización">Cotización</option>
-            <option value="Negociación">Negociación</option>
+            <option value="Rechazado">Rechazado</option>
             <option value="Adjudicación">Adjudicación</option>
           </select>
         </td>
@@ -67,15 +73,14 @@
               <a
                 class="dropdown-item text-success"
                 href="javascript: void(0);"
-                [routerLink]="['/crm/negocios/', neg.id]"
+                [routerLink]="['/crm/negocios/', neg?.id]"
               >
                 <i class="fas fa-eye"></i> Ver</a
               >
               <a
                 class="dropdown-item text-info"
                 href="javascript: void(0);"
-                [routerLink]="['/crm/negocios/editar', neg.id]"
-                (click)="nextState(neg.status, neg.id)"
+                [routerLink]="['/crm/negocios/editar', neg?.id]"
               >
                 <i class="fas fa-edit"></i> Editar</a
               >
@@ -88,9 +93,9 @@
 </div>
 <mat-paginator
   *ngIf="paginationMaterial"
-  [length]="paginationMaterial.total"
-  [pageSize]="paginationMaterial.per_page"
-  [pageIndex]="paginationMaterial.current_page - 1"
+  [length]="paginationMaterial?.total"
+  [pageSize]="paginationMaterial?.per_page"
+  [pageIndex]="paginationMaterial?.current_page - 1"
   [pageSizeOptions]="[5, 10, 25, 100]"
   (page)="handlePageEventParent($event)"
   aria-label="Select page"

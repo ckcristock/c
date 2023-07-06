@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApuServicioService } from '../apu-servicio.service';
 import { ActivatedRoute } from '@angular/router';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 
 @Component({
   selector: 'app-ver-apu-servicio',
@@ -21,7 +22,8 @@ export class VerApuServicioComponent implements OnInit {
   }
   constructor(
     private _apuServicio: ApuServicioService,
-    private actRoute: ActivatedRoute
+    private actRoute: ActivatedRoute,
+    private _swal: SwalService
   ) { }
 
   ngOnInit(): void {
@@ -50,12 +52,13 @@ export class VerApuServicioComponent implements OnInit {
       link.download = `${filename}.pdf`;
       link.click();
       this.donwloading = false;
-    }),
+    },
       (error) => {
         this.donwloading = false;
+        this._swal.hardError();
       },
       () => {
         this.donwloading = false;
-      };
+      });
   }
 }

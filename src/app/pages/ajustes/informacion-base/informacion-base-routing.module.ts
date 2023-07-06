@@ -16,6 +16,7 @@ import { BodegasComponent } from './bodegas/bodegas.component';
 import { CrearbodegaComponent } from './bodegas/crearbodega/crearbodega.component';
 import { GrupoestibaComponent } from './bodegas/grupoestiba/grupoestiba.component';
 import { EditarProductoComponent } from './productos/editar-producto/editar-producto.component';
+import { ResponsablesComponent } from './responsables/responsables.component';
 
 const routes: Routes = [
   { path: 'empresas', component: EmpresasComponent },
@@ -35,6 +36,7 @@ const routes: Routes = [
   { path: 'catalogo/editar/:id', component: EditarProductoComponent },
   //sedes
   { path: 'bodegas', component: BodegasComponent },
+  { path: 'responsables', component: ResponsablesComponent },
   { path: 'bodegas/crear', component: CrearbodegaComponent },
   { path: 'bodegas/grupoestiba/:id', component: GrupoestibaComponent }
 ];

@@ -30,7 +30,7 @@ export class ModalBuscarCotizacionComponent implements OnInit {
   paginationMaterial: any;
   pagination: any = {
     page: '',
-    pageSize: localStorage.getItem('paginationItemsQuotation') || 100,
+    pageSize: localStorage?.getItem('paginationItemsQuotation') || 100,
   }
   constructor(
     private _modal: ModalService,
@@ -48,11 +48,11 @@ export class ModalBuscarCotizacionComponent implements OnInit {
   openModal() {
     if (this.third_party_id) {
       this.cotizacionesSeleccionadas = []
-      this._modal.open(this.modal, 'xl');
+      this._modal?.open(this.modal, 'xl');
       this.createFormFiltersQuotations();
       this.getQuotations();
     } else {
-      this._swal.show({
+      this._swal?.show({
         icon: 'info',
         title: 'Atención',
         text: 'Selecciona un tercero para continuar.',
@@ -62,13 +62,13 @@ export class ModalBuscarCotizacionComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination);
-    localStorage.setItem('paginationItemsQuotation', this.pagination.pageSize);
+    this._paginator?.handlePageEvent(event, this.pagination);
+    localStorage?.setItem('paginationItemsQuotation', this.pagination?.pageSize);
     this.getQuotations()
   }
 
   createFormFiltersQuotations() {
-    this.form_filters_quotations = this.fb.group({
+    this.form_filters_quotations = this.fb?.group({
       date: '',
       date_start: '',
       date_end: '',
@@ -77,21 +77,21 @@ export class ModalBuscarCotizacionComponent implements OnInit {
       client: '',
       description: '',
     })
-    this.form_filters_quotations.valueChanges.pipe(
+    this.form_filters_quotations?.valueChanges?.pipe(
       debounceTime(500),
-    ).subscribe(r => {
+    )?.subscribe(r => {
       this.getQuotations();
     })
   }
 
   selectedDate(fecha) {
-    if (fecha.value) {
-      this.form_filters_quotations.patchValue({
-        date_start: this.datePipe.transform(fecha.value.begin._d, 'yyyy-MM-dd'),
-        date_end: this.datePipe.transform(fecha.value.end._d, 'yyyy-MM-dd')
+    if (fecha?.value) {
+      this.form_filters_quotations?.patchValue({
+        date_start: this.datePipe?.transform(fecha?.value?.begin?._d, 'yyyy-MM-dd'),
+        date_end: this.datePipe?.transform(fecha?.value?.end?._d, 'yyyy-MM-dd')
       })
     } else {
-      this.form_filters_quotations.patchValue({
+      this.form_filters_quotations?.patchValue({
         date_start: '',
         date_end: ''
       })
@@ -102,20 +102,20 @@ export class ModalBuscarCotizacionComponent implements OnInit {
     this.loadingQuotation = true;
     let params = {
       ...this.pagination,
-      ...this.form_filters_quotations.value,
+      ...this.form_filters_quotations?.value,
       third_party_id: this.third_party_id
     }
-    this._quotation.getQuotations(params).subscribe((res: any) => {
-      this.quotations = res.data.data;
-      this.quotations.forEach(quot => {
-        this.cotizacionesSeleccionadas.forEach(cot => {
-          if ((this.create ? cot.id : cot.quotation_id) == quot.id) {
+    this._quotation?.getQuotations(params)?.subscribe((res: any) => {
+      this.quotations = res?.data?.data;
+      this.quotations?.forEach(quot => {
+        this.cotizacionesSeleccionadas?.forEach(cot => {
+          if ((this.create ? cot?.id : cot?.quotation_id) == quot?.id) {
             quot.selected = true
           }
         });
       });
-      this.paginationMaterial = res.data
-      if (this.paginationMaterial.last_page < this.pagination.page) {
+      this.paginationMaterial = res?.data
+      if (this.paginationMaterial?.last_page < this.pagination?.page) {
         this.paginationMaterial.current_page = 1
         this.pagination.page = 1
         this.getQuotations()
@@ -125,23 +125,23 @@ export class ModalBuscarCotizacionComponent implements OnInit {
   }
 
   guardarCotizacion(item, event) {
-    const index = this.cotizacionesSeleccionadas.findIndex(x => ((this.create ? x.id : x.quotation_id) === item.id));
-    if (item.selected) {
+    const index = this.cotizacionesSeleccionadas?.findIndex(x => ((this.create ? x?.id : x?.quotation_id) === item?.id));
+    if (item?.selected) {
       if (index === -1) {
         if (!this.create) {
-          this.cotizacionesSeleccionadas.push({
-            quotation_id: item.id,
-            business_id: this.business_id,
-            total_cop: item.total_cop
+          this.cotizacionesSeleccionadas?.push({
+            quotation_id: item?.id,
+            business_id: this?.business_id,
+            total_cop: item?.total_cop
           });
         } else {
-          this.cotizacionesSeleccionadas.push(item)
+          this.cotizacionesSeleccionadas?.push(item)
         }
         item.selected = true
       }
     } else {
       if (index !== -1) {
-        this.cotizacionesSeleccionadas.splice(index, 1);
+        this.cotizacionesSeleccionadas?.splice(index, 1);
         item.selected = false
       }
     }
@@ -150,41 +150,41 @@ export class ModalBuscarCotizacionComponent implements OnInit {
 
   addCotizacion() {
     if (!this.create) {
-      this._swal.show({
+      this._swal?.show({
         icon: 'question',
         title: '¿Estás seguro(a)?',
         text: 'Vamos a agregar las cotizaciones seleccionadas'
-      }).then(r => {
-        if (r.isConfirmed) {
+      })?.then(r => {
+        if (r?.isConfirmed) {
           let data = {
-            business_id: this.business_id,
-            quotations: this.cotizacionesSeleccionadas,
-            person_id: this.person_id
+            business_id: this?.business_id,
+            quotations: this?.cotizacionesSeleccionadas,
+            person_id: this?.person_id
           }
-          this._negocio.newBusinessQuotation(data).subscribe((res: any) => {
-            this.update.emit();
+          this._negocio?.newBusinessQuotation(data)?.subscribe((res: any) => {
+            this.update?.emit();
             this.getQuotations();
-            this._modal.close();
+            this._modal?.close();
             this.cotizacionesSeleccionadas = [];
-            this._swal.show({
+            this._swal?.show({
               icon: 'success',
               title: 'Cotizaciones agregadas',
-              text: res.data,
+              text: res?.data,
               showCancel: false
             })
           });
         }
       })
     } else {
-      this.update.emit(this.cotizacionesSeleccionadas);
-      this._modal.close();
+      this.update?.emit(this.cotizacionesSeleccionadas);
+      this._modal?.close();
     }
   }
 
   openNewTab(route, id = '') {
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree([route + '/' + id])
+    const url = this.router?.serializeUrl(
+      this.router?.createUrlTree([route + '/' + id])
     );
-    window.open(url, '_blank');
+    window?.open(url, '_blank');
   }
 }

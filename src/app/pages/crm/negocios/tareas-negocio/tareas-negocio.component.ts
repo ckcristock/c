@@ -58,14 +58,14 @@ export class TareasNegocioComponent implements OnInit {
   }
   getPeople() {
     this._people.getPeopleIndex().subscribe((r: any) => {
-      this.peopleSelects = r.data;
+      this.peopleSelects = r?.data;
       this.peopleSelects.unshift({ text: 'Seleccione', value: '' });
     });
   }
   getTasks() {
     this.loading = true
     this._negocios.getTasks(this.business_budget_id).subscribe((resp: any) => {
-      this.tasks = resp.data.tasks;
+      this.tasks = resp?.data?.tasks;
       this.loading = false
     });
   }
@@ -85,10 +85,10 @@ export class TareasNegocioComponent implements OnInit {
   editTask(data, add) {
     this.openConfirm(add)
     this.form.patchValue({
-      id: data.id,
-      person_id: data.person_id,
-      description: data.description,
-      completed: data.completed
+      id: data?.id,
+      person_id: data?.person_id,
+      description: data?.description,
+      completed: data?.completed
     });
 
   }

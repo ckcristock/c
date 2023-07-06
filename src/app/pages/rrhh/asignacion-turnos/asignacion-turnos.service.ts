@@ -7,8 +7,8 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AsignacionTurnosService {
-  constructor(private http: HttpClient) {}
-  getTurns() {}
+  constructor(private http: HttpClient) { }
+  getTurns() { }
   getPeople(week, params = {}) {
     return this.http
       .get(`${environment.base_url}/horarios/datos/generales/${week}`, {
@@ -37,5 +37,9 @@ export class AsignacionTurnosService {
 
   saveHours(body) {
     return this.http.post(`${environment.base_url}/rotating-hour`, body);
+  }
+
+  getHistory(params = {}) {
+    return this.http.get(`${environment.base_url}/history-rotating-hour`, { params });
   }
 }

@@ -87,6 +87,11 @@ export class DotacionService {
     return this.http.post(`${environment.base_url}/dotations-update/${id}`, data)
 
   }
+
+  updateStock(data) {
+    return this.http.post(`${environment.base_url}/dotations-update-stock`, data)
+  }
+
   approveDotation({ id, data }) {
     return this.http.post(`${environment.base_url}/dotations-approve/${id}`, data)
 

@@ -176,21 +176,17 @@
                       {{ i + 1 }}
                     </td>
                     <td class="align-middle">
-                      <ng-select
+                      <select
+                        class="form-control form-control-sm form-control-edit"
                         formControlName="geometry_id"
-                        [items]="geometries"
-                        bindLabel="text"
-                        [class.is-invalid]="item.get('geometry_id')?.invalid"
-                        appearance="outline"
-                        class="in-table"
-                        [appendTo]="'body'"
-                        [clearable]="false"
-                        notFoundText="Sin resultados"
-                        bindValue="value"
-                        (search)="getGeometries($event)"
-                        loadingText="loading"
                       >
-                      </ng-select>
+                        <option
+                          *ngFor="let item of geometries"
+                          [value]="item.value"
+                        >
+                          {{ item.text }}
+                        </option>
+                      </select>
                     </td>
                     <td class="align-middle p-0">
                       <img
@@ -200,21 +196,17 @@
                       />
                     </td>
                     <td class="align-middle">
-                      <ng-select
+                      <select
+                        class="form-control form-control-sm form-control-edit"
                         formControlName="material_id"
-                        [items]="commercialMaterials"
-                        bindLabel="text"
-                        [class.is-invalid]="item.get('material_id')?.invalid"
-                        appearance="outline"
-                        class="in-table"
-                        [appendTo]="'body'"
-                        [clearable]="false"
-                        notFoundText="Sin resultados"
-                        bindValue="id"
-                        (search)="getCommercialMaterials($event)"
-                        loadingText="loading"
                       >
-                      </ng-select>
+                        <option
+                          *ngFor="let item of commercialMaterials"
+                          [value]="item.id"
+                        >
+                          {{ item.text }}
+                        </option>
+                      </select>
                     </td>
                     <ng-container formArrayName="measures">
                       <ng-container
@@ -318,21 +310,15 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <ng-select
+                    <p-dropdown
+                      [options]="materialsIndex"
                       formControlName="material_id"
-                      [items]="materialsIndex"
-                      bindLabel="text"
-                      [class.is-invalid]="item.get('material_id')?.invalid"
-                      appearance="outline"
-                      class="in-table"
-                      [appendTo]="'body'"
-                      [clearable]="false"
-                      notFoundText="Sin resultados"
-                      bindValue="id"
-                      (search)="getMaterialsFull($event)"
-                      loadingText="loading"
-                    >
-                    </ng-select>
+                      optionLabel="text"
+                      [filter]="true"
+                      filterBy="text"
+                      appendTo="body"
+                      optionValue="id"
+                    ></p-dropdown>
                   </td>
                   <td class="align-middle">
                     <select
@@ -458,21 +444,20 @@
                     {{ i + 1 }}
                   </td>
                   <td class="align-middle">
-                    <ng-select
+                    <select
+                      name=""
+                      class="form-control form-control-sm form-control-edit"
+                      style="width: 9rem"
+                      id="material_corte_agua"
                       formControlName="material_id"
-                      [items]="materials"
-                      bindLabel="text"
-                      [class.is-invalid]="item.get('material_id')?.invalid"
-                      appearance="outline"
-                      class="in-table"
-                      [appendTo]="'body'"
-                      [clearable]="false"
-                      notFoundText="Sin resultados"
-                      bindValue="id"
-                      (search)="getMaterials($event)"
-                      loadingText="loading"
                     >
-                    </ng-select>
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
+                      <option *ngFor="let item of materials" [value]="item?.id">
+                        {{ item?.text }}
+                      </option>
+                    </select>
                   </td>
                   <td class="align-middle">
                     <select
@@ -651,23 +636,23 @@
                     {{ i + 1 }}
                   </td>
                   <td class="text-center">
-                    <ng-select
+                    <select
+                      name=""
+                      class="form-control form-control-sm form-control-edit"
+                      id="material_corte_laser"
+                      style="width: 9rem"
                       formControlName="cut_laser_material_id"
-                      [items]="cutLaserMaterials"
-                      bindLabel="name"
-                      [class.is-invalid]="
-                        item.get('cut_laser_material_id')?.invalid
-                      "
-                      appearance="outline"
-                      class="in-table"
-                      [appendTo]="'body'"
-                      [clearable]="false"
-                      notFoundText="Sin resultados"
-                      bindValue="id"
-                      (search)="getCutLaserMaterial($event)"
-                      loadingText="loading"
                     >
-                    </ng-select>
+                      <option value="" disabled selected hidden>
+                        Selecciona
+                      </option>
+                      <option
+                        *ngFor="let item of cutLaserMaterials"
+                        [value]="item?.id"
+                      >
+                        {{ item?.name }}
+                      </option>
+                    </select>
                   </td>
                   <td class="text-center">
                     <select
@@ -1130,6 +1115,7 @@
                       class="form-control form-control-sm"
                       id="descripcion_otros"
                       style="min-width: 25rem"
+                      [class.is-invalid]="item.get('description').invalid"
                       placeholder="Ingresa descripción"
                       formControlName="description"
                       rows="1"
@@ -1440,8 +1426,7 @@
                   <th class="col-3 text-right">
                     <h6>
                       <span>
-                        $
-                        {{
+                        ${{
                           form?.get("sale_price_cop_withholding_total")?.value
                             | number : "1.2-2"
                         }}
@@ -1454,8 +1439,7 @@
                   <th class="col-3 text-right">
                     <h6>
                       <span>
-                        $
-                        {{
+                        ${{
                           form?.get("sale_value_cop_unit")?.value
                             | number : "1.2-2"
                         }}
@@ -1496,7 +1480,7 @@
                       <span>
                         USD
                         {{
-                          form?.get("sale_value_usd_unit")?.value
+                          form?.get("sale_value_usd_unit")?.value || 0
                             | number : "1.2-2"
                         }}
                       </span>

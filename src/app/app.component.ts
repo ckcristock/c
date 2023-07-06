@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { UserService } from './core/services/user.service';
+import { Component, OnInit } from '@angular/core';
+
 
 @Component({
   selector: 'app-root',
@@ -8,6 +7,8 @@ import { UserService } from './core/services/user.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+
+
   /* constructor(private router: Router,private _user: UserService,){
     router.events.subscribe(val => {
       if (val instanceof NavigationEnd){

@@ -17,7 +17,7 @@
   <div class="card-body">
     <table
       class="table table-borderless table-striped"
-      *ngIf="!loading && apuSets.length > 0; else notData"
+      *ngIf="!loading && apuSets?.length > 0; else notData"
     >
       <thead>
         <tr>
@@ -37,16 +37,16 @@
         <tr
           *ngFor="let item of apuSets"
           [ngClass]="{
-            'text-danger font-weight-bold': item.state == 'Inactivo'
+            'text-danger font-weight-bold': item?.state == 'Inactivo'
           }"
         >
-          <td>{{ item.code }}</td>
+          <td>{{ item?.code }}</td>
           <td>{{ item.name }}</td>
-          <td>{{ item.thirdparty.name }}</td>
-          <td>{{ item.city.name }}</td>
-          <td>{{ item.line }}</td>
-          <td>{{ item.person.name }}</td>
-          <td>{{ item.created_at | date : "longDate" }}</td>
+          <td>{{ item?.thirdparty?.name }}</td>
+          <td>{{ item?.city?.name }}</td>
+          <td>{{ item?.line }}</td>
+          <td>{{ item?.person?.name }}</td>
+          <td>{{ item?.created_at | date : "longDate" }}</td>
           <td>
             <div class="text-center">
               <div ngbDropdown container="body" class="dropdown-primary">
@@ -60,26 +60,26 @@
                 <div ngbDropdownMenu>
                   <a
                     class="dropdown-item text-dark"
-                    [routerLink]="['/crm/apu/ver-apu-conjunto', item.id]"
+                    [routerLink]="['/crm/apu/ver-apu-conjunto', item?.id]"
                   >
                     <i class="fas fa-eye"></i> Ver
                   </a>
                   <a
                     class="dropdown-item text-info"
-                    [routerLink]="['/crm/apu/editar-apu-conjunto', item.id]"
+                    [routerLink]="['/crm/apu/editar-apu-conjunto', item?.id]"
                   >
                     <i class="fas fa-edit"></i> editar
                   </a>
                   <a
-                    *ngIf="item.state == 'Activo'"
-                    (click)="activateOrInactive('Inactivo', item.id)"
+                    *ngIf="item?.state == 'Activo'"
+                    (click)="activateOrInactive('Inactivo', item?.id)"
                     class="dropdown-item text-danger"
                   >
                     <i class="fas fa-trash-alt"></i> Anular
                   </a>
                   <a
-                    *ngIf="item.state == 'Inactivo'"
-                    (click)="activateOrInactive('Activo', item.id)"
+                    *ngIf="item?.state == 'Inactivo'"
+                    (click)="activateOrInactive('Activo', item?.id)"
                     class="dropdown-item text-success"
                   >
                     <i class="fas fa-check"></i> Activar

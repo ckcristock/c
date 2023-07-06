@@ -20,6 +20,11 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { VerOrdenProduccionComponent } from './ordenes-produccion/ver-orden-produccion/ver-orden-produccion.component';
 import { VerIngenieriaComponent } from './ingenieria/ver-ingenieria/ver-ingenieria.component';
 import { VerDisenoComponent } from './diseno/ver-diseno/ver-diseno.component';
+import { CrmModule } from '../crm/crm.module';
+import { NgxCurrencyModule } from 'ngx-currency';
+import { DirectivesModule } from 'src/app/core/directives/directives.module';
+import { EditorModule } from 'primeng/editor';
+import { AlcanceItemsComponent } from './ordenes-produccion/crear-orden-produccion/alcance-items/alcance-items.component';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -42,6 +47,7 @@ export const MY_FORMATS = {
     VerOrdenProduccionComponent,
     VerIngenieriaComponent,
     VerDisenoComponent,
+    AlcanceItemsComponent
   ],
   imports: [
     CommonModule,
@@ -49,6 +55,7 @@ export const MY_FORMATS = {
     ManufacturaRoutingModule,
     NgbDropdownModule,
     ComponentsModule,
+    CrmModule,
     FormsModule,
     NgSelectModule,
     HttpClientModule,
@@ -67,10 +74,13 @@ export const MY_FORMATS = {
     MatDatepickerModule,
     MatNativeDateModule,
     SatDatepickerModule,
+    DirectivesModule,
     SatNativeDateModule,
+    NgxCurrencyModule,
     MatTooltipModule,
     CKEditorModule,
-    NgbModule
+    NgbModule,
+    EditorModule
   ],
   providers: [
     {

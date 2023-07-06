@@ -16,7 +16,10 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
   @ViewChild('subMenu') subMenu: any;
   configData;
   menuItems = [];
-  navItems = []
+  navItems = [];
+  transformedMenuData = [];
+  autoZIndex: boolean = true;
+  baseZIndex: number = 1000;
   public innerWidth: any;
   // tslint:disable-next-line: max-line-length
   constructor(
@@ -27,12 +30,33 @@ export class HorizontalnavbarComponent implements OnInit, AfterViewInit {
     private viewContainerRef: ViewContainerRef
   ) {
     this.navItems = userService.user.menu;
+    this.transformedMenuData = this.transformMenu(userService.user.menu)
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.activateMenu();
       }
     });
   }
+  handleSubmenuShow(event: any) {
+    const submenu = event.originalEvent.target.parentElement;
+    const viewportWidth = window.innerWidth;
+    const submenuRect = submenu.getBoundingClientRect();
+
+    if (submenuRect.right > viewportWidth) {
+      submenu.classList.add('menu-overflow');
+    }
+  }
+
+  transformMenu(menuItems) {
+    return menuItems.map((item) => ({
+      label: item.name,
+      icon: item.icon,
+      routerLink: item.link,
+      items: item.child && item.child.length > 0 ? this.transformMenu(item.child) : null,
+    }));
+  }
+
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.innerWidth = window.innerWidth;

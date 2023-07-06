@@ -16,7 +16,7 @@
               [appendTo]="'body'"
               appearance="outline"
               [clearable]="false"
-              [class.is-invalid]="form.get('third_party_id').invalid"
+              [class.is-invalid]="form?.get('third_party_id')?.invalid"
               bindValue="value"
               bindLabel="text"
               required
@@ -31,7 +31,7 @@
               bindLabel="text"
               [appendTo]="'body'"
               [clearable]="false"
-              [class.is-invalid]="form.get('third_party_person_id').invalid"
+              [class.is-invalid]="form?.get('third_party_person_id')?.invalid"
               appearance="outline"
               bindValue="value"
               notFoundText="No hay registros"
@@ -57,7 +57,7 @@
               [items]="cities"
               formControlName="city_id"
               [clearable]="false"
-              [class.is-invalid]="form.get('city_id').invalid"
+              [class.is-invalid]="form?.get('city_id')?.invalid"
               bindLabel="text"
               bindValue="value"
               ngDefaultControl
@@ -84,8 +84,8 @@
           <mat-form-field class="col-md-6" appearance="outline">
             <mat-label>Tipo</mat-label>
             <mat-select formControlName="business_type_id">
-              <mat-option *ngFor="let item of types" [value]="item.value">{{
-                item.text
+              <mat-option *ngFor="let item of types" [value]="item?.value">{{
+                item?.text
               }}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -118,7 +118,7 @@
                   <button
                     class="text-center btn btn-info btn-sm"
                     role="button"
-                    (click)="modalBuscarPresupuesto.openModal()"
+                    (click)="modalBuscarPresupuesto?.openModal()"
                   >
                     <i class="fa fa-search"></i> Buscar
                   </button>
@@ -133,7 +133,7 @@
               </div>
             </div>
             <ng-container
-              *ngIf="budgetsSelected.length > 0; else notDataBudgets"
+              *ngIf="budgetsSelected?.length > 0; else notDataBudgets"
             >
               <div class="rounded-top table-responsive mt-2">
                 <table class="table table-bordered table-striped table-sm">
@@ -155,30 +155,31 @@
                       *ngFor="let item of budgetsSelected"
                       class="text-center"
                       [ngClass]="{
-                        'text-danger font-weight-bold': item.state == 'Inactivo'
+                        'text-danger font-weight-bold':
+                          item?.state == 'Inactivo'
                       }"
                     >
                       <td class="align-middle">
-                        {{ item.code | uppercase }}
+                        {{ item?.code | uppercase }}
                       </td>
                       <td class="align-middle">
-                        {{ item.created_at | date : "MMM d, y" }}
+                        {{ item?.created_at | date : "MMM d, y" }}
                       </td>
                       <td class="align-middle">
-                        {{ item.destiny.name | capitalLetter }}
+                        {{ item?.destiny?.name | capitalLetter }}
                       </td>
                       <td class="align-middle">
-                        {{ item.line | capitalLetter }}
+                        {{ item?.line | capitalLetter }}
                       </td>
                       <td class="align-middle">
-                        {{ item.user.person.first_name | titlecase }}
-                        {{ item.user.person.first_surname | titlecase }}
+                        {{ item?.user?.person?.first_name | titlecase }}
+                        {{ item?.user?.person?.first_surname | titlecase }}
                       </td>
                       <td class="align-middle">
-                        ${{ item.total_cop | number : "1.2-2" }}
+                        ${{ item?.total_cop | number : "1.2-2" }}
                       </td>
                       <td class="align-middle">
-                        USD {{ item.total_usd | number : "1.2-2" }}
+                        USD {{ item?.total_usd | number : "1.2-2" }}
                       </td>
                       <td class="align-middle">
                         <div
@@ -199,8 +200,8 @@
                               class="dropdown-item text-success"
                               href="javascript: void(0);"
                               (click)="
-                                openNewTab('/crm/presupuesto/ver', item.id);
-                                _modal.close()
+                                openNewTab('/crm/presupuesto/ver', item?.id);
+                                _modal?.close()
                               "
                             >
                               <i class="fas fa-eye"></i> Ver
@@ -209,8 +210,8 @@
                               class="dropdown-item text-info"
                               href="javascript: void(0);"
                               (click)="
-                                openNewTab('/crm/presupuesto/editar', item.id);
-                                _modal.close()
+                                openNewTab('/crm/presupuesto/editar', item?.id);
+                                _modal?.close()
                               "
                             >
                               <i class="fas fa-edit"></i> Editar
@@ -244,7 +245,7 @@
                   <button
                     class="text-center btn btn-info btn-sm"
                     role="button"
-                    (click)="modalBuscarCotizacion.openModal()"
+                    (click)="modalBuscarCotizacion?.openModal()"
                   >
                     <i class="fa fa-search"></i> Buscar
                   </button>
@@ -260,7 +261,7 @@
             </div>
             <ng-container
               *ngIf="
-                !loadingQuotations && quotationSelected.length > 0;
+                !loadingQuotations && quotationSelected?.length > 0;
                 else notDataQuotations
               "
             >
@@ -284,18 +285,18 @@
                       class="text-center"
                     >
                       <td class="align-middle">
-                        {{ item.code | uppercase }}
+                        {{ item?.code | uppercase }}
                       </td>
                       <td class="align-middle">
-                        {{ item.created_at | date : "MMM d, y" }}
+                        {{ item?.created_at | date : "MMM d, y" }}
                       </td>
-                      <td>{{ item.description | capitalLetter }}</td>
-                      <td>{{ item.municipality.name | capitalLetter }}</td>
+                      <td>{{ item?.description | capitalLetter }}</td>
+                      <td>{{ item?.municipality?.name | capitalLetter }}</td>
                       <td class="align-middle">
-                        ${{ item.total_cop | number : "1.2-2" }}
+                        ${{ item?.total_cop | number : "1.2-2" }}
                       </td>
                       <td class="align-middle">
-                        USD {{ item.total_usd | number : "1.2-2" }}
+                        USD {{ item?.total_usd | number : "1.2-2" }}
                       </td>
                       <td>
                         <div
@@ -315,8 +316,8 @@
                               class="dropdown-item text-success"
                               href="javascript: void(0);"
                               (click)="
-                                openNewTab('/crm/cotizacion/ver/', item.id);
-                                _modal.close()
+                                openNewTab('/crm/cotizacion/ver/', item?.id);
+                                _modal?.close()
                               "
                             >
                               <i class="fas fa-eye"></i> Ver</a
@@ -325,8 +326,8 @@
                               class="dropdown-item text-primary"
                               href="javascript: void(0);"
                               (click)="
-                                openNewTab('/crm/cotizacion/copiar/', item.id);
-                                _modal.close()
+                                openNewTab('/crm/cotizacion/copiar/', item?.id);
+                                _modal?.close()
                               "
                               ><i class="fas fa-copy"></i> Copiar</a
                             >
@@ -334,8 +335,8 @@
                               class="dropdown-item text-info"
                               href="javascript: void(0);"
                               (click)="
-                                openNewTab('/crm/cotizacion/editar/', item.id);
-                                _modal.close()
+                                openNewTab('/crm/cotizacion/editar/', item?.id);
+                                _modal?.close()
                               "
                               ><i class="fas fa-edit"></i> Editar</a
                             >
@@ -391,7 +392,7 @@
                 </div>
               </div>
             </div>
-            <ng-container *ngIf="apuSelected.length > 0; else alertAPU">
+            <ng-container *ngIf="apuSelected?.length > 0; else alertAPU">
               <div class="rounded-top table-responsive">
                 <table
                   class="table table-bordered table-striped table-sm mt-2"
@@ -410,11 +411,11 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let item of apuSelected" class="text-center">
-                      <td>{{ item.code | uppercase }}</td>
-                      <td>{{ item.name | capitalLetter }}</td>
-                      <td>{{ item.line | capitalLetter }}</td>
-                      <td>{{ item.type_name | capitalLetter }}</td>
-                      <td>${{ item.unit_cost | number : "1.2-2" }}</td>
+                      <td>{{ item?.code | uppercase }}</td>
+                      <td>{{ item?.name | capitalLetter }}</td>
+                      <td>{{ item?.line | capitalLetter }}</td>
+                      <td>{{ item?.type_name | capitalLetter }}</td>
+                      <td>${{ item?.unit_cost | number : "1.2-2" }}</td>
                       <td class="align-middle">
                         <div
                           ngbDropdown
@@ -430,115 +431,115 @@
                           </button>
                           <div ngbDropdownMenu>
                             <a
-                              *ngIf="item.type == 'S'"
+                              *ngIf="item?.type == 'S'"
                               class="dropdown-item text-success"
                               href="javascript: void(0);"
                               (click)="
                                 openNewTab(
                                   '/crm/apu/ver-apu-servicio',
-                                  item.apu_id
+                                  item?.apu_id
                                 )
                               "
                             >
                               <i class="fas fa-eye"></i> Ver
                             </a>
                             <a
-                              *ngIf="item.type == 'P'"
+                              *ngIf="item?.type == 'P'"
                               class="dropdown-item text-success"
                               href="javascript: void(0);"
                               (click)="
                                 openNewTab(
                                   '/crm/apu/ver-apu-pieza',
-                                  item.apu_id
+                                  item?.apu_id
                                 )
                               "
                             >
                               <i class="fas fa-eye"></i> Ver
                             </a>
                             <a
-                              *ngIf="item.type == 'C'"
+                              *ngIf="item?.type == 'C'"
                               class="dropdown-item text-success"
                               href="javascript: void(0);"
                               (click)="
                                 openNewTab(
                                   '/crm/apu/ver-apu-conjunto',
-                                  item.apu_id
+                                  item?.apu_id
                                 )
                               "
                             >
                               <i class="fas fa-eye"></i> Ver
                             </a>
                             <a
-                              *ngIf="item.type == 'S'"
+                              *ngIf="item?.type == 'S'"
                               class="dropdown-item text-info"
                               href="javascript: void(0);"
                               (click)="
                                 openNewTab(
                                   '/crm/apu/editar-apu-servicio',
-                                  item.apu_id
+                                  item?.apu_id
                                 )
                               "
                             >
                               <i class="fas fa-edit"></i> Editar
                             </a>
                             <a
-                              *ngIf="item.type == 'P'"
+                              *ngIf="item?.type == 'P'"
                               class="dropdown-item text-info"
                               href="javascript: void(0);"
                               (click)="
                                 openNewTab(
                                   '/crm/apu/editar-apu-pieza',
-                                  item.apu_id
+                                  item?.apu_id
                                 )
                               "
                             >
                               <i class="fas fa-edit"></i> Editar
                             </a>
                             <a
-                              *ngIf="item.type == 'C'"
+                              *ngIf="item?.type == 'C'"
                               class="dropdown-item text-info"
                               href="javascript: void(0);"
                               (click)="
                                 openNewTab(
                                   '/crm/apu/editar-apu-conjunto',
-                                  item.apu_id
+                                  item?.apu_id
                                 )
                               "
                             >
                               <i class="fas fa-edit"></i> Editar
                             </a>
                             <a
-                              *ngIf="item.type == 'P'"
+                              *ngIf="item?.type == 'P'"
                               class="dropdown-item text-primary"
                               href="javascript: void(0);"
                               (click)="
                                 openNewTab(
                                   '/crm/apu/copiar-apu-pieza',
-                                  item.apu_id
+                                  item?.apu_id
                                 )
                               "
                               ><i class="fas fa-copy"></i> Copiar</a
                             >
                             <a
-                              *ngIf="item.type == 'C'"
+                              *ngIf="item?.type == 'C'"
                               class="dropdown-item text-primary"
                               href="javascript: void(0);"
                               (click)="
                                 openNewTab(
                                   '/crm/apu/copiar-apu-conjunto',
-                                  item.apu_id
+                                  item?.apu_id
                                 )
                               "
                               ><i class="fas fa-copy"></i> Copiar</a
                             >
                             <a
-                              *ngIf="item.type == 'S'"
+                              *ngIf="item?.type == 'S'"
                               class="dropdown-item text-primary"
                               href="javascript: void(0);"
                               (click)="
                                 openNewTab(
                                   '/crm/apu/copiar-apu-servicio',
-                                  item.apu_id
+                                  item?.apu_id
                                 )
                               "
                               ><i class="fas fa-copy"></i> Copiar</a
@@ -602,7 +603,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -615,13 +616,13 @@
     ></app-crear-apu-pieza>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cancelar
     </button>
     <button
       type="button"
       class="btn btn-primary"
-      (click)="crearApuPieza.save()"
+      (click)="crearApuPieza?.save()"
     >
       Guardar
     </button>
@@ -636,7 +637,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -649,13 +650,13 @@
     ></app-crear-apu-conjunto>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cancelar
     </button>
     <button
       type="button"
       class="btn btn-primary"
-      (click)="crearApuConjunto.save()"
+      (click)="crearApuConjunto?.save()"
     >
       Guardar
     </button>
@@ -670,7 +671,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -683,13 +684,13 @@
     ></app-crear-apu-servicio>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cancelar
     </button>
     <button
       type="button"
       class="btn btn-primary"
-      (click)="crearApuServicio.save()"
+      (click)="crearApuServicio?.save()"
     >
       Guardar
     </button>
@@ -704,7 +705,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -717,13 +718,13 @@
     ></app-crear-cotizacion>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cancelar
     </button>
     <button
       type="button"
       class="btn btn-primary"
-      (click)="crearCotizacion.save()"
+      (click)="crearCotizacion?.save()"
     >
       Guardar
     </button>
@@ -738,7 +739,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -751,13 +752,13 @@
     ></app-crear-presupuesto>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cancelar
     </button>
     <button
       type="button"
       class="btn btn-primary"
-      (click)="crearPresupuesto.save()"
+      (click)="crearPresupuesto?.save()"
     >
       Guardar
     </button>
@@ -770,7 +771,7 @@
 ></app-reload-button>
 
 <app-modal-buscar-presupuesto
-  [third_party_id]="form.get('third_party_id').value"
+  [third_party_id]="form?.get('third_party_id')?.value"
   #modalBuscarPresupuesto
   [business_id]="''"
   [person_id]="id"
@@ -779,7 +780,7 @@
 ></app-modal-buscar-presupuesto>
 
 <app-modal-buscar-cotizacion
-  [third_party_id]="form.get('third_party_id').value"
+  [third_party_id]="form?.get('third_party_id')?.value"
   #modalBuscarCotizacion
   [business_id]=""
   [person_id]="id"

@@ -16,6 +16,8 @@ import { DateAdapter } from 'saturn-datepicker';
 import { UserService } from 'src/app/core/services/user.service';
 import { PageEvent } from '@angular/material';
 import { HttpParams } from '@angular/common/http';
+import { ModalService } from 'src/app/core/services/modal.service';
+import { PaginatorService } from 'src/app/core/services/paginator.service';
 
 @Component({
   selector: 'app-asignacion-turnos',
@@ -28,6 +30,7 @@ export class AsignacionTurnosComponent implements OnInit {
 
   datePipe = new DatePipe('es-CO');
   loading: boolean;
+  loadingHistory: boolean;
   matPanel: boolean;
   date: any;
   estadoFiltros = false;
@@ -51,6 +54,7 @@ export class AsignacionTurnosComponent implements OnInit {
   groupList: any[];
   dependencyList: any[] = [];
   datosGenerales: any[] = [];
+  history: any[] = [];
   turns: any[] = [];
   diaInicialSemana = moment().startOf('week');//revisar estos, y posiblemente eliminar
   diaFinalSemana = moment().endOf('week');//se está usando en el formFilter
@@ -62,7 +66,6 @@ export class AsignacionTurnosComponent implements OnInit {
     private _rotatingTurn: RotatingTurnService,
     private _groups: GroupService,
     private _dependencies: DependenciesService,
-
     private fb: FormBuilder,
     private dateAdapter: DateAdapter<any>,
     private _permission: PermissionService,
@@ -70,6 +73,8 @@ export class AsignacionTurnosComponent implements OnInit {
     private _user: UserService,
     private route: ActivatedRoute,
     public router: Router,
+    private _modal: ModalService,
+    private _paginator: PaginatorService
   ) {
     this.user = _user.user;
     this.dateAdapter.setLocale('es');
@@ -113,34 +118,41 @@ export class AsignacionTurnosComponent implements OnInit {
     }
   }
 
-  openClose() {
-    this.matPanel = !this.matPanel;
-    this.matPanel ? this.accordion.openAll() : this.accordion.closeAll();
-  }
   handlePageEvent(event: PageEvent) {
-    this.pagination.pageSize = event.pageSize
-    this.pagination.page = event.pageIndex + 1
-    this.getData()
+    this._paginator.handlePageEvent(event, this.pagination);
+    this.getHistory()
   }
 
   resetFiltros() {
-    for (const controlName in this.formFilters.controls) {
-      this.formFilters.get(controlName).setValue('');
-    }
+    this._paginator?.resetFiltros(this.formFilters)
     this.active_filters = false
   }
 
-  SetFiltros(paginacion) {
-    let params = new HttpParams;
-    params = params.set('pag', paginacion)
-    params = params.set('pageSize', this.pagination.pageSize)
-    for (const controlName in this.formFilters.controls) {
-      const control = this.formFilters.get(controlName);
-      if (control.value) {
-        params = params.set(controlName, control.value);
-      }
+  openModal(content) {
+    this._modal.open(content, 'xl');
+    this.getHistory();
+
+  }
+
+  getHistory() {
+    this.loadingHistory = true;
+    let params = {
+      ...this.pagination,
     }
-    return params;
+    this._asignacion.getHistory(params).subscribe((res: any) => {
+      this.history = res.data.data;
+      this.loadingHistory = false;
+      this.paginationMaterial = res?.data
+      if (this.paginationMaterial?.last_page < this.pagination?.page) {
+        this.paginationMaterial.current_page = 1
+        this.pagination.page = 1
+        this.getHistory()
+      }
+    })
+  }
+
+  SetFiltros(paginacion) {
+    return this._paginator?.SetFiltros(paginacion, this.pagination, this.formFilters);
   }
 
   createFormFilters() {

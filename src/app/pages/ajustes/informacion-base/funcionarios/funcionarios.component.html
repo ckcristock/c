@@ -16,6 +16,19 @@
           <button [routerLink]="['crear']" class="btn btn-primary btn-sm">
             <i class="fa fa-user-plus"></i> Nuevo
           </button>
+          <button
+            type="button"
+            (click)="download()"
+            class="btn btn-success btn-sm"
+          >
+            <span
+              ><i
+                class="fas"
+                [class]="!donwloading ? 'fa-file-excel' : 'fa-spinner fa-spin'"
+              ></i>
+              {{ !donwloading ? "Descargar" : "Descargando" }}</span
+            >
+          </button>
           <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>

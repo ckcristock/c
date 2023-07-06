@@ -27,7 +27,6 @@ export class PreliquidadosComponent implements OnInit {
   matPanel: boolean;
   people: any[] = [];
   diffDays: any;
-
   loading: boolean = false;
   formFilters: FormGroup;
   active_filters: boolean = false
@@ -36,15 +35,8 @@ export class PreliquidadosComponent implements OnInit {
   pagination: any = {
     page: 1,
     pageSize: 10,
-    //collectionSize: 0
   }
-
-
-  listPreliquidados: any = []; //countries: [];
-  //page = 1;
-  //pageSize = 10;
-  //collectionSize = 0;
-
+  listPreliquidados: any = [];
 
   constructor(
     private router: Router,
@@ -61,16 +53,7 @@ export class PreliquidadosComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.route.queryParamMap.subscribe((params: any) => {
-      if (params.params.pageSize) {
-        this.pagination.pageSize = params.params.pageSize
-      } else {
-        this.pagination.pageSize = 10
-      }
-      if (params.params.pag) {
-        this.pagination.page = params.params.pag
-      } else {
-        this.pagination.page = 1
-      }
+      this._paginator.checkParams(this.pagination, params, 'paginationPreliquidados', 96);
       this.orderObj = { ...params.keys, ...params }
       if (Object.keys(this.orderObj).length > 3) {
         this.active_filters = true
@@ -88,7 +71,8 @@ export class PreliquidadosComponent implements OnInit {
   }
 
   handlePageEvent(event: PageEvent) {
-    this._paginator.handlePageEvent(event, this.pagination)
+    this._paginator.handlePageEvent(event, this.pagination);
+    localStorage?.setItem('paginationPreliquidados', this.pagination?.pageSize);
     this.getPreliquidados();
   }
 
@@ -154,7 +138,7 @@ export class PreliquidadosComponent implements OnInit {
             ...rest,
             one_preliquidated_log: {
               ...log,
-              created_at: new Date(created_at_timestamp).toISOString()
+              created_at: created_at_timestamp ? new Date(created_at_timestamp).toISOString() : new Date('2000-01-01').toISOString()
             }
           }))),
         ).subscribe(sortedData => this.listPreliquidados = sortedData);

@@ -63,12 +63,12 @@ export const functionsApuService = {
 
   createForm(fb: FormBuilder, clients: Array<any>, user_id, calculationBase) {
     let group = fb?.group({
-      name: ['', Validators?.required],
+      name: ['', [Validators?.required, Validators.maxLength(191)]],
       city_id: [null, Validators?.required],
       person_id: [user_id],
       third_party_id: [null, Validators?.required],
-      line: ['', Validators?.required],
-      observation: [''],
+      line: ['', [Validators?.required, Validators.maxLength(191)]],
+      observation: ['', Validators.maxLength(65535)],
       subtotal_labor: [0],
       subtotal_labor_mpm: [0],
       subtotal_labor_apm: [0],
@@ -292,12 +292,12 @@ export const functionsApuService = {
     form?.get('sale_price_cop_withholding_total')?.valueChanges?.subscribe(value => {
       let trm = form?.get('trm')
       let result = (value / trm?.value);
-      result ? form?.patchValue({ sale_price_usd_withholding_total: Math?.round(result) }) : ''
+      result ? form?.patchValue({ sale_price_usd_withholding_total: result.toFixed(2) }) : ''
     })
     form?.get('trm')?.valueChanges?.subscribe(value => {
       let sale_price_cop_withholding_total = form?.get('sale_price_cop_withholding_total')
       let result = (sale_price_cop_withholding_total?.value / value);
-      form?.patchValue({ sale_price_usd_withholding_total: Math?.round(result) })
+      form?.patchValue({ sale_price_usd_withholding_total: result.toFixed(2) })
     });
   },
 

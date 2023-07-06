@@ -12,23 +12,23 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngIf="external.length">
+      <ng-container *ngIf="external?.length">
         <ng-container *ngFor="let item of external; let i = index">
           <tr class="text-center text-uppercase">
             <td>
               {{ i + 1 }}
             </td>
             <td>
-              {{ item.external?.name }}
+              {{ item?.external?.name }}
             </td>
             <td>
-              {{ item.unit?.name }}
+              {{ item?.unit?.name }}
             </td>
             <td>
-              {{ item.amount }}
+              {{ item?.amount }}
             </td>
-            <td>${{ item.unit_cost | number : "1.2-2" }}</td>
-            <td>${{ item.total | number : "1.2-2" }}</td>
+            <td>${{ item?.unit_cost | number : "1.2-2" }}</td>
+            <td>${{ item?.total | number : "1.2-2" }}</td>
           </tr>
         </ng-container>
       </ng-container>

@@ -116,4 +116,8 @@ export class TercerosService {
   getThirdPartyPersonForThird(id) {
     return this.http.get(`${environment.base_url}/third-party-person-for-third/${id}`,);
   }
+
+  getThirdPartyPersonIndex() {
+    return this.http.get(`${environment.base_url}/third-party-person-index`,);
+  }
 }

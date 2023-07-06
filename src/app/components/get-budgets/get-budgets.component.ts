@@ -1,11 +1,12 @@
 import { PlatformLocation } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { PageEvent } from '@angular/material';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime } from 'rxjs/operators';
 import { ModalNoCloseService } from 'src/app/core/services/modal-no-close.service';
-import { ModalService } from 'src/app/core/services/modal.service';
+import { PaginatorService } from 'src/app/core/services/paginator.service';
 import { PersonService } from 'src/app/pages/ajustes/informacion-base/persons/person.service';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { BudgetService } from 'src/app/pages/crm/presupuesto/budget.service';
@@ -25,10 +26,10 @@ export class GetBudgetsComponent implements OnInit {
   dateMat = '';
   form_filters: FormGroup;
   modalRef: NgbModalRef;
-  pagination = {
-    page: 1,
-    pageSize: 10,
-    collectionSize: 0
+  paginationMaterial: any;
+  pagination: any = {
+    page: '',
+    pageSize: localStorage?.getItem('paginationItemsBudget') || 100,
   }
 
   constructor(
@@ -36,6 +37,7 @@ export class GetBudgetsComponent implements OnInit {
     private _modal: ModalNoCloseService,
     private _budgets: BudgetService,
     private platformLocation: PlatformLocation,
+    private _paginator: PaginatorService,
     private _swal: SwalService,
     private fb: FormBuilder,
     private _person: PersonService,
@@ -58,6 +60,12 @@ export class GetBudgetsComponent implements OnInit {
     this.createFormFilters();
     this.getBudgets();
     this.getPeople();
+  }
+
+  handlePageEvent(event: PageEvent) {
+    this._paginator?.handlePageEvent(event, this.pagination);
+    localStorage?.setItem('paginationItemsBudget', this.pagination.pageSize)
+    this.getBudgets()
   }
 
   createFormFilters() {
@@ -83,15 +91,20 @@ export class GetBudgetsComponent implements OnInit {
     })
   }
 
-  getBudgets(page = 1) {
+  getBudgets() {
     this.loading = true
-    this.pagination.page = page;
     let params = {
-      ...this.pagination, ...this.form_filters.value
+      ...this.pagination,
+      ...this.form_filters.value
     }
     this._budgets.getAllPaginate(params).subscribe((r: any) => {
       this.budgets = r.data.data
-      this.pagination.collectionSize = r.data.total;
+      this.paginationMaterial = r?.data
+      if (this.paginationMaterial?.last_page < this.pagination?.page) {
+        this.paginationMaterial.current_page = 1
+        this.pagination.page = 1
+        this.getBudgets()
+      }
       this.loading = false;
     })
   }

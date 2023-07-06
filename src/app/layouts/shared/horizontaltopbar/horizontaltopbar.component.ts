@@ -1,20 +1,22 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient } from '@angular/common/http';
 import {
   Router,
-  NavigationEnd,
   ActivatedRoute,
   NavigationStart,
 } from '@angular/router';
 
-import { environment } from '../../../../environments/environment';
 import { UserService } from '../../../core/services/user.service';
 import { User } from 'src/app/core/models/users.model';
-import { interval, timer, Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { AlertasComunService } from 'src/app/pages/rrhh/alertas-comun/alertas-comun.service';
 import { RightsidebarComponent } from '../rightsidebar/rightsidebar.component';
+import Echo from 'laravel-echo';
+import { map } from 'rxjs/operators';
+import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-horizontaltopbar',
@@ -23,9 +25,11 @@ import { RightsidebarComponent } from '../rightsidebar/rightsidebar.component';
 })
 export class HorizontaltopbarComponent implements OnInit {
   @ViewChild('sideBar', { static: false }) sideBar: RightsidebarComponent;
+  @ViewChild('scrollContainer', { static: true }) scrollContainer: ElementRef;
   alerts$: Subscription;
   configData: any;
   alerts: any[] = [];
+  allAlerts: any[] = [];
   count: any = 0;
   element: any;
   cookieValue;
@@ -37,6 +41,8 @@ export class HorizontaltopbarComponent implements OnInit {
   view_folder: boolean;
   name_folder: string;
   folder_permission: any;
+  viewAlert: boolean = false;
+  message: string;
   listLang = [
     { text: 'English', flag: 'assets/images/flags/us.jpg', lang: 'en' },
     { text: 'Spanish', flag: 'assets/images/flags/spain.jpg', lang: 'es' },
@@ -54,9 +60,35 @@ export class HorizontaltopbarComponent implements OnInit {
     public http: HttpClient,
     private _alert: AlertasComunService,
     private route: ActivatedRoute,
-  ) { }
+    private _swal: SwalService
+  ) {
+
+  }
 
   ngOnInit(): void {
+    this.scrollContainer.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
+    if (environment.production) {
+      const echo = new Echo({
+        broadcaster: 'pusher',
+        cluster: 'mt1',
+        key: 'ASDASD2121',
+        wsHost: window.location.hostname,
+        wsPort: 6001,
+        wssPort: 6001,
+        forceTLS: false,
+        encrypted: false,
+        disableStats: true,
+        enabledTransports: ['ws']
+      })
+      echo.channel('notification').listen('NewNotification', (e: any) => {
+        this.viewAlert = true;
+        this.message = e.message?.description;
+        this.getAlerts();
+        setTimeout(() => {
+          this.viewAlert = false;
+        }, 6000);
+      })
+    }
     this.element = document.documentElement;
 
     this.user = this._user.user;
@@ -89,10 +121,102 @@ export class HorizontaltopbarComponent implements OnInit {
 
     this.router.events.subscribe((val) => {
       if (val instanceof NavigationStart) {
-        //notificaciones
       }
     });
     this.getAlerts();
+  }
+
+  getAlerts() {
+    this.loading = true;
+    if (this.user.person.id) {
+      let param = { user_id: this.user.person.id };
+
+      this._alert.getAlertsNotification(param).subscribe((r: any) => {
+        this.alerts = r.data.slice(0, 10);
+        this.allAlerts = r.data;
+        interval(60000)
+          .pipe(
+            map(() => {
+              this.refreshTime();
+            })
+          )
+          .subscribe();
+        if (r.code <= 99) {
+          this.count = r.code
+        } else {
+          this.count = '99+'
+        }
+        this.loading = false
+      });
+      /* this.initSearch() */
+    } else {
+      /* this.initSearch() */
+    }
+  }
+
+  onScroll(event: Event): void {
+    const container = event.target as HTMLElement;
+    if (container.scrollTop + container.clientHeight >= container.scrollHeight) {
+      this.loadMoreItems();
+    }
+  }
+
+  loadMoreItems(): void {
+    console.log('holi')
+    const startIndex = this.alerts.length;
+    const endIndex = startIndex + 10;
+    this.alerts = this.alerts.concat(this.allAlerts.slice(startIndex, endIndex));
+  }
+
+  refreshTime() {
+    this.alerts.forEach(element => {
+      element.time_ago = this.getTimeAgo(element.created_at);
+    });
+  }
+
+  getTimeAgo(timestamp: number): string {
+    const now = Date.now();
+    const targetTime = new Date(timestamp).getTime();
+    const difference = now - targetTime;
+    const seconds = Math.floor(difference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) {
+      if (days === 1) {
+        return 'hace 1 día';
+      } else {
+        return `hace ${days} días`;
+      }
+    } else if (hours > 0) {
+      if (hours === 1) {
+        return 'hace 1 hora';
+      } else {
+        return `hace ${hours} horas`;
+      }
+    } else if (minutes > 0) {
+      if (minutes === 1) {
+        return 'hace 1 minuto';
+      } else {
+        return `hace ${minutes} minutos`;
+      }
+    } else {
+      return 'hace un momento';
+    }
+  }
+
+  markAllAsRead() {
+    this._swal.show({
+      title: '¿Estás seguro(a) de marcar todas las notificaciones como leidas?',
+      icon: 'warning',
+    }).then(r => {
+      if (r.isConfirmed) {
+        this._alert.markAllAsRead().subscribe((r: any) => {
+          this.getAlerts();
+        });
+      }
+    })
   }
 
   validateFolder(id) {
@@ -169,26 +293,7 @@ export class HorizontaltopbarComponent implements OnInit {
     this._user.logout();
   }
 
-  getAlerts() {
-    this.loading = true;
-    if (this.user.person.id) {
-      let param = { user_id: this.user.person.id };
 
-      this._alert.getAlertsNotification(param).subscribe((r: any) => {
-        this.alerts = r.data;
-        if (r.code <= 99) {
-          this.count = r.code
-        } else {
-          this.count = '99+'
-        }
-        this.loading = false
-      });
-      /* this.initSearch() */
-    } else {
-      /* this.initSearch() */
-    }
-
-  }
 
   read(not) {
     if (not.read_boolean == 0) {

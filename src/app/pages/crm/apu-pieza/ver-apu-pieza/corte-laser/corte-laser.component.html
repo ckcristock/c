@@ -19,14 +19,14 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngIf="cutlaser.length">
+      <ng-container *ngIf="cutlaser?.length">
         <ng-container *ngFor="let item of cutlaser; let i = index">
           <tr class="text-center text-uppercase">
             <td class="align-middle">
               {{ i + 1 }}
             </td>
             <td class="align-middle">
-              {{ item?.cut_laser_material?.product.name }}
+              {{ item?.cut_laser_material?.product?.name }}
             </td>
             <td class="align-middle">
               {{ item?.cut_laser_material_value?.thickness }}

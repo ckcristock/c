@@ -1,4 +1,4 @@
-<div class="row" *ngIf="!loading_cards && quotations_cards.length > 0">
+<div class="row" *ngIf="!loading_cards && quotations_cards?.length > 0">
   <div class="col-md-2">
     <div class="card">
       <div class="card-body p-3">
@@ -90,9 +90,9 @@
           <div class="col-md-6 px-0">
             <h4 class="text-primary">
               Cotizaciones
-              <span style="font-size: smaller" *ngIf="paginacion"
+              <span style="font-size: smaller"
                 ><small class="pb-2 text-secondary text-muted"
-                  >pág. {{ paginacion.current_page }}</small
+                  >pág. {{ paginationMaterial?.current_page }}</small
                 ></span
               >
             </h4>
@@ -114,7 +114,7 @@
             <div class="row">
               <ng-container [formGroup]="form_filters">
                 <mat-form-field appearance="outline" class="col">
-                  <mat-label>Rango de fechas</mat-label>
+                  <mat-label>Fecha de creación</mat-label>
                   <input
                     matInput
                     [satDatepicker]="picker"
@@ -198,12 +198,12 @@
         <div class="rounded-top table-responsive">
           <table
             class="table table-bordered table-striped table-sm"
-            *ngIf="!loading && quotations.length > 0; else notData"
+            *ngIf="!loading && quotations?.length > 0; else notData"
           >
             <thead class="bg-light">
               <tr class="text-center text-uppercase">
                 <th>Código</th>
-                <th>Fecha</th>
+                <th>Fecha creación</th>
                 <th>Cliente</th>
                 <th>Ciudad</th>
                 <th>Descripción</th>
@@ -216,39 +216,39 @@
                 *ngFor="let item of quotations"
                 role="button"
                 class="text-center"
-                (click)="openList(item.id)"
+                (click)="openList(item?.id)"
                 [ngClass]="{
-                  'text-danger font-weight-bold': item.status === 'Inactivo',
-                  'text-info': item.selected
+                  'text-danger font-weight-bold': item?.status === 'Inactivo',
+                  'text-info': item?.selected
                 }"
               >
-                <td>{{ item.code | uppercase }}</td>
-                <td>{{ item.created_at | date : "MMM d, y" }}</td>
+                <td class="text-nowrap">{{ item?.code | uppercase }}</td>
+                <td>{{ item?.created_at | date : "MMM d, y" }}</td>
                 <td>
                   {{
-                    (item.client.social_reason
-                      ? item.client.social_reason
-                      : item.client.full_name
+                    (item?.client?.social_reason
+                      ? item?.client?.social_reason
+                      : item?.client?.full_name
                     ) | uppercase
                   }}
                 </td>
-                <td>{{ item.municipality.name | uppercase }}</td>
-                <td>{{ item.description | uppercase }}</td>
+                <td>{{ item?.municipality?.name | uppercase }}</td>
+                <td>{{ item?.description | uppercase }}</td>
                 <td>
                   <span
                     class="badge"
                     [class]="
-                      item.status == 'Pendiente'
+                      item?.status == 'Pendiente'
                         ? 'badge-info'
-                        : item.status == 'Aprobada'
+                        : item?.status == 'Aprobada'
                         ? 'badge-primary'
-                        : item.status == 'No aprobada'
+                        : item?.status == 'No aprobada'
                         ? 'badge-warning'
-                        : item.status == 'Anulada'
+                        : item?.status == 'Anulada'
                         ? 'badge-danger'
                         : 'badge-dark'
                     "
-                    >{{ item.status | uppercase }}</span
+                    >{{ item?.status | uppercase }}</span
                   >
                 </td>
                 <td>
@@ -265,64 +265,64 @@
                       <a
                         class="dropdown-item text-success"
                         href="javascript: void(0);"
-                        [routerLink]="['ver', item.id]"
+                        [routerLink]="['ver', item?.id]"
                       >
                         <i class="fas fa-eye"></i> Ver</a
                       >
                       <a
                         class="dropdown-item text-primary"
                         href="javascript: void(0);"
-                        [routerLink]="['copiar', item.id]"
+                        [routerLink]="['copiar', item?.id]"
                         ><i class="fas fa-copy"></i> Copiar</a
                       >
                       <a
                         class="dropdown-item text-info"
                         href="javascript: void(0);"
-                        *ngIf="item.status == 'Pendiente'"
-                        [routerLink]="['editar', item.id]"
+                        *ngIf="item?.status == 'Pendiente'"
+                        [routerLink]="['editar', item?.id]"
                         ><i class="fas fa-edit"></i> Editar</a
                       >
                       <a
                         class="dropdown-item text-warning"
                         href="javascript: void(0);"
                         *ngIf="
-                          item.status == 'Aprobada' &&
-                          this.permission.permissions.approve
+                          item?.status == 'Aprobada' &&
+                          this?.permission?.permissions?.approve
                         "
-                        (click)="updateStatus('Pendiente', item.id)"
+                        (click)="updateStatus('Pendiente', item?.id)"
                         ><i class="fas fa-clock"></i> Pendiente</a
                       >
                       <a
                         class="dropdown-item text-success"
                         href="javascript: void(0);"
-                        *ngIf="item.status == 'Anulada'"
-                        (click)="updateStatus('Pendiente', item.id)"
+                        *ngIf="item?.status == 'Anulada'"
+                        (click)="updateStatus('Pendiente', item?.id)"
                         ><i class="fas fa-check"></i> Activar</a
                       >
-                      <ng-container *ngIf="item.status == 'Pendiente'">
+                      <ng-container *ngIf="item?.status == 'Pendiente'">
                         <a
                           class="dropdown-item text-danger"
                           href="javascript: void(0);"
-                          (click)="updateStatus('Anulada', item.id)"
+                          (click)="updateStatus('Anulada', item?.id)"
                           ><i class="fas fa-trash"></i> Anular</a
                         >
                         <ng-container
                           *ngIf="
-                            item.status != 'Anulada' &&
-                            this.permission.permissions.approve
+                            item?.status != 'Anulada' &&
+                            this?.permission?.permissions?.approve
                           "
                         >
                           <a
                             class="dropdown-item text-primary"
-                            *ngIf="item.status != 'Aprobada'"
+                            *ngIf="item?.status != 'Aprobada'"
                             href="javascript: void(0);"
-                            (click)="updateStatus('Aprobada', item.id)"
+                            (click)="updateStatus('Aprobada', item?.id)"
                             ><i class="fas fa-thumbs-up"></i> Aprobar</a
                           >
                           <!-- <a
                             class="dropdown-item text-warning"
-                            *ngIf="item.status != 'No aprobada'"
-                            (click)="updateStatus('No aprobada', item.id)"
+                            *ngIf="item?.status != 'No aprobada'"
+                            (click)="updateStatus('No aprobada', item?.id)"
                             href="javascript: void(0);"
                             ><i class="fas fa-thumbs-down"></i> No aprobar</a
                           > -->
@@ -337,9 +337,9 @@
         </div>
         <mat-paginator
           *ngIf="paginationMaterial"
-          [length]="paginationMaterial.total"
-          [pageSize]="paginationMaterial.per_page"
-          [pageIndex]="paginationMaterial.current_page - 1"
+          [length]="paginationMaterial?.total"
+          [pageSize]="paginationMaterial?.per_page"
+          [pageIndex]="paginationMaterial?.current_page - 1"
           [pageSizeOptions]="[5, 10, 25, 100]"
           (page)="handlePageEvent($event)"
           aria-label="Select page"
@@ -356,17 +356,17 @@
             <span
               class="badge badge-pill font-weight-normal"
               [class]="
-                quotation.status == 'Pendiente'
+                quotation?.status == 'Pendiente'
                   ? 'badge-info'
-                  : quotation.status == 'Aprobada'
+                  : quotation?.status == 'Aprobada'
                   ? 'badge-primary'
-                  : quotation.status == 'No aprobada'
+                  : quotation?.status == 'No aprobada'
                   ? 'badge-warning'
-                  : quotation.status == 'Anulada'
+                  : quotation?.status == 'Anulada'
                   ? 'badge-danger'
                   : 'badge-dark'
               "
-              >{{ quotation.status }}</span
+              >{{ quotation?.status }}</span
             >
           </h5>
           <button
@@ -379,10 +379,10 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <ng-container *ngFor="let item of quotation.items">
-          <div [innerHTML]="item.name"></div>
-          <!-- <ng-container *ngFor="let subitem of item.sub_items">
-            <div [innerHTML]="subitem.description"></div>
+        <ng-container *ngFor="let item of quotation?.items">
+          <div [ngClass]="'inner-html-mb-0'" [innerHTML]="item?.name"></div>
+          <!-- <ng-container *ngFor="let subitem of item?.sub_items">
+            <div [ngClass]="'inner-html-mb-0'" [innerHTML]="subitem?.description"></div>
           </ng-container> -->
         </ng-container>
       </div>
@@ -402,7 +402,7 @@
       class="close"
       data-dismiss="modal"
       aria-label="Close"
-      (click)="_modal.close()"
+      (click)="_modal?.close()"
     >
       <span aria-hidden="true">&times;</span>
     </button>
@@ -410,7 +410,7 @@
 
   <div class="modal-body"></div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" (click)="_modal.close()">
+    <button type="button" class="btn btn-danger" (click)="_modal?.close()">
       Cancelar
     </button>
     <button type="button" class="btn btn-primary">Guardar</button>

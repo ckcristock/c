@@ -11,14 +11,14 @@
   </div>
   <div formArrayName="items">
     <h5 class="text-center">Elementos</h5>
-    <ng-container *ngIf="items.controls.length; else notData">
+    <ng-container *ngIf="items?.controls?.length; else notData">
       <ng-container>
         <div class="rounded-top">
           <table
-            class="table table-borderless table-striped table-sm text-nowrap table-custom-quotation"
+            class="table table-bordered table-striped table-sm text-nowrap table-custom-quotation"
           >
-            <thead class="bg-light">
-              <tr class="text-center text-uppercase">
+            <thead>
+              <tr class="text-center table-secondary text-uppercase">
                 <th rowspan="2">#</th>
                 <th rowspan="2" class="col-md-5">Descripción</th>
                 <th rowspan="2"></th>
@@ -27,7 +27,7 @@
                 <th colspan="2">Valor total</th>
                 <th rowspan="2"></th>
               </tr>
-              <tr class="text-center text-uppercase">
+              <tr class="table-secondary text-center text-uppercase">
                 <th>COP sin iva</th>
                 <th>USD</th>
                 <th>COP sin iva</th>
@@ -37,19 +37,19 @@
             <tbody>
               <ng-container
                 [formGroupName]="i"
-                *ngFor="let item of items.controls; let i = index"
+                *ngFor="let item of items?.controls; let i = index"
               >
                 <tr
                   class="text-center"
-                  [class]="item.value.type ? 'table-info' : ''"
+                  [class]="item?.value?.type ? 'table-info' : ''"
                 >
                   <td class="align-middle">{{ i + 1 }}</td>
                   <td>
                     <ckeditor
                       class="custom-ck"
-                      [editor]="_texteditor.Editor"
-                      (ready)="_texteditor.onReady($event)"
-                      [config]="_texteditor.configEditor"
+                      [editor]="_texteditor?.Editor"
+                      (ready)="_texteditor?.onReady($event)"
+                      [config]="_texteditor?.configEditor"
                       formControlName="name"
                     ></ckeditor>
 
@@ -75,50 +75,53 @@
                       currencyMask
                       appInputPositionInitial
                       class="input-cuantity"
-                      [options]="masksMoney.maskNumbers"
+                      [options]="masksMoney?.maskNumbers"
                       formControlName="cuantity_aux"
                     />
                   </td>
                   <td class="align-middle text-right">
                     <input
                       currencyMask
-                      *ngIf="item.get('value_cop_aux').enabled; else itemCop"
+                      *ngIf="item?.get('value_cop_aux')?.enabled; else itemCop"
                       appInputPosition
-                      [options]="masksMoney.maskCOP"
+                      [options]="masksMoney?.maskCOP"
                       formControlName="value_cop_aux"
                     />
                     <ng-template #itemCop>
-                      ${{ item.get("value_cop_aux").value | number : "1.2-2" }}
+                      ${{
+                        item?.get("value_cop_aux")?.value | number : "1.2-2"
+                      }}
                     </ng-template>
                   </td>
                   <td class="align-middle text-right">
                     <input
                       currencyMask
                       appInputPositionUsd
-                      *ngIf="item.get('value_usd_aux').enabled; else itemUsd"
-                      [options]="masksMoney.maskUSD"
+                      *ngIf="item?.get('value_usd_aux')?.enabled; else itemUsd"
+                      [options]="masksMoney?.maskUSD"
                       formControlName="value_usd_aux"
                     />
                     <ng-template #itemUsd>
                       USD
-                      {{ item.get("value_usd_aux").value | number : "1.2-2" }}
+                      {{ item?.get("value_usd_aux")?.value | number : "1.2-2" }}
                     </ng-template>
                   </td>
                   <td class="align-middle text-right">
-                    ${{ item.get("total_cop_aux").value | number : "1.2-2" }}
+                    ${{ item?.get("total_cop_aux")?.value | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       appInputPosition
-                      [options]="masksMoney.maskCOP"
+                      [options]="masksMoney?.maskCOP"
                       formControlName="total_cop_aux"
                     /> -->
                   </td>
                   <td class="align-middle text-right">
-                    USD {{ item.get("total_usd_aux").value | number : "1.2-2" }}
+                    USD
+                    {{ item?.get("total_usd_aux")?.value | number : "1.2-2" }}
                     <!-- <input
                       currencyMask
                       appInputPositionUsd
-                      [options]="masksMoney.maskUSD"
+                      [options]="masksMoney?.maskUSD"
                       formControlName="total_usd_aux"
                     /> -->
                   </td>
@@ -127,24 +130,27 @@
                       ngbTooltip="Eliminar item {{ i + 1 }}"
                       (click)="deleteItem(i)"
                       role="button"
-                      [class]="item.value.type ? 'bd-info' : 'bg-white'"
+                      [class]="item?.value?.type ? 'bd-info' : 'bg-white'"
                       class="text-danger fas fa-trash-alt"
                     ></i>
                   </td>
                 </tr>
                 <ng-container
-                  *ngIf="item.controls.subItems.controls.length; else notData2"
+                  *ngIf="
+                    item?.controls?.subItems?.controls?.length;
+                    else notData2
+                  "
                 >
                   <ng-container formArrayName="subItems">
                     <ng-container
                       [formGroupName]="y"
                       *ngFor="
-                        let subItem of item.controls.subItems.controls;
+                        let subItem of item?.controls?.subItems?.controls;
                         let y = index
                       "
                     >
                       <tr
-                        [class]="subItem.value.type ? 'table-primary' : ''"
+                        [class]="subItem?.value?.type ? 'table-primary' : ''"
                         class="position-relative"
                       >
                         <td class="align-middle">
@@ -154,7 +160,7 @@
                             ngbTooltip="Asignar APU"
                             (click)="findApus(item, false, subItem, y)"
                             (click)="
-                              apus.openConfirm(false);
+                              apus?.openConfirm(false);
                               subItemActive = item;
                               indexAdd = y;
                               insert = true
@@ -166,9 +172,9 @@
                         <td>
                           <ckeditor
                             class="custom-ck dark"
-                            [editor]="_texteditor.Editor"
-                            (ready)="_texteditor.onReady($event)"
-                            [config]="_texteditor.configEditor"
+                            [editor]="_texteditor?.Editor"
+                            (ready)="_texteditor?.onReady($event)"
+                            [config]="_texteditor?.configEditor"
                             formControlName="description"
                           ></ckeditor>
                         </td>
@@ -176,15 +182,15 @@
                           <div class="btn-group btn-group-sm" role="group">
                             <button
                               (click)="
-                                apus.openConfirm(false);
+                                apus?.openConfirm(false);
                                 subItemActive = item;
                                 indexAdd = y;
                                 insert = false
                               "
                               ngbTooltip="Asignar APU"
                               *ngIf="
-                                !subItem.get('quotationitemsubitemable_id')
-                                  .value
+                                !subItem?.get('quotationitemsubitemable_id')
+                                  ?.value
                               "
                               class="btn btn-info btn-sm"
                               type="button"
@@ -194,18 +200,18 @@
                             <button
                               type="button"
                               *ngIf="
-                                subItem.get('quotationitemsubitemable_id')
-                                  .value &&
-                                subItem.get('quotationitemsubitemable_type')
-                                  .value != 'App\\Models\\BudgetItemSubitem'
+                                subItem?.get('quotationitemsubitemable_id')
+                                  ?.value &&
+                                subItem?.get('quotationitemsubitemable_type')
+                                  ?.value != 'App\\Models\\BudgetItemSubitem'
                               "
                               ngbTooltip="Ver APU"
                               (click)="
                                 openNewTab(
-                                  subItem.get('quotationitemsubitemable_type')
-                                    .value,
-                                  subItem.get('quotationitemsubitemable_id')
-                                    .value
+                                  subItem?.get('quotationitemsubitemable_type')
+                                    ?.value,
+                                  subItem?.get('quotationitemsubitemable_id')
+                                    ?.value
                                 )
                               "
                               class="btn btn-primary btn-sm"
@@ -219,7 +225,7 @@
                             currencyMask
                             appInputPositionInitial
                             class="input-cuantity"
-                            [options]="masksMoney.maskNumbers"
+                            [options]="masksMoney?.maskNumbers"
                             formControlName="cuantity_aux"
                           />
                         </td>
@@ -227,7 +233,7 @@
                           <input
                             currencyMask
                             appInputPosition
-                            [options]="masksMoney.maskCOP"
+                            [options]="masksMoney?.maskCOP"
                             formControlName="value_cop_aux"
                           />
                         </td>
@@ -235,32 +241,32 @@
                           <input
                             currencyMask
                             appInputPositionUsd
-                            [options]="masksMoney.maskUSD"
+                            [options]="masksMoney?.maskUSD"
                             formControlName="value_usd_aux"
                           />
                         </td>
                         <td class="align-middle text-right">
                           ${{
-                            subItem.get("total_cop_aux").value
+                            subItem?.get("total_cop_aux")?.value
                               | number : "1.2-2"
                           }}
                           <!-- <input
                             currencyMask
                             appInputPosition
-                            [options]="masksMoney.maskCOP"
+                            [options]="masksMoney?.maskCOP"
                             formControlName="total_cop_aux"
                           /> -->
                         </td>
                         <td class="align-middle text-right">
                           USD
                           {{
-                            subItem.get("total_usd_aux").value
+                            subItem?.get("total_usd_aux")?.value
                               | number : "1.2-2"
                           }}
                           <!-- <input
                             currencyMask
                             appInputPositionUsd
-                            [options]="masksMoney.maskUSD"
+                            [options]="masksMoney?.maskUSD"
                             formControlName="total_usd_aux"
                           /> -->
                         </td>
@@ -297,10 +303,10 @@
   </div>
   <app-list-items
     title1="Total COP sin IVA"
-    [var1]="form.controls.total_cop.value"
+    [var1]="form?.controls?.total_cop?.value"
     type1="cop"
     title2="Total USD"
-    [var2]="form.controls.total_usd.value"
+    [var2]="form?.controls?.total_usd?.value"
     type2="usd"
     mt="mt-2"
   ></app-list-items>

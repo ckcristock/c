@@ -90,12 +90,12 @@ export const functionsApu = {
       city_id: [null, Validators?.required],
       person_id: [user_id],
       third_party_id: [null, Validators?.required],
-      line: ['', Validators?.required],
+      line: ['', [Validators?.required, Validators?.maxLength(191)]],
       minute_value_laser: [calculationBase?.laser_cut_minute_value?.value],
       minute_value_water: [calculationBase?.warer_cut_minute_value?.value],
       amount: [null, Validators?.required],
       files: [''],
-      observation: [''],
+      observation: ['', Validators.maxLength(65535)],
       materia_prima: fb?.array([]),
       subtotal_raw_material: [0],
       commercial_materials: fb?.array([]),
@@ -150,10 +150,12 @@ export const functionsApu = {
       let data = cities?.find(c => c?.value == value);
       if (data) {
         let admin_unforeseen_utility_subtotal = group?.get('admin_unforeseen_utility_subtotal');
-        let result = admin_unforeseen_utility_subtotal?.value / (1 - (data?.percentage_product / 100));
-        group?.patchValue({
-          sale_price_cop_withholding_total: Math?.round(result)
-        })
+        if (admin_unforeseen_utility_subtotal?.value != 0) {
+          let result = admin_unforeseen_utility_subtotal?.value / (1 - (data?.percentage_product / 100));
+          group?.patchValue({
+            sale_price_cop_withholding_total: Math?.round(result)
+          })
+        }
       }
     });
     group?.get('admin_unforeseen_utility_subtotal')?.valueChanges?.subscribe(value => {
@@ -293,20 +295,20 @@ export const functionsApu = {
       let trm = group?.get('trm')?.value;
       let amount = group?.get('amount')?.value;
       group?.patchValue({
-        sale_price_usd_withholding_total: Math?.round(value / trm),
+        sale_price_usd_withholding_total: (value / trm).toFixed(2),
         sale_value_cop_unit: Math?.round(value / amount)
       })
     });
     group?.get('trm')?.valueChanges?.subscribe(value => {
       let sale_price_cop_withholding_total = group?.get('sale_price_cop_withholding_total')?.value;
       group?.patchValue({
-        sale_price_usd_withholding_total: Math?.round(sale_price_cop_withholding_total / value)
+        sale_price_usd_withholding_total: (sale_price_cop_withholding_total / value).toFixed(2)
       })
     });
     group?.get('sale_price_usd_withholding_total')?.valueChanges?.subscribe(value => {
       let amount = group?.get('amount')?.value;
       group?.patchValue({
-        sale_value_usd_unit: Math?.round(value / amount)
+        sale_value_usd_unit: (value / amount).toFixed(2)
       });
     });
   },

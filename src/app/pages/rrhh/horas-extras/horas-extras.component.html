@@ -6,7 +6,7 @@
       </div>
       <div class="col-md-6 px-0 text-right">
         <div class="btn-group rounded w-sm-100">
-          <button class="btn btn-info btn-sm" (click)="openClose()" >
+          <button class="btn btn-info btn-sm" (click)="openClose()">
             <i class="fas fa-sliders-h"></i> Filtros
           </button>
         </div>
@@ -19,10 +19,7 @@
           <div class="row">
             <mat-form-field class="col-md-4" appearance="outline">
               <mat-label>Tipo de turno actual</mat-label>
-              <mat-select
-                name="turn_type"
-                formControlName="turn_type"
-              >
+              <mat-select name="turn_type" formControlName="turn_type">
                 <mat-option value="Rotativo">Rotativo</mat-option>
                 <mat-option value="Fijo">Fijo</mat-option>
               </mat-select>
@@ -36,6 +33,7 @@
                 placeholder="Funcionario"
                 bindLabel="text"
                 bindValue="value"
+                [clearable]="false"
                 ngDefaultControl
               >
               </ng-select>
@@ -56,7 +54,6 @@
                 [for]="pickerDate"
               ></sat-datepicker-toggle>
             </mat-form-field>
-
 
             <!-- <mat-form-field class="col-md-4" appearance="outline">
               <mat-label>Rango de fechas</mat-label>
@@ -106,7 +103,7 @@
                       >
                         <td class="col-1">
                           <img
-                            src="{{ person?.image | image: 'users' }}"
+                            src="{{ person?.image | image : 'users' }}"
                             onerror="this.src='../../../../assets/images/noprofile.png'"
                             class="rounded-circle mx-auto header-profile-user"
                           />

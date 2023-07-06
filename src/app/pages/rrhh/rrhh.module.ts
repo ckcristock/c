@@ -94,6 +94,7 @@ import { NgxCurrencyModule } from 'ngx-currency';
 import { DirectivesModule } from 'src/app/core/directives/directives.module';
 import { MatSelectFilterModule } from 'mat-select-filter';
 import { ReporteErroresComponent } from './reporte-errores/reporte-errores.component';
+import { VacantesEditarComponent } from './vacantes/vacantes-editar/vacantes-editar.component';
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY'
@@ -153,6 +154,7 @@ export const MY_FORMATS = {
     CerrarProcesoComponent,
     CrearProcesoComponent,
     ReporteErroresComponent,
+    VacantesEditarComponent,
   ],
   imports: [
     RrhhRouterModule,

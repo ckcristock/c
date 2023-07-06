@@ -4,9 +4,9 @@
       <div class="row card-title d-flex justify-content-between">
         <div class="col-md-6 px-0">
           <h4 class="text-primary">
-            APU<span style="font-size: smaller" *ngIf="paginacion">
+            APU<span style="font-size: smaller">
               <small class="pb-2 text-secondary text-muted">
-                pág. {{ paginacion?.current_page }}
+                pág. {{ paginationMaterial?.current_page }}
               </small>
             </span>
           </h4>
@@ -36,7 +36,7 @@
             </button>
             <button
               class="btn btn-info btn-sm"
-              (click)="matPanelFiltros.toggle()"
+              (click)="matPanelFiltros?.toggle()"
             >
               <i class="fas fa-sliders-h"></i> Filtros
             </button>
@@ -49,7 +49,7 @@
           <div class="row">
             <ng-container [formGroup]="form_filters">
               <mat-form-field appearance="outline" class="col">
-                <mat-label>Rango de fechas</mat-label>
+                <mat-label>Fecha de creación</mat-label>
                 <input
                   matInput
                   [satDatepicker]="picker"
@@ -179,7 +179,7 @@
               >Quien elabora</mat-checkbox
             >
             <mat-checkbox color="primary" [(ngModel)]="checkFecha"
-              >Fecha</mat-checkbox
+              >Fecha creación</mat-checkbox
             >
           </section>
         </mat-expansion-panel>
@@ -204,7 +204,7 @@
           <thead class="bg-light">
             <tr class="text-center text-uppercase">
               <th>Código</th>
-              <th *ngIf="checkFecha">Fecha</th>
+              <th *ngIf="checkFecha">Fecha creación</th>
               <th *ngIf="checkCliente">Cliente</th>
               <th *ngIf="checkNombre">Nombre</th>
               <th>Conjunto</th>
@@ -218,7 +218,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of apus" class="text-center">
-              <td class="align-middle">{{ item.code | uppercase }}</td>
+              <td class="text-nowrap">{{ item?.code | uppercase }}</td>
               <td class="align-middle" *ngIf="checkFecha">
                 {{ item?.created_at | date : "MMM d, y" }}
               </td>
@@ -233,7 +233,7 @@
                 {{ item?.machine_name || "Sin información" | capitalLetter }}
               </td>
               <td class="align-middle" *ngIf="checkDestino">
-                {{ item?.city.name | uppercase }}
+                {{ item?.city?.name | uppercase }}
               </td>
               <td class="align-middle" *ngIf="checkLinea">
                 {{ item?.line | capitalLetter }}
@@ -344,9 +344,9 @@
       </div>
       <mat-paginator
         *ngIf="paginationMaterial"
-        [length]="paginationMaterial.total"
-        [pageSize]="paginationMaterial.per_page"
-        [pageIndex]="paginationMaterial.current_page - 1"
+        [length]="paginationMaterial?.total"
+        [pageSize]="paginationMaterial?.per_page"
+        [pageIndex]="paginationMaterial?.current_page - 1"
         [pageSizeOptions]="[5, 10, 25, 100]"
         (page)="handlePageEvent($event)"
         aria-label="Select page"

@@ -11,12 +11,26 @@
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
-
-  <div class="modal-body">
-    <form [formGroup]="form">
+  <ng-container [formGroup]="form">
+    <div class="modal-body">
       <div class="row">
         <div class="col-md-6">
           <div class="row">
+            <div class="col-md-12 mat-form-field-wrapper">
+              <ng-select
+                [items]="people"
+                required
+                bindLabel="text"
+                bindValue="value"
+                placeholder="Asignar a *"
+                [class.is-invalid]="form.get('id_realizador').invalid"
+                appearance="outline"
+                [clearable]="false"
+                [appendTo]="'body'"
+                formControlName="id_realizador"
+              >
+              </ng-select>
+            </div>
             <mat-form-field class="col-md-6" appearance="outline">
               <mat-label>Nombre</mat-label>
               <input
@@ -30,7 +44,12 @@
             </mat-form-field>
             <mat-form-field class="col-md-6" appearance="outline">
               <mat-label>Tipo</mat-label>
-              <mat-select formControlName="type_id" required (click)="getTypes()" [disabled]="type_task">
+              <mat-select
+                formControlName="type_id"
+                required
+                (click)="getTypes()"
+                [disabled]="type_task"
+              >
                 <mat-option *ngFor="let item of types" [value]="item.value">{{
                   item.text
                 }}</mat-option>
@@ -63,6 +82,7 @@
                 class="d-none"
                 type="file"
                 id="task_files"
+                accept=".png, .jpg, .jpeg. pdf"
                 multiple
                 (change)="onFileChanged($event)"
               />
@@ -76,10 +96,10 @@
             <div class="col-md-12">
               <div
                 class="d-flex justify-content-between"
-                *ngFor="let item of files"
+                *ngFor="let item of files.controls; let i = index"
               >
-                <span class="text-truncate">{{ item.name }}</span>
-                <a role="button" class="text-danger" (click)="deleteFiles(item.id)"
+                <span class="text-truncate">{{ item.get("name").value }}</span>
+                <a role="button" class="text-danger" (click)="deleteFiles(i)"
                   ><i class="fas fa-trash"></i
                 ></a>
               </div>
@@ -87,36 +107,16 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class="row">
-            <div class="col-md-12 mb-4">
-              <ng-select
-                [items]="people"
-                required
-                bindLabel="text"
-                bindValue="value"
-                placeholder="Asloaignar a"
-                loadingText="ding"
-                appearance="outline"
-                [appendTo]="'body'"
-                formControlName="id_realizador"
-              >
-              </ng-select>
-            </div>
-            <div class="col-md-12">
-              <ckeditor
-                [editor]="_texteditor.Editor"
-                (ready)="_texteditor.onReady($event)"
-                [config]="_texteditor.configEditor"
-                formControlName="descripcion_aux"
-              ></ckeditor>
-            </div>
-          </div>
+          <ckeditor
+            [editor]="_texteditor.Editor"
+            (ready)="_texteditor.onReady($event)"
+            [config]="_texteditor.configEditor"
+            formControlName="descripcion_aux"
+          ></ckeditor>
         </div>
       </div>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <form [formGroup]="form">
+    </div>
+    <div class="modal-footer">
       <div>
         <input
           class="form-check-input"
@@ -127,14 +127,14 @@
           ¿Adjuntar link actual?
         </label>
       </div>
-    </form>
-    <button
-      type="button"
-      class="btn btn-primary"
-      [disabled]="!form.valid"
-      (click)="save()"
-    >
-      Guardar
-    </button>
-  </div>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="save()"
+        [disabled]="disabledButton"
+      >
+        Guardar
+      </button>
+    </div>
+  </ng-container>
 </ng-template>

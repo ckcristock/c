@@ -18,6 +18,8 @@ import { SwalService } from '../../ajustes/informacion-base/services/swal.servic
 import { TiposTerminosService } from '../../ajustes/tipos/tipos-termino/tipos-terminos.service';
 import { WorkContractTypesService } from '../../ajustes/informacion-base/services/workContractTypes.service';
 import { consts } from 'src/app/core/utils/consts';
+import { PaginatorService } from 'src/app/core/services/paginator.service';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-contratos',
@@ -25,18 +27,8 @@ import { consts } from 'src/app/core/utils/consts';
   styleUrls: ['./contratos.component.scss']
 })
 export class ContratosComponent implements OnInit {
-  @ViewChild(MatAccordion) accordion: MatAccordion;
-  matPanel = false;
-  openClose() {
-    if (this.matPanel == false) {
-      this.accordion.openAll()
-      this.matPanel = true;
-    } else {
-      this.accordion.closeAll()
-      this.matPanel = false;
-    }
-  }
   formContrato: FormGroup;
+  formFilters: FormGroup;
   contractData: boolean;
   contracts: any[] = [];
   groups: any[];
@@ -54,24 +46,15 @@ export class ContratosComponent implements OnInit {
   funcionario: any;
   orderObj: any
   filtrosActivos: boolean = false
-  paginacion: any
-  paginacion2: any
+  paginationMaterial: any;
   pagination: any = {
-    pageSize: 12,
-    page: 1,
-    collectionSize: 0
+    page: '',
+    pageSize: '',
   }
-  paginationCV: any = {
-    pageSize: 7,
-    page: 1,
-    collectionSize: 0
-  }
-  filtros: any = {
-    company: '',
-    person: '',
-    dependency: '',
-    position: '',
-    group: ''
+  paginationMaterialExpire: any;
+  paginationExpire: any = {
+    page: '',
+    pageSize: localStorage?.getItem('paginationPorVencer') || 5,
   }
   masksMoney = consts
   filteredGroups: any[] = [];
@@ -87,10 +70,10 @@ export class ContratosComponent implements OnInit {
     private _typesTermsService: TiposTerminosService,
     private _workContractTypesService: WorkContractTypesService,
     private _fixedTurns: FixedTurnService,
-    private _rotatingTurs: RotatingTurnService,
     private paginator: MatPaginatorIntl,
     private route: ActivatedRoute,
     private location: Location,
+    private _paginator: PaginatorService,
     private fb: FormBuilder
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
@@ -104,26 +87,37 @@ export class ContratosComponent implements OnInit {
     this.getContractsToExpire();
     this.getContractByTrialPeriod();
     this.getTurnTypes();
-
+    this.createFormFilters();
     this.route.queryParamMap.subscribe((params) => {
+      this._paginator.checkParams(this.pagination, params, 'paginationContracts')
       this.orderObj = { ...params.keys, ...params };
-      for (let i in this.orderObj.params) {
-        if (this.orderObj.params[i]) {
-          if (Object.keys(this.orderObj).length > 2) {
-            this.filtrosActivos = true
-          }
-          this.filtros[i] = this.orderObj.params[i]
+      if (Object.keys(this.orderObj).length > 3) {
+        this.filtrosActivos = true
+        const formValues = {};
+        for (const param in params) {
+          formValues[param] = params[param];
         }
+        this.formFilters.patchValue(formValues['params']);
       }
-      if (this.orderObj.params.pag) {
-        this.getAllContracts(this.orderObj.params.pag);
-      } else {
-        this.getAllContracts()
-      }
+      this.getTurnTypes();
+      this.getWorkContractTypes();
+      this.getAllContracts();
     });
-    this.getTurnTypes();
+  }
 
-    this.getWorkContractTypes();
+  createFormFilters() {
+    this.formFilters = this.fb?.group({
+      company: '',
+      person: '',
+      dependency: '',
+      position: '',
+      group: ''
+    })
+    this.formFilters?.valueChanges?.pipe(
+      debounceTime(500),
+    ).subscribe(r => {
+      this.getAllContracts();
+    })
   }
 
   getTurnTypes() {
@@ -187,45 +181,42 @@ export class ContratosComponent implements OnInit {
     this.estadoFiltros = !this.estadoFiltros
   }
   resetFiltros() {
-    for (let i in this.filtros) {
-      this.filtros[i] = ''
-    }
+    this._paginator.resetFiltros(this.formFilters)
     this.filtrosActivos = false
-    this.getAllContracts()
   }
 
   handlePageEvent(event: PageEvent) {
-    this.getAllContracts(event.pageIndex + 1)
+    this._paginator.handlePageEvent(event, this.pagination);
+    localStorage?.setItem('paginationContracts', this.pagination?.pageSize);
+    this.getAllContracts();
   }
+
   handlePageEvent2(event: PageEvent) {
-    this.getContractsToExpire(event.pageIndex + 1)
+    this._paginator.handlePageEvent(event, this.paginationExpire);
+    localStorage?.setItem('paginationPorVencer', this.pagination?.pageSize);
+    this.getContractsToExpire();
   }
 
   SetFiltros(paginacion) {
-    let params: any = {};
-
-    params.pag = paginacion;
-    for (let i in this.filtros) {
-      if (this.filtros[i] != "") {
-        params[i] = this.filtros[i];
-      }
-    }
-    let queryString = '?' + Object.keys(params).map(key => key + '=' + params[key]).join('&');
-    return queryString;
+    return this._paginator.SetFiltros(paginacion, this.pagination, this.formFilters);
   }
-  getAllContracts(page = 1) {
-    this.pagination.page = page;
+  getAllContracts() {
+    this.loading = true;
     let params = {
-      ...this.pagination, ...this.filtros
+      ...this.pagination,
+      ...this.formFilters.value
     }
     var paramsurl = this.SetFiltros(this.pagination.page);
-    this.location.replaceState('/rrhh/contratos', paramsurl);
-    this.loading = true;
+    this.location.replaceState('/rrhh/contratos', paramsurl?.toString());
     this.contractService.getAllContracts(params)
       .subscribe((res: any) => {
         this.contracts = res.data.data;
-        this.paginacion = res.data
-        this.pagination.collectionSize = res.data.total;
+        this.paginationMaterial = res?.data
+        if (this.paginationMaterial?.last_page < this.pagination?.page) {
+          this.paginationMaterial.current_page = 1
+          this.pagination.page = 1
+          this.getAllContracts()
+        }
         this.loading = false;
       });
   }
@@ -295,15 +286,18 @@ export class ContratosComponent implements OnInit {
     });
   }
 
-  getContractsToExpire(page = 1) {
+  getContractsToExpire() {
     this.contractData = true
-    this.paginationCV.page = page;
-    this.contractService.getContractsToExpire(this.paginationCV)
+    this.contractService.getContractsToExpire(this.paginationExpire)
       .subscribe((res: any) => {
         this.contractsToExpire = res.data.data;
         this.contractsToExpire.renewed = (res.data.data == 1) || null;
-        this.paginationCV.collectionSize = res.data.total;
-        this.paginacion2 = res.data
+        this.paginationMaterialExpire = res?.data
+        if (this.paginationMaterialExpire?.last_page < this.paginationExpire?.page) {
+          this.paginationMaterialExpire.current_page = 1
+          this.paginationExpire.page = 1
+          this.getContractsToExpire()
+        }
         this.contractData = false
       });
   }

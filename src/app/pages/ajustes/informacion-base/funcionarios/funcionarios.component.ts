@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
+import { SwalService } from '../services/swal.service';
 
 @Component({
   selector: 'app-funcionarios',
@@ -53,12 +54,36 @@ export class FuncionariosComponent implements OnInit {
     private paginator: MatPaginatorIntl,
     private route: ActivatedRoute,
     private location: Location,
+    private _swal: SwalService
   ) {
     this.paginator.itemsPerPageLabel = "Items por página:";
   }
 
   ngOnInit(): void {
     this.getDependencies();
+  }
+
+  donwloading = false;
+
+  download() {
+    this.donwloading = true;
+    this._person?.download()?.subscribe((response: BlobPart) => {
+      let blob = new Blob([response], { type: 'application/excel' });
+      let link = document?.createElement('a');
+      const filename = 'lista_de_funcionarios';
+      link.href = window?.URL?.createObjectURL(blob);
+      link.download = `${filename}.xlsx`;
+      link?.click();
+      this.donwloading = false;
+    },
+      (error) => {
+        console.log(error)
+        this.donwloading = false;
+        this._swal.hardError()
+      },
+      () => {
+        this.donwloading = false;
+      })
   }
 
   openClose() {

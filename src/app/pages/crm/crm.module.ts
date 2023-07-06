@@ -99,6 +99,7 @@ import { ModalBuscarPresupuestoComponent } from './negocios/modal-buscar-presupu
 import { ModalBuscarCotizacionComponent } from './negocios/modal-buscar-cotizacion/modal-buscar-cotizacion.component';
 import { CotizacionModule } from './cotizacion/cotizacion.module';
 import { PresupuestoModule } from './presupuesto/presupuesto.module';
+import { DropdownModule } from 'primeng/dropdown';
 
 export const MY_FORMATS = {
   parse: {
@@ -182,7 +183,6 @@ export const MY_FORMATS = {
     FormsModule,
     NgSelectModule,
     HttpClientModule,
-    NgbDropdownModule,
     NgbCollapseModule,
     PipesModule,
     NgbNavModule,
@@ -224,7 +224,12 @@ export const MY_FORMATS = {
     NgxCurrencyModule,
     CotizacionModule,
     PresupuestoModule,
-    NgbModule
+    NgbModule,
+    DropdownModule
+  ],
+  exports: [
+    ModalBuscarPresupuestoComponent,
+    ModalBuscarCotizacionComponent
   ]
 })
 export class CrmModule { }

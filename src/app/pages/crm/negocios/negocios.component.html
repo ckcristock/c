@@ -1,4 +1,4 @@
-<ng-container *ngIf="this.permission.permissions.show; else noPermissions">
+<ng-container *ngIf="this.permission?.permissions?.show; else noPermissions">
   <div class="card">
     <div class="card-body">
       <div class="row card-title d-flex justify-content-between">
@@ -7,7 +7,7 @@
             Panel de negocios
             <span style="font-size: smaller" *ngIf="paginacion"
               ><small class="pb-2 text-secondary text-muted"
-                >pág. {{ paginacion.current_page }}</small
+                >pág. {{ paginacion?.current_page }}</small
               ></span
             >
           </h4>
@@ -54,7 +54,7 @@
                 />
               </mat-form-field>
               <mat-form-field class="col" appearance="outline">
-                <mat-label>Empresa</mat-label>
+                <mat-label>Tercero</mat-label>
                 <input
                   type="text"
                   matInput
@@ -70,12 +70,12 @@
                   <mat-option value="Prospección">Prospección</mat-option>
                   <mat-option value="Presupuesto">Presupuesto</mat-option>
                   <mat-option value="Cotización">Cotización</mat-option>
-                  <mat-option value="Negociación">Negociación</mat-option>
+                  <mat-option value="Rechazado">Rechazado</mat-option>
                   <mat-option value="Adjudicación">Adjudicación</mat-option>
                 </mat-select>
               </mat-form-field>
               <mat-form-field appearance="outline" class="col">
-                <mat-label>Fecha de entrega</mat-label>
+                <mat-label>Fecha de etapa</mat-label>
                 <input
                   matInput
                   [satDatepicker]="picker"
@@ -94,9 +94,11 @@
                 <mat-label>Tipo</mat-label>
                 <mat-select formControlName="business_type_id">
                   <mat-option value="">Todos</mat-option>
-                  <mat-option *ngFor="let item of types" [value]="item.value">{{
-                    item.text
-                  }}</mat-option>
+                  <mat-option
+                    *ngFor="let item of types"
+                    [value]="item?.value"
+                    >{{ item?.text }}</mat-option
+                  >
                 </mat-select>
               </mat-form-field>
             </div>
@@ -387,49 +389,48 @@
             Vista general
           </a>
           <ng-template ngbNavContent>
+            <div class="row">
+              <ng-container [formGroup]="formFiltersGeneralView">
+                <mat-form-field appearance="outline" class="col-12">
+                  <mat-label>Rango de fechas</mat-label>
+                  <input
+                    matInput
+                    [satDatepicker]="pickerGV"
+                    [value]="dateGeneralView"
+                    (dateChange)="selectedDateGV($event)"
+                    name="daterange"
+                    autocomplete="off"
+                  />
+                  <sat-datepicker #pickerGV [rangeMode]="true"></sat-datepicker>
+                  <sat-datepicker-toggle
+                    matSuffix
+                    [for]="pickerGV"
+                  ></sat-datepicker-toggle>
+                </mat-form-field>
+              </ng-container>
+            </div>
             <ng-container
               *ngIf="
-                !loadingGeneralView && generalView.length > 0;
+                !loadingGeneralView && generalView?.length > 0;
                 else notDataGeneralView
               "
             >
               <div class="row mt-3">
-                <ng-container [formGroup]="formFiltersGeneralView">
-                  <mat-form-field appearance="outline" class="col-12">
-                    <mat-label>Rango de fechas</mat-label>
-                    <input
-                      matInput
-                      [satDatepicker]="pickerGV"
-                      [value]="dateGeneralView"
-                      (dateChange)="selectedDateGV($event)"
-                      name="daterange"
-                      autocomplete="off"
-                    />
-                    <sat-datepicker
-                      #pickerGV
-                      [rangeMode]="true"
-                    ></sat-datepicker>
-                    <sat-datepicker-toggle
-                      matSuffix
-                      [for]="pickerGV"
-                    ></sat-datepicker-toggle>
-                  </mat-form-field>
-                </ng-container>
-                <div class="col-md-6">
-                  <div class="card border-card-business">
+                <div class="col-md-6 d-flex align-items-stretch">
+                  <div class="card border-card-business w-100">
                     <div class="card-body">
                       <h5 class="card-title">Prospección</h5>
                       <table class="table table-hover">
                         <tbody>
                           <tr>
                             <td>Cantidad de negocios</td>
-                            <td>{{ negocios_primera_etapa.length }}</td>
+                            <td>{{ negocios_primera_etapa?.length }}</td>
                           </tr>
-                          <tr>
+                          <!-- <tr>
                             <td>Valor total por presupuesto</td>
                             <td>
                               ${{
-                                this.prospectingStage.budget_value
+                                this.prospectingStage?.budget_value
                                   | number : "1.2-2"
                               }}
                             </td>
@@ -438,71 +439,102 @@
                             <td>Valor total por cotización</td>
                             <td>
                               ${{
-                                this.prospectingStage.quotation_value
+                                this.prospectingStage?.quotation_value
                                   | number : "1.2-2"
                               }}
                             </td>
-                          </tr>
+                          </tr> -->
                           <tr>
                             <td>Rango de fechas</td>
-                            <td>{{ today | date }} - {{ today | date }}</td>
+                            <td>
+                              {{
+                                formFiltersGeneralView.get("date_start").value
+                                  | date
+                              }}
+                              -
+                              {{
+                                formFiltersGeneralView.get("date_end").value
+                                  | date
+                              }}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="card border-card-business">
+                <div class="col-md-6 d-flex align-items-stretch">
+                  <div class="card border-card-business w-100">
                     <div class="card-body">
                       <h5 class="card-title">Presupuesto</h5>
                       <table class="table table-hover">
                         <tbody>
                           <tr>
                             <td>Cantidad de negocios</td>
-                            <td>{{ negocios_segunda_etapa.length }}</td>
+                            <td>{{ negocios_segunda_etapa?.length }}</td>
                           </tr>
                           <tr>
                             <td>Valor total por presupuesto</td>
                             <td>
                               ${{
-                                this.budgetStage.budget_value | number : "1.2-2"
+                                this.budgetStage?.budget_value
+                                  | number : "1.2-2"
                               }}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Valor total por cotización</td>
-                            <td>
-                              ${{
-                                this.budgetStage.quotation_value
+                              - USD
+                              {{
+                                this.budgetStage?.budget_value_usd
                                   | number : "1.2-2"
                               }}
                             </td>
                           </tr>
+                          <!-- <tr>
+                            <td>Valor total por cotización</td>
+                            <td>
+                              ${{
+                                this.budgetStage?.quotation_value
+                                  | number : "1.2-2"
+                              }}
+                            </td>
+                          </tr> -->
                           <tr>
                             <td>Rango de fechas</td>
-                            <td>{{ today | date }} - {{ today | date }}</td>
+                            <td>
+                              {{
+                                formFiltersGeneralView.get("date_start").value
+                                  | date
+                              }}
+                              -
+                              {{
+                                formFiltersGeneralView.get("date_end").value
+                                  | date
+                              }}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="card border-card-business">
+                <div class="col-md-6 d-flex align-items-stretch">
+                  <div class="card border-card-business w-100">
                     <div class="card-body">
                       <h5 class="card-title">Cotización</h5>
                       <table class="table table-hover">
                         <tbody>
                           <tr>
                             <td>Cantidad de negocios</td>
-                            <td>{{ negocios_tercera_etapa.length }}</td>
+                            <td>{{ negocios_tercera_etapa?.length }}</td>
                           </tr>
                           <tr>
                             <td>Valor total por presupuesto</td>
                             <td>
                               ${{
-                                this.quotationStage.budget_value
+                                this.quotationStage?.budget_value
+                                  | number : "1.2-2"
+                              }}
+                              - USD
+                              {{
+                                this.quotationStage?.budget_value_usd
                                   | number : "1.2-2"
                               }}
                             </td>
@@ -511,35 +543,55 @@
                             <td>Valor total por cotización</td>
                             <td>
                               ${{
-                                this.quotationStage.quotation_value
+                                this.quotationStage?.quotation_value
+                                  | number : "1.2-2"
+                              }}
+                              - USD
+                              {{
+                                this.quotationStage?.quotation_value_usd
                                   | number : "1.2-2"
                               }}
                             </td>
                           </tr>
                           <tr>
                             <td>Rango de fechas</td>
-                            <td>{{ today | date }} - {{ today | date }}</td>
+                            <td>
+                              {{
+                                formFiltersGeneralView.get("date_start").value
+                                  | date
+                              }}
+                              -
+                              {{
+                                formFiltersGeneralView.get("date_end").value
+                                  | date
+                              }}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="card border-card-business">
+                <div class="col-md-6 d-flex align-items-stretch">
+                  <div class="card border-card-business w-100">
                     <div class="card-body">
-                      <h5 class="card-title">Negociación</h5>
+                      <h5 class="card-title">Rechazado</h5>
                       <table class="table table-hover">
                         <tbody>
                           <tr>
                             <td>Cantidad de negocios</td>
-                            <td>{{ negocios_cuarta_etapa.length }}</td>
+                            <td>{{ negocios_cuarta_etapa?.length }}</td>
                           </tr>
-                          <tr>
+                          <!--  <tr>
                             <td>Valor total por presupuesto</td>
                             <td>
                               ${{
-                                this.negotiationStage.budget_value
+                                this.negotiationStage?.budget_value
+                                  | number : "1.2-2"
+                              }}
+                              - USD
+                              {{
+                                this.negotiationStage?.budget_value_usd
                                   | number : "1.2-2"
                               }}
                             </td>
@@ -548,35 +600,55 @@
                             <td>Valor total por cotización</td>
                             <td>
                               ${{
-                                this.negotiationStage.quotation_value
+                                this.negotiationStage?.quotation_value
+                                  | number : "1.2-2"
+                              }}
+                              - USD
+                              {{
+                                this.negotiationStage?.quotation_value_usd
                                   | number : "1.2-2"
                               }}
                             </td>
-                          </tr>
+                          </tr> -->
                           <tr>
                             <td>Rango de fechas</td>
-                            <td>{{ today | date }} - {{ today | date }}</td>
+                            <td>
+                              {{
+                                formFiltersGeneralView.get("date_start").value
+                                  | date
+                              }}
+                              -
+                              {{
+                                formFiltersGeneralView.get("date_end").value
+                                  | date
+                              }}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="card border-card-business">
+                <div class="col-md-6 d-flex align-items-stretch">
+                  <div class="card border-card-business w-100">
                     <div class="card-body">
                       <h5 class="card-title">Adjudicación</h5>
                       <table class="table table-hover">
                         <tbody>
                           <tr>
                             <td>Cantidad de negocios</td>
-                            <td>{{ negocios_quinta_etapa.length }}</td>
+                            <td>{{ negocios_quinta_etapa?.length }}</td>
                           </tr>
                           <tr>
                             <td>Valor total por presupuesto</td>
                             <td>
                               ${{
-                                this.awardStage.budget_value | number : "1.2-2"
+                                this.awardStage?.budget_value | number : "1.2-2"
+                              }}
+                              - USD
+                              {{
+                                this.awardStage?.budget_value_usd
+                                  | number : "1.2-2"
                               }}
                             </td>
                           </tr>
@@ -584,14 +656,29 @@
                             <td>Valor total por cotización</td>
                             <td>
                               ${{
-                                this.awardStage.quotation_value
+                                this.awardStage?.quotation_value
+                                  | number : "1.2-2"
+                              }}
+                              - USD
+                              {{
+                                this.awardStage?.quotation_value_usd
                                   | number : "1.2-2"
                               }}
                             </td>
                           </tr>
                           <tr>
                             <td>Rango de fechas</td>
-                            <td>{{ today | date }} - {{ today | date }}</td>
+                            <td>
+                              {{
+                                formFiltersGeneralView.get("date_start").value
+                                  | date
+                              }}
+                              -
+                              {{
+                                formFiltersGeneralView.get("date_end").value
+                                  | date
+                              }}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
@@ -642,7 +729,7 @@
       </div>
     </ng-container>
     <ng-container
-      *ngIf="!loadingType && bussinesTypes.length > 0; else notDataTypes"
+      *ngIf="!loadingType && bussinesTypes?.length > 0; else notDataTypes"
     >
       <div class="rounded-top table-responsive">
         <table class="table table-bordered table-striped table-sm">
@@ -655,8 +742,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let item of bussinesTypes" class="text-center">
-              <td>{{ item.name | uppercase }}</td>
-              <td>{{ item.created_at | date }}</td>
+              <td>{{ item?.name | uppercase }}</td>
+              <td>{{ item?.created_at | date }}</td>
               <td>
                 <a
                   class="text-info"
@@ -672,8 +759,8 @@
       </div>
       <ngb-pagination
         class="d-flex justify-content-center pagination-rounded pagination-sm"
-        [collectionSize]="paginationTypes.collectionSize"
-        [pageSize]="paginationTypes.pageSize"
+        [collectionSize]="paginationTypes?.collectionSize"
+        [pageSize]="paginationTypes?.pageSize"
         [(page)]="paginationTypes.page"
         (pageChange)="paginateTypes($event)"
         maxSize="5"
@@ -708,25 +795,27 @@
           aria-valuemax="100"
         ></div>
       </div> -->
-      <a [routerLink]="['/crm/negocios/', neg.id]" class="">{{ neg.code }}</a>
+      <a [routerLink]="['/crm/negocios/', neg?.id]" class="">{{ neg?.code }}</a>
       <div>
-        <span>{{ neg.date | date : "mediumDate" }}</span>
+        <span>{{ neg?.date | date : "mediumDate" }}</span>
       </div>
       <div>
         <h5 class="font-size-16">
           <a class="text-dark">{{
-            neg.third_party.first_name
-              ? neg.third_party.first_name + " " + neg.third_party.first_surname
-              : neg.third_party.social_reason
+            neg?.third_party?.first_name
+              ? neg?.third_party?.first_name +
+                " " +
+                neg?.third_party?.first_surname
+              : neg?.third_party?.social_reason
           }}</a>
         </h5>
-        <span class="mb-4">{{ neg.name }}</span>
+        <span class="mb-4">{{ neg?.name }}</span>
       </div>
 
       <div class="d-inline-flex team mb-0">
         <div class="mr-3 align-self-center">
           Presupuesto :
-          <span class="mb-4">${{ neg.budget_value | number : "1.2-2" }}</span>
+          <span class="mb-4">${{ neg?.budget_value | number : "1.2-2" }}</span>
         </div>
       </div>
     </div>

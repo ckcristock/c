@@ -8,7 +8,9 @@ import * as moment from 'moment';
   providedIn: 'root',
 })
 export class ReporteHorarioService {
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) { }
+
   getFixedTurnsDiaries(date1, date2, params) {
     return this.http
       .get(
@@ -22,12 +24,18 @@ export class ReporteHorarioService {
               if (Array.isArray(group.dependencies)) {
               } else {
                 group.dependencies = Object.values(group.dependencies)
-              } 
+              }
               group.dependencies.forEach((dependency) => {
                 dependency.people.forEach((person) => {
                   person.totalHours = 0;
+                  person.totalHoursEdit = 0;
                   person.diaries.forEach((diary) => {
-                    person.totalHours += parseFloat(diary.working_hours);
+                    person.totalHours += parseFloat(diary.working_hours || 0);
+                    if (diary.edit.length > 0) {
+                      person.totalHoursEdit += parseFloat(diary.edit[0].hours || 0)
+                    } else {
+                      person.totalHoursEdit += parseFloat(diary.working_hours || 0)
+                    }
                     if (diary.rotating_turn_id) {
                       diary = this.makeColorArrival(diary);
                     }
@@ -115,7 +123,7 @@ export class ReporteHorarioService {
   makeDiff(real, entry) {
     return moment(entry, 'HH:mm:ss').diff(moment(real, 'HH:mm:ss'));
   }
-  hasLateArrival() {}
+  hasLateArrival() { }
 
   download(date1, date2, params = {}) {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -123,5 +131,9 @@ export class ReporteHorarioService {
       `${environment.base_url}/download/horarios/${date1}/${date2}`,
       { params, headers, responseType: 'blob' as 'json' }
     );
+  }
+
+  updateHoursWorked(data) {
+    return this.http.post(`${environment.base_url}/update-hours-worked`, data)
   }
 }

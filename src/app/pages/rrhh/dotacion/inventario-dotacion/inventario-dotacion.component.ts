@@ -13,6 +13,7 @@ import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SwalService } from 'src/app/pages/ajustes/informacion-base/services/swal.service';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Label } from 'ng2-charts';
+import { consts } from 'src/app/core/utils/consts';
 
 @Component({
   selector: 'app-inventario-dotacion',
@@ -25,6 +26,7 @@ export class InventarioDotacionComponent implements OnInit {
   donwloading = false;
   firstDay: any;
   lastDay: any;
+  mask = consts;
   openClose() {
     if (this.matPanel == false) {
       this.accordion.openAll()
@@ -151,13 +153,14 @@ export class InventarioDotacionComponent implements OnInit {
       link.download = `${filename}.xlsx`;
       link.click();
       this.donwloading = false;
-    }),
+    },
       (error) => {
         this.donwloading = false;
+        this._swal.hardError();
       },
       () => {
         this.donwloading = false;
-      };
+      });
   }
 
   estadoFiltros = false;
@@ -229,6 +232,39 @@ export class InventarioDotacionComponent implements OnInit {
     this._dotation.getProductDotationTypes().subscribe((data: any) => {
       this.Lista_Grupos_Inventario = data.data;
     });
+  }
+
+  update(item) {
+    console.log(item)
+    this._swal.show({
+      icon: 'question',
+      title: '¿Estás seguro(a)?',
+      showCancel: true,
+      text: 'Vamos a modificar el stock',
+    }).then(r => {
+      if (r.isConfirmed) {
+        this._dotation.updateStock(item).subscribe((data: any) => {
+          if (data.status) {
+            this._swal.show({
+              icon: 'success',
+              title: 'Operación exitosa',
+              showCancel: false,
+              text: 'Categoria guardada',
+              timer: 1000
+            })
+            this.listarGrupo();
+            item.edit = false;
+          } else {
+            this._swal.show({
+              icon: 'error',
+              title: 'Operación denegada',
+              showCancel: false,
+              text: 'Ha ocurrido un error',
+            })
+          }
+        })
+      }
+    })
   }
 
   filtros() {

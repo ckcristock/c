@@ -1,0 +1,25 @@
+<ng-template #placeholder>
+  <app-placeholder-form></app-placeholder-form>
+</ng-template>
+<ng-container *ngIf="!loading; else placeholder">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <img
+            [src]="person.image"
+            class="img-fluid img-profile mx-auto d-block"
+          />
+          <h5 class="text-center mt-4">{{ person.full_names }}</h5>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <app-building></app-building>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

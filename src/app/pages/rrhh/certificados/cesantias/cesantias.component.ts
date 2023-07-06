@@ -12,6 +12,7 @@ export class CesantiasComponent implements OnInit {
   @Input() filtro: any
   layoffs: any[] = [];
   loading: boolean;
+  donwloading: boolean = false;
   pagination: any = {
     page: 1,
     pageSize: 5,
@@ -70,6 +71,7 @@ export class CesantiasComponent implements OnInit {
   }
 
   downloadComprobante(id) {
+    this.donwloading = true;
     this._certificados.downloadComprobante(id).subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/pdf' });
       let link = document.createElement('a');
@@ -77,10 +79,14 @@ export class CesantiasComponent implements OnInit {
       link.href = window.URL.createObjectURL(blob);
       link.download = `${filename}.pdf`;
       link.click();
+      this.donwloading = false;
     },
       (error) => {
+        this._swal.hardError();
+        this.donwloading = false;
       },
       () => {
+        this.donwloading = false;
       })
   }
 }

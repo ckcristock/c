@@ -25,6 +25,12 @@
         <span *ngIf="type4 == 'usd'">USD {{ var4 | number : "1.2-2" }}</span>
         <span *ngIf="type4 == 'amount'">{{ var4 | number }}</span>
       </li>
+      <li [class]="classList" *ngIf="title5">
+        {{ title5 }}
+        <span *ngIf="type5 == 'cop'">${{ var5 | number : "1.2-2" }}</span>
+        <span *ngIf="type5 == 'usd'">USD {{ var5 | number : "1.2-2" }}</span>
+        <span *ngIf="type5 == 'amount'">{{ var5 | number }}</span>
+      </li>
     </ul>
   </div>
 </div>

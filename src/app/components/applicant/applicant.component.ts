@@ -36,7 +36,7 @@ export class ApplicantComponent implements OnInit {
     this._job.download(id).subscribe((response: BlobPart) => {
       let blob = new Blob([response], { type: 'application/pdf' });
       let link = document.createElement('a');
-      const filename = 'proyeccion_pdf';
+      const filename = this.data.name + '_' + this.data.surname;
       link.href = window.URL.createObjectURL(blob);
       link.download = `${filename}.pdf`;
       link.click();

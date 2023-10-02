@@ -29,7 +29,7 @@
         </button>
       </div>
     </div>
-    <!-- <div #gantt_here class="gantt-chart"></div> -->
+    <h6 class="text-center text-primary">Información básica</h6>
     <div class="rounded-top table-responsive">
       <table class="table table-bordered table-striped table-sm">
         <thead class="bg-light">
@@ -144,7 +144,8 @@
       </ng-container>
     </div>
     <hr />
-    <h6>Datos financieros</h6>
+    <h6 class="text-center text-primary">Datos financieros</h6>
+    <h6>Órdenes de pedido</h6>
     <ng-container
       *ngIf="work_order?.order_managments?.length > 0; else notDataAlert"
     >
@@ -180,6 +181,7 @@
       mt="mt-2"
     ></app-list-items>
     <hr />
+    <h6>Presupuesto base</h6>
     <div
       class="rounded-top table-responsive"
       *ngIf="
@@ -392,13 +394,36 @@
       type3="cop"
       mt="mt-2"
     ></app-list-items>
-    <ng-container *ngIf="work_order?.description">
-      <h6>Descripción</h6>
-      <div
-        [ngClass]="'inner-html-mb-0'"
-        [innerHTML]="work_order?.description"
-      ></div>
-    </ng-container>
+    <hr />
+    <div class="rounded-top table-responsive">
+      <table class="table table-bordered table-striped table-sm">
+        <thead class="bg-light">
+          <tr class="text-center text-uppercase">
+            <th>Total órdenes de pedido</th>
+            <th>Total presupuesto base</th>
+            <th>Ganancia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-center table-success">
+            <th>${{ work_order?.total_order_managment | number : "1.2-2" }}</th>
+            <th>
+              ${{
+                work_order?.total_budget_part_set_service | number : "1.2-2"
+              }}
+            </th>
+            <th>
+              ${{
+                work_order?.total_order_managment -
+                  work_order?.total_budget_part_set_service | number : "1.2-2"
+              }}
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <hr />
+    <h6 class="text-center text-primary">Alcance</h6>
     <ng-container *ngIf="work_order?.technical_requirements">
       <h6>Requisitos técnicos, funcionales y desempeño</h6>
       <div

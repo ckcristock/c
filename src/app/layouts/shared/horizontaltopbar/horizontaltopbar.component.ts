@@ -61,9 +61,7 @@ export class HorizontaltopbarComponent implements OnInit {
     private _alert: AlertasComunService,
     private route: ActivatedRoute,
     private _swal: SwalService
-  ) {
-
-  }
+  ) { }
 
   ngOnInit(): void {
     this.scrollContainer.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
@@ -90,7 +88,6 @@ export class HorizontaltopbarComponent implements OnInit {
       })
     }
     this.element = document.documentElement;
-
     this.user = this._user.user;
     this.folder_permission = this._user.user.person.folder_id
     this.validateFolder(this.folder_permission)
@@ -162,7 +159,6 @@ export class HorizontaltopbarComponent implements OnInit {
   }
 
   loadMoreItems(): void {
-    console.log('holi')
     const startIndex = this.alerts.length;
     const endIndex = startIndex + 10;
     this.alerts = this.alerts.concat(this.allAlerts.slice(startIndex, endIndex));
